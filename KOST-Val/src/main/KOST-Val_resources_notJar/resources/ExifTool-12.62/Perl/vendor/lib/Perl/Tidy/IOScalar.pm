@@ -10,7 +10,9 @@ package Perl::Tidy::IOScalar;
 use strict;
 use warnings;
 use Carp;
-our $VERSION = '20210111';
+our $VERSION = '20230701';
+
+use constant EMPTY_STRING => q{};
 
 sub AUTOLOAD {
 
@@ -50,7 +52,7 @@ EOM
 
     }
     if ( $mode eq 'w' ) {
-        ${$rscalar} = "";
+        ${$rscalar} = EMPTY_STRING;
         return bless [ $rscalar, $mode ], $package;
     }
     elsif ( $mode eq 'r' ) {

@@ -19,6 +19,7 @@
     GyMMM => "MMM G y",
     GyMMMEd => "E, d MMM, G y",
     GyMMMd => "d MMM, G y",
+    GyMd => "GGGGG d/M/y",
     H => "HH",
     Hm => "H:mm",
     Hms => "H:mm:ss",
@@ -60,8 +61,8 @@
   date_format_long => "d MMMM, y",
   date_format_medium => "d MMM, y",
   date_format_short => "d/M/yy",
-  datetime_format_full => "{1} \N{U+0930}\N{U+094b}\N{U+091c}\N{U+0940} {0}",
-  datetime_format_long => "{1} \N{U+0930}\N{U+094b}\N{U+091c}\N{U+0940} {0}",
+  datetime_format_full => "{1}, {0}",
+  datetime_format_long => "{1}, {0}",
   datetime_format_medium => "{1}, {0}",
   datetime_format_short => "{1}, {0}",
   day_format_abbreviated => [
@@ -119,11 +120,11 @@
     "\N{U+0930}\N{U+0935}\N{U+093f}\N{U+0935}\N{U+093e}\N{U+0930}",
   ],
   era_abbreviated => [
-    "\N{U+0907}. \N{U+0938}. \N{U+092a}\N{U+0942}.",
+    "\N{U+0908}. \N{U+0938}. \N{U+092a}\N{U+0942}.",
     "\N{U+0907}. \N{U+0938}.",
   ],
   era_narrow => [
-    "\N{U+0907}. \N{U+0938}. \N{U+092a}\N{U+0942}.",
+    "\N{U+0908}. \N{U+0938}. \N{U+092a}\N{U+0942}.",
     "\N{U+0907}. \N{U+0938}.",
   ],
   era_wide => [
@@ -270,5 +271,5 @@
   time_format_medium => "h:mm:ss a",
   time_format_short => "h:mm a",
   variant => undef,
-  version => 38,
+  version => 43,
 }

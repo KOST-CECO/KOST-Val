@@ -60,7 +60,7 @@ sub _require {
     my ( $module, $version ) = ( ref $input ? @$input : $input );
     (my $file = "$module.pm") =~ s{::}{/}g;
     require $file;
-    $module->VERSION if $version;
+    $module->VERSION($version) if $version;
 }
 
 =head1 AUTHOR

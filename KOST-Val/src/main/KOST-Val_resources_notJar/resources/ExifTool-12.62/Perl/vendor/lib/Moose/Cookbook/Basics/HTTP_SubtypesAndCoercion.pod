@@ -13,7 +13,7 @@ Moose::Cookbook::Basics::HTTP_SubtypesAndCoercion - Demonstrates subtypes and co
 
 =head1 VERSION
 
-version 2.2014
+version 2.2203
 
 =head1 SYNOPSIS
 
@@ -180,7 +180,7 @@ Finally, we need to make sure our attributes enable coercion.
 Re-using the coercion lets us enforce a consistent API across multiple
 attributes.
 
-=for testing-SETUP use Test::Requires {
+=for testing-SETUP use Test::Needs {
     'HTTP::Headers'  => '0',
     'Params::Coerce' => '0',
     'URI'            => '0',

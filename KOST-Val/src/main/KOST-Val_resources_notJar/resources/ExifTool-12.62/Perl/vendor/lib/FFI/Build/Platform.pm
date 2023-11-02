@@ -11,7 +11,7 @@ use File::Spec;
 use FFI::Platypus::ShareConfig;
 
 # ABSTRACT: Platform specific configuration.
-our $VERSION = '1.34'; # VERSION
+our $VERSION = '2.08'; # VERSION
 
 
 sub new
@@ -70,7 +70,7 @@ sub library_suffix
   {
     push @suffix, '.' . $self->{config}->{dlext};
   }
-  wantarray ? @suffix : $suffix[0];  ## no critic (Freenode::Wantarray)
+  wantarray ? @suffix : $suffix[0];  ## no critic (Community::Wantarray)
 }
 
 
@@ -152,6 +152,27 @@ sub cxx
   }
 
   Carp::croak("unable to detect corresponding C++ compiler");
+}
+
+
+sub cxxld
+{
+  my $self = _self(shift);
+
+  $DB::single = 1;
+
+  # This is definitely not exhaustive or complete or even
+  # particularlly good.  Patches welcome.
+
+  if($self->osname eq 'darwin')
+  {
+    my @cxx = @{ $self->cxx };
+    return [map { /^(cc|clang|gcc)$/ ? @cxx : $_ } @{ $self->ld }];
+  }
+  else
+  {
+    return $self->cxx;
+  }
 }
 
 
@@ -248,7 +269,7 @@ sub ldflags
   elsif($self->osname eq 'darwin')
   {
     # we want to build a .dylib instead of a .bundle
-    @ldflags = map { $_ eq '-bundle' ? '-shared' : $_ } @ldflags;
+    @ldflags = map { $_ eq '-bundle' ? '-dynamiclib' : $_ } @ldflags;
   }
   \@ldflags;
 }
@@ -395,6 +416,7 @@ sub diag
   push @diag, "osname            : ". _c($self->osname);
   push @diag, "cc                : ". _l($self->cc);
   push @diag, "cxx               : ". (eval { _l($self->cxx) } || '---' );
+  push @diag, "cxxld             : ". (eval { _l($self->cxxld) } || '---' );
   push @diag, "for               : ". (eval { _l($self->for) } || '---' );
   push @diag, "ld                : ". _l($self->ld);
   push @diag, "ccflags           : ". _l($self->ccflags);
@@ -421,7 +443,7 @@ FFI::Build::Platform - Platform specific configuration.
 
 =head1 VERSION
 
-version 1.34
+version 2.08
 
 =head1 SYNOPSIS
 
@@ -497,6 +519,12 @@ The C pre-processor
  my @cxx = @{ $platform->cxx };
 
 The C++ compiler that naturally goes with the C compiler.
+
+=head2 cxxld
+
+ my @cxxld = @{ $platform->cxxld };
+
+The C++ linker that naturally goes with the C compiler.
 
 =head2 for
 
@@ -603,7 +631,7 @@ Damyan Ivanov
 
 Ilya Pavlov (Ilya33)
 
-Petr Pisar (ppisar)
+Petr Písař (ppisar)
 
 Mohammad S Anwar (MANWAR)
 
@@ -613,9 +641,17 @@ Meredith (merrilymeredith, MHOWARD)
 
 Diab Jerius (DJERIUS)
 
+Eric Brine (IKEGAMI)
+
+szTheory
+
+José Joaquín Atria (JJATRIA)
+
+Pete Houston (openstrike, HOUSTON)
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2015,2016,2017,2018,2019,2020 by Graham Ollis.
+This software is copyright (c) 2015-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

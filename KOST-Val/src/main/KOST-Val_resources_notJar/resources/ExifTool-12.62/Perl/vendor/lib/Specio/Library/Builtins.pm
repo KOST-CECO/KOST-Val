@@ -3,7 +3,7 @@ package Specio::Library::Builtins;
 use strict;
 use warnings;
 
-our $VERSION = '0.46';
+our $VERSION = '0.48';
 
 use parent 'Specio::Exporter';
 
@@ -108,7 +108,6 @@ EOF
     }
 );
 
-my $value_type = t('Value');
 declare(
     'Num',
     parent => t('Str'),
@@ -337,7 +336,7 @@ EOF
         parent     => t('Ref'),
         inline     => sub { $base_scalarref_check->( $_[1] ) },
         parameterized_inline_generator => sub {
-            my $self      = shift;
+            shift;
             my $parameter = shift;
             my $val       = shift;
 
@@ -375,7 +374,7 @@ EOF
         parent     => t('Ref'),
         inline     => sub { $base_arrayref_check->( $_[1] ) },
         parameterized_inline_generator => sub {
-            my $self      = shift;
+            shift;
             my $parameter = shift;
             my $val       = shift;
 
@@ -414,7 +413,7 @@ EOF
         parent     => t('Ref'),
         inline     => sub { $base_hashref_check->( $_[1] ) },
         parameterized_inline_generator => sub {
-            my $self      = shift;
+            shift;
             my $parameter = shift;
             my $val       = shift;
 
@@ -434,7 +433,7 @@ declare(
     parent                         => t('Item'),
     inline                         => sub {'1'},
     parameterized_inline_generator => sub {
-        my $self      = shift;
+        shift;
         my $parameter = shift;
         my $val       = shift;
 
@@ -460,7 +459,7 @@ Specio::Library::Builtins - Implements type constraint objects for Perl's built-
 
 =head1 VERSION
 
-version 0.46
+version 0.48
 
 =head1 DESCRIPTION
 
@@ -535,8 +534,8 @@ Accepts any reference.
 
 =head2 ScalarRef (of `a)
 
-Accepts a scalar reference or an object which overloads scalar
-dereferencing. If parameterized, the dereferenced value must be of type C<`a>.
+Accepts a scalar reference or an object which overloads scalar dereferencing.
+If parameterized, the dereferenced value must be of type C<`a>.
 
 =head2 ArrayRef (of `a)
 
@@ -550,13 +549,12 @@ parameterized, the values in the hashref must be of type C<`a>.
 
 =head2 CodeRef
 
-Accepts a code (sub) reference or an object which overloads code
-dereferencing.
+Accepts a code (sub) reference or an object which overloads code dereferencing.
 
 =head2 RegexpRef
 
-Accepts a regex object created by C<qr//> or an object which overloads
-regex interpolation.
+Accepts a regex object created by C<qr//> or an object which overloads regex
+interpolation.
 
 =head2 GlobRef
 
@@ -564,9 +562,9 @@ Accepts a glob reference or an object which overloads glob dereferencing.
 
 =head2 FileHandle
 
-Accepts a glob reference which is an open file handle, any C<IO::Handle>
-Object or subclass, or an object which overloads glob dereferencing and
-returns a glob reference which is an open file handle.
+Accepts a glob reference which is an open file handle, any C<IO::Handle> Object
+or subclass, or an object which overloads glob dereferencing and returns a glob
+reference which is an open file handle.
 
 =head2 Object
 
@@ -575,8 +573,6 @@ Accepts any blessed object.
 =head1 SUPPORT
 
 Bugs may be submitted at L<https://github.com/houseabsolute/Specio/issues>.
-
-I am also usually active on IRC as 'autarch' on C<irc://irc.perl.org>.
 
 =head1 SOURCE
 
@@ -588,7 +584,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2012 - 2020 by Dave Rolsky.
+This software is Copyright (c) 2012 - 2022 by Dave Rolsky.
 
 This is free software, licensed under:
 

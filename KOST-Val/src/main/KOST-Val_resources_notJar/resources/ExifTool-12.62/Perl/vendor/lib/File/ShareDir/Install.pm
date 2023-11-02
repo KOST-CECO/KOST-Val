@@ -1,4 +1,4 @@
-package File::ShareDir::Install; # git description: v0.12-6-g29a6ff7
+package File::ShareDir::Install; # git description: v0.13-6-g9916db6
 # ABSTRACT: Install shared files
 
 use strict;
@@ -9,7 +9,7 @@ use Carp ();
 use File::Spec;
 use IO::Dir;
 
-our $VERSION = '0.13';
+our $VERSION = '0.14';
 
 our @DIRS;
 our %ALREADY;
@@ -248,7 +248,7 @@ File::ShareDir::Install - Install shared files
 
 =head1 VERSION
 
-version 0.13
+version 0.14
 
 =head1 SYNOPSIS
 
@@ -287,7 +287,7 @@ directories will be ignored.
 
 Causes all the files in C<$dir> and its sub-directories to be installed
 into a per-dist or per-module share directory.  Must be called before
-L<WriteMakefile>.
+C<WriteMakefile>.
 
 The first 2 forms are equivalent; the files are installed in a per-distribution
 directory.  For example C</usr/lib/perl5/site_perl/auto/share/dist/My-Dist>.  The

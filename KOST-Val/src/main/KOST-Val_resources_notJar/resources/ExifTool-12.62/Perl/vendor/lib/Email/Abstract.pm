@@ -3,7 +3,7 @@ use warnings;
 use strict;
 package Email::Abstract;
 # ABSTRACT: unified interface to mail representations
-$Email::Abstract::VERSION = '3.008';
+$Email::Abstract::VERSION = '3.009';
 use Carp;
 use Email::Simple;
 use MRO::Compat;
@@ -124,7 +124,7 @@ Email::Abstract - unified interface to mail representations
 
 =head1 VERSION
 
-version 3.008
+version 3.009
 
 =head1 SYNOPSIS
 
@@ -160,6 +160,16 @@ C<Mail::Message>, C<Email::Simple>, C<Email::MIME>, and C<Courriel>.  Other
 representations are encouraged to create their own C<Email::Abstract::*> class
 by copying C<Email::Abstract::EmailSimple>.  All modules installed under the
 C<Email::Abstract> hierarchy will be automatically picked up and used.
+
+=head1 PERL VERSION SUPPORT
+
+This module has a long-term perl support period.  That means it will not
+require a version of perl released fewer than five years ago.
+
+Although it may work on older versions of perl, no guarantee is made that the
+minimum required version will not be increased.  The version may be increased
+for any reason, and there is no promise that patches will be accepted to lower
+the minimum required perl.
 
 =head1 METHODS
 
@@ -250,7 +260,7 @@ a string.
 
 =item *
 
-Ricardo SIGNES <rjbs@cpan.org>
+Ricardo SIGNES <rjbs@semiotic.systems>
 
 =item *
 
@@ -259,6 +269,26 @@ Simon Cozens <simon@cpan.org>
 =item *
 
 Casey West <casey@geeknest.com>
+
+=back
+
+=head1 CONTRIBUTORS
+
+=for stopwords Dave Rolsky Ricardo Signes William Yardley
+
+=over 4
+
+=item *
+
+Dave Rolsky <autarch@urth.org>
+
+=item *
+
+Ricardo Signes <rjbs@cpan.org>
+
+=item *
+
+William Yardley <pep@veggiechinese.net>
 
 =back
 

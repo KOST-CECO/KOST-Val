@@ -12,15 +12,15 @@
 # scanned at once for some particular condition of interest.  It was
 # particularly useful for developing guessing strategies.
 #
-# NOTE: This feature is deactivated in final releases but can be
-# reactivated for debugging by un-commenting the 'I' options flag
-#
 #####################################################################
 
 package Perl::Tidy::Diagnostics;
 use strict;
 use warnings;
-our $VERSION = '20210111';
+use English qw( -no_match_vars );
+our $VERSION = '20230701';
+
+use constant EMPTY_STRING => q{};
 
 sub AUTOLOAD {
 
@@ -53,8 +53,8 @@ sub new {
     my $class = shift;
     return bless {
         _write_diagnostics_count => 0,
-        _last_diagnostic_file    => "",
-        _input_file              => "",
+        _last_diagnostic_file    => EMPTY_STRING,
+        _input_file              => EMPTY_STRING,
         _fh                      => undef,
     }, $class;
 }
@@ -66,11 +66,20 @@ sub set_input_file {
 }
 
 sub write_diagnostics {
-    my ( $self, $msg ) = @_;
+    my ( $self, $msg, $line_number ) = @_;
+
+    # Write a message to the diagnostics file
+    # Input parameters:
+    #  $msg = string describing the event
+    #  $line_number = optional line number
 
     unless ( $self->{_write_diagnostics_count} ) {
         open( $self->{_fh}, ">", "DIAGNOSTICS" )
-          or Perl::Tidy::Die("couldn't open DIAGNOSTICS: $!\n");
+          or Perl::Tidy::Die("couldn't open DIAGNOSTICS: $ERRNO\n");
+    }
+
+    if ( defined($line_number) ) {
+        $msg = "$line_number:\t$msg";
     }
 
     my $fh                   = $self->{_fh};
@@ -80,11 +89,9 @@ sub write_diagnostics {
         $fh->print("\nFILE:$input_file\n");
     }
     $self->{_last_diagnostic_file} = $input_file;
-    my $input_line_number = Perl::Tidy::Tokenizer::get_input_line_number();
-    $fh->print("$input_line_number:\t$msg");
+    $fh->print($msg);
     $self->{_write_diagnostics_count}++;
     return;
 }
 
 1;
-

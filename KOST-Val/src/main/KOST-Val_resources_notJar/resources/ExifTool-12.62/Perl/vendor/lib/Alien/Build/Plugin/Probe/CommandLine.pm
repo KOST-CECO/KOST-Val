@@ -7,9 +7,10 @@ use Alien::Build::Plugin;
 use Carp ();
 use Capture::Tiny qw( capture );
 use File::Which ();
+use Alien::Util qw( version_cmp );
 
 # ABSTRACT: Probe for tools or commands already available
-our $VERSION = '2.38'; # VERSION
+our $VERSION = '2.80'; # VERSION
 
 
 has '+command' => sub { Carp::croak "@{[ __PACKAGE__ ]} requires command property" };
@@ -32,6 +33,10 @@ has 'version'   => undef;
 
 has 'version_stderr' => undef;
 
+
+has 'atleast_version' => undef;
+
+
 sub init
 {
   my($self, $meta) = @_;
@@ -52,19 +57,35 @@ sub init
       die 'Command did not return a true value' if $ret;
       die 'Command output did not match' if defined $self->match && $out !~ $self->match;
       die 'Command standard error did not match' if defined $self->match_stderr && $err !~ $self->match_stderr;
-      if(defined $self->version)
+      if (defined $self->version or defined $self->version_stderr)
       {
-        if($out =~ $self->version)
+        my $found_version = '0';
+        if(defined $self->version)
         {
-          $build->runtime_prop->{version} = $1;
+          if($out =~ $self->version)
+          {
+            $found_version = $1;
+            $build->runtime_prop->{version} = $found_version;
+          }
         }
-      }
-      if(defined $self->version_stderr)
-      {
-        if($err =~ $self->version_stderr)
+        if(defined $self->version_stderr)
         {
-          $build->hook_prop->{version} = $1;
-          $build->runtime_prop->{version} = $1;
+          if($err =~ $self->version_stderr)
+          {
+            $found_version = $1;
+            $build->hook_prop->{version} = $found_version;
+            $build->runtime_prop->{version} = $found_version;
+          }
+        }
+        if (my $atleast_version = $self->atleast_version)
+        {
+          if(version_cmp ($found_version, $self->atleast_version) < 0)
+          {
+            #  reset the versions
+            $build->runtime_prop->{version} = undef;
+            $build->hook_prop->{version} = undef;
+            die "CommandLine probe found version $found_version, but at least $atleast_version is required.";
+          }
         }
       }
     }
@@ -107,7 +128,7 @@ Alien::Build::Plugin::Probe::CommandLine - Probe for tools or commands already a
 
 =head1 VERSION
 
-version 2.38
+version 2.80
 
 =head1 SYNOPSIS
 
@@ -143,7 +164,7 @@ when you need both:
  use alienfile;
  # requires both liblzma library and xz program
  plugin 'PkgConfig' => 'liblzma';
- plugin 'Probe::CommandLine => (
+ plugin 'Probe::CommandLine' => (
    command   => 'xz',
    secondary => 1,
  );
@@ -173,6 +194,10 @@ The regular expression should store the version number in C<$1>.
 
 Regular expression to parse out the version from the program standard error.
 The regular expression should store the version number in C<$1>.
+
+=head2 atleast_version
+
+The minimum required version as provided by the system.
 
 =head1 SEE ALSO
 
@@ -220,7 +245,7 @@ Juan Julián Merelo Guervós (JJ)
 
 Joel Berger (JBERGER)
 
-Petr Pisar (ppisar)
+Petr Písař (ppisar)
 
 Lance Wicks (LANCEW)
 
@@ -238,9 +263,13 @@ Paul Evans (leonerd, PEVANS)
 
 Håkon Hægland (hakonhagland, HAKONH)
 
+nick nauwelaerts (INPHOBIA)
+
+Florian Weimer
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011-2020 by Graham Ollis.
+This software is copyright (c) 2011-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

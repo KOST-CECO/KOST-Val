@@ -3,44 +3,50 @@ use strict;
 use warnings;
 use warnings::register;
 
-use B ();
-use B::Deparse ();
-use B::Utils ();
-use Data::Dumper ();
-use DynaLoader ();
-use Exporter ();
-use IO::File ();
-use Symbol ();
-use Text::Abbrev ();
+use B              ();
+use B::Deparse     ();
+use B::Utils       ();
+use Data::Dumper   ();
+use DynaLoader     ();
+use Exporter       ();
+use IO::File       ();
+use Symbol         ();
+use Text::Abbrev   ();
 use Text::Balanced ();
-use overload ();
+use overload       ();
 
 use Data::Dump::Streamer::_::Printers;
+
+# The style of this file is determined by:
+#
+# perltidy -w -ple -bbb -bbc -bbs -nolq -l=80 -noll -nola -nwls='=' \
+#   -isbc -nolc -otr -kis -ci=4 -se -sot -sct -nsbl -pt=2 -fs  \
+#   -fsb='#start-no-tidy' -fse='#end-no-tidy' -cpb -bfvt=2
 
 # use overload qw("" printit); # does diabolical stuff.
 
 use vars qw(
-             $VERSION
-             $XS_VERSION
-             $AUTOLOAD
-             @ISA
-             @EXPORT @EXPORT_OK @EXPORT_FAIL %EXPORT_TAGS
-             %Freeze
-             %Thaw
-             $DEBUG
-             $HasPadWalker
-           );
+    $VERSION
+    $XS_VERSION
+    $AUTOLOAD
+    @ISA
+    @EXPORT @EXPORT_OK @EXPORT_FAIL %EXPORT_TAGS
+    %Freeze
+    %Thaw
+    $DEBUG
+    $HasPadWalker
+);
 
-$DEBUG=0;
-BEGIN{ $HasPadWalker=eval "use PadWalker 0.99; 1"; }
+$DEBUG= 0;
+BEGIN { $HasPadWalker= eval "use PadWalker 0.99; 1"; }
 
 BEGIN {
-    $VERSION   ='2.40';
-    $XS_VERSION = $VERSION;
-    $VERSION = eval $VERSION; # used for beta stuff.
-    @ISA       = qw(Exporter DynaLoader);
-    @EXPORT=qw(Dump DumpLex DumpVars);
-    @EXPORT_OK = qw(
+    $VERSION= '2.42';
+    $XS_VERSION= $VERSION;
+    $VERSION= eval $VERSION;    # used for beta stuff.
+    @ISA= qw(Exporter DynaLoader);
+    @EXPORT= qw(Dump DumpLex DumpVars);
+    @EXPORT_OK= qw(
         Dump
         DumpLex
         DumpVars
@@ -89,43 +95,44 @@ BEGIN {
         alias
         sqz
         usqz
-   );
-
-    %EXPORT_TAGS = (
-        undump => [ qw( alias_av alias_hv alias_ref make_ro
-                        lock_ref_keys
-                        lock_keys
-                        lock_ref_keys_plus
-                        lock_keys_plus
-                        alias_to
-                        dualvar
-                        weaken
-                        usqz
-                      )
-                  ],
-        special=> [ qw( readonly_set ) ],
-        all    => [ @EXPORT,@EXPORT_OK ],
-        alias  => [ qw( alias_av alias_hv alias_ref push_alias ) ],
-        bin    => [ @EXPORT_OK ],
-        Dumper => [ qw( Dumper DDumper )],
-        util   => [ qw (
-                        dualvar
-                        blessed reftype refaddr refcount sv_refcount
-                        readonly looks_like_number regex is_numeric
-                        make_ro readonly_set reftype_or_glob
-                        refaddr_or_glob globname
-                        weak_refcount isweak weaken
-                      )
-                  ],
-
     );
 
+    %EXPORT_TAGS= (
+        undump => [
+            qw( alias_av alias_hv alias_ref make_ro
+                lock_ref_keys
+                lock_keys
+                lock_ref_keys_plus
+                lock_keys_plus
+                alias_to
+                dualvar
+                weaken
+                usqz
+            )
+        ],
+        special => [qw( readonly_set )],
+        all     => [ @EXPORT, @EXPORT_OK ],
+        alias   => [qw( alias_av alias_hv alias_ref push_alias )],
+        bin     => [@EXPORT_OK],
+        Dumper  => [qw( Dumper DDumper )],
+        util    => [ qw (
+                dualvar
+                blessed reftype refaddr refcount sv_refcount
+                readonly looks_like_number regex is_numeric
+                make_ro readonly_set reftype_or_glob
+                refaddr_or_glob globname
+                weak_refcount isweak weaken
+            )
+        ],
+
+    );
 
     sub alias_to { return shift }
 
     #warn $VERSION;
     Data::Dump::Streamer->bootstrap($XS_VERSION);
-    if ($]>=5.013010) {
+    if ($] >= 5.013010) {
+
         # As I write this, 5.13.10 doesn't exist so I'm guessing that
         # we can begin using the ordinary core function again.
         eval q[
@@ -133,7 +140,8 @@ BEGIN {
             *regex= *regexp_pattern;
         ] or die $@;
     }
-    elsif ($]>=5.013006) {
+    elsif ($] >= 5.013006) {
+
         # Perl-5.13.6 through perl-5.13.9 began returning modifier
         # flags that weren't yet legal at the time.
         eval q[
@@ -153,7 +161,7 @@ BEGIN {
             1;
         ] or die $@;
     }
-    elsif ($]>=5.009004) {
+    elsif ($] >= 5.009004) {
         eval q[
             use re qw(regexp_pattern is_regexp);
             *regex= *regexp_pattern;
@@ -161,28 +169,29 @@ BEGIN {
         ] or die $@;
     }
     else {
-      eval q[sub is_regexp($) { defined regex($_[0]) }];
+        eval q[sub is_regexp($) { defined regex($_[0]) }];
     }
-    if ($]<=5.008) {
-        *hidden_keys=sub(\%)  { return () };
-        *legal_keys=sub(\%)   { return keys %{$_[0]} };
-        *all_keys=sub(\%\@\@) { @{$_[1]}=keys %{$_[0]}; @$_[2]=(); };
+    if ($] <= 5.008) {
+        *hidden_keys= sub(\%) { return () };
+        *legal_keys= sub(\%) { return keys %{ $_[0] } };
+        *all_keys= sub(\%\@\@) { @{ $_[1] }= keys %{ $_[0] }; @$_[2]= (); };
     }
-    if ( $]<5.008 ) {
-            no strict 'refs';
-            foreach my $sub (qw(lock_keys lock_keys_plus )) {
-                *$sub=sub(\%;@) {
-                    warnings::warn "$sub doesn't do anything before Perl 5.8.0\n";
-                    return $_[0];
-                }
+    if ($] < 5.008) {
+        no strict 'refs';
+        foreach my $sub (qw(lock_keys lock_keys_plus )) {
+            *$sub= sub(\%;@) {
+                warnings::warn "$sub doesn't do anything before Perl 5.8.0\n";
+                return $_[0];
             }
-            foreach my $sub (qw(lock_ref_keys lock_ref_keys_plus )) {
-                *$sub=sub($;@) {
-                    warnings::warn "$sub doesn't do anything before Perl 5.8.0\n";
-                    return $_[0];
-                }
+        }
+        foreach my $sub (qw(lock_ref_keys lock_ref_keys_plus )) {
+            *$sub= sub($;@) {
+                warnings::warn "$sub doesn't do anything before Perl 5.8.0\n";
+                return $_[0];
             }
-    } else {
+        }
+    }
+    else {
         eval <<'EO_HU'
         use Hash::Util qw(lock_keys);
         sub lock_ref_keys($;@) {
@@ -193,71 +202,75 @@ BEGIN {
             $hash
         }
 EO_HU
-        ;
-        *lock_ref_keys_plus=sub($;@){
-            my ($hash,@keys)=@_;
+            ;
+        *lock_ref_keys_plus= sub($;@) {
+            my ($hash, @keys)= @_;
             my @delete;
             Internals::hv_clear_placeholders(%$hash);
             foreach my $key (@keys) {
                 unless (exists($hash->{$key})) {
-                    $hash->{$key}=undef;
-                    push @delete,$key;
+                    $hash->{$key}= undef;
+                    push @delete, $key;
                 }
             }
-            SvREADONLY_ref($hash,1);
+            SvREADONLY_ref($hash, 1);
             delete @{$hash}{@delete};
-            $hash
+            $hash;
         };
-        *lock_keys_plus=sub(\%;@){lock_ref_keys_plus(@_)};
+        *lock_keys_plus= sub(\%;@) { lock_ref_keys_plus(@_) };
     }
     if ($] <= 5.008008) {
-        *disable_overloading = \&SvAMAGIC_off;
-        *restore_overloading = sub ($$) {
+        *disable_overloading= \&SvAMAGIC_off;
+        *restore_overloading= sub ($$) {
             SvAMAGIC_on($_[0], undef);
 
             # Visit all classes we are ISA and fetch the () entry from
             # every stash.
             my %done;
-            my %todo = (
+            my %todo= (
                 $_[0]     => undef,
                 UNIVERSAL => undef,
             );
             no strict 'refs';
             for my $todo_class (keys %todo) {
                 delete $todo{$todo_class};
-                $done{$todo_class} = undef;
+                $done{$todo_class}= undef;
                 for my $isa (@{"${todo_class}::ISA"}) {
-                    $todo{$isa} = undef unless exists $done{$isa};
+                    $todo{$isa}= undef unless exists $done{$isa};
                 }
             }
         };
-    } else {
-        *disable_overloading = sub ($) {
+    }
+    else {
+        *disable_overloading= sub ($) {
+
             # we use eval because $_[0] might be read-only
             # its a crappy solution, but whatever, it works
             eval { bless $_[0], 'Does::Not::Exist' };
         };
-        *restore_overloading = sub ($$) {
+        *restore_overloading= sub ($$) {
             eval { bless $_[0], $_[1] }
         };
     }
-    my %fail=map { ( $_ => 1 ) } @EXPORT_FAIL;
-    @EXPORT_OK=grep { !$fail{$_} } @EXPORT_OK;
+    my %fail= map    { ($_ => 1) } @EXPORT_FAIL;
+    @EXPORT_OK= grep { !$fail{$_} } @EXPORT_OK;
 }
 
 sub import {
-    my ($pkg) = @_;
+    my ($pkg)= @_;
     my ($idx, $alias);
 
-    if ($idx = (grep lc($_[$_]) eq 'as', 0..$#_)) {
+    if ($idx= (grep lc($_[$_]) eq 'as', 0 .. $#_)) {
+
         #print "found alias at $idx:\n";
-        ($idx, $alias) = splice(@_, $idx, 2);
+        ($idx, $alias)= splice(@_, $idx, 2);
+
         #print "found alias: $idx => $alias\n";
 
         no strict 'refs';
-        *{$alias.'::'} = *{__PACKAGE__.'::'};
+        *{ $alias . '::' }= *{ __PACKAGE__ . '::' };
     }
-    $pkg->export_to_level(1,@_);
+    $pkg->export_to_level(1, @_);
 }
 
 # NOTE
@@ -721,70 +734,75 @@ See C<Dump()> for a better way to do things.
 sub _compressor {
     return "use Data::Dump::Streamer qw(usqz);\n"
         if !@_;
-    return sqz($_[0], "usqz('", "')" );
+    return sqz($_[0], "usqz('", "')");
 }
 
 sub new {
-    my $class = shift;
-    my $self = bless {
+    my $class= shift;
+    my $self= bless {
         style => {
-            hashsep      => '=>',    # use this to separate key vals
-            arysep       => ',',
-            pairsep      => ',',
-            optspace     => ' ',
-            bless        => 'bless()', # use this to bless objects, needs fixing
+            hashsep  => '=>',         # use this to separate key vals
+            arysep   => ',',
+            pairsep  => ',',
+            optspace => ' ',
+            bless    => 'bless()',    # use this to bless objects, needs fixing
 
-            compress     => 0, # if nonzero use compressor to compress strings
-                               # longer than this value.
-            compressor   => \&_compressor,
+            compress   => 0,    # if nonzero use compressor to compress strings
+                                # longer than this value.
+            compressor => \&_compressor,
 
-            indent       => 2,    # should we indent at all?
-            indentkeys   => 1,         # indent keys
-            declare      => 0,         # predeclare vars? allows refs to root vars if 0
+            indent       => 2,  # should we indent at all?
+            indentkeys   => 1,  # indent keys
+            declare      => 0,  # predeclare vars? allows refs to root vars if 0
             sortkeys     => {},
-            verbose      => 1,         # use long names and detailed fill ins
-            dumpglob     => 1,         # dump glob contents
+            verbose      => 1,  # use long names and detailed fill ins
+            dumpglob     => 1,  # dump glob contents
             deparseglob  => 1,
-            deparse      => 1,         # deparse code refs?
-            freezer      => 'DDS_freeze',        # default freezer
-            freeze_class => {},        # freeze classes
+            deparse      => 1,  # deparse code refs?
+            freezer      => 'DDS_freeze',    # default freezer
+            freeze_class => {},              # freeze classes
 
-            rle          => 1,         # run length encode arrays
-            ignore       => {},        # ignore classes
-            indentcols   => 2,         # indent this number of cols
-            ro           => 1,         # track readonly vars
-            dualvars     => 1,         # dump dualvars
-            eclipsename  => "%s_eclipse_%d",
+            rle         => 1,                # run length encode arrays
+            ignore      => {},               # ignore classes
+            indentcols  => 2,                # indent this number of cols
+            ro          => 1,                # track readonly vars
+            dualvars    => 1,                # dump dualvars
+            eclipsename => "%s_eclipse_%d",
 
-            purity       => 1,         # test
+            purity => 1,                     # test
+
+            terse => 0,
 
             # use this if deparse is 0
-            codestub     => 'sub { Carp::confess "Dumped code stub!" }',
-            formatstub   => 'do{ local *F; eval "format F =\nFormat Stub\n.\n"; *F{FORMAT} }',
+            codestub   => 'sub { Carp::confess "Dumped code stub!" }',
+            formatstub =>
+                'do{ local *F; eval "format F =\nFormat Stub\n.\n"; *F{FORMAT} }',
+
             # use these opts if deparse is 1
-            deparseopts  => ["-sCi2v'Useless const omitted'"],
-            special      => 0,
+            deparseopts => ["-sCi2v'Useless const omitted'"],
+            special     => 0,
 
             # not yet implemented
-            array_warn  => 10_000,    # warn if an array has more than this number of elements
-            array_chop  => 32_767,    # chop arrays over this size
-            array_max   => 1_000_000, # die if arrays have more than this size
-            smart_array => 1,         # special handling of very large arrays
-                                      # with hashes as their 0 index. (pseudo-hash error detection)
+            array_warn =>
+                10_000, # warn if an array has more than this number of elements
+            array_chop  => 32_767,      # chop arrays over this size
+            array_max   => 1_000_000,   # die if arrays have more than this size
+            smart_array => 1,           # special handling of very large arrays
+                # with hashes as their 0 index. (pseudo-hash error detection)
         },
-        debug => 0,
+        debug     => 0,
         cataloged => 0,
-        ref_id => 0,
-        sv_id => 0
+        ref_id    => 0,
+        sv_id     => 0
     }, $class;
 
     return $self;
 }
 
 sub _safe_self {
-    my $self = shift;
-    unless ( ref $self ) {
-        $self = $self->new();
+    my $self= shift;
+    unless (ref $self) {
+        $self= $self->new();
     }
     return $self;
 }
@@ -800,10 +818,10 @@ sub DDumper {
 #sub _is_utf8 { length $_[0] != do { use bytes; length $_[0] } }
 
 BEGIN {
-    my $numeric_rex=qr/\A-?(?:0|[1-9]\d*)(\.\d+(?<!0))?\z/;
+    my $numeric_rex= qr/\A-?(?:0|[1-9]\d*)(\.\d+(?<!0))?\z/;
 
     # used by _qquote below
-    my %esc = (
+    my %esc= (
         "\a" => "\\a",
         "\b" => "\\b",
         "\t" => "\\t",
@@ -818,35 +836,37 @@ BEGIN {
     # put a string value in double quotes
     # Fixes by [ysth]
     sub _qquote {
-        my $str = shift;
+        my $str= shift;
         my @ret;
         while (length($str)) {
-            local($_)=substr($str,0,72,"");
+            local ($_)= substr($str, 0, 72, "");
             s/([\\\"\@\$])/\\$1/g;
 
             unless (/[^ !""\#\$%&''()*+,\-.\/0-9:;<=>?\@A-Z[\\\]^_`a-z{|}~]/) {
-                push @ret,qq("$_"); # fast exit
+                push @ret, qq("$_");    # fast exit
                 next;
             }
 
-
             s/([\a\b\t\n\f\r\e])/$esc{$1}/g;
 
-            if ( ord('^') == 94 ) {
+            if (ord('^') == 94) {
+
                 # ascii / utf8
                 # no need for 3 digits in escape if followed by a digit
                 s/([\0-\037])(?!\d) / sprintf '\\%o',    ord($1)/xeg;
                 s/([\0-\037\177])   / sprintf '\\%03o',  ord($1)/xeg;
 
                 if (length $_ != do { use bytes; length $_ }) {
-                    use utf8; #perl 5.6.1 needs this, 5.9.2 doesn't. sigh
+                    use utf8;    #perl 5.6.1 needs this, 5.9.2 doesn't. sigh
                     s/([\200-\377]) / sprintf '\\%03o',  ord($1)/xeg;
                     s/([^\040-\176])/ sprintf '\\x{%x}', ord($1)/xeg;
-                } else {
+                }
+                else {
                     # must not be under "use utf8" for 5.6.x
                     s/([\200-\377]) / sprintf '\\%03o',  ord($1)/xeg;
                 }
-            } else {
+            }
+            else {
                 # ebcdic
                 s{([^ !""\#\$%&''()*+,\-.\/0-9:;<=>?\@A-Z[\\\]^_`a-z{|}~])(?!\d)}
                  {
@@ -856,18 +876,18 @@ BEGIN {
                    {'\\'.sprintf('%03o',ord($1))}eg;
             }
 
-            push @ret,qq("$_");
+            push @ret, qq("$_");
         }
-        return join ".\n\t",@ret;
+        return join ".\n\t", @ret;
     }
-
 
     # single quote
     sub _quote {
-        my $v = join "", @_;
-        if ($v=~$numeric_rex) {
+        my $v= join "", @_;
+        if ($v =~ $numeric_rex) {
             return $v;
-        } elsif ($v!~/[^\x20-\x7E]/) {
+        }
+        elsif ($v !~ /[^\x20-\x7E]/) {
             $v =~ s/([\\''])/\\$1/g;
             return "'$v'";
         }
@@ -876,61 +896,65 @@ BEGIN {
 
     # quote a key
     sub _quotekey {
-        my $key = shift;
+        my $key= shift;
         if (!defined($key) or $key eq '') {
-            return '""'
-        } elsif ($key=~$numeric_rex or $key =~ /\A-?[A-Za-z_]\w*\z/) {
-            return $key
-        } else {
+            return '""';
+        }
+        elsif ($key =~ $numeric_rex or $key =~ /\A-?[A-Za-z_]\w*\z/) {
+            return $key;
+        }
+        else {
             _qquote($key);
         }
     }
 }
 
-my %ttrans = (
-    reftype( {} )      => '%',
-    reftype( [] )      => '@',
-    reftype( \ 'foo' ) => '$',
-    reftype( \\'foo' ) => '$', # REF
-    reftype( sub{} )   => '&',
-    ''                 => '$',
+my %ttrans= (
+    reftype({})      => '%',
+    reftype([])      => '@',
+    reftype(\ 'foo') => '$',
+    reftype(\\'foo') => '$',    # REF
+    reftype(sub { }) => '&',
+    ''               => '$',
 );
 
-
 sub _make_name {
-    my ( $self, $obj, $indx ) = @_;
+    my ($self, $obj, $indx)= @_;
+
     #warn Dumper($self->{unames})."'$self->{unames}'
     # : @{$self->{unames}||[]} @{[defined $indx ? $indx : '-']}";
-    my $uname = ( $self->{unames} || [] )->[ $indx || 0 ];
+    my $uname= ($self->{unames} || [])->[ $indx || 0 ];
 
     unless ($uname) {
-        my $name = blessed($_[1])
-                  || reftype($_[1])
-                  || ((readonly($_[1]) && (\$_[1] != \undef)) ? "RO" : "VAR");
+        my $name=
+               blessed($_[1])
+            || reftype($_[1])
+            || ((readonly($_[1]) && (\$_[1] != \undef)) ? "RO" : "VAR");
         unless ($self->{style}{verbose}) {
-            my $n=1;
-            (my $abr=$name)=~s/(\w)\w*::/$1/g;
-            $self->{type_abrv}{$name}||=$name;
-            while ($n<=length($abr) and
-                   $self->{type_abrv}{substr($abr,0,$n)} and
-                   $self->{type_abrv}{substr($abr,0,$n)} ne $name) {
+            my $n= 1;
+            (my $abr= $name) =~ s/(\w)\w*::/$1/g;
+            $self->{type_abrv}{$name} ||= $name;
+            while ( $n <= length($abr)
+                and $self->{type_abrv}{ substr($abr, 0, $n) }
+                and $self->{type_abrv}{ substr($abr, 0, $n) } ne $name)
+            {
                 $n++;
             }
-            if ($n<=length($abr)) {
-                $self->{type_abrv}{substr($abr,0,$n)}=$name;
-                return '$' .
-                       substr($abr,0,$n) .
-                       ( ++$self->{type_ids}{$name} );
+            if ($n <= length($abr)) {
+                $self->{type_abrv}{ substr($abr, 0, $n) }= $name;
+                return '$' . substr($abr, 0, $n) . (++$self->{type_ids}{$name});
             }
         }
         $name =~ s/::/_/g;
-        ($name)=$name=~/(\w+)/; #take the first word;
-        return '$' . $name . ( ++$self->{type_ids}{$name} );
-    } elsif ( $uname =~ /^[-*]/ ) {
-        my $type = reftype( $_[1] ) || '';
+        ($name)= $name =~ /(\w+)/;    #take the first word;
+        return '$' . $name . (++$self->{type_ids}{$name});
+    }
+    elsif ($uname =~ /^[-*]/) {
+        my $type= reftype($_[1]) || '';
         $uname =~ s//$ttrans{$type}/;
         $uname;
-    } else {
+    }
+    else {
         return '$' . $uname;
     }
 }
@@ -943,16 +967,16 @@ sub _make_name {
 #=cut
 
 sub diag {
-    my $self=shift;
-    my $handle=shift || \*STDOUT;
+    my $self= shift;
+    my $handle= shift || \*STDOUT;
     print $handle "+---+\n";
 
     my $oidx;
-    foreach my $idx (1..$self->{sv_id}) {
+    foreach my $idx (1 .. $self->{sv_id}) {
         print $handle $self->diag_sv_idx($idx);
     }
     print "-----\n" if $self->{ref_id} and $self->{sv_id};
-    foreach my $idx (1..($self->{ref_id}||0)) {
+    foreach my $idx (1 .. ($self->{ref_id} || 0)) {
         print $handle $self->diag_ref_idx($idx);
 
     }
@@ -961,122 +985,125 @@ sub diag {
 }
 
 sub remove_deref {
-    my $var=shift;
+    my $var= shift;
 
-    my ($brace,$rest,$sigil);
-    if ($var=~s/^([\@\%\$])(?=\$)//) {
-        ($sigil,$brace)=($1,$var)
-    } else {
+    my ($brace, $rest, $sigil);
+    if ($var =~ s/^([\@\%\$])(?=\$)//) {
+        ($sigil, $brace)= ($1, $var);
+    }
+    else {
         local $@;
-        ($brace,$rest,$sigil)= Text::Balanced::extract_bracketed( $var, '{q}',qr/[\@\%\$]/ );
+        ($brace, $rest, $sigil)=
+            Text::Balanced::extract_bracketed($var, '{q}', qr/[\@\%\$]/);
     }
     if ($brace and !$rest) {
-        $brace=~s/^\{(.*)\}$/$1/;
-        return wantarray ? ($sigil,$brace) : $brace;
-    } else {
+        $brace =~ s/^\{(.*)\}$/$1/;
+        return wantarray ? ($sigil, $brace) : $brace;
+    }
+    else {
         return;
     }
 }
 
-my %tname=qw(HASH % ARRAY @ SCALAR $ REF $);
+my %tname= qw(HASH % ARRAY @ SCALAR $ REF $);
 
 sub _build_name {
-    my ( $self, $name, $type, $val ) = @_;
+    my ($self, $name, $type, $val)= @_;
 
-    $DEBUG>1 and print STDOUT "  _build_name( $name '$type' => ";
-    $type=$tname{$type} if $tname{$type};
-    if ($type=~/[[{]/) {
+    $DEBUG > 1 and print STDOUT "  _build_name( $name '$type' => ";
+    $type= $tname{$type} if $tname{$type};
+    if ($type =~ /[[{]/) {
 
-        $name=~s/[\@\%]\$/\$/;
-        my ($sigil,$brace)=remove_deref($name);
-        if ( $name =~ /^([\@\%\$])(\w+)$/ or $sigil
-             or $name=~/^\*.*\{(?:SCALAR|HASH|ARRAY)\}$/
-           )
+        $name =~ s/[\@\%]\$/\$/;
+        my ($sigil, $brace)= remove_deref($name);
+        if (   $name =~ /^([\@\%\$])(\w+)$/
+            or $sigil
+            or $name =~ /^\*.*\{(?:SCALAR|HASH|ARRAY)\}$/)
         {
 
-            $name .= '->' if !($name =~ s/^[\@\%]/\$/)
-                          or $sigil;
-            $name=~s/^\$(\$.*)->$/\$\{$1\}->/;
+            $name .= '->'
+                if !($name =~ s/^[\@\%]/\$/)
+                or $sigil;
+            $name =~ s/^\$(\$.*)->$/\$\{$1\}->/;
         }
 
-        $DEBUG>1 and print STDOUT "$name => ";
+        $DEBUG > 1 and print STDOUT "$name => ";
 
-        if ( $type eq '[' ) {
+        if ($type eq '[') {
             $name .= "[$val]";
-        } elsif ( $type eq '{' ) {
+        }
+        elsif ($type eq '{') {
             $name .= "{" . _quotekey($val) . "}";
-        } else {
+        }
+        else {
             Carp::confess "Fallen off the end of the world...";
         }
-    } elsif ( $type =~ /^[\@\%\$]$/ ) {
-        $name = "{$name}"
-           if $name =~ /[\[\{]/ or $name=~/^\*/;
-        $name = $type . $name
-          unless substr( $name, 0, 1 ) eq $type and $type ne '$';
+    }
+    elsif ($type =~ /^[\@\%\$]$/) {
+        $name= "{$name}"
+            if $name =~ /[\[\{]/ or $name =~ /^\*/;
+        $name= $type . $name
+            unless substr($name, 0, 1) eq $type and $type ne '$';
 
-    } else {
-        no warnings; # XXX - why is this here? Yves
+    }
+    else {
+        no warnings;    # XXX - why is this here? Yves
         Carp::confess "unimplemented _build_name";
     }
-    $DEBUG>1 and print "$name )\n";
+    $DEBUG > 1 and print "$name )\n";
     $name;
 }
 
 sub _reset {
-    my $self=shift;
+    my $self= shift;
     foreach my $key (keys %$self) {
-        next unless $key=~/^(sv|ref|fix|cat|type|names|reqs|cache)/;
+        next unless $key =~ /^(sv|ref|fix|cat|type|names|reqs|cache)/;
         delete $self->{$key};
     }
-    $self->{sv_id}=$self->{ref_id}=0;
+    $self->{sv_id}= $self->{ref_id}= 0;
     $self;
 }
 
 sub diag_sv_idx {
-    my $self=shift;
-    my $idx=shift;
-    my $prefix=shift||'';
-    my $oidx=$self->{ref}{$self->{sva}[$idx]};
-    my $ret=$prefix.
-    sprintf "S%s%2d : %#x(c%2d|%2d) Dp:%2d %s Du:%s => %s %s %s %s\n",
-        ($self->{special}{$idx} ? '*' : ' '),$idx,
+    my $self= shift;
+    my $idx= shift;
+    my $prefix= shift || '';
+    my $oidx= $self->{ref}{ $self->{sva}[$idx] };
+    my $ret= $prefix
+        . sprintf "S%s%2d : %#x(c%2d|%2d) Dp:%2d %s Du:%s => %s %s %s %s\n",
+        ($self->{special}{$idx} ? '*' : ' '), $idx,
         (map { $self->{$_}[$idx] } qw( sva svc svt svd )),
         ($self->{svro}[$idx] ? 'RO ' : 'RW'),
-        (!$self->{svdu}[$idx]
-          ? '-'
-          : defined ${$self->{svdu}[$idx]}
-            ? ${$self->{svdu}[$idx]}
-            : '?'),
-        $self->{svn}[$idx],
-        (defined $self->{unames}[$idx-1] ? "($self->{unames}[$idx-1])" : ""),
-        (($oidx) ? "< $self->{refn}[$oidx] >" : ""),
-        ($self->{svon}{$idx} ? ": $self->{svon}{$idx}" : "")
-        ;
+        (
+          !$self->{svdu}[$idx]             ? '-'
+        : defined ${ $self->{svdu}[$idx] } ? ${ $self->{svdu}[$idx] }
+        :                                    '?'
+        ),
+        $self->{svn}[$idx], (
+        defined $self->{unames}[ $idx - 1 ] ? "($self->{unames}[$idx-1])" : ""),
+        (($oidx)             ? "< $self->{refn}[$oidx] >" : ""),
+        ($self->{svon}{$idx} ? ": $self->{svon}{$idx}"    : "");
     if ($prefix and $oidx) {
-        $ret.=$prefix.$self->diag_ref_idx($oidx);
+        $ret .= $prefix . $self->diag_ref_idx($oidx);
     }
     $ret;
 }
 
 sub diag_ref_idx {
-    my $self=shift;
-    my $idx=shift;
-    my $oidx=$self->{sv}{$self->{refa}[$idx]};
+    my $self= shift;
+    my $idx= shift;
+    my $oidx= $self->{sv}{ $self->{refa}[$idx] };
     sprintf "R %2d : %#x(c%2d|%2d) Dp:%2d    Du:%s => %s %s\n",
         $idx,
-        (map {
-            defined $self->{$_}[$idx] ?  $self->{$_}[$idx] : -1
-         } qw(refa refc reft refd )),
-        (!$self->{refdu}[$idx]
-         ? '-'
-         : defined ${$self->{refdu}[$idx]}
-           ? ${$self->{refdu}[$idx]}
-           : '?'),
+        (map { defined $self->{$_}[$idx] ? $self->{$_}[$idx] : -1 }
+            qw(refa refc reft refd )), (
+          !$self->{refdu}[$idx]             ? '-'
+        : defined ${ $self->{refdu}[$idx] } ? ${ $self->{refdu}[$idx] }
+        :                                     '?'
+        ),
         $self->{refn}[$idx],
-        (($oidx) ? " < $self->{svn}[$oidx] >" : "")
-        ;
+        (($oidx) ? " < $self->{svn}[$oidx] >" : "");
 }
-
 
 =item Dump
 
@@ -1152,33 +1179,35 @@ Hopefully this should make method use more or less DWIM.
 my %args_insideout;
 
 sub DESTROY {
-    my $self=shift;
-    delete $args_insideout{Data::Dump::Streamer::refaddr $self} if $self;
+    my $self= shift;
+    delete $args_insideout{ Data::Dump::Streamer::refaddr $self} if $self;
 }
 
 sub Dump {
     my $obj;
-    if ( blessed($_[0]) and blessed($_[0]) eq __PACKAGE__ ) {
-        $obj=shift;
+    if (blessed($_[0]) and blessed($_[0]) eq __PACKAGE__) {
+        $obj= shift;
     }
     if (@_) {
-        if ( defined wantarray and !wantarray ) {
+        if (defined wantarray and !wantarray) {
             $obj ||= __PACKAGE__->new();
             $obj->_make_args(@_);
             return $obj;
-        } else {
-            $obj||=__PACKAGE__;
+        }
+        else {
+            $obj ||= __PACKAGE__;
             return $obj->Data(@_)->Out();
         }
-    } else {
+    }
+    else {
         if ($obj) {
             return $obj->Out();
-        } else {
+        }
+        else {
             return __PACKAGE__->new();
         }
     }
 }
-
 
 =item DumpLex VALUES
 
@@ -1194,18 +1223,19 @@ similar wrapper around L<Data::Dumper>.
 
 =cut
 
-
 sub DumpLex {
-    if ( ! $HasPadWalker ) {
+    if (!$HasPadWalker) {
+
         #warn( "Can't use DumpLex without ".
         #    "PadWalker v1.0 or later installed.");
         goto &Dump;
     }
     my $obj;
-    if ( blessed($_[0]) and blessed($_[0]) eq __PACKAGE__ ) {
-        $obj=shift;
+    if (blessed($_[0]) and blessed($_[0]) eq __PACKAGE__) {
+        $obj= shift;
     }
     my @names;
+
     # = map {
     #        PadWalker::var_name(1,\$_)
     #        || PadWalker::var_name(1,\$_)
@@ -1215,28 +1245,27 @@ sub DumpLex {
     #if ( !@names && @_ ) {
 
     my %pad_vars;
-    foreach my $pad ( PadWalker::peek_my(1),
-        PadWalker::peek_our(1)
-    ){
-        while (my ($var,$ref) = each %$pad) {
+    foreach my $pad (PadWalker::peek_my(1), PadWalker::peek_our(1)) {
+        while (my ($var, $ref)= each %$pad) {
             $pad_vars{ refaddr $ref } ||= $var;
         }
     }
     foreach (@_) {
         my $name;
-        INNER:foreach ( \$_, $_ ) {
-            $name=$pad_vars{refaddr $_}
+        INNER: foreach (\$_, $_) {
+            $name= $pad_vars{ refaddr $_}
                 and last INNER;
         }
         push @names, $name;
     }
-    if ( defined wantarray and !wantarray ) {
+    if (defined wantarray and !wantarray) {
         $obj ||= __PACKAGE__->new();
         $obj->_make_args(@_);
         $obj->Names(@names);
         return $obj;
-    } else {
-        $obj||=__PACKAGE__;
+    }
+    else {
+        $obj ||= __PACKAGE__;
         return $obj->Names(@names)->Data(@_)->Out();
     }
 }
@@ -1251,11 +1280,10 @@ passed to L<Names()|/Names>.
 
 =cut
 
-
 sub DumpVars {
     my $obj;
-    if ( blessed($_[0]) and blessed($_[0]) eq __PACKAGE__ ) {
-        $obj=shift;
+    if (blessed($_[0]) and blessed($_[0]) eq __PACKAGE__) {
+        $obj= shift;
     }
     if (@_ % 2) {
         warnings::warnif "Odd number of arguments in DumpVars";
@@ -1263,99 +1291,100 @@ sub DumpVars {
     }
     my @names;
     my @args;
-    for ( 0 .. $#_/2 ) {
-        $names[$_]=$_[$_*2];
-        $args[$_]=$_*2+1;
+    for (0 .. $#_ / 2) {
+        $names[$_]= $_[ $_ * 2 ];
+        $args[$_]= $_ * 2 + 1;
     }
+
     #die "@_:@names|@args";
-    if ( defined wantarray and !wantarray ) {
+    if (defined wantarray and !wantarray) {
         $obj ||= __PACKAGE__->new();
         $obj->_make_args(@_[@args]);
         $obj->Names(@names);
         return $obj;
-    } else {
-        $obj||=__PACKAGE__;
+    }
+    else {
+        $obj ||= __PACKAGE__;
         return $obj->Data(@_[@args])->Names(@names)->Out();
     }
 }
 
-
 sub _reg_ref {
-    my ($self,$item,$depth,$name,$cnt,$arg)=@_;
+    my ($self, $item, $depth, $name, $cnt, $arg)= @_;
 
-    warn "_ref_ref($depth,$name,$cnt)\n" if $DEBUG;
+    print "_reg_ref($depth,$name,$cnt)\n" if $DEBUG;
 
-    my $addr=refaddr $item;
-    $arg->{raddr}=$addr if $arg;
+    my $addr= refaddr $item;
+    $arg->{raddr}= $addr if $arg;
     my $idx;
-    unless ($idx=$self->{ref}{$addr}) {
-        $idx=$self->{ref}{$addr}=++$self->{ref_id};
-        $arg->{ridx}=$idx if $arg;
-        $self->{refn}[$idx]=$name;
-        $self->{refd}[$idx]=$depth;
-        $self->{refa}[$idx]=$addr;
-        $self->{refc}[$idx]=$cnt;
-        return wantarray ? ($idx,0) : $idx
+    unless ($idx= $self->{ref}{$addr}) {
+        $idx= $self->{ref}{$addr}= ++$self->{ref_id};
+        $arg->{ridx}= $idx if $arg;
+        $self->{refn}[$idx]= $name;
+        $self->{refd}[$idx]= $depth;
+        $self->{refa}[$idx]= $addr;
+        $self->{refc}[$idx]= $cnt;
+        return wantarray ? ($idx, 0) : $idx;
     }
     $self->{reft}[$idx]++;
-    $arg->{ridx}=$idx if $arg;
-    return wantarray ? ($idx,1) : undef;
+    $arg->{ridx}= $idx if $arg;
+    return wantarray ? ($idx, 1) : undef;
 }
 
-
 sub _reg_scalar {
-    my ($self,$item,$depth,$cnt,$ro,$name,$arg)=@_;
-    Carp::cluck $name if $name=~/^\$\*/;
-    my $addr=refaddr \$_[1];
+    my ($self, $item, $depth, $cnt, $ro, $name, $arg)= @_;
+    Carp::cluck $name if $name =~ /^\$\*/;
+    my $addr= refaddr \$_[1];
     my $idx;
-    $arg->{addr}=$addr if $arg;
-    unless ($idx=$self->{sv}{$addr}) {
-        $idx=$self->{sv}{$addr}=++$self->{sv_id};
-        $self->{svd}[$idx]=$depth;
-        $self->{sva}[$idx]=$addr;
-        $self->{svro}[$idx]=$ro;
-        $self->{svc}[$idx]=$cnt;
-        $self->{svw}{$addr}=!0
+    $arg->{addr}= $addr if $arg;
+    unless ($idx= $self->{sv}{$addr}) {
+        $idx= $self->{sv}{$addr}= ++$self->{sv_id};
+        $self->{svd}[$idx]= $depth;
+        $self->{sva}[$idx]= $addr;
+        $self->{svro}[$idx]= $ro;
+        $self->{svc}[$idx]= $cnt;
+        $self->{svw}{$addr}= !0
             if isweak($_[1]);
-        ($self->{svn}[$idx]=$name)=~s/^[\@\%\&]/\$/;
+        ($self->{svn}[$idx]= $name) =~ s/^[\@\%\&]/\$/;
         if ($self->{svn}[$idx] ne $name) {
-            $self->{svn}[$idx].="_"; #XXX
-            #warn "$self->{svn}[$idx] ne $name"
-            $self->{svon}{$idx}=$name;
+            $self->{svn}[$idx] .= "_";    #XXX
+                                          #warn "$self->{svn}[$idx] ne $name"
+            $self->{svon}{$idx}= $name;
         }
 
-    } else{
-        if ($DEBUG>9) {
+    }
+    else {
+        if ($DEBUG > 9) {
             print $self->diag_sv_idx($idx);
-           print "$name is already registered as $self->{svn}[$idx] ".
-                 "Depth ($self->{svd}[$idx]) $depth\n";
+            print "$name is already registered as $self->{svn}[$idx] "
+                . "Depth ($self->{svd}[$idx]) $depth\n";
         }
-        if ($self->{svn}[$idx]=~/^\$\{?\$/ and $name!~/^\$\{?\$/) {
-            $self->{svn}[$idx]=$name;
+        if ($self->{svn}[$idx] =~ /^\$\{?\$/ and $name !~ /^\$\{?\$/) {
+            $self->{svn}[$idx]= $name;
         }
     }
     $self->{svt}[$idx]++;
-    $arg->{idx}=$idx if $arg;
+    $arg->{idx}= $idx          if $arg;
     Carp::confess "Dupe name!" if $self->{svrt}{$name};
-    $self->{svrt}{$name}=$idx;
+    $self->{svrt}{$name}= $idx;
     return $name;
 }
 
-*Precise=\&Dump;
+*Precise= \&Dump;
 
 # we make an array of hashes containing useful info about the arguments
 sub _make_args {
-    my $self=shift;
-    $args_insideout{refaddr $self}= [
-                map {
-                        {
-                                item   => \$_[$_],
-                                ro     => readonly($_[$_]),
-                                refcnt => sv_refcount($_[$_]),
-                        }
-                    } 0..$#_
-            ];
-    return $args_insideout{refaddr $self}
+    my $self= shift;
+    $args_insideout{ refaddr $self}= [
+        map {
+            {
+                item   => \$_[$_],
+                ro     => readonly($_[$_]),
+                refcnt => sv_refcount($_[$_]),
+            }
+        } 0 .. $#_
+    ];
+    return $args_insideout{ refaddr $self};
 }
 
 =back
@@ -1380,12 +1409,13 @@ Returns $self.
 
 =cut
 
-
 sub _add_queue {
-    my ($self,$queue,$type,$item,$depth,$name,$rcount,$arg)=@_;
-    if (substr($type,0,1) ne '*') {
-        push @$queue,[\$item,$depth,$name,$rcount,$arg];
-    } elsif($self->{style}{dumpglob}) {
+    my ($self, $queue, $type, $item, $depth, $name, $rcount, $arg)= @_;
+    print "add_queue($name)\n" if $DEBUG;
+    if (substr($type, 0, 1) ne '*') {
+        push @$queue, [ \$item, $depth, $name, $rcount, $arg ];
+    }
+    elsif ($self->{style}{dumpglob}) {
         local @_;
         foreach my $t ($self->_glob_slots('FORMAT')) {
 
@@ -1394,53 +1424,47 @@ sub _add_queue {
             #$self->_reg_scalar(*$item{$t},$depth+1,sv_refcount(*$item{$t}),
             # readonly(*$item{$t}),'*'.$name."{$t}");
 
-            my $v=*$item{$t};
+            my $v= *$item{$t};
             next unless defined $v;
             next if $t eq 'SCALAR' and !defined($$v);
-            push @$queue,[
-                \*$item{$t},
-                $depth+1,
-                $type."{$t}",
-                refcount(\*$item{$t})
-            ];
+            push @$queue, [
+                \*$item{$t},    $depth + 1,
+                $type . "{$t}", refcount(\*$item{$t}) ];
         }
     }
+
     #use Scalar::Util qw(weaken);
     $self;
 }
 
 sub Data {
-    my $self=shift->_safe_self;
+    my $self= shift->_safe_self;
     my $args;
-    print "Data(".scalar(@_)." vars)\n"
+    print "Data(" . scalar(@_) . " vars)\n"
         if $DEBUG;
     if (@_) {
         $self->_reset;
         $self->_make_args(@_);
-    } elsif ( $self->{cataloged} ) {
+    }
+    elsif ($self->{cataloged}) {
         $self->_reset;
     }
-    $args= $args_insideout{refaddr $self}
+    $args= $args_insideout{ refaddr $self}
         || Carp::carp "No arguments!";
-    my $pass=1;
-PASS:{
+    my $pass= 1;
+    PASS: {
         my @queue;
-        my $idx=0;
+        my $idx= 0;
         foreach my $arg (@$args) {
+
             #($self,$item,$depth,$cnt,$ro,$name)
-            my $make_name=$self->_make_name(${ $arg->{item} },$idx++);
-            my $name=$self->_reg_scalar(
-                ${ $arg->{item} },
-                1,
-                $arg->{refcnt},
-                $arg->{ro},
-                $make_name,
-                $arg
-            );
-            $arg->{name}=$name;
-            if (my $type=reftype_or_glob ${ $arg->{item} }) {
-                $self->_add_queue(\@queue, $type, ${ $arg->{item} }, 2,
-                   $name, refcount ${ $arg->{item} },$arg)
+            my $make_name= $self->_make_name(${ $arg->{item} }, $idx++);
+            my $name= $self->_reg_scalar(${ $arg->{item} },
+                1, $arg->{refcnt}, $arg->{ro}, $make_name, $arg);
+            $arg->{name}= $name;
+            if (my $type= reftype_or_glob ${ $arg->{item} }) {
+                $self->_add_queue(\@queue, $type, ${ $arg->{item} },
+                    2, $name, refcount ${ $arg->{item} }, $arg);
             }
         }
 
@@ -1449,492 +1473,572 @@ PASS:{
         my %lex_name;
         my %lex_special;
 
+        ITEM:
         while (@queue) {
+
             # If the scalar (container) is of any interest it is
             # already registered by the time we see it here.
             # at this point we only care about the contents, not the
             # container.
-            print Data::Dumper->new([\@queue],['*queue'])->Maxdepth(3)->Dump
-                if $DEBUG>=10;
+            print Data::Dumper->new([ \@queue ], ['*queue'])->Maxdepth(3)->Dump
+                if $DEBUG >= 10;
 
-            my ($ritem,
-                $cdepth,
-                $cname,
-                $rcnt,
-                $arg)=@{shift @queue};
+            my ($ritem, $cdepth, $cname, $rcnt, $arg)= @{ shift @queue };
 
-
-
-            my ($frozen,$item,$raddr,$class);
-            DEQUEUE:{
-                $item=$$ritem;
-                $raddr=refaddr($item);
-                $class=blessed($item);
+            my ($frozen, $item, $raddr, $class);
+            DEQUEUE: {
+                $item= $$ritem;
+                $raddr= refaddr($item);
+                $class= blessed($item);
 
                 if ($self->{ref_fz}{$raddr}) {
                     print "Skipping frozen element $raddr\n" if $DEBUG;
-                    next;
+                    next ITEM;
+                }
+                if ($cname =~ /^\*DB::args/) {
+                    print "Skipping \*DB::args\n" if $DEBUG;
+                    next ITEM;
                 }
 
-                $DEBUG and
-                print "Q-> $item $cdepth $cname $rcnt ($raddr)\n";
+                $DEBUG
+                    and print "Q-> $item $cdepth $cname $rcnt ($raddr)\n";
 
                 unless ($raddr) {
-                    $DEBUG and
-                    print "  Skipping '$cname' as it isn't a reference.\n";
-                    next;
+                    $DEBUG
+                        and print
+                        "  Skipping '$cname' as it isn't a reference.\n";
+                    next ITEM;
                 }
 
                 last DEQUEUE if $frozen;
-                $frozen=1;
-                if ($self->{style}{ignore}{"#$raddr"} || ($class&& $self->{style}{ignore}{".$class"})) {
-                    $DEBUG and
-                    print "Ignoring '$cname' as its class ($class) in ".
-                          "our ignore list.\n";
-                    next;
-                } elsif ($class && !$self->{"cache_skip_freeze"}{$class}) {
+                $frozen= 1;
+                if ($self->{style}{ignore}{"#$raddr"}
+                    || ($class && $self->{style}{ignore}{".$class"}))
+                {
+                    $DEBUG
+                        and print "Ignoring '$cname' as its class ($class) in "
+                        . "our ignore list.\n";
+                    next ITEM;
+                }
+                elsif ($class && !$self->{"cache_skip_freeze"}{$class}) {
                     my $freezer= $self->{cache_freeze_class}{$class};
-                    my ( $proxy, $thaw, $postop );
-                    if (! defined $freezer ) {
-                        for ( $self->{style}{freeze_class}{$class},
-                              $self->{style}{freezer},
-                              'DDS_freeze' )
+                    my ($proxy, $thaw, $postop);
+                    if (!defined $freezer) {
+                        TRY_FREEZE:
+                        for ($self->{style}{freeze_class}{$class},
+                            $self->{style}{freezer}, 'DDS_freeze')
                         {
                             $freezer= $_;
-                            if ( $freezer ) {
+                            if ($freezer) {
                                 if (ref $freezer) {
                                     eval {
-                                        ($proxy,$thaw,$postop)= $freezer->($$ritem);
+                                        ($proxy, $thaw, $postop)=
+                                            $freezer->($$ritem);
                                     };
-                                    last if !$@;
-                                } elsif ( $class->can($freezer) ) {
-                                    eval {
-                                        ($proxy,$thaw,$postop)= ${$ritem}->$freezer();
-                                    };
-                                    last if !$@;
+                                    last TRY_FREEZE if !$@;
                                 }
-                            } elsif ( defined $freezer ) {
-                                last;
+                                elsif ($class->can($freezer)) {
+                                    eval {
+                                        ($proxy, $thaw, $postop)=
+                                            ${$ritem}->$freezer();
+                                    };
+                                    last TRY_FREEZE if !$@;
+                                }
+                            }
+                            elsif (defined $freezer) {
+                                last TRY_FREEZE;
                             }
                         }
-                        if (! defined $proxy) {
-                            $self->{"cache_skip_freeze"}{$class}=1;
-                        } else {
+                        if (!defined $proxy) {
+                            $self->{"cache_skip_freeze"}{$class}= 1;
+                        }
+                        else {
                             $self->{cache_freeze_class}{$class}= $freezer;
                         }
 
-                    } elsif (ref $freezer) {
-                        ($proxy,$thaw)= $freezer->($$ritem);
-                    } else {
-                        ($proxy,$thaw)= ${$ritem}->$freezer();
                     }
-                    if ( $thaw ) {
+                    elsif (ref $freezer) {
+                        ($proxy, $thaw)= $freezer->($$ritem);
+                    }
+                    else {
+                        ($proxy, $thaw)= ${$ritem}->$freezer();
+                    }
+                    if ($thaw) {
                         $self->{ref_thaw}{$raddr}= $thaw;
                     }
-                    if ( $postop ) {
+                    if ($postop) {
                         $self->{ref_postop}{$raddr}= $postop;
                     }
-                    if ( refaddr($proxy) != $raddr ) {
+                    if (refaddr($proxy) != $raddr) {
                         $self->{ref_fz}{$raddr}= $proxy;
                         $ritem= \$proxy;
                         if (ref $proxy) {
                             redo DEQUEUE;
-                        } else {
-                            next;
                         }
                     }
                 }
+            }    # DEQUEUE
 
-            }
+            my ($idx, $dupe)=
+                $self->_reg_ref($item, $cdepth, $cname, $rcnt, $arg);
 
-            my ($idx,$dupe)=$self->_reg_ref($item,$cdepth,$cname,$rcnt,$arg);
-            $DEBUG and print "  Skipping '$cname' as it is a dupe of ".
-                             "$self->{refn}[$idx]\n"
+            $DEBUG
+                and print "  Skipping '$cname' as it is a dupe of "
+                . "$self->{refn}[$idx]\n"
                 if $dupe;
 
-            $DEBUG>9 and $self->diag;
+            $DEBUG > 9 and $self->diag;
             next if $dupe;
 
-
-            my $reftype=reftype $item;
-            my $cnt=refcount($item);
-            my $overloaded=undef;
-            my $isoverloaded=0;
+            my $reftype= reftype $item;
+            my $cnt= refcount($item);
+            my $overloaded= undef;
+            my $isoverloaded= 0;
             if (defined $class and overload::Overloaded($item)) {
-                disable_overloading( $item );
+                disable_overloading($item);
                 $overloaded= $class;
                 $isoverloaded= 1;
             }
 
-
-            if ( $reftype eq 'SCALAR' or
-                 $reftype eq 'REF' or
-                 $reftype eq 'GLOB' )
+            if (   $reftype eq 'SCALAR'
+                or $reftype eq 'REF'
+                or $reftype eq 'GLOB')
             {
-                my $name=$self->_build_name($cname,'$');
-                my $cnt=sv_refcount($$item);
-                if ($cnt>1) {
-                    $self->_reg_scalar($$item,$cdepth+1,$cnt,
-                      readonly($$item),$name);
+                my $name= $self->_build_name($cname, '$');
+                my $cnt= sv_refcount($$item);
+                if ($cnt > 1) {
+                    $self->_reg_scalar($$item, $cdepth + 1,
+                        $cnt, readonly($$item), $name);
                 }
-                if (my $type=reftype_or_glob $$item) {
-                    $self->_add_queue(\@queue,$type,$$item,
-                       $cdepth+2,$name,$cnt)
+                if (my $type= reftype_or_glob $$item) {
+                    $self->_add_queue(\@queue, $type, $$item, $cdepth + 2,
+                        $name, $cnt);
                 }
 
-            } elsif ($reftype eq 'ARRAY') {
-                foreach my $idx (0..$#$item) {
-                    my $name=$self->_build_name($cname,'[',$idx);
-                    my $cnt=sv_refcount($item->[$idx]);
-                    if ($cnt>1) {
+            }
+            elsif ($reftype eq 'ARRAY') {
+                foreach my $idx (0 .. $#$item) {
+                    my $name= $self->_build_name($cname, '[', $idx);
+                    my $cnt= sv_refcount($item->[$idx]);
+                    if ($cnt > 1) {
                         print "refcount($name)==$cnt\n"
-                            if $DEBUG>9;
-                        $self->_reg_scalar($item->[$idx],$cdepth+1,$cnt,
-                           readonly($item->[$idx]),$name);
+                            if $DEBUG > 9;
+                        $self->_reg_scalar($item->[$idx], $cdepth + 1,
+                            $cnt, readonly($item->[$idx]), $name);
                     }
-                    if (my $type=reftype_or_glob $item->[$idx]) {
-                        $self->_add_queue(\@queue,$type,$item->[$idx],
-                           $cdepth+2,$name,$cnt)
+                    if (my $type= reftype_or_glob $item->[$idx]) {
+                        $self->_add_queue(\@queue, $type, $item->[$idx],
+                            $cdepth + 2,
+                            $name, $cnt);
                     }
                 }
-            } elsif ($reftype eq 'HASH') {
-                my $ik=$self->{style}{indentkeys};
-                my ($keyary, $thaw)= $self->_get_keys($item,0,$raddr,$class);
+            }
+            elsif ($reftype eq 'HASH') {
+                my $ik= $self->{style}{indentkeys};
+                my ($keyary, $thaw)= $self->_get_keys($item, 0, $raddr, $class);
                 if ($thaw) {
                     $self->{ref_thaw}{$raddr}= $thaw;
                 }
-                my $key_len=0;
-                my $key_sum=0;
-                my $key_count=0;
+                my $key_len= 0;
+                my $key_sum= 0;
+                my $key_count= 0;
                 die reftype $keyary if $keyary && reftype($keyary) ne 'ARRAY';
 
-                while ( defined( my $key =
-                  defined $keyary ? $keyary->[$key_count] : each %$item
-                ))
-               {
+                while (
+                    defined(
+                        my $key=
+                            defined $keyary
+                        ? $keyary->[$key_count]
+                        : each %$item
+                    )
+                ) {
                     if ($ik) {
-                        my $qk=_quotekey($key);
-                        $key_sum+=length($qk);
-                        $key_len=length($qk) if $key_len<length($qk);
+                        my $qk= _quotekey($key);
+                        $key_sum += length($qk);
+                        $key_len= length($qk) if $key_len < length($qk);
                     }
                     $key_count++;
-                    my $name=$self->_build_name($cname,'{',$key);
-                    my $cnt=sv_refcount($item->{$key});
-                    if ($cnt>1) {
-                        $self->_reg_scalar($item->{$key},$cdepth+1,$cnt,
-                            readonly($item->{$key}),$name);
+                    my $name= $self->_build_name($cname, '{', $key);
+                    my $cnt= sv_refcount($item->{$key});
+                    if ($cnt > 1) {
+                        $self->_reg_scalar($item->{$key}, $cdepth + 1,
+                            $cnt, readonly($item->{$key}), $name);
                     }
-                    if (my $type=reftype_or_glob $item->{$key}) {
-                        $self->_add_queue(\@queue,$type,$item->{$key},
-                            $cdepth+2,$name,$cnt);
+                    if (my $type= reftype_or_glob $item->{$key}) {
+                        $self->_add_queue(\@queue, $type, $item->{$key},
+                            $cdepth + 2,
+                            $name, $cnt);
                     }
                 }
-                my $avg=$key_count>0 ? $key_sum/$key_count : 0;
-                $self->{ref_hklen}{$raddr}=($key_len>8 && (2/3*$key_len)>$avg)
-                                           ? int(0.5+$avg) : $key_len;
-                $self->{ref_hkcnt}{$raddr}=$key_count;
+                my $avg= $key_count > 0 ? $key_sum / $key_count : 0;
+                $self->{ref_hklen}{$raddr}=
+                    ($key_len > 8 && (2 / 3 * $key_len) > $avg)
+                    ? int(0.5 + $avg)
+                    : $key_len;
+                $self->{ref_hkcnt}{$raddr}= $key_count;
+
                 #warn "$raddr => $key_count";
 
-            } elsif ($reftype eq 'CODE') {
+            }
+            elsif ($reftype eq 'CODE') {
                 if ($pass == 1) {
 
-                    my $used=_get_lexicals($item);
+                    my $used= _get_lexicals($item);
 
                     foreach my $name (keys %$used) {
-                        next unless $name=~/\D/;
-                        my $addr=refaddr($used->{$name});
-                        if ( !$lex_addr{$addr} ) {
-                            $lex_addr{$addr}=$used->{$name};
-                            if ( $lex_name{$name} ) {
-                                my $tmpname=sprintf "%s".$self->{style}{eclipsename},
-                                             substr($name,0,1),
-                                             $self->{style}{eclipsename}=~/^[^%]*%s/
-                                              ? ( substr($name,1),
-                                                  ++$lex_special{$name}, )
-                                              : ( ++$lex_special{$name},
-                                                  substr($name,1), );
-                                $lex_name{$tmpname}=$addr;
-                                $lex_addr2name{$addr}=$tmpname;
-                                $self->_add_queue(\@queue,reftype_or_glob $used->{$name},
-                                    $used->{$name},$cdepth+1,$tmpname,2);
-                            } else {
-                                $lex_name{$name}=$addr;
-                                $lex_addr2name{$addr}=$name;
-                                $self->_add_queue(\@queue,reftype_or_glob $used->{$name},
-                                    $used->{$name},$cdepth+1,$name,2);
+                        next unless $name =~ /\D/;
+                        my $addr= refaddr($used->{$name});
+                        if (!$lex_addr{$addr}) {
+                            $lex_addr{$addr}= $used->{$name};
+                            if ($lex_name{$name}) {
+                                my $tmpname=
+                                    sprintf "%s" . $self->{style}{eclipsename},
+                                    substr($name, 0, 1),
+                                    $self->{style}{eclipsename} =~ /^[^%]*%s/
+                                    ? (substr($name, 1), ++$lex_special{$name},)
+                                    : (++$lex_special{$name},
+                                    substr($name, 1),);
+                                $lex_name{$tmpname}= $addr;
+                                $lex_addr2name{$addr}= $tmpname;
+                                $self->_add_queue(
+                                    \@queue, reftype_or_glob $used->{$name},
+                                    $used->{$name}, $cdepth + 1,
+                                    $tmpname,       2
+                                );
+                            }
+                            else {
+                                $lex_name{$name}= $addr;
+                                $lex_addr2name{$addr}= $name;
+                                $self->_add_queue(
+                                    \@queue, reftype_or_glob $used->{$name},
+                                    $used->{$name}, $cdepth + 1,
+                                    $name,          2
+                                );
                             }
                         }
                     }
                 }
-            } elsif ($reftype eq 'FORMAT') {
+            }
+            elsif ($reftype eq 'FORMAT') {
+
                 # Code similar to that of CODE should go here I think.
-            } else {
+            }
+            else {
                 # IO?
-                Carp::confess "Data() can't handle '$reftype' objects yet ($item)\n :-(\n"
+                Carp::confess
+                    "Data() can't handle '$reftype' objects yet ($item)\n :-(\n"
                     if $ENV{DDS_STRICT};
             }
             if ($isoverloaded) {
-                restore_overloading( $item, $overloaded );
+                restore_overloading($item, $overloaded);
             }
         }
-        if ( $pass++ == 1 ) {
+        if ($pass++ == 1) {
 
             my %items;
-            for my $idx ( 0..$#{$args_insideout{refaddr $self}} ) {
-                my $item=$args_insideout{refaddr $self}[$idx];
-                $items{ refaddr $item->{item} } = $idx;
+            for my $idx (0 .. $#{ $args_insideout{ refaddr $self} }) {
+                my $item= $args_insideout{ refaddr $self}[$idx];
+                $items{ refaddr $item->{item} }= $idx;
             }
 
             my @add;
-            my $added=0;
+            my $added= 0;
             if (0) {
-                @add=keys %lex_addr;
-            } else {
+                @add= keys %lex_addr;
+            }
+            else {
                 for my $addr (keys %lex_addr) {
-                    if ( exists $items{$addr} ) {
-                        my $idx = $items{$addr};
-                        if ( !$self->{unames}[$idx] ){
-                            for ($self->{unames}[$idx] = $lex_addr2name{$addr}) {
+                    if (exists $items{$addr}) {
+                        my $idx= $items{$addr};
+                        if (!$self->{unames}[$idx]) {
+                            for ($self->{unames}[$idx]= $lex_addr2name{$addr}) {
                                 s/^[^\$]/*/; s/^\$//;
                             }
                             $added++;
-                        } else {
-                            my $new=$self->{unames}[$idx];
-                            my $old=$lex_addr2name{$addr};
-                            $new=~s/^(\*)?/substr($old,0,1)/e;
-                            delete $lex_name{$lex_addr2name{$addr}};
-                            $lex_addr2name{$addr}=$new;
-                            $lex_name{$self->{unames}[$idx]} = $addr;  # xxx
                         }
-                    } else {
-                        push @add,$addr;
+                        else {
+                            my $new= $self->{unames}[$idx];
+                            my $old= $lex_addr2name{$addr};
+                            $new =~ s/^(\*)?/substr($old,0,1)/e;
+                            delete $lex_name{ $lex_addr2name{$addr} };
+                            $lex_addr2name{$addr}= $new;
+                            $lex_name{ $self->{unames}[$idx] }= $addr;    # xxx
+                        }
+                    }
+                    else {
+                        push @add, $addr;
                     }
                 }
             }
-            @add=sort {$lex_addr2name{$a} cmp $lex_addr2name{$b}} @add;
+            @add= sort { $lex_addr2name{$a} cmp $lex_addr2name{$b} } @add;
 
-            $self->{lexicals}={
-                               a2n => \%lex_addr2name,
-                               name => \%lex_name
-                              };
+            $self->{lexicals}= {
+                a2n  => \%lex_addr2name,
+                name => \%lex_name
+            };
 
             if (@add) {
-                unshift @{$args_insideout{refaddr $self}},
-                   map {
-                            my $rt=reftype($lex_addr{$_});
-                            my $item;
-                            if ($rt ne 'SCALAR' and $rt ne 'GLOB' and $rt ne 'REF') {
-                                $item=\$lex_addr{$_};
-                            } else {
-                                $item=$lex_addr{$_};
-                            }
-                            {
-                                    item   => $item,
-                                    usemy  => 1,
-                                    ro     => 0,
-                                    refcnt => refcount($lex_addr{$_}),
-                            }
-                        } @add;
-                $self->{lexicals}{added}={ map { $lex_addr2name{$_} => 1 } @add };
-                unshift @{$self->{unames}},
-                    map {
-                            (my $n=$lex_addr2name{$_})=~s/^[^\$]/*/;
-                            $n=~s/^\$//;
-                            $n
-                        } @add;
+                unshift @{ $args_insideout{ refaddr $self} }, map {
+                    my $rt= reftype($lex_addr{$_});
+                    my $item;
+                    if ($rt ne 'SCALAR' and $rt ne 'GLOB' and $rt ne 'REF') {
+                        $item= \$lex_addr{$_};
+                    }
+                    else {
+                        $item= $lex_addr{$_};
+                    }
+                    {
+                        item   => $item,
+                        usemy  => 1,
+                        ro     => 0,
+                        refcnt => refcount($lex_addr{$_}),
+                    }
+                } @add;
+                $self->{lexicals}{added}=
+                    { map { $lex_addr2name{$_} => 1 } @add };
+                unshift @{ $self->{unames} }, map {
+                    (my $n= $lex_addr2name{$_}) =~ s/^[^\$]/*/;
+                    $n =~ s/^\$//;
+                    $n
+                } @add;
                 $self->_reset;
                 redo PASS;
-            } elsif ($added) {
+            }
+            elsif ($added) {
                 $self->_reset;
                 redo PASS;
             }
         }
     }
-    $self->{cataloged}=1;
+    $self->{cataloged}= 1;
     return $self;
 }
 
 sub _add_fix {
-    my ($self,@args)=@_;
+    my ($self, @args)= @_;
+
     # 'var','glob','method call','lock','ref','sv','#'
     # TODO
     # add a fix statement to the list of fixes.
-    my $fix=@args==1 ? shift @args : [@args];
-    unless ($fix->[0]=~/^(var|glob|thaw|ref|sv|#|sub call|lock|bless)$/) {
-        Carp::confess "Unknown variant:".Dumper($fix);
+    my $fix= @args == 1 ? shift @args : [@args];
+    unless ($fix->[0] =~ /^(var|glob|thaw|ref|sv|#|sub call|lock|bless)$/) {
+        Carp::confess "Unknown variant:" . Dumper($fix);
     }
     if ($args[0] eq 'var') {
-        unshift @{$self->{fix}},$fix;
-    }   else {
-        push @{$self->{fix}},$fix;
+        unshift @{ $self->{fix} }, $fix;
+    }
+    else {
+        push @{ $self->{fix} }, $fix;
     }
 }
 
 sub _glob_slots {
-    my ($self,$inc_format)=@_;
+    my ($self, $inc_format)= @_;
+
     # $inc_format is for a special case.
     return (
-            qw(SCALAR HASH ARRAY),
-             (($self->{style}{deparse} && $self->{style}{deparseglob})
-                ? 'CODE' : ()),
-             (($inc_format && $self->{style}{deparse} && $self->{style}{deparseglob})
-                ? 'FORMAT' : () )
-           );
+        qw(SCALAR HASH ARRAY), (
+            ($self->{style}{deparse} && $self->{style}{deparseglob})
+            ? 'CODE'
+            : ()
+        ), ((
+                       $inc_format
+                    && $self->{style}{deparse}
+                    && $self->{style}{deparseglob}
+            ) ? 'FORMAT' : ()));
 }
 
-sub _dump_apply_fix { #handle fix statements and GLOB's here.
-    my ($self,$isfinal)=@_;
+sub _dump_apply_fix {    #handle fix statements and GLOB's here.
+    my ($self, $isfinal)= @_;
+
     # go through the fix statements and out any that are
     # now fully dumped.
     # currently the following types are grokked:
     # 'var','glob','method call','tlock','ref','sv','#'
 
     my @globs;
-    GLOB:{
-        @globs=();
-        @{$self->{fix}}=grep {
-            my $keep=1;
-            my $fix=$_;
+    GLOB: {
+        @globs= ();
+        @{ $self->{fix} }= grep {
+            my $keep= 1;
+            my $fix= $_;
             if (ref $fix) {
-                my ($type,$lhs,$rhs,$class)=@$fix;
+                my ($type, $lhs, $rhs, $class)= @$fix;
 
                 if ($type eq '#') {
-                    $self->{fh}->print(map "# $_\n",@$fix[0..$#$fix]);
-                    $keep=0;
-                } elsif ($type eq 'bless') {
-                    if ($isfinal) { # $self->{"refdu"}[$lhs]
-                        $lhs=$self->{"refn"}[$lhs];
+                    $self->{fh}->print(map "# $_\n", @$fix[ 0 .. $#$fix ]);
+                    $keep= 0;
+                }
+                elsif ($type eq 'bless') {
+                    if ($isfinal) {    # $self->{"refdu"}[$lhs]
+                        $lhs= $self->{"refn"}[$lhs];
                         $self->{fh}->print(
-                            substr($self->{style}{bless},0,-1)," ",$lhs,", ",
-                           _quote($rhs)," ",substr($self->{style}{bless},-1),
-                           ";\n");
-                        $keep=0;
+                            substr($self->{style}{bless}, 0, -1),
+                            " ",
+                            $lhs,
+                            ", ",
+                            _quote($rhs),
+                            " ",
+                            substr($self->{style}{bless}, -1),
+                            ";\n"
+                        );
+                        $keep= 0;
                     }
-                } elsif ($type eq 'sv') {
+                }
+                elsif ($type eq 'sv') {
 
-                    my $dref=$_->[-1];
-                    if ($self->{$type."du"}[$rhs] and ${$self->{$type."du"}[$rhs]}) {
-                        $rhs=$self->{$type."n"}[$rhs];
-                        my ($sigil,$var)=remove_deref($lhs);
+                    my $dref= $_->[-1];
+                    if ($self->{ $type . "du" }[$rhs]
+                        and ${ $self->{ $type . "du" }[$rhs] })
+                    {
+                        $rhs= $self->{ $type . "n" }[$rhs];
+                        my ($sigil, $var)= remove_deref($lhs);
                         if ($sigil) {
-                            $rhs="\\".$rhs;
-                            $lhs=$var;
+                            $rhs= "\\" . $rhs;
+                            $lhs= $var;
                         }
                         $self->{fh}->print("$lhs = $rhs;\n");
-                        $$dref=1 if ref $dref;
-                        $keep=0
+                        $$dref= 1 if ref $dref;
+                        $keep= 0;
                     }
-                } elsif ($type eq 'ref') {
+                }
+                elsif ($type eq 'ref') {
 
-                    if ($self->{$type."du"}[$rhs] and ${$self->{$type."du"}[$rhs]}) {
+                    if ($self->{ $type . "du" }[$rhs]
+                        and ${ $self->{ $type . "du" }[$rhs] })
+                    {
 
-                        $rhs=$self->{$type."n"}[$rhs];
+                        $rhs= $self->{ $type . "n" }[$rhs];
 
-                        if ($rhs=~/^[\@\%\&]/) {
-                            $rhs="\\".$rhs;
-                            $rhs="bless( $rhs, "._quote($class).' )'
+                        if ($rhs =~ /^[\@\%\&]/) {
+                            $rhs= "\\" . $rhs;
+                            $rhs= "bless( $rhs, " . _quote($class) . ' )'
                                 if $class;
-                        } # Warn if
+                        }    # Warn if
                         $self->{fh}->print("$lhs = $rhs;\n");
-                        $keep=0
+                        $keep= 0;
                     }
-                } elsif ($type eq 'lock') {
-                    if ($self->{refdu}[$lhs] and ${$self->{"refdu"}[$lhs]}) {
-                        $lhs=$self->{"refn"}[$lhs];
-                        $self->{fh}->print(@$rhs ? "lock_keys_plus( $lhs, "
-                                             : "lock_keys( $lhs ",
-                                        join(", ",map{ _quote($_) } @$rhs),
-                                        ");\n");
-                        $keep=0;
+                }
+                elsif ($type eq 'lock') {
+                    if ($self->{refdu}[$lhs] and ${ $self->{"refdu"}[$lhs] }) {
+                        $lhs= $self->{"refn"}[$lhs];
+                        $self->{fh}->print(
+                            @$rhs
+                            ? "lock_keys_plus( $lhs, "
+                            : "lock_keys( $lhs ",
+                            join(", ", map { _quote($_) } @$rhs),
+                            ");\n"
+                        );
+                        $keep= 0;
                     }
-                } elsif ($type eq 'thaw') {
+                }
+                elsif ($type eq 'thaw') {
+
                     # these have to happen at the end.
                     if ($isfinal) {
+
                         #if ($self->{refdu}[$lhs] and ${$self->{"refdu"}[$lhs]}) {
-                        ${$self->{refdu}[$lhs]}=1;
-                        $lhs=$self->{"refn"}[$lhs];
-                        my @args=@$_[3..$#$_];
-                        if ($rhs=~/^(->)?((?:\w*::)*\w+)(\(\))?$/) {
+                        ${ $self->{refdu}[$lhs] }= 1;
+                        $lhs= $self->{"refn"}[$lhs];
+                        my @args= @$_[ 3 .. $#$_ ];
+                        if ($rhs =~ /^(->)?((?:\w*::)*\w+)(\(\))?$/) {
                             if ($3) {
-                                $self->{fh}->print("$2( ".join(", ",$lhs,@args)." );\n");
-                            } else {
-                                $self->{fh}->print("$lhs->$2(".join(", ",@args).");\n");
+                                $self->{fh}->print(
+                                    "$2( " . join(", ", $lhs, @args) . " );\n");
                             }
-                        } else {
-                            $rhs=~s/^\t//mg;
+                            else {
+                                $self->{fh}->print(
+                                    "$lhs->$2(" . join(", ", @args) . ");\n");
+                            }
+                        }
+                        else {
+                            $rhs =~ s/^\t//mg;
                             $self->{fh}->print("for ($lhs) {\n$rhs\n}\n");
                         }
-                        $keep=0;
+                        $keep= 0;
                     }
-                } elsif ($type eq 'glob') {
-                    push @globs,$_;
-                    $keep=0;
-                } elsif ($type eq 'var') {
-                    $rhs="\\".$rhs;
-                    $rhs="bless( $rhs, "._quote($class).' )'
+                }
+                elsif ($type eq 'glob') {
+                    push @globs, $_;
+                    $keep= 0;
+                }
+                elsif ($type eq 'var') {
+                    $rhs= "\\" . $rhs;
+                    $rhs= "bless( $rhs, " . _quote($class) . ' )'
                         if $class;
-                    $self->{fh}->print(($self->{style}{declare} ? 'my ' : ""),"$lhs = $rhs;\n");
-                    $keep=0;
-                }  elsif ($type eq 'sub call') {
-                    my @r=grep { ref $_ and (!$self->{svdu}[$$_] or !${$self->{svdu}[$$_]}) } @$fix;
+                    $self->{fh}->print(($self->{style}{declare} ? 'my ' : ""),
+                        "$lhs = $rhs;\n");
+                    $keep= 0;
+                }
+                elsif ($type eq 'sub call') {
+                    my @r= grep {
+                        ref $_
+                            and
+                            (!$self->{svdu}[$$_] or !${ $self->{svdu}[$$_] })
+                    } @$fix;
                     unless (@r) {
-                        my ($type,$sub,@args)=map { ref $_ ? $self->{svn}[$$_] : $_ } @$fix;
-                        $self->{fh}->print("$sub(",join(", ",@args),");\n");
-                        $keep=0;
+                        my ($type, $sub, @args)=
+                            map { ref $_ ? $self->{svn}[$$_] : $_ } @$fix;
+                        $self->{fh}->print("$sub(", join(", ", @args), ");\n");
+                        $keep= 0;
                     }
-                } else {
-                    die "Bad fix: ",Dumper($fix);
+                }
+                else {
+                    die "Bad fix: ", Dumper($fix);
                 }
 
             }
             $keep;
-        } @{$self->{fix}};
+        } @{ $self->{fix} };
         foreach my $glob (@globs) {
-            my ($type,$lhs,$rhs,$depth,$name)=@$glob;
+            my ($type, $lhs, $rhs, $depth, $name)= @$glob;
             print "Symbol: $name\n" if $DEBUG and $name;
             local @_;
-            $name=$name ? '*'.$name : $rhs;
-            my $overloaded=undef;
-            my $isoverloaded=0;
-            if (defined( blessed $lhs ) and
-                overload::Overloaded( $lhs ) )
+            $name= $name ? '*' . $name : $rhs;
+            my $overloaded= undef;
+            my $isoverloaded= 0;
+            if (defined(blessed $lhs )
+                and overload::Overloaded($lhs))
             {
-                $overloaded=blessed $lhs;
-                disable_overloading( $lhs );
-                $isoverloaded=1;
+                $overloaded= blessed $lhs;
+                disable_overloading($lhs);
+                $isoverloaded= 1;
             }
-            foreach my $t ($self->_glob_slots(''))
-            {
-                my $v=*$lhs{$t};
+            foreach my $t ($self->_glob_slots('')) {
+                my $v= *$lhs{$t};
 
-                if ( not(defined $v) or
-                    ($t eq 'SCALAR' and !defined($$v)))
+                if (not(defined $v)
+                    or ($t eq 'SCALAR' and !defined($$v)))
                 {
                     next;
                 }
 
+                my $dumped= 0;
 
-                my $dumped=0;
-
-
-                my $gaddr=refaddr(*$lhs{$t});
-                my $gidx=$self->{ref}{$gaddr};
+                my $gaddr= refaddr(*$lhs{$t});
+                my $gidx= $self->{ref}{$gaddr};
                 unless ($gidx) {
-                    next
-                } elsif ($self->{refd}[$gidx]<$depth+1) {
-                    $self->_add_fix('ref',$name,$gidx,blessed(*$lhs{$t}));
+                    next;
+                }
+                elsif ($self->{refd}[$gidx] < $depth + 1) {
+                    $self->_add_fix('ref', $name, $gidx, blessed(*$lhs{$t}));
                     next;
                 }
 
-                $self->{fh}->print("$name = ");
-                my $ret=$self->_dump_sv(*$lhs{$t},$depth,\$dumped,$name,length($name)+3);
-                Carp::confess "\nUnhandled alias value '$ret' returned to _dump_apply_fix()!"
+                $self->{fh}->print("$name = ") unless $self->{style}{terse};
+                my $ret= $self->_dump_sv(*$lhs{$t}, $depth, \$dumped, $name,
+                    length($name) + 3);
+                Carp::confess
+                    "\nUnhandled alias value '$ret' returned to _dump_apply_fix()!"
                     if $ret;
                 $self->{fh}->print(";\n");
-                $dumped=1;
+                $dumped= 1;
             }
 
-            if ($self->{style}{deparse} && $self->{style}{deparseglob}
+            if (
+                   $self->{style}{deparse}
+                && $self->{style}{deparseglob}
+
                 #and defined *$lhs{FORMAT}
             ) {
                 # from link from [ysth]: http://groups.google.com/groups?selm=laUs8gzkgOlT092yn%40efn.org
@@ -1944,26 +2048,24 @@ sub _dump_apply_fix { #handle fix statements and GLOB's here.
                 # 2acc3314e31a9342e325f35c5b592967c9850c9b, keep the
                 # value \*$lhs alive while we inspect it as a B object
                 # or else it'll be reaped while we're using it.
-                my $lhs_glob = \*$lhs;
-                my $Bobj = B::svref_2object($lhs_glob);
+                my $lhs_glob= \*$lhs;
+                my $Bobj= B::svref_2object($lhs_glob);
 
                 # if passed a glob or globref, get the format
-                $Bobj = B::GV::FORM($Bobj) if ref $Bobj eq 'B::GV';
+                $Bobj= B::GV::FORM($Bobj) if ref $Bobj eq 'B::GV';
 
                 if (ref $Bobj eq 'B::FM') {
-                    (my $cleaned=$name)=~s/^\*(::)?//;
+                    (my $cleaned= $name) =~ s/^\*(::)?//;
                     $self->{fh}->print("format $cleaned =\n");
-                    my $deparser = Data::Dump::Streamer::Deparser->new();
+                    my $deparser= Data::Dump::Streamer::Deparser->new();
                     $self->{fh}->print(
-                        $deparser->indent($deparser->deparse_format($Bobj))
-                    );
+                        $deparser->indent($deparser->deparse_format($Bobj)));
                     $self->{fh}->print("\n");
                 }
             }
             if ($isoverloaded) {
-                restore_overloading( $lhs, $overloaded );
+                restore_overloading($lhs, $overloaded);
             }
-
 
         }
         redo GLOB if @globs;
@@ -2030,409 +2132,445 @@ All should DWIM.
 # w/the right tags for now...
 
 sub Out {
-    local($\,$",$,)=("","",""); # prevent globals from messing with our output via print
-    my $self = shift->_safe_self;
-    print "Out(".scalar(@_)." vars)\n"
+    local ($\, $", $,)=
+        ("", "", "");   # prevent globals from messing with our output via print
+    my $self= shift->_safe_self;
+    print "Out(" . scalar(@_) . " vars)\n"
         if $DEBUG;
-    if ( !$self->{in_printit} and (@_ or !$self->{cataloged} )) {
+    if (!$self->{in_printit} and (@_ or !$self->{cataloged})) {
         $self->Data(@_);
     }
 
     my $fh;
-    unless ( $self->{fh} ) {
+    unless ($self->{fh}) {
         print "  no filehandle using "
             if $DEBUG;
         if (defined wantarray) {
-            my $class= __PACKAGE__ . (wantarray ? "::_::ListPrinter" : "::_::StringPrinter");
-            print $class,"\n"
+            my $class= __PACKAGE__
+                . (wantarray ? "::_::ListPrinter" : "::_::StringPrinter");
+            print $class, "\n"
                 if $DEBUG;
-            $fh = $class->new()
-              or Carp::confess "$class failed to build!";
-            $self->{'return'} = $fh;
-        } else {
-            print "STDOUT\n" if $DEBUG;
-            $fh = \*STDOUT;
+            $fh= $class->new()
+                or Carp::confess "$class failed to build!";
+            $self->{'return'}= $fh;
         }
-        $self->{fh} = $fh;
+        else {
+            print "STDOUT\n" if $DEBUG;
+            $fh= \*STDOUT;
+        }
+        $self->{fh}= $fh;
     }
+
     # loop over the list
     # and dump out each one in turn
     # handling any potential fixes after
     # each definition is complete
-    $self->{out_names}=[];
-    $self->{declare}=[];
-    $self->{special}={};
-    $DEBUG>9 and $self->diag;
+    $self->{out_names}= [];
+    $self->{declare}= [];
+    $self->{special}= {};
+    $DEBUG > 9 and $self->diag;
 
-    my @items=@{$args_insideout{refaddr $self}};
+    my @items= @{ $args_insideout{ refaddr $self} };
 
-    my $namestr="";
+    my $namestr= "";
 
-    push @{$self->{out_names}},map{$_->{name}}@items; #must
-    push @{$self->{declare}},map{$_->{name}}@items;
+    push @{ $self->{out_names} }, map { $_->{name} } @items;    #must
+    push @{ $self->{declare} },   map { $_->{name} } @items;
 
     if ($self->{style}{special}) {
 
-        warn DDumper(\@items) if $DEBUG;
+        print DDumper(\@items) if $DEBUG;
 
-        $namestr="# (".join (", ",@{$self->{out_names}}).")\n";
+        $namestr= "# (" . join(", ", @{ $self->{out_names} }) . ")\n";
 
-        @items=sort { $self->{svc}[$b->{idx}] <=> $self->{svc}[$a->{idx}]||
-                  ($b->{raddr} ? $self->{refc}[$b->{ridx}] : 0)
-                   <=>
-                  ($a->{raddr} ? $self->{refc}[$a->{ridx}] : 0)
-            } @items;
+        @items= sort {
+            $self->{svc}[ $b->{idx} ] <=> $self->{svc}[ $a->{idx} ]
+                || ($b->{raddr} ? $self->{refc}[ $b->{ridx} ] : 0)
+                <=> ($a->{raddr} ? $self->{refc}[ $a->{ridx} ] : 0)
+        } @items;
 
-
-
-
-        warn DDumper(\@items) if $DEBUG;
+        print DDumper(\@items) if $DEBUG;
     }
 
     if ($self->{style}{compress} && $self->{style}{compressor}) {
-        my $prelude=$self->{style}{compressor}->();
+        my $prelude= $self->{style}{compressor}->();
         $self->{fh}->print($prelude) if $prelude;
     }
 
-    $self->{fh}->print("my (",join(",",sort keys %{$self->{lexicals}{added}}),");\n")
+    $self->{fh}
+        ->print("my (", join(",", sort keys %{ $self->{lexicals}{added} }),
+        ");\n")
         if $self->{lexicals}{added};
 
     foreach my $item (@items) {
-        my $dumped=0;
-        my $ret=$self->_dump_sv(${$item->{item}},1,\$dumped,$item->{name});
+        my $dumped= 0;
+        my $ret=
+            $self->_dump_sv(${ $item->{item} }, 1, \$dumped, $item->{name});
         Carp::confess "\nUnhandled alias value '$ret' returned to Out()!"
             if $ret;
         $self->{fh}->print(";\n");
-        $dumped=1;
+        $dumped= 1;
         $self->_dump_apply_fix();
     }
     $self->_dump_apply_fix('final');
     $self->{fh}->print($namestr) if $namestr;
 
     $self->diag if $DEBUG;
+
     #warn "@{$self->{out_names}}";
-    if ( $self->{return} and defined wantarray) {
-        my $r = delete $self->{return};
+    if ($self->{return} and defined wantarray) {
+        my $r= delete $self->{return};
         delete $self->{fh};
         return $r->value;
-    } else {
+    }
+    else {
         return $self;
     }
 
-}
-
-
-sub print_token {
-    my ($self, $str)=@_;
-    $self->{fh}->print($str);
-}
-sub print_quoted {
-    my ( $self, $str )=@_;
-    $self->{fh}->print($str);
 }
 
 # sqz(str,begin,end)
 sub sqz {
     require Compress::Zlib;
     require MIME::Base64;
-    my $res= Compress::Zlib::compress($_[0],9);
+    my $res= Compress::Zlib::compress($_[0], 9);
     return $_[1]
-          ? $_[1]
-            . MIME::Base64::encode($res,"")
-            . $_[2]
-          : MIME::Base64::encode($res,"");
+        ? $_[1] . MIME::Base64::encode($res, "") . $_[2]
+        : MIME::Base64::encode($res, "");
 }
 
 # usqz(str)
 sub usqz {
-    return Compress::Zlib::uncompress(
-            MIME::Base64::decode($_[0])
-           );
+    return Compress::Zlib::uncompress(MIME::Base64::decode($_[0]));
 }
 
-
-
 sub _dump_sv {
-    my ($self,$item,$depth,$dumped,$name,$indent,$is_ref)=@_;
+    my ($self, $item, $depth, $dumped, $name, $indent, $is_ref)= @_;
 
-    $self->{do_nl}=0;
+    $self->{do_nl}= 0;
 
-    my $addr=refaddr(\$_[1]);
-    my $idx=$self->{sv}{$addr};
+    my $addr= refaddr(\$_[1]);
+    my $idx= $self->{sv}{$addr};
     my $ro;
-    $DEBUG and printf "_dump_sv %d %s %#x - %d\n",$depth, $name,$addr,$idx||0;
+    $DEBUG
+        and printf "_dump_sv %d %s %#x - %d\n", $depth, $name, $addr, $idx || 0;
 
-
-    $name||=$self->{svn}[$idx];
-    (my $clean_name=$name)=~s/^[\@\%\&](\w+)/\$${1}_/; # XXX
-    my $optspace=$self->{style}{optspace};
+    $name ||= $self->{svn}[$idx];
+    (my $clean_name= $name) =~ s/^[\@\%\&](\w+)/\$${1}_/;    # XXX
+    my $optspace= $self->{style}{optspace};
     if ($idx) {
 
         # Its a monitored scalar.
 
-        my $pre_dumped=$self->{svdu}[$idx];
-        my $name_diff=(
-                           $self->{svd}[$idx]==$depth
-                       and $self->{svn}[$idx] ne $clean_name
-                       and $clean_name!~/\*/
-                       and $name!~/^\&/
-                      );
+        my $pre_dumped= $self->{svdu}[$idx];
+        my $name_diff=
+            (       $self->{svd}[$idx] == $depth
+                and $self->{svn}[$idx] ne $clean_name
+                and $clean_name !~ /\*/
+                and $name       !~ /^\&/);
 
         #print "Idx: $idx Special keys:",join("-",keys %{$self->{special}}),"\n"
         #    if $DEBUG and keys %{$self->{special}};
 
-        print "sv_dump Monitored:\n",$self->diag_sv_idx($idx,"  ") if $DEBUG;
+        print "sv_dump Monitored:\n", $self->diag_sv_idx($idx, "  ") if $DEBUG;
 
-
-        if (( $pre_dumped and !$self->{svon}{$idx})
-           or (!$self->{svon}{$idx} ? ($self->{svd}[$idx]<$depth or $name_diff) : undef) )
-        {
+        if (
+            ($pre_dumped and !$self->{svon}{$idx})
+            or (
+                !$self->{svon}{$idx}
+                ? ($self->{svd}[$idx] < $depth or $name_diff)
+                : undef
+            )
+        ) {
 
             print "PREDUMPED: $self->{svon}{$idx}\n"
-                if $DEBUG and $self->{svon}{$idx} and $pre_dumped and $$pre_dumped;
+                if $DEBUG
+                and $self->{svon}{$idx}
+                and $pre_dumped
+                and $$pre_dumped;
 
             # We've seen it before.
             # Unless its a ref it must be an alias
-            print(($name_diff ? "Name diff" : "No name diff"), " $name, $clean_name","\n")
+            print(($name_diff ? "Name diff" : "No name diff"),
+                " $name, $clean_name", "\n")
                 if $DEBUG;
 
-            my ($str,$ret)=('',undef);
+            my ($str, $ret)= ('', undef);
 
             if ($is_ref) {
-                if ($self->{svd}[$idx]==1 && !$self->{style}{declare}
-                    || ($pre_dumped && $$pre_dumped)
-                ) {
-                    $str="\\$self->{svn}[$idx]";
-                } else {
+                if ($self->{svd}[$idx] == 1 && !$self->{style}{declare}
+                    || ($pre_dumped && $$pre_dumped))
+                {
+                    $str= "\\$self->{svn}[$idx]";
+                }
+                else {
                     #see the 'Many refs' tests in t\dump.t for
                     #why this is here. basically we need to
                     #ensure the ref is modifiable. If its two $'s
                     #then its modifiable anyway, more and it wont be.
                     # $ref=\\$x; $ref=RW $$ref=RO $$$ref=$x=RW
                     unless ($self->{style}{purity}) {
-                        $str="\\$self->{svn}[$idx]";
-                    } else {
-                        my $need_do=($name=~/^\$\$\$+/);
+                        $str= "\\$self->{svn}[$idx]";
+                    }
+                    else {
+                        my $need_do= ($name =~ /^\$\$\$+/);
                         if ($need_do) {
-                            $str.=join($optspace,qw( do { my $f = ),'');
+                            $str .= join($optspace, qw( do { my $f = ), '');
                         }
 
-                        $str.=!$self->{style}{verbose}
-                               ? "'R'" : _quote($DEBUG ? 'SR: ' : 'R: ',
-                                                "$self->{svn}[$idx]");
-                        $ret=\do{my $nope=0};
-                        $self->_add_fix('sv',$name,$idx,$ret);
+                        $str .=
+                            !$self->{style}{verbose}
+                            ? "'R'"
+                            : _quote($DEBUG ? 'SR: ' : 'R: ',
+                            "$self->{svn}[$idx]");
+                        $ret= \do { my $nope= 0 };
+                        $self->_add_fix('sv', $name, $idx, $ret);
 
-                        $str.="$optspace}" if ($need_do)
+                        $str .= "$optspace}" if ($need_do);
                     }
-                }
-            } else {
-                if ($depth==1) {
-                    if ($self->{style}{declare}) {
-                        $str.="my $name;\n";
-                    }
-                    #push @{$self->{out_names}},$name;
-                    #push @{$self->{declare}},$name;
-                    $str.="alias_ref(\\$name,\\$self->{svn}[$idx])";
-                } elsif ($self->{style}{purity}) {
-                    $str.=!$self->{style}{verbose} ? "'A'" : _quote("A: ",$self->{svn}[$idx]);
-                    $ret=\$idx;
-                } else {
-                    $str.="alias_to($self->{svn}[$idx])";
-                    $ret='';
                 }
             }
-            $self->{buf}+=length($str);
-            $self->{buf}=length($1) if $str=~/\n([^\n]*)\s*\z/;
-            $self->{fh}->print($str);
-            return $ret ? $ret : ()
-        } else {
-            # we've never seen it before and we need to dump it.
-            $self->{svdu}[$idx]||=$dumped;
+            else {
+                if ($depth == 1) {
+                    if ($self->{style}{declare}) {
+                        $str .= "my $name;\n";
+                    }
 
-            print "Defining Special:".$self->diag_sv_idx($idx)
+                    #push @{$self->{out_names}},$name;
+                    #push @{$self->{declare}},$name;
+                    $str .= "alias_ref(\\$name,\\$self->{svn}[$idx])";
+                }
+                elsif ($self->{style}{purity}) {
+                    $str .=
+                        !$self->{style}{verbose}
+                        ? "'A'"
+                        : _quote("A: ", $self->{svn}[$idx]);
+                    $ret= \$idx;
+                }
+                else {
+                    $str .= "alias_to($self->{svn}[$idx])";
+                    $ret= '';
+                }
+            }
+            $self->{buf} += length($str);
+            $self->{buf}= length($1) if $str =~ /\n([^\n]*)\s*\z/;
+            $self->{fh}->print($str);
+            return $ret ? $ret : ();
+        }
+        else {
+            # we've never seen it before and we need to dump it.
+            $self->{svdu}[$idx] ||= $dumped;
+
+            print "Defining Special:" . $self->diag_sv_idx($idx)
                 if $DEBUG and $self->{special}{$idx};
 
-            $self->{svn}[$idx]=$name if $self->{special}{$idx};
-            $self->{svd}[$idx]=$depth if $self->{special}{$idx};
+            $self->{svn}[$idx]= $name  if $self->{special}{$idx};
+            $self->{svd}[$idx]= $depth if $self->{special}{$idx};
 
         }
-        $ro=$self->{svro}[$idx];
-    } else {
-        $ro=readonly $_[1] unless defined $ro;
+        $ro= $self->{svro}[$idx];
+    }
+    else {
+        $ro= readonly $_[1] unless defined $ro;
     }
     print "sv_dump: Postindexed\n" if $DEBUG;
-    if ($depth==1) {
+    if ($depth == 1) {
+
         # root level object. declare it
-        if ($name ne $clean_name and $name!~/^\*/ and $self->{svc}[$idx]>1) {
+        if ($name ne $clean_name and $name !~ /^\*/ and $self->{svc}[$idx] > 1)
+        {
 
-                print "Special $name\n" if $DEBUG;
-                my $oidx=$self->{ref}{$self->{sva}[$idx]};
-                if ($oidx) {
-                    #theres a ref to us out there
-                    my $name=$self->_build_name($self->{refn}[$oidx],'$');
-                    $self->{svn}[$idx]=$name;
-                    print "Oindex! $oidx $name\n" if $DEBUG;
-                    #$self->{svd}[$idx]=$self->{refd}[$idx]+1;
-                }
+            print "Special $name\n" if $DEBUG;
+            my $oidx= $self->{ref}{ $self->{sva}[$idx] };
+            if ($oidx) {
 
-                #$self->{special}{$idx}++;
-                $self->{svdu}[$idx]=undef;
+                #theres a ref to us out there
+                my $name= $self->_build_name($self->{refn}[$oidx], '$');
+                $self->{svn}[$idx]= $name;
+                print "Oindex! $oidx $name\n" if $DEBUG;
 
-                print $self->diag_sv_idx($idx,1) if $DEBUG;
+                #$self->{svd}[$idx]=$self->{refd}[$idx]+1;
+            }
+
+            #$self->{special}{$idx}++;
+            $self->{svdu}[$idx]= undef;
+
+            print $self->diag_sv_idx($idx, 1) if $DEBUG;
         }
+
         #push @{$self->{out_names}},$name; #must
         #push @{$self->{declare}},$name;
-        unless ($name=~/^\&/) { # XXX
-            my $str=(($self->{style}{declare} && $name!~/^\*/
-                     && !$self->{lexicals}{added}{$name}
-                     ) ? "my$optspace" : ""
-                     )."$name$optspace=$optspace";
+        unless ($self->{style}{terse} || $name =~ /^\&/) {    # XXX
+            my $str= ((
+                           $self->{style}{declare}
+                        && $name !~ /^\*/
+                        && !$self->{lexicals}{added}{$name}
+                ) ? "my$optspace" : ""
+            ) . "$name$optspace=$optspace";
             $self->{fh}->print($str);
-            $indent=length($str);
-            $self->{buf}=0;
-        } else {
-            $indent=0;
+            $indent= length($str);
+            $self->{buf}= 0;
+        }
+        else {
+            $indent= 0;
         }
         print "toplevel\n" if $DEBUG;
     }
 
-    my $iaddr=refaddr $item;
+    my $iaddr= refaddr $item;
 
     $self->{fh}->print("\\")
         if $is_ref;
 
-    my $glob=globname $item;
-    my $add_do=$self->{style}{purity}
-               && !$ro
-               && $is_ref
-               && !blessed($_[1])
-               && !$glob
-               && do {
-                    my $rtype= reftype($_[1]);
-                    $rtype eq "" or
-                    ($rtype eq "SCALAR" and ( $] < 5.020 or !readonly(${ $_[1] }) ) )
-                  }
-    ;
-
+    my $glob= globname $item;
+    my $add_do=
+           $self->{style}{purity}
+        && !$ro
+        && $is_ref
+        && !blessed($_[1])
+        && !$glob
+        && do {
+        my $rtype= reftype($_[1]);
+        $rtype eq ""
+            or ($rtype eq "SCALAR" and ($] < 5.020 or !readonly(${ $_[1] })));
+        };
 
     if ($add_do) {
+
         #warn "\n!$ro && $is_ref && !blessed($_[1]) && !$glob";
-        $self->{fh}->print(join $optspace,qw(do { my $v = ),'');
-        $self->{buf}+=13;
+        $self->{fh}->print(join $optspace, qw(do { my $v = ), '');
+        $self->{buf} += 13;
     }
 
     unless ($iaddr) {
         print "iaddr $glob\n" if $DEBUG;
         unless (defined $item) {
             $self->{fh}->print('undef');
-            $self->{buf}+=5;
-        } else {
-            my $is_ro=($self->{style}{ro} && $ro && !$is_ref);
-            if ($is_ro and !$self->{style}{purity}) {
+            $self->{buf} += 5;
+        }
+        else {
+            my $is_ro= ($self->{style}{ro} && $ro && !$is_ref);
+            if ($is_ro and !$self->{style}{purity} and !$self->{style}{terse}) {
                 $self->{fh}->print("make_ro($optspace");
             }
             if ($glob) {
-                if ($glob=~/^\*Symbol::GEN/) {
-                    $self->_dump_symbol($_[1],$name,$glob,'deref',$depth);
-                } else
-                {
-                    $self->{buf}+=length($glob);
+                if ($glob =~ /^\*Symbol::GEN/) {
+                    $self->_dump_symbol($_[1], $name, $glob, 'deref', $depth);
+                }
+                else {
+                    $self->{buf} += length($glob);
                     $self->{fh}->print($glob);
-                    if ($self->{style}{dumpglob} and
-                        !$self->{sv_glob_du}{$glob}++) {
-                        $self->_add_fix('glob',$_[1],$glob,$depth+1);
+                    if ($self->{style}{dumpglob}
+                        and !$self->{sv_glob_du}{$glob}++)
+                    {
+                        $self->_add_fix('glob', $_[1], $glob, $depth + 1);
                     }
                 }
-            } else {
+            }
+            else {
                 my $quoted;
                 if ($self->{style}{dualvars}) {
-                    no warnings 'numeric'; # XXX: is this required?
-                    if (_could_be_dualvar($item) && 0+$item ne $item && "$item" != $item ) {
-                        $quoted="dualvar( ".join(",$optspace",0+$item,_quote("$item"))."$optspace)";
+                    no warnings 'numeric';    # XXX: is this required?
+                    if (   _could_be_dualvar($item)
+                        && 0 + $item ne $item
+                        && "$item" != $item)
+                    {
+                        $quoted=
+                              "dualvar( "
+                            . join(",$optspace", 0 + $item, _quote("$item"))
+                            . "$optspace)";
                     }
                 }
+
                 # XXX main scalar output here!
-                if ( ! $quoted ) {
+                if (!$quoted) {
                     my $style= $self->{style};
 
-                    if ( $style->{compress} &&
-                        $style->{compressor} &&
-                        length($_[1]) > $style->{compress}
-                    ){
-                        $quoted= $style->{compressor}->($_[1],$self);
-                    } else {
-                        $quoted=_quote($item);
+                    if (   $style->{compress}
+                        && $style->{compressor}
+                        && length($_[1]) > $style->{compress})
+                    {
+                        $quoted= $style->{compressor}->($_[1], $self);
+                    }
+                    else {
+                        $quoted= _quote($item);
                     }
 
                 }
-                $self->{buf}+=length($quoted);
-                $self->{buf}=length($1) if $quoted=~/\n([^\n]*)\s*\z/;
-                $self->{fh}->print($quoted); #;
+                $self->{buf} += length($quoted);
+                $self->{buf}= length($1) if $quoted =~ /\n([^\n]*)\s*\z/;
+                $self->{fh}->print($quoted);    #;
             }
-            if ($is_ro && $self->{style}{purity}) {
-                $self->_add_fix('sub call','make_ro',$name);
-            } elsif ($is_ro) {
-                $self->{fh}->print("$optspace)");
+            if (!$self->{style}{terse}) {
+                if ($is_ro && $self->{style}{purity}) {
+                    $self->_add_fix('sub call', 'make_ro', $name);
+                }
+                elsif ($is_ro) {
+                    $self->{fh}->print("$optspace)");
+                }
             }
+
             #return
         }
-        $self->{do_nl}=0;
-    } else {
-        $self->{do_nl}=1;
-        $self->_dump_rv($item,$depth+1,$dumped,$name,$indent,$is_ref && !$add_do);
+        $self->{do_nl}= 0;
+    }
+    else {
+        $self->{do_nl}= 1;
+        $self->_dump_rv($item, $depth + 1, $dumped, $name, $indent,
+            $is_ref && !$add_do);
     }
     $self->{fh}->print("$optspace}")
-            if $add_do;
-    $self->_add_fix('sub call','weaken',$name)
-            if $self->{svw}{$addr};
-    return
+        if $add_do;
+    $self->_add_fix('sub call', 'weaken', $name)
+        if $self->{svw}{$addr};
+    return;
 }
 
 sub _brace {
-    my ($self,$name,$type,$cond,$indent,$child)=@_;
-    my $open=$type=~/[\{\[\(]/;
+    my ($self, $name, $type, $cond, $indent, $child)= @_;
+    my $open= $type =~ /[\{\[\(]/;
 
-    my $brace= $name !~ /^[%@]/
-             ? $type
-             : $type =~ /[\{\[\(]/
-                ? '('
-                : ')';
+    my $brace=
+          $name !~ /^[%@]/    ? $type
+        : $type =~ /[\{\[\(]/ ? '('
+        :                       ')';
     $child= $child ? $self->{style}{optspace} : "";
-    if ( $cond ) {
-        $_[-2] += $open ? $self->{style}{indentcols}
-                        : -$self->{style}{indentcols};
-        $self->{fh}->print($open ? "" : "\n".(" " x $_[-2]),
-                           $brace,
-                           $open ? "\n".(" " x $_[-2]) : "");
-    } else {
-        $self->{fh}->print($open ? "" : $child ,
-                           $brace,
-                           $open ? $child : "");
+    if ($cond) {
+        $_[-2] +=
+              $open
+            ? $self->{style}{indentcols}
+            : -$self->{style}{indentcols};
+        $self->{fh}->print($open ? "" : "\n" . (" " x $_[-2]),
+            $brace, $open ? "\n" . (" " x $_[-2]) : "");
     }
-    return
+    else {
+        $self->{fh}->print($open ? "" : $child, $brace, $open ? $child : "");
+    }
+    return;
 }
 
 sub _dump_qr {
-    my ($self,$pat,$mod)=@_;
+    my ($self, $pat, $mod)= @_;
     my %counts;
-    $counts{$_}++ foreach split //,$pat;
-    my ($quotes,$best)=('',length($pat)+1);
-    foreach my $char (qw( / ! % & <> {} " ),'#') { #"
-        my $bad=0;
-        $bad+=$counts{$_}||0 for split //,$char;
-        ($quotes,$best)=($char,$bad) if $bad<$best;
+    $counts{$_}++ foreach split //, $pat;
+    my ($quotes, $best)= ('', length($pat) + 1);
+    foreach my $char (qw( / ! % & <> {} " ), '#') {    #"
+        my $bad= 0;
+        $bad += $counts{$_} || 0 for split //, $char;
+        ($quotes, $best)= ($char, $bad) if $bad < $best;
         last unless $best;
     }
-    $pat=~s/(?!\\)([$quotes])/\\$1/g
+    $pat =~ s/(?!\\)([$quotes])/\\$1/g
         if $best;
     {
-    use utf8;
-    #$pat=~s/([^\x00-\x7f])/sprintf '\\x{%x}',ord $1/ge;
-    $pat=~s/([^\040-\176])/sprintf "\\x{%x}", ord($1)/ge;
+        use utf8;
+
+        #$pat=~s/([^\x00-\x7f])/sprintf '\\x{%x}',ord $1/ge;
+        $pat =~ s/([^\040-\176])/sprintf "\\x{%x}", ord($1)/ge;
     }
-    $self->{fh}->print('qr',substr($quotes,0,1),$pat,substr($quotes,-1),$mod);
-    return
+    $self->{fh}
+        ->print('qr', substr($quotes, 0, 1), $pat, substr($quotes, -1), $mod);
+    return;
 }
 
 =for uedit32
@@ -2441,84 +2579,91 @@ sub _default_key_sorters{}
 =cut
 
 my %default_key_sorters= (
-    numeric => sub  { [ sort {$a <=> $b} keys %{$_[0]} ] },
-    lexical => sub { [ sort keys %{$_[0]} ] },
-    smart => sub  {
+    numeric => sub {
+        [ sort { $a <=> $b } keys %{ $_[0] } ]
+    },
+    lexical => sub { [ sort keys %{ $_[0] } ] },
+    smart   => sub {
         [
             map { $_->[-1] }
-            sort {
-                ( $a->[2] <=> $b->[2] )
-                ||
-                (  defined($a->[0])
+                sort {
+                ($a->[2] <=> $b->[2])
+                    || (
+                    defined($a->[0])
                     ? $a->[0] <=> $b->[0] || ($a->[1] cmp $b->[1])
-                    : $a->[1] cmp $b->[1] )
-                ||
-                ( $a->[-1] cmp $b->[-1] )
-            }
-            map {
-                    my $chars=lc($_);
-                    my $num;
-                    $num=$1 if $chars=~
-                        s/\A(-?(?:0|[1-9]\d{0,8})(?:\.\d{0,15})?)(?!\d)//;
-                    $chars=~s/\W//g;
-                    [ $num, $chars, !defined $num ? 2 :
+                    : $a->[1] cmp $b->[1])
+                    || ($a->[-1] cmp $b->[-1])
+                }
+                map {
+                my $chars= lc($_);
+                my $num;
+                $num= $1
+                    if $chars =~
+                    s/\A(-?(?:0|[1-9]\d{0,8})(?:\.\d{0,15})?)(?!\d)//;
+                $chars =~ s/\W//g;
+                [
+                    $num, $chars,
+                    !defined $num ? 2
+                    :
+
                         # length($chars) ? 1 :
-                        0, $_ ]
-            }  keys %{$_[0]}
-        ]
+                        0, $_
+                ]
+                } keys %{ $_[0] } ]
     },
-    'each'=>sub { undef },
+    'each' => sub { undef },
 );
-$default_key_sorters{alphabetical}=$default_key_sorters{lexical};
-$default_key_sorters{intelligent}=$default_key_sorters{smart};
+$default_key_sorters{alphabetical}= $default_key_sorters{lexical};
+$default_key_sorters{intelligent}= $default_key_sorters{smart};
 for my $h (\%default_key_sorters) {
-    my $abr=Text::Abbrev::abbrev(keys %$h);
+    my $abr= Text::Abbrev::abbrev(keys %$h);
     foreach my $short (keys %$abr) {
-        $h->{$short}=$h->{$abr->{$short}};
+        $h->{$short}= $h->{ $abr->{$short} };
     }
 }
 
-
 sub _get_keys {
-    my ($self,$item,$pass,$addr,$class)=@_;
+    my ($self, $item, $pass, $addr, $class)= @_;
 
     my $sorter;
-    $class= "" if ! defined $class;
+    $class= "" if !defined $class;
 
-    $sorter=   $self->{style}{sortkeys}{"#$addr"}
-            || $self->{cache_sorter}{$class};
-    if ( ! $sorter ) {
-        $sorter= $self->{style}{sortkeys}{".$class"}
-                || ($class && $class->can("DDS_sortkeys") )
-                || $self->{style}{sortkeys}{"."};
-        ;
+    $sorter= $self->{style}{sortkeys}{"#$addr"}
+        || $self->{cache_sorter}{$class};
+    if (!$sorter) {
+        $sorter=
+               $self->{style}{sortkeys}{".$class"}
+            || ($class && $class->can("DDS_sortkeys"))
+            || $self->{style}{sortkeys}{"."};
+
         $self->{cache_sorter}{$class}=
             ($sorter ||= $default_key_sorters{smart});
     }
-    my ($ary,$thaw)=$sorter->( $item, $pass, $addr, $class );
+    my ($ary, $thaw)= $sorter->($item, $pass, $addr, $class);
     die "$item:$pass:$addr:$class:$ary:$thaw"
-         if $ary and reftype($ary) ne "ARRAY";
-    return ($ary,$thaw);
+        if $ary and reftype($ary) ne "ARRAY";
+    return ($ary, $thaw);
 }
 
-
 sub _dump_hash {
-    my ($self,$item,$depth,$dumped,$name,$indent,$addr,$class)=@_;
+    my ($self, $item, $depth, $dumped, $name, $indent, $addr, $class)= @_;
 
     #Carp::confess "$name" unless defined $self->{ref_hkcnt}{$addr};
 
-    my ($keyary)= $self->_get_keys($item,1,$addr,$class);
+    my ($keyary)= $self->_get_keys($item, 1, $addr, $class);
     if ($keyary and $DEBUG) {
-        warn "Keys: $keyary : @$keyary"
+        warn "Keys: $keyary : @$keyary";
     }
 
-    my $full_indent=$self->{style}{indent}>1;
-    my $ind=($self->{style}{indent}) &&
-            (!defined($self->{ref_hkcnt}{$addr}) or $self->{ref_hkcnt}{$addr}>1);
+    my $full_indent= $self->{style}{indent} > 1;
+    my $ind= ($self->{style}{indent})
+        && (!defined($self->{ref_hkcnt}{$addr})
+        or $self->{ref_hkcnt}{$addr} > 1);
 
-    $self->_brace($name,'{',$ind,$indent,$self->{ref_hkcnt}{$addr}) ;
+    $self->_brace($name, '{', $ind, $indent, $self->{ref_hkcnt}{$addr});
 
-    my $indkey=($ind && $self->{style}{indentkeys}) ? $self->{ref_hklen}{$addr} : 0;
+    my $indkey=
+        ($ind && $self->{style}{indentkeys}) ? $self->{ref_hklen}{$addr} : 0;
 
     my $cindent= $indent;
     my $style= $self->{style};
@@ -2526,237 +2671,246 @@ sub _dump_hash {
     my $sep= $optspace . $self->{style}{hashsep} . $optspace;
     my $pairsep= $self->{style}{pairsep};
     if ($indkey) {
-        $cindent+= $indkey + length($sep);
+        $cindent += $indkey + length($sep);
     }
-    $DEBUG==10 and print "Indent $ind $indkey $cindent\n";
-    my ($kc,$ix)=(0,0);
-    my $last_n=0;
-    my $ind_str=" " x $indent;
+    $DEBUG == 10 and print "Indent $ind $indkey $cindent\n";
+    my ($kc, $ix)= (0, 0);
+    my $last_n= 0;
+    my $ind_str= " " x $indent;
 
-    while (defined(my $k=defined $keyary ? $keyary->[$ix++] : each %$item)) {
-       $last_n=0 if ref $item->{$k};
-        if ( $kc ) {
-            my $do_ind=$ind && !$last_n ;
+    while (defined(my $k= defined $keyary ? $keyary->[ $ix++ ] : each %$item)) {
+        $last_n= 0 if ref $item->{$k};
+        if ($kc) {
+            my $do_ind= $ind && !$last_n;
             $self->{fh}->print($pairsep, $do_ind ? "\n$ind_str" : $optspace);
             $self->{buf}++;
             if ($do_ind) {
-                $self->{buf}=0;
-            } elsif (!$do_ind && !$optspace && $self->{buf} > 1024 ) {
-                $self->{fh}->print("\n");
-                $self->{buf}=0;
+                $self->{buf}= 0;
             }
-        } else {
+            elsif (!$do_ind && !$optspace && $self->{buf} > 1024) {
+                $self->{fh}->print("\n");
+                $self->{buf}= 0;
+            }
+        }
+        else {
             #$self->{fh}->print("\n$ind_str") if !$last_n;
-            $kc=1;
+            $kc= 1;
         }
         if ($indkey) {
-            my $qk=_quotekey($k);
-            my $str=$indkey>=length($qk)
-                ? join "",$qk," " x ($indkey-length($qk)), $sep
-                : join "",$qk,"\n$ind_str"," " x $indkey, $sep
-            ;
+            my $qk= _quotekey($k);
+            my $str=
+                $indkey >= length($qk)
+                ? join "", $qk, " " x ($indkey - length($qk)), $sep
+                : join "", $qk, "\n$ind_str", " " x $indkey, $sep;
 
-            $self->{buf}+=length($str);
-            $self->{fh}->print($str);
-        } else {
-            my $str=_quotekey($k).$sep;
-            $self->{buf}+=length($str);
+            $self->{buf} += length($str);
             $self->{fh}->print($str);
         }
-        my $alias=$self->_dump_sv($item->{$k},$depth+1,$dumped,
-                            $self->_build_name($name,'{',$k),
-                            $cindent
-        );
-        if (!$full_indent and !$self->{do_nl} and $self->{buf}<60) {
+        else {
+            my $str= _quotekey($k) . $sep;
+            $self->{buf} += length($str);
+            $self->{fh}->print($str);
+        }
+        my $alias= $self->_dump_sv($item->{$k}, $depth + 1, $dumped,
+            $self->_build_name($name, '{', $k), $cindent);
+        if (!$full_indent and !$self->{do_nl} and $self->{buf} < 60) {
+
             #warn "$self->{buf}\n";
             $last_n++;
-        } else {
+        }
+        else {
             #warn "$self->{buf}\n";
-            $last_n=0;
+            $last_n= 0;
         }
         if ($alias) {
-            $self->_add_fix('sub call','alias_hv',
-                            $self->_build_name($name,'%'),
-                            _quote($k),
-                            $alias
-            );
+            $self->_add_fix('sub call', 'alias_hv',
+                $self->_build_name($name, '%'),
+                _quote($k), $alias);
         }
     }
-    $self->_brace($name,'}',$ind,$indent,$self->{ref_hkcnt}{$addr});
-    return
+    $self->_brace($name, '}', $ind, $indent, $self->{ref_hkcnt}{$addr});
+    return;
 }
 
 sub _dump_array {
-    my ($self,$item,$depth,$dumped,$name,$indent)=@_;
-    my $full_indent=$self->{style}{indent}>1;
-    my $ind=$self->{style}{indent} && @$item>1;
+    my ($self, $item, $depth, $dumped, $name, $indent)= @_;
+    my $full_indent= $self->{style}{indent} > 1;
+    my $ind= $self->{style}{indent} && @$item > 1;
 
-    $self->_brace($name,'[',$ind,$indent,scalar @$item);
-    my $last_n=0;
-    my $ind_str=(" " x $indent);
-    my ($optspace,$sep)=@{$self->{style}}{qw(optspace arysep)};
-    unless ($self->{style}{rle} ) {
-        foreach my $k (0..$#$item) {
-            my $do_ind=$ind && (!$last_n || ref $item->[$k]);
+    $self->_brace($name, '[', $ind, $indent, scalar @$item);
+    my $last_n= 0;
+    my $ind_str= (" " x $indent);
+    my ($optspace, $sep)= @{ $self->{style} }{qw(optspace arysep)};
+    unless ($self->{style}{rle}) {
+        foreach my $k (0 .. $#$item) {
+            my $do_ind= $ind && (!$last_n || ref $item->[$k]);
             if ($k) {
                 $self->{fh}->print($sep, $do_ind ? "\n$ind_str" : $optspace);
                 if ($do_ind) {
-                    $self->{buf}=0;
-                } elsif (!$do_ind && !$optspace && $self->{buf} > 1024 ) {
+                    $self->{buf}= 0;
+                }
+                elsif (!$do_ind && !$optspace && $self->{buf} > 1024) {
                     $self->{fh}->print("\n");
-                    $self->{buf}=0;
+                    $self->{buf}= 0;
                 }
             }
 
+            my $alias= $self->_dump_sv($item->[$k], $depth + 1, $dumped,
+                $self->_build_name($name, '[', $k), $indent);
 
-            my $alias=$self->_dump_sv($item->[$k],$depth+1,$dumped,
-                                $self->_build_name($name,'[',$k),
-                                $indent
-            );
+            if (!$full_indent and !$self->{do_nl} and $self->{buf} < 60) {
 
-            if (!$full_indent and !$self->{do_nl} and $self->{buf}<60) {
                 #warn "$last_n\n";
                 $last_n++;
-            } else {
-                $last_n=0;
+            }
+            else {
+                $last_n= 0;
             }
             if ($alias) {
-                $self->_add_fix('sub call','alias_av',
-                                $self->_build_name($name,'@'),
-                                $k,
-                                $alias
-                );
+                $self->_add_fix('sub call', 'alias_av',
+                    $self->_build_name($name, '@'),
+                    $k, $alias);
             }
         }
-    } else {
+    }
+    else {
         # this is evil and must be changed.
         # ... evil ... totally evil... blech
-        for ( my $k = 0 ; $k <= $#$item ; ) {
-            my $v     = $item->[$k];
-            my $count = 1;
-            if (!refaddr($item->[$k]) and !readonly($item->[$k])
-                and (!$self->{sv}{refaddr(\$item->[$k])} or
-                $self->{svt}[$self->{sv}{refaddr(\$item->[$k])}]==1)
-            )
-            {
-                COUNT:while (
-                        $k + $count <= $#$item
+        for (my $k= 0 ; $k <= $#$item ;) {
+            my $v= $item->[$k];
+            my $count= 1;
+            if (
+                    !refaddr($item->[$k])
+                and !readonly($item->[$k])
+                and ( !$self->{sv}{ refaddr(\$item->[$k]) }
+                    or $self->{svt}[ $self->{sv}{ refaddr(\$item->[$k]) } ] ==
+                    1)
+            ) {
+                COUNT:
+                while (
+                    $k + $count <= $#$item
 
                     and !refaddr($item->[ $k + $count ])
 
                     and !readonly($item->[ $k + $count ])
 
-                    and (!$self->{sv}{refaddr(\$item->[$k + $count])} or
-                         $self->{svt}[$self->{sv}{refaddr(\$item->[$k + $count])}]==1)
+                    and ( !$self->{sv}{ refaddr(\$item->[ $k + $count ]) }
+                        or $self->{svt}
+                        [ $self->{sv}{ refaddr(\$item->[ $k + $count ]) } ] ==
+                        1)
 
                     and !$v == !$item->[ $k + $count ]
 
-                    and defined($v) == defined($item->[ $k + $count ])
-                )
+                    and defined($v) == defined($item->[ $k + $count ]))
 
                 {
-                    if (!defined( $item->[ $k + $count ] )) {
+                    if (!defined($item->[ $k + $count ])) {
                         last COUNT if defined($v);
-                    } else {
-                        last COUNT if
-                            $v ne overload::StrVal( $item->[ $k + $count ] )
+                    }
+                    else {
+                        last COUNT
+                            if $v ne overload::StrVal($item->[ $k + $count ]);
                     }
                     $count++;
                 }
             }
 
-            my $do_ind=$ind && (!$last_n || ref $item->[$k]);
+            my $do_ind= $ind && (!$last_n || ref $item->[$k]);
             $self->{fh}->print($sep, $do_ind ? "\n$ind_str" : $optspace)
                 if $k;
-            $self->{buf}=0 if $do_ind and $k;
-            if ($count>1){
+            $self->{buf}= 0 if $do_ind and $k;
+            if ($count > 1) {
                 $self->{fh}->print("($optspace");
-                $self->{buf}+=2;
+                $self->{buf} += 2;
             }
-            my $alias=$self->_dump_sv($item->[$k],$depth+1,$dumped,
-                                $self->_build_name($name,'[',$k),
-                                $indent
-            );
-            if (!$full_indent and !$self->{do_nl} and $self->{buf}<60) {
+            my $alias= $self->_dump_sv($item->[$k], $depth + 1, $dumped,
+                $self->_build_name($name, '[', $k), $indent);
+            if (!$full_indent and !$self->{do_nl} and $self->{buf} < 60) {
                 $last_n++;
-            } else {
-                $last_n=0;
+            }
+            else {
+                $last_n= 0;
             }
             if ($alias) {
-                $self->_add_fix('sub call','alias_av',
-                                $self->_build_name($name,'@'),
-                                $k,
-                                $alias
-                );
+                $self->_add_fix('sub call', 'alias_av',
+                    $self->_build_name($name, '@'),
+                    $k, $alias);
             }
-            if ($count>1) {
-                my $str=join $optspace,'',')','x',$count;
-                $self->{buf}+=length($str);
+            if ($count > 1) {
+                my $str= join $optspace, '', ')', 'x', $count;
+                $self->{buf} += length($str);
                 $self->{fh}->print($str);
             }
             $k += $count;
 
         }
     }
-    $self->_brace($name,']',$ind,$indent,scalar @$item);
-    return
+    $self->_brace($name, ']', $ind, $indent, scalar @$item);
+    return;
 }
 
 sub __vstr {
-    my ($v,@v);
+    my ($v, @v);
     unless (@_) {
-        $v=$];
-    } elsif (@_==1) {
-        $v=shift;
-    } else {
-        @v=@_;
+        $v= $];
     }
-    return join ".", @v ? (@v,(0) x 3)[0..2]
-                        : map { $v * 1000**$_ % 1000 } 0..2
+    elsif (@_ == 1) {
+        $v= shift;
+    }
+    else {
+        @v= @_;
+    }
+    return join ".", @v
+        ? (@v, (0) x 3)[ 0 .. 2 ]
+        : map { $v * 1000**$_ % 1000 } 0 .. 2;
 }
 
 sub _dump_code {
-    my ($self,$item,$name,$indent,$class)=@_;
+    my ($self, $item, $name, $indent, $class)= @_;
     unless ($self->{style}{deparse}) {
         $self->{fh}->print($self->{style}{codestub});
-    } else { #deparseopts
-        my $cv=B::svref_2object($item);
+    }
+    else {    #deparseopts
+        my $cv= B::svref_2object($item);
 
-        if (ref($cv->ROOT)=~/NULL/) {
-            my $gv=$cv->GV;
-            $self->{fh}->print("\\&",$gv->STASH->NAME,"::",$gv->SAFENAME);
+        if (ref($cv->ROOT) =~ /NULL/) {
+            my $gv= $cv->GV;
+            $self->{fh}->print("\\&", $gv->STASH->NAME, "::", $gv->SAFENAME);
             return;
         }
 
-        my $deparser=Data::Dump::Streamer::Deparser->new(@{$self->{style}{deparseopts}});
+        my $deparser= Data::Dump::Streamer::Deparser->new(
+            @{ $self->{style}{deparseopts} });
 
         my $used= _get_lexicals($item);
         my %targ;
         foreach my $targ (keys %$used) {
-            next if $targ=~/\D/;
-            my $addr=refaddr($used->{$targ});
-            $targ{$targ}=$self->{lexicals}{a2n}{$addr}
+            next if $targ =~ /\D/;
+            my $addr= refaddr($used->{$targ});
+            $targ{$targ}= $self->{lexicals}{a2n}{$addr}
                 if $self->{lexicals}{a2n}{$addr};
         }
 
         # we added this method, its not a normal method. see bottom of file.
         $deparser->dds_usenames(\%targ);
 
-        my $bless=undef;
+        my $bless= undef;
         my $code;
-        DEPARSE:{
-            $bless=($class,bless($item,$bless))[0] if defined $bless;
-            eval { $code=$deparser->coderef2text($item) };
-            bless $item,$bless if defined $bless;
-            if (!defined $bless and $@ and
-                $@ =~ /^\QUsage: ->coderef2text(CODEREF)\E/)
+        DEPARSE: {
+            $bless= ($class, bless($item, $bless))[0] if defined $bless;
+            eval { $code= $deparser->coderef2text($item) };
+            bless $item, $bless if defined $bless;
+            if (    !defined $bless
+                and $@
+                and $@ =~ /^\QUsage: ->coderef2text(CODEREF)\E/)
             {
-                $bless='CODE';
+                $bless= 'CODE';
                 redo DEPARSE;
-            } elsif ($@) {
-                warnings::warnif "Using CODE stub for $name as ".
-                 "B::Deparse->coderef2text (v$B::Deparse::VERSION".
-                 " on v@{[__vstr]}) failed. Message was:\n $@";
+            }
+            elsif ($@) {
+                warnings::warnif "Using CODE stub for $name as "
+                    . "B::Deparse->coderef2text (v$B::Deparse::VERSION"
+                    . " on v@{[__vstr]}) failed. Message was:\n $@";
                 $self->{fh}->print($self->{style}{codestub});
                 return;
             }
@@ -2766,288 +2920,332 @@ sub _dump_code {
 
         #$code=~s/^\s*(\([^)]+\)|)\s*/sub$1\n/;
 
-        $code=~s/(\%\{)(\s*\{\}\s*)/$1;$2/g;
+        $code =~ s/(\%\{)(\s*\{\}\s*)/$1;$2/g;
 
-        $code="sub".($code=~/^\s*\(/ ? "" : " ").$code;
+        $code= "sub" . ($code =~ /^\s*\(/ ? "" : " ") . $code;
         if ($self->{style}{indent}) {
-            $code=~s/\n/"\n"." " x $indent/meg;
+            $code =~ s/\n/"\n"." " x $indent/meg;
         }
+
         #warn $name;
-        if ($name=~s/^\&//) {
-            $code=~s/sub(\s)?/sub $name$1/;
+        if ($name =~ s/^\&//) {
+            $code =~ s/sub(\s)?/sub $name$1/;
         }
         $self->{fh}->print("$code");
     }
-    return
+    return;
 }
 
 sub _dump_format {
+
     # from link from [ysth]: http://groups.google.com/groups?selm=laUs8gzkgOlT092yn%40efn.org
     # translate arg (or reference to it) into a B::* object
-    my ($self,$item,$name,$indent)=@_;
-
+    my ($self, $item, $name, $indent)= @_;
 
     if ($self->{style}{deparse}) {
-        my $Bobj = B::svref_2object($item);
+        my $Bobj= B::svref_2object($item);
+
         # if passed a glob or globref, get the format
-        $Bobj = B::GV::FORM($Bobj) if ref $Bobj eq 'B::GV';
+        $Bobj= B::GV::FORM($Bobj) if ref $Bobj eq 'B::GV';
         if (ref $Bobj eq 'B::FM') {
             my $format;
             eval {
-              my $deparser = Data::Dump::Streamer::Deparser->new();
-              $format=$deparser->indent($deparser->deparse_format($Bobj));
+                my $deparser= Data::Dump::Streamer::Deparser->new();
+                $format= $deparser->indent($deparser->deparse_format($Bobj));
             };
             if ($@) {
-                warnings::warnif "B::Deparse (v$B::Deparse::VERSION on v@{[__vstr]}) failed FORMAT ref deparse.\n";
-                $format="B::Deparse (v$B::Deparse::VERSION on v@{[__vstr]}) failed FORMAT ref deparse.\n.\n";
+                warnings::warnif
+                    "B::Deparse (v$B::Deparse::VERSION on v@{[__vstr]}) failed FORMAT ref deparse.\n";
+                $format=
+                    "B::Deparse (v$B::Deparse::VERSION on v@{[__vstr]}) failed FORMAT ref deparse.\n.\n";
             }
-            my $ind=$self->{style}{indent} ? ' ' x $indent : '';
-            $format="format F =\n$format";
-            $format=~s/^/${ind}# /gm;
+            my $ind= $self->{style}{indent} ? ' ' x $indent : '';
+            $format= "format F =\n$format";
+            $format =~ s/^/${ind}# /gm;
 
-            my $end='_EOF_FORMAT_';
-            $end=~s/T(\d*)_/sprintf "T%02d_",($1||0)+1/e
-                    while $format=~/$end/;
+            my $end= '_EOF_FORMAT_';
+            $end =~ s/T(\d*)_/sprintf "T%02d_",($1||0)+1/e
+                while $format =~ /$end/;
 
-            $self->{fh}->print("do{ local *F; my \$F=<<'$end'; \$F=~s/^\\s+# //mg; eval \$F; die \$F.\$@ if \$@; *F{FORMAT};\n$format\n$end\n$ind}");
-            return
+            $self->{fh}->print(
+                "do{ local *F; my \$F=<<'$end'; \$F=~s/^\\s+# //mg; eval \$F; die \$F.\$@ if \$@; *F{FORMAT};\n$format\n$end\n$ind}"
+            );
+            return;
         }
     }
 
     $self->{fh}->print($self->{style}{formatstub});
 
-
 }
 
 sub _dump_symbol {
-    my ($self,$item,$name,$glob,$deref,$depth)=@_;
+    my ($self, $item, $name, $glob, $deref, $depth)= @_;
 
-    my $ret="Symbol::gensym";
-    $ret="do{ require Symbol; $ret }"
+    my $ret= "Symbol::gensym";
+    $ret= "do{ require Symbol; $ret }"
         unless $self->{reqs}{Symbol}++;
-    $ret="*{ $ret }"
+    $ret= "*{ $ret }"
         if $deref;
-    $self->{fh}->print( $ret );
+    $self->{fh}->print($ret);
     if ($self->{style}{dumpglob} and !$self->{sv_glob_du}{$glob}++) {
-        $self->_add_fix('glob',$_[1],$glob,$depth+1,$name);
+        $self->_add_fix('glob', $_[1], $glob, $depth + 1, $name);
     }
 }
 
 sub _dump_rv {
-    my ($self,$item,$depth,$dumped,$name,$indent,$add_do)=@_;
+    my ($self, $item, $depth, $dumped, $name, $indent, $add_do)= @_;
 
-    my ($addr,$idx,$type,$class,$is_frozen_replacement,$overloaded,
+    my ($addr, $idx, $type, $class, $is_frozen_replacement, $overloaded,
         $raddr);
     GETITEM: {
-        $addr=refaddr($item) or Carp::confess "$name : $item";
-        $idx=$self->{ref}{$addr};
-        $type=reftype($item);
-        $class=blessed($item);
-        $class=undef if $class and $class eq 'Regexp' and is_regexp $item;
+        $addr= refaddr($item) or Carp::confess "$name : $item";
+        $idx= $self->{ref}{$addr};
+        $type= reftype($item);
+        $class= blessed($item);
+        $class= undef if $class and $class eq 'Regexp' and is_regexp $item;
 
-        $DEBUG and
-        printf "_dump_rv %d %s %#x\n",$depth,$name,$addr;
+        $DEBUG
+            and printf "_dump_rv %d %s %#x\n", $depth, $name, $addr;
 
-        my $ignore=0;
+        my $ignore= 0;
         if ($self->{ref_fz}{$addr}) {
             $item= $self->{ref_fz}{$addr};
-            if ( ! $item ) {
-                $ignore=1;
-            } elsif (ref $item) {
-                $is_frozen_replacement=1;
-                $dumped= \do{my $d};
-                $raddr=$addr;
+            if (!$item) {
+                $ignore= 1;
+            }
+            elsif (ref $item) {
+                $is_frozen_replacement= 1;
+                $dumped= \do { my $d };
+                $raddr= $addr;
                 redo GETITEM;
-            } else {
-                $self->{buf}+=length($item);
+            }
+            else {
+                $self->{buf} += length($item);
                 $self->{fh}->print($item);
-                return
+                return;
             }
         }
-        if ($ignore or $self->{style}{ignore}{"#".($raddr||$addr)} or
-            (defined $class and $self->{style}{ignore}{".$class"} )
-        ){
-            my $str= _quote("Ignored Obj [".overload::StrVal($item)."]");
+        if (   $ignore
+            or $self->{style}{ignore}{ "#" . ($raddr || $addr) }
+            or (defined $class and $self->{style}{ignore}{".$class"}))
+        {
+            my $str= _quote("Ignored Obj [" . overload::StrVal($item) . "]");
             $self->{buf} += length($str);
             $self->{fh}->print($str);
-            return
+            return;
         }
     }
 
-
     unless ($idx) {
+
         #Carp::confess "Unhandled address $addr $name\n";
         # this should only happen for localized globs.
-        ($idx)=$self->_reg_ref($item,$depth,$name,refcount($item));
+        ($idx)= $self->_reg_ref($item, $depth, $name, refcount($item));
     }
-    my $optspace=$self->{style}{optspace};
+    my $optspace= $self->{style}{optspace};
     if ($idx) {
-        my $pre_dumped=$self->{refdu}[$idx];
-        my $str="";
+        my $pre_dumped= $self->{refdu}[$idx];
+        my $str= "";
         if ($pre_dumped and $$pre_dumped) {
+
             # its been dumped totally
             $DEBUG and print "  predumped $self->{refn}[$idx]\n";
-            if ($self->{refn}[$idx]=~/^[\@\%\&]/) {
+            if ($self->{refn}[$idx] =~ /^[\@\%\&]/) {
                 if (SvREADONLY_ref($item)) {
-                    my @hidden_keys=sort(hidden_keys(%$item));
-                    $self->_add_fix('lock',$idx,\@hidden_keys);
+                    my @hidden_keys= sort(hidden_keys(%$item));
+                    $self->_add_fix('lock', $idx, \@hidden_keys);
                 }
-                $str=join "",($class ? "bless($optspace" : ''),
-                                   '\\'.$self->{refn}[$idx],
-                                   ($class ? ",$optspace"._quote($class)."$optspace)" : '');
-            } else {
-                $str=$self->{refn}[$idx];
+                $str= join "", ($class ? "bless($optspace" : ''),
+                    '\\' . $self->{refn}[$idx], (
+                    $class ? ",$optspace" . _quote($class) . "$optspace)" : '');
             }
-            $self->{buf}+=length($str);
+            else {
+                $str= $self->{refn}[$idx];
+            }
+            $self->{buf} += length($str);
             $self->{fh}->print($str);
-            return
-        } elsif ($pre_dumped or $self->{refd}[$idx] < $depth) {
-            $DEBUG and print "  inprocess or depth violation: $self->{refd}[$idx] < $depth\n";
+            return;
+        }
+        elsif ($pre_dumped or $self->{refd}[$idx] < $depth) {
+            $DEBUG
+                and print
+                "  inprocess or depth violation: $self->{refd}[$idx] < $depth\n";
+
             # we are in the process of dumping it
             # output a place holder and add a fix statement
             # XXX is this sigil test correct? why not $?
-            if ($self->{refn}[$idx]=~/^[\@\%\&]/ and (!$self->{style}{declare})) {
-                $str=join"",( $class ? "bless($optspace" : '' ),
-                               '\\'.$self->{refn}[$idx],
-                               ( $class ? ",$optspace"._quote($class)."$optspace)" : '' );
-            } else {
+            if ($self->{refn}[$idx] =~ /^[\@\%\&]/
+                and (!$self->{style}{declare}))
+            {
+                $str= join "", ($class ? "bless($optspace" : ''),
+                    '\\' . $self->{refn}[$idx], (
+                    $class ? ",$optspace" . _quote($class) . "$optspace)" : '');
+            }
+            else {
                 if ($self->{style}{purity}) {
-                    $str=join"",$add_do ? join($optspace,qw(do { my $v = ),'') : '',
-                        !$self->{style}{verbose} ? "'V'" : _quote("V: ",$self->{refn}[$idx]),
-                        $add_do ? $optspace."}" : '';
+                    $str=
+                        join "",
+                        $add_do ? join($optspace, qw(do { my $v = ), '') : '',
+                        !$self->{style}{verbose}
+                        ? "'V'"
+                        : _quote("V: ", $self->{refn}[$idx]),
+                        $add_do ? $optspace . "}" : '';
 
                     #Carp::cluck "$name $self->{refd}[$idx] < $depth" if $name=~/\*/;
-                    $self->_add_fix('ref',$name,$idx,$class);
-                } else {
-                    $str=$self->{refn}[$idx];
+                    $self->_add_fix('ref', $name, $idx, $class);
+                }
+                else {
+                    $str= $self->{refn}[$idx];
                 }
             }
-            $self->{buf}+=length($str);
+            $self->{buf} += length($str);
             $self->{fh}->print($str);
-            return
+            return;
         }
-        $self->{refdu}[$idx]||=$dumped;
+        $self->{refdu}[$idx] ||= $dumped;
+
         #$name=$self->{refn}[$idx]; # override inherited names. ??? maybe not needed
-    } else {
+    }
+    else {
         Carp::confess "Unhandled object '$item'\n";
     }
-    my $isoverloaded=0;
+    my $isoverloaded= 0;
     if (defined $class and overload::Overloaded($item)) {
-        disable_overloading( $item );
+        disable_overloading($item);
         $overloaded= $class;
         $isoverloaded= 1;
     }
-    my $thaw= $self->{ref_thaw}{$raddr||$addr};
-    my ($inline,$thawtype);
-    if ( $thaw ) {
+    my $thaw= $self->{ref_thaw}{ $raddr || $addr };
+    my ($inline, $thawtype);
+    if ($thaw) {
         if ($thaw =~ /[^\w:>()-]/) {
-           $thawtype= "code";
-        }  else{
-            $inline= $thaw=~s/^->//;
-            $thawtype= $thaw=~s/\(\)$// ? "sub" : "method";
+            $thawtype= "code";
+        }
+        else {
+            $inline= $thaw   =~ s/^->//;
+            $thawtype= $thaw =~ s/\(\)$// ? "sub" : "method";
         }
         if ($inline && $thawtype eq 'sub') {
-            $self->{buf}+=length($thaw)+1;
-            $self->{fh}->print($thaw."(${optspace}");
+            $self->{buf} += length($thaw) + 1;
+            $self->{fh}->print($thaw . "(${optspace}");
         }
     }
-    $self->{do_nl}=1;
-    my $add_lock=($type eq 'HASH') && SvREADONLY_ref($item);
-    my $fix_lock=0;
-    my @hidden_keys=$add_lock ? sort(hidden_keys(%$item)) : ();
+    $self->{do_nl}= 1;
+    my $add_lock= ($type eq 'HASH') && SvREADONLY_ref($item);
+    my $fix_lock= 0;
+    my @hidden_keys= $add_lock ? sort(hidden_keys(%$item)) : ();
     if ($add_lock) {
+
         #warn "$name\n";
-        if ($name!~/^\$/) {
-            $fix_lock=1;
-            $add_lock=0;
-        } else  {
-            $self->{fh}->print("lock_ref_keys",
-                           @hidden_keys ? '_plus' : '',
-                           "(${optspace}"
-                          );
+        if ($name !~ /^\$/) {
+            $fix_lock= 1;
+            $add_lock= 0;
+        }
+        else {
+            $self->{fh}->print("lock_ref_keys", @hidden_keys ? '_plus' : '',
+                "(${optspace}");
         }
     }
 
-
-    my $add_bless=defined($class) && ($name!~/^[\@\%\&]/);
+    my $add_bless= defined($class) && ($name !~ /^[\@\%\&]/);
     if ($add_bless && !$overloaded) {
-        $self->{fh}->print(substr($self->{style}{bless},0,-1),$optspace);
+        $self->{fh}->print(substr($self->{style}{bless}, 0, -1), $optspace);
     }
 
     $DEBUG and print "  $type : Start typecheck\n";
     if ($type eq 'SCALAR' or $type eq 'REF' or $type eq 'GLOB') {
-        my ($pat,$mod)=$type eq 'SCALAR' ? regex($item) : ();
-        my $glob=$type eq 'GLOB' ? globname $$item : '';
-        if ($glob=~/^\*Symbol::GEN/) {
-            $self->_dump_symbol($_[1],$name,$glob,0,$depth);
-        } elsif (defined $pat) {
-            # its a regex
-            $self->_dump_qr($pat,$mod);
-        } else {
-            my $ret=$self->_dump_sv($$item,$depth+1,$dumped,
-                                $self->_build_name($name,'$'),
-                                $indent,'is_ref'
-            );
-            $self->{refdu}[$idx]=$ret if $ret;
+        my ($pat, $mod)= $type eq 'SCALAR' ? regex($item)    : ();
+        my $glob= $type eq 'GLOB'          ? globname $$item : '';
+        if ($glob =~ /^\*Symbol::GEN/) {
+            $self->_dump_symbol($_[1], $name, $glob, 0, $depth);
         }
-    } elsif ($type eq 'ARRAY') {
-        $self->_dump_array($item,$depth,$dumped,$name,$indent);
-    } elsif ($type eq 'HASH') {
-        $self->_dump_hash($item,$depth,$dumped,$name,$indent,$addr,$class);
-    } elsif ($type eq 'CODE') {
-        $self->_dump_code($item,$name,$indent,$class);
-    } elsif ($type eq 'FORMAT') {
+        elsif (defined $pat) {
+
+            # its a regex
+            $self->_dump_qr($pat, $mod);
+        }
+        else {
+            my $ret=
+                $self->_dump_sv($$item, $depth + 1, $dumped,
+                $self->_build_name($name, '$'),
+                $indent, 'is_ref');
+            $self->{refdu}[$idx]= $ret if $ret;
+        }
+    }
+    elsif ($type eq 'ARRAY') {
+        $self->_dump_array($item, $depth, $dumped, $name, $indent);
+    }
+    elsif ($type eq 'HASH') {
+        $self->_dump_hash($item, $depth, $dumped, $name, $indent, $addr,
+            $class);
+    }
+    elsif ($type eq 'CODE') {
+        $self->_dump_code($item, $name, $indent, $class);
+    }
+    elsif ($type eq 'FORMAT') {
+
         #$self->_dump_code($item,$name,$indent,$class); #muwhahahah
-        $self->_dump_format($item,$name,$indent);
-    } elsif ($type eq 'IO') {
+        $self->_dump_format($item, $name, $indent);
+    }
+    elsif ($type eq 'IO') {
         $self->{fh}->print("*{Symbol::gensym()}{IO}");
-    } elsif ($type eq 'ORANGE' || $type eq 'Regexp' || $type eq 'REGEXP') {
-        my ($pat,$mod)=regex($item);
-        $self->_dump_qr($pat,$mod);
-    } else {
-         Carp::confess "_dump_rv() can't handle '$type' objects yet\n :-(\n";
+    }
+    elsif ($type eq 'ORANGE' || $type eq 'Regexp' || $type eq 'REGEXP') {
+        my ($pat, $mod)= regex($item);
+        $self->_dump_qr($pat, $mod);
+    }
+    else {
+        Carp::confess "_dump_rv() can't handle '$type' objects yet\n :-(\n";
     }
     if ($add_bless) {
-        unless ( defined $overloaded ) {
-            $self->{fh}->print(",${optspace}",_quote($class),$optspace,substr($self->{style}{bless},-1))
-        } else {
-            $self->_add_fix('bless',$idx,$overloaded);
+        unless (defined $overloaded) {
+            $self->{fh}->print(",${optspace}", _quote($class), $optspace,
+                substr($self->{style}{bless}, -1));
+        }
+        else {
+            $self->_add_fix('bless', $idx, $overloaded);
         }
         if ($isoverloaded) {
-            restore_overloading( $item, $overloaded );
+            restore_overloading($item, $overloaded);
         }
     }
     if ($fix_lock && !defined($class)) {
-        $self->_add_fix('lock',$idx,\@hidden_keys);
+        $self->_add_fix('lock', $idx, \@hidden_keys);
     }
     if ($add_lock) {
         if (@hidden_keys) {
-            $self->{fh}->print(",${optspace}",join(",${optspace}",map {_quote($_)} @hidden_keys));
+            $self->{fh}->print(",${optspace}",
+                join(",${optspace}", map { _quote($_) } @hidden_keys));
         }
         $self->{fh}->print("${optspace})");
     }
-    if ( $thaw ) {
+    if ($thaw) {
         if ($inline) {
             if ($thawtype eq 'sub') {
                 $self->{fh}->print("${optspace})");
-            } elsif ($thawtype eq 'method') {
+            }
+            elsif ($thawtype eq 'method') {
                 $self->{fh}->print("->$thaw()");
             }
+
             #$$dumped=1;
-        } else {
-            $self->_add_fix('thaw', $idx, $thaw.($thawtype eq 'sub' ? "()" :"" ));
+        }
+        else {
+            $self->_add_fix('thaw', $idx,
+                $thaw . ($thawtype eq 'sub' ? "()" : ""));
         }
     }
-    if ( my $postop=$self->{ref_postop}{$raddr||$addr} ) {
+    if (my $postop= $self->{ref_postop}{ $raddr || $addr }) {
         if (ref $postop) {
             $postop->($_[1]);
-        } else {
+        }
+        else {
             $_[1]->$postop();
         }
     }
-    $self->{do_nl}=1;
+    $self->{do_nl}= 1;
 
-    return
+    return;
 }
 
 =item Names
@@ -3073,30 +3271,58 @@ or undef. In void context with no arguments the names are cleared.
 B<NOTE:>
 Must be called before C<Data()> is called.
 
+If you wish to have no names, use L<Terse>.
+
 =cut
 
 sub Names {
-    my $self = shift->_safe_self;
+    my $self= shift->_safe_self;
     if (@_) {
-        my $v=(@_==1 and reftype $_[0] eq 'ARRAY') ? shift @_ : \@_;
-        $self->{unames} = [
+        my $v= (@_ == 1 and reftype $_[0] eq 'ARRAY') ? shift @_ : \@_;
+        $self->{unames}= [
             map {
-                ( my $s = $_ ) =~ s/^[\@\%\&-]/*/;
-                $s=~s/^\$//;
+                (my $s= $_) =~ s/^[\@\%\&-]/*/;
+                $s =~ s/^\$//;
                 Carp::confess "Bad name '$_'"
-                   if $s && $s!~/^\*?\w+$/;
+                    if $s && $s !~ /^\*?\w+$/;
                 $s
-            } grep {defined} @$v ];
+            } grep { defined } @$v
+        ];
         return $self;
-    } elsif (! defined wantarray ) {
-        $self->{unames}=[];
     }
+    elsif (!defined wantarray) {
+        $self->{unames}= [];
+    }
+
     #elsif ( eval { require PadWalker; 1 } ) {
     #    print DDumper(PadWalker::peek_my(1));
     #    return $self;
     #}
 
-    return wantarray ? @{$self->{unames}||[]} : $self->{unames}
+    return wantarray ? @{ $self->{unames} || [] } : $self->{unames};
+}
+
+=item Terse
+
+=item Terse BOOL
+
+When true, no variable names will be created.  Data will be dumped as
+anonymous references or values.
+
+    Dump([])->Out;              # $ARRAY1 = []
+    Dump([])->Terse(1)->Out;    # []
+
+=cut
+
+sub Terse {
+    my $self= shift->_safe_self;
+    if (@_) {
+        $self->{style}{terse}= shift;
+        return $self;
+    }
+    else {
+        return $self->{style}{terse};
+    }
 }
 
 =for UEDIT
@@ -3138,9 +3364,9 @@ changed, or the object is destroyed.
 =cut
 
 sub To {
-    my $self = shift->_safe_self;
+    my $self= shift->_safe_self;
     if (@_) {
-        $self->{fh} = shift;
+        $self->{fh}= shift;
         return $self;
     }
     return $self->{fh};
@@ -3164,21 +3390,22 @@ Defaults to False.
 =cut
 
 sub Indent {
-    my $self=shift->_safe_self();
+    my $self= shift->_safe_self();
     if (@_) {
-        my $val=shift;
+        my $val= shift;
 
-        if ( $val == 0 && length $self->{style}{optspace} ) {
+        if ($val == 0 && length $self->{style}{optspace}) {
             $self->{style}{last_optspace}= $self->{style}{optspace};
             $self->{style}{optspace}= "";
-        } elsif( !$self->{style}{indent} && ! length $self->{style}{optspace} )
-        {
+        }
+        elsif (!$self->{style}{indent} && !length $self->{style}{optspace}) {
             $self->{style}{optspace}= $self->{style}{last_optspace};
         }
         $self->{style}{indent}= $val;
-        return $self
-    } else {
-        return $self->{style}{indent}
+        return $self;
+    }
+    else {
+        return $self->{style}{indent};
     }
 }
 
@@ -3480,24 +3707,27 @@ Must be set before C<Data()> is called.
 
 sub Freezer {
     my $self= shift;
-    if ( @_==1 ) {
+    if (@_ == 1) {
         $self->{style}{freezer}= shift;
         return $self;
-    } elsif ( @_==2 ) {
-        my ( $class, $action )= @_;
+    }
+    elsif (@_ == 2) {
+        my ($class, $action)= @_;
         $self->{style}{freeze_class}{$class}= $action;
         return $self;
     }
-    return wantarray ? ($self->{style}{freezer},
-                        map { $_ => $self->{style}{freeze_class}{$_} }
-                        keys %{$self->{style}{freeze_class}} )
-                     : $self->{style}{freezer};
+    return wantarray
+        ? (
+        $self->{style}{freezer},
+        map { $_ => $self->{style}{freeze_class}{$_} }
+            keys %{ $self->{style}{freeze_class} })
+        : $self->{style}{freezer};
 }
 
 sub ResetFreezer {
-    my $self=shift;
-    $self->{style}{freezer}='DDS_freeze';
-    $self->{style}{freeze_class}={};
+    my $self= shift;
+    $self->{style}{freezer}= 'DDS_freeze';
+    $self->{style}{freeze_class}= {};
     return $self;
 }
 
@@ -3523,25 +3753,27 @@ Must be set before C<Data()> is called.
 =cut
 
 sub Ignore {
-    my $self=shift;
-     if (@_==0) {
-        return map { s/^.//; $_ } keys %{$self->{style}{ignore}};
+    my $self= shift;
+    if (@_ == 0) {
+        return map { s/^.//; $_ } keys %{ $self->{style}{ignore} };
     }
     Carp::confess("Must have an even number of arguments in Ignore()")
-        if @_>1 && @_ %2;
+        if @_ > 1 && @_ % 2;
     while (@_) {
-        my $item=shift;
-        if ( ref $item ) {
-            $item="#".refaddr($item);
-        } else {
-            $item=".$item";
+        my $item= shift;
+        if (ref $item) {
+            $item= "#" . refaddr($item);
         }
-        if ( ! @_ ) {
+        else {
+            $item= ".$item";
+        }
+        if (!@_) {
             return $self->{style}{ignore}{$item};
         }
-        if ( shift ) {
+        if (shift) {
             $self->{style}{ignore}{$item}= 1;
-        } else {
+        }
+        else {
             delete $self->{style}{ignore}{$item};
         }
     }
@@ -3598,61 +3830,70 @@ much less efficient for storing binary data.
 =cut
 
 # weird styling here deliberate.
-sub
-DeparseOpts
-{
-    my $self=shift;
+sub DeparseOpts {
+    my $self= shift;
     if (@_) {
         if (ref $_[0]) {
-            $self->{style}{deparseopts}=shift;
-        } else {
-            $self->{style}{deparseopts}=[@_];
+            $self->{style}{deparseopts}= shift;
+        }
+        else {
+            $self->{style}{deparseopts}= [@_];
         }
         return $self;
-    } else {
-        return wantarray ? @{$self->{style}{deparseopts}}
-                         : $self->{style}{deparseopts};
+    }
+    else {
+        return wantarray
+            ? @{ $self->{style}{deparseopts} }
+            : $self->{style}{deparseopts};
     }
 }
 
 sub KeyOrder {
     my $self= shift;
-    Carp::croak("KeyOrder() Must have an even number of arguments if doing a multiple set.")
-        if @_>2 and @_ % 2;
+    Carp::croak(
+        "KeyOrder() Must have an even number of arguments if doing a multiple set."
+    ) if @_ > 2 and @_ % 2;
 
     while (@_) {
         my $obj= shift;
         my $name;
         if (ref $obj) {
-            $name= "#"  .refaddr($obj)
-        } else {
-            $name= "" if ! defined $obj;
+            $name= "#" . refaddr($obj);
+        }
+        else {
+            $name= "" if !defined $obj;
             $name= ".$obj";
         }
-        if ( ! @_ ) {
-            return $self->{style}{sortkeys_string}{$name}||
-                   $self->{style}{sortkeys}{$name};
+        if (!@_) {
+            return $self->{style}{sortkeys_string}{$name}
+                || $self->{style}{sortkeys}{$name};
         }
         my $val= shift;
-        if ( ! defined $val ) {
+        if (!defined $val) {
             delete $self->{style}{sortkeys}{$name};
             delete $self->{style}{sortkeys_string}{$name};
-        } else {
-            if ( ! ref $val ) {
+        }
+        else {
+            if (!ref $val) {
                 my $subref= $default_key_sorters{$val};
-                Carp::confess("Unblessed or per object Sortkeys() must be coderefs:'$val'\n")
-                        if (!$subref or $name eq "." )
-                        and reftype($subref) ne "CODE";
+                Carp::confess(
+                    "Unblessed or per object Sortkeys() must be coderefs:'$val'\n"
+                    )
+                    if (!$subref or $name eq ".")
+                    and reftype($subref) ne "CODE";
                 $subref ||= $obj->can($val);
                 die "Unknown sortkeys '$val', and "
-                    .  (ref($obj)||$obj)." doesn't know how to do it.\n"
+                    . (ref($obj) || $obj)
+                    . " doesn't know how to do it.\n"
                     if !$subref;
-                $self->{style}{sortkeys_string}{$name}=$val;
+                $self->{style}{sortkeys_string}{$name}= $val;
                 $val= $subref;
-            } elsif ( reftype($val) eq 'ARRAY' ) {
+            }
+            elsif (reftype($val) eq 'ARRAY') {
                 my $aryref= $val;
-                $val= sub{ return $aryref; };
-            } elsif ( reftype($val) ne 'CODE' ) {
+                $val= sub { return $aryref; };
+            }
+            elsif (reftype($val) ne 'CODE') {
                 Carp::confess("Can't use '$val' as KeyOrder() value");
             }
             $self->{style}{sortkeys}{$name}= $val;
@@ -3660,130 +3901,134 @@ sub KeyOrder {
     }
     return $self;
 }
-*Keyorder=*KeyOrder;
+*Keyorder= *KeyOrder;
+
 sub SortKeys {
-    my $self=shift;
-    $self->KeyOrder("",@_);
+    my $self= shift;
+    $self->KeyOrder("", @_);
 }
 *Sortkeys= *SortKeys;
-*HashKeys = *Hashkeys = *KeyOrder;
+*HashKeys= *Hashkeys= *KeyOrder;
 
-my %scalar_meth=map{ $_ => lc($_)}
-      qw(Declare Indent IndentCols IndentKeys
-        Verbose DumpGlob Deparse DeparseGlob DeparseFormat CodeStub
-        FormatStub Rle RLE Purity DualVars Dualvars EclipseName
-        Compress Compressor OptSpace);
+my %scalar_meth= map { $_ => lc($_) } qw(Declare Indent IndentCols IndentKeys
+    Verbose DumpGlob Deparse DeparseGlob DeparseFormat CodeStub
+    FormatStub Rle RLE Purity DualVars Dualvars EclipseName
+    Compress Compressor OptSpace);
 
 sub AUTOLOAD {
-    (my $meth=$AUTOLOAD)=~s/^((?:\w+::)+)//;
+    (my $meth= $AUTOLOAD) =~ s/^((?:\w+::)+)//;
     my $name;
-    if (defined($name=$scalar_meth{$meth})) {
+    if (defined($name= $scalar_meth{$meth})) {
         $DEBUG and print "AUTLOADING scalar meth $meth ($name)\n";
         eval '
-        sub '.$meth.' {
+        sub ' . $meth . ' {
             my $self=shift->_safe_self();
             if (@_) {
-                $self->{style}{'.$name.'}=shift;
+                $self->{style}{' . $name . '}=shift;
                 return $self
             } else {
-                return $self->{style}{'.$name.'}
+                return $self->{style}{' . $name . '}
             }
         }
         ';
         $@ and die "$meth:$@\n";
         goto &$meth;
-    } elsif ($meth=~/[^A-Z]/) {
+    }
+    elsif ($meth =~ /[^A-Z]/) {
         Carp::confess "Unhandled method/subroutine call $AUTOLOAD";
     }
 }
 
 sub _get_lexicals {
-    my $cv=shift;
+    my $cv= shift;
 
     if ($HasPadWalker) {
-        my ($names,$targs)=PadWalker::closed_over($cv);
+        my ($names, $targs)= PadWalker::closed_over($cv);
         if ($PadWalker::VERSION < 1) {
-            $names->{$_}=$names->{$targs->{$_}} for keys %$targs;
-        } else {
-            %$names=(%$names,%$targs);
+            $names->{$_}= $names->{ $targs->{$_} } for keys %$targs;
+        }
+        else {
+            %$names= (%$names, %$targs);
         }
         return $names;
     }
 
-    my $svo=B::svref_2object($cv);
-    my @pl_array = eval { $svo->PADLIST->ARRAY };
-    my @name_obj = eval { $pl_array[0]->ARRAY };
+    my $svo= B::svref_2object($cv);
+    my @pl_array= eval { $svo->PADLIST->ARRAY };
+    my @name_obj= eval { $pl_array[0]->ARRAY };
 
     my %named;
-    for my $i ( 0..$#name_obj ) {
-        if ( ref($name_obj[$i])!~/SPECIAL/) {
-            $named{$i} = $name_obj[$i]->PV;
+    for my $i (0 .. $#name_obj) {
+        if (ref($name_obj[$i]) !~ /SPECIAL/) {
+            $named{$i}= $name_obj[$i]->PV;
         }
     }
 
     my %inited;
     my %used;
     B::Utils::walkoptree_filtered(
-            $svo->ROOT,
-            sub { B::Utils::opgrep { name => [ qw[ padsv padav padhv ] ] }, @_ },
-            sub {
-                my ( $op, @items )=@_;
-                my $targ = $op->targ;
-                my $name = $named{$targ}
-                    or return;
+        $svo->ROOT,
+        sub { B::Utils::opgrep { name => [qw[ padsv padav padhv ]] }, @_ },
+        sub {
+            my ($op, @items)= @_;
+            my $targ= $op->targ;
+            my $name= $named{$targ}
+                or return;
 
-                $inited{$name}++
-                    if $op->private & 128;
+            $inited{$name}++
+                if $op->private & 128;
 
-                if ( !$inited{$name} ) {
-                    $used{$name} = $pl_array[1]->ARRAYelt($targ)->object_2svref;
-                    $used{$targ} = $used{$name};
-                    $inited{$name}++;
-                }
+            if (!$inited{$name}) {
+                $used{$name}= $pl_array[1]->ARRAYelt($targ)->object_2svref;
+                $used{$targ}= $used{$name};
+                $inited{$name}++;
             }
-    );
+        });
     return \%used;
 }
 
 package Data::Dump::Streamer::Deparser;
 use B::Deparse;
-our @ISA=qw(B::Deparse);
+our @ISA= qw(B::Deparse);
 my %cache;
 
-our $VERSION = '2.40';
+our $VERSION= '2.42';
 $VERSION= eval $VERSION;
-if ( $VERSION ne $Data::Dump::Streamer::VERSION ) {
-    die "Incompatible Data::Dump::Streamer::Deparser v$VERSION vs Data::Dump::Streamer v$Data::Dump::Streamer::VERSION";
+if ($VERSION ne $Data::Dump::Streamer::VERSION) {
+    die
+        "Incompatible Data::Dump::Streamer::Deparser v$VERSION vs Data::Dump::Streamer v$Data::Dump::Streamer::VERSION";
 }
 
 sub dds_usenames {
-    my $self=shift;
-    my $names=shift;
-    $cache{Data::Dump::Streamer::refaddr $self}=$names;
+    my $self= shift;
+    my $names= shift;
+    $cache{ Data::Dump::Streamer::refaddr $self}= $names;
 }
 
 sub padname {
-    my $self = shift;
-    my $targ = shift;
-    if ( $cache{Data::Dump::Streamer::refaddr $self} and $cache{Data::Dump::Streamer::refaddr $self}{$targ} ) {
-        return $cache{Data::Dump::Streamer::refaddr $self}{$targ}
+    my $self= shift;
+    my $targ= shift;
+    if (    $cache{ Data::Dump::Streamer::refaddr $self}
+        and $cache{ Data::Dump::Streamer::refaddr $self}{$targ})
+    {
+        return $cache{ Data::Dump::Streamer::refaddr $self}{$targ};
     }
     return $self->padname_sv($targ)->PVX;
 }
 
 sub DESTROY {
-    my $self=shift;
-    delete $cache{Data::Dump::Streamer::refaddr $self};
+    my $self= shift;
+    delete $cache{ Data::Dump::Streamer::refaddr $self};
 }
 
 unless (B::AV->can('ARRAYelt')) {
-    eval <<'    EOF_EVAL';
+    eval <<'EOF_EVAL';
         sub B::AV::ARRAYelt {
             my ($obj,$idx)=@_;
             my @array=$obj->ARRAY;
             return $array[$idx];
         }
-    EOF_EVAL
+EOF_EVAL
 }
 
 1;

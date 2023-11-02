@@ -4,9 +4,9 @@ Convert::ASN1 - ASN.1 Encode/Decode library
 
 =head1 VERSION
 
-version 0.27
+version 0.33
 
-=head1 SYNOPSYS
+=head1 SYNOPSIS
 
   use Convert::ASN1;
 
@@ -171,9 +171,9 @@ If not set, it defaults to C<1>.
 
 =head2 prepare ( ASN )
 
-Compile the given ASN.1 descripton which can be passed as a string
+Compile the given ASN.1 description which can be passed as a string
 or as a filehandle. The syntax used is very close to ASN.1, but has
-a few differences. If the ASN decribes only one macro then encode/decode can be
+a few differences. If the ASN describes only one macro then encode/decode can be
 called on this object. If ASN describes more than one ASN.1 macro then C<find>
 must be called. The method returns undef on error.
 
@@ -193,7 +193,7 @@ to a hash containing them. Returns the encoded PDU, or undef on error.
 
 =head2 decode ( PDU )
 
-Decode the PDU, returns a reference to a hash containg the values for the PDU. Returns
+Decode the PDU, returns a reference to a hash containing the values for the PDU. Returns
 undef if there was an error.
 
 =head2 registeroid ( OID, HANDLER )
@@ -242,7 +242,7 @@ then it is assumed that BUFFER already contains an incomplete element
 and new data will be appended starting at OFFSET.
 
 If FH is a socket the asn_recv is used to read the element, so the same
-restiction applies if FH is a socket of type SOCK_DGRAM.
+restriction applies if FH is a socket of type SOCK_DGRAM.
 
 =item asn_send ( SOCK, BUFFER, FLAGS, TO )
 
@@ -410,7 +410,7 @@ with these names as an index and the element value as the hash value.
 
 
 In the case of a SEQUENCE, SET or CHOICE then the value in the namespace will
-be a hash reference which will be the namespce for the elements with
+be a hash reference which will be the namespace for the elements with
 that element.
 
   # ASN.1

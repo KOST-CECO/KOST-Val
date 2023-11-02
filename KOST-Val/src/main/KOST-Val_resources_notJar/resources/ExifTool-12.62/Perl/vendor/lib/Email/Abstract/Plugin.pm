@@ -2,7 +2,7 @@ use strict;
 use warnings;
 package Email::Abstract::Plugin;
 # ABSTRACT: a base class for Email::Abstract plugins
-$Email::Abstract::Plugin::VERSION = '3.008';
+$Email::Abstract::Plugin::VERSION = '3.009';
 #pod =method is_available
 #pod
 #pod This method returns true if the plugin should be considered available for
@@ -27,7 +27,17 @@ Email::Abstract::Plugin - a base class for Email::Abstract plugins
 
 =head1 VERSION
 
-version 3.008
+version 3.009
+
+=head1 PERL VERSION SUPPORT
+
+This module has a long-term perl support period.  That means it will not
+require a version of perl released fewer than five years ago.
+
+Although it may work on older versions of perl, no guarantee is made that the
+minimum required version will not be increased.  The version may be increased
+for any reason, and there is no promise that patches will be accepted to lower
+the minimum required perl.
 
 =head1 METHODS
 
@@ -43,7 +53,7 @@ registered when Email::Abstract is loaded.
 
 =item *
 
-Ricardo SIGNES <rjbs@cpan.org>
+Ricardo SIGNES <rjbs@semiotic.systems>
 
 =item *
 

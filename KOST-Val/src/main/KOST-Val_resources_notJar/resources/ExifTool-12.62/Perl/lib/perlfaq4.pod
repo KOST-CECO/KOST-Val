@@ -4,7 +4,7 @@ perlfaq4 - Data Manipulation
 
 =head1 VERSION
 
-version 5.20201107
+version 5.20230701
 
 =head1 DESCRIPTION
 
@@ -1120,6 +1120,53 @@ signal that I missed something:
 
     print $string;
 
+
+=head2 Does Perl have anything like Ruby's #{} or Python's f string?
+
+Unlike the others, Perl allows you to embed a variable naked in a double
+quoted string, e.g. C<"variable $variable">. When there isn't whitespace or
+other non-word characters following the variable name, you can add braces
+(e.g. C<"foo ${foo}bar">) to ensure correct parsing.
+
+An array can also be embedded directly in a string, and will be expanded
+by default with spaces between the elements. The default
+L<LIST_SEPARATOR|perlvar/$LIST_SEPARATOR> can be changed by assigning a
+different string to the special variable C<$">, such as C<local $" = ', ';>.
+
+Perl also supports references within a string providing the equivalent of
+the features in the other two languages.
+
+C<${\ ... }> embedded within a string will work for most simple statements
+such as an object->method call. More complex code can be wrapped in a do
+block C<${\ do{...} }>.
+
+When you want a list to be expanded per C<$">, use C<@{[ ... ]}>.
+
+    use Time::Piece;
+    use Time::Seconds;
+    my $scalar = 'STRING';
+    my @array = ( 'zorro', 'a', 1, 'B', 3 );
+
+    # Print the current date and time and then Tommorrow
+    my $t = Time::Piece->new;
+    say "Now is: ${\ $t->cdate() }";
+    say "Tomorrow: ${\ do{ my $T=Time::Piece->new + ONE_DAY ; $T->fullday }}";
+
+    # some variables in strings
+    say "This is some scalar I have $scalar, this is an array @array.";
+    say "You can also write it like this ${scalar} @{array}.";
+
+    # Change the $LIST_SEPARATOR
+    local $" = ':';
+    say "Set \$\" to delimit with ':' and sort the Array @{[ sort @array ]}";
+
+You may also want to look at the module
+L<Quote::Code>, and templating tools such as L<Template::Toolkit> and
+L<Mojo::Template>.
+
+See also: L</"How can I expand variables in text strings?"> and
+L</"How do I expand function calls in a string?"> in this FAQ.
+
 =head2 What's wrong with always quoting "$vars"?
 
 The problem is that those double-quotes force
@@ -2154,10 +2201,9 @@ such as C<each()>.
 (contributed by brian d foy)
 
 To sort a hash, start with the keys. In this example, we give the list of
-keys to the sort function which then compares them ASCIIbetically (which
-might be affected by your locale settings). The output list has the keys
-in ASCIIbetical order. Once we have the keys, we can go through them to
-create a report which lists the keys in ASCIIbetical order.
+keys to the sort function which then compares them as strings. The output list
+has the keys in string order. Once we have the keys, we can go through them to
+create a report which lists the keys in string order:
 
     my @keys = sort { $a cmp $b } keys %hash;
 
@@ -2170,9 +2216,15 @@ comparing the keys, we can compute a value with them and use that
 value as the comparison.
 
 For instance, to make our report order case-insensitive, we use
-C<lc> to lowercase the keys before comparing them:
+C<fc> to safely lowercase the keys before comparing them:
 
-    my @keys = sort { lc $a cmp lc $b } keys %hash;
+    use v5.16;
+    my @keys = sort { fc($a) cmp fc($b) } keys %hash;
+
+Earlier versions of this answer used C<lc>, but that could give
+unexpected results with some Unicode strings. See L<perlfunc/fc>
+for the details. The Unicode::UCD module does the same thing for
+earlier perls.
 
 Note: if the computation is expensive or the hash has many elements,
 you may want to look at the Schwartzian Transform to cache the
@@ -2180,17 +2232,18 @@ computation results.
 
 If we want to sort by the hash value instead, we use the hash key
 to look it up. We still get out a list of keys, but this time they
-are ordered by their value.
+are ordered by their value:
 
     my @keys = sort { $hash{$a} <=> $hash{$b} } keys %hash;
 
 From there we can get more complex. If the hash values are the same,
-we can provide a secondary sort on the hash key.
+we can provide a secondary sort on the hash key:
 
+    use v5.16;
     my @keys = sort {
         $hash{$a} <=> $hash{$b}
             or
-        "\L$a" cmp "\L$b"
+        fc($a) cmp fc($b)
     } keys %hash;
 
 =head2 How can I always keep my hash sorted?

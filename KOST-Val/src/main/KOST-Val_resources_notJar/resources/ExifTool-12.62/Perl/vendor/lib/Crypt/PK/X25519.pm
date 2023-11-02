@@ -2,7 +2,7 @@ package Crypt::PK::X25519;
 
 use strict;
 use warnings;
-our $VERSION = '0.069';
+our $VERSION = '0.078';
 
 require Exporter; our @ISA = qw(Exporter); ### use Exporter 5.57 'import';
 our %EXPORT_TAGS = ( all => [qw( )] );
@@ -64,19 +64,19 @@ sub import_key {
   croak "FATAL: invalid key data" unless $data;
 
   if ($data =~ /-----BEGIN PUBLIC KEY-----(.*?)-----END/sg) {
-    $data = pem_to_der($data, $password);
+    $data = pem_to_der($data, $password) or croak "FATAL: PEM/key decode failed";
     return $self->_import($data);
   }
   elsif ($data =~ /-----BEGIN PRIVATE KEY-----(.*?)-----END/sg) {
-    $data = pem_to_der($data, $password);
+    $data = pem_to_der($data, $password) or croak "FATAL: PEM/key decode failed";
     return $self->_import_pkcs8($data, $password);
   }
   elsif ($data =~ /-----BEGIN ENCRYPTED PRIVATE KEY-----(.*?)-----END/sg) {
-    $data = pem_to_der($data, $password);
+    $data = pem_to_der($data, $password) or croak "FATAL: PEM/key decode failed";
     return $self->_import_pkcs8($data, $password);
   }
   elsif ($data =~ /-----BEGIN X25519 PRIVATE KEY-----(.*?)-----END/sg) {
-    $data = pem_to_der($data, $password);
+    $data = pem_to_der($data, $password) or croak "FATAL: PEM/key decode failed";
     return $self->_import_pkcs8($data, $password);
   }
   elsif ($data =~ /^\s*(\{.*?\})\s*$/s) { # JSON
@@ -273,7 +273,7 @@ See L<https://tools.ietf.org/html/rfc8037>
   "d":"AC-T0Qulco2N2OlSdyHaujJhwLsb7957S72sYx1FRlE",
  }
 
-B<BEWARE:> For JWK support you need to have L<JSON::PP>, L<JSON::XS> or L<Cpanel::JSON::XS> module.
+B<BEWARE:> For JWK support you need to have L<JSON> module installed.
 
 =item * X25519 public keys in JSON Web Key (JWK) format
 
@@ -283,7 +283,7 @@ B<BEWARE:> For JWK support you need to have L<JSON::PP>, L<JSON::XS> or L<Cpanel
   "x":"6ngG9yGoVwUSyPbvtOjWIMSaUp5N9eqnfexkb7HofkE",
  }
 
-B<BEWARE:> For JWK support you need to have L<JSON::PP>, L<JSON::XS> or L<Cpanel::JSON::XS> module.
+B<BEWARE:> For JWK support you need to have L<JSON> module installed.
 
 =back
 
@@ -336,7 +336,7 @@ Also exports public/private keys as a perl HASH with JWK structure.
  #or
  my $jwk_hash = $pk->export_key_jwk('public', 1);
 
-B<BEWARE:> For JWK support you need to have L<JSON::PP>, L<JSON::XS> or L<Cpanel::JSON::XS> module.
+B<BEWARE:> For JWK support you need to have L<JSON> module installed.
 
 =head2 export_key_raw
 

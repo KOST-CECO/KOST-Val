@@ -3,7 +3,7 @@ use strict;
 use warnings;
 # ABSTRACT: Pure perl implementation of the Package::Stash API
 
-our $VERSION = '0.39';
+our $VERSION = '0.40';
 
 use B;
 use Carp qw(confess);
@@ -428,7 +428,7 @@ Package::Stash::PP - Pure perl implementation of the Package::Stash API
 
 =head1 VERSION
 
-version 0.39
+version 0.40
 
 =head1 SYNOPSIS
 
@@ -437,6 +437,8 @@ version 0.39
 =head1 DESCRIPTION
 
 This is a backend for L<Package::Stash> implemented in pure perl, for those without a compiler or who would like to use this inline in scripts.
+
+=head1 BUGS
 
 =for stopwords TODO
 
@@ -481,7 +483,7 @@ namespace
 new
 remove_glob
 
-=head1 BUGS
+=head1 SUPPORT
 
 Bugs may be submitted through L<the RT bug tracker|https://rt.cpan.org/Public/Dist/Display.html?Name=Package-Stash>
 (or L<bug-Package-Stash@rt.cpan.org|mailto:bug-Package-Stash@rt.cpan.org>).
@@ -493,7 +495,7 @@ Moose Cabal.
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2020 by Jesse Luehrs.
+This software is copyright (c) 2022 by Jesse Luehrs.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

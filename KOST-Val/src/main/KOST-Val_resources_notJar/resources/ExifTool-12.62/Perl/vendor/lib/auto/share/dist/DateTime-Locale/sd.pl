@@ -1,7 +1,7 @@
 {
   am_pm_abbreviated => [
-    "\N{U+0635}\N{U+0628}\N{U+062d}\N{U+060c} \N{U+0645}\N{U+0646}\N{U+062c}\N{U+0647}\N{U+0646}\N{U+062f}",
-    "\N{U+0634}\N{U+0627}\N{U+0645}\N{U+060c} \N{U+0645}\N{U+0646}\N{U+062c}\N{U+0647}\N{U+0646}\N{U+062f}",
+    "\N{U+0635}\N{U+0628}\N{U+062d}\N{U+060c}\N{U+202f}\N{U+0645}\N{U+0646}\N{U+062c}\N{U+0647}\N{U+0646}\N{U+062f}",
+    "\N{U+0634}\N{U+0627}\N{U+0645}\N{U+060c}\N{U+202f}\N{U+0645}\N{U+0646}\N{U+062c}\N{U+0647}\N{U+0646}\N{U+062f}",
   ],
   available_formats => {
     Bh => "h B",
@@ -19,6 +19,7 @@
     GyMMM => "G y MMM",
     GyMMMEd => "G y MMM d, E",
     GyMMMd => "G y MMM d",
+    GyMd => "M/d/y GGGGG",
     H => "HH",
     Hm => "HH:mm",
     Hms => "HH:mm:ss",
@@ -54,7 +55,7 @@
     "yw-count-other" => "\N{U+06be}\N{U+0641}\N{U+062a}\N{U+0648} w \N{U+062c}\N{U+0648} Y",
   },
   code => "sd",
-  date_format_full => "y MMMM d, EEEE",
+  date_format_full => "EEEE, MMMM d, y",
   date_format_long => "y MMMM d",
   date_format_medium => "y MMM d",
   date_format_short => "y-MM-dd",
@@ -268,5 +269,5 @@
   time_format_medium => "h:mm:ss a",
   time_format_short => "h:mm a",
   variant => undef,
-  version => 38,
+  version => 43,
 }

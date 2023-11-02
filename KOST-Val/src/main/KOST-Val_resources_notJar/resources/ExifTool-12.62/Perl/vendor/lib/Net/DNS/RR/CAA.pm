@@ -2,7 +2,7 @@ package Net::DNS::RR::CAA;
 
 use strict;
 use warnings;
-our $VERSION = (qw$Id: CAA.pm 1814 2020-10-14 21:49:16Z willem $)[2];
+our $VERSION = (qw$Id: CAA.pm 1910 2023-03-30 19:16:30Z willem $)[2];
 
 use base qw(Net::DNS::RR);
 
@@ -19,8 +19,7 @@ use Net::DNS::Text;
 
 
 sub _decode_rdata {			## decode rdata from wire-format octet string
-	my $self = shift;
-	my ( $data, $offset ) = @_;
+	my ( $self, $data, $offset ) = @_;
 
 	my $limit = $offset + $self->{rdlength};
 	$self->{flags} = unpack "\@$offset C", $$data;
@@ -46,11 +45,11 @@ sub _format_rdata {			## format rdata portion of RR string.
 
 
 sub _parse_rdata {			## populate RR from rdata in argument list
-	my $self = shift;
+	my ( $self, @argument ) = @_;
 
-	$self->flags(shift);
-	$self->tag( lc shift );
-	$self->value(shift);
+	$self->flags( shift @argument );
+	$self->tag( lc shift @argument );
+	$self->value( shift @argument );
 	return;
 }
 
@@ -64,37 +63,34 @@ sub _defaults {				## specify RR attribute default values
 
 
 sub flags {
-	my $self = shift;
-
-	$self->{flags} = 0 + shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{flags} = 0 + $_ }
 	return $self->{flags} || 0;
 }
 
 
 sub critical {
-	my $self = shift;
-	if ( scalar @_ ) {
-		for ( $self->{flags} ) {
-			$_ = 0x0080 | ( $_ || 0 );
-			$_ ^= 0x0080 unless shift;
+	my ( $self, @value ) = @_;
+	for ( $self->{flags} |= 0 ) {
+		if ( scalar @value ) {
+			$_ |= 0x0080;
+			$_ ^= 0x0080 unless shift @value;
 		}
 	}
-	return 0x0080 & ( $self->{flags} || 0 );
+	return $self->{flags} & 0x0080;
 }
 
 
 sub tag {
-	my $self = shift;
-
-	$self->{tag} = Net::DNS::Text->new(shift) if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{tag} = Net::DNS::Text->new($_) }
 	return $self->{tag} ? $self->{tag}->value : undef;
 }
 
 
 sub value {
-	my $self = shift;
-
-	$self->{value} = Net::DNS::Text->new(shift) if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{value} = Net::DNS::Text->new($_) }
 	return $self->{value} ? $self->{value}->value : undef;
 }
 
@@ -177,7 +173,7 @@ Package template (c)2009,2012 O.M.Kolkman and R.W.Franks.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -194,6 +190,7 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::RR>, RFC8659
+L<perl> L<Net::DNS> L<Net::DNS::RR>
+L<RFC8659|https://tools.ietf.org/html/rfc8659>
 
 =cut

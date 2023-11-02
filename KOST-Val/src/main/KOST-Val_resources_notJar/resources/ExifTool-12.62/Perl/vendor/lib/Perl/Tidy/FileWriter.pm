@@ -7,9 +7,10 @@
 package Perl::Tidy::FileWriter;
 use strict;
 use warnings;
-our $VERSION = '20210111';
+our $VERSION = '20230701';
 
-use constant DEVEL_MODE => 0;
+use constant DEVEL_MODE   => 0;
+use constant EMPTY_STRING => q{};
 
 sub AUTOLOAD {
 
@@ -30,51 +31,88 @@ This error is probably due to a recent programming change
 ======================================================================
 EOM
     exit 1;
-}
+} ## end sub AUTOLOAD
 
 sub DESTROY {
 
     # required to avoid call to AUTOLOAD in some versions of perl
 }
 
-my $input_stream_name = "";
+my $input_stream_name = EMPTY_STRING;
 
 # Maximum number of little messages; probably need not be changed.
-my $MAX_NAG_MESSAGES = 6;
+use constant MAX_NAG_MESSAGES => 6;
 
 BEGIN {
 
-    # Array index names for variables
+    # Array index names for variables.
+    # Do not combine with other BEGIN blocks (c101).
     my $i = 0;
     use constant {
-        _line_sink_object_           => $i++,
-        _logger_object_              => $i++,
-        _rOpts_                      => $i++,
-        _output_line_number_         => $i++,
-        _consecutive_blank_lines_    => $i++,
-        _consecutive_nonblank_lines_ => $i++,
-        _first_line_length_error_    => $i++,
-        _max_line_length_error_      => $i++,
-        _last_line_length_error_     => $i++,
-        _first_line_length_error_at_ => $i++,
-        _max_line_length_error_at_   => $i++,
-        _last_line_length_error_at_  => $i++,
-        _line_length_error_count_    => $i++,
-        _max_output_line_length_     => $i++,
-        _max_output_line_length_at_  => $i++,
-        _rK_checklist_               => $i++,
-        _K_arrival_order_matches_    => $i++,
-        _K_sequence_error_msg_       => $i++,
-        _K_last_arrival_             => $i++,
+        _line_sink_object_            => $i++,
+        _logger_object_               => $i++,
+        _rOpts_                       => $i++,
+        _output_line_number_          => $i++,
+        _consecutive_blank_lines_     => $i++,
+        _consecutive_nonblank_lines_  => $i++,
+        _consecutive_new_blank_lines_ => $i++,
+        _first_line_length_error_     => $i++,
+        _max_line_length_error_       => $i++,
+        _last_line_length_error_      => $i++,
+        _first_line_length_error_at_  => $i++,
+        _max_line_length_error_at_    => $i++,
+        _last_line_length_error_at_   => $i++,
+        _line_length_error_count_     => $i++,
+        _max_output_line_length_      => $i++,
+        _max_output_line_length_at_   => $i++,
+        _rK_checklist_                => $i++,
+        _K_arrival_order_matches_     => $i++,
+        _K_sequence_error_msg_        => $i++,
+        _K_last_arrival_              => $i++,
+        _save_logfile_                => $i++,
     };
+} ## end BEGIN
+
+sub Die {
+    my ($msg) = @_;
+    Perl::Tidy::Die($msg);
+    return;
 }
+
+sub Fault {
+    my ($msg) = @_;
+
+    # This routine is called for errors that really should not occur
+    # except if there has been a bug introduced by a recent program change.
+    # Please add comments at calls to Fault to explain why the call
+    # should not occur, and where to look to fix it.
+    my ( $package0, $filename0, $line0, $subroutine0 ) = caller(0);
+    my ( $package1, $filename1, $line1, $subroutine1 ) = caller(1);
+    my ( $package2, $filename2, $line2, $subroutine2 ) = caller(2);
+    my $pkg = __PACKAGE__;
+
+    Die(<<EOM);
+==============================================================================
+While operating on input stream with name: '$input_stream_name'
+A fault was detected at line $line0 of sub '$subroutine1'
+in file '$filename1'
+which was called from line $line1 of sub '$subroutine2'
+Message: '$msg'
+This is probably an error introduced by a recent programming change.
+$pkg reports VERSION='$VERSION'.
+==============================================================================
+EOM
+
+    # This return is to keep Perl-Critic from complaining.
+    return;
+} ## end sub Fault
 
 sub warning {
     my ( $self, $msg ) = @_;
     my $logger_object = $self->[_logger_object_];
     if ($logger_object) { $logger_object->warning($msg); }
     return;
-}
+} ## end sub warning
 
 sub write_logfile_entry {
     my ( $self, $msg ) = @_;
@@ -83,41 +121,43 @@ sub write_logfile_entry {
         $logger_object->write_logfile_entry($msg);
     }
     return;
-}
+} ## end sub write_logfile_entry
 
 sub new {
     my ( $class, $line_sink_object, $rOpts, $logger_object ) = @_;
 
     my $self = [];
-    $self->[_line_sink_object_]           = $line_sink_object;
-    $self->[_logger_object_]              = $logger_object;
-    $self->[_rOpts_]                      = $rOpts;
-    $self->[_output_line_number_]         = 1;
-    $self->[_consecutive_blank_lines_]    = 0;
-    $self->[_consecutive_nonblank_lines_] = 0;
-    $self->[_first_line_length_error_]    = 0;
-    $self->[_max_line_length_error_]      = 0;
-    $self->[_last_line_length_error_]     = 0;
-    $self->[_first_line_length_error_at_] = 0;
-    $self->[_max_line_length_error_at_]   = 0;
-    $self->[_last_line_length_error_at_]  = 0;
-    $self->[_line_length_error_count_]    = 0;
-    $self->[_max_output_line_length_]     = 0;
-    $self->[_max_output_line_length_at_]  = 0;
-    $self->[_rK_checklist_]               = [];
-    $self->[_K_arrival_order_matches_]    = 0;
-    $self->[_K_sequence_error_msg_]       = "";
-    $self->[_K_last_arrival_]             = -1;
+    $self->[_line_sink_object_]            = $line_sink_object;
+    $self->[_logger_object_]               = $logger_object;
+    $self->[_rOpts_]                       = $rOpts;
+    $self->[_output_line_number_]          = 1;
+    $self->[_consecutive_blank_lines_]     = 0;
+    $self->[_consecutive_nonblank_lines_]  = 0;
+    $self->[_consecutive_new_blank_lines_] = 0;
+    $self->[_first_line_length_error_]     = 0;
+    $self->[_max_line_length_error_]       = 0;
+    $self->[_last_line_length_error_]      = 0;
+    $self->[_first_line_length_error_at_]  = 0;
+    $self->[_max_line_length_error_at_]    = 0;
+    $self->[_last_line_length_error_at_]   = 0;
+    $self->[_line_length_error_count_]     = 0;
+    $self->[_max_output_line_length_]      = 0;
+    $self->[_max_output_line_length_at_]   = 0;
+    $self->[_rK_checklist_]                = [];
+    $self->[_K_arrival_order_matches_]     = 0;
+    $self->[_K_sequence_error_msg_]        = EMPTY_STRING;
+    $self->[_K_last_arrival_]              = -1;
+    $self->[_save_logfile_]                = defined($logger_object);
 
     # save input stream name for local error messages
-    $input_stream_name = "";
+    $input_stream_name = EMPTY_STRING;
     if ($logger_object) {
         $input_stream_name = $logger_object->get_input_stream_name();
     }
 
     bless $self, $class;
     return $self;
-}
+} ## end sub new
 
 sub setup_convergence_test {
     my ( $self, $rlist ) = @_;
@@ -132,10 +172,10 @@ sub setup_convergence_test {
         $self->[_rK_checklist_] = \@list;
     }
     $self->[_K_arrival_order_matches_] = 1;
-    $self->[_K_sequence_error_msg_]    = "";
+    $self->[_K_sequence_error_msg_]    = EMPTY_STRING;
     $self->[_K_last_arrival_]          = -1;
     return;
-}
+} ## end sub setup_convergence_test
 
 sub get_convergence_check {
     my ($self) = @_;
@@ -143,12 +183,7 @@ sub get_convergence_check {
 
     # converged if all K arrived and in correct order
     return $self->[_K_arrival_order_matches_] && !@{$rlist};
-}
-
-sub get_K_sequence_error_msg {
-    my ($self) = @_;
-    return $self->[_K_sequence_error_msg_];
-}
+} ## end sub get_convergence_check
 
 sub get_output_line_number {
     return $_[0]->[_output_line_number_];
@@ -163,8 +198,20 @@ sub get_consecutive_nonblank_lines {
     return $_[0]->[_consecutive_nonblank_lines_];
 }
 
+sub get_consecutive_blank_lines {
+    return $_[0]->[_consecutive_blank_lines_];
+}
+
 sub reset_consecutive_blank_lines {
     $_[0]->[_consecutive_blank_lines_] = 0;
+    return;
+}
+
+# This sub call allows termination of logfile writing for efficiency when we
+# know that the logfile will not be saved.
+sub set_save_logfile {
+    my ( $self, $save_logfile ) = @_;
+    $self->[_save_logfile_] = $save_logfile;
     return;
 }
 
@@ -174,7 +221,7 @@ sub want_blank_line {
         $self->write_blank_code_line();
     }
     return;
-}
+} ## end sub want_blank_line
 
 sub require_blank_code_lines {
 
@@ -185,32 +232,62 @@ sub require_blank_code_lines {
     my $need   = $count - $self->[_consecutive_blank_lines_];
     my $rOpts  = $self->[_rOpts_];
     my $forced = $rOpts->{'maximum-consecutive-blank-lines'} > 0;
-    foreach my $i ( 0 .. $need - 1 ) {
+    foreach ( 0 .. $need - 1 ) {
         $self->write_blank_code_line($forced);
     }
     return;
-}
+} ## end sub require_blank_code_lines
 
 sub write_blank_code_line {
-    my $self   = shift;
-    my $forced = shift;
-    my $rOpts  = $self->[_rOpts_];
+    my ( $self, $forced ) = @_;
+
+    # Write a blank line of code, given:
+    #  $forced = optional flag which, if set, forces the blank line
+    #    to be written. This allows the -mbl flag to be temporarily
+    #    exceeded.
+
+    my $rOpts = $self->[_rOpts_];
     return
       if (!$forced
         && $self->[_consecutive_blank_lines_] >=
         $rOpts->{'maximum-consecutive-blank-lines'} );
-    $self->[_consecutive_blank_lines_]++;
+
     $self->[_consecutive_nonblank_lines_] = 0;
-    $self->write_line("\n");
+
+    # Balance old blanks against new (forced) blanks instead of writing them.
+    # This fixes case b1073.
+    if ( !$forced && $self->[_consecutive_new_blank_lines_] > 0 ) {
+        $self->[_consecutive_new_blank_lines_]--;
+        return;
+    }
+
+    $self->[_line_sink_object_]->write_line("\n");
+    $self->[_output_line_number_]++;
+
+    $self->[_consecutive_blank_lines_]++;
+    $self->[_consecutive_new_blank_lines_]++ if ($forced);
+
     return;
-}
+} ## end sub write_blank_code_line
+
+use constant MAX_PRINTED_CHARS => 80;
 
 sub write_code_line {
     my ( $self, $str, $K ) = @_;
 
-    $self->[_consecutive_blank_lines_] = 0;
+    # Write a line of code, given
+    #  $str = the line of code
+    #  $K   = an optional check integer which, if if given, must
+    #       increase monotonically. This was added to catch cache
+    #       sequence errors in the vertical aligner.
+
+    $self->[_consecutive_blank_lines_]     = 0;
+    $self->[_consecutive_new_blank_lines_] = 0;
     $self->[_consecutive_nonblank_lines_]++;
-    $self->write_line($str);
+
+    $self->[_line_sink_object_]->write_line($str);
+    if ( chomp $str )              { $self->[_output_line_number_]++; }
+    if ( $self->[_save_logfile_] ) { $self->check_line_lengths($str) }
 
     #----------------------------
     # Convergence and error check
@@ -238,8 +315,8 @@ sub write_code_line {
             my $K_prev = $self->[_K_last_arrival_];
             if ( $K < $K_prev ) {
                 chomp $str;
-                if ( length($str) > 80 ) {
-                    $str = substr( $str, 0, 80 ) . "...";
+                if ( length($str) > MAX_PRINTED_CHARS ) {
+                    $str = substr( $str, 0, MAX_PRINTED_CHARS ) . "...";
                 }
 
                 my $msg = <<EOM;
@@ -250,28 +327,39 @@ $str
 This is probably due to a recent programming change and needs to be fixed.
 EOM
 
-                # FIXME: it would be best to set a 'severe_error' flag here and
-                # tell caller to output the original file
-                $self->warning($msg);
+                # Always die during development, this needs to be fixed
+                if (DEVEL_MODE) { Fault($msg) }
+
+                # Otherwise warn if string is not empty (added for b1378)
+                $self->warning($msg) if ( length($str) );
 
                 # Only issue this warning once
                 $self->[_K_sequence_error_msg_] = $msg;
 
-                # stop here in DEVEL mode so this issue doesn't get missed
-                DEVEL_MODE && Perl::Tidy::Die($msg);
             }
         }
         $self->[_K_last_arrival_] = $K;
     }
     return;
-}
+} ## end sub write_code_line
 
 sub write_line {
     my ( $self, $str ) = @_;
 
-    $self->[_line_sink_object_]->write_line($str);
+    # Write a line directly to the output, without any counting of blank or
+    # non-blank lines.
 
-    if ( chomp $str ) { $self->[_output_line_number_]++; }
+    $self->[_line_sink_object_]->write_line($str);
+    if ( chomp $str )              { $self->[_output_line_number_]++; }
+    if ( $self->[_save_logfile_] ) { $self->check_line_lengths($str) }
+
+    return;
+} ## end sub write_line
+
+sub check_line_lengths {
+    my ( $self, $str ) = @_;
+
+    # collect info on line lengths for logfile
 
     # This calculation of excess line length ignores any internal tabs
     my $rOpts   = $self->[_rOpts_];
@@ -305,17 +393,20 @@ sub write_line {
             $self->[_max_line_length_error_at_] = $output_line_number - 1;
         }
 
-        if ( $self->[_line_length_error_count_] < $MAX_NAG_MESSAGES ) {
+        if ( $self->[_line_length_error_count_] < MAX_NAG_MESSAGES ) {
             $self->write_logfile_entry(
                 "Line length exceeded by $exceed characters\n");
         }
         $self->[_line_length_error_count_]++;
     }
     return;
-}
+} ## end sub check_line_lengths
 
 sub report_line_length_errors {
-    my $self                    = shift;
+    my $self = shift;
+
+    # Write summary info about line lengths to the log file
+
     my $rOpts                   = $self->[_rOpts_];
     my $line_length_error_count = $self->[_line_length_error_count_];
     if ( $line_length_error_count == 0 ) {
@@ -330,12 +421,12 @@ sub report_line_length_errors {
     }
     else {
 
-        my $word = ( $line_length_error_count > 1 ) ? "s" : "";
+        my $word = ( $line_length_error_count > 1 ) ? "s" : EMPTY_STRING;
         $self->write_logfile_entry(
 "$line_length_error_count output line$word exceeded $rOpts->{'maximum-line-length'} characters:\n"
         );
 
-        $word = ( $line_length_error_count > 1 ) ? "First" : "";
+        $word = ( $line_length_error_count > 1 ) ? "First" : EMPTY_STRING;
         my $first_line_length_error    = $self->[_first_line_length_error_];
         my $first_line_length_error_at = $self->[_first_line_length_error_at_];
         $self->write_logfile_entry(
@@ -357,5 +448,5 @@ sub report_line_length_errors {
         }
     }
     return;
-}
+} ## end sub report_line_length_errors
 1;

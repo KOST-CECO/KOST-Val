@@ -3,7 +3,7 @@ package Net::DNS::RR;
 use strict;
 use warnings;
 
-our $VERSION = (qw$Id: RR.pm 1812 2020-10-07 18:09:53Z willem $)[2];
+our $VERSION = (qw$Id: RR.pm 1910 2023-03-30 19:16:30Z willem $)[2];
 
 
 =head1 NAME
@@ -50,15 +50,15 @@ you will get an error message and execution will be terminated.
 =cut
 
 sub new {
-	return eval {
+	my ( $class, @list ) = @_;
+	my $rr = eval {
 		local $SIG{__DIE__};
-		scalar @_ > 2 ? &_new_hash : &_new_string;
-	} || do {
-		my $class = shift || __PACKAGE__;
-		my @param = map { defined($_) ? split /\s+/ : 'undef' } @_;
-		my $stmnt = substr "$class->new( @param )", 0, 80;
-		croak "${@}in $stmnt\n";
+		scalar @list > 1 ? &_new_hash : &_new_string;
 	};
+	return $rr if $rr;
+	my @param = map { defined($_) ? split /\s+/ : 'undef' } @list;
+	my $stmnt = substr "$class->new( @param )", 0, 80;
+	croak "${@}in $stmnt\n";
 }
 
 
@@ -85,14 +85,13 @@ The trailing dot (.) is optional.
 
 =cut
 
-my $PARSE_REGEX = q/("[^"]*")|;[^\n]*|[ \t\n\r\f()]/;		# NB: *not* \s (matches Unicode white space)
+my $PARSE_REGEX = q/("[^"]*")|;[^\n]*|[ \t\n\r\f()]+/;		# NB: *not* \s (matches Unicode white space)
 
 sub _new_string {
-	my $base;
-	local $_;
-	( $base, $_ ) = @_;
-	croak 'argument absent or undefined' unless defined $_;
-	croak 'non-scalar argument' if ref $_;
+	my ( $base, $string ) = @_;
+	local $_ = $string;
+	die 'argument absent or undefined' unless defined $_;
+	die 'non-scalar argument' if ref $_;
 
 	# parse into quoted strings, contiguous non-whitespace and (discarded) comments
 	s/\\\\/\\092/g;						# disguise escaped escape
@@ -102,17 +101,17 @@ sub _new_string {
 	s/\\;/\\059/g;						# disguise escaped semicolon
 	my ( $owner, @token ) = grep { defined && length } split /$PARSE_REGEX/o;
 
-	croak 'unable to parse RR string' unless scalar @token;
-	my $t1 = uc $token[0];
+	die 'unable to parse RR string' unless scalar @token;
+	my $t1 = $token[0];
 	my $t2 = $token[1];
 
 	my ( $ttl, $class );
 	if ( not defined $t2 ) {				# <owner> <type>
-		@token = ('ANY') if $classbyname{$t1};		# <owner> <class>
+		@token = ('ANY') if $classbyname{uc $t1};	# <owner> <class>
 	} elsif ( $t1 =~ /^\d/ ) {
 		$ttl   = shift @token;				# <owner> <ttl> [<class>] <type>
 		$class = shift @token if $classbyname{uc $t2} || $t2 =~ /^CLASS\d/i;
-	} elsif ( $classbyname{$t1} || $t1 =~ /^CLASS\d/ ) {
+	} elsif ( $classbyname{uc $t1} || $t1 =~ /^CLASS\d/i ) {
 		$class = shift @token;				# <owner> <class> [<ttl>] <type>
 		$ttl   = shift @token if $t2 =~ /^\d/;
 	}
@@ -122,8 +121,8 @@ sub _new_string {
 
 	my $self = $base->_subclass( $type, $populated );	# create RR object
 	$self->owner($owner);
-	$self->class($class) if defined $class;			# specify CLASS
-	$self->ttl($ttl)     if defined $ttl;			# specify TTL
+	&class( $self, $class );				# specify CLASS
+	&ttl( $self, $ttl );					# specify TTL
 
 	return $self unless $populated;				# empty RR
 
@@ -131,12 +130,12 @@ sub _new_string {
 		shift @token;					# RFC3597 hexadecimal format
 		my $rdlen = shift(@token) || 0;
 		my $rdata = pack 'H*', join( '', @token );
-		croak 'length and hexadecimal data inconsistent' unless $rdlen == length $rdata;
+		die 'length and hexadecimal data inconsistent' unless $rdlen == length $rdata;
 		$self->rdata($rdata);				# unpack RDATA
-		return $self;
+	} else {
+		$self->_parse_rdata(@token);			# parse arguments
 	}
 
-	$self->_parse_rdata(@token);				# parse arguments
 	$self->_post_parse();
 	return $self;
 }
@@ -201,15 +200,15 @@ sub _new_hash {
 
 =head2 decode
 
-    ( $rr, $next ) = decode Net::DNS::RR( \$data, $offset, @opaque );
+    ( $rr, $next ) = Net::DNS::RR->decode( \$data, $offset, @opaque );
 
 Decodes a DNS resource record at the specified location within a
 DNS packet.
 
 The argument list consists of a reference to the buffer containing
 the packet data and offset indicating where resource record begins.
-Remaining arguments, if any, are passed as opaque data to
-subordinate decoders.
+Any remaining arguments are passed as opaque data to subordinate
+decoders and do not form part of the published interface.
 
 Returns a C<Net::DNS::RR> object and the offset of the next record
 in the packet.
@@ -217,20 +216,16 @@ in the packet.
 An exception is raised if the data buffer contains insufficient or
 corrupt data.
 
-Any remaining arguments are passed as opaque data to subordinate
-decoders and do not form part of the published interface.
-
 =cut
 
 use constant RRFIXEDSZ => length pack 'n2 N n', (0) x 4;
 
 sub decode {
-	my $base = shift;
-	my ( $data, $offset, @opaque ) = @_;
+	my ( $base, @argument ) = @_;
 
-	my ( $owner, $fixed ) = decode Net::DNS::DomainName1035(@_);
-
+	my ( $owner, $fixed ) = Net::DNS::DomainName1035->decode(@argument);
 	my $index = $fixed + RRFIXEDSZ;
+	my ( $data, $offset, @opaque ) = @argument;
 	die 'corrupt wire-format data' if length $$data < $index;
 	my $self = $base->_subclass( unpack "\@$fixed n", $$data );
 	$self->{owner} = $owner;
@@ -239,9 +234,8 @@ sub decode {
 	my $next = $index + $self->{rdlength};
 	die 'corrupt wire-format data' if length $$data < $next;
 
-	$self->{offset} = $offset || 0;
+	local $self->{offset} = $offset;
 	$self->_decode_rdata( $data, $index, @opaque ) if $next > $index or $self->type eq 'OPT';
-	delete $self->{offset};
 
 	return wantarray ? ( $self, $next ) : $self;
 }
@@ -263,8 +257,8 @@ subordinate encoders.
 =cut
 
 sub encode {
-	my $self = shift;
-	my ( $offset, @opaque ) = scalar(@_) ? @_ : ( 0x4000, {} );
+	my ( $self, $offset, @opaque ) = @_;
+	( $offset, @opaque ) = ( 0x4000, {} ) unless defined $offset;
 
 	my $owner = $self->{owner}->encode( $offset, @opaque );
 	my ( $type, $class, $ttl ) = @{$self}{qw(type class ttl)};
@@ -329,18 +323,18 @@ sub string {
 	my @ttl	 = grep {defined} $self->{ttl};
 	my @core = ( $name, @ttl, $self->class, $self->type );
 
+	local $SIG{__DIE__};
 	my $empty = $self->_empty;
 	my @rdata = $empty ? () : eval { $self->_format_rdata };
 	carp $@ if $@;
 
 	my $tab = length($name) < 72 ? "\t" : ' ';
-	$self->_annotation('no data') if $empty;
-
 	my @line = _wrap( join( $tab, @core, '(' ), @rdata, ')' );
 
 	my $last = pop(@line);					# last or only line
 	$last = join $tab, @core, "@rdata" unless scalar(@line);
 
+	$self->_annotation('no data') if $empty;
 	return join "\n\t", @line, _wrap( $last, map {"; $_"} $self->_annotation );
 }
 
@@ -356,10 +350,7 @@ which have rudimentary parsers.
 =cut
 
 sub plain {
-	my $string = join ' ', shift->token;
-	$string =~ s/\\034/\\"/g;				# unescape "
-	$string =~ s/\\092/\\\\/g;				# unescape escape
-	return $string;
+	return join ' ', shift->token;
 }
 
 
@@ -377,11 +368,14 @@ sub token {
 	my @ttl	 = grep {defined} $self->{ttl};
 	my @core = ( $self->{owner}->string, @ttl, $self->class, $self->type );
 
-	my @rdata = $self->_empty ? () : eval { $self->_format_rdata };
-
 	# parse into quoted strings, contiguous non-whitespace and (discarded) comments
-	my @parse = map { split( /$PARSE_REGEX/o, $_ ) } @rdata;
-	return ( @core, grep { defined && length } @parse );
+	local $_ = $self->_empty ? '' : join( ' ', $self->_format_rdata );
+	s/\\\\/\\092/g;						# disguise escaped escape
+	s/\\"/\\034/g;						# disguise escaped quote
+	s/\\\(/\\040/g;						# disguise escaped bracket
+	s/\\\)/\\041/g;						# disguise escaped bracket
+	s/\\;/\\059/g;						# disguise escaped semicolon
+	return ( @core, grep { defined && length } split /$PARSE_REGEX/o );
 }
 
 
@@ -418,8 +412,8 @@ Returns the owner name of the record.
 =cut
 
 sub owner {
-	my $self = shift;
-	$self->{owner} = Net::DNS::DomainName1035->new(shift) if scalar @_;
+	my ( $self, @name ) = @_;
+	for (@name) { $self->{owner} = Net::DNS::DomainName1035->new($_) }
 	return defined wantarray ? $self->{owner}->name : undef;
 }
 
@@ -435,8 +429,8 @@ Returns the record type.
 =cut
 
 sub type {
-	my $self = shift;
-	croak 'not possible to change RR->type' if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { croak 'not possible to change RR->type' }
 	return typebyval( $self->{type} );
 }
 
@@ -450,8 +444,8 @@ Resource record class.
 =cut
 
 sub class {
-	my $self = shift;
-	return $self->{class} = classbyname(shift) if scalar @_;
+	my ( $self, $class ) = @_;
+	return $self->{class} = classbyname($class) if defined $class;
 	return defined $self->{class} ? classbyval( $self->{class} ) : 'IN';
 }
 
@@ -522,14 +516,18 @@ sub _defaults { }			## set attribute default values
 
 
 sub dump {				## print internal data structure
-	require Data::Dumper;					# uncoverable pod
+	my @data = @_;						# uncoverable pod
+	require Data::Dumper;
 	local $Data::Dumper::Maxdepth = $Data::Dumper::Maxdepth || 6;
 	local $Data::Dumper::Sortkeys = $Data::Dumper::Sortkeys || 1;
-	return print Data::Dumper::Dumper(@_);
+	local $Data::Dumper::Useqq    = $Data::Dumper::Useqq	|| 1;
+	return print Data::Dumper::Dumper(@data);
 }
 
 sub rdatastr {				## historical RR subtype method
-	return &rdstring;					# uncoverable pod
+	my $self = shift;					# uncoverable pod
+	$self->_deprecate('prefer $rr->rdstring()');
+	return $self->rdstring;
 }
 
 
@@ -547,9 +545,7 @@ sub rdata {
 	return $self->_empty ? '' : eval { $self->_encode_rdata( 0x4000, {} ) } unless @_;
 
 	my $data = shift || '';
-	my $hash = {};
-	$self->_decode_rdata( \$data, 0, $hash ) if ( $self->{rdlength} = length $data );
-	croak 'compression pointer in rdata'	 if keys %$hash;
+	$self->_decode_rdata( \$data, 0 ) if ( $self->{rdlength} = length $data );
 	return;
 }
 
@@ -564,6 +560,7 @@ Returns a string representation of the RR-specific data.
 
 sub rdstring {
 	my $self = shift;
+	local $SIG{__DIE__};
 
 	my @rdata = $self->_empty ? () : eval { $self->_format_rdata };
 	carp $@ if $@;
@@ -596,7 +593,7 @@ comparator function used for a particular RR based on its attributes.
 
 =head2 set_rrsort_func
 
-    my $function = sub {		## numerically ascending order
+    my $function = sub {	## numerically ascending order
 	$Net::DNS::a->{'preference'} <=> $Net::DNS::b->{'preference'};
     };
 
@@ -684,11 +681,12 @@ sub _subclass {
 			my $subclass = join '::', __PACKAGE__, $identifier;
 
 			unless ( eval "require $subclass" ) {	## no critic ProhibitStringyEval
-				push @INC, sub {
-					Net::DNS::Parameters::_typespec("$rrtype.RRTYPE");
-				};
-
+				my $perl = Net::DNS::Parameters::_typespec("$rrtype.RRTYPE");
 				$subclass = join '::', __PACKAGE__, "TYPE$rrtype";
+				push @INC, sub {		# see perldoc -f require
+					my @line = split /\n/, $perl;
+					return ( sub { defined( $_ = shift @line ) } );
+				};
 				eval "require $subclass";	## no critic ProhibitStringyEval
 			}
 
@@ -713,16 +711,17 @@ sub _subclass {
 
 
 sub _annotation {
-	my $self = shift;
-	$self->{annotation} = ["@_"] if scalar @_;
+	my ( $self, @note ) = @_;
+	$self->{annotation} = ["@note"] if scalar @note;
 	return wantarray ? @{$self->{annotation} || []} : ();
 }
 
 
-my $warned;
+my %warned;
 
 sub _deprecate {
-	carp join ' ', 'deprecated method;', pop(@_) unless $warned++;
+	my ( undef, @note ) = @_;
+	carp "deprecated method; @note" unless $warned{"@note"}++;
 	return;
 }
 
@@ -742,8 +741,6 @@ sub _wrap {
 
 	my ( @line, @fill );
 	foreach (@text) {
-		s/\\034/\\"/g;					# unescape "
-		s/\\092/\\\\/g;					# unescape escape
 		$coln += ( length || next ) + 1;
 		if ( $coln > $cols ) {				# start new line
 			push( @line, join ' ', @fill ) if @fill;
@@ -753,28 +750,32 @@ sub _wrap {
 		$coln = $cols	  if chomp;			# force line break
 		push( @fill, $_ ) if length;
 	}
-	push @line, join ' ', @fill;
-	return @line;
+	return ( @line, join ' ', @fill );
 }
 
 
 ################################################################################
 
-our $AUTOLOAD;
-
 sub DESTROY { }				## Avoid tickling AUTOLOAD (in cleanup)
 
+## no critic
 sub AUTOLOAD {				## Default method
-	my $self     = shift;
-	my ($method) = reverse split /::/, $AUTOLOAD;
-
-	for ($method) {			## tolerate mixed-case attribute name
-		return $self->$_(@_) if tr [A-Z-] [a-z_];
-	}
+	my ($self) = @_;
 
 	no strict 'refs';		## no critic ProhibitNoStrict
-	*{$AUTOLOAD} = sub {undef};	## suppress repetition and deep recursion
+	our $AUTOLOAD;
+	my ($method) = reverse split /::/, $AUTOLOAD;
+
+	for ( my $action = $method ) {	## tolerate mixed-case attribute name
+		tr [A-Z-] [a-z_];
+		if ( $self->can($action) ) {
+			*{$AUTOLOAD} = sub { shift->$action(@_) };
+			return &$AUTOLOAD;
+		}
+	}
+
 	my $oref = ref($self);
+	*{$AUTOLOAD} = sub {};		## suppress deep recursion
 	croak qq[$self has no class method "$method"] unless $oref;
 
 	my $string = $self->string;
@@ -782,7 +783,7 @@ sub AUTOLOAD {				## Default method
 	my $module = join '::', __PACKAGE__, $self->type;
 	eval("require $module") if $oref eq __PACKAGE__;	## no critic ProhibitStringyEval
 
-	@_ = ( <<"END", $@, "@object" );
+	@_ = ( <<"END" );
 ***  FATAL PROGRAM ERROR!!	Unknown instance method "$method"
 ***  which the program has attempted to call for the object:
 ***
@@ -792,8 +793,10 @@ $string
 ***  that the object would be of a particular type.  The type of an
 ***  object should be checked before calling any of its methods.
 ***
+@object
+$@
 END
-	goto &{'Carp::confess'};
+	goto &Carp::confess;
 }
 
 
@@ -818,7 +821,7 @@ All rights reserved.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -835,9 +838,10 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::Question>,
-L<Net::DNS::Packet>, L<Net::DNS::Update>,
-RFC1035 Section 4.1.3, RFC1123, RFC3597
+L<perl> L<Net::DNS>
+L<Net::DNS::Question> L<Net::DNS::Packet> L<Net::DNS::Update>
+L<RFC1035(4.1.3)|https://tools.ietf.org/html/rfc1035>
+L<RFC3597|https://tools.ietf.org/html/rfc3597>
 
 =cut
 

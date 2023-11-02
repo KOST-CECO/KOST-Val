@@ -1,15 +1,18 @@
 package Mojo::Server;
 use Mojo::Base 'Mojo::EventEmitter';
 
-use Carp qw(croak);
-use Mojo::File qw(path);
+use Carp         qw(croak);
+use Mojo::File   qw(path);
 use Mojo::Loader qw(load_class);
-use Mojo::Util qw(md5_sum);
-use POSIX ();
+use Mojo::Util   qw(md5_sum);
+use POSIX        ();
 use Scalar::Util qw(blessed);
 
-has app           => sub { shift->build_app('Mojo::HelloWorld') };
-has reverse_proxy => sub { $ENV{MOJO_REVERSE_PROXY} };
+has app             => sub { shift->build_app('Mojo::HelloWorld') };
+has reverse_proxy   => sub { $ENV{MOJO_REVERSE_PROXY} || !!@{shift->trusted_proxies} };
+has trusted_proxies => sub { [split /\s*,\s*/, ($ENV{MOJO_TRUSTED_PROXIES} // '')] };
+
+our @ARGS_OVERRIDE;
 
 sub build_app {
   my ($self, $app) = (shift, shift);
@@ -21,6 +24,7 @@ sub build_app {
 sub build_tx {
   my $self = shift;
   my $tx   = $self->app->build_tx;
+  push @{$tx->req->trusted_proxies}, @{$self->trusted_proxies};
   $tx->req->reverse_proxy(1) if $self->reverse_proxy;
   return $tx;
 }
@@ -39,15 +43,15 @@ sub daemonize {
 }
 
 sub load_app {
-  my ($self, $path) = @_;
+  my ($self, $path, @args) = (shift, shift, ref $_[0] ? %{shift()} : @_);
 
   # Clean environment (reset FindBin defensively)
   {
     local $0 = $path = path($path)->to_abs->to_string;
     require FindBin;
     FindBin->again;
-    local $ENV{MOJO_APP_LOADER} = 1;
-    local $ENV{MOJO_EXE};
+    local @ENV{qw(MOJO_APP_LOADER MOJO_EXE)} = (1, undef);
+    local @ARGS_OVERRIDE = @args;
 
     # Try to load application from script into sandbox
     delete $INC{$path};
@@ -130,7 +134,17 @@ Application this server handles, defaults to a L<Mojo::HelloWorld> object.
   my $bool = $server->reverse_proxy;
   $server  = $server->reverse_proxy($bool);
 
-This server operates behind a reverse proxy, defaults to the value of the C<MOJO_REVERSE_PROXY> environment variable.
+This server operates behind a reverse proxy, defaults to the value of the C<MOJO_REVERSE_PROXY> environment variable
+or true if L</trusted_proxies> is not empty.
+
+=head2 trusted_proxies
+
+  my $proxies = $server->trusted_proxies;
+  $server     = $server->trusted_proxies(['10.0.0.0/8', '127.0.0.1', '172.16.0.0/12', '192.168.0.0/16', 'fc00::/7']);
+
+This server expects requests from trusted reverse proxies, defaults to the value of the C<MOJO_TRUSTED_PROXIES>
+environment variable split on commas with optional whitespace. These proxies should be addresses or networks in CIDR
+form.
 
 =head1 METHODS
 
@@ -159,6 +173,8 @@ Daemonize server process.
 =head2 load_app
 
   my $app = $server->load_app('/home/sri/myapp.pl');
+  my $app = $server->load_app('/home/sri/myapp.pl', log => Mojo::Log->new);
+  my $app = $server->load_app('/home/sri/myapp.pl', {log => Mojo::Log->new});
 
 Load application from script and assign it to L</"app">.
 

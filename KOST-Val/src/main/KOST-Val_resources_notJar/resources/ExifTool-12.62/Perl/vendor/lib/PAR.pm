@@ -1,10 +1,10 @@
 package PAR;
-$PAR::VERSION = '1.017';
+$PAR::VERSION = '1.018';
 
 use 5.006;
 use strict;
 use warnings;
-use Config '%Config';
+use Config;
 use Carp qw/croak/;
 
 # If the 'prefork' module is available, we
@@ -149,7 +149,7 @@ the C<install> option, too.)
 =head1 DESCRIPTION
 
 This module lets you use special zip files, called B<P>erl B<Ar>chives, as
-libraries from which Perl modules can be loaded. 
+libraries from which Perl modules can be loaded.
 
 It supports loading XS modules by overriding B<DynaLoader> bootstrapping
 methods; it writes shared object file to a temporary file at the time it
@@ -230,7 +230,7 @@ Here is a description of the variables the previous paths.
 
 =item *
 
-I<TEMP> is a temporary directory, which can be set via 
+I<TEMP> is a temporary directory, which can be set via
 C<$ENV{PAR_GLOBAL_TMPDIR}>,
 C<$ENV{TMPDIR}>, C<$ENV{TEMPDIR}>, C<$ENV{TEMP}>
 or C<$ENV{TMP}>, in that order of priority.
@@ -306,14 +306,14 @@ In either case, they must end up in the standard install location (such
 as /usr/local/lib/) or in $ENV{PAR_TEMP} I<before> you require the
 module which needs them.  If they are not accessible before you require
 the dependent module, perl will die with a message such as "cannot open
-shared object file..." 
+shared object file..."
 
 =back
 
 =cut
 
 use Fcntl ':flock';
-use Archive::Zip qw( :ERROR_CODES ); 
+use Archive::Zip qw( :ERROR_CODES );
 
 use vars qw(@PAR_INC);              # explicitly stated PAR library files (preferred)
 use vars qw(@PAR_INC_LAST);         # explicitly stated PAR library files (fallback)
@@ -353,7 +353,7 @@ sub import {
     $is_insensitive_fs = (-s $progname and (-s lc($progname) || -1) == (-s uc($progname) || -1));
 
     my @args = @_;
-    
+
     # Insert PAR hook in @INC.
     unshift @INC, \&find_par   unless grep { $_ eq \&find_par }      @INC;
     push @INC, \&find_par_last unless grep { $_ eq \&find_par_last } @INC;
@@ -466,7 +466,7 @@ sub _import_hash_ref {
         # for files, we default to loading from PAR archive first
         my $fallback = $opt->{fallback};
         $fallback = 0 if not defined $fallback;
-        
+
         if (not $fallback) {
             # load from this PAR arch preferably
             push @PAR_INC, unpar($opt->{file}, undef, undef, 1);
@@ -475,7 +475,7 @@ sub _import_hash_ref {
             # load from this PAR arch as fallback
             push @PAR_INC_LAST, unpar($opt->{file}, undef, undef, 1);
         }
-        
+
     }
     else {
         # Deal with repositories elsewhere
@@ -488,7 +488,7 @@ sub _import_hash_ref {
             $client->run_script( $opt->{run} );
             return 1;
         }
-        
+
         return 1;
     }
 
@@ -498,21 +498,21 @@ sub _import_hash_ref {
         my $script = $opt->{run};
         require PAR::Heavy;
         PAR::Heavy::_init_dynaloader();
-        
+
         # XXX - handle META.yml here!
         _extract_inc($opt->{file});
-        
+
         my $zip = $LibCache{$opt->{file}};
         my $member = _first_member( $zip,
             (($script !~ /^script\//) ? ("script/$script", "script/$script.pl") : ()),
             $script,
             "$script.pl",
         );
-        
+
         if (not defined $member) {
             croak("Cannot run script '$script' from PAR file '$opt->{file}'. Script couldn't be found in PAR file.");
         }
-        
+
         _run_member_from_par($member);
     }
 
@@ -531,7 +531,7 @@ sub _import_repository {
     if ($@ or not eval PAR::Repository::Client->VERSION >= 0.04) {
         croak "In order to use the 'use PAR { repository => 'url' };' syntax, you need to install the PAR::Repository::Client module (version 0.04 or later) from CPAN. This module does not seem to be installed as indicated by the following error message: $@";
     }
-    
+
     if ($opt->{upgrade} and not eval PAR::Repository::Client->VERSION >= 0.22) {
         croak "In order to use the 'upgrade' option, you need to install the PAR::Repository::Client module (version 0.22 or later) from CPAN";
     }
@@ -579,7 +579,7 @@ sub _first_member {
     return;
 }
 
-# Given an Archive::Zip object, this finds the first 
+# Given an Archive::Zip object, this finds the first
 # Archive::Zip member whose file name matches the
 # regular expression
 sub _first_member_matching {
@@ -634,12 +634,12 @@ sub _run_member {
         $member->crc32String . ".pl");
 
     # NOTE: Perl 5.14.x will print the infamous warning
-    # "Use of uninitialized value in do "file" at .../PAR.pm line 636" 
+    # "Use of uninitialized value in do "file" at .../PAR.pm line 636"
     # when $INC{main} exists, but is undef, when "do 'main'" is called.
-    # This typically happens at the second invocation of _run_member() 
-    # when running a packed executable (the first invocation is for the 
-    # generated script/main.pl, the second for the packed script itself). 
-    # Hence shut the warning up by assigning something to $INC{main}. 
+    # This typically happens at the second invocation of _run_member()
+    # when running a packed executable (the first invocation is for the
+    # generated script/main.pl, the second for the packed script itself).
+    # Hence shut the warning up by assigning something to $INC{main}.
     # 5.14.x is the only Perl version since 5.8.1 that shows this behaviour.
     unshift @INC, sub { shift @INC; $INC{$_[1]} = $filename; return $fh };
 
@@ -679,7 +679,7 @@ sub _run_external_file {
 # returns that directory.
 sub _extract_inc {
     my $file_or_azip_handle = shift;
-    my $dlext = defined($Config{dlext}) ? $Config::Config{dlext} : '';
+    my $dlext = defined($Config{dlext}) ? $Config{dlext} : '';
     my $is_handle = ref($file_or_azip_handle) && $file_or_azip_handle->isa('Archive::Zip::Archive');
 
     require File::Spec;
@@ -708,7 +708,7 @@ sub _extract_inc {
                     Archive::Unzip::Burst::unzip($file_or_azip_handle, $inc) == AZ_OK;
                 } and last EXTRACT;
 
-                # Either failed to load Archive::Unzip::Burst or 
+                # Either failed to load Archive::Unzip::Burst or
                 # Archive::Unzip::Burst::unzip failed: fallback to slow way.
                 open my $fh, '<', $file_or_azip_handle
                   or die "Cannot find '$file_or_azip_handle': $!";
@@ -731,19 +731,19 @@ sub _extract_inc {
                 next if -e $outfile and not -w _;
                 $zip->extractMember($_, $outfile);
                 # Unfortunately Archive::Zip doesn't have an option
-                # NOT to restore member timestamps when extracting, hence set 
+                # NOT to restore member timestamps when extracting, hence set
                 # it to "now" (making it younger than the canary file).
                 utime(undef, undef, $outfile);
             }
         }
 
         $ArchivesExtracted{$is_handle ? $file_or_azip_handle->fileName() : $file_or_azip_handle} = $inc;
-    
+
         # touch (and back-date) canary file
-        open my $fh, ">", $canary; 
+        open my $fh, ">", $canary;
         print $fh <<'...';
-This file is used as "canary in the coal mine" to detect when 
-files in PAR's cache area are being removed by some clean up 
+This file is used as "canary in the coal mine" to detect when
+files in PAR's cache area are being removed by some clean up
 mechanism (probably based on file modification times).
 ...
         close $fh;
@@ -1007,7 +1007,7 @@ sub unpar {
         $FileCache{$_[0]} = _make_file_cache($zip);
 
         # only recursive case -- appears to be unused and unimplemented
-        foreach my $member ( _cached_members_matching($zip, 
+        foreach my $member ( _cached_members_matching($zip,
             "^par/(?:$Config{version}/)?(?:$Config{archname}/)?"
         ) ) {
             next if $member->isDirectory;
@@ -1015,7 +1015,7 @@ sub unpar {
             next unless $content =~ /^PK\003\004/;
             push @rv, unpar(\$content, undef, undef, 1);
         }
-        
+
         # extract all shlib dlls from the .par to $ENV{PAR_TEMP}
         # Intended to fix problem with Alien::wxWidgets/Wx...
         # NOTE auto/foo/foo.so|dll will get handled by the dynaloader
@@ -1085,8 +1085,8 @@ sub unpar {
     return $member if $member_only;
 
     (my $fh, $LastTempFile) = _tempfile(
-        sub { 
-            my $fh = shift; 
+        sub {
+            my $fh = shift;
             my $file = $member->fileName;
             $member->extractToFileHandle($fh) == AZ_OK
                 or die "Can't extract $file: $!";
@@ -1098,7 +1098,7 @@ sub unpar {
 
 sub _tempfile {
     my ($callback, $name) = @_;
-    
+
     if ($ENV{PAR_CLEAN} or !defined $name) {
         require File::Temp;
 
@@ -1131,7 +1131,7 @@ sub _tempfile {
         close($fh);
 
         # FIXME why?
-        rename($tempname, $filename) or unlink($tempname); 
+        rename($tempname, $filename) or unlink($tempname);
     }
 
     open my $fh, '<', $filename or die $!;
@@ -1207,7 +1207,7 @@ __END__
 
 =head1 SEE ALSO
 
-L<PAR::Tutorial>, L<PAR::FAQ> 
+L<PAR::Tutorial>, L<PAR::FAQ>
 
 The L<PAR::Packer> distribution which contains the packaging utilities:
 L<par.pl>, L<parl>, L<pp>.

@@ -8,11 +8,11 @@ use File::Which qw( which );
 use Path::Tiny qw( path );
 use Capture::Tiny qw( capture );
 use File::Temp qw( tempdir );
-use List::Util 1.33 qw( any );
+use List::Util 1.33 qw( any pairmap );
 use File::chdir;
 
 # ABSTRACT: Plugin for fetching files using curl
-our $VERSION = '2.38'; # VERSION
+our $VERSION = '2.80'; # VERSION
 
 
 sub curl_command
@@ -82,7 +82,7 @@ sub init
 
   $meta->register_hook(
     fetch => sub {
-      my($build, $url) = @_;
+      my($build, $url, %options) = @_;
       $url ||= $self->url;
 
       my($scheme) = $url =~ /^([a-z0-9]+):/i;
@@ -100,10 +100,24 @@ sub init
         $build->log("writeout: $_\\n") for @writeout;
         path('writeout')->spew(join("\\n", @writeout));
 
+        my @headers;
+        if(my $headers = $options{http_headers})
+        {
+          if(ref $headers eq 'ARRAY')
+          {
+            @headers = pairmap { -H => "$a: $b" } @$headers;
+          }
+          else
+          {
+            $build->log("Fetch for $url with http_headers that is not an array reference");
+          }
+        }
+
         my @command = (
           $self->curl_command,
           '-L', '-f', '-O', '-J',
           -w => '@writeout',
+          @headers,
         );
 
         push @command, -D => 'head' if $self->_see_headers;
@@ -125,9 +139,10 @@ sub init
         if($type eq 'text/html')
         {
           return {
-            type    => 'html',
-            base    => $h{url},
-            content => scalar path($h{filename})->slurp,
+            type     => 'html',
+            base     => $h{url},
+            content  => scalar path($h{filename})->slurp,
+            protocol => $scheme,
           };
         }
         else
@@ -136,6 +151,7 @@ sub init
             type     => 'file',
             filename => $h{filename},
             path     => path($h{filename})->absolute->stringify,
+            protocol => $scheme,
           };
         }
       }
@@ -239,7 +255,7 @@ Alien::Build::Plugin::Fetch::CurlCommand - Plugin for fetching files using curl
 
 =head1 VERSION
 
-version 2.38
+version 2.80
 
 =head1 SYNOPSIS
 
@@ -330,7 +346,7 @@ Juan Julián Merelo Guervós (JJ)
 
 Joel Berger (JBERGER)
 
-Petr Pisar (ppisar)
+Petr Písař (ppisar)
 
 Lance Wicks (LANCEW)
 
@@ -348,9 +364,13 @@ Paul Evans (leonerd, PEVANS)
 
 Håkon Hægland (hakonhagland, HAKONH)
 
+nick nauwelaerts (INPHOBIA)
+
+Florian Weimer
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011-2020 by Graham Ollis.
+This software is copyright (c) 2011-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

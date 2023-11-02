@@ -1,8 +1,8 @@
-use strict;
+use v5.12.0;
 use warnings;
-package Email::MIME::Encode;
+package Email::MIME::Encode 1.953;
 # ABSTRACT: a private helper for MIME header encoding
-$Email::MIME::Encode::VERSION = '1.949';
+
 use Carp ();
 use Encode ();
 use Email::MIME::Header;
@@ -79,8 +79,8 @@ sub _object_encode {
 sub mime_encode {
   my ($text, $charset, $header_name_length) = @_;
 
-  $header_name_length = 0 unless defined $header_name_length;
-  $charset = 'UTF-8' unless defined $charset;
+  $header_name_length //= 0;
+  $charset //= 'UTF-8';
 
   my $enc_obj = Encode::find_encoding($charset);
 
@@ -163,7 +163,7 @@ sub mime_decode {
   # -- rjbs, 2014-12-04
   local $@;
   my $result = eval { Encode::decode("MIME-Header", $text) };
-  return defined $result ? $result : $text;
+  return $result // $text;
 }
 
 1;
@@ -180,7 +180,17 @@ Email::MIME::Encode - a private helper for MIME header encoding
 
 =head1 VERSION
 
-version 1.949
+version 1.953
+
+=head1 PERL VERSION
+
+This library should run on perls released even a long time ago.  It should work
+on any version of perl released in the last five years.
+
+Although it may work on older versions of perl, no guarantee is made that the
+minimum required version will not be increased.  The version may be increased
+for any reason, and there is no promise that patches will be accepted to lower
+the minimum required perl.
 
 =head1 AUTHORS
 
@@ -188,7 +198,7 @@ version 1.949
 
 =item *
 
-Ricardo SIGNES <rjbs@cpan.org>
+Ricardo SIGNES <cpan@semiotic.systems>
 
 =item *
 

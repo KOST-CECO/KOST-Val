@@ -1,14 +1,14 @@
-# Copyrights 2007-2021 by [Mark Overmeer <markov@cpan.org>].
+# Copyrights 2007-2022 by [Mark Overmeer <markov@cpan.org>].
 #  For other contributors see ChangeLog.
 # See the manual pages for details on the licensing terms.
-# Pod stripped from pm file by OODoc 2.02.
+# Pod stripped from pm file by OODoc 2.03.
 # This code is part of distribution Log-Report. Meta-POD processed with
 # OODoc into POD and HTML manual-pages.  See README.md
 # Copyright Mark Overmeer.  Licensed under the same terms as Perl itself.
 
 package Dancer2::Plugin::LogReport;
 use vars '$VERSION';
-$VERSION = '1.31';
+$VERSION = '1.34';
 
 
 use warnings;
@@ -32,7 +32,7 @@ sub import
 {   my $class = shift;
 
      # Import Log::Report into the caller. Import options get passed through
-     my $level = $Dancer2::VERSION > 0.166001 ? '+1' : '+2';
+     my $level = $Dancer2::Plugin::VERSION > 0.166001 ? '+1' : '+2';
      Log::Report->import($level, @_, syntax => 'LONG');
  
      # Ensure the overridden import method is called (from Exporter::Tiny)
@@ -63,7 +63,12 @@ on_plugin_import
             name => 'core.app.route_exception',
             code => sub {
                 my ($app, $error) = @_;
-                report 'PANIC' => $error;
+                # If there is no request object then we are in an early hook
+                # and Dancer will not handle an exception cleanly (which will
+                # result in a stacktrace to the browser, a potential security
+                # vulnerability). Therefore in this case do not raise as fatal.
+                my $is_fatal = $app->request ? 1 : 0;
+                report {is_fatal => $is_fatal}, 'PANIC' => $error;
             },
         ),
     );
@@ -105,19 +110,6 @@ on_plugin_import
     my $sm = $settings->{session_messages} // \@default_reasons;
     $session_messages{$_} = 1
         for ref $sm eq 'ARRAY' ? @$sm : $sm;
-
-    # In a production server, we don't want the end user seeing (unexpected)
-    # exception messages, for both security and usability. If we detect
-    # that this is a production server (show_errors is 0), then we change
-    # the specific error to a generic error, when displayed to the user.
-    # The message can be customised in the config file.
-    my $fatal_error_message = $settings->{fatal_error_message}
-       // "An unexpected error has occurred";
-
-    unless($dsl->app->config->{show_errors})
-    {   $hide_real_message->{$_} = $fatal_error_message
-            for qw/FAULT ALERT FAILURE PANIC/;
-    }
 
     if(my $forward_template = $settings->{forward_template})
     {   # Add a route for the specified template
@@ -214,6 +206,18 @@ sub _message_add($)
     # for request(), which is used to access the cookies of a session.
     return unless $app->request;
 
+    # In a production server, we don't want the end user seeing (unexpected)
+    # exception messages, for both security and usability. If we detect
+    # that this is a production server (show_errors is 0), then we change
+    # the specific error to a generic error, when displayed to the user.
+    # The message can be customised in the config file.
+    # We evaluate this each message to allow show_errors to be set in the
+    # application (specifically makes testing a lot easier)
+    my $fatal_error_message = !$dsl->app->config->{show_errors}
+        && ($_settings->{fatal_error_message} // "An unexpected error has occurred");
+    $hide_real_message->{$_} = $fatal_error_message
+        for qw/FAULT ALERT FAILURE PANIC/;
+
     my $r = $msg->reason;
     if(my $newm = $hide_real_message->{$r})
     {   $msg    = __$newm;
@@ -225,20 +229,26 @@ sub _message_add($)
     push @$msgs, $msg;
     $session->write($messages_variable => $msgs);
 
-    return $dsl;
+    return ($dsl || undef, $msg);
 }
 
 #------
 
 sub _forward_home($)
-{   my $dsl = _message_add(shift) || _get_dsl();
+{   my ($dsl, $msg) = _message_add(shift);
+    $dsl ||= _get_dsl();
+
     my $page = $_settings->{forward_url} || '/';
 
-    # Don't forward if it's a GET request to the error page, as it will
-    # cause a recursive loop. In this case, do nothing, and let dancer
-    # handle it.
+    # Don't forward if it's a GET request to the error page, as it will cause a
+    # recursive loop. In this case, return the fatal error message as plain
+    # text to render that instead. If we can't do that because it's too early
+    # in the request, then let Dancer handle this with its default error
+    # handling
     my $req = $dsl->app->request or return;
-    return if $req->uri eq $page && $req->is_get;
+
+    $dsl->send_as(plain => "$msg")
+        if $req->uri eq $page && $req->is_get;
 
     $dsl->redirect($page);
 }

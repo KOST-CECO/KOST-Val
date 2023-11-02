@@ -3,7 +3,7 @@ package Net::DNS::DomainName;
 use strict;
 use warnings;
 
-our $VERSION = (qw$Id: DomainName.pm 1813 2020-10-08 21:58:40Z willem $)[2];
+our $VERSION = (qw$Id: DomainName.pm 1898 2023-02-15 14:27:22Z willem $)[2];
 
 
 =head1 NAME
@@ -97,7 +97,9 @@ sub decode {
 	my $self   = bless {label => $label}, shift;
 	my $buffer = shift;					# reference to data buffer
 	my $offset = shift || 0;				# offset within buffer
-	my $cache  = shift || {};				# hashed objectref by offset
+	my $linked = shift;					# caller's compression index
+	my $cache  = $linked;
+	$cache->{$offset} = $self;				# hashed objectref by offset
 
 	my $buflen = length $$buffer;
 	my $index  = $offset;
@@ -116,9 +118,10 @@ sub decode {
 		} else {					# compression pointer
 			my $link = 0x3FFF & unpack( "\@$index n", $$buffer );
 			croak 'corrupt compression pointer' unless $link < $offset;
+			croak 'invalid compression pointer' unless $linked;
 
 			# uncoverable condition false
-			$self->{origin} = $cache->{$link} ||= Net::DNS::DomainName->decode( $buffer, $link, $cache );
+			$self->{origin} = $cache->{$link} ||= __PACKAGE__->decode( $buffer, $link, $cache );
 			return wantarray ? ( $self, $index + 2 ) : $self;
 		}
 	}
@@ -259,7 +262,7 @@ All rights reserved.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -276,8 +279,11 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::Domain>, RFC1035, RFC2535,
-RFC3597, RFC4034
+L<perl> L<Net::DNS> L<Net::DNS::Domain>
+L<RFC1035|https://tools.ietf.org/html/rfc1035>
+L<RFC2535|https://tools.ietf.org/html/rfc2535>
+L<RFC3597|https://tools.ietf.org/html/rfc3597>
+L<RFC4034|https://tools.ietf.org/html/rfc4034>
 
 =cut
 

@@ -1,16 +1,8 @@
-
-#	pre-5.14.0 perl inadvertently destroys signal handlers
-#	http://rt.perl.org/rt3/Public/Bug/Display.html?id=76138
-use strict;
-use warnings;
-local %SIG;
-
-
 package Net::DNS::RR::SIG;
 
 use strict;
 use warnings;
-our $VERSION = (qw$Id: SIG.pm 1819 2020-10-19 08:07:24Z willem $)[2];
+our $VERSION = (qw$Id: SIG.pm 1908 2023-03-15 07:28:50Z willem $)[2];
 
 use base qw(Net::DNS::RR);
 
@@ -36,18 +28,15 @@ eval { require MIME::Base64 };
 
 # IMPORTANT: Downstream distros MUST NOT create dependencies on Net::DNS::SEC	(strong crypto prohibited in many territories)
 use constant USESEC => defined $INC{'Net/DNS/SEC.pm'};		# Discover how we got here, without exposing any crypto
-								# Discourage static code analysers and casual greppers
-use constant DNSSEC => USESEC && defined eval join '', qw(r e q u i r e), ' Net::DNS', qw(:: SEC :: Private);	## no critic
+use constant DNSSEC => USESEC && defined eval join '', qw(r e q u i r e), ' Net::DNS::SEC::Private';	## no critic
 
 my @index;
 if (DNSSEC) {
-	my $key = Net::DNS::RR->new( type => 'DNSKEY', key => 'AwEAAQ==' );
 	foreach my $class ( map {"Net::DNS::SEC::$_"} qw(RSA DSA ECCGOST ECDSA EdDSA) ) {
 		my @algorithms = eval join '', qw(r e q u i r e), " $class; $class->_index";	## no critic
-		@algorithms = grep { eval { $key->algorithm($_); $class->verify( '', $key, '' ); 1 } } ( 1 .. 16 )
-				unless scalar(@algorithms);	# Grotesquely inefficient; but need to support pre-1.14 API
 		push @index, map { ( $_ => $class ) } @algorithms;
 	}
+	croak 'Net::DNS::SEC version not supported' unless scalar(@index);
 }
 
 my %DNSSEC_verify = @index;
@@ -57,36 +46,33 @@ my @field = qw(typecovered algorithm labels orgttl sigexpiration siginception ke
 
 
 sub _decode_rdata {			## decode rdata from wire-format octet string
-	my $self = shift;
-	my ( $data, $offset, @opaque ) = @_;
+	my ( $self, $data, $offset ) = @_;
 
 	my $limit = $offset + $self->{rdlength};
 	@{$self}{@field} = unpack "\@$offset n C2 N3 n", $$data;
-	( $self->{signame}, $offset ) = Net::DNS::DomainName2535->decode( $data, $offset + 18 );
+	( $self->{signame}, $offset ) = Net::DNS::DomainName->decode( $data, $offset + 18 );
 	$self->{sigbin} = substr $$data, $offset, $limit - $offset;
 
 	croak('misplaced or corrupt SIG') unless $limit == length $$data;
-	my $raw = substr $$data, 0, $self->{offset};
+	my $raw = substr $$data, 0, $self->{offset}++;
 	$self->{rawref} = \$raw;
 	return;
 }
 
 
 sub _encode_rdata {			## encode rdata as wire-format octet string
-	my $self = shift;
-	my ( $offset, @opaque ) = @_;
-
-	my ( $hash, $packet ) = @opaque;
+	my ( $self, $offset, @opaque ) = @_;
 
 	my $signame = $self->{signame};
 
 	if ( DNSSEC && !$self->{sigbin} ) {
+		my ( undef, $packet ) = @opaque;
 		my $private = delete $self->{private};		# one shot is all you get
 		my $sigdata = $self->_CreateSigData($packet);
 		$self->_CreateSig( $sigdata, $private || die 'missing key reference' );
 	}
 
-	return pack 'n C2 N3 n a* a*', @{$self}{@field}, $signame->encode, $self->sigbin;
+	return pack 'n C2 N3 n a* a*', @{$self}{@field}, $signame->canonical, $self->sigbin;
 }
 
 
@@ -101,10 +87,10 @@ sub _format_rdata {			## format rdata portion of RR string.
 
 
 sub _parse_rdata {			## populate RR from rdata in argument list
-	my $self = shift;
+	my ( $self, @argument ) = @_;
 
-	foreach ( @field, qw(signame) ) { $self->$_(shift) }
-	$self->signature(@_);
+	foreach ( @field, qw(signame) ) { $self->$_( shift @argument ) }
+	$self->signature(@argument);
 	return;
 }
 
@@ -122,84 +108,9 @@ sub _defaults {				## specify RR attribute default values
 }
 
 
-#
-# source: http://www.iana.org/assignments/dns-sec-alg-numbers
-#
-{
-	my @algbyname = (
-		'DELETE'	     => 0,			# [RFC4034][RFC4398][RFC8078]
-		'RSAMD5'	     => 1,			# [RFC3110][RFC4034]
-		'DH'		     => 2,			# [RFC2539]
-		'DSA'		     => 3,			# [RFC3755][RFC2536]
-					## Reserved	=> 4,	# [RFC6725]
-		'RSASHA1'	     => 5,			# [RFC3110][RFC4034]
-		'DSA-NSEC3-SHA1'     => 6,			# [RFC5155]
-		'RSASHA1-NSEC3-SHA1' => 7,			# [RFC5155]
-		'RSASHA256'	     => 8,			# [RFC5702]
-					## Reserved	=> 9,	# [RFC6725]
-		'RSASHA512'	     => 10,			# [RFC5702]
-					## Reserved	=> 11,	# [RFC6725]
-		'ECC-GOST'	     => 12,			# [RFC5933]
-		'ECDSAP256SHA256'    => 13,			# [RFC6605]
-		'ECDSAP384SHA384'    => 14,			# [RFC6605]
-		'ED25519'	     => 15,			# [RFC8080]
-		'ED448'		     => 16,			# [RFC8080]
-
-		'INDIRECT'   => 252,				# [RFC4034]
-		'PRIVATEDNS' => 253,				# [RFC4034]
-		'PRIVATEOID' => 254,				# [RFC4034]
-					## Reserved	=> 255,	# [RFC4034]
-		);
-
-	my %algbyval = reverse @algbyname;
-
-	foreach (@algbyname) { s/[\W_]//g; }			# strip non-alphanumerics
-	my @algrehash = map { /^\d/ ? ($_) x 3 : uc($_) } @algbyname;
-	my %algbyname = @algrehash;				# work around broken cperl
-
-	sub _algbyname {
-		my $arg = shift;
-		my $key = uc $arg;				# synthetic key
-		$key =~ s/[\W_]//g;				# strip non-alphanumerics
-		my $val = $algbyname{$key};
-		return $val if defined $val;
-		return $key =~ /^\d/ ? $arg : croak qq[unknown algorithm "$arg"];
-	}
-
-	sub _algbyval {
-		my $value = shift;
-		return $algbyval{$value} || return $value;
-	}
-}
-
-
-my %siglen = (
-	1  => 128,
-	3  => 41,
-	5  => 256,
-	6  => 41,
-	7  => 256,
-	8  => 256,
-	10 => 256,
-	12 => 64,
-	13 => 64,
-	14 => 96,
-	15 => 64,
-	16 => 114,
-	);
-
-
-sub _size {				## estimate encoded size
-	my $self  = shift;
-	my $clone = bless {%$self}, ref($self);			# shallow clone
-	$clone->sigbin( 'x' x $siglen{$self->algorithm} );
-	return length $clone->encode();
-}
-
-
 sub typecovered {
-	my $self = shift;					# uncoverable pod
-	$self->{typecovered} = typebyname(shift) if scalar @_;
+	my ( $self, @value ) = @_;				# uncoverable pod
+	for (@value) { $self->{typecovered} = typebyname($_) }
 	my $typecode = $self->{typecovered};
 	return defined $typecode ? typebyval($typecode) : undef;
 }
@@ -230,16 +141,16 @@ sub orgttl {
 
 
 sub sigexpiration {
-	my $self = shift;
-	$self->{sigexpiration} = _string2time(shift) if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{sigexpiration} = _string2time($_) }
 	my $time = $self->{sigexpiration};
 	return unless defined wantarray && defined $time;
 	return UTIL ? Scalar::Util::dualvar( $time, _time2string($time) ) : _time2string($time);
 }
 
 sub siginception {
-	my $self = shift;
-	$self->{siginception} = _string2time(shift) if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{siginception} = _string2time($_) }
 	my $time = $self->{siginception};
 	return unless defined wantarray && defined $time;
 	return UTIL ? Scalar::Util::dualvar( $time, _time2string($time) ) : _time2string($time);
@@ -250,40 +161,37 @@ sub sigex { return &sigexpiration; }	## historical
 sub sigin { return &siginception; }	## historical
 
 sub sigval {
-	my $self = shift;
+	my ( $self, @value ) = @_;
 	no integer;
-	( $self->{sigval} ) = map { int( 60.0 * $_ ) } @_;
+	( $self->{sigval} ) = map { int( 60.0 * $_ ) } @value;
 	return;
 }
 
 
 sub keytag {
-	my $self = shift;
-
-	$self->{keytag} = 0 + shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{keytag} = 0 + $_ }
 	return $self->{keytag} || 0;
 }
 
 
 sub signame {
-	my $self = shift;
-
-	$self->{signame} = Net::DNS::DomainName2535->new(shift) if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{signame} = Net::DNS::DomainName2535->new($_) }
 	return $self->{signame} ? $self->{signame}->name : undef;
 }
 
 
 sub sig {
-	my $self = shift;
-	return MIME::Base64::encode( $self->sigbin(), "" ) unless scalar @_;
-	return $self->sigbin( MIME::Base64::decode( join "", @_ ) );
+	my ( $self, @value ) = @_;
+	return MIME::Base64::encode( $self->sigbin(), "" ) unless scalar @value;
+	return $self->sigbin( MIME::Base64::decode( join "", @value ) );
 }
 
 
 sub sigbin {
-	my $self = shift;
-
-	$self->{sigbin} = shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{sigbin} = $_ }
 	return $self->{sigbin} || "";
 }
 
@@ -297,7 +205,7 @@ sub create {
 	} else {
 		my ( $class, $data, $priv_key, %etc ) = @_;
 
-		my $private = ref($priv_key) ? $priv_key : Net::DNS::SEC::Private->new($priv_key);
+		my $private = ref($priv_key) ? $priv_key : ( Net::DNS::SEC::Private->new($priv_key) );
 		croak 'Unable to parse private key' unless ref($private) eq 'Net::DNS::SEC::Private';
 
 		my $self = Net::DNS::RR->new(
@@ -423,6 +331,79 @@ sub vrfyerrstr {
 
 ########################################
 
+{
+	my @algbyname = (
+		'DELETE'	     => 0,			# [RFC4034][RFC4398][RFC8078]
+		'RSAMD5'	     => 1,			# [RFC3110][RFC4034]
+		'DH'		     => 2,			# [RFC2539]
+		'DSA'		     => 3,			# [RFC3755][RFC2536]
+					## Reserved	=> 4,	# [RFC6725]
+		'RSASHA1'	     => 5,			# [RFC3110][RFC4034]
+		'DSA-NSEC3-SHA1'     => 6,			# [RFC5155]
+		'RSASHA1-NSEC3-SHA1' => 7,			# [RFC5155]
+		'RSASHA256'	     => 8,			# [RFC5702]
+					## Reserved	=> 9,	# [RFC6725]
+		'RSASHA512'	     => 10,			# [RFC5702]
+					## Reserved	=> 11,	# [RFC6725]
+		'ECC-GOST'	     => 12,			# [RFC5933]
+		'ECDSAP256SHA256'    => 13,			# [RFC6605]
+		'ECDSAP384SHA384'    => 14,			# [RFC6605]
+		'ED25519'	     => 15,			# [RFC8080]
+		'ED448'		     => 16,			# [RFC8080]
+
+		'INDIRECT'   => 252,				# [RFC4034]
+		'PRIVATEDNS' => 253,				# [RFC4034]
+		'PRIVATEOID' => 254,				# [RFC4034]
+					## Reserved	=> 255,	# [RFC4034]
+		);
+
+	my %algbyval = reverse @algbyname;
+
+	foreach (@algbyname) { s/[\W_]//g; }			# strip non-alphanumerics
+	my @algrehash = map { /^\d/ ? ($_) x 3 : uc($_) } @algbyname;
+	my %algbyname = @algrehash;				# work around broken cperl
+
+	sub _algbyname {
+		my $arg = shift;
+		my $key = uc $arg;				# synthetic key
+		$key =~ s/[\W_]//g;				# strip non-alphanumerics
+		my $val = $algbyname{$key};
+		return $val if defined $val;
+		return $key =~ /^\d/ ? $arg : croak qq[unknown algorithm $arg];
+	}
+
+	sub _algbyval {
+		my $value = shift;
+		return $algbyval{$value} || return $value;
+	}
+}
+
+
+{
+	my %siglen = (
+		1  => 128,
+		3  => 41,
+		5  => 256,
+		6  => 41,
+		7  => 256,
+		8  => 256,
+		10 => 256,
+		12 => 64,
+		13 => 64,
+		14 => 96,
+		15 => 64,
+		16 => 114,
+		);
+
+	sub _size {			## estimate encoded size
+		my $self  = shift;
+		my $clone = bless {%$self}, ref($self);		# shallow clone
+		$clone->sigbin( 'x' x $siglen{$self->algorithm} );
+		return length $clone->encode();
+	}
+}
+
+
 sub _CreateSigData {
 	if (DNSSEC) {
 		my ( $self, $message ) = @_;
@@ -448,18 +429,16 @@ sub _CreateSigData {
 }
 
 
-########################################
-
 sub _CreateSig {
 	if (DNSSEC) {
-		my $self = shift;
+		my ( $self, @argument ) = @_;
 
 		my $algorithm = $self->algorithm;
 		my $class     = $DNSSEC_siggen{$algorithm};
 
 		return eval {
 			die "algorithm $algorithm not supported\n" unless $class;
-			$self->sigbin( $class->sign(@_) );
+			$self->sigbin( $class->sign(@argument) );
 		} || return croak "${@}signature generation failed";
 	}
 }
@@ -467,14 +446,14 @@ sub _CreateSig {
 
 sub _VerifySig {
 	if (DNSSEC) {
-		my $self = shift;
+		my ( $self, @argument ) = @_;
 
 		my $algorithm = $self->algorithm;
 		my $class     = $DNSSEC_verify{$algorithm};
 
 		my $retval = eval {
 			die "algorithm $algorithm not supported\n" unless $class;
-			$class->verify( @_, $self->sigbin );
+			$class->verify( @argument, $self->sigbin );
 		};
 
 		unless ($retval) {
@@ -492,13 +471,13 @@ sub _VerifySig {
 
 
 sub _ordered() {			## irreflexive 32-bit partial ordering
-	use integer;
 	my ( $n1, $n2 ) = @_;
 
 	return 0 unless defined $n2;				# ( any, undef )
 	return 1 unless defined $n1;				# ( undef, any )
 
 	# unwise to assume 64-bit arithmetic, or that 32-bit integer overflow goes unpunished
+	use integer;
 	if ( $n2 < 0 ) {					# fold, leaving $n2 non-negative
 		$n1 = ( $n1 & 0xFFFFFFFF ) ^ 0x80000000;	# -2**31 <= $n1 < 2**32
 		$n2 = ( $n2 & 0x7FFFFFFF );			#  0	 <= $n2 < 2**31
@@ -555,6 +534,8 @@ sub _time2string {			## format time specification string
 	my ( $yy, $mm, @dhms ) = reverse( ( gmtime $ls31 )[0 .. 5] );
 	return sprintf '%d%02d%02d%02d%02d%02d', $yy + 1900, $mm + 1, @dhms;
 }
+
+########################################
 
 
 1;
@@ -696,8 +677,8 @@ that comes with the ISC BIND distribution.
 The optional remaining arguments consist of ( name => value ) pairs
 as follows:
 
-	sigin  => 20191201010101,	# signature inception
-	sigex  => 20191201011101,	# signature expiration
+	sigin  => 20231201010101,	# signature inception
+	sigex  => 20231201011101,	# signature expiration
 	sigval => 10,			# validity window (minutes)
 
 The sigin and sigex values may be specified as Perl time values or as
@@ -781,7 +762,7 @@ Package template (c)2009,2012 O.M.Kolkman and R.W.Franks.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -798,11 +779,15 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::RR>, L<Net::DNS::SEC>,
-RFC4034, RFC3755, RFC3008, RFC2931, RFC2535
+L<perl> L<Net::DNS> L<Net::DNS::RR>
+L<Net::DNS::SEC>
+L<RFC2536|https://tools.ietf.org/html/rfc2536>
+L<RFC2931|https://tools.ietf.org/html/rfc2931>
+L<RFC3110|https://tools.ietf.org/html/rfc3110>
+L<RFC4034|https://tools.ietf.org/html/rfc4034>
 
 L<Algorithm Numbers|http://www.iana.org/assignments/dns-sec-alg-numbers>
 
-L<BIND 9 Administrator Reference Manual|http://www.bind9.net/manuals>
+L<BIND Administrator Reference Manual|http://bind.isc.org/>
 
 =cut

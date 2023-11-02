@@ -5,12 +5,12 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-our $VERSION = '1.54';
+our $VERSION = '1.59';
 
 use DateTime;
 use DateTime::TimeZone;
 
-use base qw(DateTime);
+use parent qw(DateTime);
 
 foreach my $m (qw( set set_time_zone truncate )) {
     ## no critic (TestingAndDebugging::ProhibitNoStrict)
@@ -78,7 +78,7 @@ package DateTime::Infinite::Future;
 use strict;
 use warnings;
 
-use base qw(DateTime::Infinite);
+use parent qw(DateTime::Infinite);
 
 {
     my $Pos = bless {
@@ -103,7 +103,7 @@ package DateTime::Infinite::Past;
 use strict;
 use warnings;
 
-use base qw(DateTime::Infinite);
+use parent qw(DateTime::Infinite);
 
 {
     my $Neg = bless {
@@ -214,7 +214,7 @@ DateTime::Infinite - Infinite past and future DateTime objects
 
 =head1 VERSION
 
-version 1.54
+version 1.59
 
 =head1 SYNOPSIS
 
@@ -233,8 +233,8 @@ The objects are always in the "floating" timezone, and this cannot be changed.
 The only constructor for these two classes is the C<new> method, as shown in
 the L</SYNOPSIS>. This method takes no parameters.
 
-All "get" methods in this module simply return infinity, positive or
-negative. If the method is expected to return a string, it returns the string
+All "get" methods in this module simply return infinity, positive or negative.
+If the method is expected to return a string, it returns the string
 representation of positive or negative infinity used by your system. For
 example, on my system calling C<< $dt->year >>> returns a number which when
 printed appears either "Inf" or "-Inf".
@@ -253,12 +253,10 @@ $dt->is_infinite >> method returns true.
 
 datetime@perl.org mailing list
 
-http://datetime.perl.org/
-
 =head1 BUGS
 
-There seem to be lots of problems when dealing with infinite numbers on
-Win32. This may be a problem with this code, Perl, or Win32's IEEE math
+There seem to be lots of problems when dealing with infinite numbers on Win32.
+This may be a problem with this code, Perl, or Win32's IEEE math
 implementation. Either way, the module may not be well-behaved on Win32
 operating systems.
 
@@ -266,8 +264,6 @@ Bugs may be submitted at L<https://github.com/houseabsolute/DateTime.pm/issues>.
 
 There is a mailing list available for users of this distribution,
 L<mailto:datetime@perl.org>.
-
-I am also usually active on IRC as 'autarch' on C<irc://irc.perl.org>.
 
 =head1 SOURCE
 
@@ -279,7 +275,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2003 - 2020 by Dave Rolsky.
+This software is Copyright (c) 2003 - 2022 by Dave Rolsky.
 
 This is free software, licensed under:
 

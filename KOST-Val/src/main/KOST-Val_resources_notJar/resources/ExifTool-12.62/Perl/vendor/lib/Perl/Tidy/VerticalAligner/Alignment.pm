@@ -10,21 +10,11 @@ use warnings;
 
 { #<<< A non-indenting brace
 
-our $VERSION = '20210111';
-
-#    _column_          # the current column number
-#    _saved_column_    # a place for temporary storage
-my $i = 0;
-use constant {
-    _column_       => $i++,
-    _saved_column_ => $i++,
-};
+our $VERSION = '20230701';
 
 sub new {
     my ( $class, $rarg ) = @_;
-    my $self = bless [], $class;
-    $self->[_column_]       = $rarg->{column};
-    $self->[_saved_column_] = $rarg->{saved_column};
+    my $self = bless $rarg, $class;
     return $self;
 }
 
@@ -55,23 +45,23 @@ sub DESTROY {
 }
 
 sub get_column {
-    return $_[0]->[_column_];
+    return $_[0]->{'column'};
 }
 
 sub increment_column {
-    $_[0]->[_column_] += $_[1];
+    $_[0]->{'column'} += $_[1];
+
     return;
 }
 
 sub save_column {
-    $_[0]->[_saved_column_] = $_[0]->[_column_];
+    $_[0]->{'saved_column'} = $_[0]->{'column'};
     return;
 }
 
 sub restore_column {
-    $_[0]->[_column_] = $_[0]->[_saved_column_];
+    $_[0]->{'column'} = $_[0]->{'saved_column'};
     return;
 }
 } ## end of package VerticalAligner::Alignment
 1;
-

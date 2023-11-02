@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-our $VERSION = '2.46';
+our $VERSION = '2.60';
 
 sub new {
     my $class = shift;
@@ -90,17 +90,21 @@ sub _debug_output {
         print " First change (starts at -inf)\n";
     }
 
-    print ' Short name: ', $self->short_name,     "\n";
-    print ' UTC offset: ', $obs->offset_from_utc, "\n";
+    print ' Short name: ', $self->short_name, "\n";
+    printf " UTC offset: %s (%s)\n", $obs->offset_from_utc,
+        $obs->offset_from_utc_as_hm;
 
     if ( $obs->offset_from_std || $self->rule ) {
         if ( $obs->offset_from_std ) {
-            print ' Std offset: ', $obs->offset_from_std, "\n";
+            printf " Std offset: %s (%s)\n", $obs->offset_from_std,
+                $obs->offset_from_std_as_hm;
         }
 
         if ( $self->rule ) {
-            print ' Std offset: ', $self->rule->offset_from_std, ' - ',
-                $self->rule->name, " rule\n";
+            printf " Std offset: %s (%s) - %s rule\n",
+                $self->rule->offset_from_std,
+                $self->rule->offset_from_std_as_hm,
+                $self->rule->name;
         }
     }
     else {

@@ -6,7 +6,7 @@ use warnings;
 use Carp;
 use Module::Pluggable::Object ();
 
-our $VERSION = '0.32';
+our $VERSION = '0.33';
 
 =head1 NAME
 
@@ -314,22 +314,40 @@ Config::Any requires no configuration files or environment variables.
 
 L<Module::Pluggable::Object|Module::Pluggable::Object>
 
-And at least one of the following:
-L<Config::General|Config::General>
-L<Config::Tiny|Config::Tiny>
-L<JSON|JSON>
-L<YAML|YAML>
-L<JSON::Syck|JSON::Syck>
-L<YAML::Syck|YAML::Syck>
-L<XML::Simple|XML::Simple>
+And at least one of the following for each file type to be supported:
 
-=head1 INCOMPATIBILITIES
+=over 4
 
-None reported.
+=item *
+
+For C<.cnf>, C<.conf> files: L<Config::General>
+
+=item *
+
+For C<.ini> files: L<Config::Tiny>
+
+=item *
+
+For C<.json>, C<.jsn> files: L<Cpanel::JSON::XS>, L<JSON::MaybeXS>, L<JSON::DWIW>, L<JSON::XS>, L<JSON::Syck>, L<JSON::PP>, L<JSON>
+
+=item *
+
+For C<.pl>, C<.perl> files: no additional requirements
+
+=item *
+
+For C<.xml> files: L<XML::Simple>
+
+=item *
+
+For C<.yml>, C<.yaml> files: L<YAML::XS>, L<YAML::Syck>, L<YAML>
+
+=back
+
+Additionally, other file types are supported by third-party plugins in the C<Config::Any::>
+namespace, installed separately.
 
 =head1 BUGS AND LIMITATIONS
-
-No bugs have been reported.
 
 Please report any bugs or feature requests to
 C<bug-config-any@rt.cpan.org>, or through the web interface at

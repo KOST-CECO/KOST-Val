@@ -8,7 +8,7 @@ use File::chdir;
 use Path::Tiny ();
 
 # ABSTRACT: Plugin for fetching a local file
-our $VERSION = '2.38'; # VERSION
+our $VERSION = '2.80'; # VERSION
 
 
 has '+url' => '';
@@ -47,7 +47,9 @@ sub init
   }
 
   $meta->register_hook( fetch => sub {
-    my(undef, $path) = @_;
+    my($build, $path, %options) = @_;
+
+    $build->log("plugin Fetch::Local does not support http_headers option") if $options{http_headers};
 
     $path ||= $self->url;
 
@@ -64,8 +66,9 @@ sub init
     if(-d $path)
     {
       return {
-        type => 'list',
-        list => [
+        type     => 'list',
+        protocol => 'file',
+        list     => [
           map { { filename => $_->basename, url => $_->stringify } }
           sort { $a->basename cmp $b->basename } $path->children,
         ],
@@ -78,6 +81,7 @@ sub init
         filename => $path->basename,
         path     => $path->stringify,
         tmp      => 0,
+        protocol => 'file',
       };
     }
     else
@@ -103,7 +107,7 @@ Alien::Build::Plugin::Fetch::Local - Plugin for fetching a local file
 
 =head1 VERSION
 
-version 2.38
+version 2.80
 
 =head1 SYNOPSIS
 
@@ -198,7 +202,7 @@ Juan Julián Merelo Guervós (JJ)
 
 Joel Berger (JBERGER)
 
-Petr Pisar (ppisar)
+Petr Písař (ppisar)
 
 Lance Wicks (LANCEW)
 
@@ -216,9 +220,13 @@ Paul Evans (leonerd, PEVANS)
 
 Håkon Hægland (hakonhagland, HAKONH)
 
+nick nauwelaerts (INPHOBIA)
+
+Florian Weimer
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011-2020 by Graham Ollis.
+This software is copyright (c) 2011-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

@@ -3,10 +3,7 @@
 # modify it under the same terms as Perl itself.
 
 package Convert::ASN1;
-{
-  $Convert::ASN1::VERSION = '0.27';
-}
-
+$Convert::ASN1::VERSION = '0.33';
 ##
 ## just for debug :-)
 ##
@@ -98,7 +95,7 @@ sub asn_dump {
     my $label = $type{sprintf("%02X",$tag & ~0x20)}
 		|| $type{sprintf("%02X",$tag & 0xC0)}
 		|| "[UNIVERSAL %d]";
-    printf $label, $tnum;
+    print "$label: $tnum";
 
     if ($tag & ASN_CONSTRUCTOR) {
       print " {\n";

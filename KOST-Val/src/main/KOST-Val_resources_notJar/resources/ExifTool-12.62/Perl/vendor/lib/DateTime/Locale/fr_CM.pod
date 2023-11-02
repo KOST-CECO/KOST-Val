@@ -302,15 +302,15 @@ French Cameroon locale.
 
 =head3 Full
 
-   2008-02-05T18:30:30 = mardi 5 février 2008 à 18:30:30 UTC
-   1995-12-22T09:05:02 = vendredi 22 décembre 1995 à 09:05:02 UTC
-  -0010-09-15T04:44:23 = samedi 15 septembre -10 à 04:44:23 UTC
+   2008-02-05T18:30:30 = mardi 5 février 2008, 18:30:30 UTC
+   1995-12-22T09:05:02 = vendredi 22 décembre 1995, 09:05:02 UTC
+  -0010-09-15T04:44:23 = samedi 15 septembre -10, 04:44:23 UTC
 
 =head3 Long
 
-   2008-02-05T18:30:30 = 5 février 2008 à 18:30:30 UTC
-   1995-12-22T09:05:02 = 22 décembre 1995 à 09:05:02 UTC
-  -0010-09-15T04:44:23 = 15 septembre -10 à 04:44:23 UTC
+   2008-02-05T18:30:30 = 5 février 2008, 18:30:30 UTC
+   1995-12-22T09:05:02 = 22 décembre 1995, 09:05:02 UTC
+  -0010-09-15T04:44:23 = 15 septembre -10, 04:44:23 UTC
 
 =head3 Medium
 
@@ -416,6 +416,12 @@ French Cameroon locale.
    2008-02-05T18:30:30 = 5 févr. 2008 ap. J.-C.
    1995-12-22T09:05:02 = 22 déc. 1995 ap. J.-C.
   -0010-09-15T04:44:23 = 15 sept. -10 av. J.-C.
+
+=head3 GyMd (dd/MM/y GGGGG)
+
+   2008-02-05T18:30:30 = 05/02/2008 ap. J.-C.
+   1995-12-22T09:05:02 = 22/12/1995 ap. J.-C.
+  -0010-09-15T04:44:23 = 15/09/-10 av. J.-C.
 
 =head3 H (HH 'h')
 

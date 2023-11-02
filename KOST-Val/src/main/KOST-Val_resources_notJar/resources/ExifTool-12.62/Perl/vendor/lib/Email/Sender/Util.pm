@@ -1,9 +1,9 @@
 use strict;
 use warnings;
-package Email::Sender::Util;
+package Email::Sender::Util 2.600;
 # ABSTRACT: random stuff that makes Email::Sender go
-$Email::Sender::Util::VERSION = '1.300035';
-use Email::Address;
+
+use Email::Address::XS;
 use Email::Sender::Failure;
 use Email::Sender::Failure::Permanent;
 use Email::Sender::Failure::Temporary;
@@ -16,7 +16,7 @@ sub _recipients_from_email {
 
   my @to = List::Util::uniq(
            map { $_->address }
-           map { Email::Address->parse($_) }
+           map { Email::Address::XS->parse($_) }
            map { $email->get_header($_) }
            qw(to cc bcc));
 
@@ -27,7 +27,7 @@ sub _sender_from_email {
   my ($self, $email) = @_;
 
   my ($sender) = map { $_->address }
-                 map { Email::Address->parse($_) }
+                 map { Email::Address::XS->parse($_) }
                  scalar $email->get_header('from');
 
   return $sender;
@@ -112,7 +112,17 @@ Email::Sender::Util - random stuff that makes Email::Sender go
 
 =head1 VERSION
 
-version 1.300035
+version 2.600
+
+=head1 PERL VERSION
+
+This library should run on perls released even a long time ago.  It should work
+on any version of perl released in the last five years.
+
+Although it may work on older versions of perl, no guarantee is made that the
+minimum required version will not be increased.  The version may be increased
+for any reason, and there is no promise that patches will be accepted to lower
+the minimum required perl.
 
 =head1 METHODS
 
@@ -129,11 +139,11 @@ will be removed.
 
 =head1 AUTHOR
 
-Ricardo Signes <rjbs@semiotic.systems>
+Ricardo Signes <cpan@semiotic.systems>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2020 by Ricardo Signes.
+This software is copyright (c) 2022 by Ricardo Signes.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

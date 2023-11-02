@@ -1,42 +1,36 @@
+use strict; use warnings;
+
 package Text::Wrap;
 
 use warnings::register;
-require Exporter;
 
-@ISA = qw(Exporter);
-@EXPORT = qw(wrap fill);
-@EXPORT_OK = qw($columns $break $huge);
+BEGIN { require Exporter; *import = \&Exporter::import }
 
-$VERSION = 2013.0523;
-$SUBVERSION = 'modern';
+our @EXPORT = qw( wrap fill );
+our @EXPORT_OK = qw( $columns $break $huge );
 
-use 5.010_000;
+our $VERSION = '2023.0511';
+our $SUBVERSION = 'modern'; # back-compat vestige
 
-use vars qw($VERSION $SUBVERSION $columns $debug $break $huge $unexpand $tabstop $separator $separator2);
-use strict;
+BEGIN { eval sprintf 'sub REGEXPS_USE_BYTES () { %d }', scalar( pack('U*', 0x80) =~ /\xc2/ ) }
 
-BEGIN	{
-	$columns = 76;  # <= screen width
-	$debug = 0;
-	$break = '(?=\s)\X';
-	$huge = 'wrap'; # alternatively: 'die' or 'overflow'
-	$unexpand = 1;
-	$tabstop = 8;
-	$separator = "\n";
-	$separator2 = undef;
-}
+my $brkspc = "\x{a0}\x{202f}" =~ /\s/ ? '[^\x{a0}\x{202f}\S]' : '\s';
 
-my $CHUNK = qr/\X/;
+our $columns = 76;  # <= screen width
+our $break = '(?>\n|\r\n|'.$brkspc.'\pM*)';
+our $huge = 'wrap'; # alternatively: 'die' or 'overflow'
+our $unexpand = 1;
+our $tabstop = 8;
+our $separator = "\n";
+our $separator2 = undef;
 
-sub _xlen(_) { scalar(() = $_[0] =~ /$CHUNK/g) }
-
-sub _xpos(_) { _xlen( substr( $_[0], 0, pos($_[0]) ) ) }
+sub _xlen { $_[0] =~ /^\pM/ + ( () = $_[0] =~ /\PM/g ) }
 
 use Text::Tabs qw(expand unexpand);
 
 sub wrap
 {
-	my ($ip, $xp, @t) = @_;
+	my ($ip, $xp, @t) = map +( defined $_ ? $_ : '' ), @_;
 
 	local($Text::Tabs::tabstop) = $tabstop;
 	my $r = "";
@@ -59,17 +53,17 @@ sub wrap
 
 	pos($t) = 0;
 	while ($t !~ /\G(?:$break)*\Z/gc) {
-		if ($t =~ /\G((?:(?=[^\n])\X){0,$ll})($break|\n+|\z)/xmgc) {
+		if ($t =~ /\G((?>(?!\n)\PM\pM*|(?<![^\n])\pM+){0,$ll})($break|\n+|\z)/xmgc) {
 			$r .= $unexpand 
 				? unexpand($nl . $lead . $1)
 				: $nl . $lead . $1;
 			$remainder = $2;
-		} elsif ($huge eq 'wrap' && $t =~ /\G((?:(?=[^\n])\X){$ll})/gc) {
+		} elsif ($huge eq 'wrap' && $t =~ /\G((?>(?!\n)\PM\pM*|(?<![^\n])\pM+){$ll})/gc) {
 			$r .= $unexpand 
 				? unexpand($nl . $lead . $1)
 				: $nl . $lead . $1;
 			$remainder = defined($separator2) ? $separator2 : $separator;
-		} elsif ($huge eq 'overflow' && $t =~ /\G((?:(?=[^\n])\X)*?)($break|\n+|\z)/xmgc) {
+		} elsif ($huge eq 'overflow' && $t =~ /\G([^\n]*?)(?!(?<![^\n])\pM)($break|\n+|\z)/xmgc) {
 			$r .= $unexpand 
 				? unexpand($nl . $lead . $1)
 				: $nl . $lead . $1;
@@ -79,7 +73,7 @@ sub wrap
 		} elsif ($columns < 2) {
 			warnings::warnif "Increasing \$Text::Wrap::columns from $columns to 2";
 			$columns = 2;
-			return ($ip, $xp, @t);
+			return @_;
 		} else {
 			die "This shouldn't happen";
 		}
@@ -94,23 +88,18 @@ sub wrap
 	}
 	$r .= $remainder;
 
-	print "-----------$r---------\n" if $debug;
-
-	print "Finish up with '$lead'\n" if $debug;
-
-	my($opos) = pos($t);
-
 	$r .= $lead . substr($t, pos($t), length($t) - pos($t))
 		if pos($t) ne length($t);
 
-	print "-----------$r---------\n" if $debug;;
-
-	return $r;
+	# the 5.6 regexp engine ignores the UTF8 flag, so using capture buffers acts as an implicit _utf8_off
+	# that means on 5.6 we now have to manually set UTF8=on on the output if the input had it, for which
+	# we extract just the UTF8 flag from the input and check if it forces chr(0x80) to become multibyte
+	return REGEXPS_USE_BYTES && (substr($t,0,0)."\x80") =~ /\xc2/ ? pack('U0a*', $r) : $r;
 }
 
 sub fill 
 {
-	my ($ip, $xp, @raw) = @_;
+	my ($ip, $xp, @raw) = map +( defined $_ ? $_ : '' ), @_;
 	my @para;
 	my $pp;
 
@@ -128,6 +117,7 @@ sub fill
 }
 
 1;
+
 __END__
 
 =head1 NAME
@@ -268,17 +258,6 @@ Code:
 Result:
 
   "This is a bit of|text that forms a|normal book-style|paragraph"
-
-=head1 SUBVERSION
-
-This module comes in two flavors: one for modern perls (5.10 and above)
-and one for ancient obsolete perls.  The version for modern perls has
-support for Unicode.  The version for old perls does not.  You can tell
-which version you have installed by looking at C<$Text::Wrap::SUBVERSION>:
-it is C<old> for obsolete perls and C<modern> for current perls.
-
-This man page is for the version for modern perls and so that's probably
-what you've got.
 
 =head1 SEE ALSO
 

@@ -4,15 +4,15 @@ use strict;
 use warnings;
 use 5.008004;
 use FFI::Platypus;
-use base qw( Exporter );
+use Exporter qw( import );
 
 # ABSTRACT: Memory functions for FFI
-our $VERSION = '1.34'; # VERSION
+our $VERSION = '2.08'; # VERSION
 
 
 our @EXPORT = qw( malloc free calloc realloc memcpy memset strdup strndup strcpy );
 
-my $ffi = FFI::Platypus->new( api => 1 );
+my $ffi = FFI::Platypus->new( api => 2 );
 $ffi->lib(undef);
 $ffi->bundle;
 sub _ffi { $ffi }
@@ -33,8 +33,17 @@ eval {
   $ffi->attach(strdup  => ['string'] => 'opaque' => '$');
   $_strdup_impl = 'libc';
 };
+if($@ && $^O eq 'MSWin32')
+{
+  eval {
+    die "do not use c impl" if ($ENV{FFI_PLATYPUS_MEMORY_STRDUP_IMPL}||'libc') eq 'ffi';
+    $ffi->attach([ _strdup => 'strdup' ] => ['string'] => 'opaque' => '$');
+    $_strdup_impl = 'libc';
+  };
+}
 if($@)
 {
+  warn "using bundled strdup";
   $_strdup_impl = 'ffi';
   $ffi->attach([ ffi_platypus_memory__strdup => 'strdup' ] => ['string'] => 'opaque' => '$');
 }
@@ -53,6 +62,10 @@ if($@)
   $ffi->attach([ ffi_platypus_memory__strndup => 'strndup' ] => ['string','size_t'] => 'opaque' => '$$');
 }
 
+# used internally by FFI::Platypus::Type::WideString, may go away.
+eval { $ffi->attach( [ wcslen  => '_wcslen' ]  => [ 'opaque'           ] => 'size_t' => '$' ) };
+eval { $ffi->attach( [ wcsnlen => '_wcsnlen' ] => [ 'string', 'size_t' ] => 'size_t' => '$$' ) };
+
 1;
 
 __END__
@@ -67,7 +80,7 @@ FFI::Platypus::Memory - Memory functions for FFI
 
 =head1 VERSION
 
-version 1.34
+version 2.08
 
 =head1 SYNOPSIS
 
@@ -89,6 +102,32 @@ This module provides an interface to common memory functions provided by
 the standard C library.  They may be useful when constructing interfaces
 to C libraries with FFI.  It works mostly with the C<opaque> type and it
 is worth reviewing the section on opaque pointers in L<FFI::Platypus::Type>.
+
+Allocating memory and forgetting to free it is a common source of memory
+leaks in C and when using this module.  Very recent Perls have a C<defer>
+keyword that lets you automatically call functions like C<free> when a
+block ends.  This can be especially handy when you have multiple code
+paths or possible exceptions to keep track of.
+
+ use feature 'defer';
+ use FFI::Platypus::Memory qw( malloc free );
+
+ sub run {
+   my $ptr = malloc 66;
+   defer { free $ptr };
+
+   my $data = do_something($ptr);
+
+   # do not need to remember to place free $ptr here, as it will
+   # run through defer.
+
+   return $data;
+ }
+
+If you are not lucky enough to have the C<defer> feature in your version
+of Perl you may be able to use L<Feature::Compat::Defer>, which will use
+the feature if available, and provides its own mostly compatible version
+if not.
 
 =head1 FUNCTIONS
 
@@ -199,7 +238,7 @@ Damyan Ivanov
 
 Ilya Pavlov (Ilya33)
 
-Petr Pisar (ppisar)
+Petr Písař (ppisar)
 
 Mohammad S Anwar (MANWAR)
 
@@ -209,9 +248,17 @@ Meredith (merrilymeredith, MHOWARD)
 
 Diab Jerius (DJERIUS)
 
+Eric Brine (IKEGAMI)
+
+szTheory
+
+José Joaquín Atria (JJATRIA)
+
+Pete Houston (openstrike, HOUSTON)
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2015,2016,2017,2018,2019,2020 by Graham Ollis.
+This software is copyright (c) 2015-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

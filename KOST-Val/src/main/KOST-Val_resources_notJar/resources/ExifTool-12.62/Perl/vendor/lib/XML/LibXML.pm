@@ -29,11 +29,11 @@ use XML::LibXML::XPathContext;
 use IO::Handle; # for FH reads called as methods
 
 BEGIN {
-$VERSION = "2.0206"; # VERSION TEMPLATE: DO NOT CHANGE
+$VERSION = "2.0208"; # VERSION TEMPLATE: DO NOT CHANGE
 $ABI_VERSION = 2;
 require Exporter;
-require DynaLoader;
-@ISA = qw(DynaLoader Exporter);
+use XSLoader ();
+@ISA = qw(Exporter);
 
 use vars qw($__PROXY_NODE_REGISTRY $__threads_shared $__PROXY_NODE_REGISTRY_MUTEX $__loaded);
 
@@ -147,7 +147,7 @@ $CloseCB = undef;
 #-------------------------------------------------------------------------#
 # bootstrapping                                                           #
 #-------------------------------------------------------------------------#
-bootstrap XML::LibXML $VERSION;
+XSLoader::load( 'XML::LibXML', $VERSION );
 undef &AUTOLOAD;
 
 *encodeToUTF8 = \&XML::LibXML::Common::encodeToUTF8;

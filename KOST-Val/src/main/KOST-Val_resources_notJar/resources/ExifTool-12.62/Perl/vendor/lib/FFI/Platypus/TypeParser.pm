@@ -7,7 +7,7 @@ use List::Util 1.45 qw( uniqstr );
 use Carp qw( croak );
 
 # ABSTRACT: FFI Type Parser
-our $VERSION = '1.34'; # VERSION
+our $VERSION = '2.08'; # VERSION
 
 
 # The TypeParser and Type classes are used internally ONLY and
@@ -18,7 +18,7 @@ our $VERSION = '1.34'; # VERSION
 sub new
 {
   my($class) = @_;
-  my $self = bless { types => {}, type_map => {} }, $class;
+  my $self = bless { types => {}, type_map => {}, abi => -1 }, $class;
   $self->build;
   $self;
 }
@@ -70,6 +70,14 @@ sub types
   shift->{types};
 }
 
+# The type parser needs to know the ABI when creating closures
+sub abi
+{
+  my($self, $new) = @_;
+  $self->{abi} = $new if defined $new;
+  $self->{abi};
+}
+
 {
   my %store;
 
@@ -112,7 +120,7 @@ FFI::Platypus::TypeParser - FFI Type Parser
 
 =head1 VERSION
 
-version 1.34
+version 2.08
 
 =head1 DESCRIPTION
 
@@ -145,7 +153,7 @@ Damyan Ivanov
 
 Ilya Pavlov (Ilya33)
 
-Petr Pisar (ppisar)
+Petr Písař (ppisar)
 
 Mohammad S Anwar (MANWAR)
 
@@ -155,9 +163,17 @@ Meredith (merrilymeredith, MHOWARD)
 
 Diab Jerius (DJERIUS)
 
+Eric Brine (IKEGAMI)
+
+szTheory
+
+José Joaquín Atria (JJATRIA)
+
+Pete Houston (openstrike, HOUSTON)
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2015,2016,2017,2018,2019,2020 by Graham Ollis.
+This software is copyright (c) 2015-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

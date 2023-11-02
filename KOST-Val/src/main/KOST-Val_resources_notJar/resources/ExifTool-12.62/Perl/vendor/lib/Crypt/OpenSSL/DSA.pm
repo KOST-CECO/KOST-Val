@@ -7,7 +7,7 @@ require DynaLoader;
 
 use vars qw(@ISA $VERSION);
 @ISA = qw(DynaLoader);
-$VERSION = '0.19';
+$VERSION = '0.20';
 
 bootstrap Crypt::OpenSSL::DSA $VERSION;
 
@@ -106,6 +106,43 @@ The string should include the -----BEGIN...----- and -----END...----- lines.
 
 Generates private and public keys, assuming that $dsa is the return
 value of generate_parameters.
+
+=item $sig_size = $dsa->get_sig_size( );
+
+Returns the maximum size of an ASN.1 encoded DSA signature for key
+dsa in bytes.
+
+ 512-bit keys = 48
+1024-bit keys = 48
+2024-bit keys = 72
+3072-bit keys = 72
+
+ASN.1 dsa signatures consist of:
+
+Sequence 1-byte (0x30)
+Length   1-byte
+Integer  1-byte (0x02)
+Length   1-byte (0x14) = 20
+r       20-bytes or 21-bytes
+Integer  1-byte (0x02)
+Length   1-byte (0x14) = 20
+s       20-bytes or 21-bytes
+
+30
+2C
+02
+14
+6C.70.50.7C.93.A8.B5.EC.1E.A1.5E.C5.73.AA.0F.EA.4D.BE.42.7A
+02
+14
+4E.AD.E6.BB.72.54.92.30.2B.03.AB.53.5D.3D.6E.88.B8.AA.D6.30
+
+Note that the above signature is 46 bytes long - the extra two bytes are used
+only when r and/or s are larger than or equal to 2^159.  The extra bytes are
+used to distinguish positive from negative values.
+
+All that to say if you are using get_sig_size() to determine the size of r + s
+depending on the size of the key you can subtract 8 bytes for the ASN.1 overhead.
 
 =item $sig = $dsa->sign( $message );
 

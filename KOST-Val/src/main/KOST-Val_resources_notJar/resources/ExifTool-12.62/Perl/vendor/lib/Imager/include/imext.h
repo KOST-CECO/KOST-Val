@@ -4,6 +4,10 @@
 #include "imexttypes.h"
 #include "immacros.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern im_ext_funcs *imager_function_ext_table;
 
 #define DEFINE_IMAGER_CALLBACKS im_ext_funcs *imager_function_ext_table
@@ -156,7 +160,7 @@ extern im_ext_funcs *imager_function_ext_table;
 #define i_flood_cfill_border(im, seedx, seedy, fill, border) ((im_extt->f_i_flood_cfill_border)((im), (seedx), (seedy), (fill), (border)))
 
 #define i_poly_aa_m(im, count, x, y, mode, c) ((im_extt->f_i_poly_aa_m)((im), (count), (x), (y), (mode), (c)))
-#define i_poly_aa_cfill_m(im, count, x, y, mode, fill) ((im_extt->f_i_poly_aa_m)((im), (count), (x), (y), (mode), (fill)))
+#define i_poly_aa_cfill_m(im, count, x, y, mode, fill) ((im_extt->f_i_poly_aa_cfill_m)((im), (count), (x), (y), (mode), (fill)))
 #define i_poly_poly_aa(im, count, polys, mode, c) ((im_extt->f_i_poly_poly_aa)((im), (count), (polys), (mode), (c)))
 #define i_poly_poly_aa_cfill(im, count, polys, mode, fill) ((im_extt->f_i_poly_poly_aa_cfill)((im), (count), (polys), (mode), (fill)))
 
@@ -256,6 +260,10 @@ extern im_ext_funcs *imager_function_ext_table;
 #define im_log(x) { im_lhead(aIMCTX, __FILE__,__LINE__); im_loog x; } 
 #else
 #define mm_log(x)
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif

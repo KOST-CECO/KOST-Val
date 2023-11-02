@@ -1,6 +1,6 @@
 package StackTrace::Auto;
 # ABSTRACT: a role for generating stack traces during instantiation
-$StackTrace::Auto::VERSION = '0.200013';
+$StackTrace::Auto::VERSION = '1.001';
 use Moo::Role;
 use Sub::Quote ();
 use Module::Runtime 0.002 ();
@@ -133,7 +133,7 @@ StackTrace::Auto - a role for generating stack traces during instantiation
 
 =head1 VERSION
 
-version 0.200013
+version 1.001
 
 =head1 SYNOPSIS
 
@@ -151,6 +151,16 @@ First, include StackTrace::Auto in a Moose or Mooclass...
 ...and now you have a stack trace for the object's creation.
 
   print $obj->stack_trace->as_string;
+
+=head1 PERL VERSION
+
+This library should run on perls released even a long time ago.  It should work
+on any version of perl released in the last five years.
+
+Although it may work on older versions of perl, no guarantee is made that the
+minimum required version will not be increased.  The version may be increased
+for any reason, and there is no promise that patches will be accepted to lower
+the minimum required perl.
 
 =head1 ATTRIBUTES
 
@@ -178,7 +188,7 @@ trace.  In general, you will not need to think about it.
 
 =item *
 
-Ricardo SIGNES <rjbs@cpan.org>
+Ricardo SIGNES <cpan@semiotic.systems>
 
 =item *
 
@@ -188,7 +198,7 @@ Florian Ragwitz <rafl@debian.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2015 by Ricardo SIGNES.
+This software is copyright (c) 2022 by Ricardo SIGNES.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

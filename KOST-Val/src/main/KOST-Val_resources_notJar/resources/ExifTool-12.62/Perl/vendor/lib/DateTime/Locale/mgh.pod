@@ -417,6 +417,12 @@ Makhuwa-Meetto locale.
    1995-12-22T09:05:02 = YY 1995 Yel 22
   -0010-09-15T04:44:23 = HY -10 Tis 15
 
+=head3 GyMd (GGGGG y-MM-dd)
+
+   2008-02-05T18:30:30 = YY 2008-02-05
+   1995-12-22T09:05:02 = YY 1995-12-22
+  -0010-09-15T04:44:23 = HY -10-09-15
+
 =head3 H (HH)
 
    2008-02-05T18:30:30 = 18
@@ -507,17 +513,17 @@ Makhuwa-Meetto locale.
    1995-12-22T09:05:02 = 9 wichishu
   -0010-09-15T04:44:23 = 4 wichishu
 
-=head3 hm (h:mm a)
+=head3 hm (h:mm a)
 
-   2008-02-05T18:30:30 = 6:30 mchochil’l
-   1995-12-22T09:05:02 = 9:05 wichishu
-  -0010-09-15T04:44:23 = 4:44 wichishu
+   2008-02-05T18:30:30 = 6:30 mchochil’l
+   1995-12-22T09:05:02 = 9:05 wichishu
+  -0010-09-15T04:44:23 = 4:44 wichishu
 
-=head3 hms (h:mm:ss a)
+=head3 hms (h:mm:ss a)
 
-   2008-02-05T18:30:30 = 6:30:30 mchochil’l
-   1995-12-22T09:05:02 = 9:05:02 wichishu
-  -0010-09-15T04:44:23 = 4:44:23 wichishu
+   2008-02-05T18:30:30 = 6:30:30 mchochil’l
+   1995-12-22T09:05:02 = 9:05:02 wichishu
+  -0010-09-15T04:44:23 = 4:44:23 wichishu
 
 =head3 hmsv (h:mm:ss a v)
 

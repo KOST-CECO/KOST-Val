@@ -29,7 +29,6 @@ C:\strawberry\perl\vendor\lib\Imager\Font\BBox.pm
 C:\strawberry\perl\vendor\lib\Imager\Font\FT2.pm
 C:\strawberry\perl\vendor\lib\Imager\Font\FreeType2.pm
 C:\strawberry\perl\vendor\lib\Imager\Font\Image.pm
-C:\strawberry\perl\vendor\lib\Imager\Font\T1.pm
 C:\strawberry\perl\vendor\lib\Imager\Font\Test.pm
 C:\strawberry\perl\vendor\lib\Imager\Font\Truetype.pm
 C:\strawberry\perl\vendor\lib\Imager\Font\Type1.pm
@@ -52,6 +51,7 @@ C:\strawberry\perl\vendor\lib\Imager\Test.pm
 C:\strawberry\perl\vendor\lib\Imager\Threads.pod
 C:\strawberry\perl\vendor\lib\Imager\Transform.pm
 C:\strawberry\perl\vendor\lib\Imager\Transformations.pod
+C:\strawberry\perl\vendor\lib\Imager\TrimColorList.pm
 C:\strawberry\perl\vendor\lib\Imager\Tutorial.pod
 C:\strawberry\perl\vendor\lib\Imager\include\draw.h
 C:\strawberry\perl\vendor\lib\Imager\include\dynaload.h
@@ -95,6 +95,5 @@ C:\strawberry\perl\vendor\lib\auto\Imager\Filter\DynTest\DynTest.xs.dll
 C:\strawberry\perl\vendor\lib\auto\Imager\Filter\Flines\Flines.xs.dll
 C:\strawberry\perl\vendor\lib\auto\Imager\Filter\Mandelbrot\Mandelbrot.xs.dll
 C:\strawberry\perl\vendor\lib\auto\Imager\Font\FT2\FT2.xs.dll
-C:\strawberry\perl\vendor\lib\auto\Imager\Font\T1\T1.xs.dll
 C:\strawberry\perl\vendor\lib\auto\Imager\Font\W32\W32.xs.dll
 C:\strawberry\perl\vendor\lib\auto\Imager\Imager.xs.dll

@@ -3,7 +3,7 @@ package Crypt::Rijndael;
 use strict;
 use warnings;
 
-our $VERSION = '1.15';
+our $VERSION = '1.16';
 
 use XSLoader;
 
@@ -19,7 +19,7 @@ Crypt::Rijndael - Crypt::CBC compliant Rijndael encryption module
 
 =head1 VERSION
 
-Version 1.14
+Version 1.16
 
 =head1 SYNOPSIS
 

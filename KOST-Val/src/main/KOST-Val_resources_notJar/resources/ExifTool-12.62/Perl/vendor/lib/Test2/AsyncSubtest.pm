@@ -4,7 +4,7 @@ use warnings;
 
 use Test2::IPC;
 
-our $VERSION = '0.000139';
+our $VERSION = '0.000155';
 
 our @CARP_NOT = qw/Test2::Util::HashBase/;
 
@@ -13,10 +13,10 @@ use Test2::Util qw/get_tid CAN_THREAD CAN_FORK/;
 use Scalar::Util qw/blessed weaken/;
 use List::Util qw/first/;
 
-use Scope::Guard();
 use Test2::API();
 use Test2::API::Context();
 use Test2::Util::Trace();
+use Test2::Util::Guard();
 use Time::HiRes();
 
 use Test2::AsyncSubtest::Hub();
@@ -34,6 +34,7 @@ use Test2::Util::HashBase qw{
     children
     _in_use
     _attached pid tid
+    start_stamp stop_stamp
 };
 
 sub CAN_REALLY_THREAD {
@@ -264,6 +265,8 @@ sub start {
     croak "Subtest is already complete"
         if $self->{+FINISHED};
 
+    $self->{+START_STAMP} = Time::HiRes::time() unless defined $self->{+START_STAMP};
+
     $self->{+ACTIVE}++;
 
     push @STACK => $self;
@@ -282,6 +285,8 @@ sub stop {
 
     croak "AsyncSubtest stack mismatch"
         unless @STACK && $self == $STACK[-1];
+
+    $self->{+STOP_STAMP} = Time::HiRes::time();
 
     pop @STACK;
 
@@ -307,6 +312,8 @@ sub finish {
         if $self->{+ACTIVE};
 
     $self->wait;
+    $self->{+STOP_STAMP} = Time::HiRes::time() unless defined $self->{+STOP_STAMP};
+    my $stop_stamp = $self->{+STOP_STAMP};
 
     my $todo       = $params{todo};
     my $skip       = $params{skip};
@@ -359,6 +366,8 @@ sub finish {
             name         => $self->{+NAME},
             buffered     => 1,
             subevents    => $self->{+EVENTS},
+            start_stamp  => $self->{+START_STAMP},
+            stop_stamp   => $self->{+STOP_STAMP},
             $todo ? (
                 todo => $todo,
                 effective_pass => 1,
@@ -471,7 +480,7 @@ sub _guard {
 
     my ($pid, $tid) = ($$, get_tid);
 
-    return Scope::Guard->new(sub {
+    return Test2::Util::Guard->new(sub {
         return unless $$ == $pid && get_tid == $tid;
 
         my $error = "Scope Leak";
@@ -724,8 +733,8 @@ occurred.
 
 This is a slightly higher level interface to fork. Running it will fork your
 code in-place just like C<fork()>. It will return a pid in the parent, and an
-L<Scope::Guard> instance in the child. An exception will be thrown if fork
-fails.
+L<Test2::Util::Guard> instance in the child. An exception will be thrown if
+fork fails.
 
 It is recommended that you use C<< $ast->run_fork(sub { ... }) >> instead.
 

@@ -5,8 +5,17 @@ use strict;
 use warnings; no warnings qw(void once uninitialized numeric redefine);
 
 our $AUTHORITY = 'cpan:TOBYINK';
-our $VERSION   = '1.002002';
+our $VERSION   = '1.006002';
 our @EXPORT_OK = qw< mkopt mkopt_hash _croak _carp >;
+
+BEGIN {
+	*_HAS_NATIVE_LEXICAL_SUB = ( $] ge '5.037002' )
+		? sub () { !!1 }
+		: sub () { !!0 };
+	*_HAS_MODULE_LEXICAL_SUB = ( $] ge '5.011002' and eval('require Lexical::Sub') )
+		? sub () { !!1 }
+		: sub () { !!0 };
+};
 
 sub _croak ($;@) { require Carp; my $fmt = shift; @_ = sprintf($fmt, @_); goto \&Carp::croak }
 sub _carp  ($;@) { require Carp; my $fmt = shift; @_ = sprintf($fmt, @_); goto \&Carp::carp }
@@ -23,13 +32,18 @@ my $_process_optlist = sub
 		
 		($name =~ m{\A\!(/.+/[msixpodual]*)\z}) ?
 			do {
-				my @not = $class->_exporter_expand_regexp($1, $value, $global_opts);
+				my @not = $class->_exporter_expand_regexp("$1", $value, $global_opts);
+				++$not_want->{$_->[0]} for @not;
+			} :
+		($name =~ m{\A\![:-](.+)\z}) ?
+			do {
+				my @not = $class->_exporter_expand_tag("$1", $value, $global_opts);
 				++$not_want->{$_->[0]} for @not;
 			} :
 		($name =~ m{\A\!(.+)\z}) ?
 			(++$not_want->{$1}) :
 		($name =~ m{\A[:-](.+)\z}) ?
-			push(@$opts, $class->_exporter_expand_tag($1, $value, $global_opts)) :
+			push(@$opts, $class->_exporter_expand_tag("$1", $value, $global_opts)) :
 		($name =~ m{\A/.+/[msixpodual]*\z}) ?
 			push(@$opts, $class->_exporter_expand_regexp($name, $value, $global_opts)) :
 		# else ?
@@ -41,7 +55,14 @@ sub import
 {
 	my $class = shift;
 	my $global_opts = +{ @_ && ref($_[0]) eq q(HASH) ? %{+shift} : () };
-	$global_opts->{into} = caller unless exists $global_opts->{into};
+	
+	if ( defined $global_opts->{into} and $global_opts->{into} eq '-lexical' ) {
+		$global_opts->{lexical} = 1;
+		delete $global_opts->{into};
+	}
+	if ( not defined $global_opts->{into} ) {
+		$global_opts->{into} = caller;
+	}
 	
 	my @want;
 	my %not_want; $global_opts->{not} = \%not_want;
@@ -49,11 +70,13 @@ sub import
 	my $opts = mkopt(\@args);
 	$class->$_process_optlist($global_opts, $opts, \@want, \%not_want);
 	
+	$global_opts->{installer} ||= $class->_exporter_lexical_installer( $global_opts )
+		if $global_opts->{lexical};
+	
 	my $permitted = $class->_exporter_permitted_regexp($global_opts);
 	$class->_exporter_validate_opts($global_opts);
 	
-	for my $wanted (@want)
-	{
+	for my $wanted (@want) {
 		next if $not_want{$wanted->[0]};
 		
 		my %symbols = $class->_exporter_expand_sub(@$wanted, $global_opts, $permitted);
@@ -66,8 +89,15 @@ sub unimport
 {
 	my $class = shift;
 	my $global_opts = +{ @_ && ref($_[0]) eq q(HASH) ? %{+shift} : () };
-	$global_opts->{into} = caller unless exists $global_opts->{into};
 	$global_opts->{is_unimport} = 1;
+	
+	if ( defined $global_opts->{into} and $global_opts->{into} eq '-lexical' ) {
+		$global_opts->{lexical} = 1;
+		delete $global_opts->{into};
+	}
+	if ( not defined $global_opts->{into} ) {
+		$global_opts->{into} = caller;
+	}
 	
 	my @want;
 	my %not_want; $global_opts->{not} = \%not_want;
@@ -97,6 +127,23 @@ sub unimport
 		$class->_exporter_uninstall_sub($_, $wanted->[1], $global_opts)
 			for keys %symbols;
 	}
+}
+
+# Returns a coderef suitable to be used as a sub installer for lexical imports.
+#
+sub _exporter_lexical_installer {
+	_HAS_NATIVE_LEXICAL_SUB and return sub {
+		my ( $sigilname, $sym ) = @{ $_[1] };
+		no warnings ( $] ge '5.037002' ? 'experimental::builtin' : () );
+		builtin::export_lexically( $sigilname, $sym );
+	};
+	_HAS_MODULE_LEXICAL_SUB and return sub {
+		my ( $sigilname, $sym ) = @{ $_[1] };
+		( $sigilname =~ /^\w/ )
+			? 'Lexical::Sub'->import( $sigilname, $sym )
+			: 'Lexical::Var'->import( $sigilname, $sym );
+	};
+	_croak( 'Lexical export requires Perl 5.37.2+ for native support, or Perl 5.11.2+ with the Lexical::Sub module' );
 }
 
 # Called once per import/unimport, passed the "global" import options.
@@ -227,11 +274,12 @@ sub _exporter_expand_sub
 		my $generator = $class->can("$generatorprefix$name");
 		return $sigilname => $class->$generator($sigilname, $value, $globals) if $generator;
 		
-		my $sub = $class->can($name);
-		return $sigilname => $sub if $sub;
-		
-		# Could do this more cleverly, but this works.
-		if ($sigil ne '&') {
+		if ($sigil eq '&') {
+			my $sub = $class->can($name);
+			return $sigilname => $sub if $sub;
+		}
+		else {
+			# Could do this more cleverly, but this works.
 			my $evalled = eval "\\${sigil}${class}::${name}";
 			return $sigilname => $evalled if $evalled;
 		}
@@ -258,14 +306,15 @@ sub _exporter_install_sub
 {
 	my $class = shift;
 	my ($name, $value, $globals, $sym) = @_;
+	my $value_hash = ( ref($value) eq 'HASH' ) ? $value : {};
 	
 	my $into      = $globals->{into};
 	my $installer = $globals->{installer} || $globals->{exporter};
 	
 	$name =
-		ref    $globals->{as} ? $globals->{as}->($name) :
-		ref    $value->{-as}  ? $value->{-as}->($name) :
-		exists $value->{-as}  ? $value->{-as} :
+		ref    $globals->{as}      ? $globals->{as}->($name) :
+		ref    $value_hash->{-as}  ? $value_hash->{-as}->($name) :
+		exists $value_hash->{-as}  ? $value_hash->{-as} :
 		$name;
 	
 	return unless defined $name;
@@ -279,28 +328,30 @@ sub _exporter_install_sub
 				_croak("Cannot export symbols with a * sigil");
 			}
 		}
-		my ($prefix) = grep defined, $value->{-prefix}, $globals->{prefix}, q();
-		my ($suffix) = grep defined, $value->{-suffix}, $globals->{suffix}, q();
+		my ($prefix) = grep defined, $value_hash->{-prefix}, $globals->{prefix}, q();
+		my ($suffix) = grep defined, $value_hash->{-suffix}, $globals->{suffix}, q();
 		$name = "$prefix$name$suffix";
 	}
 	
-	my $sigilname = $sigil eq '&' ? $name : "$sigil$name";
+	my $sigilname = $sigil eq '&' ? $name : ( $sigil . $name );
 	
 #	if ({qw/$ SCALAR @ ARRAY % HASH & CODE/}->{$sigil} ne ref($sym)) {
 #		warn $sym;
 #		warn $sigilname;
 #		_croak("Reference type %s does not match sigil %s", ref($sym), $sigil);
 #	}
-		
+	
 	return ($$name = $sym)              if ref($name) eq q(SCALAR);
 	return ($into->{$sigilname} = $sym) if ref($into) eq q(HASH);
 	
 	no strict qw(refs);
 	our %TRACKED;
 	
-	if (ref($sym) eq 'CODE' and exists &{"$into\::$name"} and \&{"$into\::$name"} != $sym)
+	if ( ref($sym) eq 'CODE'
+	and ref($into) ? exists($into->{$name}) : exists(&{"$into\::$name"})
+	and $sym != ( ref($into) ? $into->{$name} : \&{"$into\::$name"} ) )
 	{
-		my ($level) = grep defined, $value->{-replace}, $globals->{replace}, q(0);
+		my ($level) = grep defined, $value_hash->{-replace}, $globals->{replace}, q(0);
 		my $action = {
 			carp     => \&_carp,
 			0        => \&_carp,
@@ -318,10 +369,9 @@ sub _exporter_install_sub
 		
 		$action->(
 			$action == \&_croak
-				? "Refusing to overwrite existing sub '%s::%s' with sub '%s' exported by %s"
-				: "Overwriting existing sub '%s::%s' with sub '%s' exported by %s",
-			$into,
-			$name,
+				? "Refusing to overwrite existing sub '%s' with sub '%s' exported by %s"
+				: "Overwriting existing sub '%s' with sub '%s' exported by %s",
+			ref($into) ? $name : "$into\::$name",
 			$_[0],
 			$class,
 		);
@@ -476,16 +526,15 @@ L<Exporter::Tiny::Manual::Importing>
 =head1 BUGS
 
 Please report any bugs to
-L<http://rt.cpan.org/Dist/Display.html?Queue=Exporter-Tiny>.
-
-=head1 SUPPORT
-
-B<< IRC: >> support is available through in the I<< #moops >> channel
-on L<irc.perl.org|http://www.irc.perl.org/channels.html>.
+L<https://github.com/tobyink/p5-exporter-tiny/issues>.
 
 =head1 SEE ALSO
 
+L<https://exportertiny.github.io/>.
+
 Simplified interface to this module: L<Exporter::Shiny>.
+
+Less tiny version, with more features: L<Exporter::Almighty>.
 
 Other interesting exporters: L<Sub::Exporter>, L<Exporter>.
 
@@ -495,7 +544,7 @@ Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
 =head1 COPYRIGHT AND LICENCE
 
-This software is copyright (c) 2013-2014, 2017 by Toby Inkster.
+This software is copyright (c) 2013-2014, 2017, 2022-2023 by Toby Inkster.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

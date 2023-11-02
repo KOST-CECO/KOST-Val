@@ -54,11 +54,10 @@ L<perlfunc/"Perl Functions by Category"> section.
 
 =cut
 
-our $VERSION = '1.13';
+our $VERSION = '1.14';
 
-require Exporter;
+use Exporter 'import';
 
-our @ISA = qw(Exporter);
 our @EXPORT = qw(%Kinds %Type %Flavor %Type_Description @Type_Order);
 
 our(%Kinds, %Type, %Flavor, %Type_Description, @Type_Order);
@@ -339,7 +338,7 @@ unlink	File	remove one link to a file
 unpack	Binary	LIST	convert binary structure into normal perl variables
 unshift	ARRAY	prepend more elements to the beginning of a list
 untie	Objects	break a tie binding to a variable
-use	Modules	Namespace	Objects	load in a module at compile time and import its namespace
+use	Modules	Namespace	Objects	enable Perl language features and declare required version
 utime	File	set a file's last access and modify times
 values	ARRAY	HASH	return a list of the values in a hash
 vec	Binary	test or set particular bits in a string

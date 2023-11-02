@@ -1,5 +1,5 @@
 package File::Map;
-$File::Map::VERSION = '0.67';
+$File::Map::VERSION = '0.71';
 # This software is copyright (c) 2008, 2009, 2010, 2011, 2012 by Leon Timmermans <leont@cpan.org>.
 #
 # This is free software; you can redistribute it and/or modify it under
@@ -8,12 +8,9 @@ $File::Map::VERSION = '0.67';
 use 5.008;
 use strict;
 use warnings FATAL => 'all';
-use subs qw{PROT_READ PROT_WRITE MAP_PRIVATE MAP_SHARED MAP_FILE MAP_ANONYMOUS};
 
 use Sub::Exporter::Progressive 0.001005 ();
 use XSLoader ();
-use Carp qw/croak carp/;
-use PerlIO::Layers qw/query_handle/;
 
 XSLoader::load('File::Map', File::Map->VERSION);
 
@@ -24,85 +21,16 @@ my %export_data = (
 	constants => [qw/PROT_NONE PROT_READ PROT_WRITE PROT_EXEC MAP_ANONYMOUS MAP_SHARED MAP_PRIVATE MAP_ANON MAP_FILE/]
 );
 
-{
-	my (@export_ok, %export_tags);
+my (@export_ok, %export_tags);
 
-	while (my ($category, $functions) = each %export_data) {
-		for my $function (grep { defined &{$_} } @{$functions}) {
-			push @export_ok, $function;
-			push @{ $export_tags{$category} }, $function;
-		}
+while (my ($category, $functions) = each %export_data) {
+	for my $function (grep { defined &{$_} } @{$functions}) {
+		push @export_ok, $function;
+		push @{ $export_tags{$category} }, $function;
 	}
-
-	Sub::Exporter::Progressive->import(-setup => { exports => \@export_ok, groups => \%export_tags });
 }
 
-my $anon_fh = -1;
-
-sub _check_layers {
-	my $fh = shift;
-	croak "Can't map fake filehandle" if fileno $fh < 0;
-	if (warnings::enabled('layer')) {
-		carp "Shouldn't map non-binary filehandle" if not query_handle($fh, 'mappable');
-	}
-	return query_handle($fh, 'utf8');
-}
-
-sub _get_offset_length {
-	my ($offset, $length, $fh) = @_;
-
-	my $size = -s $fh;
-	$offset ||= 0;
-	$length ||= $size - $offset;
-	my $end = $offset + $length;
-	croak "Window ($offset,$end) is outside the file" if $offset < 0 or $end > $size and not -c _;
-	return ($offset, $length);
-}
-
-## no critic (Subroutines::RequireArgUnpacking)
-
-sub map_handle {
-	my (undef, $fh, $mode, $offset, $length) = @_;
-	my $utf8 = _check_layers($fh);
-	($offset, $length) = _get_offset_length($offset, $length, $fh);
-	_mmap_impl($_[0], $length, _protection_value($mode || '<'), MAP_SHARED | MAP_FILE, fileno $fh, $offset, $utf8);
-	return;
-}
-
-sub map_file {
-	my (undef, $filename, $mode, $offset, $length) = @_;
-	$mode ||= '<';
-	my ($minimode, $encoding) = $mode =~ / \A ([^:]+) ([:\w-]+)? \z /xms;
-	$encoding = ':raw' if not defined $encoding;
-	open my $fh, $minimode.$encoding, $filename or croak "Couldn't open file $filename: $!";
-	my $utf8 = _check_layers($fh);
-	($offset, $length) = _get_offset_length($offset, $length, $fh);
-	_mmap_impl($_[0], $length, _protection_value($minimode), MAP_SHARED | MAP_FILE, fileno $fh, $offset, $utf8);
-	close $fh or croak "Couldn't close $filename after mapping: $!";
-	return;
-}
-
-my %flag_for = (
-	private => MAP_PRIVATE,
-	shared  => MAP_SHARED,
-);
-sub map_anonymous {
-	my (undef, $length, $flag_name) = @_;
-	my $flag = $flag_for{ $flag_name || 'shared' };
-	croak "No such flag '$flag_name'" if not defined $flag;
-	croak 'Zero length specified for anonymous map' if $length == 0;
-	_mmap_impl($_[0], $length, PROT_READ | PROT_WRITE, MAP_ANONYMOUS | $flag, $anon_fh, 0);
-	return;
-}
-
-sub sys_map {    ## no critic (ProhibitManyArgs)
-	my (undef, $length, $protection, $flags, $fh, $offset) = @_;
-	my $utf8 = _check_layers($fh);
-	my $fd = ($flags & MAP_ANONYMOUS) ? $anon_fh : fileno $fh;
-	$offset ||= 0;
-	_mmap_impl($_[0], $length, $protection, $flags, $fd, $offset, $utf8);
-	return;
-}
+Sub::Exporter::Progressive->import(-setup => { exports => \@export_ok, groups => \%export_tags });
 
 1;
 
@@ -120,7 +48,7 @@ File::Map - Memory mapping made simple and safe.
 
 =head1 VERSION
 
-version 0.67
+version 0.71
 
 =head1 SYNOPSIS
 
@@ -386,7 +314,7 @@ Overwriting an empty map is rather nonsensical, hence a warning is given when th
 
 =head1 DEPENDENCIES
 
-This module depends on perl 5.8, L<Sub::Exporter::Progressive> and L<PerlIO::Layers>. Perl 5.8.8 or higher is recommended because older versions can give spurious warnings.
+This module depends on perl 5.8 and L<Sub::Exporter::Progressive>. Perl 5.8.8 or higher is recommended because older versions can give spurious warnings.
 
 In perl versions before 5.11.5 many string functions including C<substr> are limited to L<32bit logic|http://rt.perl.org/rt3//Public/Bug/Display.html?id=72784>, even on 64bit architectures. Effectively this means you can't use them on strings bigger than 2GB. If you are working with such large files, it is strongly recommended to upgrade to 5.12.
 

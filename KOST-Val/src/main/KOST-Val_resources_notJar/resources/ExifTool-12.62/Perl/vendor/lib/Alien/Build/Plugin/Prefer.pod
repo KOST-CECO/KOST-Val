@@ -14,7 +14,7 @@ Alien::Build::Plugin::Prefer - Prefer Alien::Build plugins
 
 =head1 VERSION
 
-version 2.38
+version 2.80
 
 =head1 SYNOPSIS
 
@@ -26,7 +26,7 @@ version 2.38
 
 =head1 DESCRIPTION
 
-Prefer plugins sort 
+Prefer plugins sort
 
 Decode plugins decode HTML and FTP file listings.  Normally you
 will want to use the L<Alien::Build::Plugin::Download::Negotiate>
@@ -34,7 +34,17 @@ plugin which will automatically load the appropriate Prefer plugins.
 
 =over 4
 
+=item L<Alien::Build::Plugin::Prefer::BadVersion>
+
+Filter out known bad versions from a candidate list.
+
+=item L<Alien::Build::Plugin::Prefer::GoodVersion>
+
+Require specific known good versions from a candidate list.
+
 =item L<Alien::Build::Plugin::Prefer::SortVersions>
+
+Sort candidates by version.
 
 =back
 
@@ -84,7 +94,7 @@ Juan Julián Merelo Guervós (JJ)
 
 Joel Berger (JBERGER)
 
-Petr Pisar (ppisar)
+Petr Písař (ppisar)
 
 Lance Wicks (LANCEW)
 
@@ -102,9 +112,13 @@ Paul Evans (leonerd, PEVANS)
 
 Håkon Hægland (hakonhagland, HAKONH)
 
+nick nauwelaerts (INPHOBIA)
+
+Florian Weimer
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011-2020 by Graham Ollis.
+This software is copyright (c) 2011-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

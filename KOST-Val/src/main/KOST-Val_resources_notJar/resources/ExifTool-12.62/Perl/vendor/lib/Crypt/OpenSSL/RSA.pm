@@ -5,7 +5,7 @@ use warnings;
 
 use Carp;    # Removing carp will break the XS code.
 
-our $VERSION = '0.31';
+our $VERSION = '0.33';
 
 our $AUTOLOAD;
 use AutoLoader 'AUTOLOAD';
@@ -14,8 +14,11 @@ use XSLoader;
 XSLoader::load 'Crypt::OpenSSL::RSA', $VERSION;
 
 BEGIN {
-    eval { require Crypt::OpenSSL::Bignum };
-}            ## no critic qw(RequireCheckingReturnValueOfEval);
+    eval {
+        local $SIG{__DIE__};    # prevent outer handlers from being called
+        require Crypt::OpenSSL::Bignum;
+    };
+}    ## no critic qw(RequireCheckingReturnValueOfEval);
 
 1;
 
@@ -34,7 +37,6 @@ Crypt::OpenSSL::RSA - RSA encoding and decoding, using the openSSL libraries
   Crypt::OpenSSL::Random::random_seed($good_entropy);
   Crypt::OpenSSL::RSA->import_random_seed();
   $rsa_pub = Crypt::OpenSSL::RSA->new_public_key($key_string);
-  $rsa_pub->use_sslv23_padding(); # use_pkcs1_oaep_padding is the default
   $ciphertext = $rsa->encrypt($plaintext);
 
   $rsa_priv = Crypt::OpenSSL::RSA->new_private_key($key_string);
@@ -99,6 +101,16 @@ from an string containing the Base64/DER encoding of the PKCS1
 representation of the key.  The string should include the
 C<-----BEGIN...-----> and C<-----END...-----> lines.  The padding is set to
 PKCS1_OAEP, but can be changed with C<use_xxx_padding>.
+
+An optional parameter can be passed for passphase protected private key:
+
+=over
+
+=item passphase
+
+The passphase which protects the private key.
+
+=back
 
 =item generate_key
 
@@ -177,6 +189,22 @@ header and footer lines:
   -----BEGIN RSA PRIVATE KEY------
   -----END RSA PRIVATE KEY------
 
+2 optional parameters can be passed for passphase protected private key
+string:
+
+=over
+
+=item passphase
+
+The passphase which protects the private key.
+
+=item cipher name
+
+The cipher algorithm used to protect the private key. Default to
+'des3'.
+
+=back
+
 =item encrypt
 
 Encrypt a binary "string" using the public (portion of the) key.
@@ -224,6 +252,8 @@ C<Crypt::OpenSSL::RSA>.
 
 Use C<PKCS #1 v1.5> padding with an SSL-specific modification that
 denotes that the server is SSL3 capable.
+
+Not available since OpenSSL 3.
 
 =item use_md5_hash
 
@@ -321,8 +351,11 @@ terms as Perl itself.
 
 =head1 SEE ALSO
 
-L<perl(1)>, L<Crypt::OpenSSL::Random(3)>, L<Crypt::OpenSSL::Bignum(3)>,
-L<rsa(3)>, L<RSA_new(3)>, L<RSA_public_encrypt(3)>, L<RSA_size(3)>,
-L<RSA_generate_key(3)>, L<RSA_check_key(3)>
+L<perl(1)>, L<Crypt::OpenSSL::Random>, L<Crypt::OpenSSL::Bignum>,
+L<rsa(3)>, L<RSA_new(3)|http://man.he.net/?topic=RSA_new&section=3>,
+L<RSA_public_encrypt(3)|http://man.he.net/?topic=RSA_public_encrypt&section=3>,
+L<RSA_size(3)|http://man.he.net/?topic=RSA_size&section=3>,
+L<RSA_generate_key(3)|http://man.he.net/?topic=RSA_generate_key&section=3>,
+L<RSA_check_key(3)|http://man.he.net/?topic=RSA_check_key&section=3>
 
 =cut

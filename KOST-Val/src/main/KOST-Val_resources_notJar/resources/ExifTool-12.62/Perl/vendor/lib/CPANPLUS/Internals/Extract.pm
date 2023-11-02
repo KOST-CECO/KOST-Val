@@ -16,7 +16,7 @@ use Module::Load::Conditional   qw[can_load check_install];
 use Locale::Maketext::Simple    Class => 'CPANPLUS', Style => 'gettext';
 
 use vars qw[$VERSION];
-$VERSION = "0.9910";
+$VERSION = "0.9914";
 
 local $Params::Check::VERBOSE = 1;
 

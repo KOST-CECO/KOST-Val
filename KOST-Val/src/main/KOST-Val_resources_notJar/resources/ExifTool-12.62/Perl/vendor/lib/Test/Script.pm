@@ -1,7 +1,7 @@
 package Test::Script;
 
 # ABSTRACT: Basic cross-platform tests for scripts
-our $VERSION = '1.26'; # VERSION
+our $VERSION = '1.29'; # VERSION
 
 
 use 5.008001;
@@ -21,6 +21,7 @@ our @ISA     = 'Exporter';
 our @EXPORT  = qw{
   script_compiles
   script_compiles_ok
+  script_fails
   script_runs
   script_stdout_is
   script_stdout_isnt
@@ -30,6 +31,7 @@ our @EXPORT  = qw{
   script_stderr_isnt
   script_stderr_like
   script_stderr_unlike
+  program_fails
   program_runs
   program_stdout_is
   program_stdout_isnt
@@ -165,6 +167,17 @@ sub script_runs {
   unshift @_, "Script $unix runs" unless $_[0];
   unshift @_, $cmd, $opt;
   goto &_run;
+}
+
+
+sub script_fails {
+  my $args   = _script(shift);
+  my ( $opt, $testname ) = @_;
+  $testname = "Script $args->[0] fails" unless defined $testname;
+  die "exit is a mandatory option for script_fails"
+    unless eval{ defined $opt->{exit} };
+  my $ctx = context();
+  return release $ctx, script_runs( $args, $opt, $testname );
 }
 
 # Run a script or program and provide test events corresponding to the results.
@@ -325,6 +338,17 @@ sub program_runs {
 }
 
 
+sub program_fails {
+  my $cmd    = _script(shift);
+  my ( $opt, $testname ) = @_;
+  $testname = 'program_fails' unless defined $testname;
+  die "exit is a mandatory option for program_fails"
+    unless eval{ defined $opt->{exit} };
+  my $ctx = context();
+  return release $ctx, program_runs( $cmd, $opt, $testname );
+}
+
+
 sub program_stdout_is
 {
   my($pattern, $name) = @_;
@@ -480,7 +504,7 @@ Test::Script - Basic cross-platform tests for scripts
 
 =head1 VERSION
 
-version 1.26
+version 1.29
 
 =head1 SYNOPSIS
 
@@ -521,6 +545,8 @@ platform safety, this module will err on the side of platform safety.
 
 =head2 script_compiles
 
+[version 1.05]
+
  script_compiles( $script, $test_name );
 
 The L</script_compiles> test calls the script with "perl -c script.pl",
@@ -535,6 +561,8 @@ is running the test script (and not with the default system perl). This
 will also be shown in the diagnostic output on failure.
 
 =head2 script_runs
+
+[version 1.05]
 
  script_runs( $script, $test_name );
  script_runs( \@script_and_arguments, $test_name );
@@ -552,7 +580,9 @@ The test will be run with the same L<perl> interpreter that is running the
 test script (and not with the default system perl). This will also be shown
 in the diagnostic output on failure.
 
-You may pass in options as a hash as the second argument.
+[version 1.09]
+
+You may pass in options as a hash as the second argument (as of version 1.09).
 
 =over 4
 
@@ -562,6 +592,8 @@ The expected exit value.  The default is to use whatever indicates success
 on your platform (usually 0).
 
 =item interpreter_options
+
+[version 1.25]
 
 Array reference of Perl options to be passed to the interpreter.  Things
 like C<-w> or C<-x> can be passed this way.  This may be either a single
@@ -619,7 +651,23 @@ Same as C<stdout> above, except for stderr.
 
 =back
 
+=head2 script_fails
+
+[ version 1.28 ]
+
+ script_fails $script, { exit => $expected_exit }, $test_name );
+ script_fails $script, \%options, $test_name;
+
+L</script_runs> may be invoked as L</script_fails>. The exit option is
+mandatory when used this way. Since Perl 5.12, C<die> usually returns 255,
+but does not promise to do so. Fatal errors like divide by 0 also return
+255 often so it is not the best error code for a trapped exception.
+L<script_runs> needs an exit code it considers success, use C<warn; exit;>
+instead of die.
+
 =head2 script_stdout_is
+
+[version 1.09]
 
  script_stdout_is $expected_stdout, $test_name;
 
@@ -628,12 +676,16 @@ expected value exactly.
 
 =head2 script_stdout_isnt
 
+[version 1.09]
+
  script_stdout_is $expected_stdout, $test_name;
 
 Tests if the output to stdout from the previous L</script_runs> does NOT match the
 expected value exactly.
 
 =head2 script_stdout_like
+
+[version 1.09]
 
  script_stdout_like $regex, $test_name;
 
@@ -642,12 +694,16 @@ expression.
 
 =head2 script_stdout_unlike
 
+[version 1.09]
+
  script_stdout_unlike $regex, $test_name;
 
 Tests if the output to stdout from the previous L</script_runs> does NOT match the regular
 expression.
 
 =head2 script_stderr_is
+
+[version 1.09]
 
  script_stderr_is $expected_stderr, $test_name;
 
@@ -656,12 +712,16 @@ expected value exactly.
 
 =head2 script_stderr_isnt
 
+[version 1.09]
+
  script_stderr_is $expected_stderr, $test_name;
 
 Tests if the output to stderr from the previous L</script_runs> does NOT match the
 expected value exactly.
 
 =head2 script_stderr_like
+
+[version 1.09]
 
  script_stderr_like $regex, $test_name;
 
@@ -670,12 +730,16 @@ expression.
 
 =head2 script_stderr_unlike
 
+[version 1.09]
+
  script_stderr_unlike $regex, $test_name;
 
 Tests if the output to stderr from the previous L</script_runs> does NOT match the regular
 expression.
 
 =head2 program_runs
+
+[version 1.26]
 
  program_runs( $program, $test_name );
  program_runs( \@program_and_arguments, $test_name );
@@ -702,7 +766,19 @@ The C<%options> do not support the C<interpreter_options> key.
 See L<File::Spec> or L<Path::Class> for routines useful in building pathnames
 in a cross-platform way.
 
+=head2 program_fails
+
+[ version 1.28 ]
+
+ program_fails $program, { exit => $expected_exit }, $test_name;
+ program_fails $program, \%options, $test_name;
+
+L</program_runs> may be invoked as L</program_fails>. L</program_fails>
+needs to know the expected exit value, so exit becomes a required option.
+
 =head2 program_stdout_is
+
+[version 1.26]
 
  program_stdout_is $expected_stdout, $test_name;
 
@@ -711,12 +787,16 @@ expected value exactly.
 
 =head2 program_stdout_isnt
 
+[version 1.26]
+
  program_stdout_is $expected_stdout, $test_name;
 
 Tests if the output to stdout from the previous L</program_runs> does NOT match the
 expected value exactly.
 
 =head2 program_stdout_like
+
+[version 1.26]
 
  program_stdout_like $regex, $test_name;
 
@@ -725,12 +805,16 @@ expression.
 
 =head2 program_stdout_unlike
 
+[version 1.26]
+
  program_stdout_unlike $regex, $test_name;
 
 Tests if the output to stdout from the previous L</program_runs> does NOT match the regular
 expression.
 
 =head2 program_stderr_is
+
+[version 1.26]
 
  program_stderr_is $expected_stderr, $test_name;
 
@@ -739,6 +823,8 @@ expected value exactly.
 
 =head2 program_stderr_isnt
 
+[version 1.26]
+
  program_stderr_is $expected_stderr, $test_name;
 
 Tests if the output to stderr from the previous L</program_runs> does NOT match the
@@ -746,12 +832,16 @@ expected value exactly.
 
 =head2 program_stderr_like
 
+[version 1.26]
+
  program_stderr_like $regex, $test_name;
 
 Tests if the output to stderr from the previous L</program_runs> matches the regular
 expression.
 
 =head2 program_stderr_unlike
+
+[version 1.26]
 
  program_stderr_unlike $regex, $test_name;
 
@@ -783,9 +873,11 @@ Brendan Byrd
 
 Chris White E<lt>cxw@cpan.orgE<gt>
 
+John Karr (BRAINBUZ)
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2019 by Adam Kennedy.
+This software is copyright (c) 2006-2021 by Adam Kennedy.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

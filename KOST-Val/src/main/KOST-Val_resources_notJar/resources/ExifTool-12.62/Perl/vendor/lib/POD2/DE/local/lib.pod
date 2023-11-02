@@ -343,8 +343,8 @@ der Module. Standardmäßig dies ist C<~/perl5>.
 
 =back
 
-Versucht das Home Verzeichnis vom aktullen User zu finden. Wenn C<File::HomeDir>
-installiert ist, für dieses benutzt dafür. Es wird eine Exception geworfen, wenn
+Versucht das Home Verzeichnis vom aktullen User zu finden.
+Es wird eine Exception geworfen, wenn
 kein Home Verzeichnis ermittelt werden konnte.
 
 =head2 resolve_relative_path

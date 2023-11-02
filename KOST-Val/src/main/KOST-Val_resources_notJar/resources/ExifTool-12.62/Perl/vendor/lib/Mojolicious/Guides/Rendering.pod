@@ -281,7 +281,7 @@ Any of the native Perl data types can be passed to templates as references throu
 L<Mojolicious::Controller/"stash">.
 
   $c->stash(description => 'web framework');
-  $c->stash(frameworks  => ['Catalyst', 'Mojolicious']);
+  $c->stash(frameworks  => ['Catalyst', 'Mojolicious', 'mojo.js']);
   $c->stash(spinoffs    => {minion => 'job queue'});
 
   %= $description
@@ -332,6 +332,91 @@ ensure that they don't conflict with existing methods you may already have.
 A list of all built-in helpers can be found in L<Mojolicious::Plugin::DefaultHelpers> and
 L<Mojolicious::Plugin::TagHelpers>.
 
+=head2 Static files
+
+Static files are automatically served from the C<public> directories of the application, which can be customized with
+L<Mojolicious::Static/"paths">, or one of the C<DATA> sections from L<Mojolicious::Static/"classes">. And if that's not
+enough you can also serve them manually with L<Mojolicious::Plugin::DefaultHelpers/"reply-E<gt>static"> and
+L<Mojolicious::Plugin::DefaultHelpers/"reply-E<gt>file">.
+
+  use Mojolicious::Lite -signatures;
+
+  get '/' => sub ($c) {
+    $c->reply->static('index.html');
+  };
+
+  get '/some_download' => sub ($c) {
+    $c->res->headers->content_disposition('attachment; filename=bar.png;');
+    $c->reply->static('foo/bar.png');
+  };
+
+  get '/leak' => sub ($c) {
+    $c->reply->file('/etc/passwd');
+  };
+
+  app->start;
+
+=head2 Static assets
+
+While Mojolicious does not have any special support for frontend frameworks like L<Vue.js|https://vuejs.org> and
+L<React|https://reactjs.org>, the C<public/assets> directory is reserved for static assets created by bundlers like
+L<Webpack|https://webpack.js.org> and L<Rollup.js|https://rollupjs.org> ahead of time. Asset files can be of any type,
+they just have to follow the C<[name].[checksum].[extensions]> naming scheme, like C<myapp.ab1234cd5678ef.js>. You can
+then use L<Mojolicious::Controller/"url_for_asset"> or L<Mojolicious::Plugin::TagHelpers/"asset_tag"> to generate URLs
+without having to know the checksum.
+
+  # "/assets/myapp.ab1234cd5678ef.js"
+  $c->url_for_asset('/myapp.js');
+
+  # "<script src="/assets/myapp.ab1234cd5678ef.js"></script>"
+  $c->asset_tag('/myapp.js');
+
+If your application runs in C<development> mode, all assets will be served with a C<Cache-Control: no-cache> header, to
+speed up development by preventing browser caching. Additionally all assets following the
+C<[name].development.[extensions]> naming scheme, like C<myapp.development.js>, have a higher precedence than assets
+with checksums. That way you can just overwrite your assets during development, instead of having to manually delete
+them each time they are rebuilt with a different checksum.
+
+  # "/assets/foo/bar.development.js"
+  $c->url_for_asset('/foo/bar.js');
+
+Webpack L<configuration|https://webpack.js.org/configuration/> example (C<webpack.config.js>):
+
+  import Path from '@mojojs/path';
+
+  const isDev = process.env.MOJO_MODE === 'development';
+
+  export default {
+    output: {
+      filename: isDev ? '[name].development.js' : '[name].[chunkhash].js',
+      path: Path.currentFile().sibling('public', 'assets').toString(),
+      publicPath: ''
+    },
+
+    // Add your own rules and entry point here
+  };
+
+Rollup L<configuration|https://rollupjs.org/guide/en/#configuration-files> example (C<rollup.config.js>):
+
+  import Path from '@mojojs/path';
+
+  const isDev = process.env.MOJO_MODE === 'development';
+
+  export default {
+    output: {
+      entryFileNames: isDev ? '[name].development.[ext]' : '[name].[hash].[ext]',
+      dir: Path.currentFile().sibling('public', 'assets').toString(),
+      format: 'iife'
+    },
+
+    // Add your own rules and entry point here
+  };
+
+Everything else is up to your bundler of choice, so you need to consult its documentation for further information. And
+where you keep your asset sources, such as C<.vue> and C<.jsx> files, is not important, as long as your bundler can
+find them. Using a directory named C<assets> or C<frontend> in your application root directory is a good best practice
+though.
+
 =head2 Content negotiation
 
 For resources with different representations and that require truly RESTful content negotiation you can also use
@@ -341,14 +426,14 @@ L<Mojolicious::Plugin::DefaultHelpers/"respond_to"> instead of L<Mojolicious::Co
   # /hello (Accept: application/xml)  -> "xml"
   # /hello.json                       -> "json"
   # /hello.xml                        -> "xml"
-  # /hello?format=json                -> "json"
-  # /hello?format=xml                 -> "xml"
+  # /hello?_format=json               -> "json"
+  # /hello?_format=xml                -> "xml"
   $c->respond_to(
     json => {json => {hello => 'world'}},
     xml  => {text => '<hello>world</hello>'}
   );
 
-The best possible representation will be automatically selected from the C<format> C<GET>/C<POST> parameter, C<format>
+The best possible representation will be automatically selected from the C<_format> C<GET>/C<POST> parameter, C<format>
 stash value or C<Accept> request header and stored in the C<format> stash value. To change MIME type mappings for the
 C<Accept> request header or the C<Content-Type> response header you can use L<Mojolicious/"types">.
 
@@ -368,9 +453,9 @@ Callbacks can be used for representations that are too complex to fit into a sin
   # /hello.json                       -> "json"
   # /hello.html                       -> "html"
   # /hello.png                        -> "any"
-  # /hello?format=json                -> "json"
-  # /hello?format=html                -> "html"
-  # /hello?format=png                 -> "any"
+  # /hello?_format=json                -> "json"
+  # /hello?_format=html                -> "html"
+  # /hello?_format=png                 -> "any"
   $c->respond_to(
     json => {json => {hello => 'world'}},
     html => {template => 'hello', message => 'world'},
@@ -387,9 +472,9 @@ automatically.
   # /hello.html                 -> "html"
   # /hello.xml                  -> "xml"
   # /hello.txt                  -> undef
-  # /hello?format=html          -> "html"
-  # /hello?format=xml           -> "xml"
-  # /hello?format=txt           -> undef
+  # /hello?_format=html          -> "html"
+  # /hello?_format=xml           -> "xml"
+  # /hello?_format=txt           -> undef
   if (my $format = $c->accepts('html', 'xml')) {
     ...
   }
@@ -413,8 +498,7 @@ L<Mojolicious::Plugin::DefaultHelpers/"reply-E<gt>not_found">.
     my $divisor  = $c->param('divisor');
 
     # 404
-    return $c->reply->not_found
-      unless looks_like_number $dividend && looks_like_number $divisor;
+    return $c->reply->not_found unless looks_like_number $dividend && looks_like_number $divisor;
 
     # 500
     return $c->reply->exception('Division by zero!') if $divisor == 0;
@@ -451,6 +535,25 @@ C<not_found.$mode.$format.*> before falling back to the built-in default templat
       <pre><%= dumper $snapshot %></pre>
     </body>
   </html>
+
+The default exception format is C<html>, but that can be changed at application and controller level. By default there
+are handlers for C<html>, C<txt> and C<json> available. There are also various exception helpers in
+L<Mojolicious::Plugin::DefaultHelpers> for you to overload to change the default behavior.
+
+  use Mojolicious::Lite -signatures;
+
+  app->exception_format('json');
+
+  get '/json' => sub ($c) {
+    die 'Just a test';
+  };
+
+  get '/txt' => sub ($c) {
+    $c->exception_format('txt');
+    die 'Just a test';
+  };
+
+  app->start;
 
 The hook L<Mojolicious/"before_render"> makes even more advanced customizations possible by allowing you to intercept
 and modify the arguments passed to the renderer.
@@ -753,8 +856,7 @@ immediately to build more advanced validation logic with methods like L<Mojolici
 
     # Validate parameters ("pass_again" depends on "pass")
     $v->required('user')->size(1, 20)->like(qr/^[a-z0-9]+$/);
-    $v->required('pass_again')->equal_to('pass')
-      if $v->optional('pass')->size(7, 500)->is_valid;
+    $v->required('pass_again')->equal_to('pass') if $v->optional('pass')->size(7, 500)->is_valid;
 
     # Check if validation failed
     return $c->render('index') if $v->has_error;
@@ -950,30 +1052,6 @@ build skeleton templates with named blocks that child templates can override.
   % end
 
 This chain could go on and on to allow a very high level of template reuse.
-
-=head2 Serving static files
-
-Static files are automatically served from the C<public> directories of the application, which can be customized with
-L<Mojolicious::Static/"paths">, or one of the C<DATA> sections from L<Mojolicious::Static/"classes">. And if that's not
-enough you can also serve them manually with L<Mojolicious::Plugin::DefaultHelpers/"reply-E<gt>static"> and
-L<Mojolicious::Plugin::DefaultHelpers/"reply-E<gt>file">.
-
-  use Mojolicious::Lite -signatures;
-
-  get '/' => sub ($c) {
-    $c->reply->static('index.html');
-  };
-
-  get '/some_download' => sub ($c) {
-    $c->res->headers->content_disposition('attachment; filename=bar.png;');
-    $c->reply->static('foo/bar.png');
-  };
-
-  get '/leak' => sub ($c) {
-    $c->reply->file('/etc/passwd');
-  };
-
-  app->start;
 
 =head2 Custom responses
 
@@ -1423,7 +1501,7 @@ authors.
 =head1 SUPPORT
 
 If you have any questions the documentation might not yet answer, don't hesitate to ask in the
-L<Forum|https://forum.mojolicious.org> or the official IRC channel C<#mojo> on C<chat.freenode.net>
-(L<chat now!|https://webchat.freenode.net/#mojo>).
+L<Forum|https://forum.mojolicious.org>, on L<Matrix|https://matrix.to/#/#mojo:matrix.org>, or
+L<IRC|https://web.libera.chat/#mojo>.
 
 =cut

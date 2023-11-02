@@ -1,5 +1,5 @@
 package DateTime::TimeZone::Local::Win32;
-$DateTime::TimeZone::Local::Win32::VERSION = '2.04';
+$DateTime::TimeZone::Local::Win32::VERSION = '2.05';
 use 5.006;
 
 use strict;
@@ -186,6 +186,7 @@ sub EnvVars { return 'TZ' }
         'Singapore Standard Time'         => 'Asia/Singapore',
         'South Africa'                    => 'Africa/Harare',
         'South Africa Standard Time'      => 'Africa/Harare',
+        'South Sudan Standard Time'       => 'Africa/Juba',
         'Sri Lanka'                       => 'Asia/Colombo',
         'Sri Lanka Standard Time'         => 'Asia/Colombo',
         'Sudan Standard Time'             => 'Africa/Khartoum',
@@ -234,11 +235,12 @@ sub EnvVars { return 'TZ' }
         'Western Brazilian Standard Time' => 'America/Rio_Branco',
         'Yakutsk'                         => 'Asia/Yakutsk',
         'Yakutsk Standard Time'           => 'Asia/Yakutsk',
+        'Yukon Standard Time'             => 'America/Whitehorse',
     );
-    
+
     sub _WindowsToIANA {
         my $class = shift;
-        
+
         my $win_name = shift;
 
         # On Windows 2008 Server, there is additional junk after a
@@ -321,7 +323,7 @@ DateTime::TimeZone::Local::Win32 - Determine the local system's time zone on Win
 
 =head1 VERSION
 
-version 2.04
+version 2.05
 
 =head1 SYNOPSIS
 
@@ -399,7 +401,7 @@ Dave Rolsky <autarch@urth.org>
 =head1 COPYRIGHT AND LICENSE
 
 Copyright (C) 2007-2014 Dave Rolsky <autarch@urth.org>
-Copyright (C) 2014-2019 by David Pinkowitz <dapink@cpan.org>
+Copyright (C) 2014-2021 by David Pinkowitz <dapink@cpan.org>
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

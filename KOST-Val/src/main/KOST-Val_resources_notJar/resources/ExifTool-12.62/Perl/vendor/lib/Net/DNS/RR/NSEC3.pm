@@ -2,7 +2,7 @@ package Net::DNS::RR::NSEC3;
 
 use strict;
 use warnings;
-our $VERSION = (qw$Id: NSEC3.pm 1814 2020-10-14 21:49:16Z willem $)[2];
+our $VERSION = (qw$Id: NSEC3.pm 1910 2023-03-30 19:16:30Z willem $)[2];
 
 use base qw(Net::DNS::RR::NSEC);
 
@@ -24,42 +24,9 @@ require Net::DNS::DomainName;
 
 eval { require Digest::SHA };		## optional for simple Net::DNS RR
 
-my %digest = (
-	'1' => ['Digest::SHA', 1],				# RFC3658
-	);
-
-{
-	my @digestbyname = (
-		'SHA-1' => 1,					# RFC3658
-		);
-
-	my @digestalias = ( 'SHA' => 1 );
-
-	my %digestbyval = reverse @digestbyname;
-
-	foreach (@digestbyname) { s/[\W_]//g; }			# strip non-alphanumerics
-	my @digestrehash = map { /^\d/ ? ($_) x 3 : uc($_) } @digestbyname;
-	my %digestbyname = ( @digestalias, @digestrehash );	# work around broken cperl
-
-	sub _digestbyname {
-		my $arg = shift;
-		my $key = uc $arg;				# synthetic key
-		$key =~ s/[\W_]//g;				# strip non-alphanumerics
-		my $val = $digestbyname{$key};
-		croak qq[unknown algorithm "$arg"] unless defined $val;
-		return $val;
-	}
-
-	sub _digestbyval {
-		my $value = shift;
-		return $digestbyval{$value} || return $value;
-	}
-}
-
 
 sub _decode_rdata {			## decode rdata from wire-format octet string
-	my $self = shift;
-	my ( $data, $offset ) = @_;
+	my ( $self, $data, $offset ) = @_;
 
 	my $limit = $offset + $self->{rdlength};
 	my $ssize = unpack "\@$offset x4 C", $$data;
@@ -91,7 +58,7 @@ sub _format_rdata {			## format rdata portion of RR string.
 	my $self = shift;
 
 	my @rdata = (
-		$self->algorithm, $self->flags, $self->iterations,
+		$self->algorithm,   $self->flags,    $self->iterations,
 		$self->salt || '-', $self->hnxtname, $self->typelist
 		);
 	return @rdata;
@@ -99,15 +66,15 @@ sub _format_rdata {			## format rdata portion of RR string.
 
 
 sub _parse_rdata {			## populate RR from rdata in argument list
-	my $self = shift;
+	my ( $self, @argument ) = @_;
 
-	my $alg = $self->algorithm(shift);
-	$self->flags(shift);
-	my $iter = $self->iterations(shift);
-	my $salt = shift;
+	my $alg = $self->algorithm( shift @argument );
+	$self->flags( shift @argument );
+	my $iter = $self->iterations( shift @argument );
+	my $salt = shift @argument;
 	$self->salt($salt) unless $salt eq '-';
-	$self->hnxtname(shift);
-	$self->typelist(@_);
+	$self->hnxtname( shift @argument );
+	$self->typelist(@argument);
 	$self->{hashfn} = _hashfn( $alg, $iter, $self->{saltbin} );
 	return;
 }
@@ -136,51 +103,49 @@ sub algorithm {
 
 
 sub flags {
-	my $self = shift;
-
-	$self->{flags} = 0 + shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{flags} = 0 + $_ }
 	return $self->{flags} || 0;
 }
 
 
 sub optout {
-	my $self = shift;
-	if ( scalar @_ ) {
-		for ( $self->{flags} ) {
-			$_ = 0x01 | ( $_ || 0 );
-			$_ ^= 0x01 unless shift;
+	my ( $self, @value ) = @_;
+	for ( $self->{flags} |= 0 ) {
+		if ( scalar @value ) {
+			$_ |= 0x01;
+			$_ ^= 0x01 unless shift @value;
 		}
 	}
-	return 0x01 & ( $self->{flags} || 0 );
+	return $self->{flags} & 0x01;
 }
 
 
 sub iterations {
-	my $self = shift;
-
-	$self->{iterations} = 0 + shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{iterations} = 0 + $_ }
 	return $self->{iterations} || 0;
 }
 
 
 sub salt {
-	my $self = shift;
-	return unpack "H*", $self->saltbin() unless scalar @_;
-	return $self->saltbin( pack "H*", join "", map { /^"*([\dA-Fa-f]*)"*$/ || croak("corrupt hex"); $1 } @_ );
+	my ( $self, @value ) = @_;
+	return unpack "H*", $self->saltbin() unless scalar @value;
+	my @hex = map { /^"*([\dA-Fa-f]*)"*$/ || croak("corrupt hex"); $1 } @value;
+	return $self->saltbin( pack "H*", join "", @hex );
 }
 
 
 sub saltbin {
-	my $self = shift;
-
-	$self->{saltbin} = shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{saltbin} = $_ }
 	return $self->{saltbin} || "";
 }
 
 
 sub hnxtname {
-	my $self = shift;
-	$self->{hnxtname} = _decode_base32hex(shift) if scalar @_;
+	my ( $self, @name ) = @_;
+	for (@name) { $self->{hnxtname} = _decode_base32hex($_) }
 	return defined(wantarray) ? _encode_base32hex( $self->{hnxtname} ) : undef;
 }
 
@@ -255,6 +220,38 @@ sub wildcard { return shift->{wildcard}; }
 
 ########################################
 
+my @digestbyname = (
+	'SHA-1' => 1,						# [RFC3658]
+	);
+
+my @digestalias = ( 'SHA' => 1 );
+
+my %digestbyval = reverse @digestbyname;
+
+foreach (@digestbyname) { s/[\W_]//g; }				# strip non-alphanumerics
+my @digestrehash = map { /^\d/ ? ($_) x 3 : uc($_) } @digestbyname;
+my %digestbyname = ( @digestalias, @digestrehash );		# work around broken cperl
+
+sub _digestbyname {
+	my $arg = shift;
+	my $key = uc $arg;					# synthetic key
+	$key =~ s/[\W_]//g;					# strip non-alphanumerics
+	my $val = $digestbyname{$key};
+	croak qq[unknown algorithm $arg] unless defined $val;
+	return $val;
+}
+
+sub _digestbyval {
+	my $value = shift;
+	return $digestbyval{$value} || return $value;
+}
+
+
+my %digest = (
+	'1' => scalar( eval { Digest::SHA->new(1) } ),		# RFC3658
+	);
+
+
 sub _decode_base32hex {
 	local $_ = shift || '';
 	tr [0-9A-Va-v\060-\071\101-\126\141-\166] [\000-\037\012-\037\000-\037\012-\037];
@@ -278,17 +275,12 @@ sub _hashfn {
 	my $iterations = shift || 0;
 	my $salt       = shift || '';
 
-	my $key_adjunct = pack 'Cna*', $hashalg, $iterations, $salt;
-	$iterations++;
+	my $hash = $digest{$hashalg};
+	return sub { croak "algorithm $hashalg not supported" }
+			unless $hash;
+	my $clone = $hash->clone;
 
-	my $instance = eval {
-		my $arglist = $digest{$hashalg};
-		my ( $class, @argument ) = @$arglist;
-		$class->new(@argument);
-	};
-	my $exception = $@;
-	return sub { croak $exception }
-			if $exception;
+	my $key_adjunct = pack 'Cna*', $hashalg, $iterations, $salt;
 
 	return sub {
 		my $name  = Net::DNS::DomainName->new(shift)->canonical;
@@ -297,15 +289,16 @@ sub _hashfn {
 		return $cache if defined $cache;
 		( $cache1, $cache2, $limit ) = ( {}, $cache1, 50 ) unless $limit--;    # recycle cache
 
-		my $hash = $name;
-		my $iter = $iterations;
-		$instance->reset;
-		while ( $iter-- ) {
-			$instance->add($hash);
-			$instance->add($salt);
-			$hash = $instance->digest;
+		$clone->add($name);
+		$clone->add($salt);
+		my $digest = $clone->digest;
+		my $count  = $iterations;
+		while ( $count-- ) {
+			$clone->add($digest);
+			$clone->add($salt);
+			$digest = $clone->digest;
 		}
-		return $$cache1{$key} = $hash;
+		return $$cache1{$key} = $digest;
 	};
 }
 
@@ -320,6 +313,8 @@ sub name2hash {
 	my $hash       = _hashfn( $hashalg, $iterations, $salt );
 	return _encode_base32hex( &$hash($name) );
 }
+
+########################################
 
 
 1;
@@ -483,7 +478,7 @@ Package template (c)2009,2012 O.M.Kolkman and R.W.Franks.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -500,7 +495,9 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::RR>, RFC5155, RFC4648
+L<perl> L<Net::DNS> L<Net::DNS::RR>
+L<RFC5155|https://tools.ietf.org/html/rfc5155>
+L<RFC9077|https://tools.ietf.org/html/rfc9077>
 
 L<Hash Algorithms|http://www.iana.org/assignments/dnssec-nsec3-parameters>
 

@@ -2,7 +2,7 @@ package Net::DNS::RR::LOC;
 
 use strict;
 use warnings;
-our $VERSION = (qw$Id: LOC.pm 1814 2020-10-14 21:49:16Z willem $)[2];
+our $VERSION = (qw$Id: LOC.pm 1896 2023-01-30 12:59:25Z willem $)[2];
 
 use base qw(Net::DNS::RR);
 
@@ -19,8 +19,7 @@ use Carp;
 
 
 sub _decode_rdata {			## decode rdata from wire-format octet string
-	my $self = shift;
-	my ( $data, $offset ) = @_;
+	my ( $self, $data, $offset ) = @_;
 
 	my $version = $self->{version} = unpack "\@$offset C", $$data;
 	@{$self}{qw(size hp vp latitude longitude altitude)} = unpack "\@$offset xC3N3", $$data;
@@ -50,27 +49,27 @@ sub _format_rdata {			## format rdata portion of RR string.
 
 
 sub _parse_rdata {			## populate RR from rdata in argument list
-	my $self = shift;
+	my ( $self, @argument ) = @_;
 
 	my @lat;
-	while ( scalar @_ ) {
-		my $this = shift;
+	while ( scalar @argument ) {
+		my $this = shift @argument;
 		push( @lat, $this );
 		last if $this =~ /[NSns]/;
 	}
 	$self->latitude(@lat);
 
 	my @long;
-	while ( scalar @_ ) {
-		my $this = shift;
+	while ( scalar @argument ) {
+		my $this = shift @argument;
 		push( @long, $this );
 		last if $this =~ /[EWew]/;
 	}
 	$self->longitude(@long);
 
 	foreach my $attr (qw(altitude size hp vp)) {
-		$self->$attr(@_);
-		shift;
+		$self->$attr(@argument);
+		shift @argument;
 	}
 	return;
 }
@@ -88,36 +87,36 @@ sub _defaults {				## specify RR attribute default values
 
 
 sub latitude {
-	my $self = shift;
-	$self->{latitude} = _encode_angle(@_) if scalar @_;
+	my ( $self, @value ) = @_;
+	$self->{latitude} = _encode_angle(@value) if scalar @value;
 	return _decode_angle( $self->{latitude} || return, 'N', 'S' );
 }
 
 
 sub longitude {
-	my $self = shift;
-	$self->{longitude} = _encode_angle(@_) if scalar @_;
+	my ( $self, @value ) = @_;
+	$self->{longitude} = _encode_angle(@value) if scalar @value;
 	return _decode_angle( $self->{longitude} || return, 'E', 'W' );
 }
 
 
 sub altitude {
-	my $self = shift;
-	$self->{altitude} = _encode_alt(shift) if scalar @_;
+	my ( $self, @value ) = @_;
+	$self->{altitude} = _encode_alt(@value) if scalar @value;
 	return _decode_alt( $self->{altitude} );
 }
 
 
 sub size {
-	my $self = shift;
-	$self->{size} = _encode_prec(shift) if scalar @_;
+	my ( $self, @value ) = @_;
+	$self->{size} = _encode_prec(@value) if scalar @value;
 	return _decode_prec( $self->{size} );
 }
 
 
 sub hp {
-	my $self = shift;
-	$self->{hp} = _encode_prec(shift) if scalar @_;
+	my ( $self, @value ) = @_;
+	$self->{hp} = _encode_prec(@value) if scalar @value;
 	return _decode_prec( $self->{hp} );
 }
 
@@ -125,8 +124,8 @@ sub horiz_pre { return &hp; }					# uncoverable pod
 
 
 sub vp {
-	my $self = shift;
-	$self->{vp} = _encode_prec(shift) if scalar @_;
+	my ( $self, @value ) = @_;
+	$self->{vp} = _encode_prec(@value) if scalar @value;
 	return _decode_prec( $self->{vp} );
 }
 
@@ -134,9 +133,10 @@ sub vert_pre { return &vp; }					# uncoverable pod
 
 
 sub latlon {
-	my $self = shift;
-	my ( $lat, @lon ) = @_;
-	return ( scalar $self->latitude(@_), scalar $self->longitude(@lon) );
+	my ( $self, @argument ) = @_;
+	my @lat = @argument;
+	my ( undef, @long ) = @argument;
+	return ( scalar $self->latitude(@lat), scalar $self->longitude(@long) );
 }
 
 
@@ -166,7 +166,8 @@ sub _decode_angle {
 
 
 sub _encode_angle {
-	my @ang = scalar @_ > 1 ? (@_) : ( split /[\s\260'"]+/, shift );
+	my @ang = @_;
+	@ang = split /[\s\260'"]+/, shift @ang unless scalar @ang > 1;
 	my $ang = ( 0 + shift @ang ) * 3600000;
 	my $neg = ( @ang ? pop @ang : '' ) =~ /[SWsw]/;
 	$ang += ( @ang ? shift @ang : 0 ) * 60000;
@@ -203,6 +204,8 @@ sub _encode_prec {
 	my $mantissa = int( 0.5 + $argument / $power10[$exponent] );
 	return ( $mantissa & 0xF ) << 4 | $exponent;
 }
+
+########################################
 
 
 1;
@@ -321,7 +324,7 @@ Package template (c)2009,2012 O.M.Kolkman and R.W.Franks.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -338,6 +341,7 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::RR>, RFC1876
+L<perl> L<Net::DNS> L<Net::DNS::RR>
+L<RFC1876|https://tools.ietf.org/html/rfc1876>
 
 =cut

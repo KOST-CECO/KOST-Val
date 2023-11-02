@@ -14,7 +14,7 @@ Alien::Build::Manual::Contributing - Over-detailed contributing guide
 
 =head1 VERSION
 
-version 2.38
+version 2.80
 
 =head1 SYNOPSIS
 
@@ -62,7 +62,7 @@ inherit from L<Alien::Base>, like so:
 
  package Alien::libfoo;
  
- use base qw( Alien::Base );
+ use parent qw( Alien::Base );
  
  1;
 
@@ -126,7 +126,7 @@ prerequisites.
 
 =head3 interface agnostic
 
-One of the challenges with L<Alien::Buil::ModuleBuild> was that
+One of the challenges with L<Alien::Base::ModuleBuild> was that
 L<Module::Build> was pulled from the core.  In addition, there is a
 degree of hostility toward L<Module::Build> in some corners of the Perl
 community.  I agree with Joel Berger's rationale for choosing
@@ -157,7 +157,7 @@ shouldn't need to be modified.
 
 The actual logic that probes the system, downloads source and builds it
 should be as pluggable as possible.  One of the challenges with
-L<Alien::Build::ModuleBuild> was that it was designed to work well with
+L<Alien::Base::ModuleBuild> was that it was designed to work well with
 software that works with C<autoconf> and C<pkg-config>.  While you can
 build with other tools, you have to know a bit of how the installer
 logic works, and which hooks need to be tweaked.
@@ -191,7 +191,13 @@ L<https://metacpan.org/pod/Alien::Base#CONTRIBUTORS>
 
 =head1 SEE ALSO
 
-L<alienfile>, L<Alien::Build::MM>, L<Alien::Build::Plugin>, L<Alien::Base>, L<Alien>
+=over 4
+
+=item L<Alien::Build::Manual>
+
+Other L<Alien::Build> manuals.
+
+=back
 
 =head1 AUTHOR
 
@@ -235,7 +241,7 @@ Juan Julián Merelo Guervós (JJ)
 
 Joel Berger (JBERGER)
 
-Petr Pisar (ppisar)
+Petr Písař (ppisar)
 
 Lance Wicks (LANCEW)
 
@@ -253,9 +259,13 @@ Paul Evans (leonerd, PEVANS)
 
 Håkon Hægland (hakonhagland, HAKONH)
 
+nick nauwelaerts (INPHOBIA)
+
+Florian Weimer
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011-2020 by Graham Ollis.
+This software is copyright (c) 2011-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

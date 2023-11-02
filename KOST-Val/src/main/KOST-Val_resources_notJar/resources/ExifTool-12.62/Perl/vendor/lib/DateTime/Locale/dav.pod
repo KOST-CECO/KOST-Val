@@ -383,15 +383,15 @@ Taita locale.
 
 =head3 Ehm (E h:mm a)
 
-   2008-02-05T18:30:30 = Kaw 6:30 luma lwa p
-   1995-12-22T09:05:02 = Kas 9:05 Luma lwa K
-  -0010-09-15T04:44:23 = Ngu 4:44 Luma lwa K
+   2008-02-05T18:30:30 = Kaw 6:30 luma lwa p
+   1995-12-22T09:05:02 = Kas 9:05 Luma lwa K
+  -0010-09-15T04:44:23 = Ngu 4:44 Luma lwa K
 
 =head3 Ehms (E h:mm:ss a)
 
-   2008-02-05T18:30:30 = Kaw 6:30:30 luma lwa p
-   1995-12-22T09:05:02 = Kas 9:05:02 Luma lwa K
-  -0010-09-15T04:44:23 = Ngu 4:44:23 Luma lwa K
+   2008-02-05T18:30:30 = Kaw 6:30:30 luma lwa p
+   1995-12-22T09:05:02 = Kas 9:05:02 Luma lwa K
+  -0010-09-15T04:44:23 = Ngu 4:44:23 Luma lwa K
 
 =head3 Gy (G y)
 
@@ -416,6 +416,12 @@ Taita locale.
    2008-02-05T18:30:30 = BK 2008 Kaw 5
    1995-12-22T09:05:02 = BK 1995 Iwi 22
   -0010-09-15T04:44:23 = KK -10 Ike 15
+
+=head3 GyMd (GGGGG y-MM-dd)
+
+   2008-02-05T18:30:30 = BK 2008-02-05
+   1995-12-22T09:05:02 = BK 1995-12-22
+  -0010-09-15T04:44:23 = KK -10-09-15
 
 =head3 H (HH)
 
@@ -509,33 +515,33 @@ Taita locale.
 
 =head3 h (h a)
 
-   2008-02-05T18:30:30 = 6 luma lwa p
-   1995-12-22T09:05:02 = 9 Luma lwa K
-  -0010-09-15T04:44:23 = 4 Luma lwa K
+   2008-02-05T18:30:30 = 6 luma lwa p
+   1995-12-22T09:05:02 = 9 Luma lwa K
+  -0010-09-15T04:44:23 = 4 Luma lwa K
 
-=head3 hm (h:mm a)
+=head3 hm (h:mm a)
 
-   2008-02-05T18:30:30 = 6:30 luma lwa p
-   1995-12-22T09:05:02 = 9:05 Luma lwa K
-  -0010-09-15T04:44:23 = 4:44 Luma lwa K
+   2008-02-05T18:30:30 = 6:30 luma lwa p
+   1995-12-22T09:05:02 = 9:05 Luma lwa K
+  -0010-09-15T04:44:23 = 4:44 Luma lwa K
 
 =head3 hms (h:mm:ss a)
 
-   2008-02-05T18:30:30 = 6:30:30 luma lwa p
-   1995-12-22T09:05:02 = 9:05:02 Luma lwa K
-  -0010-09-15T04:44:23 = 4:44:23 Luma lwa K
+   2008-02-05T18:30:30 = 6:30:30 luma lwa p
+   1995-12-22T09:05:02 = 9:05:02 Luma lwa K
+  -0010-09-15T04:44:23 = 4:44:23 Luma lwa K
 
 =head3 hmsv (h:mm:ss a v)
 
-   2008-02-05T18:30:30 = 6:30:30 luma lwa p UTC
-   1995-12-22T09:05:02 = 9:05:02 Luma lwa K UTC
-  -0010-09-15T04:44:23 = 4:44:23 Luma lwa K UTC
+   2008-02-05T18:30:30 = 6:30:30 luma lwa p UTC
+   1995-12-22T09:05:02 = 9:05:02 Luma lwa K UTC
+  -0010-09-15T04:44:23 = 4:44:23 Luma lwa K UTC
 
 =head3 hmv (h:mm a v)
 
-   2008-02-05T18:30:30 = 6:30 luma lwa p UTC
-   1995-12-22T09:05:02 = 9:05 Luma lwa K UTC
-  -0010-09-15T04:44:23 = 4:44 Luma lwa K UTC
+   2008-02-05T18:30:30 = 6:30 luma lwa p UTC
+   1995-12-22T09:05:02 = 9:05 Luma lwa K UTC
+  -0010-09-15T04:44:23 = 4:44 Luma lwa K UTC
 
 =head3 ms (mm:ss)
 

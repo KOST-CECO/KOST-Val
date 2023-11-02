@@ -13,7 +13,7 @@ Moose::Cookbook::Legacy::Debugging_BaseClassReplacement - Providing an alternate
 
 =head1 VERSION
 
-version 2.2014
+version 2.2203
 
 =head1 SYNOPSIS
 
@@ -68,7 +68,8 @@ us in the first place.
 
 See the L<Moose::Exporter> docs for more details on its API.
 
-=for testing-SETUP use Test::Requires 'Test::Output';
+=for testing-SETUP use Test::Needs 'Test::Output';
+use Test::Output;
 
 =head1 USING MyApp::UseMyBase
 

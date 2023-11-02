@@ -19,6 +19,7 @@
     GyMMM => "G y MMM",
     GyMMMEd => "G y MMM d, E",
     GyMMMd => "G y MMM d",
+    GyMd => "GGGGG y-MM-dd",
     H => "HH",
     Hm => "HH:mm",
     Hms => "HH:mm:ss",
@@ -136,7 +137,7 @@
   glibc_datetime_format => "%a %b %e %H:%M:%S %Y",
   glibc_time_12_format => "%I:%M:%S %p",
   glibc_time_format => "%H:%M:%S",
-  language => "Fulah",
+  language => "Fula",
   month_format_abbreviated => [
     "sii",
     "col",
@@ -221,10 +222,10 @@
     "jolal",
     "bowte",
   ],
-  name => "Fulah Burkina Faso Latin",
+  name => "Fula Burkina Faso Latin",
   native_language => "Pulaar",
-  native_name => "Pulaar Burkibaa Faaso Latn",
-  native_script => "Latn",
+  native_name => "Pulaar Burkibaa Faaso",
+  native_script => undef,
   native_territory => "Burkibaa Faaso",
   native_variant => undef,
   quarter_format_abbreviated => [
@@ -270,5 +271,5 @@
   time_format_medium => "HH:mm:ss",
   time_format_short => "HH:mm",
   variant => undef,
-  version => 38,
+  version => 43,
 }

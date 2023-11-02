@@ -154,7 +154,7 @@ A reference of the filters follows:
 
 =item C<autolevels>
 
-Scales the luminosity of the image so that the luminosity will cover
+Scales the luminance of the image so that the luminance will cover
 the possible range for the image.  C<lsat> and C<usat> truncate the
 range by the specified fraction at the top and bottom of the range
 respectively.
@@ -803,6 +803,33 @@ a value of zero returns all different pixels, not all pixels.  Range:
 0 to 255 inclusive.  Default: 0.
 
 For large sample images this is scaled down to the range 0 .. 1.
+
+=back
+
+=item rgb_difference()
+
+You can create a new image that is the difference between 2 other images.
+
+  my $diff = $img->rgb_difference(other=>$other_img);
+
+For each pixel in $img that is different to the pixel in $other_img,
+the arithmetic difference for the value of the pixel in $img from
+$other_img per color is given. Transparency is ignored.
+
+This can be used for measuring image differences ("How much are they
+different?").
+
+Note that $img and $other_img must have the same number of channels.
+The width and height of $diff will be the minimum of each of the width
+and height of $img and $other_img.
+
+Parameters:
+
+=over
+
+=item *
+
+C<other> - the other image object to compare against
 
 =back
 

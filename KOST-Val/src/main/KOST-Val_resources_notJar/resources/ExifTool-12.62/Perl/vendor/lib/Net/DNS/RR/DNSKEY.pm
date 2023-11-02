@@ -2,7 +2,7 @@ package Net::DNS::RR::DNSKEY;
 
 use strict;
 use warnings;
-our $VERSION = (qw$Id: DNSKEY.pm 1814 2020-10-14 21:49:16Z willem $)[2];
+our $VERSION = (qw$Id: DNSKEY.pm 1910 2023-03-30 19:16:30Z willem $)[2];
 
 use base qw(Net::DNS::RR);
 
@@ -19,64 +19,12 @@ use Carp;
 
 use constant BASE64 => defined eval { require MIME::Base64 };
 
-#
-# source: http://www.iana.org/assignments/dns-sec-alg-numbers
-#
-{
-	my @algbyname = (
-		'DELETE'	     => 0,			# [RFC4034][RFC4398][RFC8078]
-		'RSAMD5'	     => 1,			# [RFC3110][RFC4034]
-		'DH'		     => 2,			# [RFC2539]
-		'DSA'		     => 3,			# [RFC3755][RFC2536]
-					## Reserved	=> 4,	# [RFC6725]
-		'RSASHA1'	     => 5,			# [RFC3110][RFC4034]
-		'DSA-NSEC3-SHA1'     => 6,			# [RFC5155]
-		'RSASHA1-NSEC3-SHA1' => 7,			# [RFC5155]
-		'RSASHA256'	     => 8,			# [RFC5702]
-					## Reserved	=> 9,	# [RFC6725]
-		'RSASHA512'	     => 10,			# [RFC5702]
-					## Reserved	=> 11,	# [RFC6725]
-		'ECC-GOST'	     => 12,			# [RFC5933]
-		'ECDSAP256SHA256'    => 13,			# [RFC6605]
-		'ECDSAP384SHA384'    => 14,			# [RFC6605]
-		'ED25519'	     => 15,			# [RFC8080]
-		'ED448'		     => 16,			# [RFC8080]
-
-		'INDIRECT'   => 252,				# [RFC4034]
-		'PRIVATEDNS' => 253,				# [RFC4034]
-		'PRIVATEOID' => 254,				# [RFC4034]
-					## Reserved	=> 255,	# [RFC4034]
-		);
-
-	my %algbyval = reverse @algbyname;
-
-	foreach (@algbyname) { s/[\W_]//g; }			# strip non-alphanumerics
-	my @algrehash = map { /^\d/ ? ($_) x 3 : uc($_) } @algbyname;
-	my %algbyname = @algrehash;				# work around broken cperl
-
-	sub _algbyname {
-		my $arg = shift;
-		my $key = uc $arg;				# synthetic key
-		$key =~ s/[\W_]//g;				# strip non-alphanumerics
-		my $val = $algbyname{$key};
-		return $val if defined $val;
-		return $key =~ /^\d/ ? $arg : croak qq[unknown algorithm "$arg"];
-	}
-
-	sub _algbyval {
-		my $value = shift;
-		return $algbyval{$value} || return $value;
-	}
-}
-
 
 sub _decode_rdata {			## decode rdata from wire-format octet string
-	my $self = shift;
-	my ( $data, $offset ) = @_;
+	my ( $self, $data, $offset ) = @_;
 
 	my $rdata = substr $$data, $offset, $self->{rdlength};
-	$self->{keybin} = unpack '@4 a*', $rdata;
-	@{$self}{qw(flags protocol algorithm)} = unpack 'n C*', $rdata;
+	@{$self}{qw(flags protocol algorithm keybin)} = unpack 'n C2 a*', $rdata;
 	return;
 }
 
@@ -91,23 +39,26 @@ sub _encode_rdata {			## encode rdata as wire-format octet string
 sub _format_rdata {			## format rdata portion of RR string.
 	my $self = shift;
 
-	my $algorithm = $self->{algorithm};
-	$self->_annotation( 'Key ID =', $self->keytag ) if $algorithm;
-	return $self->SUPER::_format_rdata() unless BASE64;
-	my @param = ( @{$self}{qw(flags protocol)}, $algorithm );
-	my @rdata = ( @param, split /\s+/, MIME::Base64::encode( $self->{keybin} ) || '-' );
+	my @rdata = @{$self}{qw(flags protocol algorithm)};
+	if ( my $keybin = $self->keybin ) {
+		$self->_annotation( 'Key ID =', $self->keytag );
+		return $self->SUPER::_format_rdata() unless BASE64;
+		push @rdata, split /\s+/, MIME::Base64::encode($keybin);
+	} else {
+		push @rdata, '""';
+	}
 	return @rdata;
 }
 
 
 sub _parse_rdata {			## populate RR from rdata in argument list
-	my $self = shift;
+	my ( $self, @argument ) = @_;
 
-	my $flags = shift;		## avoid destruction by CDNSKEY algorithm(0)
-	$self->protocol(shift);
-	$self->algorithm(shift);
-	$self->flags($flags);
-	$self->key(@_);
+	$self->flags( shift @argument );
+	$self->protocol( shift @argument );
+	my $algorithm = shift @argument;
+	$self->key(@argument) if $algorithm;
+	$self->algorithm($algorithm);
 	return;
 }
 
@@ -115,62 +66,60 @@ sub _parse_rdata {			## populate RR from rdata in argument list
 sub _defaults {				## specify RR attribute default values
 	my $self = shift;
 
-	$self->algorithm(1);
 	$self->flags(256);
 	$self->protocol(3);
+	$self->algorithm(1);
 	$self->keybin('');
 	return;
 }
 
 
 sub flags {
-	my $self = shift;
-
-	$self->{flags} = 0 + shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{flags} = 0 + $_ }
 	return $self->{flags} || 0;
 }
 
 
 sub zone {
-	my $self = shift;
-	if ( scalar @_ ) {
-		for ( $self->{flags} ) {
-			$_ = 0x0100 | ( $_ || 0 );
-			$_ ^= 0x0100 unless shift;
+	my ( $self, @value ) = @_;
+	for ( $self->{flags} |= 0 ) {
+		if ( scalar @value ) {
+			$_ |= 0x0100;
+			$_ ^= 0x0100 unless shift @value;
 		}
 	}
-	return 0x0100 & ( $self->{flags} || 0 );
+	return $self->{flags} & 0x0100;
 }
 
 
 sub revoke {
-	my $self = shift;
-	if ( scalar @_ ) {
-		for ( $self->{flags} ) {
-			$_ = 0x0080 | ( $_ || 0 );
-			$_ ^= 0x0080 unless shift;
+	my ( $self, @value ) = @_;
+	for ( $self->{flags} |= 0 ) {
+		if ( scalar @value ) {
+			$_ |= 0x0080;
+			$_ ^= 0x0080 unless shift @value;
 		}
 	}
-	return 0x0080 & ( $self->{flags} || 0 );
+	return $self->{flags} & 0x0080;
 }
 
 
 sub sep {
-	my $self = shift;
-	if ( scalar @_ ) {
-		for ( $self->{flags} ) {
-			$_ = 0x0001 | ( $_ || 0 );
-			$_ ^= 0x0001 unless shift;
+	my ( $self, @value ) = @_;
+	for ( $self->{flags} |= 0 ) {
+		if ( scalar @value ) {
+			$_ |= 0x0001;
+			$_ ^= 0x0001 unless shift @value;
 		}
 	}
-	return 0x0001 & ( $self->{flags} || 0 );
+	return $self->{flags} & 0x0001;
 }
 
 
 sub protocol {
-	my $self = shift;
-
-	$self->{protocol} = 0 + shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{protocol} = 0 + $_ }
 	return $self->{protocol} || 0;
 }
 
@@ -190,21 +139,23 @@ sub algorithm {
 
 
 sub key {
-	my $self = shift;
-	return MIME::Base64::encode( $self->keybin(), "" ) unless scalar @_;
-	return $self->keybin( MIME::Base64::decode( join "", @_ ) );
+	my ( $self, @value ) = @_;
+	return MIME::Base64::encode( $self->keybin(), "" ) unless scalar @value;
+	return $self->keybin( MIME::Base64::decode( join "", @value ) );
 }
 
 
 sub keybin {
-	my $self = shift;
-
-	$self->{keybin} = shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{keybin} = $_ }
 	return $self->{keybin} || "";
 }
 
 
-sub publickey { return shift->key(@_); }
+sub publickey {
+	my ( $self, @value ) = @_;
+	return $self->key(@value);
+}
 
 
 sub privatekeyname {
@@ -253,7 +204,7 @@ sub keylength {
 sub keytag {
 	my $self = shift;
 
-	my $keybin = $self->keybin || return 0;
+	my $keybin = $self->{keybin} || return;
 
 	# RFC4034 Appendix B.1: most significant 16 bits of least significant 24 bits
 	return unpack 'n', substr $keybin, -3 if $self->{algorithm} == 1;
@@ -266,6 +217,58 @@ sub keytag {
 	$ac += ( $ac >> 16 );
 	return $ac & 0xFFFF;
 }
+
+
+########################################
+
+{
+	my @algbyname = (
+		'DELETE'	     => 0,			# [RFC4034][RFC4398][RFC8078]
+		'RSAMD5'	     => 1,			# [RFC3110][RFC4034]
+		'DH'		     => 2,			# [RFC2539]
+		'DSA'		     => 3,			# [RFC3755][RFC2536]
+					## Reserved	=> 4,	# [RFC6725]
+		'RSASHA1'	     => 5,			# [RFC3110][RFC4034]
+		'DSA-NSEC3-SHA1'     => 6,			# [RFC5155]
+		'RSASHA1-NSEC3-SHA1' => 7,			# [RFC5155]
+		'RSASHA256'	     => 8,			# [RFC5702]
+					## Reserved	=> 9,	# [RFC6725]
+		'RSASHA512'	     => 10,			# [RFC5702]
+					## Reserved	=> 11,	# [RFC6725]
+		'ECC-GOST'	     => 12,			# [RFC5933]
+		'ECDSAP256SHA256'    => 13,			# [RFC6605]
+		'ECDSAP384SHA384'    => 14,			# [RFC6605]
+		'ED25519'	     => 15,			# [RFC8080]
+		'ED448'		     => 16,			# [RFC8080]
+
+		'INDIRECT'   => 252,				# [RFC4034]
+		'PRIVATEDNS' => 253,				# [RFC4034]
+		'PRIVATEOID' => 254,				# [RFC4034]
+					## Reserved	=> 255,	# [RFC4034]
+		);
+
+	my %algbyval = reverse @algbyname;
+
+	foreach (@algbyname) { s/[\W_]//g; }			# strip non-alphanumerics
+	my @algrehash = map { /^\d/ ? ($_) x 3 : uc($_) } @algbyname;
+	my %algbyname = @algrehash;				# work around broken cperl
+
+	sub _algbyname {
+		my $arg = shift;
+		my $key = uc $arg;				# synthetic key
+		$key =~ s/[\W_]//g;				# strip non-alphanumerics
+		my $val = $algbyname{$key};
+		return $val if defined $val;
+		return $key =~ /^\d/ ? $arg : croak qq[unknown algorithm $arg];
+	}
+
+	sub _algbyval {
+		my $value = shift;
+		return $algbyval{$value} || return $value;
+	}
+}
+
+########################################
 
 
 1;
@@ -410,7 +413,7 @@ Package template (c)2009,2012 O.M.Kolkman and R.W.Franks.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -427,9 +430,11 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::RR>, RFC4034, RFC3755
+L<perl> L<Net::DNS> L<Net::DNS::RR>
+L<RFC4034|https://tools.ietf.org/html/rfc4034>
 
-L<Algorithm Numbers|http://www.iana.org/assignments/dns-sec-alg-numbers>,
 L<DNSKEY Flags|http://www.iana.org/assignments/dnskey-flags>
+
+L<Algorithm Numbers|http://www.iana.org/assignments/dns-sec-alg-numbers>
 
 =cut

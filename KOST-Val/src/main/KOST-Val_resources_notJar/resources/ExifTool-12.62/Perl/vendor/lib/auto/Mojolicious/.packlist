@@ -31,7 +31,6 @@ C:\strawberry\perl\vendor\lib\Mojo\HelloWorld.pm
 C:\strawberry\perl\vendor\lib\Mojo\Home.pm
 C:\strawberry\perl\vendor\lib\Mojo\IOLoop.pm
 C:\strawberry\perl\vendor\lib\Mojo\IOLoop\Client.pm
-C:\strawberry\perl\vendor\lib\Mojo\IOLoop\Delay.pm
 C:\strawberry\perl\vendor\lib\Mojo\IOLoop\Server.pm
 C:\strawberry\perl\vendor\lib\Mojo\IOLoop\Stream.pm
 C:\strawberry\perl\vendor\lib\Mojo\IOLoop\Subprocess.pm
@@ -129,7 +128,6 @@ C:\strawberry\perl\vendor\lib\Mojolicious\resources\public\favicon.ico
 C:\strawberry\perl\vendor\lib\Mojolicious\resources\public\mojo\bootstrap\bootstrap.css
 C:\strawberry\perl\vendor\lib\Mojolicious\resources\public\mojo\bootstrap\bootstrap.js
 C:\strawberry\perl\vendor\lib\Mojolicious\resources\public\mojo\failraptor.png
-C:\strawberry\perl\vendor\lib\Mojolicious\resources\public\mojo\fontawesome\fontawesome.css
 C:\strawberry\perl\vendor\lib\Mojolicious\resources\public\mojo\highlight.js\highlight-mojo-dark.css
 C:\strawberry\perl\vendor\lib\Mojolicious\resources\public\mojo\highlight.js\highlight.min.js
 C:\strawberry\perl\vendor\lib\Mojolicious\resources\public\mojo\highlight.js\mojolicious.min.js
@@ -142,21 +140,6 @@ C:\strawberry\perl\vendor\lib\Mojolicious\resources\public\mojo\noraptor.png
 C:\strawberry\perl\vendor\lib\Mojolicious\resources\public\mojo\notfound.png
 C:\strawberry\perl\vendor\lib\Mojolicious\resources\public\mojo\pinstripe-dark.png
 C:\strawberry\perl\vendor\lib\Mojolicious\resources\public\mojo\pinstripe-light.png
-C:\strawberry\perl\vendor\lib\Mojolicious\resources\public\mojo\webfonts\fa-brands-400.eot
-C:\strawberry\perl\vendor\lib\Mojolicious\resources\public\mojo\webfonts\fa-brands-400.svg
-C:\strawberry\perl\vendor\lib\Mojolicious\resources\public\mojo\webfonts\fa-brands-400.ttf
-C:\strawberry\perl\vendor\lib\Mojolicious\resources\public\mojo\webfonts\fa-brands-400.woff
-C:\strawberry\perl\vendor\lib\Mojolicious\resources\public\mojo\webfonts\fa-brands-400.woff2
-C:\strawberry\perl\vendor\lib\Mojolicious\resources\public\mojo\webfonts\fa-regular-400.eot
-C:\strawberry\perl\vendor\lib\Mojolicious\resources\public\mojo\webfonts\fa-regular-400.svg
-C:\strawberry\perl\vendor\lib\Mojolicious\resources\public\mojo\webfonts\fa-regular-400.ttf
-C:\strawberry\perl\vendor\lib\Mojolicious\resources\public\mojo\webfonts\fa-regular-400.woff
-C:\strawberry\perl\vendor\lib\Mojolicious\resources\public\mojo\webfonts\fa-regular-400.woff2
-C:\strawberry\perl\vendor\lib\Mojolicious\resources\public\mojo\webfonts\fa-solid-900.eot
-C:\strawberry\perl\vendor\lib\Mojolicious\resources\public\mojo\webfonts\fa-solid-900.svg
-C:\strawberry\perl\vendor\lib\Mojolicious\resources\public\mojo\webfonts\fa-solid-900.ttf
-C:\strawberry\perl\vendor\lib\Mojolicious\resources\public\mojo\webfonts\fa-solid-900.woff
-C:\strawberry\perl\vendor\lib\Mojolicious\resources\public\mojo\webfonts\fa-solid-900.woff2
 C:\strawberry\perl\vendor\lib\Mojolicious\resources\templates\mojo\debug.html.ep
 C:\strawberry\perl\vendor\lib\Mojolicious\resources\templates\mojo\exception.html.ep
 C:\strawberry\perl\vendor\lib\Mojolicious\resources\templates\mojo\not_found.html.ep

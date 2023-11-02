@@ -47,30 +47,30 @@ just the request path, such as request method and headers like C<Host>, C<User-A
 While regular expressions are quite powerful they also tend to be unpleasant to look at and are generally overkill for
 ordinary path matching.
 
-  qr!/user/show/(\d+)! -> $c->render(text => $users{$1});
+  qr!/user/admin/(\d+)! -> $c->render(text => $users{$1});
 
 This is where routes come into play, they have been designed from the ground up to represent paths with placeholders.
 
-  /user/show/:id -> $c->render(text => $users{$id});
+  /user/admin/:id -> $c->render(text => $users{$id});
 
 The only difference between a static path and the route above is the C<:id> placeholder. One or more placeholders can
 be anywhere in the route.
 
-  /user/:action/:id
+  /user/:role/:id
 
 A fundamental concept of the L<Mojolicious> router is that extracted placeholder values are turned into a hash.
 
-  /user/show/23 -> /user/:action/:id -> {action => 'show', id => 23}
+  /user/admin/23 -> /user/:role/:id -> {role => 'admin', id => 23}
 
 This hash is basically the center of every L<Mojolicious> application, you will learn more about this later on.
 Internally, routes get compiled to regular expressions, so you can get the best of both worlds with a little bit of
 experience.
 
-  /user/show/:id -> qr/(?-xism:^\/user\/show\/([^\/.]+))/
+  /user/admin/:id -> qr/(?-xism:^\/user\/admin\/([^\/.]+))/
 
 A trailing slash in the path is always optional.
 
-  /user/show/23/ -> /user/:action/:id -> {action => 'show', id => 23}
+  /user/admin/23/ -> /user/:role/:id -> {role => 'admin', id => 23}
 
 =head2 Reversibility
 
@@ -256,6 +256,10 @@ with whatever data you need to generate a response. Once dispatched the whole st
     $self->stash(mymessage => 'Welcome');
   }
 
+You can use L<Mojolicious/"defaults"> to set default stash values that will be available everywhere in the application.
+
+  $app->defaults(mymessage => 'Howdy');
+
 For a full list of reserved stash values see L<Mojolicious::Controller/"stash">.
 
 =head2 Nested routes
@@ -336,7 +340,7 @@ L<Mojolicious::Controller> or L<Mojo> before dispatching to it.
 You can use the C<namespace> stash value to change the namespace of a whole route with all its children.
 
   # /bye -> MyApp::MyController::Foo::Bar->bye
-  $r->get('/bye')->to(namespace => 'MyApp::MyController::Foo::Bar', action => 'bye');
+  $r->get('/bye')->to(namespace => 'MyApp::MyController', controller => 'Foo::Bar', action => 'bye');
 
 The C<controller> is always converted from C<snake_case> to C<CamelCase> with L<Mojo::Util/"camelize">, and then
 appended to this C<namespace>.
@@ -428,21 +432,6 @@ name present, this works similar to the regular expression C<([^/.]+)?>.
   $r->get('/test/:mymessage/123')->to('foo#bar', mymessage => 'hi');
 
 And if two optional placeholders are only separated by a slash, that slash can become optional as well.
-
-  # /           -> {controller => 'foo',   action => 'bar'}
-  # /users      -> {controller => 'users', action => 'bar'}
-  # /users/list -> {controller => 'users', action => 'list'}
-  $r->get('/:controller/:action')->to('foo#bar');
-
-Special stash values like C<controller> and C<action> can also be placeholders, which is very convenient especially
-during development, but should only be used very carefully, because every controller method becomes a potential route.
-All uppercase methods as well as those starting with an underscore are automatically hidden from the router and you can
-use L<Mojolicious::Routes/"hide"> to add additional ones.
-
-  # Hide "create" method in all controllers
-  $r->hide('create');
-
-This has already been done for all attributes and methods from L<Mojolicious::Controller>.
 
 =head2 Restrictive placeholders
 
@@ -567,46 +556,41 @@ L<Mojolicious::Controller/"match">.
 
 =head2 Formats
 
-File extensions like C<.html> and C<.txt> at the end of a route are automatically detected and stored in the stash
-value C<format>.
-
-  # /foo      -> {controller => 'foo', action => 'bar'}
-  # /foo.html -> {controller => 'foo', action => 'bar', format => 'html'}
-  # /foo.txt  -> {controller => 'foo', action => 'bar', format => 'txt'}
-  $r->get('/foo')->to('foo#bar');
-
-This for example, allows multiple templates in different formats to share the same action code. Restrictive
-placeholders can also be used to limit the allowed formats.
+File extensions like C<.html> and C<.txt> at the end of a route can be detected and stored in the stash value C<format>.
+Use a restrictive placeholder to declare the possible values.
 
   # /foo.txt -> undef
   # /foo.rss -> {controller => 'foo', action => 'bar', format => 'rss'}
   # /foo.xml -> {controller => 'foo', action => 'bar', format => 'xml'}
   $r->get('/foo' => [format => ['rss', 'xml']])->to('foo#bar');
 
+This for example, allows multiple templates in different formats to share the same action code. And just like with
+placeholders you can use a default value to make the format optional.
+
+  # /foo      -> {controller => 'foo', action => 'bar'}
+  # /foo.html -> {controller => 'foo', action => 'bar', format => 'html'}
+  # /foo.txt  -> {controller => 'foo', action => 'bar', format => 'txt'}
+  $r->get('/foo' => [format => ['html', 'txt']])->to('foo#bar', format => undef);
+
+Formats can be inherited by nested routes.
+
+  # /foo      -> {controller => 'foo', action => 'one', format => undef}
+  # /foo.html -> {controller => 'foo', action => 'one', format => 'html'}
+  # /foo.json -> {controller => 'foo', action => 'one', format => 'json'}
+  # /bar      -> {controller => 'bar', action => 'two', format => undef}
+  # /bar.html -> {controller => 'bar', action => 'two', format => 'html'}
+  # /bar.json -> {controller => 'bar', action => 'two', format => 'json'}
+  my $with_format = $r->any('/' => [format => ['html', 'json']])->to(format => undef);
+  $with_format->get('/foo')->to('foo#one');
+  $with_format->get('/bar')->to('bar#two');
+
 A C<format> value can also be passed to L<Mojolicious::Controller/"url_for">.
 
-  # /foo/bar.txt -> {controller => 'foo', action => 'bar', format => 'txt'}
-  $r->get('/foo/:action')->to('foo#')->name('baz');
+  # /foo/23.txt -> {controller => 'foo', action => 'bar', id => 23, format => 'txt'}
+  $r->get('/foo/:id')->to('foo#bar')->name('baz');
 
-  # Generate URL "/foo/bar.txt" for route "baz"
-  my $url = $c->url_for('baz', action => 'bar', format => 'txt');
-
-Or you can just disable format detection with a special type of restrictive placeholder, which gets inherited by nested
-routes, and then re-enable it on demand.
-
-  # /foo      -> {controller => 'foo', action => 'bar'}
-  # /foo.html -> undef
-  $r->get('/foo' => [format => 0])->to('foo#bar');
-
-  # /foo      -> {controller => 'foo', action => 'bar'}
-  # /foo.html -> undef
-  # /baz      -> undef
-  # /baz.txt  -> {controller => 'baz', action => 'yada', format => 'txt'}
-  # /baz.html -> {controller => 'baz', action => 'yada', format => 'html'}
-  # /baz.xml  -> undef
-  my $inactive = $r->under([format => 0]);
-  $inactive->get('/foo')->to('foo#bar');
-  $inactive->get('/baz' => [format => ['txt', 'html']])->to('baz#yada');
+  # Generate URL "/foo/24.txt" for route "baz"
+  my $url = $c->url_for('baz', id => 24, format => 'txt');
 
 =head2 WebSockets
 
@@ -1005,7 +989,7 @@ authors.
 =head1 SUPPORT
 
 If you have any questions the documentation might not yet answer, don't hesitate to ask in the
-L<Forum|https://forum.mojolicious.org> or the official IRC channel C<#mojo> on C<chat.freenode.net>
-(L<chat now!|https://webchat.freenode.net/#mojo>).
+L<Forum|https://forum.mojolicious.org>, on L<Matrix|https://matrix.to/#/#mojo:matrix.org>, or
+L<IRC|https://web.libera.chat/#mojo>.
 
 =cut

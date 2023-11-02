@@ -19,6 +19,7 @@
     GyMMM => "G y MMM",
     GyMMMEd => "E, d, MMM G y",
     GyMMMd => "d, MMM G y",
+    GyMd => "GGGGG y-MM-dd",
     H => "HH",
     Hm => "HH:mm",
     Hms => "HH:mm:ss",
@@ -58,8 +59,8 @@
   date_format_long => "d, MMMM y",
   date_format_medium => "d, MMM y",
   date_format_short => "d/M/yy",
-  datetime_format_full => "{1} \N{U+0917}\N{U+0940} {0}",
-  datetime_format_long => "{1} \N{U+0917}\N{U+0940} {0}",
+  datetime_format_full => "{1}, {0}",
+  datetime_format_long => "{1}, {0}",
   datetime_format_medium => "{1}, {0}",
   datetime_format_short => "{1}, {0}",
   day_format_abbreviated => [
@@ -86,7 +87,7 @@
     "\N{U+092c}\N{U+0941}\N{U+0927}\N{U+092c}\N{U+093e}\N{U+0930}",
     "\N{U+092c}\N{U+0940}\N{U+0930}\N{U+092c}\N{U+093e}\N{U+0930}",
     "\N{U+0936}\N{U+0941}\N{U+0915}\N{U+094d}\N{U+0930}\N{U+092c}\N{U+093e}\N{U+0930}",
-    "\N{U+0936}\N{U+0928}\N{U+0940}\N{U+092c}\N{U+093e}\N{U+0930}",
+    "\N{U+0936}\N{U+0928}\N{U+093f}\N{U+092c}\N{U+093e}\N{U+0930}",
     "\N{U+0910}\N{U+0924}\N{U+092c}\N{U+093e}\N{U+0930}",
   ],
   day_stand_alone_abbreviated => [
@@ -173,7 +174,7 @@
     "\N{U+091c}\N{U+0941}\N{U+0932}\N{U+093e}\N{U+0908}",
     "\N{U+0905}\N{U+0917}\N{U+0938}\N{U+094d}\N{U+0924}",
     "\N{U+0938}\N{U+093f}\N{U+0924}\N{U+0902}\N{U+092c}\N{U+0930}",
-    "\N{U+0905}\N{U+0924}\N{U+094d}\N{U+0924}\N{U+0942}\N{U+092c}\N{U+0930}",
+    "\N{U+0905}\N{U+0915}\N{U+094d}\N{U+0924}\N{U+0942}\N{U+092c}\N{U+0930}",
     "\N{U+0928}\N{U+0935}\N{U+0902}\N{U+092c}\N{U+0930}",
     "\N{U+0926}\N{U+093f}\N{U+0938}\N{U+0902}\N{U+092c}\N{U+0930}",
   ],
@@ -268,5 +269,5 @@
   time_format_medium => "h:mm:ss a",
   time_format_short => "h:mm a",
   variant => undef,
-  version => 38,
+  version => 43,
 }

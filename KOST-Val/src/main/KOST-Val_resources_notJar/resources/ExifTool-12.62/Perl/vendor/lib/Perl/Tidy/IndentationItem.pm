@@ -1,6 +1,6 @@
 #####################################################################
 #
-# the Perl::Tidy::IndentationItem class supplies items which contain
+# The Perl::Tidy::IndentationItem class supplies items which contain
 # how much whitespace should be used at the start of a line
 #
 #####################################################################
@@ -8,11 +8,12 @@
 package Perl::Tidy::IndentationItem;
 use strict;
 use warnings;
-our $VERSION = '20210111';
+our $VERSION = '20230701';
 
 BEGIN {
 
     # Array index names
+    # Do not combine with other BEGIN blocks (c101).
     my $i = 0;
     use constant {
         _spaces_             => $i++,
@@ -21,17 +22,18 @@ BEGIN {
         _available_spaces_   => $i++,
         _closed_             => $i++,
         _comma_count_        => $i++,
-        _sequence_number_    => $i++,
-        _index_              => $i++,
+        _lp_item_index_      => $i++,
         _have_child_         => $i++,
         _recoverable_spaces_ => $i++,
-        _align_paren_        => $i++,
+        _align_seqno_        => $i++,
         _marked_             => $i++,
         _stack_depth_        => $i++,
-        _starting_index_K_   => $i++,
+        _K_begin_line_       => $i++,
         _arrow_count_        => $i++,
+        _standard_spaces_    => $i++,
+        _K_extra_space_      => $i++,
     };
-}
+} ## end BEGIN
 
 sub AUTOLOAD {
 
@@ -52,7 +54,7 @@ This error is probably due to a recent programming change
 ======================================================================
 EOM
     exit 1;
-}
+} ## end sub AUTOLOAD
 
 sub DESTROY {
 
@@ -73,17 +75,16 @@ sub new {
     #                        # for this level
     # closed             =>  # index where we saw closing '}'
     # comma_count        =>  # how many commas at this level?
-    # sequence_number    =>  # output batch number
-    # index              =>  # index in output batch list
+    # lp_item_index     =>  # index in output batch list
     # have_child         =>  # any dependents?
     # recoverable_spaces =>  # how many spaces to the right
     #                        # we would like to move to get
     #                        # alignment (negative if left)
-    # align_paren        =>  # do we want to try to align
-    #                        # with an opening structure?
+    # align_seqno        =>  # if we are aligning with an opening structure,
+    #                        # this is its seqno
     # marked             =>  # if visited by corrector logic
     # stack_depth        =>  # indentation nesting depth
-    # starting_index_K   =>  # first token index K of this level
+    # K_begin_line   =>  # first token index K of this level
     # arrow_count        =>  # how many =>'s
 
     my $self = [];
@@ -93,19 +94,20 @@ sub new {
     $self->[_available_spaces_]   = $input_hash{available_spaces};
     $self->[_closed_]             = -1;
     $self->[_comma_count_]        = 0;
-    $self->[_sequence_number_]    = $input_hash{gnu_sequence_number};
-    $self->[_index_]              = $input_hash{index};
+    $self->[_lp_item_index_]      = $input_hash{lp_item_index};
     $self->[_have_child_]         = 0;
     $self->[_recoverable_spaces_] = 0;
-    $self->[_align_paren_]        = $input_hash{align_paren};
+    $self->[_align_seqno_]        = $input_hash{align_seqno};
     $self->[_marked_]             = 0;
     $self->[_stack_depth_]        = $input_hash{stack_depth};
-    $self->[_starting_index_K_]   = $input_hash{starting_index_K};
+    $self->[_K_begin_line_]       = $input_hash{K_begin_line};
     $self->[_arrow_count_]        = 0;
+    $self->[_standard_spaces_]    = $input_hash{standard_spaces};
+    $self->[_K_extra_space_]      = $input_hash{K_extra_space};
 
     bless $self, $class;
     return $self;
-}
+} ## end sub new
 
 sub permanently_decrease_available_spaces {
 
@@ -119,12 +121,17 @@ sub permanently_decrease_available_spaces {
       ( $available_spaces > $spaces_needed )
       ? $spaces_needed
       : $available_spaces;
-    $item->decrease_available_spaces($deleted_spaces);
+
+    # Fixed for c085; a zero value must remain unchanged unless the closed
+    # flag has been set.
+    my $closed = $item->get_closed();
+    $item->decrease_available_spaces($deleted_spaces)
+      unless ( $available_spaces == 0 && $closed < 0 );
     $item->decrease_SPACES($deleted_spaces);
     $item->set_recoverable_spaces(0);
 
     return $deleted_spaces;
-}
+} ## end sub permanently_decrease_available_spaces
 
 sub tentatively_decrease_available_spaces {
 
@@ -142,7 +149,7 @@ sub tentatively_decrease_available_spaces {
     $item->decrease_SPACES($deleted_spaces);
     $item->increase_recoverable_spaces($deleted_spaces);
     return $deleted_spaces;
-}
+} ## end sub tentatively_decrease_available_spaces
 
 sub get_stack_depth {
     return $_[0]->[_stack_depth_];
@@ -150,6 +157,10 @@ sub get_stack_depth {
 
 sub get_spaces {
     return $_[0]->[_spaces_];
+}
+
+sub get_standard_spaces {
+    return $_[0]->[_standard_spaces_];
 }
 
 sub get_marked {
@@ -162,7 +173,7 @@ sub set_marked {
         $self->[_marked_] = $value;
     }
     return $self->[_marked_];
-}
+} ## end sub set_marked
 
 sub get_available_spaces {
     return $_[0]->[_available_spaces_];
@@ -174,18 +185,19 @@ sub decrease_SPACES {
         $self->[_spaces_] -= $value;
     }
     return $self->[_spaces_];
-}
+} ## end sub decrease_SPACES
 
 sub decrease_available_spaces {
     my ( $self, $value ) = @_;
+
     if ( defined($value) ) {
         $self->[_available_spaces_] -= $value;
     }
     return $self->[_available_spaces_];
-}
+} ## end sub decrease_available_spaces
 
-sub get_align_paren {
-    return $_[0]->[_align_paren_];
+sub get_align_seqno {
+    return $_[0]->[_align_seqno_];
 }
 
 sub get_recoverable_spaces {
@@ -198,7 +210,7 @@ sub set_recoverable_spaces {
         $self->[_recoverable_spaces_] = $value;
     }
     return $self->[_recoverable_spaces_];
-}
+} ## end sub set_recoverable_spaces
 
 sub increase_recoverable_spaces {
     my ( $self, $value ) = @_;
@@ -206,7 +218,7 @@ sub increase_recoverable_spaces {
         $self->[_recoverable_spaces_] += $value;
     }
     return $self->[_recoverable_spaces_];
-}
+} ## end sub increase_recoverable_spaces
 
 sub get_ci_level {
     return $_[0]->[_ci_level_];
@@ -216,16 +228,21 @@ sub get_level {
     return $_[0]->[_level_];
 }
 
-sub get_sequence_number {
-    return $_[0]->[_sequence_number_];
+sub get_spaces_level_ci {
+    my $self = shift;
+    return [ $self->[_spaces_], $self->[_level_], $self->[_ci_level_] ];
 }
 
-sub get_index {
-    return $_[0]->[_index_];
+sub get_lp_item_index {
+    return $_[0]->[_lp_item_index_];
 }
 
-sub get_starting_index_K {
-    return $_[0]->[_starting_index_K_];
+sub get_K_begin_line {
+    return $_[0]->[_K_begin_line_];
+}
+
+sub get_K_extra_space {
+    return $_[0]->[_K_extra_space_];
 }
 
 sub set_have_child {
@@ -234,7 +251,7 @@ sub set_have_child {
         $self->[_have_child_] = $value;
     }
     return $self->[_have_child_];
-}
+} ## end sub set_have_child
 
 sub get_have_child {
     return $_[0]->[_have_child_];
@@ -246,7 +263,7 @@ sub set_arrow_count {
         $self->[_arrow_count_] = $value;
     }
     return $self->[_arrow_count_];
-}
+} ## end sub set_arrow_count
 
 sub get_arrow_count {
     return $_[0]->[_arrow_count_];
@@ -258,7 +275,7 @@ sub set_comma_count {
         $self->[_comma_count_] = $value;
     }
     return $self->[_comma_count_];
-}
+} ## end sub set_comma_count
 
 sub get_comma_count {
     return $_[0]->[_comma_count_];
@@ -270,7 +287,7 @@ sub set_closed {
         $self->[_closed_] = $value;
     }
     return $self->[_closed_];
-}
+} ## end sub set_closed
 
 sub get_closed {
     return $_[0]->[_closed_];

@@ -1,8 +1,8 @@
-use strict;
+use v5.12.0;
 use warnings;
-package Email::MIME::Header;
+package Email::MIME::Header 1.953;
 # ABSTRACT: the header of a MIME message
-$Email::MIME::Header::VERSION = '1.949';
+
 use parent 'Email::Simple::Header';
 
 use Carp ();
@@ -92,7 +92,7 @@ sub header_str_pairs {
 sub header_as_obj {
   my ($self, $name, $index, $class) = @_;
 
-  $class = $self->get_class_for_header($name) unless defined $class;
+  $class //= $self->get_class_for_header($name);
 
   {
     local @CARP_NOT = qw(Email::MIME);
@@ -143,7 +143,7 @@ Email::MIME::Header - the header of a MIME message
 
 =head1 VERSION
 
-version 1.949
+version 1.953
 
 =head1 DESCRIPTION
 
@@ -180,13 +180,23 @@ module due to L<bugs in MIME-Header|Encode::MIME::Header/BUGS>.
 Alternately, if you have Unicode (character) strings to set in headers, use the
 C<header_str_set> method.
 
+=head1 PERL VERSION
+
+This library should run on perls released even a long time ago.  It should work
+on any version of perl released in the last five years.
+
+Although it may work on older versions of perl, no guarantee is made that the
+minimum required version will not be increased.  The version may be increased
+for any reason, and there is no promise that patches will be accepted to lower
+the minimum required perl.
+
 =head1 AUTHORS
 
 =over 4
 
 =item *
 
-Ricardo SIGNES <rjbs@cpan.org>
+Ricardo SIGNES <cpan@semiotic.systems>
 
 =item *
 

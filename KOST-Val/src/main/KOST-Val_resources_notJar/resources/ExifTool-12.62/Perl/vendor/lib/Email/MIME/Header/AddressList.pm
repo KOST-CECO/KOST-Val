@@ -1,8 +1,10 @@
 # Copyright (c) 2016-2017 by Pali <pali@cpan.org>
 
-package Email::MIME::Header::AddressList;
-$Email::MIME::Header::AddressList::VERSION = '1.949';
-use strict;
+package Email::MIME::Header::AddressList 1.953;
+
+# ABSTRACT: MIME support for list of Email::Address::XS objects
+
+use v5.12.0;
 use warnings;
 
 use Carp ();
@@ -10,10 +12,6 @@ use Email::Address::XS;
 use Email::MIME::Encode;
 
 #pod =encoding utf8
-#pod
-#pod =head1 NAME
-#pod
-#pod Email::MIME::Header::AddressList - MIME support for list of Email::Address::XS objects
 #pod
 #pod =head1 SYNOPSIS
 #pod
@@ -331,11 +329,11 @@ __END__
 
 =head1 NAME
 
-Email::MIME::Header::AddressList
+Email::MIME::Header::AddressList - MIME support for list of Email::Address::XS objects
 
 =head1 VERSION
 
-version 1.949
+version 1.953
 
 =head1 SYNOPSIS
 
@@ -464,9 +462,15 @@ group and array reference of L<Email::Address::XS|Email::Address::XS> objects.
 
 =back
 
-=head1 NAME
+=head1 PERL VERSION
 
-Email::MIME::Header::AddressList - MIME support for list of Email::Address::XS objects
+This library should run on perls released even a long time ago.  It should work
+on any version of perl released in the last five years.
+
+Although it may work on older versions of perl, no guarantee is made that the
+minimum required version will not be increased.  The version may be increased
+for any reason, and there is no promise that patches will be accepted to lower
+the minimum required perl.
 
 =head1 SEE ALSO
 
@@ -485,7 +489,7 @@ Pali E<lt>pali@cpan.orgE<gt>
 
 =item *
 
-Ricardo SIGNES <rjbs@cpan.org>
+Ricardo SIGNES <cpan@semiotic.systems>
 
 =item *
 

@@ -2,8 +2,10 @@ package Imager::Color;
 use 5.006;
 use Imager;
 use strict;
+use Scalar::Util ();
+use POSIX ();
 
-our $VERSION = "1.013";
+our $VERSION = "1.015";
 
 # It's just a front end to the XS creation functions.
 
@@ -248,9 +250,55 @@ sub _get_x_color {
   return @{$x_cache{$filename}{colors}{lc $args{name}}};
 }
 
+sub _pc_to_byte {
+  POSIX::ceil($_[0] * 255 / 100);
+}
+
+sub _rgb_alpha {
+  my ($alpha) = @_;
+  if ($alpha =~ /^(.*)%\z/) {
+    return POSIX::ceil($1 * 255 / 100);
+  }
+  else {
+    return POSIX::ceil($alpha * 255);
+  }
+}
+
+my $rgb_key = qr/rgba?/;
+my $rgb_samp = qr/(\d+(?:\.\d*)?)/;
+my $rgb_pc = qr/(\d+(?:\.\d*)?)%/;
+my $rgb_sep = qr/ *[, ] */;
+my $rgb_rgb = qr/$rgb_samp $rgb_sep $rgb_samp $rgb_sep $rgb_samp/x;
+my $rgb_rgb_pc = qr/$rgb_pc $rgb_sep $rgb_pc $rgb_sep $rgb_pc/x;
+my $rgb_alpha_sep = qr/ *[\/,] */;
+my $rgb_alpha = qr/((?:\.\d+|\d+(?:\.\d*)?)%?)/;
+
 # Parse color spec into an a set of 4 colors
 
 sub _pspec {
+  if (@_ == 1 && Scalar::Util::blessed($_[0])) {
+    if ($_[0]->isa("Imager::Color")) {
+      return $_[0]->rgba;
+    } elsif ($_[0]->isa("Imager::Color::Float")) {
+      return $_[0]->as_8bit->rgba;
+    }
+  }
+  if (@_ == 1) {
+    # CSS Color 4 says that color values are rounded to +Inf
+    if ($_[0] =~ /\A$rgb_key\( *$rgb_rgb *\)\z/) {
+      return ( POSIX::ceil($1), POSIX::ceil($2), POSIX::ceil($3), 255 );
+    }
+    elsif ($_[0] =~ /\A$rgb_key\( *$rgb_rgb_pc *\)\z/) {
+      return ( _pc_to_byte($1), _pc_to_byte($2), _pc_to_byte($3), 255 );
+    }
+    elsif ($_[0] =~ /\A$rgb_key\( *$rgb_rgb$rgb_alpha_sep$rgb_alpha *\)\z/) {
+      return ( POSIX::ceil($1), POSIX::ceil($2), POSIX::ceil($3), _rgb_alpha($4) );
+    }
+    elsif ($_[0] =~ /\A$rgb_key\( *$rgb_rgb_pc$rgb_alpha_sep$rgb_alpha *\)\z/) {
+      return ( _pc_to_byte($1), _pc_to_byte($2), _pc_to_byte($3), _rgb_alpha($4) );
+    }
+  }
+
   return (@_,255) if @_ == 3 && !grep /[^\d.+eE-]/, @_;
   return (@_    ) if @_ == 4 && !grep /[^\d.+eE-]/, @_;
   if ($_[0] =~
@@ -443,7 +491,36 @@ sub hsv {
     }
 
     return int($h), $s, $v, $alpha;
+}
 
+sub as_float {
+  my ($self) = @_;
+
+  return Imager::Color::Float->new(map { $_ / 255 } $self->rgba);
+}
+
+sub as_css_rgb {
+  my ($self) = @_;
+
+  my ($r, $g, $b, $alpha) = $self->rgba;
+
+  if ($alpha == 255) {
+    return "rgb($r, $g, $b)";
+  }
+  else {
+    my $ac = POSIX::floor($alpha * 1000 / 255) / 10;
+    if (POSIX::ceil(POSIX::floor($ac/10) * 10 * 255 / 100) == $alpha) {
+      # simple one decimal fraction
+      $ac = POSIX::floor($ac/10)/10;
+    }
+    elsif (POSIX::ceil(POSIX::floor($ac) * 255 / 100) == $alpha) {
+      $ac = POSIX::floor($ac) . "%";
+    }
+    else {
+      $ac = "$ac%";
+    }
+    return "rgba($r, $g, $b, $ac)";
+  }
 }
 
 1;
@@ -544,6 +621,14 @@ simple values:
 
 =item *
 
+an Imager::Color object
+
+=item *
+
+an Imager::Color::Float object, the ranges of samples are translated from 0.0...1.0 to 0...255.
+
+=item *
+
 simple numeric parameters - if you supply 3 or 4 numeric arguments, you get a color made up of those RGB (and possibly A) components.
 
 =item *
@@ -553,6 +638,21 @@ a six hex digit web color, either C<RRGGBB> or C<#RRGGBB>
 =item *
 
 an eight hex digit web color, either C<RRGGBBAA> or C<#RRGGBBAA>.
+
+=item *
+
+a CSS rgb() color, based on CSS Color 4.  The C<none> keyword is not
+supported and numbers must be simple decimals without exponents. eg.
+
+  rgb(50% 50% 100%)
+  rgb(0, 0, 255)
+  rgb(0.5 0.5 1.0 / 0.8)
+  rgb(50%, 50%, 100%, 80%)
+
+Samples from percentages or decimals are rounded up per CSS Color 3 and 4.
+
+This accepts some colors not accepted by the CSS rgb() specification,
+this may change.
 
 =item *
 
@@ -692,6 +792,20 @@ Returns the color as a Hue/Saturation/Value/Alpha tuple.
 =item alpha
 
 Returns the respective component as an integer from 0 to 255.
+
+=item as_float
+
+Returns the color as a L<Imager::Color::Float> object.
+
+=item as_css_rgb
+
+Returns the color as a CSS rgb() format color.  This is always
+returned in the byte form, eg. rgb(255 128 64).
+
+If the alpha is not full coverage (255) it will be rounded if the
+result of converting the color back to an 8 bit color would return the
+same alpha, eg. if the color alpha is 128, it will be formatted as
+0.5, not as the more precise 50.2%.
 
 =back
 

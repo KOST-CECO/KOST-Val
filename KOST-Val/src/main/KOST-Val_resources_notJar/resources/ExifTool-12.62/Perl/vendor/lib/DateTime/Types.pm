@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-our $VERSION = '1.54';
+our $VERSION = '1.59';
 
 use parent 'Specio::Exporter';
 
@@ -82,7 +82,7 @@ my $time_zone_object = object_can_type(
             name
             offset_for_datetime
             short_name_for_datetime
-            )
+        )
     ],
 );
 
@@ -145,7 +145,7 @@ enum(
             nanosecond
             week
             local_week
-            )
+        )
     ],
 );
 
@@ -170,7 +170,7 @@ DateTime::Types - Types used for parameter checking in DateTime
 
 =head1 VERSION
 
-version 1.54
+version 1.59
 
 =head1 DESCRIPTION
 
@@ -185,8 +185,6 @@ Bugs may be submitted at L<https://github.com/houseabsolute/DateTime.pm/issues>.
 There is a mailing list available for users of this distribution,
 L<mailto:datetime@perl.org>.
 
-I am also usually active on IRC as 'autarch' on C<irc://irc.perl.org>.
-
 =head1 SOURCE
 
 The source code repository for DateTime can be found at L<https://github.com/houseabsolute/DateTime.pm>.
@@ -197,7 +195,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2003 - 2020 by Dave Rolsky.
+This software is Copyright (c) 2003 - 2022 by Dave Rolsky.
 
 This is free software, licensed under:
 

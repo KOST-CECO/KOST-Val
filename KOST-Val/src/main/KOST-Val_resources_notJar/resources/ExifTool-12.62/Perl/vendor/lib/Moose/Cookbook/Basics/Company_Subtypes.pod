@@ -13,7 +13,7 @@ Moose::Cookbook::Basics::Company_Subtypes - Demonstrates the use of subtypes and
 
 =head1 VERSION
 
-version 2.2014
+version 2.2203
 
 =head1 SYNOPSIS
 
@@ -279,7 +279,7 @@ BEGIN {
     }
 }
 
-use Test::Requires {
+use Test::Needs {
     'Locale::US'     => '0',
     'Regexp::Common' => '0',
 };

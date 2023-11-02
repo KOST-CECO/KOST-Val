@@ -16,7 +16,7 @@ use warnings;
 
 use vars qw ($VERSION);
 
-$VERSION = "2.0206"; # VERSION TEMPLATE: DO NOT CHANGE
+$VERSION = "2.0208"; # VERSION TEMPLATE: DO NOT CHANGE
 
 use overload
         '""' => \&value,

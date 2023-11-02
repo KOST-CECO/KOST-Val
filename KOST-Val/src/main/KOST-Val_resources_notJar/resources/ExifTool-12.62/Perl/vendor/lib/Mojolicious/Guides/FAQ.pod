@@ -52,15 +52,15 @@ Because there are no advantages, it drastically increases maintenance costs and 
 anything in return. It would only make sense if we wanted to pass ownership of a module to a new maintainer, which we
 already have done in the past.
 
-=head2 Where can i discuss my patches for Mojolicious?
+=head2 Where can I discuss my patches for Mojolicious?
 
-We'd love to discuss your contributions to L<Mojolicious> on our official IRC channel C<#mojo> on C<chat.freenode.net>
-(L<chat now!|https://webchat.freenode.net/#mojo>).
+We'd love to discuss your contributions to L<Mojolicious> on L<Matrix|https://matrix.to/#/#mojo:matrix.org> or
+L<IRC|https://web.libera.chat/#mojo>.
 
 =head2 Which versions of Perl are supported by Mojolicious?
 
 First of all, you need to be aware that according to the L<perlpolicy>, only the two most recent stable release series
-of Perl are supported by the community and receive bug fixes, which are currently 5.30.x and 5.28.x. L<Mojolicious>
+of Perl are supported by the community and receive bug fixes, which are currently 5.32.x and 5.30.x. L<Mojolicious>
 follows this model and fully supports these two release series. In addition we will also keep the distribution
 installable (and that means passing all tests) up to a certain legacy version that the core team deems worthy of
 supporting, but not specifically optimize for it, this is currently 5.16.0.
@@ -244,7 +244,7 @@ authors.
 =head1 SUPPORT
 
 If you have any questions the documentation might not yet answer, don't hesitate to ask in the
-L<Forum|https://forum.mojolicious.org> or the official IRC channel C<#mojo> on C<chat.freenode.net>
-(L<chat now!|https://webchat.freenode.net/#mojo>).
+L<Forum|https://forum.mojolicious.org>, on L<Matrix|https://matrix.to/#/#mojo:matrix.org>, or
+L<IRC|https://web.libera.chat/#mojo>.
 
 =cut

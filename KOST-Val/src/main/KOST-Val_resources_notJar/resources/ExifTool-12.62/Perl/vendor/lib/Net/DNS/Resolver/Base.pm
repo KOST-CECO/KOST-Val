@@ -2,7 +2,7 @@ package Net::DNS::Resolver::Base;
 
 use strict;
 use warnings;
-our $VERSION = (qw$Id: Base.pm 1818 2020-10-18 15:24:42Z willem $)[2];
+our $VERSION = (qw$Id: Base.pm 1910 2023-03-30 19:16:30Z willem $)[2];
 
 
 #
@@ -25,7 +25,7 @@ our $VERSION = (qw$Id: Base.pm 1818 2020-10-18 15:24:42Z willem $)[2];
 # [Revised March 2016, June 2018]
 
 
-use constant USE_SOCKET_IP => defined eval 'use IO::Socket::IP 0.38; 1;';	## no critic
+use constant USE_SOCKET_IP => defined eval 'use IO::Socket::IP 0.38; 1;';    ## no critic
 require IO::Socket::INET unless USE_SOCKET_IP;
 
 use constant IPv6 => USE_SOCKET_IP;
@@ -95,22 +95,24 @@ use constant PACKETSZ => 512;
 }
 
 
-my $warned;
+my %warned;
 
 sub _deprecate {
-	carp join ' ', 'deprecated method;', pop(@_) unless $warned++;
+	my ( undef, @note ) = @_;
+	carp join ' ', 'deprecated method;', "@note" unless $warned{"@note"}++;
 	return;
 }
 
 
-sub _untaint {
+sub _untaint {				## no critic		# recurses into user list arguments
 	return TAINT ? map { ref($_) ? [_untaint(@$_)] : do { /^(.*)$/; $1 } } @_ : @_;
 }
 
 
 # These are the attributes that the user may specify in the new() constructor.
 my %public_attr = (
-	map { $_ => $_ } keys %{&_defaults}, qw(domain nameserver srcaddr),
+	map { $_ => $_ } keys %{&_defaults},
+	qw(domain nameserver srcaddr),
 	map { $_ => 0 } qw(nameserver4 nameserver6 srcaddr4 srcaddr6),
 	);
 
@@ -127,7 +129,7 @@ sub new {
 	if ( my $file = $args{config_file} ) {
 		my $conf = bless {@$initial}, $class;
 		$conf->_read_config_file($file);		# user specified config
-		$self = bless {_untaint(%$conf)}, $class;
+		$self  = bless {_untaint(%$conf)}, $class;
 		%$base = %$self unless $init;			# define default configuration
 
 	} elsif ($init) {
@@ -186,8 +188,7 @@ sub _read_env {				## read resolver config environment variables
 
 
 sub _read_config_file {			## read resolver config file
-	my $self = shift;
-	my $file = shift;
+	my ( $self, $file ) = @_;
 
 	my $filehandle = IO::File->new( $file, '<' ) or croak "$file: $!";
 
@@ -236,8 +237,8 @@ sub string {
 	my $self = shift;
 	$self = $self->_defaults unless ref($self);
 
-	my @nslist = $self->nameservers();
-	my ($force)  = ( grep( { $self->{$_} } qw(force_v6 force_v4) ),   'force_v4' );
+	my @nslist   = $self->nameservers();
+	my ($force)  = ( grep( { $self->{$_} } qw(force_v6 force_v4) ),	  'force_v4' );
 	my ($prefer) = ( grep( { $self->{$_} } qw(prefer_v6 prefer_v4) ), 'prefer_v4' );
 	return <<END;
 ;; RESOLVER state:
@@ -256,7 +257,7 @@ END
 
 
 sub print {
-	print &string;
+	print shift->string;
 	return;
 }
 
@@ -265,26 +266,22 @@ sub searchlist {
 	my ( $self, @domain ) = @_;
 	$self = $self->_defaults unless ref($self);
 
-	if ( scalar(@domain) || !defined(wantarray) ) {
-		foreach (@domain) { $_ = Net::DNS::Domain->new($_)->name }
-		$self->{searchlist} = [@domain];
-	}
-
-	return ( @{$self->{searchlist}} );
+	foreach (@domain) { $_ = Net::DNS::Domain->new($_)->name }
+	$self->{searchlist} = \@domain if scalar(@domain);
+	return @{$self->{searchlist}};
 }
 
 sub domain {
-	my ($head) = &searchlist;
-	return wantarray ? ( grep {defined} $head ) : $head;
+	return (&searchlist)[0];
 }
 
 
 sub nameservers {
-	my $self = shift;
+	my ( $self, @ns ) = @_;
 	$self = $self->_defaults unless ref($self);
 
 	my @ip;
-	foreach my $ns ( grep {defined} @_ ) {
+	foreach my $ns ( grep {defined} @ns ) {
 		if ( _ipv4($ns) || _ipv6($ns) ) {
 			push @ip, $ns;
 
@@ -310,7 +307,7 @@ sub nameservers {
 		}
 	}
 
-	if ( scalar(@_) || !defined(wantarray) ) {
+	if ( scalar(@ns) || !defined(wantarray) ) {
 		my @ipv4 = grep { _ipv4($_) } @ip;
 		my @ipv6 = grep { _ipv6($_) } @ip;
 		$self->{nameservers} = \@ip;
@@ -320,6 +317,7 @@ sub nameservers {
 
 	my @ns4 = $self->{force_v6} ? () : @{$self->{nameserver4}};
 	my @ns6 = $self->{force_v4} ? () : @{$self->{nameserver6}};
+
 	my @nameservers = @{$self->{nameservers}};
 	@nameservers = ( @ns4, @ns6 ) if $self->{prefer_v4} || !scalar(@ns6);
 	@nameservers = ( @ns6, @ns4 ) if $self->{prefer_v6} || !scalar(@ns4);
@@ -342,7 +340,7 @@ sub _cname_addr {
 	# Out of bailiwick will fail.
 	my @null;
 	my $packet = shift || return @null;
-	my $names = shift;
+	my $names  = shift;
 
 	$names->{lc( $_->qname )}++ foreach $packet->question;
 	$names->{lc( $_->cname )}++ foreach grep { $_->can('cname') } $packet->answer;
@@ -373,24 +371,24 @@ sub errorstring {
 
 
 sub query {
-	my $self = shift;
-	my $name = shift || '.';
+	my ( $self, @argument ) = @_;
 
+	my $name = shift(@argument) || '.';
 	my @sfix = $self->{defnames} && ( $name !~ m/[.:]/ ) ? $self->domain : ();
 
 	my $fqdn = join '.', $name, @sfix;
-	$self->_diag( 'query(', $fqdn, @_, ')' );
-	my $packet = $self->send( $fqdn, @_ ) || return;
+	$self->_diag( 'query(', $fqdn, @argument, ')' );
+	my $packet = $self->send( $fqdn, @argument ) || return;
 	return $packet->header->ancount ? $packet : undef;
 }
 
 
 sub search {
-	my $self = shift;
+	my ( $self, @argument ) = @_;
 
-	return $self->query(@_) unless $self->{dnsrch};
+	return $self->query(@argument) unless $self->{dnsrch};
 
-	my $name = shift || '.';
+	my $name = shift(@argument) || '.';
 	my $dots = $name =~ tr/././;
 
 	my @sfix = ( $dots < $self->{ndots} ) ? @{$self->{searchlist}} : ();
@@ -398,8 +396,8 @@ sub search {
 
 	foreach my $suffix ( $one, @more ) {
 		my $fqname = $suffix ? join( '.', $name, $suffix ) : $name;
-		$self->_diag( 'search(', $fqname, @_, ')' );
-		my $packet = $self->send( $fqname, @_ ) || next;
+		$self->_diag( 'search(', $fqname, @argument, ')' );
+		my $packet = $self->send( $fqname, @argument ) || next;
 		return $packet if $packet->header->ancount;
 	}
 
@@ -408,8 +406,8 @@ sub search {
 
 
 sub send {
-	my $self	= shift;
-	my $packet	= $self->_make_query_packet(@_);
+	my ( $self, @argument ) = @_;
+	my $packet	= $self->_make_query_packet(@argument);
 	my $packet_data = $packet->data;
 
 	$self->_reset_errorstring;
@@ -445,8 +443,6 @@ sub _send_tcp {
 		$socket->send($tcp_packet);
 		$self->errorstring($!);
 
-		next unless $select->can_read($timeout);	# uncoverable branch true
-
 		my $buffer = _read_tcp($socket);
 		$self->{replyfrom} = $ip;
 		$self->_diag( 'reply from', "[$ip]", length($buffer), 'bytes' );
@@ -479,7 +475,7 @@ sub _send_udp {
 	my @ns	    = $self->nameservers;
 	my $port    = $self->{port};
 	my $retrans = $self->{retrans} || 1;
-	my $retry   = $self->{retry} || 1;
+	my $retry   = $self->{retry}   || 1;
 	my $servers = scalar(@ns);
 	my $timeout = $servers ? do { no integer; $retrans / $servers } : 0;
 	my $fallback;
@@ -494,23 +490,23 @@ NAMESERVER: foreach my $ns (@ns) {
 
 			# state vector replaces corresponding element of @ns array
 			unless ( ref $ns ) {
-				my $dst_sockaddr = $self->_create_dst_sockaddr( $ns, $port );
-				my $socket = $self->_create_udp_socket($ns) || next;
-				$ns = [$socket, $ns, $dst_sockaddr];
+				my $sockaddr = $self->_create_dst_sockaddr( $ns, $port );
+				my $socket   = $self->_create_udp_socket($ns) || next;
+				$ns = [$socket, $ns, $sockaddr];
 			}
 
-			my ( $socket, $ip, $dst_sockaddr, $failed ) = @$ns;
+			my ( $socket, $ip, $sockaddr, $failed ) = @$ns;
 			next if $failed;
 
 			$self->_diag( 'udp send', "[$ip]:$port" );
 
 			$select->add($socket);
-			$socket->send( $query_data, 0, $dst_sockaddr );
+			$socket->send( $query_data, 0, $sockaddr );
 			$self->errorstring( $$ns[3] = $! );
 
 			# handle failure to detect taint inside socket->send()
 			die 'Insecure dependency while running with -T switch'
-					if TESTS && Scalar::Util::tainted($dst_sockaddr);
+					if TESTS && Scalar::Util::tainted($sockaddr);
 
 			my $reply;
 			while ( my ($socket) = $select->can_read($timeout) ) {
@@ -552,8 +548,8 @@ NAMESERVER: foreach my $ns (@ns) {
 
 
 sub bgsend {
-	my $self	= shift;
-	my $packet	= $self->_make_query_packet(@_);
+	my ( $self, @argument ) = @_;
+	my $packet	= $self->_make_query_packet(@argument);
 	my $packet_data = $packet->data;
 
 	$self->_reset_errorstring;
@@ -598,7 +594,7 @@ sub _bgsend_udp {
 
 	foreach my $ip ( $self->nameservers ) {
 		my $sockaddr = $self->_create_dst_sockaddr( $ip, $port );
-		my $socket = $self->_create_udp_socket($ip) || next;
+		my $socket   = $self->_create_udp_socket($ip) || next;
 
 		$self->_diag( 'bgsend', "[$ip]:$port" );
 
@@ -618,7 +614,7 @@ sub _bgsend_udp {
 }
 
 
-sub bgbusy {
+sub bgbusy {				## no critic		# overwrites user UDP handle
 	my ( $self, $handle ) = @_;
 	return unless $handle;
 
@@ -639,19 +635,20 @@ sub bgbusy {
 
 	$self->_diag('packet truncated: retrying using TCP');
 	my $tcp = $self->_bgsend_tcp( $query, $query->data ) || return;
-	return defined( $_[1] = $tcp );
+	return defined( $_[1] = $tcp );				# caller's UDP handle now TCP
 }
 
 
 sub bgisready {				## historical
-	_deprecate('prefer  ! bgbusy(...)');			# uncoverable pod
+	__PACKAGE__->_deprecate('prefer ! bgbusy(...)');	# uncoverable pod
 	return !&bgbusy;
 }
 
 
 sub bgread {
+	my ( $self, $handle ) = @_;
 	while (&bgbusy) {					# side effect: TCP retry
-		IO::Select->new( $_[1] )->can_read(0.02);	# reduce my CPU usage by 3 orders of magnitude
+		IO::Select->new($handle)->can_read(0.02);	# reduce my CPU usage by 3 orders of magnitude
 	}
 	return &_bgread;
 }
@@ -673,7 +670,7 @@ sub _bgread {
 
 	my $peer = $self->{replyfrom} = $handle->peerhost;
 
-	my $dgram = $handle->socktype() == SOCK_DGRAM;
+	my $dgram  = $handle->socktype() == SOCK_DGRAM;
 	my $buffer = $dgram ? _read_udp( $handle, $self->_packetsz ) : _read_tcp($handle);
 	$self->_diag( "reply from [$peer]", length($buffer), 'bytes' );
 
@@ -698,16 +695,20 @@ sub _accept_reply {
 
 	return if $query && $header->id != $query->header->id;
 
-	return $self->errorstring( $header->rcode );			# historical quirk
+	return $self->errorstring( $header->rcode );		# historical quirk
 }
 
 
 sub axfr {				## zone transfer
-	return eval {
-		my $self = shift;
+	my ( $self, @argument ) = @_;
+	my $zone  = scalar(@argument) ? shift @argument : $self->domain;
+	my @class = @argument;
 
-		# initialise iterator state vector
-		my ( $select, $verify, @rr, $soa ) = $self->_axfr_start(@_);
+	my $request = $self->_make_query_packet( $zone, 'AXFR', @class );
+
+	return eval {
+		$self->_diag("axfr( $zone @class )");
+		my ( $select, $verify, @rr, $soa ) = $self->_axfr_start($request);
 
 		my $iterator = sub {	## iterate over RRs
 			my $rr = shift(@rr);
@@ -715,7 +716,7 @@ sub axfr {				## zone transfer
 			if ( ref($rr) eq 'Net::DNS::RR::SOA' ) {
 				if ($soa) {
 					$select = undef;
-					return if $rr->encode eq $soa->encode;
+					return if $rr->canonical eq $soa->canonical;
 					croak $self->errorstring('mismatched final SOA');
 				}
 				$soa = $rr;
@@ -743,33 +744,31 @@ sub axfr {				## zone transfer
 
 
 sub axfr_start {			## historical
-	_deprecate('prefer  $iterator = $self->axfr(...)');	# uncoverable pod
-	my $self = shift;
-	return defined( $self->{axfr_iter} = $self->axfr(@_) );
+	my ( $self, @argument ) = @_;				# uncoverable pod
+	$self->_deprecate('prefer  $iterator = $self->axfr(...)');
+	my $iterator = $self->axfr(@argument);
+	( $self->{axfr_iter} ) = grep {defined} ( $iterator, sub {} );
+	return defined($iterator);
 }
 
 
 sub axfr_next {				## historical
-	_deprecate('prefer  $iterator->()');			# uncoverable pod
-	return shift->{axfr_iter}->();
+	my $self = shift;					# uncoverable pod
+	$self->_deprecate('prefer  $iterator->()');
+	return $self->{axfr_iter}->();
 }
 
 
 sub _axfr_start {
-	my $self  = shift;
-	my $dname = scalar(@_) ? shift : $self->domain;
-	my @class = @_;
-
-	my $request = $self->_make_query_packet( $dname, 'AXFR', @class );
+	my ( $self, $request ) = @_;
 	my $content = $request->data;
 	my $TCP_msg = pack 'n a*', length($content), $content;
-
-	$self->_diag("axfr( $dname @class )");
 
 	my ( $select, $reply, $rcode );
 	foreach my $ns ( $self->nameservers ) {
 		$self->_diag("axfr send [$ns]");
 
+		local $self->{persistent_tcp};
 		my $socket = $self->_create_tcp_socket($ns);
 		$self->errorstring($!);
 		$select = IO::Select->new( $socket || next );
@@ -793,7 +792,7 @@ sub _axfr_start {
 
 	my $verifyok = $reply->verify($verify);
 	croak $self->errorstring( $reply->verifyerr ) unless $verifyok;
-	croak $self->errorstring unless $rcode eq 'NOERROR';
+	croak $self->errorstring if $rcode ne 'NOERROR';
 	return ( $select, $verifyok, $reply->answer );
 }
 
@@ -824,17 +823,16 @@ sub _axfr_next {
 sub _read_tcp {
 	my $socket = shift;
 
-	my ( $buffer, $s1, $s2 );
-	$socket->recv( $s1, 2 );				# one lump
-	$socket->recv( $s2, 2 - length $s1 );			# or two?
+	my ( $s1, $s2 );
+	$socket->recv( $s1, 1 );				# two octet length
+	$socket->recv( $s2, 2 - length $s1 );			# possibly fragmented
 	my $size = unpack 'n', pack( 'a*a*@2', $s1, $s2 );
 
-	$socket->recv( $buffer, $size );			# initial read
-
-	while ( length($buffer) < $size ) {
+	my $buffer = '';
+	for ( ; ; ) {
 		my $fragment;
 		$socket->recv( $fragment, $size - length($buffer) );
-		$buffer .= $fragment || last;
+		last unless length( $buffer .= $fragment || last ) < $size;
 	}
 	return $buffer;
 }
@@ -852,12 +850,10 @@ sub _read_udp {
 
 
 sub _create_tcp_socket {
-	my $self = shift;
-	my $ip	 = shift;
+	my ( $self, $ip ) = @_;
 
-	my $sock_key = "TCP[$ip]";
 	my $socket;
-
+	my $sock_key = "TCP[$ip]";
 	if ( $socket = $self->{persistent}{$sock_key} ) {
 		$self->_diag( 'using persistent socket', $sock_key );
 		return $socket if $socket->connected;
@@ -865,7 +861,6 @@ sub _create_tcp_socket {
 	}
 
 	my $ip6_addr = IPv6 && _ipv6($ip);
-
 	$socket = IO::Socket::IP->new(
 		LocalAddr => $ip6_addr ? $self->{srcaddr6} : $self->{srcaddr4},
 		LocalPort => $self->{srcport},
@@ -888,20 +883,19 @@ sub _create_tcp_socket {
 				unless $ip6_addr;
 	}
 
-	$self->{persistent}{$sock_key} = $self->{persistent_tcp} ? $socket : undef;
+	$self->{persistent}{$sock_key} = $socket if $self->{persistent_tcp};
 	return $socket;
 }
 
 
 sub _create_udp_socket {
-	my $self = shift;
-	my $ip	 = shift;
+	my ( $self, $ip ) = @_;
 
-	my $ip6_addr = IPv6 && _ipv6($ip);
-	my $sock_key = IPv6 && $ip6_addr ? 'UDP/IPv6' : 'UDP/IPv4';
 	my $socket;
+	my $sock_key = "UDP[$ip]";
 	return $socket if $socket = $self->{persistent}{$sock_key};
 
+	my $ip6_addr = IPv6 && _ipv6($ip);
 	$socket = IO::Socket::IP->new(
 		LocalAddr => $ip6_addr ? $self->{srcaddr6} : $self->{srcaddr4},
 		LocalPort => $self->{srcport},
@@ -920,7 +914,7 @@ sub _create_udp_socket {
 				unless $ip6_addr;
 	}
 
-	$self->{persistent}{$sock_key} = $self->{persistent_udp} ? $socket : undef;
+	$self->{persistent}{$sock_key} = $socket if $self->{persistent_udp};
 	return $socket;
 }
 
@@ -930,13 +924,23 @@ sub _create_udp_socket {
 	use constant AI_NUMERICHOST => Socket::AI_NUMERICHOST;
 	use constant IPPROTO_UDP    => Socket::IPPROTO_UDP;
 
-	my $ip4 = {family => AF_INET,  flags => AI_NUMERICHOST, protocol => IPPROTO_UDP, socktype => SOCK_DGRAM};
-	my $ip6 = {family => AF_INET6, flags => AI_NUMERICHOST, protocol => IPPROTO_UDP, socktype => SOCK_DGRAM};
+	my $ip4 = {
+		family	 => AF_INET,
+		flags	 => AI_NUMERICHOST,
+		protocol => IPPROTO_UDP,
+		socktype => SOCK_DGRAM
+		};
+	my $ip6 = {
+		family	 => AF_INET6,
+		flags	 => AI_NUMERICHOST,
+		protocol => IPPROTO_UDP,
+		socktype => SOCK_DGRAM
+		};
 
 	sub _create_dst_sockaddr {	## create UDP destination sockaddr structure
 		my ( $self, $ip, $port ) = @_;
 
-		unless (USE_SOCKET_IP) {				# NB: errors raised in socket->send
+		unless (USE_SOCKET_IP) {			# NB: errors raised in socket->send
 			return _ipv6($ip) ? undef : sockaddr_in( $port, inet_aton($ip) );
 		}
 
@@ -958,7 +962,7 @@ sub _ipv4 {
 
 sub _ipv6 {
 	for (shift) {
-		last unless m/:.*:/;				# must contain two colons
+		last	 unless m/:.*:/;			# must contain two colons
 		return 1 unless m/[^:0-9A-Fa-f]/;		# colons and hexdigits only
 		return 1 if m/^[:.0-9A-Fa-f]+\%.+$/;		# RFC4007 scoped address
 		return m/^[:0-9A-Fa-f]+:[.0-9]+$/;		# prefix : dotted digits
@@ -968,19 +972,15 @@ sub _ipv6 {
 
 
 sub _make_query_packet {
-	my $self = shift;
+	my ( $self, @argument ) = @_;
 
-	my ($packet) = @_;
+	my ($packet) = @argument;
 	if ( ref($packet) ) {
 		my $edns = $packet->edns;			# advertise UDPsize for local stack
-		$edns->size( $self->{udppacketsize} ) unless defined $edns->{size};
-
-		my $header = $packet->header;
-		$header->rd( $self->{recurse} ) if $header->opcode eq 'QUERY';
-
+		$edns->udpsize( $self->{udppacketsize} ) unless defined $edns->{udpsize};
 	} else {
-		$packet = Net::DNS::Packet->new(@_);
-		$packet->edns->size( $self->{udppacketsize} );
+		$packet = Net::DNS::Packet->new(@argument);
+		$packet->edns->udpsize( $self->{udppacketsize} );
 
 		my $header = $packet->header;
 		$header->ad( $self->{adflag} );			# RFC6840, 5.7
@@ -998,58 +998,57 @@ sub _make_query_packet {
 
 
 sub dnssec {
-	my $self = shift;
-
-	return $self->{dnssec} unless scalar @_;
-
-	# increase default udppacket size if flag set
-	$self->udppacketsize(2048) if $self->{dnssec} = shift;
-
+	my ( $self, @argument ) = @_;
+	for (@argument) {
+		$self->udppacketsize(1232);
+		$self->{dnssec} = $_;
+	}
 	return $self->{dnssec};
 }
 
 
 sub force_v6 {
-	my $self = shift;
-	my $value = scalar(@_) ? $_[0] : $self->{force_v6};
-	return $self->{force_v6} = $value ? do { $self->{force_v4} = 0; 1 } : 0;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{force_v4} = 0 if $self->{force_v6} = $_ }
+	return $self->{force_v6} ? 1 : 0;
 }
 
 sub force_v4 {
-	my $self = shift;
-	my $value = scalar(@_) ? $_[0] : $self->{force_v4};
-	return $self->{force_v4} = $value ? do { $self->{force_v6} = 0; 1 } : 0;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{force_v6} = 0 if $self->{force_v4} = $_ }
+	return $self->{force_v4} ? 1 : 0;
 }
 
 sub prefer_v6 {
-	my $self = shift;
-	my $value = scalar(@_) ? $_[0] : $self->{prefer_v6};
-	return $self->{prefer_v6} = $value ? do { $self->{prefer_v4} = 0; 1 } : 0;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{prefer_v4} = 0 if $self->{prefer_v6} = $_ }
+	return $self->{prefer_v6} ? 1 : 0;
 }
 
 sub prefer_v4 {
-	my $self = shift;
-	my $value = scalar(@_) ? $_[0] : $self->{prefer_v4};
-	return $self->{prefer_v4} = $value ? do { $self->{prefer_v6} = 0; 1 } : 0;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{prefer_v6} = 0 if $self->{prefer_v4} = $_ }
+	return $self->{prefer_v4} ? 1 : 0;
 }
 
-
 sub srcaddr {
-	my $self = shift;
-	for (@_) {
+	my ( $self, @value ) = @_;
+	for (@value) {
 		my $hashkey = _ipv6($_) ? 'srcaddr6' : 'srcaddr4';
 		$self->{$hashkey} = $_;
 	}
-	return shift;
+	return shift @value;
 }
 
 
 sub tsig {
-	my $self = shift;
+	my ( $self, $arg, @etc ) = @_;
 	$self->{tsig_rr} = eval {
+		return $arg unless $arg;
+		return $arg if ref($arg) eq 'Net::DNS::RR::TSIG';
 		local $SIG{__DIE__};
 		require Net::DNS::RR::TSIG;
-		Net::DNS::RR::TSIG->create(@_);
+		Net::DNS::RR::TSIG->create( $arg, @etc );
 	};
 	croak "${@}unable to create TSIG record" if $@;
 	return;
@@ -1065,8 +1064,8 @@ sub _packetsz {
 }
 
 sub udppacketsize {
-	my $self = shift;
-	$self->{udppacketsize} = shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{udppacketsize} = $_ }
 	return $self->_packetsz;
 }
 
@@ -1075,15 +1074,14 @@ sub udppacketsize {
 # Keep this method around. Folk depend on it although it is neither documented nor exported.
 #
 sub make_query_packet {			## historical
-	_deprecate('see RT#37104');				# uncoverable pod
+	__PACKAGE__->_deprecate('see RT#37104');		# uncoverable pod
 	return &_make_query_packet;
 }
 
 
 sub _diag {				## debug output
-	my $self = shift;
-	return unless $self->{debug};
-	return print "\n;; @_\n"
+	return unless shift->{debug};
+	return print "\n;; @_\n";
 }
 
 
@@ -1095,13 +1093,13 @@ sub _diag {				## debug output
 		my @rr	= $dug->read;
 
 		my @auth = grep { $_->type eq 'NS' } @rr;
-		my %auth = map { lc $_->nsdname => 1 } @auth;
+		my %auth = map	{ lc $_->nsdname => 1 } @auth;
 		my %glue;
 		my @glue = grep { $auth{lc $_->name} } @rr;
 		foreach ( grep { $_->can('address') } @glue ) {
 			push @{$glue{lc $_->name}}, $_->address;
 		}
-		map { @$_ } values %glue;
+		map {@$_} values %glue;
 	};
 
 	my @ip;
@@ -1114,18 +1112,17 @@ sub _diag {				## debug output
 }
 
 
-our $AUTOLOAD;
-
 sub DESTROY { }				## Avoid tickling AUTOLOAD (in cleanup)
 
 sub AUTOLOAD {				## Default method
 	my ($self) = @_;
 
+	no strict 'refs';		## no critic ProhibitNoStrict
+	our $AUTOLOAD;
 	my $name = $AUTOLOAD;
 	$name =~ s/.*://;
 	croak qq[unknown method "$name"] unless $public_attr{$name};
 
-	no strict 'refs';		## no critic ProhibitNoStrict
 	*{$AUTOLOAD} = sub {
 		my $self = shift;
 		$self = $self->_defaults unless ref($self);
@@ -1133,7 +1130,7 @@ sub AUTOLOAD {				## Default method
 		return $self->{$name};
 	};
 
-	goto &{$AUTOLOAD};
+	return &$AUTOLOAD;
 }
 
 
@@ -1187,7 +1184,7 @@ All rights reserved.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -1204,7 +1201,7 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::Resolver>
+L<perl> L<Net::DNS> L<Net::DNS::Resolver>
 
 =cut
 
@@ -1213,64 +1210,65 @@ L<perl>, L<Net::DNS>, L<Net::DNS::Resolver>
 
 __DATA__	## DEFAULT HINTS
 
-; <<>> DiG 9.11.4-RedHat-9.11.4-4.fc28 <<>> @b.root-servers.net . -t NS
+; <<>> DiG 9.18.8 <<>> @b.root-servers.net . -t NS
 ; (2 servers found)
 ;; global options: +cmd
 ;; Got answer:
-;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 44111
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 4847
 ;; flags: qr aa rd; QUERY: 1, ANSWER: 13, AUTHORITY: 0, ADDITIONAL: 27
 ;; WARNING: recursion requested but not available
 
 ;; OPT PSEUDOSECTION:
-; EDNS: version: 0, flags:; udp: 4096
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: 93d86b753941ac2f0100000063c009ad51783c108e36cf16 (good)
 ;; QUESTION SECTION:
 ;.				IN	NS
 
 ;; ANSWER SECTION:
-.			518400	IN	NS	c.root-servers.net.
-.			518400	IN	NS	k.root-servers.net.
-.			518400	IN	NS	l.root-servers.net.
-.			518400	IN	NS	j.root-servers.net.
+.			518400	IN	NS	a.root-servers.net.
 .			518400	IN	NS	b.root-servers.net.
+.			518400	IN	NS	c.root-servers.net.
+.			518400	IN	NS	d.root-servers.net.
+.			518400	IN	NS	e.root-servers.net.
+.			518400	IN	NS	f.root-servers.net.
 .			518400	IN	NS	g.root-servers.net.
 .			518400	IN	NS	h.root-servers.net.
-.			518400	IN	NS	d.root-servers.net.
-.			518400	IN	NS	a.root-servers.net.
-.			518400	IN	NS	f.root-servers.net.
 .			518400	IN	NS	i.root-servers.net.
+.			518400	IN	NS	j.root-servers.net.
+.			518400	IN	NS	k.root-servers.net.
+.			518400	IN	NS	l.root-servers.net.
 .			518400	IN	NS	m.root-servers.net.
-.			518400	IN	NS	e.root-servers.net.
 
 ;; ADDITIONAL SECTION:
-a.root-servers.net.	3600000	IN	A	198.41.0.4
-b.root-servers.net.	3600000	IN	A	199.9.14.201
-c.root-servers.net.	3600000	IN	A	192.33.4.12
-d.root-servers.net.	3600000	IN	A	199.7.91.13
-e.root-servers.net.	3600000	IN	A	192.203.230.10
-f.root-servers.net.	3600000	IN	A	192.5.5.241
-g.root-servers.net.	3600000	IN	A	192.112.36.4
-h.root-servers.net.	3600000	IN	A	198.97.190.53
-i.root-servers.net.	3600000	IN	A	192.36.148.17
-j.root-servers.net.	3600000	IN	A	192.58.128.30
-k.root-servers.net.	3600000	IN	A	193.0.14.129
-l.root-servers.net.	3600000	IN	A	199.7.83.42
-m.root-servers.net.	3600000	IN	A	202.12.27.33
-a.root-servers.net.	3600000	IN	AAAA	2001:503:ba3e::2:30
-b.root-servers.net.	3600000	IN	AAAA	2001:500:200::b
-c.root-servers.net.	3600000	IN	AAAA	2001:500:2::c
-d.root-servers.net.	3600000	IN	AAAA	2001:500:2d::d
-e.root-servers.net.	3600000	IN	AAAA	2001:500:a8::e
-f.root-servers.net.	3600000	IN	AAAA	2001:500:2f::f
-g.root-servers.net.	3600000	IN	AAAA	2001:500:12::d0d
-h.root-servers.net.	3600000	IN	AAAA	2001:500:1::53
-i.root-servers.net.	3600000	IN	AAAA	2001:7fe::53
-j.root-servers.net.	3600000	IN	AAAA	2001:503:c27::2:30
-k.root-servers.net.	3600000	IN	AAAA	2001:7fd::1
-l.root-servers.net.	3600000	IN	AAAA	2001:500:9f::42
-m.root-servers.net.	3600000	IN	AAAA	2001:dc3::35
+a.root-servers.net.	518400	IN	A	198.41.0.4
+a.root-servers.net.	518400	IN	AAAA	2001:503:ba3e::2:30
+b.root-servers.net.	518400	IN	A	199.9.14.201
+b.root-servers.net.	518400	IN	AAAA	2001:500:200::b
+c.root-servers.net.	518400	IN	A	192.33.4.12
+c.root-servers.net.	518400	IN	AAAA	2001:500:2::c
+d.root-servers.net.	518400	IN	A	199.7.91.13
+d.root-servers.net.	518400	IN	AAAA	2001:500:2d::d
+e.root-servers.net.	518400	IN	A	192.203.230.10
+e.root-servers.net.	518400	IN	AAAA	2001:500:a8::e
+f.root-servers.net.	518400	IN	A	192.5.5.241
+f.root-servers.net.	518400	IN	AAAA	2001:500:2f::f
+g.root-servers.net.	518400	IN	A	192.112.36.4
+g.root-servers.net.	518400	IN	AAAA	2001:500:12::d0d
+h.root-servers.net.	518400	IN	A	198.97.190.53
+h.root-servers.net.	518400	IN	AAAA	2001:500:1::53
+i.root-servers.net.	518400	IN	A	192.36.148.17
+i.root-servers.net.	518400	IN	AAAA	2001:7fe::53
+j.root-servers.net.	518400	IN	A	192.58.128.30
+j.root-servers.net.	518400	IN	AAAA	2001:503:c27::2:30
+k.root-servers.net.	518400	IN	A	193.0.14.129
+k.root-servers.net.	518400	IN	AAAA	2001:7fd::1
+l.root-servers.net.	518400	IN	A	199.7.83.42
+l.root-servers.net.	518400	IN	AAAA	2001:500:9f::42
+m.root-servers.net.	518400	IN	A	202.12.27.33
+m.root-servers.net.	518400	IN	AAAA	2001:dc3::35
 
-;; Query time: 173 msec
-;; SERVER: 199.9.14.201#53(199.9.14.201)
-;; WHEN: Fri Aug 10 19:03:11 BST 2018
-;; MSG SIZE  rcvd: 811
+;; Query time: 15 msec
+;; SERVER: 199.9.14.201#53(b.root-servers.net) (UDP)
+;; WHEN: Thu Jan 12 13:22:53 GMT 2023
+;; MSG SIZE  rcvd: 1031
 

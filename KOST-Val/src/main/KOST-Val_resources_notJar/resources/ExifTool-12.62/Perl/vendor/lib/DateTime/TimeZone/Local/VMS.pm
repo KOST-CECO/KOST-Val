@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-our $VERSION = '2.46';
+our $VERSION = '2.60';
 
 use parent 'DateTime::TimeZone::Local';
 
@@ -30,7 +30,7 @@ DateTime::TimeZone::Local::VMS - Determine the local system's time zone on VMS
 
 =head1 VERSION
 
-version 2.46
+version 2.60
 
 =head1 SYNOPSIS
 
@@ -40,16 +40,15 @@ version 2.46
 
 =head1 DESCRIPTION
 
-This module provides methods for determining the local time zone on a
-VMS platform.
+This module provides methods for determining the local time zone on a VMS
+platform.
 
-NOTE: This is basically a stub pending an implementation by someone
-who knows something about VMS.
+NOTE: This is basically a stub pending an implementation by someone who knows
+something about VMS.
 
 =head1 HOW THE TIME ZONE IS DETERMINED
 
-This class tries the following methods of determining the local time
-zone:
+This class tries the following methods of determining the local time zone:
 
 =over 4
 
@@ -77,8 +76,6 @@ We check the following environment variables:
 
 Bugs may be submitted at L<https://github.com/houseabsolute/DateTime-TimeZone/issues>.
 
-I am also usually active on IRC as 'autarch' on C<irc://irc.perl.org>.
-
 =head1 SOURCE
 
 The source code repository for DateTime-TimeZone can be found at L<https://github.com/houseabsolute/DateTime-TimeZone>.
@@ -89,7 +86,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2020 by Dave Rolsky.
+This software is copyright (c) 2023 by Dave Rolsky.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

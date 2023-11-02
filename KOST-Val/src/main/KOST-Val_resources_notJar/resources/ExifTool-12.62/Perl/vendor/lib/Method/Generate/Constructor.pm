@@ -1,10 +1,10 @@
 package Method::Generate::Constructor;
+use strict;
+use warnings;
 
-use Moo::_strictures;
 use Sub::Quote qw(quote_sub quotify);
 use Sub::Defer;
-use Moo::_Utils qw(_getstash _getglob);
-use Moo::_mro;
+use Moo::_Utils qw(_getstash _getglob _linear_isa);
 use Scalar::Util qw(weaken);
 use Carp qw(croak);
 use Carp::Heavy ();
@@ -22,8 +22,8 @@ sub register_attribute_specs {
   my $ag = $self->accessor_generator;
   while (my ($name, $new_spec) = splice @new_specs, 0, 2) {
     if ($name =~ s/^\+//) {
-      croak "has '+${name}' given but no ${name} attribute already exists"
-        unless my $old_spec = $specs->{$name};
+      my $old_spec = $specs->{$name}
+        or croak "has '+${name}' given but no ${name} attribute already exists";
       $ag->merge_specs($new_spec, $old_spec);
     }
     if ($new_spec->{required}
@@ -75,11 +75,11 @@ sub install_delayed {
   my ($self) = @_;
   $self->assert_constructor;
   my $package = $self->{package};
-  my (undef, @isa) = @{mro::get_linear_isa($package)};
+  my (undef, @isa) = @{_linear_isa($package)};
   my $isa = join ',', @isa;
   my (undef, $from_file, $from_line) = caller(Carp::short_error_loc());
   my $constructor = defer_sub "${package}::new" => sub {
-    my (undef, @new_isa) = @{mro::get_linear_isa($package)};
+    my (undef, @new_isa) = @{_linear_isa($package)};
     if (join(',', @new_isa) ne $isa) {
       my ($expected_new) = grep { *{_getglob($_.'::new')}{CODE} } @isa;
       my ($found_new) = grep { *{_getglob($_.'::new')}{CODE} } @new_isa;

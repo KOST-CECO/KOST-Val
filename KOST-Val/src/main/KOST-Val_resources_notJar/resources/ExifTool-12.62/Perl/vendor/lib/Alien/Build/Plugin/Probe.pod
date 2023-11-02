@@ -14,7 +14,7 @@ Alien::Build::Plugin::Probe - Probe Alien::Build plugins
 
 =head1 VERSION
 
-version 2.38
+version 2.80
 
 =head1 SYNOPSIS
 
@@ -36,18 +36,32 @@ look for tools in the path:
    version => qr/gzip ([0-9\.]+)/,
  );
 
+Use C<vcpkg> for Visual C++ Perl:
+
+ use alienfile;
+ plugin 'Probe::Vcpkg' => 'libffi';
+
 =head1 DESCRIPTION
 
 Probe plugins try to find existing libraries and tools
 I<already> installed on the system.  If found they can
-be used instead of downloading the source from the 
+be used instead of downloading the source from the
 internet and building.
 
 =over 4
 
 =item L<Alien::Build::Plugin::Probe::CBuilder>
 
+Use L<ExtUtils::CBuilder> to probe for existing installed
+library.
+
 =item L<Alien::Build::Plugin::Probe::CommandLine>
+
+Execute commands to probe for existing tools.
+
+=item L<Alien::Build::Plugin::Probe::Vcpkg>
+
+Use L<Win32::Vcpkg> to probe for existing installed library.
 
 =back
 
@@ -97,7 +111,7 @@ Juan Julián Merelo Guervós (JJ)
 
 Joel Berger (JBERGER)
 
-Petr Pisar (ppisar)
+Petr Písař (ppisar)
 
 Lance Wicks (LANCEW)
 
@@ -115,9 +129,13 @@ Paul Evans (leonerd, PEVANS)
 
 Håkon Hægland (hakonhagland, HAKONH)
 
+nick nauwelaerts (INPHOBIA)
+
+Florian Weimer
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011-2020 by Graham Ollis.
+This software is copyright (c) 2011-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

@@ -1,1 +1,7 @@
 C:\strawberry\perl\vendor\lib\Crypt\CBC.pm
+C:\strawberry\perl\vendor\lib\Crypt\CBC\PBKDF.pm
+C:\strawberry\perl\vendor\lib\Crypt\CBC\PBKDF\none.pm
+C:\strawberry\perl\vendor\lib\Crypt\CBC\PBKDF\opensslv1.pm
+C:\strawberry\perl\vendor\lib\Crypt\CBC\PBKDF\opensslv2.pm
+C:\strawberry\perl\vendor\lib\Crypt\CBC\PBKDF\pbkdf2.pm
+C:\strawberry\perl\vendor\lib\Crypt\CBC\PBKDF\randomiv.pm

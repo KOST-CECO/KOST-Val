@@ -1,0 +1,602 @@
+
+# ABSTRACT: useful, demonstrative, or stupid Sub::Exporter tricks
+# PODNAME: Sub::Exporter::Cookbook
+
+#pod =head1 OVERVIEW
+#pod
+#pod Sub::Exporter is a fairly simple tool, and can be used to achieve some very
+#pod simple goals.  Its basic behaviors and their basic application (that is,
+#pod "traditional" exporting of routines) are described in
+#pod L<Sub::Exporter::Tutorial> and L<Sub::Exporter>.  This document presents
+#pod applications that may not be immediately obvious, or that can demonstrate how
+#pod certain features can be put to use (for good or evil).
+#pod
+#pod =head1 THE RECIPES
+#pod
+#pod =head2 Exporting Methods as Routines
+#pod
+#pod With Exporter.pm, exporting methods is a non-starter.  Sub::Exporter makes it
+#pod simple.  By using the C<curry_method> utility provided in
+#pod L<Sub::Exporter::Util>, a method can be exported with the invocant built in.
+#pod
+#pod   package Object::Strenuous;
+#pod
+#pod   use Sub::Exporter::Util 'curry_method';
+#pod   use Sub::Exporter -setup => {
+#pod     exports => [ objection => curry_method('new') ],
+#pod   };
+#pod
+#pod With this configuration, the importing code may contain:
+#pod
+#pod   my $obj = objection("irrelevant");
+#pod
+#pod ...and this will be equivalent to:
+#pod
+#pod   my $obj = Object::Strenuous->new("irrelevant");
+#pod
+#pod The built-in invocant is determined by the invocant for the C<import> method.
+#pod That means that if we were to subclass Object::Strenuous as follows:
+#pod
+#pod   package Object::Strenuous::Repeated;
+#pod   @ISA = 'Object::Strenuous';
+#pod
+#pod ...then importing C<objection> from the subclass would build-in that subclass.
+#pod
+#pod Finally, since the invocant can be an object, you can write something like
+#pod this:
+#pod
+#pod   package Cypher;
+#pod   use Sub::Exporter::Util 'curry_method';
+#pod   use Sub::Exporter -setup => {
+#pod     exports => [ encypher => curry_method ],
+#pod   };
+#pod
+#pod with the expectation that C<import> will be called on an instantiated Cypher
+#pod object:
+#pod
+#pod   BEGIN {
+#pod     my $cypher = Cypher->new( ... );
+#pod     $cypher->import('encypher');
+#pod   }
+#pod
+#pod Now there is a globally-available C<encypher> routine which calls the encypher
+#pod method on an otherwise unavailable Cypher object.
+#pod
+#pod =head2 Exporting Methods as Methods
+#pod
+#pod While exporting modules usually export subroutines to be called as subroutines,
+#pod it's easy to use Sub::Exporter to export subroutines meant to be called as
+#pod methods on the importing package or its objects.
+#pod
+#pod Here's a trivial (and naive) example:
+#pod
+#pod   package Mixin::DumpObj;
+#pod
+#pod   use Data::Dumper;
+#pod
+#pod   use Sub::Exporter -setup => {
+#pod     exports => [ qw(dump) ]
+#pod   };
+#pod
+#pod   sub dump {
+#pod     my ($self) = @_;
+#pod     return Dumper($self);
+#pod   }
+#pod
+#pod When writing your own object class, you can then import C<dump> to be used as a
+#pod method, called like so:
+#pod
+#pod   $object->dump;
+#pod
+#pod By assuming that the importing class will provide a certain interface, a
+#pod method-exporting module can be used as a simple plugin:
+#pod
+#pod   package Number::Plugin::Upto;
+#pod   use Sub::Exporter -setup => {
+#pod     into    => 'Number',
+#pod     exports => [ qw(upto) ],
+#pod     groups  => [ default => [ qw(upto) ] ],
+#pod   };
+#pod
+#pod   sub upto {
+#pod     my ($self) = @_;
+#pod     return 1 .. abs($self->as_integer);
+#pod   }
+#pod
+#pod The C<into> line in the configuration says that this plugin will export, by
+#pod default, into the Number package, not into the C<use>-ing package.  It can be
+#pod exported anyway, though, and will work as long as the destination provides an
+#pod C<as_integer> method like the one it expects.  To import it to a different
+#pod destination, one can just write:
+#pod
+#pod   use Number::Plugin::Upto { into => 'Quantity' };    
+#pod
+#pod =head2 Mixing-in Complex External Behavior
+#pod
+#pod When exporting methods to be used as methods (see above), one very powerful
+#pod option is to export methods that are generated routines that maintain an
+#pod enclosed reference to the exporting module.  This allows a user to import a
+#pod single method which is implemented in terms of a complete, well-structured
+#pod package.
+#pod
+#pod Here is a very small example:
+#pod
+#pod   package Data::Analyzer;
+#pod
+#pod   use Sub::Exporter -setup => {
+#pod     exports => [ analyze => \'_generate_analyzer' ],
+#pod   };
+#pod
+#pod   sub _generate_analyzer {
+#pod     my ($mixin, $name, $arg, $col) = @_;
+#pod
+#pod     return sub {
+#pod       my ($self) = @_;
+#pod
+#pod       my $values = [ $self->values ];
+#pod
+#pod       my $analyzer = $mixin->new($values);
+#pod       $analyzer->perform_analysis;
+#pod       $analyzer->aggregate_results;
+#pod
+#pod       return $analyzer->summary;
+#pod     };
+#pod   }
+#pod
+#pod If imported by any package providing a C<values> method, this plugin will
+#pod provide a single C<analyze> method that acts as a simple interface to a more
+#pod complex set of behaviors.
+#pod
+#pod Even more importantly, because the C<$mixin> value will be the invocant on
+#pod which the C<import> was actually called, one can subclass C<Data::Analyzer> and
+#pod replace only individual pieces of the complex behavior, making it easy to write
+#pod complex, subclassable toolkits with simple single points of entry for external
+#pod interfaces.
+#pod
+#pod =head2 Exporting Constants
+#pod
+#pod While Sub::Exporter isn't in the constant-exporting business, it's easy to
+#pod export constants by using one of its sister modules, Package::Generator.
+#pod
+#pod   package Important::Constants;
+#pod  
+#pod   use Sub::Exporter -setup => {
+#pod     collectors => [ constants => \'_set_constants' ],
+#pod   };
+#pod  
+#pod   sub _set_constants {
+#pod     my ($class, $value, $data) = @_;
+#pod  
+#pod     Package::Generator->assign_symbols(
+#pod       $data->{into},
+#pod       [
+#pod         MEANING_OF_LIFE => \42,
+#pod         ONE_TRUE_BASE   => \13,
+#pod         FACTORS         => [ 6, 9 ],
+#pod       ],
+#pod     );
+#pod
+#pod     return 1;
+#pod   }
+#pod
+#pod Then, someone can write:
+#pod
+#pod   use Important::Constants 'constants';
+#pod   
+#pod   print "The factors @FACTORS produce $MEANING_OF_LIFE in $ONE_TRUE_BASE.";
+#pod
+#pod (The constants must be exported via a collector, because they are effectively
+#pod altering the importing class in a way other than installing subroutines.)
+#pod  
+#pod =head2 Altering the Importer's @ISA
+#pod
+#pod It's trivial to make a collector that changes the inheritance of an importing
+#pod package:
+#pod
+#pod   use Sub::Exporter -setup => {
+#pod     collectors => { -base => \'_make_base' },
+#pod   };
+#pod
+#pod   sub _make_base {
+#pod     my ($class, $value, $data) = @_;
+#pod
+#pod     my $target = $data->{into};
+#pod     push @{"$target\::ISA"}, $class;
+#pod   }
+#pod
+#pod Then, the user of your class can write:
+#pod
+#pod   use Some::Class -base;
+#pod
+#pod and become a subclass.  This can be quite useful in building, for example, a
+#pod module that helps build plugins.  We may want a few utilities imported, but we
+#pod also want to inherit behavior from some base plugin class;
+#pod
+#pod   package Framework::Util;
+#pod
+#pod   use Sub::Exporter -setup => {
+#pod     exports    => [ qw(log global_config) ],
+#pod     groups     => [ _plugin => [ qw(log global_config) ]
+#pod     collectors => { '-plugin' => \'_become_plugin' },
+#pod   };
+#pod
+#pod   sub _become_plugin {
+#pod     my ($class, $value, $data) = @_;
+#pod
+#pod     my $target = $data->{into};
+#pod     push @{"$target\::ISA"}, $class->plugin_base_class;
+#pod
+#pod     push @{ $data->{import_args} }, '-_plugin';
+#pod   }
+#pod
+#pod Now, you can write a plugin like this:
+#pod
+#pod   package Framework::Plugin::AirFreshener;
+#pod   use Framework::Util -plugin;
+#pod
+#pod =head2 Eating Exporter.pm's Brain
+#pod
+#pod You probably shouldn't actually do this in production.  It's offered more as a
+#pod demonstration than a suggestion.
+#pod
+#pod  sub exporter_upgrade {
+#pod    my ($pkg) = @_;
+#pod    my $new_pkg = "$pkg\::UsingSubExporter";
+#pod
+#pod    return $new_pkg if $new_pkg->isa($pkg);
+#pod
+#pod    Sub::Exporter::setup_exporter({
+#pod      as      => 'import',
+#pod      into    => $new_pkg,
+#pod      exports => [ @{"$pkg\::EXPORT_OK"} ],
+#pod      groups  => {
+#pod        %{"$pkg\::EXPORT_TAG"},
+#pod        default => [ @{"$pkg\::EXPORTS"} ],
+#pod      },
+#pod    });
+#pod
+#pod    @{"$new_pkg\::ISA"} = $pkg;
+#pod    return $new_pkg;
+#pod  }
+#pod
+#pod This routine, given the name of an existing package configured to use
+#pod Exporter.pm, returns the name of a new package with a Sub::Exporter-powered
+#pod C<import> routine.  This lets you import C<Toolkit::exported_sub> into the
+#pod current package with the name C<foo> by writing:
+#pod
+#pod   BEGIN {
+#pod     require Toolkit;
+#pod     exporter_upgrade('Toolkit')->import(exported_sub => { -as => 'foo' })
+#pod   }
+#pod
+#pod If you're feeling particularly naughty, this routine could have been declared
+#pod in the UNIVERSAL package, meaning you could write:
+#pod
+#pod   BEGIN {
+#pod     require Toolkit;
+#pod     Toolkit->exporter_upgrade->import(exported_sub => { -as => 'foo' })
+#pod   }
+#pod
+#pod The new package will have all the same exporter configuration as the original,
+#pod but will support export and group renaming, including exporting into scalar
+#pod references.  Further, since Sub::Exporter uses C<can> to find the routine being
+#pod exported, the new package may be subclassed and some of its exports replaced.
+#pod
+#pod =cut
+
+__END__
+
+=pod
+
+=encoding UTF-8
+
+=head1 NAME
+
+Sub::Exporter::Cookbook - useful, demonstrative, or stupid Sub::Exporter tricks
+
+=head1 VERSION
+
+version 0.989
+
+=head1 OVERVIEW
+
+Sub::Exporter is a fairly simple tool, and can be used to achieve some very
+simple goals.  Its basic behaviors and their basic application (that is,
+"traditional" exporting of routines) are described in
+L<Sub::Exporter::Tutorial> and L<Sub::Exporter>.  This document presents
+applications that may not be immediately obvious, or that can demonstrate how
+certain features can be put to use (for good or evil).
+
+=head1 PERL VERSION
+
+This library should run on perls released even a long time ago.  It should work
+on any version of perl released in the last five years.
+
+Although it may work on older versions of perl, no guarantee is made that the
+minimum required version will not be increased.  The version may be increased
+for any reason, and there is no promise that patches will be accepted to lower
+the minimum required perl.
+
+=head1 THE RECIPES
+
+=head2 Exporting Methods as Routines
+
+With Exporter.pm, exporting methods is a non-starter.  Sub::Exporter makes it
+simple.  By using the C<curry_method> utility provided in
+L<Sub::Exporter::Util>, a method can be exported with the invocant built in.
+
+  package Object::Strenuous;
+
+  use Sub::Exporter::Util 'curry_method';
+  use Sub::Exporter -setup => {
+    exports => [ objection => curry_method('new') ],
+  };
+
+With this configuration, the importing code may contain:
+
+  my $obj = objection("irrelevant");
+
+...and this will be equivalent to:
+
+  my $obj = Object::Strenuous->new("irrelevant");
+
+The built-in invocant is determined by the invocant for the C<import> method.
+That means that if we were to subclass Object::Strenuous as follows:
+
+  package Object::Strenuous::Repeated;
+  @ISA = 'Object::Strenuous';
+
+...then importing C<objection> from the subclass would build-in that subclass.
+
+Finally, since the invocant can be an object, you can write something like
+this:
+
+  package Cypher;
+  use Sub::Exporter::Util 'curry_method';
+  use Sub::Exporter -setup => {
+    exports => [ encypher => curry_method ],
+  };
+
+with the expectation that C<import> will be called on an instantiated Cypher
+object:
+
+  BEGIN {
+    my $cypher = Cypher->new( ... );
+    $cypher->import('encypher');
+  }
+
+Now there is a globally-available C<encypher> routine which calls the encypher
+method on an otherwise unavailable Cypher object.
+
+=head2 Exporting Methods as Methods
+
+While exporting modules usually export subroutines to be called as subroutines,
+it's easy to use Sub::Exporter to export subroutines meant to be called as
+methods on the importing package or its objects.
+
+Here's a trivial (and naive) example:
+
+  package Mixin::DumpObj;
+
+  use Data::Dumper;
+
+  use Sub::Exporter -setup => {
+    exports => [ qw(dump) ]
+  };
+
+  sub dump {
+    my ($self) = @_;
+    return Dumper($self);
+  }
+
+When writing your own object class, you can then import C<dump> to be used as a
+method, called like so:
+
+  $object->dump;
+
+By assuming that the importing class will provide a certain interface, a
+method-exporting module can be used as a simple plugin:
+
+  package Number::Plugin::Upto;
+  use Sub::Exporter -setup => {
+    into    => 'Number',
+    exports => [ qw(upto) ],
+    groups  => [ default => [ qw(upto) ] ],
+  };
+
+  sub upto {
+    my ($self) = @_;
+    return 1 .. abs($self->as_integer);
+  }
+
+The C<into> line in the configuration says that this plugin will export, by
+default, into the Number package, not into the C<use>-ing package.  It can be
+exported anyway, though, and will work as long as the destination provides an
+C<as_integer> method like the one it expects.  To import it to a different
+destination, one can just write:
+
+  use Number::Plugin::Upto { into => 'Quantity' };    
+
+=head2 Mixing-in Complex External Behavior
+
+When exporting methods to be used as methods (see above), one very powerful
+option is to export methods that are generated routines that maintain an
+enclosed reference to the exporting module.  This allows a user to import a
+single method which is implemented in terms of a complete, well-structured
+package.
+
+Here is a very small example:
+
+  package Data::Analyzer;
+
+  use Sub::Exporter -setup => {
+    exports => [ analyze => \'_generate_analyzer' ],
+  };
+
+  sub _generate_analyzer {
+    my ($mixin, $name, $arg, $col) = @_;
+
+    return sub {
+      my ($self) = @_;
+
+      my $values = [ $self->values ];
+
+      my $analyzer = $mixin->new($values);
+      $analyzer->perform_analysis;
+      $analyzer->aggregate_results;
+
+      return $analyzer->summary;
+    };
+  }
+
+If imported by any package providing a C<values> method, this plugin will
+provide a single C<analyze> method that acts as a simple interface to a more
+complex set of behaviors.
+
+Even more importantly, because the C<$mixin> value will be the invocant on
+which the C<import> was actually called, one can subclass C<Data::Analyzer> and
+replace only individual pieces of the complex behavior, making it easy to write
+complex, subclassable toolkits with simple single points of entry for external
+interfaces.
+
+=head2 Exporting Constants
+
+While Sub::Exporter isn't in the constant-exporting business, it's easy to
+export constants by using one of its sister modules, Package::Generator.
+
+  package Important::Constants;
+ 
+  use Sub::Exporter -setup => {
+    collectors => [ constants => \'_set_constants' ],
+  };
+ 
+  sub _set_constants {
+    my ($class, $value, $data) = @_;
+ 
+    Package::Generator->assign_symbols(
+      $data->{into},
+      [
+        MEANING_OF_LIFE => \42,
+        ONE_TRUE_BASE   => \13,
+        FACTORS         => [ 6, 9 ],
+      ],
+    );
+
+    return 1;
+  }
+
+Then, someone can write:
+
+  use Important::Constants 'constants';
+  
+  print "The factors @FACTORS produce $MEANING_OF_LIFE in $ONE_TRUE_BASE.";
+
+(The constants must be exported via a collector, because they are effectively
+altering the importing class in a way other than installing subroutines.)
+
+=head2 Altering the Importer's @ISA
+
+It's trivial to make a collector that changes the inheritance of an importing
+package:
+
+  use Sub::Exporter -setup => {
+    collectors => { -base => \'_make_base' },
+  };
+
+  sub _make_base {
+    my ($class, $value, $data) = @_;
+
+    my $target = $data->{into};
+    push @{"$target\::ISA"}, $class;
+  }
+
+Then, the user of your class can write:
+
+  use Some::Class -base;
+
+and become a subclass.  This can be quite useful in building, for example, a
+module that helps build plugins.  We may want a few utilities imported, but we
+also want to inherit behavior from some base plugin class;
+
+  package Framework::Util;
+
+  use Sub::Exporter -setup => {
+    exports    => [ qw(log global_config) ],
+    groups     => [ _plugin => [ qw(log global_config) ]
+    collectors => { '-plugin' => \'_become_plugin' },
+  };
+
+  sub _become_plugin {
+    my ($class, $value, $data) = @_;
+
+    my $target = $data->{into};
+    push @{"$target\::ISA"}, $class->plugin_base_class;
+
+    push @{ $data->{import_args} }, '-_plugin';
+  }
+
+Now, you can write a plugin like this:
+
+  package Framework::Plugin::AirFreshener;
+  use Framework::Util -plugin;
+
+=head2 Eating Exporter.pm's Brain
+
+You probably shouldn't actually do this in production.  It's offered more as a
+demonstration than a suggestion.
+
+ sub exporter_upgrade {
+   my ($pkg) = @_;
+   my $new_pkg = "$pkg\::UsingSubExporter";
+
+   return $new_pkg if $new_pkg->isa($pkg);
+
+   Sub::Exporter::setup_exporter({
+     as      => 'import',
+     into    => $new_pkg,
+     exports => [ @{"$pkg\::EXPORT_OK"} ],
+     groups  => {
+       %{"$pkg\::EXPORT_TAG"},
+       default => [ @{"$pkg\::EXPORTS"} ],
+     },
+   });
+
+   @{"$new_pkg\::ISA"} = $pkg;
+   return $new_pkg;
+ }
+
+This routine, given the name of an existing package configured to use
+Exporter.pm, returns the name of a new package with a Sub::Exporter-powered
+C<import> routine.  This lets you import C<Toolkit::exported_sub> into the
+current package with the name C<foo> by writing:
+
+  BEGIN {
+    require Toolkit;
+    exporter_upgrade('Toolkit')->import(exported_sub => { -as => 'foo' })
+  }
+
+If you're feeling particularly naughty, this routine could have been declared
+in the UNIVERSAL package, meaning you could write:
+
+  BEGIN {
+    require Toolkit;
+    Toolkit->exporter_upgrade->import(exported_sub => { -as => 'foo' })
+  }
+
+The new package will have all the same exporter configuration as the original,
+but will support export and group renaming, including exporting into scalar
+references.  Further, since Sub::Exporter uses C<can> to find the routine being
+exported, the new package may be subclassed and some of its exports replaced.
+
+=head1 AUTHOR
+
+Ricardo Signes <cpan@semiotic.systems>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2007 by Ricardo Signes.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut

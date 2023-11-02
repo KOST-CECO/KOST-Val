@@ -1,10 +1,10 @@
 package Mojo::Reactor::Poll;
 use Mojo::Base 'Mojo::Reactor';
 
-use Carp qw(croak);
-use IO::Poll qw(POLLERR POLLHUP POLLIN POLLNVAL POLLOUT POLLPRI);
-use List::Util qw(min);
-use Mojo::Util qw(md5_sum steady_time);
+use Carp        qw(croak);
+use IO::Poll    qw(POLLERR POLLHUP POLLIN POLLNVAL POLLOUT POLLPRI);
+use List::Util  qw(min);
+use Mojo::Util  qw(md5_sum steady_time);
 use Time::HiRes qw(usleep);
 
 sub again {
@@ -93,9 +93,7 @@ sub remove {
   return !!delete $self->{io}{fileno($remove) // croak 'Handle is closed'};
 }
 
-sub reset {
-  delete @{shift()}{qw(events io next_tick next_timer running timers)};
-}
+sub reset { delete @{shift()}{qw(events io next_tick next_timer running timers)} }
 
 sub start {
   my $self = shift;
@@ -133,11 +131,8 @@ sub _next {
 
 sub _timer {
   my ($self, $recurring, $after, $cb) = @_;
-
-  my $id    = $self->_id;
-  my $timer = $self->{timers}{$id}
-    = {cb => $cb, after => $after, recurring => $recurring, time => steady_time + $after};
-
+  my $id = $self->_id;
+  $self->{timers}{$id} = {cb => $cb, after => $after, recurring => $recurring, time => steady_time + $after};
   return $id;
 }
 

@@ -381,17 +381,17 @@ Luxembourgish Luxembourg locale.
    1995-12-22T09:05:02 = Fre., 22.
   -0010-09-15T04:44:23 = Sam., 15.
 
-=head3 Ehm (E, h:mm a)
+=head3 Ehm (E, h:mm a)
 
-   2008-02-05T18:30:30 = Dën., 6:30 nomëttes
-   1995-12-22T09:05:02 = Fre., 9:05 moies
-  -0010-09-15T04:44:23 = Sam., 4:44 moies
+   2008-02-05T18:30:30 = Dën., 6:30 nomëttes
+   1995-12-22T09:05:02 = Fre., 9:05 moies
+  -0010-09-15T04:44:23 = Sam., 4:44 moies
 
-=head3 Ehms (E, h:mm:ss a)
+=head3 Ehms (E, h:mm:ss a)
 
-   2008-02-05T18:30:30 = Dën., 6:30:30 nomëttes
-   1995-12-22T09:05:02 = Fre., 9:05:02 moies
-  -0010-09-15T04:44:23 = Sam., 4:44:23 moies
+   2008-02-05T18:30:30 = Dën., 6:30:30 nomëttes
+   1995-12-22T09:05:02 = Fre., 9:05:02 moies
+  -0010-09-15T04:44:23 = Sam., 4:44:23 moies
 
 =head3 Gy (y G)
 
@@ -416,6 +416,12 @@ Luxembourgish Luxembourg locale.
    2008-02-05T18:30:30 = 5. Feb. 2008 n. Chr.
    1995-12-22T09:05:02 = 22. Dez. 1995 n. Chr.
   -0010-09-15T04:44:23 = 15. Sep. -10 v. Chr.
+
+=head3 GyMd (GGGGG y-MM-dd)
+
+   2008-02-05T18:30:30 = n. Chr. 2008-02-05
+   1995-12-22T09:05:02 = n. Chr. 1995-12-22
+  -0010-09-15T04:44:23 = v. Chr. -10-09-15
 
 =head3 H (HH 'Auer')
 
@@ -501,23 +507,23 @@ Luxembourgish Luxembourg locale.
    1995-12-22T09:05:02 = 22
   -0010-09-15T04:44:23 = 15
 
-=head3 h (h a)
+=head3 h (h a)
 
-   2008-02-05T18:30:30 = 6 nomëttes
-   1995-12-22T09:05:02 = 9 moies
-  -0010-09-15T04:44:23 = 4 moies
+   2008-02-05T18:30:30 = 6 nomëttes
+   1995-12-22T09:05:02 = 9 moies
+  -0010-09-15T04:44:23 = 4 moies
 
-=head3 hm (h:mm a)
+=head3 hm (h:mm a)
 
-   2008-02-05T18:30:30 = 6:30 nomëttes
-   1995-12-22T09:05:02 = 9:05 moies
-  -0010-09-15T04:44:23 = 4:44 moies
+   2008-02-05T18:30:30 = 6:30 nomëttes
+   1995-12-22T09:05:02 = 9:05 moies
+  -0010-09-15T04:44:23 = 4:44 moies
 
-=head3 hms (h:mm:ss a)
+=head3 hms (h:mm:ss a)
 
-   2008-02-05T18:30:30 = 6:30:30 nomëttes
-   1995-12-22T09:05:02 = 9:05:02 moies
-  -0010-09-15T04:44:23 = 4:44:23 moies
+   2008-02-05T18:30:30 = 6:30:30 nomëttes
+   1995-12-22T09:05:02 = 9:05:02 moies
+  -0010-09-15T04:44:23 = 4:44:23 moies
 
 =head3 hmsv (h:mm:ss a v)
 

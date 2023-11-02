@@ -1,6 +1,6 @@
 package Net::SSH2;
 
-our $VERSION = '0.72';
+our $VERSION = '0.73';
 
 use 5.006;
 use strict;
@@ -1478,8 +1478,8 @@ I<Don't hesitate to report any bug you found in that area!>
 
 =head2 Protocol versions
 
-The underlaying C<libssh2> library does support version 2 of the SSH
-protocol exclusively (hopefully, version 1 usage is almost extinct).
+The underlying C<libssh2> library does support version 2 of the SSH protocol
+exclusively (hopefully, version 1 usage is almost extinct.)
 
 The SFTP client implements version 3 of the SFTP protocol.
 
@@ -1491,10 +1491,9 @@ on the libssh2 version being used and of the underlying crypto backend
 it was configured to use at build time (OpenSSL C<libssl> or
 C<libgcrypt>).
 
-An increassingly common problem is that OpenSSH since version 7.8
-(released 2018-8-24) generates keys by default using the format
-RFC4716 which is not supported by the default crypto backend
-(C<libssl>).
+An increasingly common problem is that OpenSSH since version 7.8 (released
+2018-8-24) generates keys by default using the format RFC4716 which is not
+supported by the default crypto backend (C<libssl>).
 
 Keys can be converted inplace to the old PEM format using
 L<ssh-keygen(1)> as follows:
@@ -1504,11 +1503,10 @@ L<ssh-keygen(1)> as follows:
 On Windows, PuTTYgen (which is part of the PuTTY distribution) can be
 used to convert keys.
 
-Another common issue is that in the last years OpenSSH has
-incorporated several new cyphers that are not supported by any version
-of C<libssh2> yet (though the incoming 1.8.1 may aliviate the
-situation). Currently the best option from an interoperability
-standpoint is probably to stick to RSA key usage.
+Another common issue is that in the last years OpenSSH has incorporated several
+new cyphers that are not supported by any version of C<libssh2> yet. Currently
+the best option from an interoperability standpoint is probably to stick to RSA
+key usage.
 
 =head2 Security
 

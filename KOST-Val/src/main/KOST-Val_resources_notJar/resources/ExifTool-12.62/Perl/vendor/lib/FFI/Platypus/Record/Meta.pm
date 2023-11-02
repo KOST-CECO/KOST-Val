@@ -5,13 +5,13 @@ use warnings;
 use 5.008004;
 
 # ABSTRACT: FFI support for structured records data
-our $VERSION = '1.34'; # VERSION
+our $VERSION = '2.08'; # VERSION
 
 
 {
   require FFI::Platypus;
   my $ffi = FFI::Platypus->new(
-    api          => 1,
+    api          => 2,
   );
   $ffi->bundle;
   $ffi->mangler(sub {
@@ -31,8 +31,8 @@ our $VERSION = '1.34'; # VERSION
 
   $ffi->attach( _find_symbol => ['string'] => 'ffi_type');
 
-  $ffi->attach( new => ['ffi_type[]'] => 'meta_t', sub {
-    my($xsub, $class, $elements) = @_;
+  $ffi->attach( new => ['ffi_type[]','int'] => 'meta_t', sub {
+    my($xsub, $class, $elements, $closure_safe) = @_;
 
     if(ref($elements) ne 'ARRAY')
     {
@@ -57,7 +57,7 @@ our $VERSION = '1.34'; # VERSION
 
     push @element_type_pointers, undef;
 
-    my $ptr = $xsub->(\@element_type_pointers);
+    my $ptr = $xsub->(\@element_type_pointers, $closure_safe);
     bless \$ptr, $class;
   });
 
@@ -68,6 +68,8 @@ our $VERSION = '1.34'; # VERSION
 
   $ffi->attach( DESTROY          => ['meta_t'] => 'void'       );
 }
+
+sub ptr { ${ shift() } }
 
 1;
 
@@ -83,7 +85,7 @@ FFI::Platypus::Record::Meta - FFI support for structured records data
 
 =head1 VERSION
 
-version 1.34
+version 2.08
 
 =head1 DESCRIPTION
 
@@ -116,7 +118,7 @@ Damyan Ivanov
 
 Ilya Pavlov (Ilya33)
 
-Petr Pisar (ppisar)
+Petr Písař (ppisar)
 
 Mohammad S Anwar (MANWAR)
 
@@ -126,9 +128,17 @@ Meredith (merrilymeredith, MHOWARD)
 
 Diab Jerius (DJERIUS)
 
+Eric Brine (IKEGAMI)
+
+szTheory
+
+José Joaquín Atria (JJATRIA)
+
+Pete Houston (openstrike, HOUSTON)
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2015,2016,2017,2018,2019,2020 by Graham Ollis.
+This software is copyright (c) 2015-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

@@ -8,7 +8,7 @@ package # hide from the pauses
 use strict;
 use warnings;
 
-our $VERSION = '0.24';
+our $VERSION = '0.26';
 
 use Scalar::Util ();
 use constant _NEEDS_MEMORY_CORRUPTION_FIXUP => (
