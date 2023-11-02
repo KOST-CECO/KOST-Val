@@ -8,7 +8,7 @@ use Path::Tiny ();
 use Alien::Build::Util qw( _mirror );
 
 # ABSTRACT: Core download plugin
-our $VERSION = '2.38'; # VERSION
+our $VERSION = '2.80'; # VERSION
 
 
 sub _hook
@@ -27,10 +27,42 @@ sub _hook
 
   if($res->{type} eq 'list')
   {
+    my $orig = $res;
     $res = $build->prefer($res);
-    die "no matching files in listing" if @{ $res->{list} } == 0;
+
+    my @exclude;
+    if($build->meta->prop->{start_url} =~ /^https:/)
+    {
+      @{ $res->{list} } = grep {
+        $_->{url} =~ /https:/ ? 1 : do {
+          push @exclude, $_->{url};
+          0;
+        }
+      } @{ $res->{list} };
+    }
+
+    if(@{ $res->{list} } == 0)
+    {
+      my @excluded = map { $_->{url} } @{ $orig->{list} };
+      if(@excluded)
+      {
+        if(@excluded > 15)
+        {
+          splice @excluded , 14;
+          push @excluded, '...';
+        }
+        $build->log("These files were excluded by the filter stage:");
+        $build->log("excluded $_") for @excluded;
+      }
+      else
+      {
+        $build->log("No files found prior to the filter stage");
+      }
+      die "no matching files in listing";
+    }
     my $version = $res->{list}->[0]->{version};
     my($pick, @other) = map { $_->{url} } @{ $res->{list} };
+
     if(@other > 8)
     {
       splice @other, 7;
@@ -38,6 +70,18 @@ sub _hook
     }
     $build->log("candidate *$pick");
     $build->log("candidate  $_") for @other;
+
+    if(@exclude)
+    {
+      if(@exclude > 8)
+      {
+        splice @exclude, 7;
+        push @exclude, '...';
+      }
+      $build->log("excluded insecure URLs:");
+      $build->log($_) for @exclude;
+    }
+
     $res = $build->fetch($pick);
 
     if($version)
@@ -59,6 +103,7 @@ sub _hook
       $path->spew_raw($res->{content});
       $build->install_prop->{download} = $path->stringify;
       $build->install_prop->{complete}->{download} = 1;
+      $build->install_prop->{download_detail}->{"$path"}->{protocol} = $res->{protocol} if defined $res->{protocol};
       return $build;
     }
     elsif($res->{path})
@@ -69,6 +114,7 @@ sub _hook
         {
           $build->install_prop->{download} = $res->{path};
           $build->install_prop->{complete}->{download} = 1;
+          $build->install_prop->{download_detail}->{$res->{path}}->{protocol} = $res->{protocol} if defined $res->{protocol};
         }
         else
         {
@@ -97,6 +143,7 @@ sub _hook
         }
         $build->install_prop->{download} = $to->stringify;
         $build->install_prop->{complete}->{download} = 1;
+        $build->install_prop->{download_detail}->{"$to"}->{protocol} = $res->{protocol} if defined $res->{protocol};
       }
       return $build;
     }
@@ -126,7 +173,7 @@ Alien::Build::Plugin::Core::Download - Core download plugin
 
 =head1 VERSION
 
-version 2.38
+version 2.80
 
 =head1 SYNOPSIS
 
@@ -183,7 +230,7 @@ Juan Julián Merelo Guervós (JJ)
 
 Joel Berger (JBERGER)
 
-Petr Pisar (ppisar)
+Petr Písař (ppisar)
 
 Lance Wicks (LANCEW)
 
@@ -201,9 +248,13 @@ Paul Evans (leonerd, PEVANS)
 
 Håkon Hægland (hakonhagland, HAKONH)
 
+nick nauwelaerts (INPHOBIA)
+
+Florian Weimer
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011-2020 by Graham Ollis.
+This software is copyright (c) 2011-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

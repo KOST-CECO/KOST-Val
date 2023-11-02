@@ -4,7 +4,7 @@ use strict;
 use vars qw($VERSION @ISA @EXPORT $CWD @CWD);
 # ABSTRACT: a more sensible way to change directories
 
-our $VERSION = '0.1010';
+our $VERSION = '0.1011';
 
 require Exporter;
 @ISA = qw(Exporter);
@@ -205,7 +205,7 @@ File::chdir - a more sensible way to change directories
 
 =head1 VERSION
 
-version 0.1010
+version 0.1011
 
 =head1 SYNOPSIS
 
@@ -257,7 +257,7 @@ C<$CWD> and normal C<chdir()> work together just fine.
 C<@CWD> represents the current working directory as an array, each
 directory in the path is an element of the array.  This can often make
 the directory easier to manipulate, and you don't have to fumble with
-C<File::Spec->splitpath> and C<File::Spec->catdir> to make portable code.
+C<< File::Spec->splitpath >> and C<< File::Spec->catdir >> to make portable code.
 
   # Similar to chdir("/usr/local/src/perl")
   @CWD = qw(usr local src perl);
@@ -362,7 +362,7 @@ There is currently no way to change the current volume via File::chdir.
 
 =head1 NOTES
 
-C<$CWD> returns the current directory using native path separators, i.e. \
+C<$CWD> returns the current directory using native path separators, i.e. C<\>
 on Win32.  This ensures that C<$CWD> will compare correctly with directories
 created using File::Spec.  For example:
 
@@ -444,15 +444,29 @@ Michael G. Schwern <schwern@pobox.com>
 
 =back
 
-=head1 CONTRIBUTOR
+=head1 CONTRIBUTORS
 
-=for stopwords Joel Berger
+=for stopwords David Golden Joel Berger Philippe Bruhat (BooK)
+
+=over 4
+
+=item *
+
+David Golden <xdg@xdg.me>
+
+=item *
 
 Joel Berger <joel.a.berger@gmail.com>
 
+=item *
+
+Philippe Bruhat (BooK) <book@cpan.org>
+
+=back
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2015 by Michael G. Schwern and David Golden.
+This software is copyright (c) 2016 by Michael G. Schwern and David Golden.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

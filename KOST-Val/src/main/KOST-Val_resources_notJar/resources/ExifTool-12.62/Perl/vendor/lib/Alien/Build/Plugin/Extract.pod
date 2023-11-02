@@ -14,7 +14,7 @@ Alien::Build::Plugin::Extract - Extract Alien::Build plugins
 
 =head1 VERSION
 
-version 2.38
+version 2.80
 
 =head1 SYNOPSIS
 
@@ -26,21 +26,35 @@ version 2.38
 =head1 DESCRIPTION
 
 Extract plugins extract packages that have been downloaded from the internet.
-Unless you are doing something unusual you will likely want to use the 
-L<Alien::Build::Plugin::Extract::Negotiate> plugin to select the best 
+Unless you are doing something unusual you will likely want to use the
+L<Alien::Build::Plugin::Extract::Negotiate> plugin to select the best
 Extract plugin available.
 
 =over 4
 
 =item L<Alien::Build::Plugin::Extract::ArchiveTar>
 
+Extract using C<tar>.  Typically also works with compressed tarballs like C<tar.gz>.
+
 =item L<Alien::Build::Plugin::Extract::ArchiveZip>
+
+Extract using L<Archive::Zip>.
 
 =item L<Alien::Build::Plugin::Extract::CommandLine>
 
+Extract using command line tools like C<tar> or C<unxip>.
+
 =item L<Alien::Build::Plugin::Extract::Directory>
 
+Extract a local directory.
+
+=item L<Alien::Build::Plugin::Extract::File>
+
+"Extract" a single file.
+
 =item L<Alien::Build::Plugin::Extract::Negotiate>
+
+Pick the best extract plugin based on the extension of the package archive.
 
 =back
 
@@ -90,7 +104,7 @@ Juan Julián Merelo Guervós (JJ)
 
 Joel Berger (JBERGER)
 
-Petr Pisar (ppisar)
+Petr Písař (ppisar)
 
 Lance Wicks (LANCEW)
 
@@ -108,9 +122,13 @@ Paul Evans (leonerd, PEVANS)
 
 Håkon Hægland (hakonhagland, HAKONH)
 
+nick nauwelaerts (INPHOBIA)
+
+Florian Weimer
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011-2020 by Graham Ollis.
+This software is copyright (c) 2011-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

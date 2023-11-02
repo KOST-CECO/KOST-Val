@@ -209,7 +209,7 @@ contribution, but deserve acknowledgement just the same. Time and time again
 the seemingly most insignificant questions and suggestions have been shown
 to catalyze monumental improvements in consistency, accuracy and performance.
 
-List of the awesome contributors who made DBIC v0.082842 possible
+List of the awesome contributors who made DBIC v0.082843 possible
 
 =encoding utf8
 
@@ -418,6 +418,8 @@ B<kkane>: Kevin L. Kane <kevin.kane@gmail.com>
 B<konobi>: Scott McWhirter <konobi@cpan.org>
 
 B<lejeunerenard>: Sean Zellmer <sean@lejeunerenard.com>
+
+B<leont>: Leon Timmermans <fawaka@gmail.com>
 
 B<littlesavage>: Alexey Illarionov <littlesavage@orionet.ru>
 

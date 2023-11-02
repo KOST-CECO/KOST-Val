@@ -3,7 +3,7 @@ package Net::DNS::Domain;
 use strict;
 use warnings;
 
-our $VERSION = (qw$Id: Domain.pm 1825 2020-11-18 13:15:01Z willem $)[2];
+our $VERSION = (qw$Id: Domain.pm 1913 2023-04-20 12:33:30Z willem $)[2];
 
 
 =head1 NAME
@@ -48,10 +48,9 @@ use constant UTF8 => scalar eval {	## not UTF-EBCDIC  [see Unicode TR#16 3.6]
 	Encode::encode_utf8( chr(182) ) eq pack( 'H*', 'C2B6' );
 };
 
-use constant LIBIDN2 => defined eval { require Net::LibIDN2 };
-use constant LIBIDN  => LIBIDN2 ? undef : defined eval { require Net::LibIDN };
-
+use constant LIBIDN2  => defined eval { require Net::LibIDN2 };
 use constant IDN2FLAG => LIBIDN2 ? &Net::LibIDN2::IDN2_NFC_INPUT + &Net::LibIDN2::IDN2_NONTRANSITIONAL : 0;
+use constant LIBIDN   => LIBIDN2 ? undef : defined eval { require Net::LibIDN };
 
 # perlcc: address of encoding objects must be determined at runtime
 my $ascii = ASCII ? Encode::find_encoding('ascii') : undef;	# Osborn's Law:
@@ -97,8 +96,8 @@ sub new {
 	my ( $class, $s ) = @_;
 	croak 'domain identifier undefined' unless defined $s;
 
-	my $k = join '', $s, $class, $ORIGIN || '';		# cache key
-	my $cache = $$cache1{$k} ||= $$cache2{$k};		# two layer cache
+	my $index = join '', $s, $class, $ORIGIN || '';		# cache key
+	my $cache = $$cache1{$index} ||= $$cache2{$index};	# two layer cache
 	return $cache if defined $cache;
 
 	( $cache1, $cache2, $limit ) = ( {}, $cache1, 500 ) unless $limit--;	# recycle cache
@@ -125,11 +124,12 @@ sub new {
 		}
 
 		s/\134([\060-\071]{3})/$unescape{$1}/eg;	# restore numeric escapes
-		s/\134(.)/$1/g;					# restore character escapes
+		s/\134([^\134])/$1/g;				# restore character escapes
+		s/\134(\134)/$1/g;				# restore escaped escapes
 		croak qq(label too long in "$s") if length > 63;
 	}
 
-	$$cache1{$k} = $self;					# cache object reference
+	$$cache1{$index} = $self;				# cache object reference
 
 	return $self if $s =~ /\.$/;				# fully qualified name
 	$self->{origin} = $ORIGIN || return $self;		# dynamically scoped $ORIGIN
@@ -159,18 +159,19 @@ sub name {
 	return unless defined wantarray;
 
 	my @label = shift->_wire;
+	return $self->{name} = '.' unless scalar @label;
+
 	for (@label) {
 		s/([^\055\101-\132\141-\172\060-\071])/$escape{$1}/eg;
 	}
 
-	return $self->{name} = '.' unless scalar @label;
 	return $self->{name} = _decode_ascii( join chr(46), @label );
 }
 
 
 =head2 fqdn
 
-    @fqdn = $domain->fqdn;
+    $fqdn = $domain->fqdn;
 
 Returns a character string containing the fully qualified domain
 name, including the trailing dot.
@@ -179,7 +180,7 @@ name, including the trailing dot.
 
 sub fqdn {
 	my $name = &name;
-	return $name =~ /[.]$/ ? $name : $name . '.';		# append trailing dot
+	return $name =~ /[.]$/ ? $name : "$name.";		# append trailing dot
 }
 
 
@@ -225,7 +226,7 @@ sub label {
 	my @label = shift->_wire;
 	for (@label) {
 		s/([^\055\101-\132\141-\172\060-\071])/$escape{$1}/eg;
-		_decode_ascii($_)
+		_decode_ascii($_);
 	}
 	return @label;
 }
@@ -243,10 +244,7 @@ represented by the appropriate escape sequence.
 
 =cut
 
-sub string {
-	( my $name = &name ) =~ s/(["();@])/\\$1/;		# escape special char
-	return $name =~ /[.]$/ ? $name : $name . '.';		# append trailing dot
-}
+sub string { return &fqdn }
 
 
 =head2 origin
@@ -265,13 +263,13 @@ my $placebo = sub { my $constructor = shift; &$constructor; };
 
 sub origin {
 	my ( $class, $name ) = @_;
-	my $domain = defined $name ? Net::DNS::Domain->new($name) : return $placebo;
+	my $domain = defined $name ? __PACKAGE__->new($name) : return $placebo;
 
 	return sub {						# closure w.r.t. $domain
 		my $constructor = shift;
 		local $ORIGIN = $domain;			# dynamically scoped $ORIGIN
 		&$constructor;
-			}
+	}
 }
 
 
@@ -306,25 +304,26 @@ sub _encode_utf8 {			## perl internal encoding to UTF8
 sub _wire {
 	my $self = shift;
 
-	my $label = $self->{label};
+	my $label  = $self->{label};
 	my $origin = $self->{origin};
 	return ( @$label, $origin ? $origin->_wire : () );
 }
 
 
 %escape = eval {			## precalculated ASCII escape table
-	my %table = (						# ASCII printable,	\. \\
-		( map { ( $_ => $_ ) } map { pack( 'C', $_ ) } ( 33 .. 126 ) ),
-		( map { pack( 'C', $_ ) => pack( 'C2', 92, $_ ) } ( 46, 92 ) ),
-		);
+	my %table = map { ( chr($_) => chr($_) ) } ( 0 .. 127 );
 
-	foreach my $n ( 0 .. 32, 127 .. 255 ) {			# \ddd
+	foreach my $n ( 0 .. 32, 34, 92, 127 .. 255 ) {		# \ddd
 		my $codepoint = sprintf( '%03u', $n );
 
 		# transliteration for non-ASCII character encodings
 		$codepoint =~ tr [0-9] [\060-\071];
 
 		$table{pack( 'C', $n )} = pack 'C a3', 92, $codepoint;
+	}
+
+	foreach my $n ( 40, 41, 46, 59 ) {			# character escape
+		$table{chr($n)} = pack( 'C2', 92, $n );
 	}
 
 	return %table;
@@ -375,7 +374,7 @@ All rights reserved.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -392,7 +391,10 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::LibIDN2>, RFC1034, RFC1035, RFC5891, Unicode TR#16
+L<perl> L<Net::DNS> L<Net::LibIDN2>
+L<RFC1034|https://tools.ietf.org/html/rfc1034>
+L<RFC1035|https://tools.ietf.org/html/rfc1035>
+L<RFC5891|https://tools.ietf.org/html/rfc5891>
 
 =cut
 

@@ -37,7 +37,7 @@ Imager::Files - working with image files
   my $data;
   $img->write(data => \$data, type => $type) or die;
 
-  my $fh = ... ; # eg. IO::File
+  open my $fh, "+>:raw", ... ;
   $img->write(fh => $fh, type => $type) or die;
 
   $img->write(fd => fileno($fh), type => $type) or die;
@@ -177,6 +177,13 @@ and can be any of the following:
   tga   TARGA
   tiff  Tagged Image File Format (TIFF)
 
+Support for other formats can be found on CPAN, including:
+X<heif>X<QOI>X<webp>
+
+  heif/heic   Imager::File::HEIF
+  qoi         Imager::File::QOI
+  webp        Imager::File::WEBP
+
 When you read an image, Imager may set some tags, possibly including
 information about the spatial resolution, textual information, and
 animation information.  See L<Imager::ImageTypes/Tags> for specifics.
@@ -209,9 +216,9 @@ file you do not need to supply a C<type>.
 
 =item *
 
-C<fh> - C<fh> is a file handle, typically either returned from
-C<<IO::File->new()>>, or a glob from an C<open> call.  You should call
-C<binmode> on the handle before passing it to Imager.
+C<fh> - C<fh> is a file handle, typically returned from an C<open>
+call.  You should call C<binmode> on the handle before passing it to
+Imager.
 
 Imager will set the handle to autoflush to make sure any buffered data
 is flushed , since Imager will write to the file descriptor (from
@@ -700,10 +707,141 @@ not set in the image when reading:
 
 =over
 
+=item *
+
 C<jpeg_optimize> - set to a non-zero integer to compute optimal
 Huffman coding tables for the image.  This will increase memory usage
 and processing time (about 12% in my simple tests) but can
 significantly reduce file size without a loss of quality.
+
+=item *
+
+C<jpeg_compress_profile> - set to either C<fastest>, the default, or
+only with C<MozJPEG>, to C<max>.  Setting this to any other value will
+cause an error, failing the write() call.  Setting this to C<max>
+without C<MozJPEG> will cause an error.
+
+  use Imager::File::JPEG;
+  my $prof = Imager::File::JPEG->is_mozjpeg ? "max" : "fastest";
+  $im->write(file => "foo.jpeg", jpeg_compress_profile => $prof)
+     or die $im->errstr;
+
+Note that unlike C<MozJPEG>, Imager always defaults to C<fastest>.
+
+=item *
+
+C<jpeg_tune> - corresponds to the C<MozJPEG> C<cjpeg> C<-tune>
+parameters, this can be any of:
+
+=over
+
+=item * C<psnr>
+
+=item * C<ssim>
+
+=item * C<ms-ssim>
+
+=item * C<hvs-psnr>
+
+=back
+
+These set the same values as the C<jpeg_base_quant_tbl_idx>,
+C<jpeg_lambda_log_scale1>, C<jpeg_lambda_log_scale2> and
+C<jpeg_use_lambda_weight_tbl> tags, which can override the values set
+by C<jpeg_tune>.
+
+Unlike C<cjpeg> C<-tune>, C<jpeg_tune> doesn't force the quality to
+75.
+
+Requires that Imager::File::JPEG was built with C<MozJPEG>.
+
+=item *
+
+C<jpeg_arithmetic> - if set to non-zero, use arithmetic coding when
+writing the image.  This requires that the C<libjpeg> variant that
+L<Imager::File::JPEG> was built with had encode support for arithmetic
+coding enabled when it was built.
+
+=item *
+
+=for stopwords JFIF
+
+C<jpeg_jfif> - if set to zero, disable writing the JFIF header even if
+one is technically required, which it is for the color spaces Imager
+works with.  This saves 18 bytes in the output file and most
+applications including web browsers will successfully read the file,
+but your experience may differ.
+
+This will prevent the C<i_xres>, C<i_yres> and C<jpeg_density_units>
+tags from having an effect.
+
+=item *
+
+C<jpeg_smooth> - if set to a value from 1 to 100 apply smoothing to
+the image to eliminate dithering noise (without modifying the Imager
+image).  Default: 0 (no smoothing).
+
+=item *
+
+=for stopwords MCUs
+
+C<jpeg_restart> - if set to a plain integer C<N>, generate a JPEG
+restart marker every C<N> rows, if set to an integer followed by C<B>,
+generate a JPEG restart marker every C<N> MCUs, the 8x8 pixel blocks
+that make up a JPEG image.  Note that if this is specified in rows it
+will be translated to MCUs by C<libjpeg>.
+
+This allows a decoder to recover from corruption, but it makes the
+file slightly larger.
+
+Default: 0, no restart markers are produced.
+
+=item *
+
+=for stopwords subsampling YCbCr
+
+C<jpeg_sample> - control subsampling of the YCbCr components,
+equivalent to the C<-sample> parameter for C<cjpeg>.
+
+Default: "2x2,1x1,1x1", default 4:2:0 JPEG subsampling.
+
+=back
+
+The following options can be set on writing with C<MozJPEG> and
+correspond directly to the API options described in the C<MozJPEG>
+F<README-mozilla.txt>.  Attempting to set them when Imager::File::JPEG
+has been built with another C<libjpeg> will result in an error.
+
+=over
+
+=item *
+
+C<jpeg_optimize_scans>, C<jpeg_trellis_quant>,
+C<jpeg_trellis_quant_dc>, C<jpeg_tresllis_eob_opt>,
+C<jpeg_use_lambda_weight_tbl>, C<jpeg_use_scans_in_trellis>,
+C<jpeg_overshoot_deringing> - boolean options, set to 0 or 1.
+
+C<jpeg_lambda_log_scale1>, C<jpeg_lambda_log_scale2>,
+C<jpeg_trellis_delta_dc_weight> - integer options.
+
+
+C<jpeg_trellis_freq_split>, C<jpeg_trellis_num_loops>,
+C<jpeg_base_quant_tbl_idx>, C<jpeg_dc_scan_opt_mode> - floating point
+options.
+
+=back
+
+When reading a JPEG image, the following tag will be set, and ignored
+on writing:
+
+=over
+
+=item *
+
+C<jpeg_read_arithmetic> - the image had been written with arithmetic
+coding.  This uses a separate name from writing to avoid arithmetic
+coding from being accidentally propagated to a file that might need
+to be read by an implementation without arithmetic coding support.
 
 =back
 
@@ -1933,9 +2071,32 @@ to autoload it.
 
 =item preload()
 
-This preloads the file support modules included with or that have been
-included with Imager in the past.  This is intended for use in forking
-servers such as mod_perl.
+C<Imager->preload> preloads the file support modules included with or
+that have been included with Imager in the past.
+
+It isn't typically needed, but some cases where you might want to use
+it:
+
+=over
+
+=item *
+
+For use in forking servers such as mod_perl to allow as many pages as
+possible to be shared between parent and child processes.
+
+=item *
+
+to avoid runtime loading of a module from delaying output in an
+animation.
+
+=item *
+
+if you're loading modules from a relative C<$ENV{PERL5LIB}> and expect
+to change directories.
+
+=back
+
+You probably don't need it.
 
 If the module is not available no error occurs.
 

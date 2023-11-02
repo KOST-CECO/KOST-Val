@@ -21,6 +21,7 @@
     GyMMMEEEEd => "G y\N{U+b144} MMM d\N{U+c77c} EEEE",
     GyMMMEd => "G y\N{U+b144} MMM d\N{U+c77c} (E)",
     GyMMMd => "G y\N{U+b144} MMM d\N{U+c77c}",
+    GyMd => "GGGGG y/M/d",
     H => "H\N{U+c2dc}",
     HHmmss => "HH:mm:ss",
     Hm => "HH:mm",
@@ -275,5 +276,5 @@
   time_format_medium => "a h:mm:ss",
   time_format_short => "a h:mm",
   variant => undef,
-  version => 38,
+  version => 43,
 }

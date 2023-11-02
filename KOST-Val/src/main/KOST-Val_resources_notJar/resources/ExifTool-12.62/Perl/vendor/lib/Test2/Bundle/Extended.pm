@@ -4,7 +4,7 @@ use warnings;
 
 use Test2::V0;
 
-our $VERSION = '0.000139';
+our $VERSION = '0.000155';
 
 BEGIN {
     push @Test2::Bundle::Extended::ISA => 'Test2::V0';
@@ -316,9 +316,15 @@ See L<Test2::Tools::Compare>.
 
 =item $check = DF()
 
+=item $check = E()
+
 =item $check = DNE()
 
 =item $check = FDNE()
+
+=item $check = U()
+
+=item $check = L()
 
 =item $check = exact_ref($ref)
 

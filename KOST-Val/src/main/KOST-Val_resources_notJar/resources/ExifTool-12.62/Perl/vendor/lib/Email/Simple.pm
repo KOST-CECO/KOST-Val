@@ -1,9 +1,8 @@
-use 5.008;
-use strict;
+use v5.12.0;
 use warnings;
-package Email::Simple;
+package Email::Simple 2.218;
 # ABSTRACT: simple parsing of RFC2822 message format and headers
-$Email::Simple::VERSION = '2.216';
+
 use Carp ();
 
 use Email::Simple::Creator;
@@ -77,6 +76,8 @@ sub new {
   Carp::croak 'Unable to parse undefined message' if ! defined $text;
 
   my $text_ref = (ref $text || '' eq 'SCALAR') ? $text : \$text;
+
+  Carp::carp 'Message with wide characters' if ${$text_ref} =~ /[^\x00-\xFF]/;
 
   my ($pos, $mycrlf) = $class->_split_head_from_body($text_ref);
 
@@ -303,6 +304,7 @@ sub body {
 sub body_set {
   my ($self, $text) = @_;
   my $text_ref = ref $text ? $text : \$text;
+  Carp::carp 'Body with wide characters' if defined ${$text_ref} and ${$text_ref} =~ /[^\x00-\xFF]/;
   $self->{body} = $text_ref;
   return;
 }
@@ -348,7 +350,7 @@ Email::Simple - simple parsing of RFC2822 message format and headers
 
 =head1 VERSION
 
-version 2.216
+version 2.218
 
 =head1 SYNOPSIS
 
@@ -386,6 +388,16 @@ The Email:: namespace was begun as a reaction against the increasing complexity
 and bugginess of Perl's existing email modules.  C<Email::*> modules are meant
 to be simple to use and to maintain, pared to the bone, fast, minimal in their
 external dependencies, and correct.
+
+=head1 PERL VERSION
+
+This library should run on perls released even a long time ago.  It should work
+on any version of perl released in the last five years.
+
+Although it may work on older versions of perl, no guarantee is made that the
+minimum required version will not be increased.  The version may be increased
+for any reason, and there is no promise that patches will be accepted to lower
+the minimum required perl.
 
 =head1 METHODS
 
@@ -535,13 +547,13 @@ Casey West
 
 =item *
 
-Ricardo SIGNES
+Ricardo SIGNES <cpan@semiotic.systems>
 
 =back
 
 =head1 CONTRIBUTORS
 
-=for stopwords Brian Cassidy Christian Walde Marc Bradshaw Michael Stevens Pali Ricardo SIGNES Ronald F. Guilmette William Yardley
+=for stopwords Brian Cassidy Christian Walde Marc Bradshaw Michael Stevens Pali Ricardo Signes Ronald F. Guilmette William Yardley
 
 =over 4
 
@@ -567,7 +579,11 @@ Pali <pali@cpan.org>
 
 =item *
 
-Ricardo SIGNES <rjbs@cpan.org>
+Ricardo Signes <rjbs@cpan.org>
+
+=item *
+
+Ricardo Signes <rjbs@semiotic.systems>
 
 =item *
 

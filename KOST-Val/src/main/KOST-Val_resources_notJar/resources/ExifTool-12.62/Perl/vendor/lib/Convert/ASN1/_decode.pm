@@ -3,10 +3,7 @@
 # modify it under the same terms as Perl itself.
 
 package Convert::ASN1;
-{
-  $Convert::ASN1::VERSION = '0.27';
-}
-
+$Convert::ASN1::VERSION = '0.33';
 use strict;
 use warnings;
 
@@ -97,8 +94,15 @@ sub _decode {
 	      $buf,
 	    );
 
-	    ($seqof ? $seqof->[$idx++] : defined($var) ? $stash->{$var} : ref($stash) eq 'SCALAR' ? $$stash : undef)
-		= &{$ctr}(@ctrlist);
+        ($seqof
+            ? $seqof->[$idx++] # = &{$ctr}(@ctrlist);
+                : defined($var)
+                    ? $stash->{$var} # = &{$ctr}(@ctrlist);
+                        : ref($stash) eq 'SCALAR'
+                            ? $$stash # = &{$ctr}(@ctrlist);
+                                : my $any ) # = &{$ctr}(@ctrlist) FIX #43
+        = &{$ctr}(@ctrlist);
+
 	    $pos = $npos+$len+$indef;
 
 	    redo TAGLOOP if $seqof && $pos < $end;
@@ -663,7 +667,7 @@ sub _decode_tl {
   return if $pos+$len+$indef > $end;
 
   # return the tag, the length of the data, the position of the data
-  # and the number of extra bytes for indefinate encoding
+  # and the number of extra bytes for indefinite encoding
 
   ($tag, $len, $pos, $indef);
 }
@@ -683,12 +687,14 @@ sub _scan_indef {
       $pos += 2;
       next;
     }
+    return if $pos >= $end;
 
     my $tag = substr($_[0], $pos++, 1);
 
     if((unpack("C",$tag) & 0x1f) == 0x1f) {
       my $b;
       do {
+	return if $pos >= $end;
 	$tag .= substr($_[0],$pos++,1);
 	$b = ord substr($tag,-1);
       } while($b & 0x80);

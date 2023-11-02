@@ -2,7 +2,7 @@ package Net::DNS::RR::AFSDB;
 
 use strict;
 use warnings;
-our $VERSION = (qw$Id: AFSDB.pm 1814 2020-10-14 21:49:16Z willem $)[2];
+our $VERSION = (qw$Id: AFSDB.pm 1898 2023-02-15 14:27:22Z willem $)[2];
 
 use base qw(Net::DNS::RR);
 
@@ -19,18 +19,16 @@ use Net::DNS::DomainName;
 
 
 sub _decode_rdata {			## decode rdata from wire-format octet string
-	my $self = shift;
-	my ( $data, $offset, @opaque ) = @_;
+	my ( $self, $data, $offset ) = @_;
 
 	$self->{subtype}  = unpack "\@$offset n", $$data;
-	$self->{hostname} = Net::DNS::DomainName2535->decode( $data, $offset + 2, @opaque );
+	$self->{hostname} = Net::DNS::DomainName2535->decode( $data, $offset + 2 );
 	return;
 }
 
 
 sub _encode_rdata {			## encode rdata as wire-format octet string
-	my $self = shift;
-	my ( $offset, @opaque ) = @_;
+	my ( $self, $offset, @opaque ) = @_;
 
 	my $hostname = $self->{hostname};
 	return pack 'n a*', $self->subtype, $hostname->encode( $offset + 2, @opaque );
@@ -46,26 +44,23 @@ sub _format_rdata {			## format rdata portion of RR string.
 
 
 sub _parse_rdata {			## populate RR from rdata in argument list
-	my $self = shift;
+	my ( $self, @argument ) = @_;
 
-	$self->subtype(shift);
-	$self->hostname(shift);
+	for (qw(subtype hostname)) { $self->$_( shift @argument ) }
 	return;
 }
 
 
 sub subtype {
-	my $self = shift;
-
-	$self->{subtype} = 0 + shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{subtype} = 0 + $_ }
 	return $self->{subtype} || 0;
 }
 
 
 sub hostname {
-	my $self = shift;
-
-	$self->{hostname} = Net::DNS::DomainName2535->new(shift) if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{hostname} = Net::DNS::DomainName2535->new($_) }
 	return $self->{hostname} ? $self->{hostname}->name : undef;
 }
 
@@ -125,7 +120,7 @@ Package template (c)2009,2012 O.M.Kolkman and R.W.Franks.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -142,6 +137,8 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::RR>, RFC1183, RFC5864
+L<perl> L<Net::DNS> L<Net::DNS::RR>
+L<RFC1183(1)|https://tools.ietf.org/html/rfc1183>
+L<RFC5864|https://tools.ietf.org/html/rfc5864>
 
 =cut

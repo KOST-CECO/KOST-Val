@@ -13,7 +13,7 @@ WWW::Mechanize::Examples - Sample programs that use WWW::Mechanize
 
 =head1 VERSION
 
-version 2.03
+version 2.17
 
 =head1 SYNOPSIS
 

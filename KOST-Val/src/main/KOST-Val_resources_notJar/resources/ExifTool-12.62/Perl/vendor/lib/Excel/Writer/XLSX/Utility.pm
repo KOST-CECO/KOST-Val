@@ -7,7 +7,7 @@ package Excel::Writer::XLSX::Utility;
 #
 # Used in conjunction with Excel::Writer::XLSX
 #
-# Copyright 2000-2020, John McNamara, jmcnamara@cpan.org
+# Copyright 2000-2023, John McNamara, jmcnamara@cpan.org
 #
 # Documentation after __END__
 #
@@ -21,7 +21,7 @@ use warnings;
 use autouse 'Date::Calc'  => qw(Delta_DHMS Decode_Date_EU Decode_Date_US);
 use autouse 'Date::Manip' => qw(ParseDate Date_Init);
 
-our $VERSION = '1.07';
+our $VERSION = '1.11';
 
 # Row and column functions
 my @rowcol = qw(
@@ -34,6 +34,7 @@ my @rowcol = qw(
   xl_dec_row
   xl_inc_col
   xl_dec_col
+  xl_string_pixel_width
 );
 
 # Date and Time functions
@@ -53,6 +54,26 @@ our @EXPORT      = ( @rowcol, @dates, 'quote_sheetname' );
 our %EXPORT_TAGS = (
     rowcol => \@rowcol,
     dates  => \@dates
+);
+
+
+our %CHAR_WIDTHS = (
+    ' '  => 3,  '!' => 5,  '"' => 6,  '#' => 7,  '$' => 7,  '%' => 11,
+    '&'  => 10, "'" => 3,  '(' => 5,  ')' => 5,  '*' => 7,  '+' => 7,
+    ','  => 4,  '-' => 5,  '.' => 4,  '/' => 6,  '0' => 7,  '1' => 7,
+    '2'  => 7,  '3' => 7,  '4' => 7,  '5' => 7,  '6' => 7,  '7' => 7,
+    '8'  => 7,  '9' => 7,  ':' => 4,  ';' => 4,  '<' => 7,  '=' => 7,
+    '>'  => 7,  '?' => 7,  '@' => 13, 'A' => 9,  'B' => 8,  'C' => 8,
+    'D'  => 9,  'E' => 7,  'F' => 7,  'G' => 9,  'H' => 9,  'I' => 4,
+    'J'  => 5,  'K' => 8,  'L' => 6,  'M' => 12, 'N' => 10, 'O' => 10,
+    'P'  => 8,  'Q' => 10, 'R' => 8,  'S' => 7,  'T' => 7,  'U' => 9,
+    'V'  => 9,  'W' => 13, 'X' => 8,  'Y' => 7,  'Z' => 7,  '[' => 5,
+    '\\' => 6,  ']' => 5,  '^' => 7,  '_' => 7,  '`' => 4,  'a' => 7,
+    'b'  => 8,  'c' => 6,  'd' => 8,  'e' => 8,  'f' => 5,  'g' => 7,
+    'h'  => 8,  'i' => 4,  'j' => 4,  'k' => 7,  'l' => 4,  'm' => 12,
+    'n'  => 8,  'o' => 8, 'p' => 8,   'q' => 8,  'r' => 5,  's' => 6,
+    't'  => 5,  'u' => 8,  'v' => 7,  'w' => 11, 'x' => 7,  'y' => 7,
+    'z'  => 6,  '{' => 5, '|' => 7,   '}' => 5,  '~' => 7,
 );
 
 
@@ -160,7 +181,12 @@ sub xl_range {
     my $range1 = xl_rowcol_to_cell( $row_1, $col_1, $row_abs_1, $col_abs_1 );
     my $range2 = xl_rowcol_to_cell( $row_2, $col_2, $row_abs_2, $col_abs_2 );
 
-    return $range1 . ':' . $range2;
+    if ($range1 eq $range2) {
+        return $range1;
+    }
+    else {
+        return $range1 . ':' . $range2;
+    }
 }
 
 
@@ -431,6 +457,26 @@ sub xl_date_1904 {
 }
 
 
+###############################################################################
+#
+# xl_string_pixel_width($string)
+#
+# Get the pixel width of a string based on individual character widths taken
+# from Excel. UTF8 characters are given a default width of 8.
+#
+# Note, Excel adds an additional 7 pixels padding to a cell.
+#
+sub xl_string_pixel_width {
+    my $length = 0;
+
+    for my $char (split //, shift) {
+        $length += $CHAR_WIDTHS{$char} || 8;
+    }
+
+    return $length;
+}
+
+
 1;
 
 
@@ -612,7 +658,8 @@ This function converts zero based row and column cell references to an A1 style 
     my $str = xl_range( 1, 8, 2, 2 );          # C2:C9
     my $str = xl_range( 0, 3, 0, 4 );          # A1:E4
     my $str = xl_range( 0, 3, 0, 4, 1 );       # A$1:E4
-    my $str = xl_range( 0, 3, 0, 4, 1, 1 );    # A$1:E$4
+    my $str = xl_range( 0, 3, 0, 4, 1, 1 );    # A$1:E$
+    my $str = xl_range( 0, 0, 0, 0 );          # A1
 
 =head2 xl_range_formula($sheetname, $row_1, $row_2, $col_1, $col_2)
 
@@ -904,7 +951,6 @@ John McNamara jmcnamara@cpan.org
 
 =head1 COPYRIGHT
 
-Copyright MM-MMXX, John McNamara.
+Copyright MM-MMXXIII, John McNamara.
 
 All Rights Reserved. This module is free software. It may be used, redistributed and/or modified under the same terms as Perl itself.
-

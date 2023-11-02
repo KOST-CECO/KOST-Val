@@ -1,8 +1,8 @@
 use strict;
 use warnings;
-package Email::Sender::Manual::QuickStart;
+package Email::Sender::Manual::QuickStart 2.600;
 # ABSTRACT: how to start using Email::Sender right now
-$Email::Sender::Manual::QuickStart::VERSION = '1.300035';
+
 #pod =head1 QUICK START
 #pod
 #pod =head2 Let's Send Some Mail!
@@ -41,9 +41,9 @@ $Email::Sender::Manual::QuickStart::VERSION = '1.300035';
 #pod
 #pod We didn't have to tell Email::Sender::Simple where to send the message.  If you
 #pod don't specify recipients, it will use all the email addresses it can find in
-#pod the F<To> and F<Cc> headers by default.  It will use L<Email::Address> to parse
-#pod those fields.  Similarly, if no sender is specified, it will use the first
-#pod address found in the F<From> header.
+#pod the F<To> and F<Cc> headers by default.  It will use L<Email::Address::XS> to
+#pod parse those fields.  Similarly, if no sender is specified, it will use the
+#pod first address found in the F<From> header.
 #pod
 #pod In most email transmission systems, though, the headers are not by necessity
 #pod tied to the addresses used as the sender and recipients.  For example, your
@@ -251,7 +251,17 @@ Email::Sender::Manual::QuickStart - how to start using Email::Sender right now
 
 =head1 VERSION
 
-version 1.300035
+version 2.600
+
+=head1 PERL VERSION
+
+This library should run on perls released even a long time ago.  It should work
+on any version of perl released in the last five years.
+
+Although it may work on older versions of perl, no guarantee is made that the
+minimum required version will not be increased.  The version may be increased
+for any reason, and there is no promise that patches will be accepted to lower
+the minimum required perl.
 
 =head1 QUICK START
 
@@ -291,9 +301,9 @@ This is exactly the same as saying:
 
 We didn't have to tell Email::Sender::Simple where to send the message.  If you
 don't specify recipients, it will use all the email addresses it can find in
-the F<To> and F<Cc> headers by default.  It will use L<Email::Address> to parse
-those fields.  Similarly, if no sender is specified, it will use the first
-address found in the F<From> header.
+the F<To> and F<Cc> headers by default.  It will use L<Email::Address::XS> to
+parse those fields.  Similarly, if no sender is specified, it will use the
+first address found in the F<From> header.
 
 In most email transmission systems, though, the headers are not by necessity
 tied to the addresses used as the sender and recipients.  For example, your
@@ -487,11 +497,11 @@ and the various Email::Sender::Transport classes.
 
 =head1 AUTHOR
 
-Ricardo Signes <rjbs@semiotic.systems>
+Ricardo Signes <cpan@semiotic.systems>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2020 by Ricardo Signes.
+This software is copyright (c) 2022 by Ricardo Signes.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

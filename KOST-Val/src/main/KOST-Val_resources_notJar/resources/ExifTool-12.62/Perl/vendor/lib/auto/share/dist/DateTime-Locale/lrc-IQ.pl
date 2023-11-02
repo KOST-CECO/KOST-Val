@@ -19,6 +19,7 @@
     GyMMM => "G y MMM",
     GyMMMEd => "G y MMM d, E",
     GyMMMd => "G y MMM d",
+    GyMd => "GGGGG y-MM-dd",
     H => "HH",
     Hm => "HH:mm",
     Hms => "HH:mm:ss",
@@ -219,9 +220,9 @@
   ],
   name => "Northern Luri Iraq",
   native_language => "\N{U+0644}\N{U+06ca}\N{U+0631}\N{U+06cc} \N{U+0634}\N{U+0648}\N{U+0645}\N{U+0627}\N{U+0644}\N{U+06cc}",
-  native_name => "\N{U+0644}\N{U+06ca}\N{U+0631}\N{U+06cc} \N{U+0634}\N{U+0648}\N{U+0645}\N{U+0627}\N{U+0644}\N{U+06cc} IQ",
+  native_name => "\N{U+0644}\N{U+06ca}\N{U+0631}\N{U+06cc} \N{U+0634}\N{U+0648}\N{U+0645}\N{U+0627}\N{U+0644}\N{U+06cc}",
   native_script => undef,
-  native_territory => "IQ",
+  native_territory => undef,
   native_variant => undef,
   quarter_format_abbreviated => [
     "Q1",
@@ -266,5 +267,5 @@
   time_format_medium => "h:mm:ss a",
   time_format_short => "h:mm a",
   variant => undef,
-  version => 38,
+  version => 43,
 }

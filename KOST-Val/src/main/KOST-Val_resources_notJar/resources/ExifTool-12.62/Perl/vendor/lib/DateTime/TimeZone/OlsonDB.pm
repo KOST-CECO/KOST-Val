@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-our $VERSION = '2.46';
+our $VERSION = '2.60';
 
 use DateTime::Duration;
 use DateTime::TimeZone::OlsonDB::Rule;
@@ -301,7 +301,7 @@ DateTime::TimeZone::OlsonDB - An object to represent an Olson time zone database
 
 =head1 VERSION
 
-version 2.46
+version 2.60
 
 =head1 SYNOPSIS
 
@@ -309,26 +309,24 @@ version 2.46
 
 =head1 DESCRIPTION
 
-This module parses the Olson database time zone definition files and
-creates various objects representing time zone data.
+This module parses the Olson database time zone definition files and creates
+various objects representing time zone data.
 
-Each time zone is broken down into several parts.  The first piece is
-an observance, which is an offset from UTC and an abbreviation.  A
-single zone may contain many observances, reflecting historical
-changes in that time zone over time.  An observance may also refer to
-a set of rules.
+Each time zone is broken down into several parts.  The first piece is an
+observance, which is an offset from UTC and an abbreviation.  A single zone may
+contain many observances, reflecting historical changes in that time zone over
+time.  An observance may also refer to a set of rules.
 
-Rules are named, and may apply to many different zones.  For example,
-the "US" rules apply to most of the time zones in the US,
-unsurprisingly.  Rules are made of an offset from standard time and a
-definition of when that offset changes.  Changes can be a one time
-thing, or they can recur at regular times through a span of years.
+Rules are named, and may apply to many different zones.  For example, the "US"
+rules apply to most of the time zones in the US, unsurprisingly.  Rules are
+made of an offset from standard time and a definition of when that offset
+changes.  Changes can be a one time thing, or they can recur at regular times
+through a span of years.
 
 Each rule may have an associated letter, which is used to generate an
-abbreviated name for the time zone, along with the offset's
-abbreviation.  For example, if the offset's abbreviation is "C%sT",
-and the a rule specifies the letter "S", then the abbreviation when
-that rule is in effect is "CST".
+abbreviated name for the time zone, along with the offset's abbreviation.  For
+example, if the offset's abbreviation is "C%sT", and the a rule specifies the
+letter "S", then the abbreviation when that rule is in effect is "CST".
 
 =head1 USAGE
 
@@ -337,8 +335,6 @@ Not yet documented.  This stuff is a mess.
 =head1 SUPPORT
 
 Bugs may be submitted at L<https://github.com/houseabsolute/DateTime-TimeZone/issues>.
-
-I am also usually active on IRC as 'autarch' on C<irc://irc.perl.org>.
 
 =head1 SOURCE
 
@@ -350,7 +346,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2020 by Dave Rolsky.
+This software is copyright (c) 2023 by Dave Rolsky.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

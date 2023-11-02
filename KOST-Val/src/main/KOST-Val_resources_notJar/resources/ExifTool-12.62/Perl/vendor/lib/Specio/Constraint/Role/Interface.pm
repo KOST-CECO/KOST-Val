@@ -3,7 +3,7 @@ package Specio::Constraint::Role::Interface;
 use strict;
 use warnings;
 
-our $VERSION = '0.46';
+our $VERSION = '0.48';
 
 use Carp qw( confess );
 use Eval::Closure qw( eval_closure );
@@ -18,9 +18,10 @@ use Specio::Role::Inlinable;
 with 'Specio::Role::Inlinable';
 
 use overload(
-    q{""}  => sub { $_[0] },
+    q{""}  => '_stringify',
     '&{}'  => '_subification',
     'bool' => sub {1},
+    'eq'   => 'is_same_type_as',
 );
 
 {
@@ -165,8 +166,9 @@ sub is_a_type_of {
     my $self = shift;
     my $type = shift;
 
-    return any { $_->_signature eq $type->_signature }
-    $self->_ancestors_and_self;
+    return
+        any { $_->_signature eq $type->_signature }
+        $self->_ancestors_and_self;
 }
 
 sub is_same_type_as {
@@ -221,7 +223,7 @@ sub _self_or_first_inlinable_ancestor {
     my $self = shift;
 
     my $type = first { $_->_has_inline_generator }
-    reverse $self->_ancestors_and_self;
+        reverse $self->_ancestors_and_self;
 
     # This should never happen because ->can_be_inlined should always be
     # checked before this builder is called.
@@ -442,7 +444,7 @@ sub _build_subification {
 }
 
 sub _inline_throw_exception {
-    my $self                       = shift;
+    shift;
     my $value_var                  = shift;
     my $message_generator_var_name = shift;
     my $type_var_name              = shift;
@@ -531,6 +533,14 @@ sub _clone_coercions {
 }
 ## use critic
 
+sub _stringify {
+    my $self = shift;
+
+    return $self->name unless $self->is_anon;
+
+    return sprintf( '__ANON__(%s)', $self->parent . q{} );
+}
+
 sub _build_signature {
     my $self = shift;
 
@@ -618,7 +628,7 @@ Specio::Constraint::Role::Interface - The interface all type constraints should 
 
 =head1 VERSION
 
-version 0.46
+version 0.48
 
 =head1 DESCRIPTION
 
@@ -643,8 +653,6 @@ This role does the L<Specio::Role::Inlinable> role.
 
 Bugs may be submitted at L<https://github.com/houseabsolute/Specio/issues>.
 
-I am also usually active on IRC as 'autarch' on C<irc://irc.perl.org>.
-
 =head1 SOURCE
 
 The source code repository for Specio can be found at L<https://github.com/houseabsolute/Specio>.
@@ -655,7 +663,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2012 - 2020 by Dave Rolsky.
+This software is Copyright (c) 2012 - 2022 by Dave Rolsky.
 
 This is free software, licensed under:
 

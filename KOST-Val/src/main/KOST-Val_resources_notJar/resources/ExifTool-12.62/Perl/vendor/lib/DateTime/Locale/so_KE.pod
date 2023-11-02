@@ -146,11 +146,11 @@ Somali Kenya locale.
   May
   Juun
   Luuliyo
-  Ogost
-  Sebtembar
+  Ogosto
+  Sebteembar
   Oktoobar
-  Nofembar
-  Desembar
+  Noofeembar
+  Diseembar
 
 =head3 Abbreviated (stand-alone)
 
@@ -236,8 +236,8 @@ Somali Kenya locale.
 
 =head3 Abbreviated (format)
 
-  CH
-  CD
+  BC
+  AD
 
 =head3 Narrow (format)
 
@@ -248,15 +248,15 @@ Somali Kenya locale.
 
 =head3 Full
 
-   2008-02-05T18:30:30 = Talaado, Bisha Labaad 05, 2008
+   2008-02-05T18:30:30 = Talaado, Bisha Labaad 5, 2008
    1995-12-22T09:05:02 = Jimco, Bisha Laba iyo Tobnaad 22, 1995
   -0010-09-15T04:44:23 = Sabti, Bisha Sagaalaad 15, -10
 
 =head3 Long
 
-   2008-02-05T18:30:30 = 05 Bisha Labaad 2008
-   1995-12-22T09:05:02 = 22 Bisha Laba iyo Tobnaad 1995
-  -0010-09-15T04:44:23 = 15 Bisha Sagaalaad -10
+   2008-02-05T18:30:30 = Bisha Labaad 5, 2008
+   1995-12-22T09:05:02 = Bisha Laba iyo Tobnaad 22, 1995
+  -0010-09-15T04:44:23 = Bisha Sagaalaad 15, -10
 
 =head3 Medium
 
@@ -302,15 +302,15 @@ Somali Kenya locale.
 
 =head3 Full
 
-   2008-02-05T18:30:30 = Talaado, Bisha Labaad 05, 2008 18:30:30 UTC
+   2008-02-05T18:30:30 = Talaado, Bisha Labaad 5, 2008 18:30:30 UTC
    1995-12-22T09:05:02 = Jimco, Bisha Laba iyo Tobnaad 22, 1995 09:05:02 UTC
   -0010-09-15T04:44:23 = Sabti, Bisha Sagaalaad 15, -10 04:44:23 UTC
 
 =head3 Long
 
-   2008-02-05T18:30:30 = 05 Bisha Labaad 2008 18:30:30 UTC
-   1995-12-22T09:05:02 = 22 Bisha Laba iyo Tobnaad 1995 09:05:02 UTC
-  -0010-09-15T04:44:23 = 15 Bisha Sagaalaad -10 04:44:23 UTC
+   2008-02-05T18:30:30 = Bisha Labaad 5, 2008 18:30:30 UTC
+   1995-12-22T09:05:02 = Bisha Laba iyo Tobnaad 22, 1995 09:05:02 UTC
+  -0010-09-15T04:44:23 = Bisha Sagaalaad 15, -10 04:44:23 UTC
 
 =head3 Medium
 
@@ -395,27 +395,33 @@ Somali Kenya locale.
 
 =head3 Gy (y G)
 
-   2008-02-05T18:30:30 = 2008 CD
-   1995-12-22T09:05:02 = 1995 CD
-  -0010-09-15T04:44:23 = -10 CH
+   2008-02-05T18:30:30 = 2008 AD
+   1995-12-22T09:05:02 = 1995 AD
+  -0010-09-15T04:44:23 = -10 BC
 
 =head3 GyMMM (MMM y G)
 
-   2008-02-05T18:30:30 = Feb 2008 CD
-   1995-12-22T09:05:02 = Dis 1995 CD
-  -0010-09-15T04:44:23 = Seb -10 CH
+   2008-02-05T18:30:30 = Feb 2008 AD
+   1995-12-22T09:05:02 = Dis 1995 AD
+  -0010-09-15T04:44:23 = Seb -10 BC
 
 =head3 GyMMMEd (E, MMM d, y G)
 
-   2008-02-05T18:30:30 = Tldo, Feb 5, 2008 CD
-   1995-12-22T09:05:02 = Jmc, Dis 22, 1995 CD
-  -0010-09-15T04:44:23 = Sbti, Seb 15, -10 CH
+   2008-02-05T18:30:30 = Tldo, Feb 5, 2008 AD
+   1995-12-22T09:05:02 = Jmc, Dis 22, 1995 AD
+  -0010-09-15T04:44:23 = Sbti, Seb 15, -10 BC
 
 =head3 GyMMMd (MMM d, y G)
 
-   2008-02-05T18:30:30 = Feb 5, 2008 CD
-   1995-12-22T09:05:02 = Dis 22, 1995 CD
-  -0010-09-15T04:44:23 = Seb 15, -10 CH
+   2008-02-05T18:30:30 = Feb 5, 2008 AD
+   1995-12-22T09:05:02 = Dis 22, 1995 AD
+  -0010-09-15T04:44:23 = Seb 15, -10 BC
+
+=head3 GyMd (M/d/y GGGGG)
+
+   2008-02-05T18:30:30 = 2/5/2008 A
+   1995-12-22T09:05:02 = 12/22/1995 A
+  -0010-09-15T04:44:23 = 9/15/-10 B
 
 =head3 H (HH)
 
@@ -531,11 +537,11 @@ Somali Kenya locale.
    1995-12-22T09:05:02 = 9:05:02 GH
   -0010-09-15T04:44:23 = 4:44:23 GH
 
-=head3 hmsv (h:mm:ss a v)
+=head3 hmsv (h:mm:ss a v)
 
-   2008-02-05T18:30:30 = 6:30:30 GD UTC
-   1995-12-22T09:05:02 = 9:05:02 GH UTC
-  -0010-09-15T04:44:23 = 4:44:23 GH UTC
+   2008-02-05T18:30:30 = 6:30:30 GD UTC
+   1995-12-22T09:05:02 = 9:05:02 GH UTC
+  -0010-09-15T04:44:23 = 4:44:23 GH UTC
 
 =head3 hmv (h:mm a v)
 

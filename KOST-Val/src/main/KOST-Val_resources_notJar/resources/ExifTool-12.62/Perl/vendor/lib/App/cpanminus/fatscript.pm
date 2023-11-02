@@ -22,7 +22,7 @@ my %fatpacked;
 
 $fatpacked{"App/cpanminus.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'APP_CPANMINUS';
   package App::cpanminus;
-  our $VERSION = "1.7044";
+  our $VERSION = "1.7046";
   
   =encoding utf8
   
@@ -98,8 +98,7 @@ $fatpacked{"App/cpanminus.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'A
   to be updated.
   
   You're recommended to update the software or system if you can. If
-  that is impossible or difficult, use the C<-k> option with curl or an
-  alternative URL, C<https://git.io/cpanm>
+  that is impossible or difficult, use the C<-k> option with curl.
   
   =head1 DEPENDENCIES
   
@@ -1988,28 +1987,6 @@ $fatpacked{"App/cpanminus/script.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\
       return $dir;
   }
   
-  sub verify_checksums_signature {
-      my($self, $chk_file) = @_;
-  
-      require Module::Signature; # no fatpack
-  
-      $self->chat("Verifying the signature of CHECKSUMS\n");
-  
-      my $rv = eval {
-          local $SIG{__WARN__} = sub {}; # suppress warnings
-          my $v = Module::Signature::_verify($chk_file);
-          $v == Module::Signature::SIGNATURE_OK();
-      };
-      if ($rv) {
-          $self->chat("Verified OK!\n");
-      } else {
-          $self->diag_fail("Verifying CHECKSUMS signature failed: $rv\n");
-          return;
-      }
-  
-      return 1;
-  }
-  
   sub verify_archive {
       my($self, $file, $uri, $dist) = @_;
   
@@ -2031,7 +2008,6 @@ $fatpacked{"App/cpanminus/script.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\
       }
   
       $self->diag_ok;
-      $self->verify_checksums_signature($chk_file) or return;
       $self->verify_checksum($file, $chk_file);
   }
   
@@ -25163,8 +25139,11 @@ Defaults to false.
 
 =item --verify
 
-Verify the integrity of distribution files retrieved from PAUSE using
-CHECKSUMS and SIGNATURES (if found). Defaults to false.
+Verify the integrity of distribution files retrieved from CPAN using CHECKSUMS
+file, and SIGNATURES file (if found in the distribution). Defaults to false.
+
+Using this option does not verify the integrity of the CHECKSUMS file, and it's
+unsafe to rely on this option if you're using a CPAN mirror that you do not trust.
 
 =item --report-perl-version
 

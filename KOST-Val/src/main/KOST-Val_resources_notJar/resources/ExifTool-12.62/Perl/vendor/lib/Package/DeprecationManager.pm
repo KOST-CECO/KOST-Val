@@ -3,14 +3,14 @@ package Package::DeprecationManager;
 use strict;
 use warnings;
 
-our $VERSION = '0.17';
+our $VERSION = '0.18';
 
 use Carp qw( croak );
 use List::Util 1.33 qw( any );
 use Package::Stash;
 use Params::Util qw( _HASH0 );
 use Sub::Install;
-use Sub::Name qw( subname );
+use Sub::Util qw( set_subname );
 
 sub import {
     shift;
@@ -37,7 +37,7 @@ sub import {
 
     Sub::Install::install_sub(
         {
-            code => subname( $caller . '::import', $import ),
+            code => set_subname( $caller . '::import', $import ),
             into => $caller,
             as   => 'import',
         }
@@ -45,7 +45,7 @@ sub import {
 
     Sub::Install::install_sub(
         {
-            code => subname( $caller . '::deprecated', $warn ),
+            code => set_subname( $caller . '::deprecated', $warn ),
             into => $caller,
             as   => 'deprecated',
         }
@@ -93,7 +93,7 @@ sub _build_warn {
     my $deprecated_at = shift;
     my $ignore        = shift;
 
-    my %ignore = map { $_ => 1 } grep { !ref } @{ $ignore || [] };
+    my %ignore     = map  { $_ => 1 } grep { !ref } @{ $ignore || [] };
     my @ignore_res = grep {ref} @{ $ignore || [] };
 
     my %warned;
@@ -106,9 +106,10 @@ sub _build_warn {
         my $skipped = 1;
 
         if ( @ignore_res || keys %ignore ) {
-            while ( defined $package
+            while (
+                defined $package
                 && ( $ignore{$package} || any { $package =~ $_ } @ignore_res )
-                ) {
+            ) {
                 $package = caller( $skipped++ );
             }
         }
@@ -166,7 +167,7 @@ Package::DeprecationManager - Manage deprecation warnings for your distribution
 
 =head1 VERSION
 
-version 0.17
+version 0.18
 
 =head1 SYNOPSIS
 
@@ -219,23 +220,22 @@ are the version when that feature was deprecated.
 
 In many cases, you can simply use the fully qualified name of a subroutine or
 method as the feature name. This works for cases where the whole subroutine is
-deprecated. However, the feature names can be any string. This is useful if
-you don't want to deprecate an entire subroutine, just a certain usage.
+deprecated. However, the feature names can be any string. This is useful if you
+don't want to deprecate an entire subroutine, just a certain usage.
 
-You can also provide an optional array reference in the C<-ignore>
-parameter.
+You can also provide an optional array reference in the C<-ignore> parameter.
 
-The values to be ignored can be package names or regular expressions (made
-with C<qr//>).  Use this to ignore packages in your distribution that can
-appear on the call stack when a deprecated feature is used.
+The values to be ignored can be package names or regular expressions (made with
+C<qr//>).  Use this to ignore packages in your distribution that can appear on
+the call stack when a deprecated feature is used.
 
 As part of the import process, C<Package::DeprecationManager> will export two
-subroutines into its caller. It provides an C<import()> sub for the caller and a
-C<deprecated()> sub.
+subroutines into its caller. It provides an C<import()> sub for the caller and
+a C<deprecated()> sub.
 
-The C<import()> sub allows callers of I<your> class to specify an C<-api_version>
-parameter. If this is supplied, then deprecation warnings are only issued for
-deprecations with API versions earlier than the one specified.
+The C<import()> sub allows callers of I<your> class to specify an
+C<-api_version> parameter. If this is supplied, then deprecation warnings are
+only issued for deprecations with API versions earlier than the one specified.
 
 You must call the C<deprecated()> sub in each deprecated subroutine. When
 called, it will issue a warning using C<Carp::cluck()>.
@@ -253,14 +253,14 @@ C<caller()> to identify its caller, using its fully qualified subroutine name.
 
 A given deprecation warning is only issued once for a given package. This
 module tracks this based on both the feature name I<and> the error message
-itself. This means that if you provide several different error messages for
-the same feature, all of those errors will appear.
+itself. This means that if you provide several different error messages for the
+same feature, all of those errors will appear.
 
 =head2 Other import() subs
 
-This module works by installing an C<import> sub in any package that uses
-it. If that package I<already> has an C<import> sub, then that C<import> will
-be called after any arguments passed for C<Package::DeprecationManager> are
+This module works by installing an C<import> sub in any package that uses it.
+If that package I<already> has an C<import> sub, then that C<import> will be
+called after any arguments passed for C<Package::DeprecationManager> are
 stripped out. You need to define your C<import> sub before you C<use
 Package::DeprecationManager> to make this work:
 
@@ -280,17 +280,16 @@ If you'd like to thank me for the work I've done on this module, please
 consider making a "donation" to me via PayPal. I spend a lot of free time
 creating free software, and would appreciate any support you'd care to offer.
 
-Please note that B<I am not suggesting that you must do this> in order
-for me to continue working on this particular software. I will
-continue to do so, inasmuch as I have in the past, for as long as it
-interests me.
+Please note that B<I am not suggesting that you must do this> in order for me
+to continue working on this particular software. I will continue to do so,
+inasmuch as I have in the past, for as long as it interests me.
 
 Similarly, a donation made in this way will probably not make me work on this
 software much more, unless I get so many donations that I can consider working
 on free software full time, which seems unlikely at best.
 
-To donate, log into PayPal and send money to autarch@urth.org or use the
-button on this page: L<http://www.urth.org/~autarch/fs-donation.html>
+To donate, log into PayPal and send money to autarch@urth.org or use the button
+on this page: L<http://www.urth.org/~autarch/fs-donation.html>
 
 =head1 CREDITS
 
@@ -304,10 +303,11 @@ C<bug-package-deprecationmanager@rt.cpan.org>, or through the web interface at
 L<http://rt.cpan.org>.  I will be notified, and then you'll automatically be
 notified of progress on your bug as I make changes.
 
-Bugs may be submitted through L<the RT bug tracker|http://rt.cpan.org/Public/Dist/Display.html?Name=Package-DeprecationManager>
-(or L<bug-package-deprecationmanager@rt.cpan.org|mailto:bug-package-deprecationmanager@rt.cpan.org>).
+Bugs may be submitted at L<https://github.com/moose/Package-DeprecationManager/issues>.
 
-I am also usually active on IRC as 'drolsky' on C<irc://irc.perl.org>.
+=head1 SOURCE
+
+The source code repository for Package-DeprecationManager can be found at L<https://github.com/moose/Package-DeprecationManager>.
 
 =head1 DONATIONS
 
@@ -324,7 +324,7 @@ software much more, unless I get so many donations that I can consider working
 on free software full time (let's all have a chuckle at that together).
 
 To donate, log into PayPal and send money to autarch@urth.org, or use the
-button at L<http://www.urth.org/~autarch/fs-donation.html>.
+button at L<https://houseabsolute.com/foss-donations/>.
 
 =head1 AUTHOR
 
@@ -332,9 +332,13 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 CONTRIBUTORS
 
-=for stopwords Jesse Luehrs Karen Etheridge Tomas Doran
+=for stopwords Aristotle Pagaltzis Jesse Luehrs Karen Etheridge Tomas Doran
 
 =over 4
+
+=item *
+
+Aristotle Pagaltzis <pagaltzis@gmx.de>
 
 =item *
 
@@ -350,12 +354,15 @@ Tomas Doran <bobtfish@bobtfish.net>
 
 =back
 
-=head1 COPYRIGHT AND LICENCE
+=head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2016 by Dave Rolsky.
+This software is Copyright (c) 2023 by Dave Rolsky.
 
 This is free software, licensed under:
 
   The Artistic License 2.0 (GPL Compatible)
+
+The full text of the license can be found in the
+F<LICENSE> file included with this distribution.
 
 =cut

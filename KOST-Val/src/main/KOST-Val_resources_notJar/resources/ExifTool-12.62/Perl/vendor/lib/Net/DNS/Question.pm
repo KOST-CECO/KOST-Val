@@ -3,7 +3,7 @@ package Net::DNS::Question;
 use strict;
 use warnings;
 
-our $VERSION = (qw$Id: Question.pm 1812 2020-10-07 18:09:53Z willem $)[2];
+our $VERSION = (qw$Id: Question.pm 1895 2023-01-16 13:38:08Z willem $)[2];
 
 
 =head1 NAME
@@ -106,10 +106,11 @@ An exception is raised if the object cannot be created
 use constant QFIXEDSZ => length pack 'n2', (0) x 2;
 
 sub decode {
-	my $self = bless {}, shift;
-	my ( $data, $offset ) = @_;
+	my ( $class, @argument ) = @_;
+	my ( $data,  $offset )	 = @argument;
+	my $self = bless {}, $class;
 
-	( $self->{qname}, $offset ) = Net::DNS::DomainName1035->decode(@_);
+	( $self->{qname}, $offset ) = Net::DNS::DomainName1035->decode(@argument);
 
 	my $next = $offset + QFIXEDSZ;
 	die 'corrupt wire-format data' if length $$data < $next;
@@ -133,9 +134,8 @@ table used to index compressed names within the packet.
 =cut
 
 sub encode {
-	my $self = shift;
-
-	return pack 'a* n2', $self->{qname}->encode(@_), @{$self}{qw(qtype qclass)};
+	my ( $self, @opaque ) = @_;
+	return pack 'a* n2', $self->{qname}->encode(@opaque), @{$self}{qw(qtype qclass)};
 }
 
 
@@ -149,7 +149,6 @@ Returns a string representation of the question record.
 
 sub string {
 	my $self = shift;
-
 	return join "\t", $self->{qname}->string, $self->qclass, $self->qtype;
 }
 
@@ -190,9 +189,8 @@ should be extracted from a query or reply packet.
 =cut
 
 sub name {
-	my $self = shift;
-
-	croak 'immutable object: argument invalid' if scalar @_;
+	my ( $self, @argument ) = @_;
+	for (@argument) { croak 'immutable object: argument invalid' }
 	return $self->{qname}->xname;
 }
 
@@ -209,9 +207,8 @@ attribute is known as zname() and refers to the zone name.
 =cut
 
 sub qname {
-	my $self = shift;
-
-	croak 'immutable object: argument invalid' if scalar @_;
+	my ( $self, @argument ) = @_;
+	for (@argument) { croak 'immutable object: argument invalid' }
 	return $self->{qname}->name;
 }
 
@@ -230,9 +227,8 @@ this attribute is known as ztype() and refers to the zone type.
 =cut
 
 sub type {
-	my $self = shift;
-
-	croak 'immutable object: argument invalid' if scalar @_;
+	my ( $self, @argument ) = @_;
+	for (@argument) { croak 'immutable object: argument invalid' }
 	return typebyval( $self->{qtype} );
 }
 
@@ -252,9 +248,8 @@ this attribute is known as zclass() and refers to the zone class.
 =cut
 
 sub class {
-	my $self = shift;
-
-	croak 'immutable object: argument invalid' if scalar @_;
+	my ( $self, @argument ) = @_;
+	for (@argument) { croak 'immutable object: argument invalid' }
 	return classbyval( $self->{qclass} );
 }
 
@@ -316,7 +311,7 @@ All rights reserved.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -333,8 +328,8 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::DomainName>, L<Net::DNS::Packet>,
-RFC 1035 Section 4.1.2
+L<perl> L<Net::DNS> L<Net::DNS::DomainName> L<Net::DNS::Packet>
+L<RFC1035(4.1.2)|https://tools.ietf.org/html/rfc1035>
 
 =cut
 

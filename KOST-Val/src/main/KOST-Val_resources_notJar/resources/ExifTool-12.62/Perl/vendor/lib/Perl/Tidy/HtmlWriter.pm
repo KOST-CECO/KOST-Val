@@ -7,36 +7,51 @@
 package Perl::Tidy::HtmlWriter;
 use strict;
 use warnings;
-our $VERSION = '20210111';
+our $VERSION = '20230701';
 
+use English qw( -no_match_vars );
 use File::Basename;
 
+use constant EMPTY_STRING => q{};
+use constant SPACE        => q{ };
+
 # class variables
-use vars qw{
-  %html_color
-  %html_bold
-  %html_italic
-  %token_short_names
-  %short_to_long_names
-  $rOpts
-  $css_filename
-  $css_linkname
-  $missing_html_entities
-  $missing_pod_html
-};
+my (
+
+    # INITIALIZER: BEGIN block
+    $missing_html_entities,
+    $missing_pod_html,
+
+    # INITIALIZER: BEGIN block
+    %short_to_long_names,
+    %token_short_names,
+
+    # INITIALIZER: sub check_options
+    $rOpts,
+    $rOpts_html_entities,
+    $css_linkname,
+    %html_bold,
+    %html_color,
+    %html_italic,
+
+);
 
 # replace unsafe characters with HTML entity representation if HTML::Entities
 # is available
 #{ eval "use HTML::Entities"; $missing_html_entities = $@; }
 
 BEGIN {
+
+    $missing_html_entities = EMPTY_STRING;
     if ( !eval { require HTML::Entities; 1 } ) {
-        $missing_html_entities = $@ ? $@ : 1;
+        $missing_html_entities = $EVAL_ERROR ? $EVAL_ERROR : 1;
     }
+
+    $missing_pod_html = EMPTY_STRING;
     if ( !eval { require Pod::Html; 1 } ) {
-        $missing_pod_html = $@ ? $@ : 1;
+        $missing_pod_html = $EVAL_ERROR ? $EVAL_ERROR : 1;
     }
-}
+} ## end BEGIN
 
 sub AUTOLOAD {
 
@@ -57,7 +72,7 @@ This error is probably due to a recent programming change
 ======================================================================
 EOM
     exit 1;
-}
+} ## end sub AUTOLOAD
 
 sub DESTROY {
 
@@ -88,7 +103,7 @@ sub new {
     ( $html_fh, my $html_filename ) =
       Perl::Tidy::streamhandle( $html_file, 'w' );
     unless ($html_fh) {
-        Perl::Tidy::Warn("can't open $html_file: $!\n");
+        Perl::Tidy::Warn("can't open $html_file: $ERRNO\n");
         return;
     }
     $html_file_opened = 1;
@@ -168,7 +183,7 @@ PRE_END
         ( $title, my $path ) = fileparse($input_file);
     }
     my $toc_item_count = 0;
-    my $in_toc_package = "";
+    my $in_toc_package = EMPTY_STRING;
     my $last_level     = 0;
     return bless {
         _input_file        => $input_file,          # name of input file
@@ -192,7 +207,7 @@ PRE_END
                                                     # name changes
         _rlast_level       => \$last_level,         # brace indentation level
     }, $class;
-}
+} ## end sub new
 
 sub close_object {
     my ($object) = @_;
@@ -200,7 +215,7 @@ sub close_object {
     # returns true if close works, false if not
     # failure probably means there is no close method
     return eval { $object->close(); 1 };
-}
+} ## end sub close_object
 
 sub add_toc_item {
 
@@ -224,8 +239,9 @@ sub add_toc_item {
     my $end_package_list = sub {
         if ( ${$rin_toc_package} ) {
             $html_toc_fh->print("</ul>\n</li>\n");
-            ${$rin_toc_package} = "";
+            ${$rin_toc_package} = EMPTY_STRING;
         }
+        return;
     };
 
     my $start_package_list = sub {
@@ -236,6 +252,7 @@ sub add_toc_item {
 <ul>
 EOM
         ${$rin_toc_package} = $package;
+        return;
     };
 
     # start the table of contents on the first item
@@ -307,7 +324,7 @@ TOC_END
 TOC_END
     }
     return;
-}
+} ## end sub add_toc_item
 
 BEGIN {
 
@@ -379,7 +396,6 @@ BEGIN {
     );
 
     # These token types will all be called identifiers for now
-    # FIXME: could separate user defined modules as separate type
     my @identifier = qw< i t U C Y Z G :: CORE::>;
     @token_short_names{@identifier} = ('i') x scalar(@identifier);
 
@@ -414,7 +430,7 @@ BEGIN {
     #    my @list = qw" .. -> <> ... \ ? ";
     #    @token_long_names{@list} = ('misc-operators') x scalar(@list);
 
-}
+} ## end BEGIN
 
 sub make_getopt_long_names {
     my ( $class, $rgetopt_names ) = @_;
@@ -454,7 +470,7 @@ sub make_getopt_long_names {
     push @{$rgetopt_names}, "podheader!";
     push @{$rgetopt_names}, "podindex!";
     return;
-}
+} ## end sub make_getopt_long_names
 
 sub make_abbreviated_names {
 
@@ -491,7 +507,7 @@ sub make_abbreviated_names {
     ${$rexpansion}{"text"}  = ["html-toc-extension"];
     ${$rexpansion}{"sext"}  = ["html-src-extension"];
     return;
-}
+} ## end sub make_abbreviated_names
 
 sub check_options {
 
@@ -550,6 +566,7 @@ sub check_options {
     }
 
     # make sure user gives a file name after -css
+    $css_linkname = EMPTY_STRING;
     if ( defined( $rOpts->{'html-linked-style-sheet'} ) ) {
         $css_linkname = $rOpts->{'html-linked-style-sheet'};
         if ( $css_linkname =~ /^-/ ) {
@@ -573,26 +590,25 @@ sub check_options {
         # forgets to specify the style sheet, like this:
         #    perltidy -html -css myfile1.pl myfile2.pl
         # This would cause myfile1.pl to parsed as the style sheet by GetOpts
-        my $css_filename = $css_linkname;
-        unless ( -e $css_filename ) {
-            write_style_sheet_file($css_filename);
+        unless ( -e $css_linkname ) {
+            write_style_sheet_file($css_linkname);
         }
     }
-    $missing_html_entities = 1 unless $rOpts->{'html-entities'};
+    $rOpts_html_entities = $rOpts->{'html-entities'};
     return;
-}
+} ## end sub check_options
 
 sub write_style_sheet_file {
 
-    my $css_filename = shift;
+    my $filename = shift;
     my $fh;
-    unless ( $fh = IO::File->new("> $css_filename") ) {
-        Perl::Tidy::Die("can't open $css_filename: $!\n");
+    unless ( $fh = IO::File->new("> $filename") ) {
+        Perl::Tidy::Die("can't open $filename: $ERRNO\n");
     }
     write_style_sheet_data($fh);
     close_object($fh);
     return;
-}
+} ## end sub write_style_sheet_file
 
 sub write_style_sheet_data {
 
@@ -620,7 +636,7 @@ EOM
         my $long_name = $short_to_long_names{$short_name};
 
         my $abbrev = '.' . $short_name;
-        if ( length($short_name) == 1 ) { $abbrev .= ' ' }    # for alignment
+        if ( length($short_name) == 1 ) { $abbrev .= SPACE }    # for alignment
         my $color = $html_color{$short_name};
         if ( !defined($color) ) { $color = $text_color }
         $fh->print("$abbrev \{ color: $color;");
@@ -635,7 +651,7 @@ EOM
         $fh->print("} /* $long_name */\n");
     }
     return;
-}
+} ## end sub write_style_sheet_data
 
 sub set_default_color {
 
@@ -644,7 +660,7 @@ sub set_default_color {
     if ( $rOpts->{$key} ) { $color = $rOpts->{$key} }
     $rOpts->{$key} = check_RGB($color);
     return;
-}
+} ## end sub set_default_color
 
 sub check_RGB {
 
@@ -653,7 +669,7 @@ sub check_RGB {
     my ($color) = @_;
     if ( $color =~ /^[0-9a-fA-F]{6,6}$/ ) { $color = "#$color" }
     return $color;
-}
+} ## end sub check_RGB
 
 sub set_default_properties {
     my ( $short_name, $color, $bold, $italic ) = @_;
@@ -665,7 +681,7 @@ sub set_default_properties {
     $key           = "html-italic-$short_to_long_names{$short_name}";
     $rOpts->{$key} = ( defined $rOpts->{$key} ) ? $rOpts->{$key} : $italic;
     return;
-}
+} ## end sub set_default_properties
 
 sub pod_to_html {
 
@@ -748,7 +764,7 @@ sub pod_to_html {
         # this error shouldn't happen ... we just used this filename
         Perl::Tidy::Warn(
             "unable to open temporary file $tmpfile; cannot use pod2html\n");
-        goto RETURN;
+        return $success_flag;
     }
 
     my $html_fh = $self->{_html_fh};
@@ -759,17 +775,18 @@ sub pod_to_html {
 
     # This routine will write the html selectively and store the toc
     my $html_print = sub {
-        foreach (@_) {
-            $html_fh->print($_) unless ($no_print);
-            if ($in_toc) { push @toc, $_ }
+        foreach my $line (@_) {
+            $html_fh->print($line) unless ($no_print);
+            if ($in_toc) { push @toc, $line }
         }
+        return;
     };
 
     # loop over lines of html output from pod2html and merge in
     # the necessary perltidy html sections
     my ( $saw_body, $saw_index, $saw_body_end );
 
-    my $timestamp = "";
+    my $timestamp = EMPTY_STRING;
     if ( $rOpts->{'timestamp'} ) {
         my $date = localtime;
         $timestamp = "on $date";
@@ -841,10 +858,10 @@ sub pod_to_html {
                 $html_print->("<hr />\n") if $rOpts->{'frames'};
                 $html_print->("<h2>Code Index:</h2>\n");
                 ##my @toc = map { $_ .= "\n" } split /\n/, $toc_string;
-                my @toc = map { $_ . "\n" } split /\n/, $toc_string;
-                $html_print->(@toc);
+                my @toc_st = map { $_ . "\n" } split /\n/, $toc_string;
+                $html_print->(@toc_st);
             }
-            $in_toc   = "";
+            $in_toc   = EMPTY_STRING;
             $no_print = 0;
         }
 
@@ -866,10 +883,10 @@ sub pod_to_html {
                     $html_print->("<hr />\n") if $rOpts->{'frames'};
                     $html_print->("<h2>Code Index:</h2>\n");
                     ##my @toc = map { $_ .= "\n" } split /\n/, $toc_string;
-                    my @toc = map { $_ . "\n" } split /\n/, $toc_string;
-                    $html_print->(@toc);
+                    my @toc_st = map { $_ . "\n" } split /\n/, $toc_string;
+                    $html_print->(@toc_st);
                 }
-                $in_toc   = "";
+                $in_toc   = EMPTY_STRING;
                 $ul_level = 0;
                 $no_print = 0;
             }
@@ -943,14 +960,14 @@ sub pod_to_html {
         $success_flag = 0;
     }
 
-  RETURN:
     close_object($html_fh);
 
     # note that we have to unlink tmpfile before making frames
     # because the tmpfile may be one of the names used for frames
     if ( -e $tmpfile ) {
         unless ( unlink($tmpfile) ) {
-            Perl::Tidy::Warn("couldn't unlink temporary file $tmpfile: $!\n");
+            Perl::Tidy::Warn(
+                "couldn't unlink temporary file $tmpfile: $ERRNO\n");
             $success_flag = 0;
         }
     }
@@ -959,7 +976,7 @@ sub pod_to_html {
         $self->make_frame( \@toc );
     }
     return $success_flag;
-}
+} ## end sub pod_to_html
 
 sub make_frame {
 
@@ -977,7 +994,7 @@ sub make_frame {
     $title = escape_html($title);
 
     # FUTURE input parameter:
-    my $top_basename = "";
+    my $top_basename = EMPTY_STRING;
 
     # We need to produce 3 html files:
     # 1. - the table of contents
@@ -997,7 +1014,8 @@ sub make_frame {
 
     # 2. The current .html filename is renamed to be the contents panel
     rename( $html_filename, $src_filename )
-      or Perl::Tidy::Die("Cannot rename $html_filename to $src_filename:$!\n");
+      or Perl::Tidy::Die(
+        "Cannot rename $html_filename to $src_filename: $ERRNO\n");
 
     # 3. Then use the original html filename for the frame
     write_frame_html(
@@ -1005,14 +1023,14 @@ sub make_frame {
         $toc_basename, $src_basename,  $src_frame_name
     );
     return;
-}
+} ## end sub make_frame
 
 sub write_toc_html {
 
     # write a separate html table of contents file for frames
     my ( $title, $toc_filename, $src_basename, $rtoc, $src_frame_name ) = @_;
     my $fh = IO::File->new( $toc_filename, 'w' )
-      or Perl::Tidy::Die("Cannot open $toc_filename:$!\n");
+      or Perl::Tidy::Die("Cannot open $toc_filename: $ERRNO\n");
     $fh->print(<<EOM);
 <html>
 <head>
@@ -1024,7 +1042,7 @@ EOM
 
     my $first_anchor =
       change_anchor_names( $rtoc, $src_basename, "$src_frame_name" );
-    $fh->print( join "", @{$rtoc} );
+    $fh->print( join EMPTY_STRING, @{$rtoc} );
 
     $fh->print(<<EOM);
 </body>
@@ -1032,7 +1050,7 @@ EOM
 EOM
 
     return;
-}
+} ## end sub write_toc_html
 
 sub write_frame_html {
 
@@ -1043,7 +1061,7 @@ sub write_frame_html {
     ) = @_;
 
     my $fh = IO::File->new( $frame_filename, 'w' )
-      or Perl::Tidy::Die("Cannot open $toc_basename:$!\n");
+      or Perl::Tidy::Die("Cannot open $toc_basename: $ERRNO\n");
 
     $fh->print(<<EOM);
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN"
@@ -1089,7 +1107,7 @@ EOM
 </html>
 EOM
     return;
-}
+} ## end sub write_frame_html
 
 sub change_anchor_names {
 
@@ -1113,7 +1131,7 @@ sub change_anchor_names {
         }
     }
     return $first_anchor;
-}
+} ## end sub change_anchor_names
 
 sub close_html_file {
     my $self = shift;
@@ -1190,7 +1208,7 @@ ENDCSS
     # --------------------------------------------------
     my $input_file = $self->{_input_file};
     my $title      = escape_html($input_file);
-    my $timestamp  = "";
+    my $timestamp  = EMPTY_STRING;
     if ( $rOpts->{'timestamp'} ) {
         my $date = localtime;
         $timestamp = "on $date";
@@ -1260,7 +1278,7 @@ HTML_END
         $self->make_frame( \@toc );
     }
     return;
-}
+} ## end sub close_html_file
 
 sub markup_tokens {
     my ( $self, $rtokens, $rtoken_type, $rlevels ) = @_;
@@ -1268,7 +1286,7 @@ sub markup_tokens {
     my $rlast_level    = $self->{_rlast_level};
     my $rpackage_stack = $self->{_rpackage_stack};
 
-    for ( my $j = 0 ; $j < @{$rtoken_type} ; $j++ ) {
+    foreach my $j ( 0 .. @{$rtoken_type} - 1 ) {
         $type  = $rtoken_type->[$j];
         $token = $rtokens->[$j];
         $level = $rlevels->[$j];
@@ -1309,8 +1327,8 @@ sub markup_tokens {
             $type  = 'M';
 
             # but don't include sub declarations in the toc;
-            # these wlll have leading token types 'i;'
-            my $signature = join "", @{$rtoken_type};
+            # these will have leading token types 'i;'
+            my $signature = join EMPTY_STRING, @{$rtoken_type};
             unless ( $signature =~ /^i;/ ) {
                 my $subname = $token;
                 $subname =~ s/[\s\(].*$//; # remove any attributes and prototype
@@ -1336,7 +1354,7 @@ sub markup_tokens {
         push @colored_tokens, $token;
     }
     return ( \@colored_tokens );
-}
+} ## end sub markup_tokens
 
 sub markup_html_element {
     my ( $self, $token, $type ) = @_;
@@ -1369,12 +1387,12 @@ sub markup_html_element {
         if ( $html_bold{$short_name} )   { $token = "<b>$token</b>" }
     }
     return $token;
-}
+} ## end sub markup_html_element
 
 sub escape_html {
 
     my $token = shift;
-    if ($missing_html_entities) {
+    if ( $missing_html_entities || !$rOpts_html_entities ) {
         $token =~ s/\&/&amp;/g;
         $token =~ s/\</&lt;/g;
         $token =~ s/\>/&gt;/g;
@@ -1384,7 +1402,7 @@ sub escape_html {
         HTML::Entities::encode_entities($token);
     }
     return $token;
-}
+} ## end sub escape_html
 
 sub finish_formatting {
 
@@ -1392,7 +1410,7 @@ sub finish_formatting {
     my $self = shift;
     $self->close_html_file();
     return;
-}
+} ## end sub finish_formatting
 
 sub write_line {
 
@@ -1415,11 +1433,11 @@ sub write_line {
             $html_line = $1;
         }
         else {
-            $html_line = "";
+            $html_line = EMPTY_STRING;
         }
         my ($rcolored_tokens) =
           $self->markup_tokens( $rtokens, $rtoken_type, $rlevels );
-        $html_line .= join '', @{$rcolored_tokens};
+        $html_line .= join EMPTY_STRING, @{$rcolored_tokens};
     }
 
     # markup line of non-code..
@@ -1429,6 +1447,8 @@ sub write_line {
         elsif ( $line_type eq 'HERE_END' )   { $line_character = 'h' }
         elsif ( $line_type eq 'FORMAT' )     { $line_character = 'H' }
         elsif ( $line_type eq 'FORMAT_END' ) { $line_character = 'h' }
+        elsif ( $line_type eq 'SKIP' )       { $line_character = 'H' }
+        elsif ( $line_type eq 'SKIP_END' )   { $line_character = 'h' }
         elsif ( $line_type eq 'SYSTEM' )     { $line_character = 'c' }
         elsif ( $line_type eq 'END_START' ) {
             $line_character = 'k';
@@ -1472,7 +1492,7 @@ EOM
                     # otherwise, just clear the current string and start
                     # over
                     else {
-                        ${$rpre_string} = "";
+                        ${$rpre_string} = EMPTY_STRING;
                         $html_pod_fh->print("\n");
                     }
                 }
@@ -1491,16 +1511,15 @@ EOM
     # add the line number if requested
     if ( $rOpts->{'html-line-numbers'} ) {
         my $extra_space =
-            ( $line_number < 10 )   ? "   "
-          : ( $line_number < 100 )  ? "  "
-          : ( $line_number < 1000 ) ? " "
-          :                           "";
-        $html_line = $extra_space . $line_number . " " . $html_line;
+            ( $line_number < 10 )   ? SPACE x 3
+          : ( $line_number < 100 )  ? SPACE x 2
+          : ( $line_number < 1000 ) ? SPACE
+          :                           EMPTY_STRING;
+        $html_line = $extra_space . $line_number . SPACE . $html_line;
     }
 
     # write the line
     $html_pre_fh->print("$html_line\n");
     return;
-}
+} ## end sub write_line
 1;
-

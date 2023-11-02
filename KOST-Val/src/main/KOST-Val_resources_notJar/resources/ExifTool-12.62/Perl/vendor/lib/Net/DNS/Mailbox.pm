@@ -3,7 +3,7 @@ package Net::DNS::Mailbox;
 use strict;
 use warnings;
 
-our $VERSION = (qw$Id: Mailbox.pm 1813 2020-10-08 21:58:40Z willem $)[2];
+our $VERSION = (qw$Id: Mailbox.pm 1910 2023-03-30 19:16:30Z willem $)[2];
 
 
 =head1 NAME
@@ -61,18 +61,13 @@ sub new {
 
 	s/^.*<//g;						# strip excess on left
 	s/>.*$//g;						# strip excess on right
+	s/^\@.+://;						# strip deprecated source route
+	s/\\\./\\046/g;						# disguise escaped dots
 
-	s/\\\@/\\064/g;						# disguise escaped @
-	s/("[^"]*)\@([^"]*")/$1\\064$2/g;			# disguise quoted @
+	my ( $localpart, @domain ) = split /[@.]([^@;:"]*$)/;	# split on rightmost @
+	s/\./\\046/g for $localpart ||= '';			# escape dots in local part
 
-	my ( $mbox, @host ) = split /\@/;			# split on @ if present
-	for ( $mbox ||= '' ) {
-		s/^.*"(.*)".*$/$1/;				# strip quotes
-		s/\\\./\\046/g;					# disguise escaped dot
-		s/\./\\046/g if @host;				# escape dots in local part
-	}
-
-	return bless __PACKAGE__->SUPER::new( join '.', $mbox, @host ), $class;
+	return bless __PACKAGE__->SUPER::new( join '.', $localpart, @domain ), $class;
 }
 
 
@@ -91,10 +86,10 @@ sub address {
 	my @label = shift->label;
 	local $_ = shift(@label) || return '<>';
 	s/\\\\//g;						# delete escaped \
+	s/^\\034(.*)\\034$/"$1"/;				# unescape enclosing quotes
 	s/\\\d\d\d//g;						# delete non-printable
 	s/\\\./\./g;						# unescape dots
-	s/[\\"]//g;						# delete \ "
-	s/^(.*)$/"$1"/ if /["(),:;<>@\[\\\]]/;			# quote local part
+	s/\\//g;						# delete escapes
 	return $_ unless scalar(@label);
 	return join '@', $_, join '.', @label;
 }
@@ -131,7 +126,7 @@ All rights reserved.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -148,7 +143,9 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::DomainName>, RFC1035, RFC5322 (RFC822)
+L<perl> L<Net::DNS> L<Net::DNS::DomainName>
+L<RFC1035|https://tools.ietf.org/html/rfc1035>
+L<RFC5322|https://tools.ietf.org/html/rfc5322>
 
 =cut
 

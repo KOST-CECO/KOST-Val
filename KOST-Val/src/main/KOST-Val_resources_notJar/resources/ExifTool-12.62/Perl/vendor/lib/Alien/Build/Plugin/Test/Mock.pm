@@ -9,7 +9,7 @@ use Path::Tiny ();
 use File::chdir;
 
 # ABSTRACT: Mock plugin for testing
-our $VERSION = '2.38'; # VERSION
+our $VERSION = '2.80'; # VERSION
 
 
 has 'probe';
@@ -25,6 +25,9 @@ has 'build';
 
 
 has 'gather';
+
+
+has check_digest => 1;
 
 sub init
 {
@@ -60,7 +63,7 @@ sub init
     $meta->register_hook(
       download => sub {
         my($build) = @_;
-        _fs($build, $download);
+        _fs($build, $download, 1);
       },
     );
   }
@@ -143,11 +146,42 @@ sub init
       },
     ) for qw( gather_share gather_system );
   }
+
+  if(my $cd = $self->check_digest)
+  {
+    $meta->register_hook(
+      check_digest => ref($cd) eq 'CODE' ? $cd : sub {
+        my($build, $file, $algorithm, $digest) = @_;
+        if($algorithm ne 'FOO92')
+        {
+          return 'FAKE';
+        }
+        if($digest eq 'deadbeaf')
+        {
+          return 1;
+        }
+        else
+        {
+          die "Digest FAKE does not match: got deadbeaf, expected $digest";
+        }
+      }
+    );
+    $meta->register_hook(
+      check_download => sub {
+        my($build) = @_;
+        my $path = $build->install_prop->{download};
+        if(defined $path)
+        {
+          $build->check_digest($path);
+        }
+      },
+    );
+  }
 }
 
 sub _fs
 {
-  my($build, $hash) = @_;
+  my($build, $hash, $download) = @_;
 
   foreach my $key (sort keys %$hash)
   {
@@ -160,11 +194,23 @@ sub _fs
     }
     elsif(ref $val eq 'CODE')
     {
-      Path::Tiny->new($key)->spew($val->($build));
+      my $path = Path::Tiny->new($key)->absolute;
+      $path->spew_raw($val->($build));
+      if($download)
+      {
+        $build->install_prop->{download_detail}->{"$path"}->{protocol} = 'file';
+        $build->install_prop->{download_detail}->{"$path"}->{digest}   = [ FAKE => 'deadbeaf' ];
+      }
     }
     elsif(defined $val)
     {
-      Path::Tiny->new($key)->spew($val);
+      my $path = Path::Tiny->new($key)->absolute;
+      $path->spew_raw($val);
+      if($download)
+      {
+        $build->install_prop->{download_detail}->{"$path"}->{protocol} = 'file';
+        $build->install_prop->{download_detail}->{"$path"}->{digest}   = [ FAKE => 'deadbeaf' ];
+      }
     }
   }
 }
@@ -259,7 +305,7 @@ Alien::Build::Plugin::Test::Mock - Mock plugin for testing
 
 =head1 VERSION
 
-version 2.38
+version 2.80
 
 =head1 SYNOPSIS
 
@@ -372,6 +418,27 @@ Similar to C<download> above, but for the C<extract> phase.
 This adds a gather hook (for both C<share> and C<system>) that adds the given runtime properties, or
 if a true non-hash value is provided, some reasonable runtime properties for testing.
 
+=head2 check_digest
+
+ plugin 'Test::Mock' => (
+   check_digest => 1,  # the default
+ );
+
+This adds a check_digest hook that uses fake algorithm FAKE that hashes everything to C<deadbeaf>.
+The mock download above will set the digest for download_details so that this will pass the
+signature check.
+
+ plugin 'Test::Mock' => (
+   check_digest => sub {
+     my($build, $file, $algo, $digest) = @_;
+     ...
+   },
+ );
+
+If you give it a code reference then you can write your own faux digest.  See the
+L<check_digest hook|Alien::Build::Manual::PluginAuthor/"check_digest hook"> in
+L<Alien::Build::Manual::PluginAuthor> for details.
+
 =head1 AUTHOR
 
 Author: Graham Ollis E<lt>plicease@cpan.orgE<gt>
@@ -414,7 +481,7 @@ Juan Julián Merelo Guervós (JJ)
 
 Joel Berger (JBERGER)
 
-Petr Pisar (ppisar)
+Petr Písař (ppisar)
 
 Lance Wicks (LANCEW)
 
@@ -432,9 +499,13 @@ Paul Evans (leonerd, PEVANS)
 
 Håkon Hægland (hakonhagland, HAKONH)
 
+nick nauwelaerts (INPHOBIA)
+
+Florian Weimer
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011-2020 by Graham Ollis.
+This software is copyright (c) 2011-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

@@ -4,7 +4,7 @@ use 5.006;
 use strict;
 use warnings;
 
-our $VERSION = '1.302183';
+our $VERSION = '1.302195';
 
 BEGIN {
     if( $] < 5.008 ) {
@@ -655,6 +655,8 @@ sub skip_all {
         die 'Label not found for "last T2_SUBTEST_WRAPPER"' if $begin && $ctx->hub->meta(__PACKAGE__, {})->{parent};
     }
 
+    $reason = "$reason" if defined $reason;
+
     $ctx->plan(0, SKIP => $reason);
 }
 
@@ -765,7 +767,7 @@ sub _unoverload {
         require overload;
     }
     my $string_meth = overload::Method( $$thing, $type ) || return;
-    $$thing = $$thing->$string_meth();
+    $$thing = $$thing->$string_meth(undef, 0);
 }
 
 sub _unoverload_str {
@@ -1000,15 +1002,7 @@ END
             $self->_is_diag( $got, $type, $expect );
         }
         elsif( $type =~ /^(ne|!=)$/ ) {
-            no warnings;
-            my $eq = ($got eq $expect || $got == $expect)
-                && (
-                    (defined($got) xor defined($expect))
-                 || (length($got)  !=  length($expect))
-                );
-            use warnings;
-
-            if ($eq) {
+            if (defined($got) xor defined($expect)) {
                 $self->_cmp_diag( $got, $type, $expect );
             }
             else {
@@ -1072,6 +1066,13 @@ sub skip {
 
     my $ctx = $self->ctx;
 
+    $name = "$name";
+    $why  = "$why";
+
+    $name =~ s|#|\\#|g;    # # in a name can confuse Test::Harness.
+    $name =~ s{\n}{\n# }sg;
+    $why =~ s{\n}{\n# }sg;
+
     $ctx->hub->meta(__PACKAGE__, {})->{Test_Results}[ $ctx->hub->count ] = {
         'ok'      => 1,
         actual_ok => 1,
@@ -1079,10 +1080,6 @@ sub skip {
         type      => 'skip',
         reason    => $why,
     } unless $self->{no_log_results};
-
-    $name =~ s|#|\\#|g;    # # in a name can confuse Test::Harness.
-    $name =~ s{\n}{\n# }sg;
-    $why =~ s{\n}{\n# }sg;
 
     my $tctx = $ctx->snapshot;
     $tctx->skip('', $why);
@@ -1673,7 +1670,7 @@ sub _ending {
     return unless $plan || $count || $failed;
 
     # Ran tests but never declared a plan or hit done_testing
-    if( !$hub->plan and $hub->count ) {
+    if( !defined($hub->plan) and $hub->count ) {
         $self->diag("Tests were run but no plan was declared and done_testing() was not seen.");
 
         if($real_exit_code) {

@@ -1,6 +1,10 @@
 package Term::UI;
+$Term::UI::VERSION = '0.50';
 
 use if $] > 5.017, 'deprecate';
+
+use strict;
+use warnings;
 
 use Carp;
 use Params::Check qw[check allow];
@@ -8,14 +12,9 @@ use Term::ReadLine;
 use Locale::Maketext::Simple Style => 'gettext';
 use Term::UI::History;
 
-use strict;
-
-BEGIN {
-    use vars        qw[$VERSION $AUTOREPLY $VERBOSE $INVALID];
-    $VERBOSE    =   1;
-    $VERSION    =   '0.46';
-    $INVALID    =   loc('Invalid selection, please try again: ');
-}
+our $AUTOREPLY;
+our $INVALID = loc( 'Invalid selection, please try again: ' );
+our $VERBOSE = 1;
 
 push @Term::ReadLine::Stub::ISA, __PACKAGE__
         unless grep { $_ eq __PACKAGE__ } @Term::ReadLine::Stub::ISA;
@@ -85,7 +84,7 @@ C<Term::UI::History> manpage or the C<SYNOPSIS> for details.
 
 =head1 METHODS
 
-=head2 $reply = $term->get_reply( prompt => 'question?', [choices => \@list, default => $list[0], multi => BOOL, print_me => "extra text to print & record", allow => $ref] );
+=head2 $reply = $term->get_reply( prompt => 'question?', [choices => \@list, default => $list[0], preput => "text to put as default user input", multi => BOOL, print_me => "extra text to print & record", allow => $ref] );
 
 C<get_reply> asks a user a question, and then returns the reply to the
 caller. If the answer is invalid (more on that below), the question will
@@ -98,6 +97,13 @@ presented, the question will be reposed.
 If you provide a C<default>  answer, this will be returned when either
 C<$AUTOREPLY> is set to true, (see the C<GLOBAL VARIABLES> section further
 below), or when the user just hits C<enter>.
+
+The C<preput> argument allows to specify a text that will be inserted to
+the prompt line as the initial input which may be edited, deleted or
+accepted by the user. If you supply the empty string as the C<preput>
+argument then the C<default> value will be preputted. It will only work if
+the underlying readline module provide support for it (now it is supported
+only by the C<Term::Readline::Gnu>).
 
 You can indicate that the user is allowed to enter multiple answers by
 toggling the C<multi> flag. Note that a list of answers will then be
@@ -123,6 +129,7 @@ sub get_reply {
 
     my $tmpl = {
         default     => { default => undef,  strict_type => 0 },
+        preput      => { default => '',     strict_type => 0 },
         prompt      => { default => '',     strict_type => 1, required => 1 },
         choices     => { default => [],     strict_type => 1 },
         multi       => { default => 0,      allow => [0, 1] },
@@ -145,7 +152,23 @@ sub get_reply {
     ### if you supplied several choices to pick from,
     ### we'll print them separately before the prompt
     if( @{$args->{choices}} ) {
+        # clean up 'default' of items not in 'choices'
+        if ( $args->{ 'default' } ) {
+            if ( $args->{ 'multi' } ) {
+                @{ $args->{ 'default' } } =
+                    grep {
+                        my $default = $_;
+                        grep $default eq $_, @{ $args->{ 'choices' } };
+                    }
+                    @{ $args->{ 'default' } };
+            } else {
+                delete $args->{ 'default' }
+                    unless grep $_ eq $args->{ 'default' }, @{ $args->{ 'choices' } }
+            }
+        }
+
         my $i;
+        my $choices_width = length( sprintf( "%d", scalar @{ $args->{ 'choices' } } ) );
 
         for my $choice ( @{$args->{choices}} ) {
             $i++;   # the answer counter -- but humans start counting
@@ -155,7 +178,7 @@ sub get_reply {
             ### so we can construct a "foo? [DIGIT]" type prompt
             if (defined $args->{default}) {
                 if ($args->{multi}) {
-                    push @$prompt_add, $i if (scalar(grep { m/^$choice$/ } @{$args->{default}}));
+                    push @$prompt_add, $i if grep { $_ eq $choice } @{ $args->{ 'default' } };
                 }
                 else {
                     $prompt_add = $i if ($choice eq $args->{default});
@@ -163,7 +186,7 @@ sub get_reply {
             }
 
             ### create a "DIGIT> choice" type line
-            $args->{print_me} .= sprintf "\n%3s> %-s", $i, $choice;
+            $args->{print_me} .= sprintf "\n%*s> %-s", $choices_width, $i, $choice;
         }
 
         $prompt_add = join(" ", @$prompt_add) if ( $prompt_add && $args->{multi} );
@@ -264,11 +287,11 @@ sub _tt_readline {
     local $Params::Check::VERBOSE = 0;  # why is this?
     local $| = 1;                       # print ASAP
 
-
-    my ($default, $prompt, $choices, $multi, $allow, $prompt_add, $print_me);
+    my ($default, $preput, $prompt, $choices, $multi, $allow, $prompt_add, $print_me);
     my $tmpl = {
         default     => { default => undef,  strict_type => 0,
                             store => \$default },
+        preput      => { default => undef,  strict_type => 0, store => \$preput},
         prompt      => { default => '',     strict_type => 1, required => 1,
                             store => \$prompt },
         choices     => { default => [],     strict_type => 1,
@@ -285,6 +308,18 @@ sub _tt_readline {
     ### it can display wonky on some terminals.
     history( $print_me ) if $print_me;
 
+    my $preput_is_supported =
+      $term->ReadLine eq "Term::ReadLine::Gnu" ? 1 : undef;
+
+    $preput = undef unless $preput_is_supported;
+
+    ### If we are using Term::ReadLine:Gnu we can preput default value
+    if (defined $preput and $preput eq '') {
+        # if preput is the empty string we preput default
+        $preput = $prompt_add;
+        # We don't need to double information in the prompt in that case
+        $prompt_add = undef;
+    }
 
     if ($prompt_add) {
         ### we might have to add a default value to the prompt, to
@@ -336,17 +371,20 @@ sub _tt_readline {
         }
 
         ### pose the question
-        my $answer  = $term->readline($prompt);
+        my $answer = defined $preput
+          ? $term->readline($prompt, $preput)
+          : $term->readline($prompt);
+
         $answer     = $default unless length $answer;
 
         $term->addhistory( $answer ) if length $answer;
 
         ### add both prompt and answer to the history
-        history( "$prompt $answer", 0 );
+        history( defined $answer ? "$prompt $answer" : "$prompt", 0 );
 
         ### if we're allowed to give multiple answers, split
         ### the answer on whitespace
-        my @answers = $multi ? split(/\s+/, $answer) : $answer;
+        my @answers = grep defined, $multi ? split(/\s+/, $answer) : ( $answer );
 
         ### the return value list
         my @rv;
@@ -357,7 +395,11 @@ sub _tt_readline {
 
                 ### a digit implies a multiple choice question,
                 ### a non-digit is an open answer
-                if( $answer =~ /\D/ ) {
+                if ( $answer =~ /\D/
+                     || ( $answer =~ /^\d+$/
+                          && @$choices < $answer
+                        )
+                   ) {
                     push @rv, $answer if allow( $answer, $allow );
                 } else {
 

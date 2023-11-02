@@ -1,8 +1,10 @@
 package Moo::_Utils;
-use Moo::_strictures;
+use strict;
+use warnings;
 
 {
   no strict 'refs';
+  no warnings 'once';
   sub _getglob { \*{$_[0]} }
   sub _getstash { \%{"$_[0]::"} }
 }
@@ -28,8 +30,9 @@ BEGIN {
   *_module_name_rx = sub(){$module_name_rx};
 }
 
-use Exporter qw(import);
-use Config;
+use Exporter ();
+BEGIN { *import = \&Exporter::import }
+use Config ();
 use Scalar::Util qw(weaken);
 use Carp qw(croak);
 
@@ -52,6 +55,9 @@ our @EXPORT_OK = qw(
   _name_coderef
   _set_loaded
   _unimport_coderefs
+  _linear_isa
+  _in_global_destruction
+  _in_global_destruction_code
 );
 
 my %EXPORTS;
@@ -158,6 +164,60 @@ sub _maybe_load_module {
   return $MAYBE_LOADED{$module} = 0;
 }
 
+BEGIN {
+  # optimize for newer perls
+  require mro
+    if "$]" >= 5.009_005;
+
+  if (defined &mro::get_linear_isa) {
+    *_linear_isa = \&mro::get_linear_isa;
+  }
+  else {
+    my $e;
+    {
+      local $@;
+      eval <<'END_CODE' or $e = $@;
+sub _linear_isa($;$) {
+  my $class = shift;
+  my $type = shift || exists $Class::C3::MRO{$class} ? 'c3' : 'dfs';
+
+  if ($type eq 'c3') {
+    require Class::C3;
+    return [Class::C3::calculateMRO($class)];
+  }
+
+  my @check = ($class);
+  my @lin;
+
+  my %found;
+  while (defined(my $check = shift @check)) {
+    push @lin, $check;
+    no strict 'refs';
+    unshift @check, grep !$found{$_}++, @{"$check\::ISA"};
+  }
+
+  return \@lin;
+}
+
+1;
+END_CODE
+    }
+    die $e if defined $e;
+  }
+}
+
+BEGIN {
+  my $gd_code
+    = "$]" >= 5.014
+      ? q[${^GLOBAL_PHASE} eq 'DESTRUCT']
+    : _maybe_load_module('Devel::GlobalDestruction::XS')
+      ? 'Devel::GlobalDestruction::XS::in_global_destruction()'
+      : 'do { use B (); ${B::main_cv()} == 0 }';
+  *_in_global_destruction_code = sub () { $gd_code };
+  eval "sub _in_global_destruction () { $gd_code }; 1"
+    or die $@;
+}
+
 sub _set_loaded {
   (my $file = "$_[0].pm") =~ s{::}{/}g;
   $INC{$file} ||= $_[1];
@@ -221,7 +281,7 @@ sub _unimport_coderefs {
   }
 }
 
-if ($Config{useithreads}) {
+if ($Config::Config{useithreads}) {
   require Moo::HandleMoose::_TypeMap;
 }
 

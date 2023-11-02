@@ -3,7 +3,7 @@ package Exception::Class::Base;
 use strict;
 use warnings;
 
-our $VERSION = '1.44';
+our $VERSION = '1.45';
 
 use Class::Data::Inheritable 0.02;
 use Devel::StackTrace 2.00;
@@ -107,7 +107,7 @@ sub new {
 
 sub _initialize {
     my $self = shift;
-    my %p = @_ == 1 ? ( error => $_[0] ) : @_;
+    my %p    = @_ == 1 ? ( error => $_[0] ) : @_;
 
     $self->{message} = $p{message} || $p{error} || q{};
 
@@ -115,7 +115,7 @@ sub _initialize {
 
     if ( $self->NoContextInfo ) {
         $self->{show_trace} = 0;
-        $self->{package} = $self->{file} = $self->{line} = undef;
+        $self->{package}    = $self->{file} = $self->{line} = undef;
     }
     else {
         # CORE::time is important to fix an error with some versions of
@@ -148,7 +148,7 @@ sub _initialize {
                 frame_filter
                 filter_frames_early
                 skip_frames
-                ),
+            ),
         );
     }
 
@@ -273,7 +273,7 @@ Exception::Class::Base - A base class for exception objects
 
 =head1 VERSION
 
-version 1.44
+version 1.45
 
 =head1 SYNOPSIS
 
@@ -285,9 +285,8 @@ version 1.44
 
 =head1 DESCRIPTION
 
-This class is the base class for all exceptions created by
-L<Exception::Class>. It provides a number of methods for getting information
-about the exception.
+This class is the base class for all exceptions created by L<Exception::Class>.
+It provides a number of methods for getting information about the exception.
 
 =for Pod::Coverage     Classes
     caught
@@ -299,8 +298,8 @@ about the exception.
 
 Each C<Exception::Class::Base> subclass can be set individually to include a
 stacktrace when the C<as_string> method is called. The default is to not
-include a stacktrace. Calling this method with a value changes this
-behavior. It always returns the current value (after any change is applied).
+include a stacktrace. Calling this method with a value changes this behavior.
+It always returns the current value (after any change is applied).
 
 This value is inherited by any subclasses. However, if this value is set for a
 subclass, it will thereafter be independent of the value in
@@ -349,9 +348,9 @@ ones created in modules you don't control.
 
 =head2 MyException->MaxArgLength($boolean)
 
-When a C<Devel::StackTrace> object stringifies, by default it displays the
-full argument for each function. This parameter can be used to limit the
-maximum length of each argument.
+When a C<Devel::StackTrace> object stringifies, by default it displays the full
+argument for each function. This parameter can be used to limit the maximum
+length of each argument.
 
 Since C<Exception::Class::Base> uses C<Devel::StackTrace> internally, this
 method provides a way to tell C<Devel::StackTrace> to limit the length of
@@ -382,10 +381,10 @@ This method creates a new object with the given error message. If no error
 message is given, this will be an empty string. It then dies with this object
 as its argument.
 
-This method also takes a C<show_trace> parameter which indicates whether or
-not the particular exception object being created should show a stacktrace
-when its C<as_string> method is called. This overrides the value of C<Trace>
-for this class if it is given.
+This method also takes a C<show_trace> parameter which indicates whether or not
+the particular exception object being created should show a stacktrace when its
+C<as_string> method is called. This overrides the value of C<Trace> for this
+class if it is given.
 
 The frames included in the trace can be controlled by the C<ignore_class> and
 C<ignore_package> parameters. These are passed directly to Devel::Stacktrace's
@@ -415,9 +414,9 @@ change in the future). This is also an object method.
 
 =head2 $exception->rethrow
 
-Simply dies with the object as its sole argument. It's just syntactic
-sugar. This does not change any of the object's attribute values.  However, it
-will cause C<caller> to report the die as coming from within the
+Simply dies with the object as its sole argument. It's just syntactic sugar.
+This does not change any of the object's attribute values.  However, it will
+cause C<caller> to report the die as coming from within the
 C<Exception::Class::Base> class rather than where rethrow was called.
 
 Of course, you always have access to the original stacktrace for the exception
@@ -510,8 +509,8 @@ trace is also included. The result looks like C<Carp::confess>.
 =head2 $exception->full_message
 
 Called by the C<as_string> method to get the message. By default, this is the
-same as calling the C<message> method, but may be overridden by a
-subclass. See below for details.
+same as calling the C<message> method, but may be overridden by a subclass. See
+below for details.
 
 =head1 LIGHTWEIGHT EXCEPTIONS
 
@@ -584,7 +583,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2017 by Dave Rolsky.
+This software is copyright (c) 2021 by Dave Rolsky.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

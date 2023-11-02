@@ -3,7 +3,7 @@ use Mojo::Base 'Mojolicious::Plugin';
 
 use Mojo::ByteStream;
 use Mojo::DOM::HTML qw(tag_to_html);
-use Scalar::Util qw(blessed);
+use Scalar::Util    qw(blessed);
 
 sub register {
   my ($self, $app) = @_;
@@ -16,7 +16,7 @@ sub register {
   $app->helper(datetime_field => sub { _input(@_, type => 'datetime-local') });
 
   my @helpers = (
-    qw(csrf_field form_for hidden_field javascript label_for link_to select_field stylesheet submit_button),
+    qw(asset_tag csrf_field form_for hidden_field javascript label_for link_to select_field stylesheet submit_button),
     qw(tag_with_error text_area)
   );
   $app->helper($_ => __PACKAGE__->can("_$_")) for @helpers;
@@ -32,6 +32,16 @@ sub register {
 
   # "t" is just a shortcut for the "tag" helper
   $app->helper($_ => sub { shift; _tag(@_) }) for qw(t tag);
+}
+
+sub _asset_tag {
+  my ($c, $target) = (shift, shift);
+
+  my $url = $c->url_for_asset($target);
+
+  return $c->helpers->javascript($url, @_) if $target =~ /\.js$/;
+  return $c->helpers->stylesheet($url, @_) if $target =~ /\.css$/;
+  return $c->helpers->image($url, @_);
 }
 
 sub _button_to {
@@ -233,6 +243,13 @@ See L<Mojolicious::Plugins/"PLUGINS"> for a list of plugins that are available b
 
 L<Mojolicious::Plugin::TagHelpers> implements the following helpers.
 
+=head2 asset_tag
+
+  %= asset_tag '/app.js'
+  %= asset_tag '/app.js', async => 'async'
+
+Generate C<script>, C<link> or C<img> tag for static asset.
+
 =head2 button_to
 
   %= button_to Test => 'some_get_route'
@@ -428,7 +445,7 @@ Generate C<input> tag. Previous input values will automatically get picked up an
   %= javascript '/script.js'
   %= javascript '/script.js', defer => undef
   %= javascript begin
-    var a = 'b';
+    const a = 'b';
   % end
 
 Generate portable C<script> tag for JavaScript asset.
@@ -436,7 +453,7 @@ Generate portable C<script> tag for JavaScript asset.
   <script src="/path/to/script.js"></script>
   <script defer src="/path/to/script.js"></script>
   <script><![CDATA[
-    var a = 'b';
+    const a = 'b';
   ]]></script>
 
 =head2 label_for
@@ -487,6 +504,12 @@ content.
   <a href="/path/to/file.txt">File</a>
   <a href="https://mojolicious.org">Mojolicious</a>
   <a href="http://127.0.0.1:3000/current/path?foo=bar">Retry</a>
+
+The first argument to C<link_to> is the link content, except when the
+final argument is Perl code such as a template block (created with the
+C<begin> and C<end> keywords); in that case, the link content is
+omitted at the start of the argument list, and the block will become
+the link content.
 
 =head2 month_field
 

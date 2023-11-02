@@ -3,7 +3,7 @@ package Params::ValidationCompiler::Exceptions;
 use strict;
 use warnings;
 
-our $VERSION = '0.30';
+our $VERSION = '0.31';
 
 use Exception::Class (
     'Params::ValidationCompiler::Exception::BadArguments',
@@ -41,7 +41,7 @@ Params::ValidationCompiler::Exceptions - Defines exceptions thrown by Params::Va
 
 =head1 VERSION
 
-version 0.30
+version 0.31
 
 =head1 DESCRIPTION
 
@@ -89,8 +89,6 @@ This is the type constraint object that did not accept the value.
 
 Bugs may be submitted at L<https://github.com/houseabsolute/Params-ValidationCompiler/issues>.
 
-I am also usually active on IRC as 'autarch' on C<irc://irc.perl.org>.
-
 =head1 SOURCE
 
 The source code repository for Params-ValidationCompiler can be found at L<https://github.com/houseabsolute/Params-ValidationCompiler>.
@@ -101,7 +99,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2016 - 2018 by Dave Rolsky.
+This software is Copyright (c) 2016 - 2023 by Dave Rolsky.
 
 This is free software, licensed under:
 

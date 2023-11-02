@@ -2,7 +2,7 @@ package Crypt::PK::RSA;
 
 use strict;
 use warnings;
-our $VERSION = '0.069';
+our $VERSION = '0.078';
 
 require Exporter; our @ISA = qw(Exporter); ### use Exporter 5.57 'import';
 our %EXPORT_TAGS = ( all => [qw(rsa_encrypt rsa_decrypt rsa_sign_message rsa_verify_message rsa_sign_hash rsa_verify_hash)] );
@@ -122,17 +122,17 @@ sub import_key {
     # PKCS#1 RSAPublicKey        (PEM header: BEGIN RSA PUBLIC KEY)
     # PKCS#1 RSAPrivateKey       (PEM header: BEGIN RSA PRIVATE KEY)
     # X.509 SubjectPublicKeyInfo (PEM header: BEGIN PUBLIC KEY)
-    $data = pem_to_der($data, $password);
+    $data = pem_to_der($data, $password) or croak "FATAL: PEM/key decode failed";
     return $self->_import($data) if $data;
   }
   elsif ($data =~ /-----BEGIN PRIVATE KEY-----(.*?)-----END/sg) {
     # PKCS#8 PrivateKeyInfo      (PEM header: BEGIN PRIVATE KEY)
-    $data = pem_to_der($data, $password);
+    $data = pem_to_der($data, $password) or croak "FATAL: PEM/key decode failed";
     return $self->_import_pkcs8($data, $password);
   }
   elsif ($data =~ /-----BEGIN ENCRYPTED PRIVATE KEY-----(.*?)-----END/sg) {
     # PKCS#8 PrivateKeyInfo      (PEM header: BEGIN ENCRYPTED PRIVATE KEY)
-    $data = pem_to_der($data, $password);
+    $data = pem_to_der($data, $password) or croak "FATAL: PEM/key decode failed";
     return $self->_import_pkcs8($data, $password);
   }
   elsif ($data =~ /^\s*(\{.*?\})\s*$/s) {
@@ -147,11 +147,11 @@ sub import_key {
     }
   }
   elsif ($data =~ /-----BEGIN CERTIFICATE-----(.*?)-----END CERTIFICATE-----/sg) {
-    $data = pem_to_der($data);
+    $data = pem_to_der($data) or croak "FATAL: PEM/cert decode failed";
     return $self->_import_x509($data);
   }
   elsif ($data =~ /---- BEGIN SSH2 PUBLIC KEY ----(.*?)---- END SSH2 PUBLIC KEY ----/sg) {
-    $data = pem_to_der($data);
+    $data = pem_to_der($data) or croak "FATAL: PEM/key decode failed";
     my ($typ, $N, $e) = Crypt::PK::_ssh_parse($data);
     return $self->_import_hex(unpack("H*", $e), unpack("H*", $N)) if $typ && $e && $N && $typ eq 'ssh-rsa';
   }
@@ -489,7 +489,7 @@ See L<http://tools.ietf.org/html/draft-ietf-jose-json-web-key>
    "qi":"GyM_p6JrXySiz1toFgKbWV...4ypu9bMWx3QJBfm0FoYzUIZEVEcOqwmRN81oDAaaBk0KWGDjJHDdDmFW3AN7I-pux_mHZG",
  }
 
-B<BEWARE:> For JWK support you need to have L<JSON::PP>, L<JSON::XS> or L<Cpanel::JSON::XS> module.
+B<BEWARE:> For JWK support you need to have L<JSON> module installed.
 
 =item * RSA public keys in JSON Web Key (JWK) format
 
@@ -499,7 +499,7 @@ B<BEWARE:> For JWK support you need to have L<JSON::PP>, L<JSON::XS> or L<Cpanel
    "e":"AQAB",
  }
 
-B<BEWARE:> For JWK support you need to have L<JSON::PP>, L<JSON::XS> or L<Cpanel::JSON::XS> module.
+B<BEWARE:> For JWK support you need to have L<JSON> module installed.
 
 =back
 
@@ -559,7 +559,7 @@ Also exports public/private keys as a perl HASH with JWK structure.
  #or
  my $jwk_hash = $pk->export_key_jwk('public', 1);
 
-B<BEWARE:> For JWK support you need to have L<JSON::PP>, L<JSON::XS> or L<Cpanel::JSON::XS> module.
+B<BEWARE:> For JWK support you need to have L<JSON> module installed.
 
 =head2 export_key_jwk_thumbprint
 

@@ -1,4 +1,4 @@
-package Sub::Name; # git description: v0.25-7-gdb146e5
+package Sub::Name; # git description: v0.26-4-gf9cd47d
 # ABSTRACT: (Re)name a sub
 # KEYWORDS: subroutine function utility name rename symbol
 
@@ -54,7 +54,7 @@ use 5.006;
 use strict;
 use warnings;
 
-our $VERSION = '0.26';
+our $VERSION = '0.27';
 
 use Exporter ();
 *import = \&Exporter::import;
@@ -82,7 +82,7 @@ Sub::Name - (Re)name a sub
 
 =head1 VERSION
 
-version 0.26
+version 0.27
 
 =head1 SYNOPSIS
 
@@ -141,7 +141,7 @@ Matthijs van Duin <xmath@cpan.org>
 
 =head1 CONTRIBUTORS
 
-=for stopwords Karen Etheridge Graham Knop Leon Timmermans Reini Urban Florian Ragwitz Matthijs van Duin Dagfinn Ilmari Mannsåker gfx Aristotle Pagaltzis J.R. Mash Alexander Bluhm
+=for stopwords Karen Etheridge Graham Knop Leon Timmermans Florian Ragwitz Reini Urban Matthijs van Duin Dagfinn Ilmari Mannsåker gfx Aristotle Pagaltzis Alexander Bluhm J.R. Mash
 
 =over 4
 
@@ -159,11 +159,11 @@ Leon Timmermans <fawaka@gmail.com>
 
 =item *
 
-Reini Urban <rurban@cpan.org>
+Florian Ragwitz <rafl@debian.org>
 
 =item *
 
-Florian Ragwitz <rafl@debian.org>
+Reini Urban <rurban@cpan.org>
 
 =item *
 
@@ -183,11 +183,11 @@ Aristotle Pagaltzis <pagaltzis@gmx.de>
 
 =item *
 
-J.R. Mash <jmash.code@gmail.com>
+Alexander Bluhm <alexander.bluhm@gmx.net>
 
 =item *
 
-Alexander Bluhm <alexander.bluhm@gmx.net>
+J.R. Mash <jmash.code@gmail.com>
 
 =back
 

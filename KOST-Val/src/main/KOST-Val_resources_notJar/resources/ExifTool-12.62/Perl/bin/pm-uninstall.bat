@@ -11,7 +11,7 @@
 @if %ErrorLevel% == 9009 @echo You do not have Perl in your PATH.
 @goto endofperl
 @rem ';
-#!C:\strawberry\perl\bin\perl.exe 
+#!perl
 #line 30
 
 use strict;

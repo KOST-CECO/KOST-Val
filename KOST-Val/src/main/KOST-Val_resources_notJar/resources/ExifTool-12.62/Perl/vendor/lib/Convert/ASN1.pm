@@ -3,10 +3,7 @@
 # modify it under the same terms as Perl itself.
 
 package Convert::ASN1;
-{
-  $Convert::ASN1::VERSION = '0.27';
-}
-
+$Convert::ASN1::VERSION = '0.33';
 use 5.004;
 use strict;
 use vars qw($VERSION @ISA @EXPORT_OK %EXPORT_TAGS @opParts @opName $AUTOLOAD);
@@ -120,7 +117,7 @@ sub configure {
     Carp::croak("Unsupported encoding format '$opt{encoding}'");
   }
 
-  # IMPLICIT as defalt for backwards compatibility, even though it's wrong.
+  # IMPLICIT as default for backwards compatibility, even though it's wrong.
   $self->{options}{tagdefault} = uc($opt{tagdefault} || 'IMPLICIT');
 
   unless ($self->{options}{tagdefault} =~ /^(?:EXPLICIT|IMPLICIT)$/) {

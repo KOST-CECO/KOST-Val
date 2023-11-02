@@ -3,7 +3,7 @@ package Net::DNS::Text;
 use strict;
 use warnings;
 
-our $VERSION = (qw$Id: Text.pm 1813 2020-10-08 21:58:40Z willem $)[2];
+our $VERSION = (qw$Id: Text.pm 1894 2023-01-12 10:59:08Z willem $)[2];
 
 
 =head1 NAME
@@ -66,19 +66,17 @@ interpretation.
 
 =cut
 
-my ( %escape, %unescape );		## precalculated ASCII escape tables
+my ( %escape, %escapeUTF8, %unescape );	## precalculated escape tables
 
 sub new {
 	my $self = bless [], shift;
-	croak 'argument undefined' unless defined $_[0];
-
 	local $_ = &_encode_utf8;
 
 	s/^\042(.*)\042$/$1/s;					# strip paired quotes
 
-	s/\134\134/\134\060\071\062/g;				# disguise escaped escape
-	s/\134([\060-\071]{3})/$unescape{$1}/eg;		# numeric escape
-	s/\134(.)/$1/g;						# character escape
+	s/\134([\060-\071]{3})/$unescape{$1}/eg;		# restore numeric escapes
+	s/\134([^\134])/$1/g;					# restore character escapes
+	s/\134\134/\134/g;					# restore escaped escapes
 
 	while ( length $_ > 255 ) {
 		my $chunk = substr( $_, 0, 255 );		# carve into chunks
@@ -178,7 +176,7 @@ sub value {
 
     $string = $text->string;
 
-Conditionally quoted zone file representation of the text object.
+Conditionally quoted RFC1035 zone file representation of the text object.
 
 =cut
 
@@ -187,7 +185,24 @@ sub string {
 
 	my @s = map { split '', $_ } @$self;			# escape special and ASCII non-printable
 	my $s = _decode_utf8( join '', map { $escape{$_} } @s );
-	return $s =~ /\\034|[ \t\n\r\f();]|^$/ ? qq("$s") : $s; # quote special characters and empty string
+	return $s =~ /[ \t\n\r\f(),;]|^$/ ? qq("$s") : $s;	# quote special characters and empty string
+}
+
+
+=head2 unicode
+
+    $string = $text->unicode;
+
+Conditionally quoted Unicode representation of the text object.
+
+=cut
+
+sub unicode {
+	my $self = shift;
+
+	my @s = map { split '', $_ } @$self;			# escape special and non-printable
+	my $s = _decode_utf8( join '', map { $escapeUTF8{$_} } @s );
+	return $s =~ /[ \t\n\r\f();]|^$/ ? qq("$s") : $s;	# quote special characters and empty string
 }
 
 
@@ -213,6 +228,7 @@ sub _decode_utf8 {			## UTF-8 to perl internal encoding
 
 sub _encode_utf8 {			## perl internal encoding to UTF-8
 	local $_ = shift;
+	croak 'argument undefined' unless defined $_;
 
 	# partial transliteration for non-ASCII character encodings
 	tr
@@ -224,22 +240,24 @@ sub _encode_utf8 {			## perl internal encoding to UTF-8
 }
 
 
-%escape = eval {			## precalculated ASCII/UTF-8 escape table
-	my @C0 = ( 0 .. 31 );					# control characters
-	my @NA = UTF8 ? ( 192, 193, 216 .. 223, 245 .. 255 ) : ( 128 .. 255 );
+%escape = eval {			## precalculated ASCII escape table
+	my %table = map { ( chr($_) => chr($_) ) } ( 0 .. 127 );
 
-	my %table = map { ( chr($_) => chr($_) ) } ( 0 .. 255 );
-
-	foreach my $n ( @C0, 34, 92, 127, @NA ) {		# numerical escape
+	foreach my $n ( 0 .. 31, 34, 92, 127 .. 255 ) {		# numerical escape
 		my $codepoint = sprintf( '%03u', $n );
 
 		# transliteration for non-ASCII character encodings
 		$codepoint =~ tr [0-9] [\060-\071];
 
-		$table{pack( 'C', $n )} = pack 'C a3', 92, $codepoint;
+		$table{chr($n)} = pack 'C a3', 92, $codepoint;
 	}
 
 	return %table;
+};
+
+%escapeUTF8 = eval {			## precalculated UTF-8 escape table
+	my @octet = UTF8 ? ( 128 .. 191, 194 .. 254 ) : ();
+	return ( %escape, map { ( chr($_) => chr($_) ) } @octet );
 };
 
 
@@ -287,7 +305,7 @@ All rights reserved.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -304,7 +322,9 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, RFC1035, RFC3629, Unicode TR#16
+L<perl> L<Net::DNS>
+L<RFC1035|https://tools.ietf.org/html/rfc1035>
+L<RFC3629|https://tools.ietf.org/html/rfc3629>
 
 =cut
 

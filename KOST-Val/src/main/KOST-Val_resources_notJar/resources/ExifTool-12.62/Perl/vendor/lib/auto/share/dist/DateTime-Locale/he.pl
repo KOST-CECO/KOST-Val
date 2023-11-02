@@ -19,6 +19,7 @@
     GyMMM => "MMM y G",
     GyMMMEd => "E, d \N{U+05d1}MMM y G",
     GyMMMd => "d \N{U+05d1}MMM y G",
+    GyMd => "d/M/y GGGGG",
     H => "H",
     Hm => "H:mm",
     Hms => "H:mm:ss",
@@ -63,8 +64,8 @@
   date_format_long => "d \N{U+05d1}MMMM y",
   date_format_medium => "d \N{U+05d1}MMM y",
   date_format_short => "d.M.y",
-  datetime_format_full => "{1} \N{U+05d1}\N{U+05e9}\N{U+05e2}\N{U+05d4} {0}",
-  datetime_format_long => "{1} \N{U+05d1}\N{U+05e9}\N{U+05e2}\N{U+05d4} {0}",
+  datetime_format_full => "{1}, {0}",
+  datetime_format_long => "{1}, {0}",
   datetime_format_medium => "{1}, {0}",
   datetime_format_short => "{1}, {0}",
   day_format_abbreviated => [
@@ -126,8 +127,8 @@
     "\N{U+05dc}\N{U+05e1}\N{U+05e4}\N{U+05d9}\N{U+05e8}\N{U+05d4}",
   ],
   era_narrow => [
-    "\N{U+05dc}\N{U+05e4}\N{U+05e0}\N{U+05d4}\N{U+05f4}\N{U+05e1}",
-    "\N{U+05dc}\N{U+05e1}\N{U+05e4}\N{U+05d9}\N{U+05e8}\N{U+05d4}",
+    "\N{U+05dc}\N{U+05e4}\N{U+05e0}\N{U+05d9}",
+    "\N{U+05d0}\N{U+05d7}\N{U+05e8}\N{U+05d9}\N{U+05d9}",
   ],
   era_wide => [
     "\N{U+05dc}\N{U+05e4}\N{U+05e0}\N{U+05d9} \N{U+05d4}\N{U+05e1}\N{U+05e4}\N{U+05d9}\N{U+05e8}\N{U+05d4}",
@@ -273,5 +274,5 @@
   time_format_medium => "H:mm:ss",
   time_format_short => "H:mm",
   variant => undef,
-  version => 38,
+  version => 43,
 }

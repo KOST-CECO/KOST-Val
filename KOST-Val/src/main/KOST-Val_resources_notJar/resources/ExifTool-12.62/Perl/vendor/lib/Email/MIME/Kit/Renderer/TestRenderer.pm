@@ -1,6 +1,7 @@
-package Email::MIME::Kit::Renderer::TestRenderer;
+package Email::MIME::Kit::Renderer::TestRenderer 3.000007;
 # ABSTRACT:  extremely simple renderer for testing purposes only
-$Email::MIME::Kit::Renderer::TestRenderer::VERSION = '3.000006';
+
+use v5.20.0;
 use Moose;
 with 'Email::MIME::Kit::Role::Renderer';
 
@@ -70,7 +71,7 @@ Email::MIME::Kit::Renderer::TestRenderer - extremely simple renderer for testing
 
 =head1 VERSION
 
-version 3.000006
+version 3.000007
 
 =head1 DESCRIPTION
 
@@ -98,6 +99,16 @@ example, this will actually get the OS:
 
   [% z_by($^O) %]
 
+=head1 PERL VERSION
+
+This library should run on perls released even a long time ago.  It should work
+on any version of perl released in the last five years.
+
+Although it may work on older versions of perl, no guarantee is made that the
+minimum required version will not be increased.  The version may be increased
+for any reason, and there is no promise that patches will be accepted to lower
+the minimum required perl.
+
 =head1 WARNING
 
 Seriously, this is horrible code.  If you want, look at it.  It's swell for
@@ -110,7 +121,7 @@ Ricardo Signes <rjbs@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2018 by Ricardo Signes.
+This software is copyright (c) 2023 by Ricardo Signes.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

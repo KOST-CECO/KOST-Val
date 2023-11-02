@@ -56,9 +56,9 @@ If you can't resolve this, then run
 
   perl errep.perl
 
-and include the (large) generated F<report.txt> in your email to:
+and include the (large) generated F<report.txt> in your report at:
 
-  bug-Imager@rt.cpan.org
+  https://github.com/tonycoz/imager/issues
 
 There are other options used to configure how Imager is built:
 
@@ -84,12 +84,32 @@ build Imager with assertions enabled.
 build Imager to trace context object management to C<stderr> for
 debugging.
 
+=item C<--enable=feature>I<< C<,feature> ... >>
+
+=item C<--disable=feature>I<< C<,feature> ... >>
+
+Enable or disable attempting to build bundled modules.  This only has
+an effect on modules are also available on CPAN that are bundled with
+Imager for historical reasons.
+
+You can use C<--enable=none> to prevent attempting to install any of
+the bundled modules.
+
+You can use either of C<--enable> or C<--disable> but not both.
+
 =back
 
 =head2 Build time environment variables
 X<build time environment variables>
 
 =over
+
+=item *
+
+X<< C<IM_ENABLE> >>C<IM_ENABLE> - if set, a comma separated list of
+bundled modules to try to build.  This can be set to C<none> to build
+none of them.  There is no environment variable corresponding to
+C<--disable>.
 
 =item *
 
@@ -196,8 +216,13 @@ Cygwin: C<libgif-devel>
 L<Imager::File::JPEG> uses L<< C<libjpeg> |http://www.ijg.org/ >> for JPEG
 image file support.
 
-You may also use
-L<< C<libjpeg-turbo> |http://sourceforge.net/projects/libjpeg-turbo/ >>.
+You may also use L<< C<libjpeg-turbo>
+|http://sourceforge.net/projects/libjpeg-turbo/ >> or L<< C<mozjpeg>
+|https://github.com/mozilla/mozjpeg >> by setting the installed
+library's F<pkgconfig/> directory in `PKG_CONFIG_PATH`, eg:
+
+  PKG_CONFIG_PATH=/home/tony/local/mozjpeg-3.0git/lib/pkgconfig/ perl Makefile.PL
+  PKG_CONFIG_PATH=/home/tony/local/jpeg-turbo-2.0.4git/lib/pkgconfig/ perl Makefile.PL
 
 To install older releases of C<libjpeg> from source, you'll need to
 run:

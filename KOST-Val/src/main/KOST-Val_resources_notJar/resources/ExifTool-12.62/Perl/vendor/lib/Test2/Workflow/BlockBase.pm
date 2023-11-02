@@ -2,10 +2,10 @@ package Test2::Workflow::BlockBase;
 use strict;
 use warnings;
 
-our $VERSION = '0.000139';
+our $VERSION = '0.000155';
 
 use Test2::Util::HashBase qw/code frame _info _lines/;
-use Sub::Info qw/sub_info/;
+use Test2::Util::Sub qw/sub_info/;
 use List::Util qw/min max/;
 use Carp qw/croak/;
 

@@ -102,7 +102,7 @@ Inherited, see L<Log::Report::Dispatcher/"Constructors">
 
 =item died => STRING
 
-The exit string ($@) of the eval'ed block.
+The exit string or object ($@) of the eval'ed block, in its unprocessed state.
 
 =item exceptions => ARRAY
 
@@ -141,8 +141,9 @@ Returns the value of L<new(on_die)|Log::Report::Dispatcher::Try/"Constructors">.
 
 =item $obj-E<gt>B<died>( [STRING] )
 
-The message which was reported by C<eval>, which is used internally
-to catch problems in the try block.
+The exit string or object ($@) of the eval'ed block, in its unprocessed state.
+They will always return true when they where deadly, and it always stringifies
+into something useful.
 
 =item $obj-E<gt>B<exceptions>()
 
@@ -322,12 +323,12 @@ or nothing.
 
 =head1 SEE ALSO
 
-This module is part of Log-Report distribution version 1.31,
-built on January 15, 2021. Website: F<http://perl.overmeer.net/CPAN/>
+This module is part of Log-Report distribution version 1.34,
+built on September 15, 2022. Website: F<http://perl.overmeer.net/CPAN/>
 
 =head1 LICENSE
 
-Copyrights 2007-2021 by [Mark Overmeer <markov@cpan.org>]. For other contributors see ChangeLog.
+Copyrights 2007-2022 by [Mark Overmeer <markov@cpan.org>]. For other contributors see ChangeLog.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

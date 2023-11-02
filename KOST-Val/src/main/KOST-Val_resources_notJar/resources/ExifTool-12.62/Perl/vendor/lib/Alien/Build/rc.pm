@@ -5,13 +5,31 @@ use warnings;
 use 5.008004;
 
 # ABSTRACT: Alien::Build local config
-our $VERSION = '2.38'; # VERSION
+our $VERSION = '2.80'; # VERSION
 
 
 sub logx ($)
 {
   unshift @_, 'Alien::Build';
   goto &Alien::Build::log;
+}
+
+
+sub preload_plugin
+{
+  my(@args) = @_;
+  push @Alien::Build::rc::PRELOAD, sub {
+    shift->apply_plugin(@args);
+  };
+}
+
+
+sub postload_plugin
+{
+  my(@args) = @_;
+  push @Alien::Build::rc::POSTLOAD, sub {
+    shift->apply_plugin(@args);
+  };
 }
 
 
@@ -40,7 +58,7 @@ Alien::Build::rc - Alien::Build local config
 
 =head1 VERSION
 
-version 2.38
+version 2.80
 
 =head1 SYNOPSIS
 
@@ -65,13 +83,29 @@ or fetch from a local mirror.
 
 Send a message to the L<Alien::Build> log.
 
+=head2 preload_plugin
+
+ preload_plugin $plugin, @args;
+
+Preload the given plugin, with arguments.
+
+=head2 postload_plugin
+
+ postload_plugin $plugin, @args;
+
+Postload the given plugin, with arguments.
+
 =head2 preload
+
+[deprecated]
 
  preload $plugin;
 
 Preload the given plugin.
 
 =head2 postload
+
+[deprecated]
 
  postload $plugin;
 
@@ -133,7 +167,7 @@ Juan Julián Merelo Guervós (JJ)
 
 Joel Berger (JBERGER)
 
-Petr Pisar (ppisar)
+Petr Písař (ppisar)
 
 Lance Wicks (LANCEW)
 
@@ -151,9 +185,13 @@ Paul Evans (leonerd, PEVANS)
 
 Håkon Hægland (hakonhagland, HAKONH)
 
+nick nauwelaerts (INPHOBIA)
+
+Florian Weimer
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011-2020 by Graham Ollis.
+This software is copyright (c) 2011-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

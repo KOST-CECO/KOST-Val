@@ -268,5 +268,5 @@
   time_format_medium => "h:mm:ss a",
   time_format_short => "h:mm a",
   variant => "Computer",
-  version => 38,
+  version => 39,
 }

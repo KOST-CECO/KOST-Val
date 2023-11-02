@@ -7,7 +7,7 @@ package Excel::Writer::XLSX::Worksheet;
 #
 # Used in conjunction with Excel::Writer::XLSX
 #
-# Copyright 2000-2020, John McNamara, jmcnamara@cpan.org
+# Copyright 2000-2023, John McNamara, jmcnamara@cpan.org
 #
 # Documentation after __END__
 #
@@ -27,10 +27,11 @@ use Excel::Writer::XLSX::Utility qw(xl_cell_to_rowcol
                                     xl_rowcol_to_cell
                                     xl_col_to_name
                                     xl_range
+                                    xl_string_pixel_width
                                     quote_sheetname);
 
 our @ISA     = qw(Excel::Writer::XLSX::Package::XMLwriter);
-our $VERSION = '1.07';
+our $VERSION = '1.11';
 
 
 ###############################################################################
@@ -82,7 +83,7 @@ sub new {
     $self->{_dim_colmin} = undef;
     $self->{_dim_colmax} = undef;
 
-    $self->{_colinfo}    = {};
+    $self->{_col_info}    = {};
     $self->{_selections} = [];
     $self->{_hidden}     = 0;
     $self->{_active}     = 0;
@@ -92,6 +93,7 @@ sub new {
     $self->{_active_pane}          = 3;
     $self->{_selected}             = 0;
     $self->{_hide_row_col_headers} = 0;
+    $self->{_top_left_cell}        = '';
 
     $self->{_page_setup_changed} = 0;
     $self->{_paper_size}         = 0;
@@ -111,6 +113,7 @@ sub new {
     $self->{_header_footer_scales}  = 1;
     $self->{_header_images}         = [];
     $self->{_footer_images}         = [];
+    $self->{_background_image}      = '';
 
     $self->{_margin_left}   = 0.7;
     $self->{_margin_right}  = 0.7;
@@ -136,8 +139,10 @@ sub new {
     $self->{_hbreaks} = [];
     $self->{_vbreaks} = [];
 
-    $self->{_protect}  = 0;
-    $self->{_password} = undef;
+    $self->{_protect}              = 0;
+    $self->{_password}             = undef;
+    $self->{_protected_ranges}     = [];
+    $self->{_num_protected_ranges} = 0;
 
     $self->{_set_cols} = {};
     $self->{_set_rows} = {};
@@ -163,6 +168,7 @@ sub new {
     $self->{_default_col_width}   = 8.43;
     $self->{_default_col_pixels}  = 64;
     $self->{_default_row_zeroed}  = 0;
+    $self->{_default_date_pixels} = 68;
 
     $self->{_names} = {};
 
@@ -182,15 +188,15 @@ sub new {
     $self->{_vml_shape_id}        = 1024;
     $self->{_buttons_array}       = [];
     $self->{_header_images_array} = [];
+    $self->{_ignore_errors}       = undef;
 
     $self->{_autofilter}   = '';
     $self->{_filter_on}    = 0;
     $self->{_filter_range} = [];
     $self->{_filter_cols}  = {};
+    $self->{_filter_cells}  = {};
 
-    $self->{_col_sizes}        = {};
     $self->{_row_sizes}        = {};
-    $self->{_col_formats}      = {};
     $self->{_col_size_changed} = 0;
     $self->{_row_size_changed} = 0;
 
@@ -203,6 +209,7 @@ sub new {
     $self->{_external_comment_links} = [];
     $self->{_external_vml_links}     = [];
     $self->{_external_table_links}   = [];
+    $self->{_external_background_links} = [];
     $self->{_drawing_links}          = [];
     $self->{_vml_drawing_links}      = [];
     $self->{_charts}                 = [];
@@ -215,14 +222,17 @@ sub new {
     $self->{_drawing}                = 0;
     $self->{_drawing_rels}           = {};
     $self->{_drawing_rels_id}        = 0;
-    $self->{_vml_drawing_rels}           = {};
-    $self->{_vml_drawing_rels_id}        = 0;
-
-    $self->{_horizontal_dpi} = 0;
-    $self->{_vertical_dpi}   = 0;
+    $self->{_vml_drawing_rels}       = {};
+    $self->{_vml_drawing_rels_id}    = 0;
+    $self->{_horizontal_dpi}         = 0;
+    $self->{_vertical_dpi}           = 0;
+    $self->{_has_dynamic_arrays}     = 0;
+    $self->{_use_future_functions}   = 0;
 
     $self->{_rstring}      = '';
     $self->{_previous_row} = 0;
+
+
 
     if ( $self->{_optimization} == 1 ) {
         my $fh = tempfile( DIR => $self->{_tempdir} );
@@ -316,6 +326,9 @@ sub _assemble_xml_file {
     # Write the sheetProtection element.
     $self->_write_sheet_protection();
 
+    # Write the protectedRanges element.
+    $self->_write_protected_ranges();
+
     # Write the worksheet calculation properties.
     #$self->_write_sheet_calc_pr();
 
@@ -357,6 +370,9 @@ sub _assemble_xml_file {
     # Write the colBreaks element.
     $self->_write_col_breaks();
 
+    # Write the ignoredErrors element.
+    $self->_write_ignored_errors();
+
     # Write the drawing element.
     $self->_write_drawings();
 
@@ -365,6 +381,9 @@ sub _assemble_xml_file {
 
     # Write the legacyDrawingHF element.
     $self->_write_legacy_drawing_hf();
+
+    # Write the picture element, for backgrounds.
+    $self->_write_picture();
 
     # Write the tableParts element.
     $self->_write_table_parts();
@@ -537,45 +556,70 @@ sub protect {
 
 ###############################################################################
 #
-# _encode_password($password)
+# unprotect_range( $range, $range_name, $password )
 #
-# Based on the algorithm provided by Daniel Rentz of OpenOffice.
+# Unprotect ranges within a protected worksheet.
 #
-sub _encode_password {
+sub unprotect_range {
 
-    use integer;
+    my $self       = shift;
+    my $range      = shift;
+    my $range_name = shift;
+    my $password   = shift;
 
-    my $self      = shift;
-    my $plaintext = $_[0];
-    my $password;
-    my $count;
-    my @chars;
-    my $i = 0;
-
-    $count = @chars = split //, $plaintext;
-
-    foreach my $char ( @chars ) {
-        my $low_15;
-        my $high_15;
-        $char    = ord( $char ) << ++$i;
-        $low_15  = $char & 0x7fff;
-        $high_15 = $char & 0x7fff << 15;
-        $high_15 = $high_15 >> 15;
-        $char    = $low_15 | $high_15;
+    if ( !defined $range ) {
+        carp "The range must be defined in unprotect_range())\n";
+        return;
+    }
+    else {
+        $range =~ s/\$//g;
+        $range =~ s/^=//;
+        $self->{_num_protected_ranges}++;
     }
 
-    $password = 0x0000;
-    $password ^= $_ for @chars;
-    $password ^= $count;
-    $password ^= 0xCE4B;
 
-    return sprintf "%X", $password;
+    if ( !defined $range_name ) {
+        $range_name = 'Range' . $self->{_num_protected_ranges};
+    }
+
+    if ( defined $password ) {
+        $password = $self->_encode_password( $password );
+    }
+
+    push @{ $self->{_protected_ranges} }, [ $range, $range_name, $password ];
 }
 
 
 ###############################################################################
 #
-# set_column($firstcol, $lastcol, $width, $format, $hidden, $level)
+# _encode_password($password)
+#
+# Hash a worksheet password. Based on the algorithm in ECMA-376-4:2016, Office
+# Open XML File Formats — Transitional Migration Features, Additional
+# attributes for workbookProtection element (Part 1, §18.2.29).
+#
+sub _encode_password {
+    my $self     = shift;
+    my $password = $_[0];
+    my $hash     = 0;
+    my $length;
+
+    foreach my $char ( split //, reverse $password ) {
+        $hash = ( ( $hash >> 14 ) & 0x01 ) | ( ( $hash << 1 ) & 0x7fff );
+        $hash ^= ord $char;
+    }
+
+    $hash = ( ( $hash >> 14 ) & 0x01 ) | ( ( $hash << 1 ) & 0x7fff );
+    $hash ^= length $password;
+    $hash ^= 0xCE4B;
+
+    return sprintf "%X", $hash;
+}
+
+
+###############################################################################
+#
+# set_column($first_col, $last_col, $width, $format, $hidden, $level)
 #
 # Set the width of a single column or a range of columns.
 # See also: _write_col_info
@@ -595,58 +639,276 @@ sub set_column {
         splice @data, 1, 1;    # $row2
     }
 
-    return if @data < 3;       # Ensure at least $firstcol, $lastcol and $width
-    return if not defined $data[0];    # Columns must be defined.
-    return if not defined $data[1];
+    # Ensure at least $first_col, $last_col and $width
+    return if @data < 3;
+
+
+    my $first_col = $data[0];
+    my $last_col  = $data[1];
+    my $width     = $data[2];
+    my $format    = $data[3];
+    my $hidden    = $data[4] || 0;
+    my $level     = $data[5] || 0;
+    my $collapsed = $data[6] || 0;
+    my $autofit   = 0;
+
+    return if not defined $first_col;    # Columns must be defined.
+    return if not defined $last_col;
 
     # Assume second column is the same as first if 0. Avoids KB918419 bug.
-    $data[1] = $data[0] if $data[1] == 0;
+    $last_col = $first_col if $last_col == 0;
 
     # Ensure 2nd col is larger than first. Also for KB918419 bug.
-    ( $data[0], $data[1] ) = ( $data[1], $data[0] ) if $data[0] > $data[1];
-
+    ( $first_col, $last_col ) = ( $last_col, $first_col )
+      if $first_col > $last_col;
 
     # Check that cols are valid and store max and min values with default row.
     # NOTE: The check shouldn't modify the row dimensions and should only modify
     #       the column dimensions in certain cases.
     my $ignore_row = 1;
     my $ignore_col = 1;
-    $ignore_col = 0 if ref $data[3];          # Column has a format.
-    $ignore_col = 0 if $data[2] && $data[4];  # Column has a width but is hidden
+    $ignore_col = 0 if ref $format;          # Column has a format.
+    $ignore_col = 0 if $width && $hidden;    # Column has a width but is hidden
 
     return -2
-      if $self->_check_dimensions( 0, $data[0], $ignore_row, $ignore_col );
+      if $self->_check_dimensions( 0, $first_col, $ignore_row, $ignore_col );
     return -2
-      if $self->_check_dimensions( 0, $data[1], $ignore_row, $ignore_col );
+      if $self->_check_dimensions( 0, $last_col, $ignore_row, $ignore_col );
 
     # Set the limits for the outline levels (0 <= x <= 7).
-    $data[5] = 0 unless defined $data[5];
-    $data[5] = 0 if $data[5] < 0;
-    $data[5] = 7 if $data[5] > 7;
+    $level = 0 unless defined $level;
+    $level = 0 if $level < 0;
+    $level = 7 if $level > 7;
 
-    if ( $data[5] > $self->{_outline_col_level} ) {
-        $self->{_outline_col_level} = $data[5];
+
+    # Excel has a maximumn column width of 255 characters.
+    if (defined $width && $width > 255.0) {
+        $width = 255.0;
     }
 
-    # Store the column data based on the first column. Padded for sorting.
-    $self->{_colinfo}->{ sprintf "%05d", $data[0] } = [@data];
+    if ( $level > $self->{_outline_col_level} ) {
+        $self->{_outline_col_level} = $level;
+    }
+
+    # Store the column data for each column.
+    foreach my $col ( $first_col .. $last_col ) {
+        $self->{_col_info}->{$col} =
+          [ $width, $format, $hidden, $level, $collapsed, $autofit ];
+    }
+
 
     # Store the column change to allow optimisations.
     $self->{_col_size_changed} = 1;
+}
 
-    # Store the col sizes for use when calculating image vertices taking
-    # hidden columns into account. Also store the column formats.
-    my $width  = $data[2];
-    my $format = $data[3];
-    my $hidden = $data[4] || 0;
+###############################################################################
+#
+# set_column_pixels_($first_col, $last_col, $width, $format, $hidden, $level)
+#
+# Set the width (and properties) of a single column or a range of columns in
+# pixels rather than character units.
+#
+sub set_column_pixels {
 
-    $width = $self->{_default_col_width} if !defined $width;
+    my $self = shift;
+    my @data = @_;
+    my $cell = $data[0];
 
-    my ( $firstcol, $lastcol ) = @data;
+    # Check for a cell reference in A1 notation and substitute row and column
+    if ( $cell =~ /^\D/ ) {
+        @data = $self->_substitute_cellref( @_ );
 
-    foreach my $col ( $firstcol .. $lastcol ) {
-        $self->{_col_sizes}->{$col}   = [$width, $hidden];
-        $self->{_col_formats}->{$col} = $format if $format;
+        # Returned values $row1 and $row2 aren't required here. Remove them.
+        shift @data;    # $row1
+        splice @data, 1, 1;    # $row2
+    }
+
+    # Ensure at least $first_col, $last_col and $width
+    return if @data < 3;
+
+    my $first_col = $data[0];
+    my $last_col  = $data[1];
+    my $pixels    = $data[2];
+    my $format    = $data[3];
+    my $hidden    = $data[4] || 0;
+    my $level     = $data[5];
+    my $width;
+
+    if ($pixels) {
+        $width = _pixels_to_width( $pixels );
+    }
+
+    return $self->set_column( $first_col, $last_col, $width, $format,
+                              $hidden, $level );
+}
+
+###############################################################################
+#
+# autofit()
+#
+# Simulate autofit based on the data, and datatypes in each column. We do this
+# by estimating a pixel width for each cell data.
+#
+sub autofit {
+    my $self      = shift;
+    my %col_width = ();
+
+    # Create a reverse lookup for the share strings table so we can convert
+    # the string id back to the original string.
+    my @strings;
+    while ( my $key = each %{ ${ $self->{_str_table} } } ) {
+        $strings[ ${ $self->{_str_table} }->{$key} ] = $key;
+    }
+
+
+    # Iterate through all the data in the worksheet.
+    for my $row_num ( $self->{_dim_rowmin} .. $self->{_dim_rowmax} ) {
+
+        # Skip row if it doesn't contain cell data.
+        if ( !$self->{_table}->{$row_num} ) {
+            next;
+        }
+
+        if ( my $row_ref = $self->{_table}->{$row_num} ) {
+            for my $col_num ( $self->{_dim_colmin} .. $self->{_dim_colmax} ) {
+                if ( my $cell = $self->{_table}->{$row_num}->{$col_num} ) {
+
+                    # Get the cell type and data.
+                    my $type   = $cell->[0];
+                    my $token  = $cell->[1];
+                    my $length = 0;
+
+
+                    if ( $type eq 's' || $type eq 'r' ) {
+
+                        # Handle strings and rich strings.
+                        #
+                        # For standard shared strings we do a reverse lookup
+                        # from the shared string id to the actual string. For
+                        # rich strings we use the unformatted string. We also
+                        # split multiline strings and handle each part
+                        # separately.
+                        my $string;
+
+                        if ( $type eq 's' ) {
+
+                            # Handle standard shared strings.
+                            $string = $strings[$token];
+                        }
+                        else {
+                            # Handle rich strings without html formatting.
+                            $string = $cell->[3];
+                        }
+
+                        if ( $string !~ /\n/ ) {
+                            $length = xl_string_pixel_width( $string );
+                        }
+                        else {
+                            # Handle multiline strings.
+                            my @segments = split "\n", $string;
+                            for my $string ( @segments ) {
+                                my $seg_length =
+                                  xl_string_pixel_width( $string );
+
+                                if ( $seg_length > $length ) {
+                                    $length = $seg_length;
+                                }
+                            }
+                        }
+                    }
+                    elsif ( $type eq 'n' ) {
+
+                        # Handle numbers.
+                        #
+                        # We use a workaround/optimization for numbers since
+                        # digits all have a pixel width of 7. This gives a
+                        # slightly greater width for the decimal place and
+                        # minus sign but only by a few pixels and
+                        # over-estimation is okay.
+                        $length = 7 * length $token;
+                    }
+                    elsif ( $type eq 't' ) {
+
+                        # Handle dates.
+                        #
+                        # The following uses the default width for mm/dd/yyyy
+                        # dates. It isn't feasible to parse the number format
+                        # to get the actual string width for all format types.
+                        $length = $self->{_default_date_pixels};
+                    }
+                    elsif ( $type eq 'l' ) {
+
+                        # Handle boolean values.
+                        #
+                        # Use the Excel standard widths for TRUE and FALSE.
+                        if ( $token ) {
+                            $length = 31;
+                        }
+                        else {
+                            $length = 36;
+                        }
+                    }
+                    elsif ( $type eq 'f' ) {
+
+                        # Handle formulas.
+                        #
+                        # We only try to autofit a formula if it has a
+                        # non-zero value.
+                        my $value = $cell->[3];
+                        if ( $value ) {
+                            $length = xl_string_pixel_width( $value );
+                        }
+                    }
+                    elsif ( $type eq 'a' || $type eq 'd' ) {
+
+                        # Handle array and dynamic formulas.
+                        my $value = $cell->[4];
+                        if ( $value ) {
+                            $length = xl_string_pixel_width( $value );
+                        }
+                    }
+
+
+                    # If the cell is in an autofilter header we add an
+                    # additional 16 pixels for the dropdown arrow.
+                    if ( $length > 0
+                        && exists $self->{_filter_cells}->{"$row_num:$col_num"}
+                      )
+                    {
+                        $length += 16;
+                    }
+
+                    # Add the string length to the lookup hash.
+                    my $max = $col_width{$col_num} || 0;
+                    if ( $length > $max ) {
+                        $col_width{$col_num} = $length;
+
+                    }
+                }
+            }
+        }
+    }
+
+    # Apply the width to the column.
+    while ( my ( $col_num, $pixel_width ) = each %col_width ) {
+
+        # Convert the string pixel width to a character width using an
+        # additional padding of 7 pixels, like Excel.
+        my $width = _pixels_to_width( $pixel_width + 7 );
+
+        # The max column character width in Excel is 255.
+        if ( $width > 255.0 ) {
+            $width = 255.0;
+        }
+
+        # Add the width to an existing col info structure or add a new one.
+        if ( exists $self->{_col_info}->{$col_num} ) {
+            $self->{_col_info}->{$col_num}->[0] = $width;
+            $self->{_col_info}->{$col_num}->[5] = 1;
+        }
+        else {
+            $self->{_col_info}->{$col_num} = [ $width, undef, 0, 0, 0, 1 ];
+        }
     }
 }
 
@@ -695,13 +957,7 @@ sub set_selection {
             ( $col_first, $col_last ) = ( $col_last, $col_first );
         }
 
-        # If the first and last cell are the same write a single cell.
-        if ( ( $row_first == $row_last ) && ( $col_first == $col_last ) ) {
-            $sqref = $active_cell;
-        }
-        else {
-            $sqref = xl_range( $row_first, $row_last, $col_first, $col_last );
-        }
+        $sqref = xl_range( $row_first, $row_last, $col_first, $col_last );
 
     }
     else {
@@ -714,6 +970,35 @@ sub set_selection {
     return if $sqref eq 'A1';
 
     $self->{_selections} = [ [ $pane, $active_cell, $sqref ] ];
+}
+
+
+###############################################################################
+#
+# set_top_left_cell()
+#
+# Set the first visible cell at the top left of the worksheet.
+#
+sub set_top_left_cell {
+
+    my $self = shift;
+    my $sqref;
+
+    return unless @_;
+
+    # Check for a cell reference in A1 notation and substitute row and column.
+    if ( $_[0] =~ /^\D/ ) {
+        @_ = $self->_substitute_cellref( @_ );
+    }
+
+    my $row = $_[0] || 0;
+    my $col = $_[1] || 0;
+
+    return if ( $row == 0 && $col == 0 );
+
+    my $top_left_cell = xl_rowcol_to_cell( $row, $col );
+
+    $self->{_top_left_cell} = $top_left_cell;
 }
 
 
@@ -864,8 +1149,9 @@ sub set_header {
     # Replace the Excel placeholder &[Picture] with the internal &G.
     $string =~ s/&\[Picture\]/&G/g;
 
-    if ( length $string >= 255 ) {
-        carp 'Header string must be less than 255 characters';
+    if ( length $string > 255 ) {
+        carp "Header string cannot be longer than Excel's " .
+             "limit of 255 characters";
         return;
     }
 
@@ -929,8 +1215,9 @@ sub set_footer {
     # Replace the Excel placeholder &[Picture] with the internal &G.
     $string =~ s/&\[Picture\]/&G/g;
 
-    if ( length $string >= 255 ) {
-        carp 'Footer string must be less than 255 characters';
+    if ( length $string > 255 ) {
+        carp "Footer string cannot be longer than Excel's " .
+             "limit of 255 characters";
         return;
     }
 
@@ -1266,6 +1553,12 @@ sub autofilter {
     $self->{_autofilter}     = $area;
     $self->{_autofilter_ref} = $ref;
     $self->{_filter_range}   = [ $col1, $col2 ];
+
+    # Store the filter cell positions for use in the autofit calculation.
+    for my $col ($col1 .. $col2) {
+        $self->{_filter_cells}->{ "$row1:$col"} = 1;
+    }
+
 }
 
 
@@ -1809,6 +2102,7 @@ sub print_black_and_white {
     my $self = shift;
 
     $self->{_black_white} = 1;
+    $self->{_page_setup_changed} = 1;
 }
 
 
@@ -2322,10 +2616,10 @@ sub write_rich_string {
     my $col    = shift;            # Zero indexed column.
     my $str    = '';
     my $xf     = undef;
-    my $type   = 's';              # The data type.
-    my $length = 0;                # String length.
+    my $type   = 'r';              # The data type.
     my $index;
     my $str_error = 0;
+    my $raw_string = '';
 
     # Check that row and col are valid and store max and min values
     return -2 if $self->_check_dimensions( $row, $col );
@@ -2371,7 +2665,8 @@ sub write_rich_string {
                 push @fragments, $token;
             }
 
-            $length += length $token;    # Keep track of actual string length.
+            $raw_string .= $token; # Keep track of the unformatted string.
+
             $last = 'string';
         }
         else {
@@ -2418,7 +2713,7 @@ sub write_rich_string {
     }
 
     # Check that the string is < 32767 chars.
-    if ( $length > $self->{_xls_strmax} ) {
+    if ( length $raw_string > $self->{_xls_strmax} ) {
         return -3;
     }
 
@@ -2436,7 +2731,7 @@ sub write_rich_string {
         $self->_write_single_row( $row );
     }
 
-    $self->{_table}->{$row}->{$col} = [ $type, $index, $xf ];
+    $self->{_table}->{$row}->{$col} = [ $type, $index, $xf, $raw_string ];
 
     return 0;
 }
@@ -2491,6 +2786,171 @@ sub write_blank {
     return 0;
 }
 
+###############################################################################
+#
+# _prepare_formula($formula)
+#
+# Utility method to strip equal sign and array braces from a formula and also
+# expand out future and dynamic array formulas.
+#
+sub _prepare_formula {
+
+    my $self    = shift;
+    my $formula = shift;
+
+    # Ignore empty/null formulas.
+    return $formula if !$formula;
+
+    # Remove array formula braces and the leading =.
+    $formula =~ s/^{(.*)}$/$1/;
+    $formula =~ s/^=//;
+
+    # # Don't expand formulas that the user has already expanded.
+    return $formula if $formula =~ m/_xlfn\./;
+
+    # Expand dynamic array formulas.
+    $formula =~ s/\b(LET\()/_xlfn.$1/g;
+    $formula =~ s/\b(LAMBDA\()/_xlfn.$1/g;
+    $formula =~ s/\b(SINGLE\()/_xlfn.$1/g;
+    $formula =~ s/\b(SORTBY\()/_xlfn.$1/g;
+    $formula =~ s/\b(UNIQUE\()/_xlfn.$1/g;
+    $formula =~ s/\b(XMATCH\()/_xlfn.$1/g;
+    $formula =~ s/\b(XLOOKUP\()/_xlfn.$1/g;
+    $formula =~ s/\b(SEQUENCE\()/_xlfn.$1/g;
+    $formula =~ s/\b(RANDARRAY\()/_xlfn.$1/g;
+    $formula =~ s/\b(SORT\()/_xlfn._xlws.$1/g;
+    $formula =~ s/\b(ANCHORARRAY\()/_xlfn.$1/g;
+    $formula =~ s/\b(FILTER\()/_xlfn._xlws.$1/g;
+
+    if ( !$self->{_use_future_functions} ) {
+        return $formula;
+    }
+
+    # Future functions.
+    $formula =~ s/\b(ACOTH\()/_xlfn.$1/g;
+    $formula =~ s/\b(ACOT\()/_xlfn.$1/g;
+    $formula =~ s/\b(AGGREGATE\()/_xlfn.$1/g;
+    $formula =~ s/\b(ARABIC\()/_xlfn.$1/g;
+    $formula =~ s/\b(BASE\()/_xlfn.$1/g;
+    $formula =~ s/\b(BETA.DIST\()/_xlfn.$1/g;
+    $formula =~ s/\b(BETA.INV\()/_xlfn.$1/g;
+    $formula =~ s/\b(BINOM.DIST.RANGE\()/_xlfn.$1/g;
+    $formula =~ s/\b(BINOM.DIST\()/_xlfn.$1/g;
+    $formula =~ s/\b(BINOM.INV\()/_xlfn.$1/g;
+    $formula =~ s/\b(BITAND\()/_xlfn.$1/g;
+    $formula =~ s/\b(BITLSHIFT\()/_xlfn.$1/g;
+    $formula =~ s/\b(BITOR\()/_xlfn.$1/g;
+    $formula =~ s/\b(BITRSHIFT\()/_xlfn.$1/g;
+    $formula =~ s/\b(BITXOR\()/_xlfn.$1/g;
+    $formula =~ s/\b(CEILING.MATH\()/_xlfn.$1/g;
+    $formula =~ s/\b(CEILING.PRECISE\()/_xlfn.$1/g;
+    $formula =~ s/\b(CHISQ.DIST.RT\()/_xlfn.$1/g;
+    $formula =~ s/\b(CHISQ.DIST\()/_xlfn.$1/g;
+    $formula =~ s/\b(CHISQ.INV.RT\()/_xlfn.$1/g;
+    $formula =~ s/\b(CHISQ.INV\()/_xlfn.$1/g;
+    $formula =~ s/\b(CHISQ.TEST\()/_xlfn.$1/g;
+    $formula =~ s/\b(COMBINA\()/_xlfn.$1/g;
+    $formula =~ s/\b(CONCAT\()/_xlfn.$1/g;
+    $formula =~ s/\b(CONFIDENCE.NORM\()/_xlfn.$1/g;
+    $formula =~ s/\b(CONFIDENCE.T\()/_xlfn.$1/g;
+    $formula =~ s/\b(COTH\()/_xlfn.$1/g;
+    $formula =~ s/\b(COT\()/_xlfn.$1/g;
+    $formula =~ s/\b(COVARIANCE.P\()/_xlfn.$1/g;
+    $formula =~ s/\b(COVARIANCE.S\()/_xlfn.$1/g;
+    $formula =~ s/\b(CSCH\()/_xlfn.$1/g;
+    $formula =~ s/\b(CSC\()/_xlfn.$1/g;
+    $formula =~ s/\b(DAYS\()/_xlfn.$1/g;
+    $formula =~ s/\b(DECIMAL\()/_xlfn.$1/g;
+    $formula =~ s/\b(ERF.PRECISE\()/_xlfn.$1/g;
+    $formula =~ s/\b(ERFC.PRECISE\()/_xlfn.$1/g;
+    $formula =~ s/\b(EXPON.DIST\()/_xlfn.$1/g;
+    $formula =~ s/\b(F.DIST.RT\()/_xlfn.$1/g;
+    $formula =~ s/\b(F.DIST\()/_xlfn.$1/g;
+    $formula =~ s/\b(F.INV.RT\()/_xlfn.$1/g;
+    $formula =~ s/\b(F.INV\()/_xlfn.$1/g;
+    $formula =~ s/\b(F.TEST\()/_xlfn.$1/g;
+    $formula =~ s/\b(FILTERXML\()/_xlfn.$1/g;
+    $formula =~ s/\b(FLOOR.MATH\()/_xlfn.$1/g;
+    $formula =~ s/\b(FLOOR.PRECISE\()/_xlfn.$1/g;
+    $formula =~ s/\b(FORECAST.ETS.CONFINT\()/_xlfn.$1/g;
+    $formula =~ s/\b(FORECAST.ETS.SEASONALITY\()/_xlfn.$1/g;
+    $formula =~ s/\b(FORECAST.ETS.STAT\()/_xlfn.$1/g;
+    $formula =~ s/\b(FORECAST.ETS\()/_xlfn.$1/g;
+    $formula =~ s/\b(FORECAST.LINEAR\()/_xlfn.$1/g;
+    $formula =~ s/\b(FORMULATEXT\()/_xlfn.$1/g;
+    $formula =~ s/\b(GAMMA.DIST\()/_xlfn.$1/g;
+    $formula =~ s/\b(GAMMA.INV\()/_xlfn.$1/g;
+    $formula =~ s/\b(GAMMALN.PRECISE\()/_xlfn.$1/g;
+    $formula =~ s/\b(GAMMA\()/_xlfn.$1/g;
+    $formula =~ s/\b(GAUSS\()/_xlfn.$1/g;
+    $formula =~ s/\b(HYPGEOM.DIST\()/_xlfn.$1/g;
+    $formula =~ s/\b(IFNA\()/_xlfn.$1/g;
+    $formula =~ s/\b(IFS\()/_xlfn.$1/g;
+    $formula =~ s/\b(IMCOSH\()/_xlfn.$1/g;
+    $formula =~ s/\b(IMCOT\()/_xlfn.$1/g;
+    $formula =~ s/\b(IMCSCH\()/_xlfn.$1/g;
+    $formula =~ s/\b(IMCSC\()/_xlfn.$1/g;
+    $formula =~ s/\b(IMSECH\()/_xlfn.$1/g;
+    $formula =~ s/\b(IMSEC\()/_xlfn.$1/g;
+    $formula =~ s/\b(IMSINH\()/_xlfn.$1/g;
+    $formula =~ s/\b(IMTAN\()/_xlfn.$1/g;
+    $formula =~ s/\b(ISFORMULA\()/_xlfn.$1/g;
+    $formula =~ s/\b(ISOWEEKNUM\()/_xlfn.$1/g;
+    $formula =~ s/\b(LOGNORM.DIST\()/_xlfn.$1/g;
+    $formula =~ s/\b(LOGNORM.INV\()/_xlfn.$1/g;
+    $formula =~ s/\b(MAXIFS\()/_xlfn.$1/g;
+    $formula =~ s/\b(MINIFS\()/_xlfn.$1/g;
+    $formula =~ s/\b(MODE.MULT\()/_xlfn.$1/g;
+    $formula =~ s/\b(MODE.SNGL\()/_xlfn.$1/g;
+    $formula =~ s/\b(MUNIT\()/_xlfn.$1/g;
+    $formula =~ s/\b(NEGBINOM.DIST\()/_xlfn.$1/g;
+    $formula =~ s/\b(NORM.DIST\()/_xlfn.$1/g;
+    $formula =~ s/\b(NORM.INV\()/_xlfn.$1/g;
+    $formula =~ s/\b(NORM.S.DIST\()/_xlfn.$1/g;
+    $formula =~ s/\b(NORM.S.INV\()/_xlfn.$1/g;
+    $formula =~ s/\b(NUMBERVALUE\()/_xlfn.$1/g;
+    $formula =~ s/\b(PDURATION\()/_xlfn.$1/g;
+    $formula =~ s/\b(PERCENTILE.EXC\()/_xlfn.$1/g;
+    $formula =~ s/\b(PERCENTILE.INC\()/_xlfn.$1/g;
+    $formula =~ s/\b(PERCENTRANK.EXC\()/_xlfn.$1/g;
+    $formula =~ s/\b(PERCENTRANK.INC\()/_xlfn.$1/g;
+    $formula =~ s/\b(PERMUTATIONA\()/_xlfn.$1/g;
+    $formula =~ s/\b(PHI\()/_xlfn.$1/g;
+    $formula =~ s/\b(POISSON.DIST\()/_xlfn.$1/g;
+    $formula =~ s/\b(QUARTILE.EXC\()/_xlfn.$1/g;
+    $formula =~ s/\b(QUARTILE.INC\()/_xlfn.$1/g;
+    $formula =~ s/\b(QUERYSTRING\()/_xlfn.$1/g;
+    $formula =~ s/\b(RANK.AVG\()/_xlfn.$1/g;
+    $formula =~ s/\b(RANK.EQ\()/_xlfn.$1/g;
+    $formula =~ s/\b(RRI\()/_xlfn.$1/g;
+    $formula =~ s/\b(SECH\()/_xlfn.$1/g;
+    $formula =~ s/\b(SEC\()/_xlfn.$1/g;
+    $formula =~ s/\b(SHEETS\()/_xlfn.$1/g;
+    $formula =~ s/\b(SHEET\()/_xlfn.$1/g;
+    $formula =~ s/\b(SKEW.P\()/_xlfn.$1/g;
+    $formula =~ s/\b(STDEV.P\()/_xlfn.$1/g;
+    $formula =~ s/\b(STDEV.S\()/_xlfn.$1/g;
+    $formula =~ s/\b(SWITCH\()/_xlfn.$1/g;
+    $formula =~ s/\b(T.DIST.2T\()/_xlfn.$1/g;
+    $formula =~ s/\b(T.DIST.RT\()/_xlfn.$1/g;
+    $formula =~ s/\b(T.DIST\()/_xlfn.$1/g;
+    $formula =~ s/\b(T.INV.2T\()/_xlfn.$1/g;
+    $formula =~ s/\b(T.INV\()/_xlfn.$1/g;
+    $formula =~ s/\b(T.TEST\()/_xlfn.$1/g;
+    $formula =~ s/\b(TEXTJOIN\()/_xlfn.$1/g;
+    $formula =~ s/\b(UNICHAR\()/_xlfn.$1/g;
+    $formula =~ s/\b(UNICODE\()/_xlfn.$1/g;
+    $formula =~ s/\b(VAR.P\()/_xlfn.$1/g;
+    $formula =~ s/\b(VAR.S\()/_xlfn.$1/g;
+    $formula =~ s/\b(WEBSERVICE\()/_xlfn.$1/g;
+    $formula =~ s/\b(WEIBULL.DIST\()/_xlfn.$1/g;
+    $formula =~ s/\b(XOR\()/_xlfn.$1/g;
+    $formula =~ s/\b(Z.TEST\()/_xlfn.$1/g;
+
+    return $formula;
+
+}
+
 
 ###############################################################################
 #
@@ -2522,6 +2982,25 @@ sub write_formula {
     my $value   = $_[4];           # Optional formula value.
     my $type    = 'f';             # The data type
 
+    # Check for dynamic array functions.
+    local $_ = $formula;
+    if (   m{\bLET\(}
+        || m{\bSORT\(}
+        || m{\bLAMBDA\(}
+        || m{\bSINGLE\(}
+        || m{\bSORTBY\(}
+        || m{\bUNIQUE\(}
+        || m{\bXMATCH\(}
+        || m{\bFILTER\(}
+        || m{\bXLOOKUP\(}
+        || m{\bSEQUENCE\(}
+        || m{\bRANDARRAY\(}
+        || m{\bANCHORARRAY\(} )
+    {
+        return $self->write_dynamic_array_formula( $row, $col, $row, $col,
+            $formula, $xf, $value );
+    }
+
     # Hand off array formulas.
     if ( $formula =~ /^{=.*}$/ ) {
         return $self->write_array_formula( $row, $col, $row, $col, $formula,
@@ -2544,38 +3023,38 @@ sub write_formula {
     return 0;
 }
 
-
-###############################################################################
-#
-# write_array_formula($row1, $col1, $row2, $col2, $formula, $format)
-#
-# Write an array formula to the specified row and column (zero indexed).
-#
-# $format is optional.
-#
-# Returns  0 : normal termination
-#         -1 : insufficient number of arguments
-#         -2 : row or column out of range
-#
-sub write_array_formula {
+# Internal method shared by the write_array_formula() and
+# write_dynamic_array_formula() methods.
+sub _write_array_formula {
 
     my $self = shift;
+    my $type = shift;
+    my @args = @_;
 
     # Check for a cell reference in A1 notation and substitute row and column
-    if ( $_[0] =~ /^\D/ ) {
-        @_ = $self->_substitute_cellref( @_ );
+    if ( $args[0] =~ /^\D/ ) {
+        my $cellref = shift @args;
+
+        # Convert single cell to range.
+        my @dims = $self->_substitute_cellref( $cellref );
+
+        if ( @dims == 2 ) {
+            @args = ( @dims, @dims, @args );
+        }
+        else {
+            @args = ( @dims, @args );
+        }
     }
 
-    if ( @_ < 5 ) { return -1 }    # Check the number of args
+    if ( @args < 5 ) { return -1 }    # Check the number of args
 
-    my $row1    = $_[0];           # First row
-    my $col1    = $_[1];           # First column
-    my $row2    = $_[2];           # Last row
-    my $col2    = $_[3];           # Last column
-    my $formula = $_[4];           # The formula text string
-    my $xf      = $_[5];           # The format object.
-    my $value   = $_[6];           # Optional formula value.
-    my $type    = 'a';             # The data type
+    my $row1    = $args[0];           # First row
+    my $col1    = $args[1];           # First column
+    my $row2    = $args[2];           # Last row
+    my $col2    = $args[3];           # Last column
+    my $formula = $args[4];           # The formula text string
+    my $xf      = $args[5];           # The format object.
+    my $value   = $args[6];           # Optional formula value.
 
     # Swap last row/col with first row/col as necessary
     ( $row1, $row2 ) = ( $row2, $row1 ) if $row1 > $row2;
@@ -2598,9 +3077,8 @@ sub write_array_formula {
           . xl_rowcol_to_cell( $row2, $col2 );
     }
 
-    # Remove array formula braces and the leading =.
-    $formula =~ s/^{(.*)}$/$1/;
-    $formula =~ s/^=//;
+    # Modify the formula string, as needed.
+    $formula = $self->_prepare_formula($formula);
 
     # Write previous row if in in-line string optimization mode.
     my $row = $row1;
@@ -2610,7 +3088,6 @@ sub write_array_formula {
 
     $self->{_table}->{$row1}->{$col1} =
       [ $type, $formula, $xf, $range, $value ];
-
 
     # Pad out the rest of the area with formatted zeroes.
     if ( !$self->{_optimization} ) {
@@ -2623,6 +3100,52 @@ sub write_array_formula {
     }
 
     return 0;
+}
+
+
+###############################################################################
+#
+# write_array_formula($row1, $col1, $row2, $col2, $formula, $format)
+#
+# Write an array formula to the specified row and column (zero indexed).
+#
+# $format is optional.
+#
+# Returns  0 : normal termination
+#         -1 : insufficient number of arguments
+#         -2 : row or column out of range
+#
+sub write_array_formula {
+
+    my $self = shift;
+
+    return $self->_write_array_formula( 'a', @_ );
+}
+
+
+###############################################################################
+#
+# write_dynamic_array_formula($row1, $col1, $row2, $col2, $formula, $format)
+#
+# Write a dynamic formula to the specified row and column (zero indexed).
+#
+# $format is optional.
+#
+# Returns  0 : normal termination
+#         -1 : insufficient number of arguments
+#         -2 : row or column out of range
+#
+sub write_dynamic_array_formula {
+
+    my $self = shift;
+
+    my $error = $self->_write_array_formula( 'd', @_ );
+
+    if ( $error == 0 ) {
+        $self->{_has_dynamic_arrays} = 1;
+    }
+
+    return $error;
 }
 
 
@@ -2889,7 +3412,7 @@ sub write_date_time {
     my $col  = $_[1];              # Zero indexed column
     my $str  = $_[2];
     my $xf   = $_[3];              # The cell format
-    my $type = 'n';                # The data type
+    my $type = 't';                # The data type
 
 
     # Check that row and col are valid and store max and min values
@@ -3056,16 +3579,16 @@ sub convert_date_time {
 
 ###############################################################################
 #
-# set_row($row, $height, $XF, $hidden, $level, $collapsed)
+# set_row($row, $height, $format, $hidden, $level, $collapsed)
 #
-# This method is used to set the height and XF format for a row.
+# This method is used to set the height and properties of a row.
 #
 sub set_row {
 
     my $self      = shift;
     my $row       = shift;         # Row Number.
     my $height    = shift;         # Row height.
-    my $xf        = shift;         # Format object.
+    my $format    = shift;         # Format object.
     my $hidden    = shift || 0;    # Hidden flag.
     my $level     = shift || 0;    # Outline level.
     my $collapsed = shift || 0;    # Collapsed row.
@@ -3101,13 +3624,35 @@ sub set_row {
     }
 
     # Store the row properties.
-    $self->{_set_rows}->{$row} = [ $height, $xf, $hidden, $level, $collapsed ];
+    $self->{_set_rows}->{$row} = [ $height, $format,
+                                   $hidden, $level, $collapsed ];
 
     # Store the row change to allow optimisations.
     $self->{_row_size_changed} = 1;
 
     # Store the row sizes for use when calculating image vertices.
     $self->{_row_sizes}->{$row} = [$height, $hidden];
+}
+
+
+###############################################################################
+#
+# set_row_pixels($row, $height, $format, $hidden, $level, $collapsed)
+#
+# This method is used to set the height (in pixels) and the properties of the
+# row.
+#
+sub set_row_pixels {
+
+    my $self = shift;
+    my @data = @_;
+    my $height = $data[1];
+
+    if ( $height ) {
+        $data[1] = _pixels_to_height( $height );
+    }
+
+    return $self->set_row( @data );
 }
 
 
@@ -3322,7 +3867,7 @@ sub data_validation {
     if ( @_ != 5 && @_ != 3 ) { return -1 }
 
     # The final hashref contains the validation parameters.
-    my $param = pop;
+    my $options = pop;
 
     # Make the last row/col the same as the first if not defined.
     my ( $row1, $col1, $row2, $col2 ) = @_;
@@ -3335,12 +3880,14 @@ sub data_validation {
     return -2 if $self->_check_dimensions( $row1, $col1, 1, 1 );
     return -2 if $self->_check_dimensions( $row2, $col2, 1, 1 );
 
-
     # Check that the last parameter is a hash list.
-    if ( ref $param ne 'HASH' ) {
-        carp "Last parameter '$param' in data_validation() must be a hash ref";
+    if ( ref $options ne 'HASH' ) {
+        carp "Last parameter in data_validation() must be a hash ref";
         return -3;
     }
+
+    # Copy the user params.
+    my $param = {%$options};
 
     # List of valid input parameters.
     my %valid_parameter = (
@@ -3629,11 +4176,9 @@ sub conditional_formatting {
     return -2 if $self->_check_dimensions( $row1, $col1, 1, 1 );
     return -2 if $self->_check_dimensions( $row2, $col2, 1, 1 );
 
-
     # Check that the last parameter is a hash list.
     if ( ref $options ne 'HASH' ) {
-        carp "Last parameter in conditional_formatting() "
-          . "must be a hash ref";
+        carp "Last parameter in conditional_formatting() must be a hash ref";
         return -3;
     }
 
@@ -3880,15 +4425,8 @@ sub conditional_formatting {
         ( $col1, $col2 ) = ( $col2, $col1 );
     }
 
-    # If the first and last cell are the same write a single cell.
-    if ( ( $row1 == $row2 ) && ( $col1 == $col2 ) ) {
-        $range = xl_rowcol_to_cell( $row1, $col1 );
-        $start_cell = $range;
-    }
-    else {
-        $range = xl_range( $row1, $row2, $col1, $col2 );
-        $start_cell = xl_rowcol_to_cell( $row1, $col1 );
-    }
+    $range = xl_range( $row1, $row2, $col1, $col2 );
+    $start_cell = xl_rowcol_to_cell( $row1, $col1 );
 
     # Override with user defined multiple range if provided.
     if ( $user_range ) {
@@ -4287,6 +4825,14 @@ sub add_table {
     return -2 if $self->_check_dimensions( $row1, $col1, 1, 1 );
     return -2 if $self->_check_dimensions( $row2, $col2, 1, 1 );
 
+    # Swap last row/col for first row/col as necessary.
+    if ( $row1 > $row2 ) {
+        ( $row1, $row2 ) = ( $row2, $row1 );
+    }
+
+    if ( $col1 > $col2 ) {
+        ( $col1, $col2 ) = ( $col2, $col1 );
+    }
 
     # The final hashref contains the validation parameters.
     my $param = $_[4] || {};
@@ -4325,6 +4871,15 @@ sub add_table {
     $param->{banded_rows} = 1 if !defined $param->{banded_rows};
     $param->{header_row}  = 1 if !defined $param->{header_row};
     $param->{autofilter}  = 1 if !defined $param->{autofilter};
+
+    # Check that there are enough rows.
+    my $num_rows = $row2 - $row1;
+    $num_rows -= 1 if $param->{header_row};
+
+    if ( $num_rows < 0 ) {
+        carp "Must have at least one data row in in add_table()";
+        return -3;
+    }
 
     # Set the table options.
     $table{_show_first_col}   = $param->{first_column}   ? 1 : 0;
@@ -4369,16 +4924,6 @@ sub add_table {
     }
     else {
         $table{_style} = "TableStyleMedium9";
-    }
-
-
-    # Swap last row/col for first row/col as necessary.
-    if ( $row1 > $row2 ) {
-        ( $row1, $row2 ) = ( $row2, $row1 );
-    }
-
-    if ( $col1 > $col2 ) {
-        ( $col1, $col2 ) = ( $col2, $col1 );
     }
 
 
@@ -4545,6 +5090,13 @@ sub add_table {
         }
     }
 
+
+    # Store the filter cell positions for use in the autofit calculation.
+    if ( $param->{autofilter} ) {
+        for my $col ($col1 .. $col2) {
+            $self->{_filter_cells}->{ "$row1:$col" } = 1;
+        }
+    }
 
     # Store the table data.
     push @{ $self->{_tables} }, \%table;
@@ -4786,6 +5338,42 @@ sub set_vba_name {
     else {
         $self->{_vba_codename} = "Sheet" . ($self->{_index} + 1);
     }
+}
+
+
+
+###############################################################################
+#
+# ignore_errors()
+#
+# Ignore worksheet errors/warnings in user defined ranges.
+#
+sub ignore_errors {
+
+    my $self    = shift;
+    my $ignores = shift;
+
+    # List of valid input parameters.
+    my %valid_parameter = (
+        number_stored_as_text => 1,
+        eval_error            => 1,
+        formula_differs       => 1,
+        formula_range         => 1,
+        formula_unlocked      => 1,
+        empty_cell_reference  => 1,
+        list_data_validation  => 1,
+        calculated_column     => 1,
+        two_digit_text_year   => 1,
+    );
+
+    for my $param_key ( keys %$ignores ) {
+        if ( not exists $valid_parameter{$param_key} ) {
+            carp "Unknown parameter '$param_key' in ignore_errors()";
+            return -3;
+        }
+    }
+
+    $self->{_ignore_errors} = {%$ignores};
 }
 
 
@@ -5349,10 +5937,13 @@ sub _size_col {
 
 
     # Look up the cell value to see if it has been changed.
-    if ( exists $self->{_col_sizes}->{$col} )
+    if ( exists $self->{_col_info}->{$col} )
     {
-        my $width  = $self->{_col_sizes}->{$col}[0];
-        my $hidden = $self->{_col_sizes}->{$col}[1];
+        my $width  = $self->{_col_info}->{$col}[0];
+        my $hidden = $self->{_col_info}->{$col}[2];
+
+        $width = $self->{_default_col_width} if !defined $width;
+
 
         # Convert to pixels.
         if ( $hidden == 1 && $anchor != 4 ) {
@@ -5371,7 +5962,6 @@ sub _size_col {
 
     return $pixels;
 }
-
 
 ###############################################################################
 #
@@ -5406,6 +5996,44 @@ sub _size_row {
     }
 
     return $pixels;
+}
+
+
+###############################################################################
+#
+# _pixels_to_width($pixels)
+#
+# Convert the width of a cell from pixels to character units.
+#
+sub _pixels_to_width {
+
+    my $pixels          = shift;
+    my $max_digit_width = 7;
+    my $padding         = 5;
+    my $width;
+
+    if ( $pixels <= 12 ) {
+        $width =  $pixels / ( $max_digit_width + $padding );
+    }
+    else {
+        $width = ( $pixels - $padding ) / $max_digit_width;
+    }
+
+    return $width;
+}
+
+
+###############################################################################
+#
+# _pixels_to_height($pixels)
+#
+# Convert the height of a cell from pixels to character units.
+#
+sub _pixels_to_height {
+
+    my $pixels = shift;
+
+    return 0.75 * $pixels;
 }
 
 
@@ -5504,6 +6132,8 @@ sub insert_chart {
     my $x_scale;
     my $y_scale;
     my $anchor;
+    my $description;
+    my $decorative;
 
     croak "Insufficient arguments in insert_chart()" unless @_ >= 3;
 
@@ -5520,13 +6150,16 @@ sub insert_chart {
     }
 
     if ( ref $_[3] eq 'HASH' ) {
+
         # Newer hashref bashed options.
-        my $options = $_[3];
-        $x_offset = $options->{x_offset}        || 0;
-        $y_offset = $options->{y_offset}        || 0;
-        $x_scale  = $options->{x_scale}         || 1;
-        $y_scale  = $options->{y_scale}         || 1;
-        $anchor   = $options->{object_position} || 1;
+        my $options  = $_[3];
+        $x_offset    = $options->{x_offset}        || 0;
+        $y_offset    = $options->{y_offset}        || 0;
+        $x_scale     = $options->{x_scale}         || 1;
+        $y_scale     = $options->{y_scale}         || 1;
+        $anchor      = $options->{object_position} || 1;
+        $description = $options->{description};
+        $decorative  = $options->{decorative};
     }
     else {
         # Older parameter based options.
@@ -5559,7 +6192,9 @@ sub insert_chart {
     $y_offset = $chart->{_y_offset} if $chart->{_y_offset};
 
     push @{ $self->{_charts} },
-      [ $row, $col, $chart, $x_offset, $y_offset, $x_scale, $y_scale, $anchor ];
+      [ $row,     $col,     $chart,  $x_offset,    $y_offset,
+        $x_scale, $y_scale, $anchor, $description, $decorative
+      ];
 }
 
 
@@ -5578,8 +6213,10 @@ sub _prepare_chart {
     my $drawing_type = 1;
     my $drawing;
 
-    my ( $row, $col, $chart, $x_offset, $y_offset, $x_scale, $y_scale, $anchor )
-      = @{ $self->{_charts}->[$index] };
+    my (
+        $row,     $col,     $chart,  $x_offset,    $y_offset,
+        $x_scale, $y_scale, $anchor, $description, $decorative
+    ) = @{ $self->{_charts}->[$index] };
 
     $chart->{_id} = $chart_id - 1;
 
@@ -5617,12 +6254,14 @@ sub _prepare_chart {
     $drawing_object->{_dimensions}    = \@dimensions;
     $drawing_object->{_width}         = 0;
     $drawing_object->{_height}        = 0;
-    $drawing_object->{_description}   = $name;
+    $drawing_object->{_name}          = $name;
     $drawing_object->{_shape}         = undef;
     $drawing_object->{_anchor}        = $anchor;
     $drawing_object->{_rel_index}     = $self->_get_drawing_rel_index();
     $drawing_object->{_url_rel_index} = 0;
     $drawing_object->{_tip}           = undef;
+    $drawing_object->{_description}   = $description;
+    $drawing_object->{_decorative}    = $decorative;
 
     push @{ $self->{_drawing_links} },
       [ '/chart', '../charts/chart' . $chart_id . '.xml' ];
@@ -5666,12 +6305,12 @@ sub _get_range_data {
                 my $token = $cell->[1];
 
 
-                if ( $type eq 'n' ) {
+                if ( $type eq 'n'  || $type eq 't') {
 
                     # Store a number.
                     push @data, $token;
                 }
-                elsif ( $type eq 's' ) {
+                elsif ( $type eq 's' || $type eq 'r' ) {
 
                     # Store a string.
                     if ( $self->{_optimization} == 0 ) {
@@ -5686,7 +6325,7 @@ sub _get_range_data {
                     # Store a formula.
                     push @data, $cell->[3] || 0;
                 }
-                elsif ( $type eq 'a' ) {
+                elsif ( $type eq 'a' || $type eq 'd') {
 
                     # Store an array formula.
                     push @data, $cell->[4] || 0;
@@ -5734,17 +6373,21 @@ sub insert_image {
     my $anchor;
     my $url;
     my $tip;
+    my $description;
+    my $decorative;
 
     if ( ref $_[3] eq 'HASH' ) {
         # Newer hashref bashed options.
         my $options = $_[3];
-        $x_offset = $options->{x_offset}        || 0;
-        $y_offset = $options->{y_offset}        || 0;
-        $x_scale  = $options->{x_scale}         || 1;
-        $y_scale  = $options->{y_scale}         || 1;
-        $anchor   = $options->{object_position} || 2;
-        $url      = $options->{url};
-        $tip      = $options->{tip};
+        $x_offset    = $options->{x_offset}        || 0;
+        $y_offset    = $options->{y_offset}        || 0;
+        $x_scale     = $options->{x_scale}         || 1;
+        $y_scale     = $options->{y_scale}         || 1;
+        $anchor      = $options->{object_position} || 2;
+        $url         = $options->{url};
+        $tip         = $options->{tip};
+        $description = $options->{description};
+        $decorative  = $options->{decorative};
     }
     else {
         # Older parameter based options.
@@ -5760,8 +6403,9 @@ sub insert_image {
 
     push @{ $self->{_images} },
       [
-        $row,     $col,     $image, $x_offset, $y_offset,
-        $x_scale, $y_scale, $url,   $tip,      $anchor
+        $row,      $col,     $image,       $x_offset,
+        $y_offset, $x_scale, $y_scale,     $url,
+        $tip,      $anchor,  $description, $decorative
       ];
 }
 
@@ -5789,8 +6433,9 @@ sub _prepare_image {
     my $drawing;
 
     my (
-        $row,     $col,     $image, $x_offset, $y_offset,
-        $x_scale, $y_scale, $url,   $tip,      $anchor
+        $row,      $col,     $image,       $x_offset,
+        $y_offset, $x_scale, $y_scale,     $url,
+        $tip,      $anchor,  $description, $decorative
     ) = @{ $self->{_images}->[$index] };
 
     $width  *= $x_scale;
@@ -5827,13 +6472,18 @@ sub _prepare_image {
     $drawing_object->{_dimensions}    = \@dimensions;
     $drawing_object->{_width}         = $width;
     $drawing_object->{_height}        = $height;
-    $drawing_object->{_description}   = $name;
+    $drawing_object->{_name}          = $name;
     $drawing_object->{_shape}         = undef;
     $drawing_object->{_anchor}        = $anchor;
     $drawing_object->{_rel_index}     = 0;
     $drawing_object->{_url_rel_index} = 0;
     $drawing_object->{_tip}           = $tip;
+    $drawing_object->{_description}   = $description;
+    $drawing_object->{_decorative}    = $decorative;
 
+    if ( !defined $description ) {
+        $drawing_object->{_description} = $name;
+    }
 
     if ( $url ) {
         my $rel_type    = '/hyperlink';
@@ -5844,11 +6494,20 @@ sub _prepare_image {
             $target = _escape_url( $url );
         }
 
-        if ( $url =~ s{^external:}{file:///} ) {
+
+        if ( $url =~ s{^external:}{} ) {
             $target = _escape_url( $url );
 
             # Additional escape not required in worksheet hyperlinks.
             $target =~ s/#/%23/g;
+
+            # Prefix absolute paths (not relative) with file:///.
+            if ( $target =~ m{^\w:} || $target =~ m{^\\\\} ) {
+                $target = 'file:///' . $target;
+            }
+            else {
+                $target =~ s[\\][/]g;
+            }
         }
 
         if ( $url =~ s/^internal:/#/ ) {
@@ -5913,6 +6572,40 @@ sub _prepare_header_image {
 
     push @{ $self->{_header_images_array} },
       [ $width, $height, $name, $position, $x_dpi, $y_dpi, $ref_id ];
+}
+
+
+###############################################################################
+#
+# set_background( $filename )
+#
+# Set the background image for the worksheet.
+#
+sub set_background {
+
+    my $self  = shift;
+    my $image = shift;
+
+    croak "Couldn't locate $image: $!" unless -e $image;
+
+    $self->{_background_image} = $image;
+}
+
+
+###############################################################################
+#
+# _prepare_background()
+#
+# Set up an image without a drawing object for the background image.
+#
+sub _prepare_background {
+
+    my $self       = shift;
+    my $image_id   = shift;
+    my $image_type = shift;
+
+    push @{ $self->{_external_background_links} },
+      [ '/image', '../media/image' . $image_id . '.' . $image_type ];
 }
 
 
@@ -6061,6 +6754,7 @@ sub _prepare_shape {
     $drawing_object->{_rel_index}     = $self->_get_drawing_rel_index();
     $drawing_object->{_url_rel_index} = 0;
     $drawing_object->{_tip}           = undef;
+    $drawing_object->{_decorative}    = 0;
 }
 
 
@@ -6549,6 +7243,8 @@ sub _button_params {
         $button->{_macro} = '[0]!Button' . $button_number . '_Click';
     }
 
+    # Set the alt text for the button.
+    $button->{_description} = $params->{description};
 
     # Ensure that a width and height have been set.
     my $default_width  = $self->{_default_col_pixels};
@@ -6694,6 +7390,42 @@ sub repeat_formula {
     my $formula = join '', @tokens;
 
     return $self->write_formula( $row, $col, $formula, $format, $value );
+}
+
+
+# Helper function to compare adjacent column information structures.
+sub _compare_col_info {
+    my $col_options      = shift;
+    my $previous_options = shift;
+
+    if ( defined $col_options->[0] != defined $previous_options->[0] ) {
+        return undef;
+    }
+
+    if (   defined $col_options->[0]
+        && defined $previous_options->[0]
+        && $col_options->[0] != $previous_options->[0] )
+    {
+        return undef;
+    }
+
+    if ( defined $col_options->[1] != defined $previous_options->[1] ) {
+        return undef;
+    }
+
+    if (   defined $col_options->[1]
+        && defined $previous_options->[1]
+        && $col_options->[1] != $previous_options->[1] )
+    {
+        return undef;
+    }
+
+    return undef if $col_options->[2] != $previous_options->[2];
+    return undef if $col_options->[3] != $previous_options->[3];
+    return undef if $col_options->[4] != $previous_options->[4];
+    return undef if $col_options->[5] != $previous_options->[5];
+
+    return 1;
 }
 
 
@@ -6909,6 +7641,7 @@ sub _write_sheet_view {
     my $view             = $self->{_page_view};
     my $zoom             = $self->{_zoom};
     my $row_col_headers  = $self->{_hide_row_col_headers};
+    my $top_left_cell    = $self->{_top_left_cell};
     my $workbook_view_id = 0;
     my @attributes       = ();
 
@@ -6947,6 +7680,11 @@ sub _write_sheet_view {
     # TODO. Add pageBreakPreview mode when requested.
     if ( $view ) {
         push @attributes, ( 'view' => 'pageLayout' );
+    }
+
+    # Set the first visible cell.
+    if ($top_left_cell) {
+        push @attributes, ( 'topLeftCell' => $top_left_cell );
     }
 
     # Set the zoom level.
@@ -7055,16 +7793,53 @@ sub _write_cols {
     my $self = shift;
 
     # Exit unless some column have been formatted.
-    return unless %{ $self->{_colinfo} };
+    return unless %{ $self->{_col_info} };
 
     $self->xml_start_tag( 'cols' );
 
-    for my $col ( sort keys %{ $self->{_colinfo} } ) {
-        $self->_write_col_info( @{ $self->{_colinfo}->{$col} } );
+
+    # Use the first element of the column information structures to set
+    # the initial/previous properties.
+    my $first_col = ( sort { $a <=> $b } keys %{ $self->{_col_info} } )[0];
+    my $last_col = $first_col;
+    my $previous_options    = $self->{_col_info}->{$first_col};
+    my $deleted_col         = $first_col;
+    my $deleted_col_options = $previous_options;
+
+    delete $self->{_col_info}->{$first_col};
+
+    for my $col ( sort { $a <=> $b } keys %{ $self->{_col_info} } ) {
+        my $col_options = $self->{_col_info}->{$col};
+
+        # Check if the column number is contiguous with the previous
+        # column and if the properties are the same.
+        if ( $col == $last_col + 1
+            && _compare_col_info( $col_options, $previous_options ) )
+        {
+            $last_col = $col;
+        }
+        else {
+            # If not contiguous/equal then we write out the current range
+            # of columns and start again.
+            $self->_write_col_info( $first_col, $last_col, @$previous_options );
+            $first_col        = $col;
+            $last_col         = $first_col;
+            $previous_options = $col_options;
+        }
     }
+
+    # We will exit the previous loop with one unhandled column range.
+    $self->_write_col_info( $first_col, $last_col, @$previous_options );
+
+
+    # Put back the deleted first column information structure.
+    $self->{_col_info}->{$deleted_col} = $deleted_col_options;
 
     $self->xml_end_tag( 'cols' );
 }
+
+
+
 
 
 ##############################################################################
@@ -7082,7 +7857,8 @@ sub _write_col_info {
     my $format       = $_[3];         # Format index.
     my $hidden       = $_[4] || 0;    # Hidden flag.
     my $level        = $_[5] || 0;    # Outline level.
-    my $collapsed    = $_[6] || 0;    # Outline level.
+    my $collapsed    = $_[6] || 0;    # Outline collapsed.
+    my $autofit      = $_[7] || 0;    # Best fit for autofit numbers.
     my $custom_width = 1;
     my $xf_index     = 0;
 
@@ -7137,6 +7913,7 @@ sub _write_col_info {
 
     push @attributes, ( 'style'        => $xf_index ) if $xf_index;
     push @attributes, ( 'hidden'       => 1 )         if $hidden;
+    push @attributes, ( 'bestFit'      => 1 )         if $autofit;
     push @attributes, ( 'customWidth'  => 1 )         if $custom_width;
     push @attributes, ( 'outlineLevel' => $level )    if $level;
     push @attributes, ( 'collapsed'    => 1 )         if $collapsed;
@@ -7535,19 +8312,21 @@ sub _write_cell {
         my $row_xf = $self->{_set_rows}->{$row}->[1];
         push @attributes, ( 's' => $row_xf->get_xf_index() );
     }
-    elsif ( $self->{_col_formats}->{$col} ) {
-        my $col_xf = $self->{_col_formats}->{$col};
-        push @attributes, ( 's' => $col_xf->get_xf_index() );
+    elsif ( $self->{_col_info}->{$col} ) {
+        my $col_xf = $self->{_col_info}->{$col}->[1];
+        if (defined $col_xf) {
+            push @attributes, ( 's' => $col_xf->get_xf_index() );
+        }
     }
 
 
     # Write the various cell types.
-    if ( $type eq 'n' ) {
+    if ( $type eq 'n' || $type eq 't' ) {
 
         # Write a number.
         $self->xml_number_element( $token, @attributes );
     }
-    elsif ( $type eq 's' ) {
+    elsif ( $type eq 's' || $type eq 'r' ) {
 
         # Write a string.
         if ( $self->{_optimization} == 0 ) {
@@ -7606,7 +8385,12 @@ sub _write_cell {
         $self->xml_formula_element( $token, $value, @attributes );
 
     }
-    elsif ( $type eq 'a' ) {
+    elsif ( $type eq 'a' || $type eq 'd') {
+
+        # Add metadata linkage for dynamic array formulas.
+        if ($type eq 'd') {
+            push @attributes, ( 'cm' => '1' );
+        }
 
         # Write an array formula.
         $self->xml_start_tag( 'c', @attributes );
@@ -8746,6 +9530,51 @@ sub _write_sheet_protection {
 
 ##############################################################################
 #
+# _write_protected_ranges()
+#
+# Write the <protectedRanges> element.
+#
+sub _write_protected_ranges {
+
+    my $self = shift;
+
+    return if $self->{_num_protected_ranges} == 0;
+
+    $self->xml_start_tag( 'protectedRanges' );
+
+    for my $aref (@{ $self->{_protected_ranges} }) {
+        $self->_write_protected_range(@$aref);
+    }
+
+    $self->xml_end_tag( 'protectedRanges' );
+}
+
+
+##############################################################################
+#
+# _write_protected_range()
+#
+# Write the <protectedRange> element.
+#
+sub _write_protected_range {
+
+    my $self     = shift;
+    my $sqref    = shift;
+    my $name     = shift;
+    my $password = shift;
+
+    my @attributes = ();
+
+    push @attributes, ( 'password' => $password ) if $password;
+    push @attributes, ( 'sqref' => $sqref );
+    push @attributes, ( 'name' =>  $name );
+
+    $self->xml_empty_tag( 'protectedRange', @attributes );
+}
+
+
+##############################################################################
+#
 # _write_drawings()
 #
 # Write the <drawing> elements.
@@ -8800,7 +9629,6 @@ sub _write_legacy_drawing {
 }
 
 
-
 ##############################################################################
 #
 # _write_legacy_drawing_hf()
@@ -8820,6 +9648,28 @@ sub _write_legacy_drawing_hf {
     my @attributes = ( 'r:id' => 'rId' . $id );
 
     $self->xml_empty_tag( 'legacyDrawingHF', @attributes );
+}
+
+
+##############################################################################
+#
+# _write_picture()
+#
+# Write the <picture> element.
+#
+sub _write_picture {
+
+    my $self = shift;
+    my $id;
+
+    return unless $self->{_background_image};
+
+    # Increment the relationship id.
+    $id = ++$self->{_rel_count};
+
+    my @attributes = ( 'r:id' => 'rId' . $id );
+
+    $self->xml_empty_tag( 'picture', @attributes );
 }
 
 
@@ -9012,13 +9862,7 @@ sub _write_data_validation {
             ( $col_first, $col_last ) = ( $col_last, $col_first );
         }
 
-        # If the first and last cell are the same write a single cell.
-        if ( ( $row_first == $row_last ) && ( $col_first == $col_last ) ) {
-            $sqref .= xl_rowcol_to_cell( $row_first, $col_first );
-        }
-        else {
-            $sqref .= xl_range( $row_first, $row_last, $col_first, $col_last );
-        }
+        $sqref .= xl_range( $row_first, $row_last, $col_first, $col_last );
     }
 
 
@@ -10203,6 +11047,92 @@ sub _write_color_low {
 }
 
 
+##############################################################################
+#
+# _write_ignored_errors()
+#
+# Write the <ignoredErrors> element.
+#
+sub _write_ignored_errors {
+
+    my $self   = shift;
+    my $ignore = $self->{_ignore_errors};
+
+    if ( !defined $ignore ) {
+        return;
+    }
+
+    $self->xml_start_tag( 'ignoredErrors' );
+
+    if ( exists $ignore->{number_stored_as_text} ) {
+        my $range = $ignore->{number_stored_as_text};
+        $self->_write_ignored_error( 'numberStoredAsText', $range );
+    }
+
+    if ( exists $ignore->{eval_error} ) {
+        my $range = $ignore->{eval_error};
+        $self->_write_ignored_error( 'evalError', $range );
+    }
+
+    if ( exists $ignore->{formula_differs} ) {
+        my $range = $ignore->{formula_differs};
+        $self->_write_ignored_error( 'formula', $range );
+    }
+
+    if ( exists $ignore->{formula_range} ) {
+        my $range = $ignore->{formula_range};
+        $self->_write_ignored_error( 'formulaRange', $range );
+    }
+
+    if ( exists $ignore->{formula_unlocked} ) {
+        my $range = $ignore->{formula_unlocked};
+        $self->_write_ignored_error( 'unlockedFormula', $range );
+    }
+
+    if ( exists $ignore->{empty_cell_reference} ) {
+        my $range = $ignore->{empty_cell_reference};
+        $self->_write_ignored_error( 'emptyCellReference', $range );
+    }
+
+    if ( exists $ignore->{list_data_validation} ) {
+        my $range = $ignore->{list_data_validation};
+        $self->_write_ignored_error( 'listDataValidation', $range );
+    }
+
+    if ( exists $ignore->{calculated_column} ) {
+        my $range = $ignore->{calculated_column};
+        $self->_write_ignored_error( 'calculatedColumn', $range );
+    }
+
+    if ( exists $ignore->{two_digit_text_year} ) {
+        my $range = $ignore->{two_digit_text_year};
+        $self->_write_ignored_error( 'twoDigitTextYear', $range );
+    }
+
+    $self->xml_end_tag( 'ignoredErrors' );
+}
+
+##############################################################################
+#
+# _write_ignored_error()
+#
+# Write the <ignoredError> element.
+#
+sub _write_ignored_error {
+
+    my $self  = shift;
+    my $type  = shift;
+    my $sqref = shift;
+
+    my @attributes = (
+        'sqref' => $sqref,
+        $type   => 1,
+    );
+
+    $self->xml_empty_tag( 'ignoredError', @attributes );
+}
+
+
 1;
 
 
@@ -10227,6 +11157,6 @@ John McNamara jmcnamara@cpan.org
 
 =head1 COPYRIGHT
 
-(c) MM-MMXX, John McNamara.
+(c) MM-MMXXIII, John McNamara.
 
 All Rights Reserved. This module is free software. It may be used, redistributed and/or modified under the same terms as Perl itself.

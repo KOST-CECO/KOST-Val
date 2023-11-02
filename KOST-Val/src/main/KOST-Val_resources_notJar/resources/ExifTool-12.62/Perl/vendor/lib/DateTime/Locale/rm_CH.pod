@@ -381,17 +381,17 @@ Romansh Switzerland locale.
    1995-12-22T09:05:02 = ve 22.
   -0010-09-15T04:44:23 = so 15.
 
-=head3 Ehm (E h:mm a)
+=head3 Ehm (E h:mm a)
 
-   2008-02-05T18:30:30 = ma 6:30 PM
-   1995-12-22T09:05:02 = ve 9:05 AM
-  -0010-09-15T04:44:23 = so 4:44 AM
+   2008-02-05T18:30:30 = ma 6:30 PM
+   1995-12-22T09:05:02 = ve 9:05 AM
+  -0010-09-15T04:44:23 = so 4:44 AM
 
-=head3 Ehms (E h:mm:ss a)
+=head3 Ehms (E h:mm:ss a)
 
-   2008-02-05T18:30:30 = ma 6:30:30 PM
-   1995-12-22T09:05:02 = ve 9:05:02 AM
-  -0010-09-15T04:44:23 = so 4:44:23 AM
+   2008-02-05T18:30:30 = ma 6:30:30 PM
+   1995-12-22T09:05:02 = ve 9:05:02 AM
+  -0010-09-15T04:44:23 = so 4:44:23 AM
 
 =head3 Gy (y G)
 
@@ -424,6 +424,12 @@ Romansh Switzerland locale.
   -0010-09-15T04:44:23 = 15 da settember -10 av. Cr.
 
 =head3 GyMMMd (dd-MM-y GGGGG)
+
+   2008-02-05T18:30:30 = 05-02-2008 s. Cr.
+   1995-12-22T09:05:02 = 22-12-1995 s. Cr.
+  -0010-09-15T04:44:23 = 15-09--10 av. Cr.
+
+=head3 GyMd (dd-MM-y GGGGG)
 
    2008-02-05T18:30:30 = 05-02-2008 s. Cr.
    1995-12-22T09:05:02 = 22-12-1995 s. Cr.
@@ -489,11 +495,17 @@ Romansh Switzerland locale.
    1995-12-22T09:05:02 = ve, 22 da december
   -0010-09-15T04:44:23 = so, 15 da settember
 
-=head3 MMMMW-count-other ('week' W 'of' MMMM)
+=head3 MMMMW-count-one (W. 'emna' MMMM)
 
-   2008-02-05T18:30:30 = week 1 of da favrer
-   1995-12-22T09:05:02 = week 3 of da december
-  -0010-09-15T04:44:23 = week 2 of da settember
+   2008-02-05T18:30:30 = 1. emna da favrer
+   1995-12-22T09:05:02 = 3. emna da december
+  -0010-09-15T04:44:23 = 2. emna da settember
+
+=head3 MMMMW-count-other (W. 'emna' MMMM)
+
+   2008-02-05T18:30:30 = 1. emna da favrer
+   1995-12-22T09:05:02 = 3. emna da december
+  -0010-09-15T04:44:23 = 2. emna da settember
 
 =head3 MMMMd (d MMMM)
 
@@ -519,35 +531,35 @@ Romansh Switzerland locale.
    1995-12-22T09:05:02 = 22
   -0010-09-15T04:44:23 = 15
 
-=head3 h (h a)
+=head3 h (h a)
 
-   2008-02-05T18:30:30 = 6 PM
-   1995-12-22T09:05:02 = 9 AM
-  -0010-09-15T04:44:23 = 4 AM
+   2008-02-05T18:30:30 = 6 PM
+   1995-12-22T09:05:02 = 9 AM
+  -0010-09-15T04:44:23 = 4 AM
 
-=head3 hm (h:mm a)
+=head3 hm (h:mm a)
 
-   2008-02-05T18:30:30 = 6:30 PM
-   1995-12-22T09:05:02 = 9:05 AM
-  -0010-09-15T04:44:23 = 4:44 AM
+   2008-02-05T18:30:30 = 6:30 PM
+   1995-12-22T09:05:02 = 9:05 AM
+  -0010-09-15T04:44:23 = 4:44 AM
 
-=head3 hms (h:mm:ss a)
+=head3 hms (h:mm:ss a)
 
-   2008-02-05T18:30:30 = 6:30:30 PM
-   1995-12-22T09:05:02 = 9:05:02 AM
-  -0010-09-15T04:44:23 = 4:44:23 AM
+   2008-02-05T18:30:30 = 6:30:30 PM
+   1995-12-22T09:05:02 = 9:05:02 AM
+  -0010-09-15T04:44:23 = 4:44:23 AM
 
-=head3 hmsv (h:mm:ss a v)
+=head3 hmsv (h:mm:ss a v)
 
-   2008-02-05T18:30:30 = 6:30:30 PM UTC
-   1995-12-22T09:05:02 = 9:05:02 AM UTC
-  -0010-09-15T04:44:23 = 4:44:23 AM UTC
+   2008-02-05T18:30:30 = 6:30:30 PM UTC
+   1995-12-22T09:05:02 = 9:05:02 AM UTC
+  -0010-09-15T04:44:23 = 4:44:23 AM UTC
 
-=head3 hmv (h:mm a v)
+=head3 hmv (h:mm a v)
 
-   2008-02-05T18:30:30 = 6:30 PM UTC
-   1995-12-22T09:05:02 = 9:05 AM UTC
-  -0010-09-15T04:44:23 = 4:44 AM UTC
+   2008-02-05T18:30:30 = 6:30 PM UTC
+   1995-12-22T09:05:02 = 9:05 AM UTC
+  -0010-09-15T04:44:23 = 4:44 AM UTC
 
 =head3 ms (mm:ss)
 
@@ -627,11 +639,17 @@ Romansh Switzerland locale.
    1995-12-22T09:05:02 = 4. quartal 1995
   -0010-09-15T04:44:23 = 3. quartal -10
 
-=head3 yw-count-other ('week' w 'of' Y)
+=head3 yw-count-one (w. 'dal' Y)
 
-   2008-02-05T18:30:30 = week 6 of 2008
-   1995-12-22T09:05:02 = week 51 of 1995
-  -0010-09-15T04:44:23 = week 37 of -10
+   2008-02-05T18:30:30 = 6. dal 2008
+   1995-12-22T09:05:02 = 51. dal 1995
+  -0010-09-15T04:44:23 = 37. dal -10
+
+=head3 yw-count-other (w. 'emna' 'dal' Y)
+
+   2008-02-05T18:30:30 = 6. emna dal 2008
+   1995-12-22T09:05:02 = 51. emna dal 1995
+  -0010-09-15T04:44:23 = 37. emna dal -10
 
 
 =head2 Miscellaneous

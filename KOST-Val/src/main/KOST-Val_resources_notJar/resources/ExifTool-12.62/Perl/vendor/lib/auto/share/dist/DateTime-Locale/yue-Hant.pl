@@ -19,6 +19,7 @@
     GyMMM => "Gy\N{U+5e74}M\N{U+6708}",
     GyMMMEd => "Gy\N{U+5e74}M\N{U+6708}d\N{U+65e5} E",
     GyMMMd => "Gy\N{U+5e74}M\N{U+6708}d\N{U+65e5}",
+    GyMd => "GGGGG y-MM-dd",
     H => "H\N{U+6642}",
     Hm => "HH:mm",
     Hms => "HH:mm:ss",
@@ -268,5 +269,5 @@
   time_format_medium => "ah:mm:ss",
   time_format_short => "ah:mm",
   variant => undef,
-  version => 38,
+  version => 43,
 }

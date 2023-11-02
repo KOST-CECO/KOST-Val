@@ -3,7 +3,7 @@ package Net::DNS::Header;
 use strict;
 use warnings;
 
-our $VERSION = (qw$Id: Header.pm 1812 2020-10-07 18:09:53Z willem $)[2];
+our $VERSION = (qw$Id: Header.pm 1910 2023-03-30 19:16:30Z willem $)[2];
 
 
 =head1 NAME
@@ -66,16 +66,16 @@ sub string {
 	my $an	   = $self->ancount;
 	my $ns	   = $self->nscount;
 	my $ar	   = $self->arcount;
-
-	my $opt = $$self->edns;
-	my $edns = $opt->_specified ? $opt->string : '';
-
-	return <<END . $edns if $opcode eq 'UPDATE';
+	return <<"QQ" if $opcode eq 'DSO';
+;;	id = $id
+;;	qr = $qr		opcode = $opcode	rcode = $rcode
+;;	qdcount = $qd	ancount = $an	nscount = $ns	arcount = $ar
+QQ
+	return <<"QQ" if $opcode eq 'UPDATE';
 ;;	id = $id
 ;;	qr = $qr		opcode = $opcode	rcode = $rcode
 ;;	zocount = $qd	prcount = $an	upcount = $ns	adcount = $ar
-END
-
+QQ
 	my $aa = $self->aa;
 	my $tc = $self->tc;
 	my $rd = $self->rd;
@@ -84,14 +84,13 @@ END
 	my $ad = $self->ad;
 	my $cd = $self->cd;
 	my $do = $self->do;
-
-	return <<END . $edns;
+	return <<"QQ";
 ;;	id = $id
 ;;	qr = $qr	aa = $aa	tc = $tc	rd = $rd	opcode = $opcode
 ;;	ra = $ra	z  = $zz	ad = $ad	cd = $cd	rcode  = $rcode
 ;;	qdcount = $qd	ancount = $an	nscount = $ns	arcount = $ar
 ;;	do = $do
-END
+QQ
 }
 
 
@@ -120,11 +119,18 @@ A random value is assigned if the argument value is undefined.
 
 =cut
 
+my ( $cache1, $cache2, $limit );				# two layer cache
+
 sub id {
-	my ( $self, @arg ) = @_;
-	$$self->{id} = shift(@arg) if scalar @arg;
-	return $$self->{id} if defined $$self->{id};
-	return $$self->{id} = int rand(0xffff);
+	my ( $self, @value ) = @_;
+	for (@value) { $$self->{id} = $_ }
+	my $ident = $$self->{id};
+	return $ident if $ident;
+	return $ident if defined($ident) && $self->opcode eq 'DSO';
+	( $cache1, $cache2, $limit ) = ( {0 => 1}, $cache1, 50 ) unless $limit--;
+	$ident = int rand(0xffff);				# preserve short-term uniqueness
+	$ident = int rand(0xffff) while $cache1->{$ident}++ + exists( $cache2->{$ident} );
+	return $$self->{id} = $ident;
 }
 
 
@@ -143,7 +149,7 @@ sub opcode {
 	for ( $$self->{status} ) {
 		return opcodebyval( ( $_ >> 11 ) & 0x0f ) unless defined $arg;
 		$opcode = opcodebyname($arg);
-		$_ = ( $_ & 0x87ff ) | ( $opcode << 11 );
+		$_	= ( $_ & 0x87ff ) | ( $opcode << 11 );
 	}
 	return $opcode;
 }
@@ -164,7 +170,6 @@ sub rcode {
 	for ( $$self->{status} ) {
 		my $opt = $$self->edns;
 		unless ( defined $arg ) {
-			return rcodebyval( $_ & 0x0f ) unless $opt->_specified;
 			$rcode = ( $opt->rcode & 0xff0 ) | ( $_ & 0x00f );
 			$opt->rcode($rcode);			# write back full 12-bit rcode
 			return $rcode == 16 ? 'BADVERS' : rcodebyval($rcode);
@@ -188,7 +193,8 @@ Gets or sets the query response flag.
 =cut
 
 sub qr {
-	return shift->_dnsflag( 0x8000, @_ );
+	my ( $self, @value ) = @_;
+	return $self->_dnsflag( 0x8000, @value );
 }
 
 
@@ -202,7 +208,8 @@ Gets or sets the authoritative answer flag.
 =cut
 
 sub aa {
-	return shift->_dnsflag( 0x0400, @_ );
+	my ( $self, @value ) = @_;
+	return $self->_dnsflag( 0x0400, @value );
 }
 
 
@@ -216,7 +223,8 @@ Gets or sets the truncated packet flag.
 =cut
 
 sub tc {
-	return shift->_dnsflag( 0x0200, @_ );
+	my ( $self, @value ) = @_;
+	return $self->_dnsflag( 0x0200, @value );
 }
 
 
@@ -230,7 +238,8 @@ Gets or sets the recursion desired flag.
 =cut
 
 sub rd {
-	return shift->_dnsflag( 0x0100, @_ );
+	my ( $self, @value ) = @_;
+	return $self->_dnsflag( 0x0100, @value );
 }
 
 
@@ -244,7 +253,8 @@ Gets or sets the recursion available flag.
 =cut
 
 sub ra {
-	return shift->_dnsflag( 0x0080, @_ );
+	my ( $self, @value ) = @_;
+	return $self->_dnsflag( 0x0080, @value );
 }
 
 
@@ -255,7 +265,8 @@ Unassigned bit, should always be zero.
 =cut
 
 sub z {
-	return shift->_dnsflag( 0x0040, @_ );
+	my ( $self, @value ) = @_;
+	return $self->_dnsflag( 0x0040, @value );
 }
 
 
@@ -272,7 +283,8 @@ and is allowed to set the bit by policy.)
 =cut
 
 sub ad {
-	return shift->_dnsflag( 0x0020, @_ );
+	my ( $self, @value ) = @_;
+	return $self->_dnsflag( 0x0020, @value );
 }
 
 
@@ -286,7 +298,8 @@ Gets or sets the checking disabled flag.
 =cut
 
 sub cd {
-	return shift->_dnsflag( 0x0010, @_ );
+	my ( $self, @value ) = @_;
+	return $self->_dnsflag( 0x0010, @value );
 }
 
 
@@ -300,13 +313,10 @@ to the number of RRs in the zone section.
 
 =cut
 
-our $warned;
-
 sub qdcount {
-	my $self = shift;
-	return $$self->{count}[0] || scalar @{$$self->{question}} unless scalar @_;
-	carp 'header->qdcount attribute is read-only' unless $warned++;
-	return;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->_warn('packet->header->qdcount is read-only') }
+	return $$self->{count}[0] || scalar @{$$self->{question}};
 }
 
 
@@ -323,10 +333,9 @@ to the number of RRs in the prerequisite section.
 =cut
 
 sub ancount {
-	my $self = shift;
-	return $$self->{count}[1] || scalar @{$$self->{answer}} unless scalar @_;
-	carp 'header->ancount attribute is read-only' unless $warned++;
-	return;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->_warn('packet->header->ancount is read-only') }
+	return $$self->{count}[1] || scalar @{$$self->{answer}};
 }
 
 
@@ -343,10 +352,9 @@ to the number of RRs in the update section.
 =cut
 
 sub nscount {
-	my $self = shift;
-	return $$self->{count}[2] || scalar @{$$self->{authority}} unless scalar @_;
-	carp 'header->nscount attribute is read-only' unless $warned++;
-	return;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->_warn('packet->header->nscount is read-only') }
+	return $$self->{count}[2] || scalar @{$$self->{authority}};
 }
 
 
@@ -362,10 +370,9 @@ In dynamic update packets, this field is known as C<adcount>.
 =cut
 
 sub arcount {
-	my $self = shift;
-	return $$self->{count}[3] || scalar @{$$self->{additional}} unless scalar @_;
-	carp 'header->arcount attribute is read-only' unless $warned++;
-	return;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->_warn('packet->header->arcount is read-only') }
+	return $$self->{count}[3] || scalar @{$$self->{additional}};
 }
 
 sub zocount { return &qdcount; }
@@ -387,7 +394,8 @@ Gets or sets the EDNS DNSSEC OK flag.
 =cut
 
 sub do {
-	return shift->_ednsflag( 0x8000, @_ );
+	my ( $self, @value ) = @_;
+	return $self->_ednsflag( 0x8000, @value );
 }
 
 
@@ -398,20 +406,16 @@ EDNS extended rcodes are handled transparently by $packet->header->rcode().
 
 =head2 UDP packet size
 
-    $udp_max = $packet->header->size;
-    $udp_max = $packet->edns->size;
+    $udp_max = $packet->edns->UDPsize;
 
 EDNS offers a mechanism to advertise the maximum UDP packet size
 which can be assembled by the local network stack.
 
-UDP size advertisement can be viewed as either a header extension or
-an EDNS feature.  Endless debate is avoided by supporting both views.
-
 =cut
 
-sub size {
-	my $self = shift;
-	return $$self->edns->size(@_);
+sub size {				## historical
+	my ( $self, @value ) = @_;
+	return $$self->edns->UDPsize(@value);
 }
 
 
@@ -421,7 +425,7 @@ sub size {
     $version = $header->edns->version;
     @options = $header->edns->options;
     $option  = $header->edns->option(n);
-    $udp_max = $packet->edns->size;
+    $udp_max = $packet->edns->UDPsize;
 
 Auxiliary function which provides access to the EDNS protocol
 extension OPT RR.
@@ -437,27 +441,33 @@ sub edns {
 ########################################
 
 sub _dnsflag {
-	my $self = shift;
-	my $flag = shift;
+	my ( $self, $flag, @value ) = @_;
 	for ( $$self->{status} ) {
 		my $set = $_ | $flag;
-		my $not = $set - $flag;
-		$_ = (shift) ? $set : $not if scalar @_;
-		$flag = ( $_ & $flag ) ? 1 : 0;
+		$_ = ( shift @value ) ? $set : ( $set ^ $flag ) if @value;
+		$flag &= $_;
 	}
-	return $flag;
+	return $flag ? 1 : 0;
 }
 
 
 sub _ednsflag {
-	my ( $self, $flag, @val ) = @_;
-	my $edns = $$self->edns->flags || 0;
-	return $flag & $edns ? 1 : 0 unless scalar @val;
-	my $set = $flag | $edns;
-	my $not = $set - $flag;
-	my $val = shift(@val) ? $set : $not;
-	$$self->edns->flags($val) unless $val == $edns;
-	return ( $val & $flag ) ? 1 : 0;
+	my ( $self, $flag, @value ) = @_;
+	my $edns = $$self->edns;
+	for ( $edns->flags ) {
+		my $set = $_ | $flag;
+		$edns->flags( $_ = ( shift @value ) ? $set : ( $set ^ $flag ) ) if @value;
+		$flag &= $_;
+	}
+	return $flag ? 1 : 0;
+}
+
+
+my %warned;
+
+sub _warn {
+	my ( undef, @note ) = @_;
+	return carp "usage; @note" unless $warned{"@note"}++;
 }
 
 
@@ -473,7 +483,7 @@ Copyright (c)1997 Michael Fuhr.
 
 Portions Copyright (c)2002,2003 Chris Reinhardt.
 
-Portions Copyright (c)2012 Dick Franks.
+Portions Copyright (c)2012,2022 Dick Franks.
 
 All rights reserved.
 
@@ -482,7 +492,7 @@ All rights reserved.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -499,8 +509,8 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::Packet>, L<Net::DNS::RR::OPT>
-RFC 1035 Section 4.1.1
+L<perl> L<Net::DNS> L<Net::DNS::Packet> L<Net::DNS::RR::OPT>
+L<RFC1035(4.1.1)|https://tools.ietf.org/html/rfc1035>
 
 =cut
 

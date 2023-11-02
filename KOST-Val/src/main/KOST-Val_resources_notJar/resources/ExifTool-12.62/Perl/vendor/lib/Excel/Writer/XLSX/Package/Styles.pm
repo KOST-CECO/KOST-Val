@@ -6,7 +6,7 @@ package Excel::Writer::XLSX::Package::Styles;
 #
 # Used in conjunction with Excel::Writer::XLSX
 #
-# Copyright 2000-2020, John McNamara, jmcnamara@cpan.org
+# Copyright 2000-2023, John McNamara, jmcnamara@cpan.org
 #
 # Documentation after __END__
 #
@@ -20,7 +20,7 @@ use Carp;
 use Excel::Writer::XLSX::Package::XMLwriter;
 
 our @ISA     = qw(Excel::Writer::XLSX::Package::XMLwriter);
-our $VERSION = '1.07';
+our $VERSION = '1.11';
 
 
 ###############################################################################
@@ -45,7 +45,7 @@ sub new {
     $self->{_xf_formats}         = undef;
     $self->{_palette}            = [];
     $self->{_font_count}         = 0;
-    $self->{_num_format_count}   = 0;
+    $self->{_num_formats}        = [];
     $self->{_border_count}       = 0;
     $self->{_fill_count}         = 0;
     $self->{_custom_colors}      = [];
@@ -126,7 +126,7 @@ sub _set_style_properties {
     $self->{_xf_formats}         = shift;
     $self->{_palette}            = shift;
     $self->{_font_count}         = shift;
-    $self->{_num_format_count}   = shift;
+    $self->{_num_formats}        = shift;
     $self->{_border_count}       = shift;
     $self->{_fill_count}         = shift;
     $self->{_custom_colors}      = shift;
@@ -203,7 +203,7 @@ sub _write_style_sheet {
 sub _write_num_fmts {
 
     my $self  = shift;
-    my $count = $self->{_num_format_count};
+    my $count = @{ $self->{_num_formats} };
 
     return unless $count;
 
@@ -212,12 +212,11 @@ sub _write_num_fmts {
     $self->xml_start_tag( 'numFmts', @attributes );
 
     # Write the numFmts elements.
-    for my $format ( @{ $self->{_xf_formats} } ) {
+    my $index = 164;
+    for my $num_format ( @{ $self->{_num_formats} } ) {
 
-        # Ignore built-in number formats, i.e., < 164.
-        next unless $format->{_num_format_index} >= 164;
-        $self->_write_num_fmt( $format->{_num_format_index},
-            $format->{_num_format} );
+        $self->_write_num_fmt( $index, $num_format );
+        $index++;
     }
 
     $self->xml_end_tag( 'numFmts' );
@@ -592,6 +591,11 @@ sub _write_fill {
 
     );
 
+    # Special handling for pattern only case.
+    if ( !$fg_color && !$bg_color && $format->{_pattern} ) {
+        $self->_write_default_fill( $patterns[ $format->{_pattern} ] );
+        return;
+    }
 
     $self->xml_start_tag( 'fill' );
 
@@ -618,7 +622,7 @@ sub _write_fill {
         $self->xml_empty_tag( 'bgColor', 'rgb' => $bg_color );
     }
     else {
-        if ( !$dxf_format ) {
+        if ( !$dxf_format && $format->{_pattern} <= 1) {
             $self->xml_empty_tag( 'bgColor', 'indexed' => 64 );
         }
     }
@@ -910,6 +914,10 @@ sub _write_xf {
     );
 
 
+    if ( $format->{_quote_prefix} ) {
+        push @attributes, ( 'quotePrefix' => 1 );
+    }
+
     if ( $format->{_num_format_index} > 0 ) {
         push @attributes, ( 'applyNumberFormat' => 1 );
     }
@@ -1188,7 +1196,7 @@ John McNamara jmcnamara@cpan.org
 
 =head1 COPYRIGHT
 
-(c) MM-MMXX, John McNamara.
+(c) MM-MMXXIII, John McNamara.
 
 All Rights Reserved. This module is free software. It may be used, redistributed and/or modified under the same terms as Perl itself.
 

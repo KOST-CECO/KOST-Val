@@ -1,0 +1,97 @@
+=pod
+
+=encoding utf-8
+
+=head1 NAME
+
+Type::Tiny::Manual::Contributing - contributing to Type::Tiny development.
+
+=head1 MANUAL
+
+=head2 Reporting bugs
+
+Bug reports (including wishlist items) can be submitted to GitHub.
+
+L<https://github.com/tobyink/p5-type-tiny/issues>.
+
+Test cases written using L<Test::More> are always appreciated.
+
+=head2 Fixing bugs
+
+If something doesn't work as documented, or causes unexpected crashes,
+and you know how to fix it, then either attach a patch to the bug report
+(see above) or as a pull request to the project on GitHub.
+
+L<https://github.com/tobyink/p5-type-tiny>.
+
+Please try to follow the coding style used in the rest of the project.
+(Tab indents, spaces for alignment, British English spellings, pod at
+the end of code but the start of test cases, etc.) 
+
+L<https://github.com/tobyink/misc-development-tools/blob/master/bin/my-perltidy>
+
+=head2 Adding Test Cases
+
+New test cases for the Type::Tiny test suite are always welcome.
+The coveralls page for Type::Tiny should reveal what parts of the
+code are most needing good test cases. Any files with below 95%
+coverage are highest priority.
+
+L<https://coveralls.io/github/tobyink/p5-type-tiny>.
+
+Type::Tiny is now also on Codecov which does coverage accounting
+slightly differently, giving some stricter targets to aim for.
+
+L<https://codecov.io/gh/tobyink/p5-type-tiny>
+
+=head2 Type::Tiny::XS
+
+I'm not really a C programmer, nor am I that familiar with Perl's internals,
+so help with L<Type::Tiny::XS> is always appreciated. There are some type
+constraints in L<Types::Standard>, L<Types::Common::String>, and
+L<Types::Common::Numeric> which don't have XS implementations.
+
+=head2 Writing Type Libraries
+
+Though I'm unlikely to bundle many more type libraries in this distribution,
+uploading your own type libraries to CPAN will strengthen the Type::Tiny
+ecosystem.
+
+=head2 Donate
+
+If you or your organization uses Type::Tiny and you wish to contribute
+financially, you should be able to find links to donate on the Type::Tiny
+website at L<https://typetiny.toby.ink/>.
+
+Please note that I am not suggesting that you must do this in order for me
+to continue working on Type::Tiny and related modules.
+
+=head1 NEXT STEPS
+
+You've reached the end of the manual!
+
+But each class, type library, and other package includes more detailed
+documentation.
+
+=head1 SEE ALSO
+
+L<https://toby.ink/open-source/contributing/>.
+
+=head1 AUTHOR
+
+Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
+
+=head1 COPYRIGHT AND LICENCE
+
+This software is copyright (c) 2013-2014, 2017-2023 by Toby Inkster.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=head1 DISCLAIMER OF WARRANTIES
+
+THIS PACKAGE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
+MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
+=cut

@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-Net::SSLeay - Perl extension for using OpenSSL
+Net::SSLeay - Perl bindings for OpenSSL and LibreSSL
 
 =head1 SYNOPSIS
 
@@ -49,17 +49,17 @@ Net::SSLeay supports the following libssl implementations:
 
 =item *
 
-Any stable release of L<OpenSSL|https://www.openssl.org> in the 0.9.8 - 1.1.1
+Any stable release of L<OpenSSL|https://www.openssl.org> in the 0.9.8 - 3.0
 branches, except for OpenSSL 0.9.8 - 0.9.8b.
 
 =item *
 
-Any stable release of L<LibreSSL|https://www.libressl.org> in the 2.0 - 3.1
-series.
+Any stable release of L<LibreSSL|https://www.libressl.org> in the 2.0 - 3.4
+series, except for LibreSSL 3.2.2 and 3.2.3.
 
 =back
 
-Net::SSLeay may not function as expected with newer releases than the ones
+Net::SSLeay may not function as expected with releases other than the ones
 listed above due to libssl API incompatibilities, or, in the case of LibreSSL,
 because of deviations from the libssl API.
 
@@ -926,6 +926,7 @@ a session secret callback can be set up to be called when a session secret is se
 by openssl.
 
 Establish it like this:
+
     Net::SSLeay::set_session_secret_cb($ssl, \&session_secret_cb, $somedata);
 
 It will be called like this:
@@ -994,52 +995,101 @@ The following new functions behave in perlish way:
                                     # Performs SSL_write, but automatically
                                     # figures out the size of $foo
 
-=head3 Low level API: Version related functions
+=head3 Low level API: Version and library information related functions
 
 =over
 
-=item * SSLeay
+=item * OpenSSL_version_num and SSLeay
 
-B<COMPATIBILITY:> not available in Net-SSLeay-1.42 and before
+B<COMPATIBILITY:> SSLeay() is not available in Net-SSLeay-1.42 and
+before. SSLeay() was made an alias of OpenSSL_version_num() in OpenSSL
+1.1.0 and LibreSSL 2.7.0.
 
-Gives version number (numeric) of underlaying openssl library.
+B<COMPATIBILITY:> OpenSSL_version_num() requires at least
+Net-SSLeay-1.82 with OpenSSL 1.1.0, or Net-SSLeay-1.88 with LibreSSL
+2.7.0.
+
+Both functions return OPENSSL_VERSION_NUMBER constant (numeric) as
+defined by the underlying OpenSSL or LibreSSL library.
 
  my $ver_number = Net::SSLeay::SSLeay();
- # returns: the number identifying the openssl release
- #
+or
+ my $ver_number = Net::SSLeay::OpenSSL_version_num();
+ # returns: OPENSSL_VERSION_NUMBER constant
+
+ OpenSSL version numbering is:
+
  # 0x00903100 => openssl-0.9.3
  # 0x00904100 => openssl-0.9.4
  # 0x00905100 => openssl-0.9.5
  # 0x0090600f => openssl-0.9.6
  # 0x0090601f => openssl-0.9.6a
- # 0x0090602f => openssl-0.9.6b
  # ...
  # 0x009060df => openssl-0.9.6m
  # 0x0090700f => openssl-0.9.7
  # 0x0090701f => openssl-0.9.7a
- # 0x0090702f => openssl-0.9.7b
  # ...
  # 0x009070df => openssl-0.9.7m
  # 0x0090800f => openssl-0.9.8
  # 0x0090801f => openssl-0.9.8a
- # 0x0090802f => openssl-0.9.8b
  # ...
- # 0x0090814f => openssl-0.9.8t
+ # 0x0090821f => openssl-0.9.8zh
  # 0x1000000f => openssl-1.0.0
- # 0x1000004f => openssl-1.0.0d
- # 0x1000007f => openssl-1.0.0g
+ # ...
+ # 0x1000014f => openssl-1.0.0t
+ # 0x1000100f => openssl-1.0.1
+ # ...
+ # 0x1000115f => openssl-1.0.1u
+ # 0x1000200f => openssl-1.0.2
+ # ...
+ # 0x1000215f => openssl-1.0.2u
+ # 0x1010000f => openssl-1.1.0
+ # ...
+ # 0x101000cf => openssl-1.1.0l
+ # 0x1010100f => openssl-1.1.1
+ # ...
+ # 0x101010df => openssl-1.1.1m
+ # 0x30000000 => openssl-3.0.0
+ # 0x30000010 => openssl-3.0.1
 
-You can use it like this:
+ Note that OpenSSL 3.0.0 and later do not set the status nibble in the
+ least significant octet to f.
+
+ LibreSSL returns 0x20000000 always:
+
+ # 0x20000000 => libressl-2.2.1
+ # ...
+ # 0x20000000 => libressl-3.4.2
+
+You can use the version number like this when you know that the
+underlying library is OpenSSL:
 
   if (Net::SSLeay::SSLeay() < 0x0090800f) {
-    die "you need openssl-0.9.8 or higher";
+    die "You need OpenSSL 0.9.8 or higher";
   }
+
+LibresSSL 2.2.2 and later define constant LIBRESSL_VERSION_NUMBER that
+gives the LibreSSL version number. The format is the same that OpenSSL
+uses with OPENSSL_VERSION_NUMBER. You can do this if you need to
+check that the underlying library is LibreSSL and it's recent enough:
+
+
+  if (Net::SSLeay::SSLeay() != 0x20000000 ||
+      Net::SSLeay::LIBRESSL_VERSION_NUMBER() < 0x3040200f) {
+    die "You need LibreSSL. Version 3.4.2 or higher";
+  }
+
+Check openssl doc
+L<https://www.openssl.org/docs/manmaster/man3/OpenSSL_version_num.html>
+
+See OpenSSL 1.1.1 and earlier documentation for the details of status
+nibble and the format interpretation.
 
 =item * SSLeay_version
 
 B<COMPATIBILITY:> not available in Net-SSLeay-1.42 and before
 
-Gives version number (string) of underlaying openssl library.
+Returns different strings depending on $type.
 
  my $ver_string = Net::SSLeay::SSLeay_version($type);
  # $type
@@ -1055,22 +1105,22 @@ Gives version number (string) of underlaying openssl library.
  #is equivalent to
  Net::SSLeay::SSLeay_version(SSLEAY_VERSION);
 
-Check openssl doc L<https://www.openssl.org/docs/man1.0.2/crypto/SSLeay_version.html|https://www.openssl.org/docs/man1.0.2/crypto/SSLeay_version.html>
+OpenSSL 1.1.0 changed SSLeay_version() to an alias of
+OpenSSL_version(). To ensure correct functionality with LibreSSL, use
+SSLEAY_* constants with SSLeay_version() and OPENSSL_* constants with
+OpenSSL_version().
 
-=item * OpenSSL_version_num
+Check openssl doc L<https://www.openssl.org/docs/manmaster/man3/OpenSSL_version.html>
 
-B<COMPATIBILITY:> not available in Net-SSLeay-1.82 and before; requires at least OpenSSL 1.1.0
-
-Gives version number (numeric) of underlaying openssl library. See L</SSLeay> for interpreting the result.
-
- my $ver_number = Net::SSLeay::OpenSSL_version_num();
- # returns: the number identifying the openssl release
+OpenSSL website no longer has a manual page for SSLeay_version().
 
 =item * OpenSSL_version
 
-B<COMPATIBILITY:> not available in Net-SSLeay-1.82 and before; requires at least OpenSSL 1.1.0
+B<COMPATIBILITY:> requires at least Net-SSLeay-1.82 with OpenSSL
+1.1.0, or Net-SSLeay-1.88 with LibreSSL 2.7.0.
 
-Gives version number (string) of underlaying openssl library.
+Returns different strings depending on $t. Available $t constants
+depend on the library version.
 
  my $ver_string = Net::SSLeay::OpenSSL_version($t);
  # $t
@@ -1087,7 +1137,78 @@ Gives version number (string) of underlaying openssl library.
  #is equivalent to
  Net::SSLeay::OpenSSL_version(OPENSSL_VERSION);
 
-Check openssl doc L<https://www.openssl.org/docs/crypto/OpenSSL_version.html|https://www.openssl.org/docs/crypto/OpenSSL_version.html>
+Check openssl doc L<https://www.openssl.org/docs/manmaster/man3/OpenSSL_version.html>
+
+=item * OPENSSL_info
+
+B<COMPATIBILITY:> not available in Net-SSLeay-1.90 and before; requires at least OpenSSL 3.0.0-alpha1
+
+Returns different strings depending on $t. Available $t constants
+depend on the library version.
+
+ my $info_string = Net::SSLeay::OPENSSL_info($t);
+ # $t
+ #   OPENSSL_INFO_CONFIG_DIR - e.g. '/opt/openssl-3.0.1'
+ #   OPENSSL_INFO_...
+ #
+ # returns: string
+
+Check openssl doc L<https://www.openssl.org/docs/manmaster/man3/OPENSSL_info.html>
+
+=item * OPENSSL_version_major, OPENSSL_version_minor and OPENSSL_version_patch
+
+B<COMPATIBILITY:> not available in Net-SSLeay-1.90 and before; requires at least OpenSSL 3.0.0-alpha1, not in LibreSSL
+
+Return constants OPENSSL_VERSION_MAJOR, OPENSSL_VERSION_MINOR and OPENSSL_VERSION_PATCH, respectively.
+
+ my $major = Net::SSLeay::OPENSSL_version_major();
+ my $minor = Net::SSLeay::OPENSSL_version_minor();
+ my $patch = Net::SSLeay::OPENSSL_version_patch();
+ #
+ # return: integer
+
+For example with OpenSSL 3.0.1, $major is 3, $minor is 0 and $patch is 1.
+
+Note: the constants record Net::SSLeay compile time values whereas the
+three functions return values from the library. Typically these are
+the same, but they can be different if the library version is updated
+but Net::SSLeay is not re-compiled. See the OpenSSL and LibreSSL
+API/ABI compatibility statements for more information.
+
+Check openssl doc L<https://www.openssl.org/docs/manmaster/man3/OPENSSL_version_major.html>
+
+=item * OPENSSL_version_pre_release
+
+B<COMPATIBILITY:> not available in Net-SSLeay-1.90 and before; requires at least OpenSSL 3.0.0-alpha1, not in LibreSSL
+
+Return constant string defined by C macro OPENSSL_VERSION_PRE_RELEASE.
+
+ my $pre_release = Net::SSLeay::OPENSSL_version_pre_release();
+ #
+ # returns: string
+
+ For example: "-alpha3" or "" for a release version.
+
+When the macro is not defined, an empty string is returned instead.
+
+Check openssl doc L<https://www.openssl.org/docs/manmaster/man3/OPENSSL_version_pre_release.html>
+
+=item * OPENSSL_version_build_metadata()
+
+B<COMPATIBILITY:> not available in Net-SSLeay-1.90 and before; requires at least OpenSSL 3.0.0-alpha1, not in LibreSSL
+
+Return constant string defined by C macro OPENSSL_VERSION_BUILD_METADATA.
+
+ my $metadata = Net::SSLeay::OPENSSL_version_build_metadata();
+ #
+ # returns: string
+
+ For example: "+fips" or "".
+
+When the macro is not defined, an empty string is returned instead.
+
+Check openssl doc L<https://www.openssl.org/docs/manmaster/man3/OPENSSL_version_build_metadata.html>
+
 
 =back
 
@@ -2490,7 +2611,7 @@ values. It may not be correct anymore.
  0x00400000 corresponds to SSL_OP_CIPHER_SERVER_PREFERENCE
  0x04000000 corresponds to SSL_OP_NO_TLSv1
 
-Check openssl doc L<https://www.openssl.org/docs/man1.0.2/ssl/SSL_CTX_set_options.html|https://www.openssl.org/docs/man1.0.2/ssl/SSL_CTX_set_options.html>
+Check openssl doc L<https://www.openssl.org/docs/manmaster/man3/SSL_CTX_get_options.html>
 
 =item * CTX_set_options
 
@@ -2504,7 +2625,7 @@ Adds the options set via bitmask in $options to ctx. Options already set before 
 
 For bitmask details see L</CTX_get_options> (above).
 
-Check openssl doc L<https://www.openssl.org/docs/man1.0.2/ssl/SSL_CTX_set_options.html|https://www.openssl.org/docs/man1.0.2/ssl/SSL_CTX_set_options.html>
+Check openssl doc L<https://www.openssl.org/docs/manmaster/man3/SSL_CTX_set_options.html>
 
 =item * CTX_get_quiet_shutdown
 
@@ -2576,7 +2697,7 @@ Check openssl doc L<http://www.openssl.org/docs/ssl/SSL_CTX_set_timeout.html|htt
 
 =item * CTX_get_verify_depth
 
-Returns the verification depth limit currently set in $ctx. If no limit has been explicitly set, -1 is returned and the default value will be used.",
+Returns the verification depth limit currently set in $ctx. If no limit has been explicitly set, -1 is returned and the default value will be used.
 
  my $rv = Net::SSLeay::CTX_get_verify_depth($ctx);
  # $ctx - value corresponding to openssl's SSL_CTX structure
@@ -2996,9 +3117,9 @@ The list of ciphers is inherited by all ssl objects created from $ctx.
  #
  # returns: 1 if any cipher could be selected and 0 on complete failure
 
-The format of $str is described in L<http://www.openssl.org/docs/apps/ciphers.html|http://www.openssl.org/docs/apps/ciphers.html>
+The format of $str is described in L<https://www.openssl.org/docs/manmaster/man1/openssl-ciphers.html>
 
-Check openssl doc L<http://www.openssl.org/docs/ssl/SSL_CTX_set_cipher_list.html|http://www.openssl.org/docs/ssl/SSL_CTX_set_cipher_list.html>
+Check openssl doc L<https://www.openssl.org/docs/manmaster/man3/SSL_CTX_set_cipher_list.html>
 
 =item * CTX_set_ciphersuites
 
@@ -3397,6 +3518,39 @@ Get number of TLSv1.3 session tickets that will be sent to a client.
  # returns: (integer) number of tickets to send
 
 Check openssl doc L<https://www.openssl.org/docs/manmaster/man3/SSL_CTX_get_num_tickets.html|https://www.openssl.org/docs/manmaster/man3/SSL_CTX_get_num_tickets.html>
+
+=item * CTX_set_keylog_callback
+
+B<COMPATIBILITY:> not available in Net-SSLeay-1.90 and before; requires at least OpenSSL 1.1.1pre1, not in LibreSSL
+
+Set the TLS key logging callback.
+
+ Net::SSLeay::CTX_set_keylog_callback($ctx, $cb);
+ # $ctx  - value corresponding to openssl's SSL_CTX structure
+ # $cb - reference to a perl callback function
+ #
+ # returns: no return value
+
+The callback function will be called like this:
+
+ keylog_cb_func($ssl, $line);
+ # $ssl - value corresponding to OpenSSL's SSL object associated with the connection
+ # $line - a string containing the key material in the format used by NSS for its SSLKEYLOGFILE debugging output
+
+Check openssl doc L<https://www.openssl.org/docs/manmaster/man3/SSL_CTX_set_keylog_callback.html>
+
+=item * CTX_get_keylog_callback
+
+B<COMPATIBILITY:> not available in Net-SSLeay-1.90 and before; requires at least OpenSSL 1.1.1pre1, not in LibreSSL
+
+Retrieve the previously set TLS key logging callback.
+
+ my $cb = Net::SSLeay::CTX_get_keylog_callback($ctx);
+ # $ctx  - value corresponding to openssl's SSL_CTX structure
+ #
+ # returns: a reference to a perl callback function or undef if no callback is set
+
+Check openssl doc L<https://www.openssl.org/docs/manmaster/man3/SSL_CTX_get_keylog_callback.html>
 
 =back
 
@@ -4624,6 +4778,34 @@ When callback is undef, an existing callback will be disabled.
 
 Check openssl doc L<http://www.openssl.org/docs/ssl/SSL_CTX_set_info_callback.html|http://www.openssl.org/docs/ssl/SSL_CTX_set_info_callback.html>
 
+=item * set_msg_callback
+
+Sets the callback function, that can be used to obtain protocol messages information for $ssl during connection setup and use.
+When callback is undef, the callback setting currently valid for ctx is used.
+Note that set_msg_callback_arg is not provided as there is no need to explicitly set $arg, this is handled by set_msg_callback.
+
+ Net::SSLeay::set_msg_callback($ssl, $cb, [$arg]);
+ # $ssl - value corresponding to openssl's SSL structure
+ # $cb - sub { my ($write_p,$version,$content_type,$buf,$len,$ssl,$arg) = @_; ... }
+ #
+ # returns: no return value
+
+Check openssl doc L<http://www.openssl.org/docs/manmaster/man3/SSL_set_msg_callback.html|http://www.openssl.org/docs/manmaster/man3/SSL_set_msg_callback.html>
+
+=item * CTX_set_msg_callback
+
+Sets the callback function on ctx, that can be used to obtain protocol messages information for ssl connection setup and use.
+When callback is undef, the existing callback will be disabled.
+Note that CTX_set_msg_callback_arg is not provided as there is no need to explicitly set $arg, this is handled by CTX_set_msg_callback.
+
+ Net::SSLeay::CTX_set_msg_callback($ssl, $cb, [$arg]);
+ # $ssl - value corresponding to openssl's SSL structure
+ # $cb - sub { my ($write_p,$version,$content_type,$buf,$len,$ssl,$arg) = @_; ... }
+ #
+ # returns: no return value
+
+Check openssl doc L<http://www.openssl.org/docs/manmaster/man3/SSL_CTX_set_msg_callback.html|http://www.openssl.org/docs/manmaster/man3/SSL_CTX_set_msg_callback.html>
+
 =item * set_pref_cipher
 
 Sets the list of available ciphers for $ssl using the control string $str.
@@ -4709,13 +4891,13 @@ Setup pre-shared secret session resumption function.
  # returns: no return value
 
 The callback function will be called like:
-callback_function($secret, $ciphers, $pref_cipher, $data);
 
-# $secret is the current master session key, usually all 0s at the beginning of a session
-# $ciphers is ref to an array of peer cipher names
-# $pref_cipher is a ref to an index into the list of cipher names of 
-#  the preferred cipher. Set it if you want to specify a preferred cipher
-# $data is the data passed to set_session_secret_cb
+ callback_function($secret, $ciphers, $pref_cipher, $data);
+ # $secret is the current master session key, usually all 0s at the beginning of a session
+ # $ciphers is ref to an array of peer cipher names
+ # $pref_cipher is a ref to an index into the list of cipher names of 
+ #  the preferred cipher. Set it if you want to specify a preferred cipher
+ # $data is the data passed to set_session_secret_cb
 
 The callback function should return 1 if it likes the suggested cipher (or has selected an alternative 
 by setting pref_cipher), else it should return 0 (in which case OpenSSL will select its own preferred cipher).
@@ -4735,12 +4917,12 @@ Setup encryption for TLS session tickets (stateless session reuse).
  # returns: no return value
 
 The callback function will be called like:
-getkey($data,[$key_name]) -> ($key,$current_key_name)
 
-# $data is the data passed to set_session_secret_cb
-# $key_name is the name of the key OpenSSL has extracted from the session ticket
-# $key is the requested key for ticket encryption + HMAC
-# $current_key_name is the name for the currently valid key
+ getkey($data,[$key_name]) -> ($key,$current_key_name)
+ # $data is the data passed to set_session_secret_cb
+ # $key_name is the name of the key OpenSSL has extracted from the session ticket
+ # $key is the requested key for ticket encryption + HMAC
+ # $current_key_name is the name for the currently valid key
 
 OpenSSL will call the function without a key name if it generates a new ticket.
 It then needs the callback to return the encryption+HMAC key and an identifier
@@ -4805,12 +4987,12 @@ Setup callback for TLS session tickets (stateless session reuse).
  # returns: no return value
 
 The callback function will be called like:
-getticket($ssl,$ticket,$data) -> $return_value
 
-# $ssl is a value corresponding to openssl's SSL structure
-# $ticket is a value of received TLS session ticket (can also be empty)
-# $data is the data passed to set_session_ticket_ext_cb
-# $return_value is either 0 (failure) or 1 (success)
+ getticket($ssl,$ticket,$data) -> $return_value
+ # $ssl is a value corresponding to openssl's SSL structure
+ # $ticket is a value of received TLS session ticket (can also be empty)
+ # $data is the data passed to set_session_ticket_ext_cb
+ # $return_value is either 0 (failure) or 1 (success)
 
 This function is based on the OpenSSL function SSL_set_session_ticket_ext_cb.
 
@@ -4825,12 +5007,12 @@ Set TLS session ticket (stateless session reuse).
  # returns: no return value
 
 The callback function will be called like:
-getticket($ssl,$ticket,$data) -> $return_value
 
-# $ssl is a value corresponding to openssl's SSL structure
-# $ticket is a value of received TLS session ticket (can also be empty)
-# $data is the data passed to set_session_ticket_ext_cb
-# $return_value is either 0 (failure) or 1 (success)
+ getticket($ssl,$ticket,$data) -> $return_value
+ # $ssl is a value corresponding to openssl's SSL structure
+ # $ticket is a value of received TLS session ticket (can also be empty)
+ # $data is the data passed to set_session_ticket_ext_cb
+ # $return_value is either 0 (failure) or 1 (success)
 
 This function is based on the OpenSSL function SSL_set_session_ticket_ext_cb.
 
@@ -5361,7 +5543,9 @@ Generates a default path for the random seed file.
  my $file = Net::SSLeay::RAND_file_name($num);
  # $num - maximum size of returned file name
  #
- # returns: string with file name on success, '' (empty string) on failure
+ # returns: string with file name on success, '' (empty string) or undef on failure
+
+LibreSSL and OpenSSL 1.1.0a and later return undef when, for example, $num is not large enough to hold the filename.
 
 Check openssl doc L<http://www.openssl.org/docs/crypto/RAND_load_file.html|http://www.openssl.org/docs/crypto/RAND_load_file.html>
 
@@ -6129,7 +6313,7 @@ Returns X509_EXTENSION from $x509 based on given NID.
 Returns fingerprint of certificate $cert.
 
 B<NOTE:> Does not exactly correspond to any low level API function. The implementation
-is basen on openssl's C<X509_digest()>.
+is based on openssl's C<X509_digest()>.
 
  Net::SSLeay::X509_get_fingerprint($x509, $type);
  # $x509 - value corresponding to openssl's X509 structure
@@ -7501,20 +7685,23 @@ returns a newly initialised X509_STORE_CTX structure.
 X509_STORE_CTX_init() sets up an X509_STORE_CTX for a subsequent verification operation.
 It must be called before each call to X509_verify_cert().
 
-Net::SSLeay::X509_STORE_CTX_init($x509_store_ctx, $x509_store, $x509, $chain);
+ my $rv = Net::SSLeay::X509_STORE_CTX_init($x509_store_ctx, $x509_store, $x509, $chain);
+ # $x509_store_ctx - value corresponding to openssl's X509_STORE_CTX structure (required)
+ # $x509_store - value corresponding to openssl's X509_STORE structure (optional)
+ # $x509 - value corresponding to openssl's X509 structure (optional)
+ # $chain - value corresponding to openssl's STACK_OF(X509) structure (optional)
+ #
+ # returns: 1 on success, 0 on failure
+ #
+ # Note: returns nothing with Net::SSLeay 1.90 and earlier.
 
-# $x509_store_ctx - value corresponding to openssl's X509_STORE_CTX structure (required)
-# $x509_store - value corresponding to openssl's X509_STORE structure (optional)
-# $x509 - value corresponding to openssl's X509 structure (optional)
-# $chain - value corresponding to openssl's STACK_OF(X509) structure (optional)
-
-Check openssl doc L<https://www.openssl.org/docs/man1.0.2/crypto/X509_STORE_CTX_init.html|https://www.openssl.org/docs/man1.0.2/crypto/X509_STORE_CTX_init.html>
+Check openssl doc L<https://www.openssl.org/docs/manmaster/man3/X509_STORE_CTX_init.html>
 
 =item * X509_STORE_CTX_free
 
 Frees an X509_STORE_CTX structure.
 
-Net::SSLeay::X509_STORE_CTX_free($x509_store_ctx);
+ Net::SSLeay::X509_STORE_CTX_free($x509_store_ctx);
 
 # $x509_store_ctx - value corresponding to openssl's X509_STORE_CTX structure
 
@@ -7527,10 +7714,10 @@ of the process is contained in the verify(1) manual page.
 If this function returns 0, use X509_STORE_CTX_get_error to get additional error
 information.
 
-my $rv = Net::SSLeay::X509_verify_cert($x509_store_ctx);
-# $x509_store_ctx - value corresponding to openssl's X509_STORE_CTX structure
-#
-# returns: 1 if a complete chain can be built and validated, otherwise 0
+ my $rv = Net::SSLeay::X509_verify_cert($x509_store_ctx);
+ # $x509_store_ctx - value corresponding to openssl's X509_STORE_CTX structure
+ #
+ # returns: 1 if a complete chain can be built and validated, otherwise 0
 
 Check openssl doc L<https://www.openssl.org/docs/manmaster/man3/X509_verify_cert.html|https://www.openssl.org/docs/manmaster/man3/X509_verify_cert.html>
 
@@ -7633,29 +7820,29 @@ Check openssl doc L<http://www.openssl.org/docs/crypto/X509_STORE_CTX_new.html|h
 
 Returns a newly initialized X509_STORE structure.
 
-my $rv = Net::SSLeay::X509_STORE_new();
-#
-# returns: value corresponding to openssl's X509_STORE structure (0 on failure)
+ my $rv = Net::SSLeay::X509_STORE_new();
+ #
+ # returns: value corresponding to openssl's X509_STORE structure (0 on failure)
 
 =item * X509_STORE_free
 
 Frees an X509_STORE structure
 
-Net::SSLeay::X509_STORE_free($x509_store);
-# $x509_store - value corresponding to openssl's X509_STORE structure
+ Net::SSLeay::X509_STORE_free($x509_store);
+ # $x509_store - value corresponding to openssl's X509_STORE structure
 
 =item * X509_STORE_add_lookup
 
 Adds a lookup to an X509_STORE for a given lookup method.
 
-my $method = &Net::SSLeay::X509_LOOKUP_hash_dir;
-my $rv = Net::SSLeay::X509_STORE_add_lookup($x509_store, $method);
-# $method - value corresponding to openssl's X509_LOOKUP_METHOD structure
-# $x509_store - value corresponding to openssl's X509_STORE structure
-#
-# returns: value corresponding to openssl's X509_LOOKUP structure
+ my $method = &Net::SSLeay::X509_LOOKUP_hash_dir;
+ my $rv = Net::SSLeay::X509_STORE_add_lookup($x509_store, $method);
+ # $method - value corresponding to openssl's X509_LOOKUP_METHOD structure
+ # $x509_store - value corresponding to openssl's X509_STORE structure
+ #
+ # returns: value corresponding to openssl's X509_LOOKUP structure
 
-Check openssl doc L<https://www.openssl.org/docs/man1.1.1/man3/X509_load_crl_file.html|https://www.openssl.org/docs/man1.1.1/man3/X509_load_crl_file.html>
+Check openssl doc L<https://www.openssl.org/docs/manmaster/man3/X509_STORE_add_lookup.html>
 
 =item * X509_STORE_CTX_set_error
 
@@ -7705,9 +7892,9 @@ Returns an X509_LOOKUP structure that instructs an X509_STORE to
 load files from a directory containing certificates with filenames
 in the format I<hash.N> or crls with filenames in the format I<hash.>B<r>I<N>
 
-my $rv = Net::SSLeay::X509_LOOKUP_hash_dir();
-#
-# returns: value corresponding to openssl's X509_LOOKUP_METHOD structure, with the hashed directory method
+ my $rv = Net::SSLeay::X509_LOOKUP_hash_dir();
+ #
+ # returns: value corresponding to openssl's X509_LOOKUP_METHOD structure, with the hashed directory method
 
 Check openssl doc L<https://www.openssl.org/docs/man1.1.1/man3/X509_load_crl_file.html|https://www.openssl.org/docs/man1.1.1/man3/X509_load_crl_file.html>
 
@@ -7716,13 +7903,13 @@ Check openssl doc L<https://www.openssl.org/docs/man1.1.1/man3/X509_load_crl_fil
 Add a directory to an X509_LOOKUP structure, usually obtained from
 X509_STORE_add_lookup.
 
-my $method = &Net::SSLeay::X509_LOOKUP_hash_dir;
-my $lookup = Net::SSLeay::X509_STORE_add_lookup($x509_store, $method);
-my $type = &Net::SSLeay::X509_FILETYPE_PEM;
-Net::SSLeay::X509_LOOKUP_add_dir($lookup, $dir, $type);
-# $lookup - value corresponding to openssl's X509_LOOKUP structure
-# $dir - string path to a directory
-s# $type - constant corresponding to the type of file in the directory - can be X509_FILETYPE_PEM, X509_FILETYPE_DEFAULT, or X509_FILETYPE_ASN1
+ my $method = &Net::SSLeay::X509_LOOKUP_hash_dir;
+ my $lookup = Net::SSLeay::X509_STORE_add_lookup($x509_store, $method);
+ my $type = &Net::SSLeay::X509_FILETYPE_PEM;
+ Net::SSLeay::X509_LOOKUP_add_dir($lookup, $dir, $type);
+ # $lookup - value corresponding to openssl's X509_LOOKUP structure
+ # $dir - string path to a directory
+ # $type - constant corresponding to the type of file in the directory - can be X509_FILETYPE_PEM, X509_FILETYPE_DEFAULT, or X509_FILETYPE_ASN1
 
 =item * X509_STORE_set_flags
 
@@ -8525,9 +8712,10 @@ Check openssl doc L<http://www.openssl.org/docs/crypto/RSA_new.html|http://www.o
 Returns a list of pointers to BIGNUMs representing the parameters of the key in
 this order:
 (n, e, d, p, q, dmp1, dmq1, iqmp)
+
 Caution: returned list consists of SV pointers to BIGNUMs, which would need to be blessed as Crypt::OpenSSL::Bignum for further use
 
-my (@params) = RSA_get_key_parameters($r);
+ my (@params) = RSA_get_key_parameters($r);
 
 =back
 
@@ -9128,7 +9316,7 @@ broader binary compatibility, e.g. make application work with both 1.0.2
 and prior version (in which case call to SSL_ctrl with new code
 returning error would have to be ignored when running with prior version).
 
-Net::SSLeay::get_tlsa_record_byname($name, $port, $type);
+ Net::SSLeay::get_tlsa_record_byname($name, $port, $type);
 
 =back
 
@@ -9244,6 +9432,129 @@ These functions are only available since OpenSSL 1.1.1.
 =back
 
 
+=head3 Low level API: OSSL_LIB_CTX and OSSL_PROVIDER related functions
+
+=over
+
+=item * OSSL_LIB_CTX_get0_global_default
+
+Returns a concrete (non NULL) reference to the global default library context.
+
+ my $libctx = Net::SSLeay::OSSL_LIB_CTX_get0_global_default();
+ # returns: a value corresponding to OSSL_LIB_CTX structure or false on failure
+
+Typically it's simpler to use undef with functions that take an
+OSSL_LIB_CTX argument when global default library context is needed.
+
+Check openssl doc L<https://www.openssl.org/docs/manmaster/man3/OSSL_LIB_CTX_get0_global_default.html|https://www.openssl.org/docs/manmaster/man3/OSSL_LIB_CTX_get0_global_default.html>
+
+=item * OSSL_PROVIDER_load
+
+Loads and initializes a provider
+
+ my $provider = Net::SSLeay::OSSL_PROVIDER_load($libctx, $name);
+ # $libctx - value corresponding to OSSL_LIB_CTX structure or undef
+ # $name - (string) provider name, e.g., 'legacy'
+ #
+ # returns: a value corresponding to OSSL_PROVIDER or false on failure
+
+Using undef loads the provider within the global default library context.
+
+ my $provider = Net::SSLeay::OSSL_PROVIDER_load(undef, 'legacy');
+
+Check openssl doc L<https://www.openssl.org/docs/manmaster/man3/OSSL_PROVIDER_load.html|https://www.openssl.org/docs/manmaster/man3/OSSL_PROVIDER_load.html>
+
+=item * OSSL_PROVIDER_try_load
+
+Loads and initializes a provider similar to OSSL_PROVIDER_load with additional fallback control.
+
+ my $provider = Net::SSLeay::OSSL_PROVIDER_try_load($libctx, $name, $retain_fallbacks);
+ # $libctx - value corresponding to OSSL_LIB_CTX structure or undef
+ # $name - (string) provider name, e.g., 'legacy'
+ # $retain_fallbacks - (integer) 0 or 1
+ #
+ # returns: a value corresponding to OSSL_PROVIDER or false on failure
+
+Check openssl doc L<https://www.openssl.org/docs/manmaster/man3/OSSL_PROVIDER_try_load.html|https://www.openssl.org/docs/manmaster/man3/OSSL_PROVIDER_try_load.html>
+
+=item * OSSL_PROVIDER_unload
+
+Unloads the given provider.
+
+ my $rv = Net::SSLeay::OSSL_PROVIDER_unload($provider);
+ # $provider - a value corresponding to OSSL_PROVIDER
+ #
+ # returns: (integer) 1 on success, 0 on error
+
+Check openssl doc L<https://www.openssl.org/docs/manmaster/man3/OSSL_PROVIDER_unload.html|https://www.openssl.org/docs/manmaster/man3/OSSL_PROVIDER_unload.html>
+
+=item * OSSL_PROVIDER_available
+
+Checks if a named provider is available for use.
+
+ my $rv = Net::SSLeay::OSSL_PROVIDER_available($libctx, $name);
+ # $libctx - value corresponding to OSSL_LIB_CTX structure or undef
+ # $name - (string) provider name, e.g., 'legacy'
+ #
+ # returns: (integer) 1 if the named provider is available, otherwise 0.
+
+Check openssl doc L<https://www.openssl.org/docs/manmaster/man3/OSSL_PROVIDER_available.html|https://www.openssl.org/docs/manmaster/man3/OSSL_PROVIDER_available.html>
+
+=item * OSSL_PROVIDER_do_all
+
+Iterates over all loaded providers. A callback is called for each provider.
+
+ my $rv = Net::SSLeay::OSSL_PROVIDER_do_all($libctx, $cb, $cbdata);
+ # $libctx - value corresponding to OSSL_LIB_CTX structure or undef
+ # $cb - reference to a perl callback function
+ $ $cbdata - data that will be passed to callback function
+ #
+ # returns: (integer) 1 if all callbacks returned 1, 0 the first time a callback returns 0.
+
+Example:
+
+ sub do_all_cb {
+     my ($provider, $cbdata) = @_;
+
+     my $name = Net::SSLeay::OSSL_PROVIDER_get0_name($provider);
+     print "Callback for provider: '$name', cbdata: '$cbdata'\n";
+     return 1;
+  }
+  my $data_for_cb = 'Hello';
+
+  # Triggers default provider automatic loading.
+  Net::SSLeay::OSSL_PROVIDER_available(undef, 'default') || die 'default provider not available';
+  Net::SSLeay::OSSL_PROVIDER_load(undef, 'legacy') || die 'load legacy';
+  Net::SSLeay::OSSL_PROVIDER_load(undef, 'null')   || die 'load null';
+  Net::SSLeay::OSSL_PROVIDER_do_all(undef, \&do_all_cb, $data_for_cb) || die 'a callback failed';
+
+Check openssl doc L<https://www.openssl.org/docs/manmaster/man3/OSSL_PROVIDER_do_all.html|https://www.openssl.org/docs/manmaster/man3/OSSL_PROVIDER_do_all.html>
+
+=item * OSSL_PROVIDER_get0_name
+
+Returns the name of the given provider.
+
+ my $name = Net::SSLeay::OSSL_PROVIDER_get0_name($provider);
+ # $provider - a value corresponding to OSSL_PROVIDER
+ #
+ # returns: (string) provider name, e.g., 'legacy'
+
+Check openssl doc L<https://www.openssl.org/docs/manmaster/man3/OSSL_PROVIDER_get0_name.html|https://www.openssl.org/docs/manmaster/man3/OSSL_PROVIDER_get0_name.html>
+
+=item * OSSL_PROVIDER_self_test
+
+Runs the provider's self tests.
+
+ my $rv = Net::SSLeay::OSSL_PROVIDER_self_test($provider);
+ # $libctx - value corresponding to OSSL_LIB_CTX structure or undef
+ # $provider - a value corresponding to OSSL_PROVIDER
+ #
+ # returns: (integer) returns 1 if the self tests pass, 0 on error
+
+Check openssl doc L<https://www.openssl.org/docs/manmaster/man3/OSSL_PROVIDER_self_test.html|https://www.openssl.org/docs/manmaster/man3/OSSL_PROVIDER_self_test.html>
+
+=back
+
 =head2 Constants
 
 There are many openssl constants available in L<Net::SSLeay>. You can use them like this:
@@ -9267,192 +9578,318 @@ have name with C<SSL_> part stripped - e.g. openssl's constant C<SSL_OP_ALL> is 
 
 The list of all available constant names:
 
-=for comment the next part is the output of: perl helper_script/regen_openssl_constants.pl -gen-pod
+=for comment
+The list below is automatically generated - do not manually modify it.
+To add or remove a constant, edit helper_script/constants.txt, then run
+helper_script/update-exported-constants.
 
- ASN1_STRFLGS_ESC_CTRL           NID_netscape                              R_UNKNOWN_REMOTE_ERROR_TYPE
- ASN1_STRFLGS_ESC_MSB            NID_netscape_base_url                     R_UNKNOWN_STATE
- ASN1_STRFLGS_ESC_QUOTE          NID_netscape_ca_policy_url                R_X509_LIB
- ASN1_STRFLGS_RFC2253            NID_netscape_ca_revocation_url            SENT_SHUTDOWN
- CB_ACCEPT_EXIT                  NID_netscape_cert_extension               SESSION_ASN1_VERSION
- CB_ACCEPT_LOOP                  NID_netscape_cert_sequence                SESS_CACHE_BOTH
- CB_ALERT                        NID_netscape_cert_type                    SESS_CACHE_CLIENT
- CB_CONNECT_EXIT                 NID_netscape_comment                      SESS_CACHE_NO_AUTO_CLEAR
- CB_CONNECT_LOOP                 NID_netscape_data_type                    SESS_CACHE_NO_INTERNAL
- CB_EXIT                         NID_netscape_renewal_url                  SESS_CACHE_NO_INTERNAL_LOOKUP
- CB_HANDSHAKE_DONE               NID_netscape_revocation_url               SESS_CACHE_NO_INTERNAL_STORE
- CB_HANDSHAKE_START              NID_netscape_ssl_server_name              SESS_CACHE_OFF
- CB_LOOP                         NID_ns_sgc                                SESS_CACHE_SERVER
- CB_READ                         NID_organizationName                      SSL3_VERSION
- CB_READ_ALERT                   NID_organizationalUnitName                SSLEAY_BUILT_ON
- CB_WRITE                        NID_pbeWithMD2AndDES_CBC                  SSLEAY_CFLAGS
- CB_WRITE_ALERT                  NID_pbeWithMD2AndRC2_CBC                  SSLEAY_DIR
- ERROR_NONE                      NID_pbeWithMD5AndCast5_CBC                SSLEAY_PLATFORM
- ERROR_SSL                       NID_pbeWithMD5AndDES_CBC                  SSLEAY_VERSION
- ERROR_SYSCALL                   NID_pbeWithMD5AndRC2_CBC                  ST_ACCEPT
- ERROR_WANT_ACCEPT               NID_pbeWithSHA1AndDES_CBC                 ST_BEFORE
- ERROR_WANT_CONNECT              NID_pbeWithSHA1AndRC2_CBC                 ST_CONNECT
- ERROR_WANT_READ                 NID_pbe_WithSHA1And128BitRC2_CBC          ST_INIT
- ERROR_WANT_WRITE                NID_pbe_WithSHA1And128BitRC4              ST_OK
- ERROR_WANT_X509_LOOKUP          NID_pbe_WithSHA1And2_Key_TripleDES_CBC    ST_READ_BODY
- ERROR_ZERO_RETURN               NID_pbe_WithSHA1And3_Key_TripleDES_CBC    ST_READ_HEADER
- EVP_PKS_DSA                     NID_pbe_WithSHA1And40BitRC2_CBC           TLS1_1_VERSION
- EVP_PKS_EC                      NID_pbe_WithSHA1And40BitRC4               TLS1_2_VERSION
- EVP_PKS_RSA                     NID_pbes2                                 TLS1_3_VERSION
- EVP_PKT_ENC                     NID_pbmac1                                TLS1_VERSION
- EVP_PKT_EXCH                    NID_pkcs                                  TLSEXT_STATUSTYPE_ocsp
- EVP_PKT_EXP                     NID_pkcs3                                 VERIFY_CLIENT_ONCE
- EVP_PKT_SIGN                    NID_pkcs7                                 VERIFY_FAIL_IF_NO_PEER_CERT
- EVP_PK_DH                       NID_pkcs7_data                            VERIFY_NONE
- EVP_PK_DSA                      NID_pkcs7_digest                          VERIFY_PEER
- EVP_PK_EC                       NID_pkcs7_encrypted                       VERIFY_POST_HANDSHAKE
- EVP_PK_RSA                      NID_pkcs7_enveloped                       V_OCSP_CERTSTATUS_GOOD
- FILETYPE_ASN1                   NID_pkcs7_signed                          V_OCSP_CERTSTATUS_REVOKED
- FILETYPE_PEM                    NID_pkcs7_signedAndEnveloped              V_OCSP_CERTSTATUS_UNKNOWN
- F_CLIENT_CERTIFICATE            NID_pkcs8ShroudedKeyBag                   WRITING
- F_CLIENT_HELLO                  NID_pkcs9                                 X509_CHECK_FLAG_ALWAYS_CHECK_SUBJECT
- F_CLIENT_MASTER_KEY             NID_pkcs9_challengePassword               X509_CHECK_FLAG_MULTI_LABEL_WILDCARDS
- F_D2I_SSL_SESSION               NID_pkcs9_contentType                     X509_CHECK_FLAG_NEVER_CHECK_SUBJECT
- F_GET_CLIENT_FINISHED           NID_pkcs9_countersignature                X509_CHECK_FLAG_NO_PARTIAL_WILDCARDS
- F_GET_CLIENT_HELLO              NID_pkcs9_emailAddress                    X509_CHECK_FLAG_NO_WILDCARDS
- F_GET_CLIENT_MASTER_KEY         NID_pkcs9_extCertAttributes               X509_CHECK_FLAG_SINGLE_LABEL_SUBDOMAINS
- F_GET_SERVER_FINISHED           NID_pkcs9_messageDigest                   X509_FILETYPE_ASN1
- F_GET_SERVER_HELLO              NID_pkcs9_signingTime                     X509_FILETYPE_DEFAULT
- F_GET_SERVER_VERIFY             NID_pkcs9_unstructuredAddress             X509_FILETYPE_PEM
- F_I2D_SSL_SESSION               NID_pkcs9_unstructuredName                X509_LOOKUP
- F_READ_N                        NID_private_key_usage_period              X509_PURPOSE_ANY
- F_REQUEST_CERTIFICATE           NID_rc2_40_cbc                            X509_PURPOSE_CRL_SIGN
- F_SERVER_HELLO                  NID_rc2_64_cbc                            X509_PURPOSE_NS_SSL_SERVER
- F_SSL_CERT_NEW                  NID_rc2_cbc                               X509_PURPOSE_OCSP_HELPER
- F_SSL_GET_NEW_SESSION           NID_rc2_cfb64                             X509_PURPOSE_SMIME_ENCRYPT
- F_SSL_NEW                       NID_rc2_ecb                               X509_PURPOSE_SMIME_SIGN
- F_SSL_READ                      NID_rc2_ofb64                             X509_PURPOSE_SSL_CLIENT
- F_SSL_RSA_PRIVATE_DECRYPT       NID_rc4                                   X509_PURPOSE_SSL_SERVER
- F_SSL_RSA_PUBLIC_ENCRYPT        NID_rc4_40                                X509_PURPOSE_TIMESTAMP_SIGN
- F_SSL_SESSION_NEW               NID_rc5_cbc                               X509_TRUST_COMPAT
- F_SSL_SESSION_PRINT_FP          NID_rc5_cfb64                             X509_TRUST_EMAIL
- F_SSL_SET_FD                    NID_rc5_ecb                               X509_TRUST_OBJECT_SIGN
- F_SSL_SET_RFD                   NID_rc5_ofb64                             X509_TRUST_OCSP_REQUEST
- F_SSL_SET_WFD                   NID_ripemd160                             X509_TRUST_OCSP_SIGN
- F_SSL_USE_CERTIFICATE           NID_ripemd160WithRSA                      X509_TRUST_SSL_CLIENT
- F_SSL_USE_CERTIFICATE_ASN1      NID_rle_compression                       X509_TRUST_SSL_SERVER
- F_SSL_USE_CERTIFICATE_FILE      NID_rsa                                   X509_TRUST_TSA
- F_SSL_USE_PRIVATEKEY            NID_rsaEncryption                         X509_V_ERR_AKID_ISSUER_SERIAL_MISMATCH
- F_SSL_USE_PRIVATEKEY_ASN1       NID_rsadsi                                X509_V_ERR_AKID_SKID_MISMATCH
- F_SSL_USE_PRIVATEKEY_FILE       NID_safeContentsBag                       X509_V_ERR_APPLICATION_VERIFICATION
- F_SSL_USE_RSAPRIVATEKEY         NID_sdsiCertificate                       X509_V_ERR_CA_KEY_TOO_SMALL
- F_SSL_USE_RSAPRIVATEKEY_ASN1    NID_secretBag                             X509_V_ERR_CA_MD_TOO_WEAK
- F_SSL_USE_RSAPRIVATEKEY_FILE    NID_serialNumber                          X509_V_ERR_CERT_CHAIN_TOO_LONG
- F_WRITE_PENDING                 NID_server_auth                           X509_V_ERR_CERT_HAS_EXPIRED
- GEN_DIRNAME                     NID_sha                                   X509_V_ERR_CERT_NOT_YET_VALID
- GEN_DNS                         NID_sha1                                  X509_V_ERR_CERT_REJECTED
- GEN_EDIPARTY                    NID_sha1WithRSA                           X509_V_ERR_CERT_REVOKED
- GEN_EMAIL                       NID_sha1WithRSAEncryption                 X509_V_ERR_CERT_SIGNATURE_FAILURE
- GEN_IPADD                       NID_shaWithRSAEncryption                  X509_V_ERR_CERT_UNTRUSTED
- GEN_OTHERNAME                   NID_stateOrProvinceName                   X509_V_ERR_CRL_HAS_EXPIRED
- GEN_RID                         NID_subject_alt_name                      X509_V_ERR_CRL_NOT_YET_VALID
- GEN_URI                         NID_subject_key_identifier                X509_V_ERR_CRL_PATH_VALIDATION_ERROR
- GEN_X400                        NID_surname                               X509_V_ERR_CRL_SIGNATURE_FAILURE
- LIBRESSL_VERSION_NUMBER         NID_sxnet                                 X509_V_ERR_DANE_NO_MATCH
- MBSTRING_ASC                    NID_time_stamp                            X509_V_ERR_DEPTH_ZERO_SELF_SIGNED_CERT
- MBSTRING_BMP                    NID_title                                 X509_V_ERR_DIFFERENT_CRL_SCOPE
- MBSTRING_FLAG                   NID_undef                                 X509_V_ERR_EE_KEY_TOO_SMALL
- MBSTRING_UNIV                   NID_uniqueIdentifier                      X509_V_ERR_EMAIL_MISMATCH
- MBSTRING_UTF8                   NID_x509Certificate                       X509_V_ERR_ERROR_IN_CERT_NOT_AFTER_FIELD
- MIN_RSA_MODULUS_LENGTH_IN_BYTES NID_x509Crl                               X509_V_ERR_ERROR_IN_CERT_NOT_BEFORE_FIELD
- MODE_ACCEPT_MOVING_WRITE_BUFFER NID_zlib_compression                      X509_V_ERR_ERROR_IN_CRL_LAST_UPDATE_FIELD
- MODE_AUTO_RETRY                 NOTHING                                   X509_V_ERR_ERROR_IN_CRL_NEXT_UPDATE_FIELD
- MODE_ENABLE_PARTIAL_WRITE       OCSP_RESPONSE_STATUS_INTERNALERROR        X509_V_ERR_EXCLUDED_VIOLATION
- MODE_RELEASE_BUFFERS            OCSP_RESPONSE_STATUS_MALFORMEDREQUEST     X509_V_ERR_HOSTNAME_MISMATCH
- NID_OCSP_sign                   OCSP_RESPONSE_STATUS_SIGREQUIRED          X509_V_ERR_INVALID_CA
- NID_SMIMECapabilities           OCSP_RESPONSE_STATUS_SUCCESSFUL           X509_V_ERR_INVALID_CALL
- NID_X500                        OCSP_RESPONSE_STATUS_TRYLATER             X509_V_ERR_INVALID_EXTENSION
- NID_X509                        OCSP_RESPONSE_STATUS_UNAUTHORIZED         X509_V_ERR_INVALID_NON_CA
- NID_ad_OCSP                     OPENSSL_BUILT_ON                          X509_V_ERR_INVALID_POLICY_EXTENSION
- NID_ad_ca_issuers               OPENSSL_CFLAGS                            X509_V_ERR_INVALID_PURPOSE
- NID_algorithm                   OPENSSL_DIR                               X509_V_ERR_IP_ADDRESS_MISMATCH
- NID_authority_key_identifier    OPENSSL_ENGINES_DIR                       X509_V_ERR_KEYUSAGE_NO_CERTSIGN
- NID_basic_constraints           OPENSSL_PLATFORM                          X509_V_ERR_KEYUSAGE_NO_CRL_SIGN
- NID_bf_cbc                      OPENSSL_VERSION                           X509_V_ERR_KEYUSAGE_NO_DIGITAL_SIGNATURE
- NID_bf_cfb64                    OPENSSL_VERSION_NUMBER                    X509_V_ERR_NO_EXPLICIT_POLICY
- NID_bf_ecb                      OP_ALL                                    X509_V_ERR_NO_VALID_SCTS
- NID_bf_ofb64                    OP_ALLOW_NO_DHE_KEX                       X509_V_ERR_OCSP_CERT_UNKNOWN
- NID_cast5_cbc                   OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION      X509_V_ERR_OCSP_VERIFY_FAILED
- NID_cast5_cfb64                 OP_CIPHER_SERVER_PREFERENCE               X509_V_ERR_OCSP_VERIFY_NEEDED
- NID_cast5_ecb                   OP_CISCO_ANYCONNECT                       X509_V_ERR_OUT_OF_MEM
- NID_cast5_ofb64                 OP_COOKIE_EXCHANGE                        X509_V_ERR_PATH_LENGTH_EXCEEDED
- NID_certBag                     OP_CRYPTOPRO_TLSEXT_BUG                   X509_V_ERR_PATH_LOOP
- NID_certificate_policies        OP_DONT_INSERT_EMPTY_FRAGMENTS            X509_V_ERR_PERMITTED_VIOLATION
- NID_client_auth                 OP_ENABLE_MIDDLEBOX_COMPAT                X509_V_ERR_PROXY_CERTIFICATES_NOT_ALLOWED
- NID_code_sign                   OP_EPHEMERAL_RSA                          X509_V_ERR_PROXY_PATH_LENGTH_EXCEEDED
- NID_commonName                  OP_LEGACY_SERVER_CONNECT                  X509_V_ERR_PROXY_SUBJECT_NAME_VIOLATION
- NID_countryName                 OP_MICROSOFT_BIG_SSLV3_BUFFER             X509_V_ERR_SELF_SIGNED_CERT_IN_CHAIN
- NID_crlBag                      OP_MICROSOFT_SESS_ID_BUG                  X509_V_ERR_STORE_LOOKUP
- NID_crl_distribution_points     OP_MSIE_SSLV2_RSA_PADDING                 X509_V_ERR_SUBJECT_ISSUER_MISMATCH
- NID_crl_number                  OP_NETSCAPE_CA_DN_BUG                     X509_V_ERR_SUBTREE_MINMAX
- NID_crl_reason                  OP_NETSCAPE_CHALLENGE_BUG                 X509_V_ERR_SUITE_B_CANNOT_SIGN_P_384_WITH_P_256
- NID_delta_crl                   OP_NETSCAPE_DEMO_CIPHER_CHANGE_BUG        X509_V_ERR_SUITE_B_INVALID_ALGORITHM
- NID_des_cbc                     OP_NETSCAPE_REUSE_CIPHER_CHANGE_BUG       X509_V_ERR_SUITE_B_INVALID_CURVE
- NID_des_cfb64                   OP_NON_EXPORT_FIRST                       X509_V_ERR_SUITE_B_INVALID_SIGNATURE_ALGORITHM
- NID_des_ecb                     OP_NO_ANTI_REPLAY                         X509_V_ERR_SUITE_B_INVALID_VERSION
- NID_des_ede                     OP_NO_CLIENT_RENEGOTIATION                X509_V_ERR_SUITE_B_LOS_NOT_ALLOWED
- NID_des_ede3                    OP_NO_COMPRESSION                         X509_V_ERR_UNABLE_TO_DECODE_ISSUER_PUBLIC_KEY
- NID_des_ede3_cbc                OP_NO_ENCRYPT_THEN_MAC                    X509_V_ERR_UNABLE_TO_DECRYPT_CERT_SIGNATURE
- NID_des_ede3_cfb64              OP_NO_QUERY_MTU                           X509_V_ERR_UNABLE_TO_DECRYPT_CRL_SIGNATURE
- NID_des_ede3_ofb64              OP_NO_RENEGOTIATION                       X509_V_ERR_UNABLE_TO_GET_CRL
- NID_des_ede_cbc                 OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION X509_V_ERR_UNABLE_TO_GET_CRL_ISSUER
- NID_des_ede_cfb64               OP_NO_SSL_MASK                            X509_V_ERR_UNABLE_TO_GET_ISSUER_CERT
- NID_des_ede_ofb64               OP_NO_SSLv2                               X509_V_ERR_UNABLE_TO_GET_ISSUER_CERT_LOCALLY
- NID_des_ofb64                   OP_NO_SSLv3                               X509_V_ERR_UNABLE_TO_VERIFY_LEAF_SIGNATURE
- NID_description                 OP_NO_TICKET                              X509_V_ERR_UNHANDLED_CRITICAL_CRL_EXTENSION
- NID_desx_cbc                    OP_NO_TLSv1                               X509_V_ERR_UNHANDLED_CRITICAL_EXTENSION
- NID_dhKeyAgreement              OP_NO_TLSv1_1                             X509_V_ERR_UNNESTED_RESOURCE
- NID_dnQualifier                 OP_NO_TLSv1_2                             X509_V_ERR_UNSPECIFIED
- NID_dsa                         OP_NO_TLSv1_3                             X509_V_ERR_UNSUPPORTED_CONSTRAINT_SYNTAX
- NID_dsaWithSHA                  OP_PKCS1_CHECK_1                          X509_V_ERR_UNSUPPORTED_CONSTRAINT_TYPE
- NID_dsaWithSHA1                 OP_PKCS1_CHECK_2                          X509_V_ERR_UNSUPPORTED_EXTENSION_FEATURE
- NID_dsaWithSHA1_2               OP_PRIORITIZE_CHACHA                      X509_V_ERR_UNSUPPORTED_NAME_SYNTAX
- NID_dsa_2                       OP_SAFARI_ECDHE_ECDSA_BUG                 X509_V_FLAG_ALLOW_PROXY_CERTS
- NID_email_protect               OP_SINGLE_DH_USE                          X509_V_FLAG_CB_ISSUER_CHECK
- NID_ext_key_usage               OP_SINGLE_ECDH_USE                        X509_V_FLAG_CHECK_SS_SIGNATURE
- NID_ext_req                     OP_SSLEAY_080_CLIENT_DH_BUG               X509_V_FLAG_CRL_CHECK
- NID_friendlyName                OP_SSLREF2_REUSE_CERT_TYPE_BUG            X509_V_FLAG_CRL_CHECK_ALL
- NID_givenName                   OP_TLSEXT_PADDING                         X509_V_FLAG_EXPLICIT_POLICY
- NID_hmacWithSHA1                OP_TLS_BLOCK_PADDING_BUG                  X509_V_FLAG_EXTENDED_CRL_SUPPORT
- NID_id_ad                       OP_TLS_D5_BUG                             X509_V_FLAG_IGNORE_CRITICAL
- NID_id_ce                       OP_TLS_ROLLBACK_BUG                       X509_V_FLAG_INHIBIT_ANY
- NID_id_kp                       READING                                   X509_V_FLAG_INHIBIT_MAP
- NID_id_pbkdf2                   RECEIVED_SHUTDOWN                         X509_V_FLAG_NOTIFY_POLICY
- NID_id_pe                       RSA_3                                     X509_V_FLAG_NO_ALT_CHAINS
- NID_id_pkix                     RSA_F4                                    X509_V_FLAG_NO_CHECK_TIME
- NID_id_qt_cps                   R_BAD_AUTHENTICATION_TYPE                 X509_V_FLAG_PARTIAL_CHAIN
- NID_id_qt_unotice               R_BAD_CHECKSUM                            X509_V_FLAG_POLICY_CHECK
- NID_idea_cbc                    R_BAD_MAC_DECODE                          X509_V_FLAG_POLICY_MASK
- NID_idea_cfb64                  R_BAD_RESPONSE_ARGUMENT                   X509_V_FLAG_SUITEB_128_LOS
- NID_idea_ecb                    R_BAD_SSL_FILETYPE                        X509_V_FLAG_SUITEB_128_LOS_ONLY
- NID_idea_ofb64                  R_BAD_SSL_SESSION_ID_LENGTH               X509_V_FLAG_SUITEB_192_LOS
- NID_info_access                 R_BAD_STATE                               X509_V_FLAG_TRUSTED_FIRST
- NID_initials                    R_BAD_WRITE_RETRY                         X509_V_FLAG_USE_CHECK_TIME
- NID_invalidity_date             R_CHALLENGE_IS_DIFFERENT                  X509_V_FLAG_USE_DELTAS
- NID_issuer_alt_name             R_CIPHER_TABLE_SRC_ERROR                  X509_V_FLAG_X509_STRICT
- NID_keyBag                      R_INVALID_CHALLENGE_LENGTH                X509_V_OK
- NID_key_usage                   R_NO_CERTIFICATE_SET                      XN_FLAG_COMPAT
- NID_localKeyID                  R_NO_CERTIFICATE_SPECIFIED                XN_FLAG_DN_REV
- NID_localityName                R_NO_CIPHER_LIST                          XN_FLAG_DUMP_UNKNOWN_FIELDS
- NID_md2                         R_NO_CIPHER_MATCH                         XN_FLAG_FN_ALIGN
- NID_md2WithRSAEncryption        R_NO_PRIVATEKEY                           XN_FLAG_FN_LN
- NID_md5                         R_NO_PUBLICKEY                            XN_FLAG_FN_MASK
- NID_md5WithRSA                  R_NULL_SSL_CTX                            XN_FLAG_FN_NONE
- NID_md5WithRSAEncryption        R_PEER_DID_NOT_RETURN_A_CERTIFICATE       XN_FLAG_FN_OID
- NID_md5_sha1                    R_PEER_ERROR                              XN_FLAG_FN_SN
- NID_mdc2                        R_PEER_ERROR_CERTIFICATE                  XN_FLAG_MULTILINE
- NID_mdc2WithRSA                 R_PEER_ERROR_NO_CIPHER                    XN_FLAG_ONELINE
- NID_ms_code_com                 R_PEER_ERROR_UNSUPPORTED_CERTIFICATE_TYPE XN_FLAG_RFC2253
- NID_ms_code_ind                 R_PUBLIC_KEY_ENCRYPT_ERROR                XN_FLAG_SEP_COMMA_PLUS
- NID_ms_ctl_sign                 R_PUBLIC_KEY_IS_NOT_RSA                   XN_FLAG_SEP_CPLUS_SPC
- NID_ms_efs                      R_READ_WRONG_PACKET_TYPE                  XN_FLAG_SEP_MASK
- NID_ms_ext_req                  R_SHORT_READ                              XN_FLAG_SEP_MULTILINE
- NID_ms_sgc                      R_SSL_SESSION_ID_IS_DIFFERENT             XN_FLAG_SEP_SPLUS_SPC
- NID_name                        R_UNABLE_TO_EXTRACT_PUBLIC_KEY            XN_FLAG_SPC_EQ
+=for start_constants
+
+    ASN1_STRFLGS_ESC_CTRL                   OPENSSL_VERSION_STRING
+    ASN1_STRFLGS_ESC_MSB                    OP_ALL
+    ASN1_STRFLGS_ESC_QUOTE                  OP_ALLOW_NO_DHE_KEX
+    ASN1_STRFLGS_RFC2253                    OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION
+    CB_ACCEPT_EXIT                          OP_CIPHER_SERVER_PREFERENCE
+    CB_ACCEPT_LOOP                          OP_CISCO_ANYCONNECT
+    CB_ALERT                                OP_COOKIE_EXCHANGE
+    CB_CONNECT_EXIT                         OP_CRYPTOPRO_TLSEXT_BUG
+    CB_CONNECT_LOOP                         OP_DONT_INSERT_EMPTY_FRAGMENTS
+    CB_EXIT                                 OP_ENABLE_MIDDLEBOX_COMPAT
+    CB_HANDSHAKE_DONE                       OP_EPHEMERAL_RSA
+    CB_HANDSHAKE_START                      OP_LEGACY_SERVER_CONNECT
+    CB_LOOP                                 OP_MICROSOFT_BIG_SSLV3_BUFFER
+    CB_READ                                 OP_MICROSOFT_SESS_ID_BUG
+    CB_READ_ALERT                           OP_MSIE_SSLV2_RSA_PADDING
+    CB_WRITE                                OP_NETSCAPE_CA_DN_BUG
+    CB_WRITE_ALERT                          OP_NETSCAPE_CHALLENGE_BUG
+    ERROR_NONE                              OP_NETSCAPE_DEMO_CIPHER_CHANGE_BUG
+    ERROR_SSL                               OP_NETSCAPE_REUSE_CIPHER_CHANGE_BUG
+    ERROR_SYSCALL                           OP_NON_EXPORT_FIRST
+    ERROR_WANT_ACCEPT                       OP_NO_ANTI_REPLAY
+    ERROR_WANT_CONNECT                      OP_NO_CLIENT_RENEGOTIATION
+    ERROR_WANT_READ                         OP_NO_COMPRESSION
+    ERROR_WANT_WRITE                        OP_NO_ENCRYPT_THEN_MAC
+    ERROR_WANT_X509_LOOKUP                  OP_NO_QUERY_MTU
+    ERROR_ZERO_RETURN                       OP_NO_RENEGOTIATION
+    EVP_PKS_DSA                             OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION
+    EVP_PKS_EC                              OP_NO_SSL_MASK
+    EVP_PKS_RSA                             OP_NO_SSLv2
+    EVP_PKT_ENC                             OP_NO_SSLv3
+    EVP_PKT_EXCH                            OP_NO_TICKET
+    EVP_PKT_EXP                             OP_NO_TLSv1
+    EVP_PKT_SIGN                            OP_NO_TLSv1_1
+    EVP_PK_DH                               OP_NO_TLSv1_2
+    EVP_PK_DSA                              OP_NO_TLSv1_3
+    EVP_PK_EC                               OP_PKCS1_CHECK_1
+    EVP_PK_RSA                              OP_PKCS1_CHECK_2
+    FILETYPE_ASN1                           OP_PRIORITIZE_CHACHA
+    FILETYPE_PEM                            OP_SAFARI_ECDHE_ECDSA_BUG
+    F_CLIENT_CERTIFICATE                    OP_SINGLE_DH_USE
+    F_CLIENT_HELLO                          OP_SINGLE_ECDH_USE
+    F_CLIENT_MASTER_KEY                     OP_SSLEAY_080_CLIENT_DH_BUG
+    F_D2I_SSL_SESSION                       OP_SSLREF2_REUSE_CERT_TYPE_BUG
+    F_GET_CLIENT_FINISHED                   OP_TLSEXT_PADDING
+    F_GET_CLIENT_HELLO                      OP_TLS_BLOCK_PADDING_BUG
+    F_GET_CLIENT_MASTER_KEY                 OP_TLS_D5_BUG
+    F_GET_SERVER_FINISHED                   OP_TLS_ROLLBACK_BUG
+    F_GET_SERVER_HELLO                      READING
+    F_GET_SERVER_VERIFY                     RECEIVED_SHUTDOWN
+    F_I2D_SSL_SESSION                       RSA_3
+    F_READ_N                                RSA_F4
+    F_REQUEST_CERTIFICATE                   R_BAD_AUTHENTICATION_TYPE
+    F_SERVER_HELLO                          R_BAD_CHECKSUM
+    F_SSL_CERT_NEW                          R_BAD_MAC_DECODE
+    F_SSL_GET_NEW_SESSION                   R_BAD_RESPONSE_ARGUMENT
+    F_SSL_NEW                               R_BAD_SSL_FILETYPE
+    F_SSL_READ                              R_BAD_SSL_SESSION_ID_LENGTH
+    F_SSL_RSA_PRIVATE_DECRYPT               R_BAD_STATE
+    F_SSL_RSA_PUBLIC_ENCRYPT                R_BAD_WRITE_RETRY
+    F_SSL_SESSION_NEW                       R_CHALLENGE_IS_DIFFERENT
+    F_SSL_SESSION_PRINT_FP                  R_CIPHER_TABLE_SRC_ERROR
+    F_SSL_SET_FD                            R_INVALID_CHALLENGE_LENGTH
+    F_SSL_SET_RFD                           R_NO_CERTIFICATE_SET
+    F_SSL_SET_WFD                           R_NO_CERTIFICATE_SPECIFIED
+    F_SSL_USE_CERTIFICATE                   R_NO_CIPHER_LIST
+    F_SSL_USE_CERTIFICATE_ASN1              R_NO_CIPHER_MATCH
+    F_SSL_USE_CERTIFICATE_FILE              R_NO_PRIVATEKEY
+    F_SSL_USE_PRIVATEKEY                    R_NO_PUBLICKEY
+    F_SSL_USE_PRIVATEKEY_ASN1               R_NULL_SSL_CTX
+    F_SSL_USE_PRIVATEKEY_FILE               R_PEER_DID_NOT_RETURN_A_CERTIFICATE
+    F_SSL_USE_RSAPRIVATEKEY                 R_PEER_ERROR
+    F_SSL_USE_RSAPRIVATEKEY_ASN1            R_PEER_ERROR_CERTIFICATE
+    F_SSL_USE_RSAPRIVATEKEY_FILE            R_PEER_ERROR_NO_CIPHER
+    F_WRITE_PENDING                         R_PEER_ERROR_UNSUPPORTED_CERTIFICATE_TYPE
+    GEN_DIRNAME                             R_PUBLIC_KEY_ENCRYPT_ERROR
+    GEN_DNS                                 R_PUBLIC_KEY_IS_NOT_RSA
+    GEN_EDIPARTY                            R_READ_WRONG_PACKET_TYPE
+    GEN_EMAIL                               R_SHORT_READ
+    GEN_IPADD                               R_SSL_SESSION_ID_IS_DIFFERENT
+    GEN_OTHERNAME                           R_UNABLE_TO_EXTRACT_PUBLIC_KEY
+    GEN_RID                                 R_UNKNOWN_REMOTE_ERROR_TYPE
+    GEN_URI                                 R_UNKNOWN_STATE
+    GEN_X400                                R_X509_LIB
+    LIBRESSL_VERSION_NUMBER                 SENT_SHUTDOWN
+    MBSTRING_ASC                            SESSION_ASN1_VERSION
+    MBSTRING_BMP                            SESS_CACHE_BOTH
+    MBSTRING_FLAG                           SESS_CACHE_CLIENT
+    MBSTRING_UNIV                           SESS_CACHE_NO_AUTO_CLEAR
+    MBSTRING_UTF8                           SESS_CACHE_NO_INTERNAL
+    MIN_RSA_MODULUS_LENGTH_IN_BYTES         SESS_CACHE_NO_INTERNAL_LOOKUP
+    MODE_ACCEPT_MOVING_WRITE_BUFFER         SESS_CACHE_NO_INTERNAL_STORE
+    MODE_AUTO_RETRY                         SESS_CACHE_OFF
+    MODE_ENABLE_PARTIAL_WRITE               SESS_CACHE_SERVER
+    MODE_RELEASE_BUFFERS                    SSL2_MT_CLIENT_CERTIFICATE
+    NID_OCSP_sign                           SSL2_MT_CLIENT_FINISHED
+    NID_SMIMECapabilities                   SSL2_MT_CLIENT_HELLO
+    NID_X500                                SSL2_MT_CLIENT_MASTER_KEY
+    NID_X509                                SSL2_MT_ERROR
+    NID_ad_OCSP                             SSL2_MT_REQUEST_CERTIFICATE
+    NID_ad_ca_issuers                       SSL2_MT_SERVER_FINISHED
+    NID_algorithm                           SSL2_MT_SERVER_HELLO
+    NID_authority_key_identifier            SSL2_MT_SERVER_VERIFY
+    NID_basic_constraints                   SSL2_VERSION
+    NID_bf_cbc                              SSL3_MT_CCS
+    NID_bf_cfb64                            SSL3_MT_CERTIFICATE
+    NID_bf_ecb                              SSL3_MT_CERTIFICATE_REQUEST
+    NID_bf_ofb64                            SSL3_MT_CERTIFICATE_STATUS
+    NID_cast5_cbc                           SSL3_MT_CERTIFICATE_URL
+    NID_cast5_cfb64                         SSL3_MT_CERTIFICATE_VERIFY
+    NID_cast5_ecb                           SSL3_MT_CHANGE_CIPHER_SPEC
+    NID_cast5_ofb64                         SSL3_MT_CLIENT_HELLO
+    NID_certBag                             SSL3_MT_CLIENT_KEY_EXCHANGE
+    NID_certificate_policies                SSL3_MT_ENCRYPTED_EXTENSIONS
+    NID_client_auth                         SSL3_MT_END_OF_EARLY_DATA
+    NID_code_sign                           SSL3_MT_FINISHED
+    NID_commonName                          SSL3_MT_HELLO_REQUEST
+    NID_countryName                         SSL3_MT_KEY_UPDATE
+    NID_crlBag                              SSL3_MT_MESSAGE_HASH
+    NID_crl_distribution_points             SSL3_MT_NEWSESSION_TICKET
+    NID_crl_number                          SSL3_MT_NEXT_PROTO
+    NID_crl_reason                          SSL3_MT_SERVER_DONE
+    NID_delta_crl                           SSL3_MT_SERVER_HELLO
+    NID_des_cbc                             SSL3_MT_SERVER_KEY_EXCHANGE
+    NID_des_cfb64                           SSL3_MT_SUPPLEMENTAL_DATA
+    NID_des_ecb                             SSL3_RT_ALERT
+    NID_des_ede                             SSL3_RT_APPLICATION_DATA
+    NID_des_ede3                            SSL3_RT_CHANGE_CIPHER_SPEC
+    NID_des_ede3_cbc                        SSL3_RT_HANDSHAKE
+    NID_des_ede3_cfb64                      SSL3_RT_HEADER
+    NID_des_ede3_ofb64                      SSL3_RT_INNER_CONTENT_TYPE
+    NID_des_ede_cbc                         SSL3_VERSION
+    NID_des_ede_cfb64                       SSLEAY_BUILT_ON
+    NID_des_ede_ofb64                       SSLEAY_CFLAGS
+    NID_des_ofb64                           SSLEAY_DIR
+    NID_description                         SSLEAY_PLATFORM
+    NID_desx_cbc                            SSLEAY_VERSION
+    NID_dhKeyAgreement                      ST_ACCEPT
+    NID_dnQualifier                         ST_BEFORE
+    NID_dsa                                 ST_CONNECT
+    NID_dsaWithSHA                          ST_INIT
+    NID_dsaWithSHA1                         ST_OK
+    NID_dsaWithSHA1_2                       ST_READ_BODY
+    NID_dsa_2                               ST_READ_HEADER
+    NID_email_protect                       TLS1_1_VERSION
+    NID_ext_key_usage                       TLS1_2_VERSION
+    NID_ext_req                             TLS1_3_VERSION
+    NID_friendlyName                        TLS1_VERSION
+    NID_givenName                           TLSEXT_STATUSTYPE_ocsp
+    NID_hmacWithSHA1                        VERIFY_CLIENT_ONCE
+    NID_id_ad                               VERIFY_FAIL_IF_NO_PEER_CERT
+    NID_id_ce                               VERIFY_NONE
+    NID_id_kp                               VERIFY_PEER
+    NID_id_pbkdf2                           VERIFY_POST_HANDSHAKE
+    NID_id_pe                               V_OCSP_CERTSTATUS_GOOD
+    NID_id_pkix                             V_OCSP_CERTSTATUS_REVOKED
+    NID_id_qt_cps                           V_OCSP_CERTSTATUS_UNKNOWN
+    NID_id_qt_unotice                       WRITING
+    NID_idea_cbc                            X509_CHECK_FLAG_ALWAYS_CHECK_SUBJECT
+    NID_idea_cfb64                          X509_CHECK_FLAG_MULTI_LABEL_WILDCARDS
+    NID_idea_ecb                            X509_CHECK_FLAG_NEVER_CHECK_SUBJECT
+    NID_idea_ofb64                          X509_CHECK_FLAG_NO_PARTIAL_WILDCARDS
+    NID_info_access                         X509_CHECK_FLAG_NO_WILDCARDS
+    NID_initials                            X509_CHECK_FLAG_SINGLE_LABEL_SUBDOMAINS
+    NID_invalidity_date                     X509_FILETYPE_ASN1
+    NID_issuer_alt_name                     X509_FILETYPE_DEFAULT
+    NID_keyBag                              X509_FILETYPE_PEM
+    NID_key_usage                           X509_LOOKUP
+    NID_localKeyID                          X509_PURPOSE_ANY
+    NID_localityName                        X509_PURPOSE_CRL_SIGN
+    NID_md2                                 X509_PURPOSE_NS_SSL_SERVER
+    NID_md2WithRSAEncryption                X509_PURPOSE_OCSP_HELPER
+    NID_md5                                 X509_PURPOSE_SMIME_ENCRYPT
+    NID_md5WithRSA                          X509_PURPOSE_SMIME_SIGN
+    NID_md5WithRSAEncryption                X509_PURPOSE_SSL_CLIENT
+    NID_md5_sha1                            X509_PURPOSE_SSL_SERVER
+    NID_mdc2                                X509_PURPOSE_TIMESTAMP_SIGN
+    NID_mdc2WithRSA                         X509_TRUST_COMPAT
+    NID_ms_code_com                         X509_TRUST_EMAIL
+    NID_ms_code_ind                         X509_TRUST_OBJECT_SIGN
+    NID_ms_ctl_sign                         X509_TRUST_OCSP_REQUEST
+    NID_ms_efs                              X509_TRUST_OCSP_SIGN
+    NID_ms_ext_req                          X509_TRUST_SSL_CLIENT
+    NID_ms_sgc                              X509_TRUST_SSL_SERVER
+    NID_name                                X509_TRUST_TSA
+    NID_netscape                            X509_V_ERR_AKID_ISSUER_SERIAL_MISMATCH
+    NID_netscape_base_url                   X509_V_ERR_AKID_SKID_MISMATCH
+    NID_netscape_ca_policy_url              X509_V_ERR_APPLICATION_VERIFICATION
+    NID_netscape_ca_revocation_url          X509_V_ERR_CA_KEY_TOO_SMALL
+    NID_netscape_cert_extension             X509_V_ERR_CA_MD_TOO_WEAK
+    NID_netscape_cert_sequence              X509_V_ERR_CERT_CHAIN_TOO_LONG
+    NID_netscape_cert_type                  X509_V_ERR_CERT_HAS_EXPIRED
+    NID_netscape_comment                    X509_V_ERR_CERT_NOT_YET_VALID
+    NID_netscape_data_type                  X509_V_ERR_CERT_REJECTED
+    NID_netscape_renewal_url                X509_V_ERR_CERT_REVOKED
+    NID_netscape_revocation_url             X509_V_ERR_CERT_SIGNATURE_FAILURE
+    NID_netscape_ssl_server_name            X509_V_ERR_CERT_UNTRUSTED
+    NID_ns_sgc                              X509_V_ERR_CRL_HAS_EXPIRED
+    NID_organizationName                    X509_V_ERR_CRL_NOT_YET_VALID
+    NID_organizationalUnitName              X509_V_ERR_CRL_PATH_VALIDATION_ERROR
+    NID_pbeWithMD2AndDES_CBC                X509_V_ERR_CRL_SIGNATURE_FAILURE
+    NID_pbeWithMD2AndRC2_CBC                X509_V_ERR_DANE_NO_MATCH
+    NID_pbeWithMD5AndCast5_CBC              X509_V_ERR_DEPTH_ZERO_SELF_SIGNED_CERT
+    NID_pbeWithMD5AndDES_CBC                X509_V_ERR_DIFFERENT_CRL_SCOPE
+    NID_pbeWithMD5AndRC2_CBC                X509_V_ERR_EE_KEY_TOO_SMALL
+    NID_pbeWithSHA1AndDES_CBC               X509_V_ERR_EMAIL_MISMATCH
+    NID_pbeWithSHA1AndRC2_CBC               X509_V_ERR_ERROR_IN_CERT_NOT_AFTER_FIELD
+    NID_pbe_WithSHA1And128BitRC2_CBC        X509_V_ERR_ERROR_IN_CERT_NOT_BEFORE_FIELD
+    NID_pbe_WithSHA1And128BitRC4            X509_V_ERR_ERROR_IN_CRL_LAST_UPDATE_FIELD
+    NID_pbe_WithSHA1And2_Key_TripleDES_CBC  X509_V_ERR_ERROR_IN_CRL_NEXT_UPDATE_FIELD
+    NID_pbe_WithSHA1And3_Key_TripleDES_CBC  X509_V_ERR_EXCLUDED_VIOLATION
+    NID_pbe_WithSHA1And40BitRC2_CBC         X509_V_ERR_HOSTNAME_MISMATCH
+    NID_pbe_WithSHA1And40BitRC4             X509_V_ERR_INVALID_CA
+    NID_pbes2                               X509_V_ERR_INVALID_CALL
+    NID_pbmac1                              X509_V_ERR_INVALID_EXTENSION
+    NID_pkcs                                X509_V_ERR_INVALID_NON_CA
+    NID_pkcs3                               X509_V_ERR_INVALID_POLICY_EXTENSION
+    NID_pkcs7                               X509_V_ERR_INVALID_PURPOSE
+    NID_pkcs7_data                          X509_V_ERR_IP_ADDRESS_MISMATCH
+    NID_pkcs7_digest                        X509_V_ERR_KEYUSAGE_NO_CERTSIGN
+    NID_pkcs7_encrypted                     X509_V_ERR_KEYUSAGE_NO_CRL_SIGN
+    NID_pkcs7_enveloped                     X509_V_ERR_KEYUSAGE_NO_DIGITAL_SIGNATURE
+    NID_pkcs7_signed                        X509_V_ERR_NO_EXPLICIT_POLICY
+    NID_pkcs7_signedAndEnveloped            X509_V_ERR_NO_VALID_SCTS
+    NID_pkcs8ShroudedKeyBag                 X509_V_ERR_OCSP_CERT_UNKNOWN
+    NID_pkcs9                               X509_V_ERR_OCSP_VERIFY_FAILED
+    NID_pkcs9_challengePassword             X509_V_ERR_OCSP_VERIFY_NEEDED
+    NID_pkcs9_contentType                   X509_V_ERR_OUT_OF_MEM
+    NID_pkcs9_countersignature              X509_V_ERR_PATH_LENGTH_EXCEEDED
+    NID_pkcs9_emailAddress                  X509_V_ERR_PATH_LOOP
+    NID_pkcs9_extCertAttributes             X509_V_ERR_PERMITTED_VIOLATION
+    NID_pkcs9_messageDigest                 X509_V_ERR_PROXY_CERTIFICATES_NOT_ALLOWED
+    NID_pkcs9_signingTime                   X509_V_ERR_PROXY_PATH_LENGTH_EXCEEDED
+    NID_pkcs9_unstructuredAddress           X509_V_ERR_PROXY_SUBJECT_NAME_VIOLATION
+    NID_pkcs9_unstructuredName              X509_V_ERR_SELF_SIGNED_CERT_IN_CHAIN
+    NID_private_key_usage_period            X509_V_ERR_STORE_LOOKUP
+    NID_rc2_40_cbc                          X509_V_ERR_SUBJECT_ISSUER_MISMATCH
+    NID_rc2_64_cbc                          X509_V_ERR_SUBTREE_MINMAX
+    NID_rc2_cbc                             X509_V_ERR_SUITE_B_CANNOT_SIGN_P_384_WITH_P_256
+    NID_rc2_cfb64                           X509_V_ERR_SUITE_B_INVALID_ALGORITHM
+    NID_rc2_ecb                             X509_V_ERR_SUITE_B_INVALID_CURVE
+    NID_rc2_ofb64                           X509_V_ERR_SUITE_B_INVALID_SIGNATURE_ALGORITHM
+    NID_rc4                                 X509_V_ERR_SUITE_B_INVALID_VERSION
+    NID_rc4_40                              X509_V_ERR_SUITE_B_LOS_NOT_ALLOWED
+    NID_rc5_cbc                             X509_V_ERR_UNABLE_TO_DECODE_ISSUER_PUBLIC_KEY
+    NID_rc5_cfb64                           X509_V_ERR_UNABLE_TO_DECRYPT_CERT_SIGNATURE
+    NID_rc5_ecb                             X509_V_ERR_UNABLE_TO_DECRYPT_CRL_SIGNATURE
+    NID_rc5_ofb64                           X509_V_ERR_UNABLE_TO_GET_CRL
+    NID_ripemd160                           X509_V_ERR_UNABLE_TO_GET_CRL_ISSUER
+    NID_ripemd160WithRSA                    X509_V_ERR_UNABLE_TO_GET_ISSUER_CERT
+    NID_rle_compression                     X509_V_ERR_UNABLE_TO_GET_ISSUER_CERT_LOCALLY
+    NID_rsa                                 X509_V_ERR_UNABLE_TO_VERIFY_LEAF_SIGNATURE
+    NID_rsaEncryption                       X509_V_ERR_UNHANDLED_CRITICAL_CRL_EXTENSION
+    NID_rsadsi                              X509_V_ERR_UNHANDLED_CRITICAL_EXTENSION
+    NID_safeContentsBag                     X509_V_ERR_UNNESTED_RESOURCE
+    NID_sdsiCertificate                     X509_V_ERR_UNSPECIFIED
+    NID_secretBag                           X509_V_ERR_UNSUPPORTED_CONSTRAINT_SYNTAX
+    NID_serialNumber                        X509_V_ERR_UNSUPPORTED_CONSTRAINT_TYPE
+    NID_server_auth                         X509_V_ERR_UNSUPPORTED_EXTENSION_FEATURE
+    NID_sha                                 X509_V_ERR_UNSUPPORTED_NAME_SYNTAX
+    NID_sha1                                X509_V_FLAG_ALLOW_PROXY_CERTS
+    NID_sha1WithRSA                         X509_V_FLAG_CB_ISSUER_CHECK
+    NID_sha1WithRSAEncryption               X509_V_FLAG_CHECK_SS_SIGNATURE
+    NID_shaWithRSAEncryption                X509_V_FLAG_CRL_CHECK
+    NID_stateOrProvinceName                 X509_V_FLAG_CRL_CHECK_ALL
+    NID_subject_alt_name                    X509_V_FLAG_EXPLICIT_POLICY
+    NID_subject_key_identifier              X509_V_FLAG_EXTENDED_CRL_SUPPORT
+    NID_surname                             X509_V_FLAG_IGNORE_CRITICAL
+    NID_sxnet                               X509_V_FLAG_INHIBIT_ANY
+    NID_time_stamp                          X509_V_FLAG_INHIBIT_MAP
+    NID_title                               X509_V_FLAG_LEGACY_VERIFY
+    NID_undef                               X509_V_FLAG_NOTIFY_POLICY
+    NID_uniqueIdentifier                    X509_V_FLAG_NO_ALT_CHAINS
+    NID_x509Certificate                     X509_V_FLAG_NO_CHECK_TIME
+    NID_x509Crl                             X509_V_FLAG_PARTIAL_CHAIN
+    NID_zlib_compression                    X509_V_FLAG_POLICY_CHECK
+    NOTHING                                 X509_V_FLAG_POLICY_MASK
+    OCSP_RESPONSE_STATUS_INTERNALERROR      X509_V_FLAG_SUITEB_128_LOS
+    OCSP_RESPONSE_STATUS_MALFORMEDREQUEST   X509_V_FLAG_SUITEB_128_LOS_ONLY
+    OCSP_RESPONSE_STATUS_SIGREQUIRED        X509_V_FLAG_SUITEB_192_LOS
+    OCSP_RESPONSE_STATUS_SUCCESSFUL         X509_V_FLAG_TRUSTED_FIRST
+    OCSP_RESPONSE_STATUS_TRYLATER           X509_V_FLAG_USE_CHECK_TIME
+    OCSP_RESPONSE_STATUS_UNAUTHORIZED       X509_V_FLAG_USE_DELTAS
+    OPENSSL_BUILT_ON                        X509_V_FLAG_X509_STRICT
+    OPENSSL_CFLAGS                          X509_V_OK
+    OPENSSL_CPU_INFO                        XN_FLAG_COMPAT
+    OPENSSL_DIR                             XN_FLAG_DN_REV
+    OPENSSL_ENGINES_DIR                     XN_FLAG_DUMP_UNKNOWN_FIELDS
+    OPENSSL_FULL_VERSION_STRING             XN_FLAG_FN_ALIGN
+    OPENSSL_INFO_CONFIG_DIR                 XN_FLAG_FN_LN
+    OPENSSL_INFO_CPU_SETTINGS               XN_FLAG_FN_MASK
+    OPENSSL_INFO_DIR_FILENAME_SEPARATOR     XN_FLAG_FN_NONE
+    OPENSSL_INFO_DSO_EXTENSION              XN_FLAG_FN_OID
+    OPENSSL_INFO_ENGINES_DIR                XN_FLAG_FN_SN
+    OPENSSL_INFO_LIST_SEPARATOR             XN_FLAG_MULTILINE
+    OPENSSL_INFO_MODULES_DIR                XN_FLAG_ONELINE
+    OPENSSL_INFO_SEED_SOURCE                XN_FLAG_RFC2253
+    OPENSSL_MODULES_DIR                     XN_FLAG_SEP_COMMA_PLUS
+    OPENSSL_PLATFORM                        XN_FLAG_SEP_CPLUS_SPC
+    OPENSSL_VERSION                         XN_FLAG_SEP_MASK
+    OPENSSL_VERSION_MAJOR                   XN_FLAG_SEP_MULTILINE
+    OPENSSL_VERSION_MINOR                   XN_FLAG_SEP_SPLUS_SPC
+    OPENSSL_VERSION_NUMBER                  XN_FLAG_SPC_EQ
+    OPENSSL_VERSION_PATCH
+
+=for end_constants
 
 =head2 INTERNAL ONLY functions (do not use these)
 
@@ -9676,6 +10113,17 @@ Or alternatively you can just use the following convenience functions:
     $got = Net::SSLeay::ssl_read_all($ssl) or die "ssl read failure";
 
 =head1 KNOWN BUGS AND CAVEATS
+
+LibreSSL versions in the 3.1 - 3.3 series contain a TLS 1.3 implementation that
+is not fully compatible with the libssl API, but is still advertised during
+protocol auto-negotiation. If you encounter problems or unexpected behaviour
+with SSL or SSL_CTX objects whose protocol version was automatically negotiated
+and libssl is provided by any of these versions of LibreSSL, it could be because
+the peers negotiated to use TLS 1.3 - try setting the maximum protocol version
+to TLS 1.2 (via C<Net::SSLeay::set_max_proto_version()> or
+C<Net::SSLeay::CTX_set_max_proto_version()>) before establishing the connection.
+The first stable LibreSSL version with a fully libssl-compatible TLS 1.3
+implementation is 3.4.1.
 
 An OpenSSL bug CVE-2015-0290 "OpenSSL Multiblock Corrupted Pointer Issue" 
 can cause POST requests of over 90kB to fail or crash. This bug is reported to be fixed in

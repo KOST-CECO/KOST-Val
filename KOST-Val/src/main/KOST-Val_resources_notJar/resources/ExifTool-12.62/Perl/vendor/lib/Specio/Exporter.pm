@@ -3,7 +3,7 @@ package Specio::Exporter;
 use strict;
 use warnings;
 
-our $VERSION = '0.46';
+our $VERSION = '0.48';
 
 use parent 'Exporter';
 
@@ -61,7 +61,7 @@ Specio::Exporter - Base class for type libraries
 
 =head1 VERSION
 
-version 0.46
+version 0.48
 
 =head1 SYNOPSIS
 
@@ -83,8 +83,8 @@ version 0.46
 
 Inheriting from this package makes your package a type exporter. By default,
 types defined in a package are never visible outside of the package. When you
-inherit from this package, all the types you define internally become
-available via exports.
+inherit from this package, all the types you define internally become available
+via exports.
 
 The exported types are available through the importing package's C<t>
 subroutine.
@@ -110,17 +110,17 @@ You can explicitly ask for types to be re-exported:
   use Specio::Declare;
   use Specio::Library::Builtins -reexport;
 
-In this case, packages which C<use MyApp::Type::Library> will get all the
-types from L<Specio::Library::Builtins> as well as any types defined in
+In this case, packages which C<use MyApp::Type::Library> will get all the types
+from L<Specio::Library::Builtins> as well as any types defined in
 C<MyApp::Type::Library>.
 
 =head1 ADDITIONAL EXPORTS
 
 If you want to export some additional subroutines from a package which has
-C<Specio::Exporter> as its parent, define a sub named C<_also_export>. This
-sub should return a I<list> of subroutines defined in your package that should
-also be exported. These subs will be exported unconditionally to any package
-that uses your package.
+C<Specio::Exporter> as its parent, define a sub named C<_also_export>. This sub
+should return a I<list> of subroutines defined in your package that should also
+be exported. These subs will be exported unconditionally to any package that
+uses your package.
 
 =head1 COMBINING LIBRARIES WITH L<Specio::Subs>
 
@@ -142,8 +142,6 @@ C<Specio::Subs::subs_installed_into>:
 
 Bugs may be submitted at L<https://github.com/houseabsolute/Specio/issues>.
 
-I am also usually active on IRC as 'autarch' on C<irc://irc.perl.org>.
-
 =head1 SOURCE
 
 The source code repository for Specio can be found at L<https://github.com/houseabsolute/Specio>.
@@ -154,7 +152,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2012 - 2020 by Dave Rolsky.
+This software is Copyright (c) 2012 - 2022 by Dave Rolsky.
 
 This is free software, licensed under:
 

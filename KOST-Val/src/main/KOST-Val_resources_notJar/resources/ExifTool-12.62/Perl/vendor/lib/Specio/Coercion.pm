@@ -3,7 +3,7 @@ package Specio::Coercion;
 use strict;
 use warnings;
 
-our $VERSION = '0.46';
+our $VERSION = '0.48';
 
 use Specio::OO;
 
@@ -140,7 +140,7 @@ Specio::Coercion - A class representing a coercion from one type to another
 
 =head1 VERSION
 
-version 0.46
+version 0.48
 
 =head1 SYNOPSIS
 
@@ -192,8 +192,8 @@ This parameter is required.
 
 =item * coercion => sub { ... }
 
-A subroutine reference implementing the coercion. It will be called as a
-method on the object and passed a single argument, the value to coerce.
+A subroutine reference implementing the coercion. It will be called as a method
+on the object and passed a single argument, the value to coerce.
 
 It should return the new value.
 
@@ -229,9 +229,9 @@ This environment will be used when compiling the coercion as part of a
 subroutine. The named variables will be captured as closures in the generated
 subroutine, using L<Eval::Closure>.
 
-It should be very rare to need to set this in the constructor. It's more
-likely that a special coercion subclass would need to provide values that it
-generates internally.
+It should be very rare to need to set this in the constructor. It's more likely
+that a special coercion subclass would need to provide values that it generates
+internally.
 
 This parameter defaults to an empty hash reference.
 
@@ -271,9 +271,9 @@ generator.
 
 =head2 $coercion->can_be_inlined()
 
-This returns true if the coercion has an inline generator I<and> the
-constraint it is from can be inlined. This exists primarily for the benefit of
-the C<inline_coercion_and_check()> method for type constraint object.
+This returns true if the coercion has an inline generator I<and> the constraint
+it is from can be inlined. This exists primarily for the benefit of the
+C<inline_coercion_and_check()> method for type constraint object.
 
 =head2 $coercion->inline_environment()
 
@@ -287,9 +287,9 @@ Returns a clone of this object.
 
 =head2 $coercion->clone_with_new_to($new_to_type)
 
-This returns a clone of the coercion, replacing the "to" type with a new
-one. This is intended for use when the to type itself is being cloned as part
-of importing that type. We need to make sure the newly cloned coercion has the
+This returns a clone of the coercion, replacing the "to" type with a new one.
+This is intended for use when the to type itself is being cloned as part of
+importing that type. We need to make sure the newly cloned coercion has the
 newly cloned type as well.
 
 =head1 ROLES
@@ -299,8 +299,6 @@ This class does the L<Specio::Role::Inlinable> role.
 =head1 SUPPORT
 
 Bugs may be submitted at L<https://github.com/houseabsolute/Specio/issues>.
-
-I am also usually active on IRC as 'autarch' on C<irc://irc.perl.org>.
 
 =head1 SOURCE
 
@@ -312,7 +310,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2012 - 2020 by Dave Rolsky.
+This software is Copyright (c) 2012 - 2022 by Dave Rolsky.
 
 This is free software, licensed under:
 

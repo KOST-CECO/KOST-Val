@@ -5,7 +5,7 @@ use warnings;
 use 5.008004;
 
 # ABSTRACT: Advanced interpolation engine for Alien builds
-our $VERSION = '2.38'; # VERSION
+our $VERSION = '2.80'; # VERSION
 
 
 sub new
@@ -156,8 +156,11 @@ sub _get_prop
 
 sub interpolate
 {
-  my($self, $string, $prop) = @_;
-  $prop ||= {};
+  my($self, $string, $build) = @_;
+
+  my $prop = defined $build && eval { $build->isa('Alien::Build') }
+  ? $build->_command_prop
+  : {};
 
   $string =~ s{(?<!\%)\%\{([a-zA-Z_][a-zA-Z_0-9]+)\}}{$self->execute_helper($1)}eg;
   $string =~ s{(?<!\%)\%\{([a-zA-Z_\.][a-zA-Z_0-9\.]+)\}}{_get_prop($1,$prop,$1)}eg;
@@ -250,7 +253,7 @@ Alien::Build::Interpolate - Advanced interpolation engine for Alien builds
 
 =head1 VERSION
 
-version 2.38
+version 2.80
 
 =head1 CONSTRUCTOR
 
@@ -279,17 +282,36 @@ Returns the code reference.
 
  my $value = $intr->execute_helper($name);
 
+This evaluates the given helper and returns the result.
+
 =head2 interpolate
 
+ my $string = $intr->interpolate($template, $build);
  my $string = $intr->interpolate($template);
+
+This takes a template and fills in the appropriate values of any helpers used
+in the template.
+
+[version 2.58]
+
+If you pass in an L<Alien::Build> instance as the second argument, you can use
+properties as well as helpers in the template.  Example:
+
+ my $patch = $intr->template("%{.install.patch}/foo-%{.runtime.version}.patch", $build);
 
 =head2 requires
 
  my %requires = $intr->requires($template);
 
+This returns a hash of modules required in order to execute the given template.
+The keys are the module names and the values are the versions.  Version will be
+set to C<0> if any version is sufficient.
+
 =head2 clone
 
  my $intr2 = $intr->clone;
+
+This creates a clone of the interpolator.
 
 =head1 AUTHOR
 
@@ -333,7 +355,7 @@ Juan Julián Merelo Guervós (JJ)
 
 Joel Berger (JBERGER)
 
-Petr Pisar (ppisar)
+Petr Písař (ppisar)
 
 Lance Wicks (LANCEW)
 
@@ -351,9 +373,13 @@ Paul Evans (leonerd, PEVANS)
 
 Håkon Hægland (hakonhagland, HAKONH)
 
+nick nauwelaerts (INPHOBIA)
+
+Florian Weimer
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011-2020 by Graham Ollis.
+This software is copyright (c) 2011-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

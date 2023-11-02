@@ -5,27 +5,27 @@ use warnings;
 use 5.008004;
 use Carp qw( croak );
 use FFI::Platypus;
-use base qw( Exporter );
+use Exporter qw( import );
 use constant 1.32 ();
 
 our @EXPORT = qw( record_layout record_layout_1 );
 
 # ABSTRACT: FFI support for structured records data
-our $VERSION = '1.34'; # VERSION
+our $VERSION = '2.08'; # VERSION
 
 
 sub record_layout_1
 {
   if(@_ % 2 == 0)
   {
-    my $ffi = FFI::Platypus->new( api => 1 );
+    my $ffi = FFI::Platypus->new( api => 2);
     unshift @_, $ffi;
     goto &record_layout;
   }
   elsif(defined $_[0] && ref($_[0]) eq 'ARRAY')
   {
     my @args = @{ shift @_ };
-    unshift @args, api => 1;
+    unshift @args, api => 2;
     unshift @_, \@args;
     goto &record_layout;
   }
@@ -74,6 +74,7 @@ sub record_layout
 
   my @destroy;
   my @ffi_types;
+  my $has_string;
 
   while(@_)
   {
@@ -87,10 +88,10 @@ sub record_layout
     croak "accessor/method $name already exists"
       if $caller->can($name);
 
-    my $size  = $type->sizeof;
-    my $align = $type->alignof;
+    my $size      = $type->sizeof;
+    my $align     = $type->alignof;
     $record_align = $align if $align > $record_align;
-    my $meta  = $type->meta;
+    my $meta      = $type->meta;
 
     $offset++ while $offset % $align;
 
@@ -108,6 +109,8 @@ sub record_layout
         $ffi_type = $meta->{ffi_type};
         $count    = $meta->{element_count};
         $count    = 1 unless defined $count;
+
+        $has_string = 1 if $meta->{type} eq 'string';
       }
       push @ffi_types, $ffi_type for 1..$count;
     }
@@ -166,6 +169,7 @@ sub record_layout
     require FFI::Platypus::Record::Meta;
     my $ffi_meta = FFI::Platypus::Record::Meta->new(
       \@ffi_types,
+      !$has_string,
     );
     *{join '::', $caller, '_ffi_meta'} = sub { $ffi_meta };
   }
@@ -200,7 +204,7 @@ FFI::Platypus::Record - FFI support for structured records data
 
 =head1 VERSION
 
-version 1.34
+version 2.08
 
 =head1 SYNOPSIS
 
@@ -223,17 +227,17 @@ Perl:
  
  use FFI::Platypus::Record;
  
- record_layout_1(qw(
-   int       age
-   string(3) title
-   string_rw name
- ));
+ record_layout_1(
+   'int'       => 'age',
+   'string(3)' => 'title',
+   'string rw' => 'name',
+ );
  
  package main;
  
- use FFI::Platypus;
+ use FFI::Platypus 2.00;
  
- my $ffi = FFI::Platypus->new( api => 1 );
+ my $ffi = FFI::Platypus->new( api => 2 );
  $ffi->lib("myperson.so");
  $ffi->type("record(MyPerson)" => 'MyPerson');
  
@@ -266,6 +270,10 @@ Before you get to deep into using this class you should also consider
 the L<FFI::C>, which provides some overlapping functionality.  Briefly,
 it comes down to this:
 
+(The tl;dr is: use this class when you need to pass by value (since
+L<FFI::C> does not support pass by value) and use L<FFI::C> in all
+other circumstances).
+
 =over 4
 
 =item L<FFI::Platypus::Record>
@@ -276,7 +284,7 @@ Supports:
 
 =item C pointers to C<struct> types
 
-=item Passing C <struct>s by-value.
+=item Passing C C<struct>s by-value.
 
 =back
 
@@ -328,14 +336,14 @@ of L<FFI::Platypus> as the first argument in order to use its type
 aliases.  Alternatively you may provide constructor arguments that will
 be passed to the internal platypus instance.  Thus this is the same:
 
- my $ffi = FFI::Platypus->new( lang => 'Rust', api => 1 );
+ my $ffi = FFI::Platypus->new( lang => 'Rust', api => 2 );
  record_layout_1( $ffi, ... );
  # same as:
  record_layout_1( [ lang => 'Rust' ], ... );
 
 and this is the same:
 
- my $ffi = FFI::Platypus->new( api => 1 );
+ my $ffi = FFI::Platypus->new( api => 2 );
  record_layout_1( $ffi, ... );
  # same as:
  record_layout_1( ... );
@@ -537,7 +545,7 @@ Damyan Ivanov
 
 Ilya Pavlov (Ilya33)
 
-Petr Pisar (ppisar)
+Petr Písař (ppisar)
 
 Mohammad S Anwar (MANWAR)
 
@@ -547,9 +555,17 @@ Meredith (merrilymeredith, MHOWARD)
 
 Diab Jerius (DJERIUS)
 
+Eric Brine (IKEGAMI)
+
+szTheory
+
+José Joaquín Atria (JJATRIA)
+
+Pete Houston (openstrike, HOUSTON)
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2015,2016,2017,2018,2019,2020 by Graham Ollis.
+This software is copyright (c) 2015-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

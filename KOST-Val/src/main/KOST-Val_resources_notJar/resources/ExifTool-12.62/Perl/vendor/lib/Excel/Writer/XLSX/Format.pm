@@ -7,7 +7,7 @@ package Excel::Writer::XLSX::Format;
 #
 # Used in conjunction with Excel::Writer::XLSX
 #
-# Copyright 2000-2020, John McNamara, jmcnamara@cpan.org
+# Copyright 2000-2023, John McNamara, jmcnamara@cpan.org
 #
 # Documentation after __END__
 #
@@ -20,7 +20,7 @@ use Carp;
 
 
 our @ISA     = qw(Exporter);
-our $VERSION = '1.07';
+our $VERSION = '1.11';
 our $AUTOLOAD;
 
 
@@ -105,6 +105,8 @@ sub new {
         _just_distrib  => 0,
         _color_indexed => 0,
         _font_only     => 0,
+
+        _quote_prefix  => 0,
 
     };
 
@@ -261,7 +263,8 @@ sub get_format_key {
         $self->get_font_key(), $self->get_border_key,
         $self->get_fill_key(), $self->get_alignment_key(),
         $self->{_num_format},  $self->{_locked},
-        $self->{_hidden}
+        $self->{_hidden},
+        $self->{_quote_prefix},
       );
 
     return $key;
@@ -812,6 +815,6 @@ John McNamara jmcnamara@cpan.org
 
 =head1 COPYRIGHT
 
-(c) MM-MMXX, John McNamara.
+(c) MM-MMXXIII, John McNamara.
 
 All Rights Reserved. This module is free software. It may be used, redistributed and/or modified under the same terms as Perl itself.

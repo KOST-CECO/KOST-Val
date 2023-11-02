@@ -19,12 +19,12 @@
 
 =head1 NAME
 
-DateTime::Locale::ff_Latn_LR - Locale data examples for the Fulah Liberia Latin (ff-Latn-LR) locale
+DateTime::Locale::ff_Latn_LR - Locale data examples for the Fula Liberia Latin (ff-Latn-LR) locale
 
 =head1 DESCRIPTION
 
 This pod file contains examples of the locale data available for the
-Fulah Liberia Latin locale.
+Fula Liberia Latin locale.
 
 =head2 Days
 
@@ -275,54 +275,54 @@ Fulah Liberia Latin locale.
 
 =head3 Full
 
-   2008-02-05T18:30:30 = 6:30:30 kikiiɗe UTC
-   1995-12-22T09:05:02 = 9:05:02 subaka UTC
-  -0010-09-15T04:44:23 = 4:44:23 subaka UTC
+   2008-02-05T18:30:30 = 6:30:30 kikiiɗe UTC
+   1995-12-22T09:05:02 = 9:05:02 subaka UTC
+  -0010-09-15T04:44:23 = 4:44:23 subaka UTC
 
 =head3 Long
 
-   2008-02-05T18:30:30 = 6:30:30 kikiiɗe UTC
-   1995-12-22T09:05:02 = 9:05:02 subaka UTC
-  -0010-09-15T04:44:23 = 4:44:23 subaka UTC
+   2008-02-05T18:30:30 = 6:30:30 kikiiɗe UTC
+   1995-12-22T09:05:02 = 9:05:02 subaka UTC
+  -0010-09-15T04:44:23 = 4:44:23 subaka UTC
 
 =head3 Medium
 
-   2008-02-05T18:30:30 = 6:30:30 kikiiɗe
-   1995-12-22T09:05:02 = 9:05:02 subaka
-  -0010-09-15T04:44:23 = 4:44:23 subaka
+   2008-02-05T18:30:30 = 6:30:30 kikiiɗe
+   1995-12-22T09:05:02 = 9:05:02 subaka
+  -0010-09-15T04:44:23 = 4:44:23 subaka
 
 =head3 Short
 
-   2008-02-05T18:30:30 = 6:30 kikiiɗe
-   1995-12-22T09:05:02 = 9:05 subaka
-  -0010-09-15T04:44:23 = 4:44 subaka
+   2008-02-05T18:30:30 = 6:30 kikiiɗe
+   1995-12-22T09:05:02 = 9:05 subaka
+  -0010-09-15T04:44:23 = 4:44 subaka
 
 
 =head2 Datetime Formats
 
 =head3 Full
 
-   2008-02-05T18:30:30 = mawbaare 5 colte 2008 6:30:30 kikiiɗe UTC
-   1995-12-22T09:05:02 = mawnde 22 bowte 1995 9:05:02 subaka UTC
-  -0010-09-15T04:44:23 = hoore-biir 15 siilto -10 4:44:23 subaka UTC
+   2008-02-05T18:30:30 = mawbaare 5 colte 2008 6:30:30 kikiiɗe UTC
+   1995-12-22T09:05:02 = mawnde 22 bowte 1995 9:05:02 subaka UTC
+  -0010-09-15T04:44:23 = hoore-biir 15 siilto -10 4:44:23 subaka UTC
 
 =head3 Long
 
-   2008-02-05T18:30:30 = 5 colte 2008 6:30:30 kikiiɗe UTC
-   1995-12-22T09:05:02 = 22 bowte 1995 9:05:02 subaka UTC
-  -0010-09-15T04:44:23 = 15 siilto -10 4:44:23 subaka UTC
+   2008-02-05T18:30:30 = 5 colte 2008 6:30:30 kikiiɗe UTC
+   1995-12-22T09:05:02 = 22 bowte 1995 9:05:02 subaka UTC
+  -0010-09-15T04:44:23 = 15 siilto -10 4:44:23 subaka UTC
 
 =head3 Medium
 
-   2008-02-05T18:30:30 = 5 col, 2008 6:30:30 kikiiɗe
-   1995-12-22T09:05:02 = 22 bow, 1995 9:05:02 subaka
-  -0010-09-15T04:44:23 = 15 slt, -10 4:44:23 subaka
+   2008-02-05T18:30:30 = 5 col, 2008 6:30:30 kikiiɗe
+   1995-12-22T09:05:02 = 22 bow, 1995 9:05:02 subaka
+  -0010-09-15T04:44:23 = 15 slt, -10 4:44:23 subaka
 
 =head3 Short
 
-   2008-02-05T18:30:30 = 5/2/2008 6:30 kikiiɗe
-   1995-12-22T09:05:02 = 22/12/1995 9:05 subaka
-  -0010-09-15T04:44:23 = 15/9/-10 4:44 subaka
+   2008-02-05T18:30:30 = 5/2/2008 6:30 kikiiɗe
+   1995-12-22T09:05:02 = 22/12/1995 9:05 subaka
+  -0010-09-15T04:44:23 = 15/9/-10 4:44 subaka
 
 
 =head2 Available Formats
@@ -416,6 +416,12 @@ Fulah Liberia Latin locale.
    2008-02-05T18:30:30 = C-I 2008 col 5
    1995-12-22T09:05:02 = C-I 1995 bow 22
   -0010-09-15T04:44:23 = H-I -10 slt 15
+
+=head3 GyMd (GGGGG y-MM-dd)
+
+   2008-02-05T18:30:30 = C-I 2008-02-05
+   1995-12-22T09:05:02 = C-I 1995-12-22
+  -0010-09-15T04:44:23 = H-I -10-09-15
 
 =head3 H (HH)
 

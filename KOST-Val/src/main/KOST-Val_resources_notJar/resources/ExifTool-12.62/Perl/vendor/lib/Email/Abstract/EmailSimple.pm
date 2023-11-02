@@ -2,7 +2,7 @@ use strict;
 use warnings;
 package Email::Abstract::EmailSimple;
 # ABSTRACT: Email::Abstract wrapper for Email::Simple
-$Email::Abstract::EmailSimple::VERSION = '3.008';
+$Email::Abstract::EmailSimple::VERSION = '3.009';
 use Email::Abstract::Plugin;
 BEGIN { @Email::Abstract::EmailSimple::ISA = 'Email::Abstract::Plugin' };
 
@@ -64,12 +64,22 @@ Email::Abstract::EmailSimple - Email::Abstract wrapper for Email::Simple
 
 =head1 VERSION
 
-version 3.008
+version 3.009
 
 =head1 DESCRIPTION
 
 This module wraps the Email::Simple mail handling library with an
 abstract interface, to be used with L<Email::Abstract>
+
+=head1 PERL VERSION SUPPORT
+
+This module has a long-term perl support period.  That means it will not
+require a version of perl released fewer than five years ago.
+
+Although it may work on older versions of perl, no guarantee is made that the
+minimum required version will not be increased.  The version may be increased
+for any reason, and there is no promise that patches will be accepted to lower
+the minimum required perl.
 
 =head1 SEE ALSO
 
@@ -81,7 +91,7 @@ L<Email::Abstract>, L<Email::Simple>.
 
 =item *
 
-Ricardo SIGNES <rjbs@cpan.org>
+Ricardo SIGNES <rjbs@semiotic.systems>
 
 =item *
 

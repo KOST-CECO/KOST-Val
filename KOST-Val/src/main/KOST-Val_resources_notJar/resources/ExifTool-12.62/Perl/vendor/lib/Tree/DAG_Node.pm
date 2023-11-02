@@ -5,7 +5,7 @@ use warnings;
 use warnings qw(FATAL utf8); # Fatalize encoding glitches.
 
 our $Debug   = 0;
-our $VERSION = '1.31';
+our $VERSION = '1.32';
 
 use File::Slurp::Tiny 'read_lines';
 
@@ -3368,7 +3368,7 @@ L<https://github.com/ronsavage/Tree-DAG_Node>
 
 Email the author, or log a bug on RT:
 
-L<https://rt.cpan.org/Public/Dist/Display.html?Name=Tree-DAG_Node>.
+L<https://github.com/ronsavage/Tree-DAG_Node/issues>.
 
 =head1 ACKNOWLEDGEMENTS
 

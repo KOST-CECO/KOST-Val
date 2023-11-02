@@ -3,7 +3,7 @@ package Specio::Library::Perl;
 use strict;
 use warnings;
 
-our $VERSION = '0.46';
+our $VERSION = '0.48';
 
 use parent 'Specio::Exporter';
 
@@ -125,7 +125,7 @@ Specio::Library::Perl - Implements type constraint objects for some common Perl 
 
 =head1 VERSION
 
-version 0.46
+version 0.48
 
 =head1 DESCRIPTION
 
@@ -146,18 +146,17 @@ Same as C<PackageName>.
 
 A valid distribution name like C<DBD-Pg> Basically this is the same as a
 package name with the double-colons replaced by dashes. Note that there are
-some historical distribution names that don't fit this pattern, like
-C<CGI.pm>.
+some historical distribution names that don't fit this pattern, like C<CGI.pm>.
 
 This type does allow Unicode characters.
 
 =head2 Identifier
 
 An L<Identifier|perldata/Variable names> is something that could be used as a
-symbol name or other identifier (filehandle, directory handle, subroutine
-name, format name, or label). It's what you put after the sigil (dollar sign,
-at sign, percent sign) in a variable name. Generally, it's a bunch of
-word characters not starting with a digit.
+symbol name or other identifier (filehandle, directory handle, subroutine name,
+format name, or label). It's what you put after the sigil (dollar sign, at
+sign, percent sign) in a variable name. Generally, it's a bunch of word
+characters not starting with a digit.
 
 This type does allow Unicode characters.
 
@@ -171,9 +170,9 @@ the Perl interpreter.
 
 Lax and strict version strings use the L<is_lax|version/is_lax> and
 L<is_strict|version/is_strict> methods from C<version> to check if the given
-string would be a valid lax or strict version. L<version::Internals> covers
-the details but basically: lax versions are everything you may do, and strict
-omit many of the usages best avoided.
+string would be a valid lax or strict version. L<version::Internals> covers the
+details but basically: lax versions are everything you may do, and strict omit
+many of the usages best avoided.
 
 =head2 CREDITS
 
@@ -183,8 +182,6 @@ written by Ricardo SIGNES <rjbs@cpan.org>.
 =head1 SUPPORT
 
 Bugs may be submitted at L<https://github.com/houseabsolute/Specio/issues>.
-
-I am also usually active on IRC as 'autarch' on C<irc://irc.perl.org>.
 
 =head1 SOURCE
 
@@ -196,7 +193,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2012 - 2020 by Dave Rolsky.
+This software is Copyright (c) 2012 - 2022 by Dave Rolsky.
 
 This is free software, licensed under:
 

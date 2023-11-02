@@ -1,8 +1,8 @@
 use strict;
 use warnings;
-package Email::MessageID;
+package Email::MessageID 1.408;
 # ABSTRACT: Generate world unique message-ids.
-$Email::MessageID::VERSION = '1.406';
+
 use overload '""' => 'as_string', fallback => 1;
 
 #pod =head1 SYNOPSIS
@@ -24,7 +24,7 @@ use overload '""' => 'as_string', fallback => 1;
 #pod
 #pod   my $new_mid = Email::MessageID->new( host => $myhost );
 #pod
-#pod This class method constructs an L<Email::Address|Email::Address> object
+#pod This class method constructs an Email::MessageID object
 #pod containing a unique message-id. You may specify custom C<host> and C<user>
 #pod parameters.
 #pod
@@ -146,7 +146,7 @@ Email::MessageID - Generate world unique message-ids.
 
 =head1 VERSION
 
-version 1.406
+version 1.408
 
 =head1 SYNOPSIS
 
@@ -161,6 +161,16 @@ version 1.406
 Message-ids are optional, but highly recommended, headers that identify a
 message uniquely. This software generates a unique message-id.
 
+=head1 PERL VERSION
+
+This library should run on perls released even a long time ago.  It should work
+on any version of perl released in the last five years.
+
+Although it may work on older versions of perl, no guarantee is made that the
+minimum required version will not be increased.  The version may be increased
+for any reason, and there is no promise that patches will be accepted to lower
+the minimum required perl.
+
 =head1 METHODS
 
 =head2 new
@@ -169,7 +179,7 @@ message uniquely. This software generates a unique message-id.
 
   my $new_mid = Email::MessageID->new( host => $myhost );
 
-This class method constructs an L<Email::Address|Email::Address> object
+This class method constructs an Email::MessageID object
 containing a unique message-id. You may specify custom C<host> and C<user>
 parameters.
 
@@ -224,15 +234,29 @@ Casey West <casey@geeknest.com>
 
 =item *
 
-Ricardo SIGNES <rjbs@cpan.org>
+Ricardo SIGNES <cpan@semiotic.systems>
 
 =back
 
-=head1 CONTRIBUTOR
+=head1 CONTRIBUTORS
 
-=for stopwords Aaron Crane
+=for stopwords Aaron Crane Pali Ricardo Signes
+
+=over 4
+
+=item *
 
 Aaron Crane <arc@cpan.org>
+
+=item *
+
+Pali <pali@cpan.org>
+
+=item *
+
+Ricardo Signes <rjbs@semiotic.systems>
+
+=back
 
 =head1 COPYRIGHT AND LICENSE
 

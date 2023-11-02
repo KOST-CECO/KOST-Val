@@ -19,12 +19,12 @@
 
 =head1 NAME
 
-DateTime::Locale::ff_Latn_CM - Locale data examples for the Fulah Cameroon Latin (ff-Latn-CM) locale
+DateTime::Locale::ff_Latn_CM - Locale data examples for the Fula Cameroon Latin (ff-Latn-CM) locale
 
 =head1 DESCRIPTION
 
 This pod file contains examples of the locale data available for the
-Fulah Cameroon Latin locale.
+Fula Cameroon Latin locale.
 
 =head2 Days
 
@@ -416,6 +416,12 @@ Fulah Cameroon Latin locale.
    2008-02-05T18:30:30 = C-I 2008 col 5
    1995-12-22T09:05:02 = C-I 1995 bow 22
   -0010-09-15T04:44:23 = H-I -10 slt 15
+
+=head3 GyMd (GGGGG y-MM-dd)
+
+   2008-02-05T18:30:30 = C-I 2008-02-05
+   1995-12-22T09:05:02 = C-I 1995-12-22
+  -0010-09-15T04:44:23 = H-I -10-09-15
 
 =head3 H (HH)
 

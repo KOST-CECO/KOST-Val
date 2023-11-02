@@ -8,7 +8,7 @@ use Text::ParseWords;
 use File::Which qw(which);
 use List::Util qw(first);
 
-our $VERSION = "1.24";
+our $VERSION = "1.26";
 our $DEBUG;
 
 sub debug { return if !$DEBUG; warn @_ }
@@ -62,6 +62,10 @@ else {
    $gfortran = 'gfortran';
    $fallback_compiler = 'G77';
 }
+
+$gcc = $ENV{CC} if $ENV{CC};
+$gfortran = $ENV{F77} if $ENV{F77};
+$fallback_compiler = $ENV{F77} if $ENV{F77};
 
 ############## End of Win32 Specific ##############
 
@@ -129,7 +133,7 @@ $F77config{MinGW}{GFortran}{Link} = sub {
   gfortran_make_linkline($dir, "gfortran", "/usr/local/lib", "", '-lquadmath');
 };
 $F77config{MinGW}{GFortran}{Trail_} = 1;
-$F77config{MinGW}{GFortran}{Compiler} = "$gfortran";
+$F77config{MinGW}{GFortran}{Compiler} = $gfortran;
 $F77config{MinGW}{GFortran}{Cflags}   = '-O';
 
 ### SunOS (use this as a template for new entries) ###
@@ -236,8 +240,8 @@ $F77config{Solaris}{DEFAULT} = 'F77';
 
 $F77config{Generic}{GNU}{Trail_} = 1;
 $F77config{Generic}{GNU}{Cflags} = ' ';        # <---need this space!
-$F77config{Generic}{GNU}{Link}   = link_gnufortran_compiler('gfortran', 'g77', 'g95', 'fort77');
-$F77config{Generic}{GNU}{Compiler} = find_in_path("$gfortran", 'g77',  'g95','fort77');
+$F77config{Generic}{GNU}{Link}   = link_gnufortran_compiler($gfortran, 'g77', 'g95', 'fort77');
+$F77config{Generic}{GNU}{Compiler} = find_in_path($gfortran, 'g77',  'g95','fort77');
 
 $F77config{Generic}{DEFAULT}     = 'GNU';
 
@@ -246,7 +250,7 @@ $F77config{Generic}{DEFAULT}     = 'GNU';
 $F77config{Cygwin}{GNU}{Trail_} = 1;
 $F77config{Cygwin}{GNU}{Cflags} = '-O';        # <---need this space!
 $F77config{Cygwin}{GNU}{Link}   = link_gnufortran_compiler('g77', 'gfortran', 'g95', 'fort77');
-$F77config{Cygwin}{GNU}{Compiler} = find_in_path('g77', "$gfortran", 'g95','fort77');
+$F77config{Cygwin}{GNU}{Compiler} = find_in_path('g77', $gfortran, 'g95','fort77');
 
 $F77config{Cygwin}{DEFAULT}     = 'GNU';
 
@@ -314,7 +318,7 @@ if (ucfirst($Config{'osname'}) eq "Irix")
       $libs = "-L/usr/lib -lF77 -lI77 -lU77 -lisam -lm";
    }
    $F77config{Irix}{F77}{Cflags}   = "$abi $mips";
-   $F77config{Irix}{F77}{Link}     = "$libs";
+   $F77config{Irix}{F77}{Link}     = $libs;
    $F77config{Irix}{F77}{Trail_}   = 1;
    $F77config{Irix}{F77}{Compiler} = "f77 $abi";
 
@@ -331,7 +335,7 @@ $F77config{Aix}{DEFAULT}     = 'F77';
 ### FreeBSD ###
 
 if($^O =~ /Freebsd/i) {
-  $gfortran = 'gfortran48'; # requires rewrite
+  $gfortran = 'gfortran';
   $fallback_compiler = 'G77';
 }
 
@@ -348,7 +352,7 @@ $F77config{Freebsd}{GFortran}{Link} = sub {
   gfortran_make_linkline($dir, "gfortran", "/usr/local/lib", "");
 };
 $F77config{Freebsd}{GFortran}{Trail_} = 1;
-$F77config{Freebsd}{GFortran}{Compiler} = "$gfortran";
+$F77config{Freebsd}{GFortran}{Compiler} = $gfortran;
 $F77config{Freebsd}{GFortran}{Cflags}   = '-O2';
 
 $F77config{Freebsd}{DEFAULT}     = 'GFortran';
@@ -424,7 +428,7 @@ sub import {
 
       # If it doesn't work try Generic + GNU77
 
-      unless (("$Runtime" ne "-LSNAFU -lwontwork") && $ok) {
+      unless (($Runtime ne "-LSNAFU -lwontwork") && $ok) {
          $system   =
          $Config{cc} =~ /\bgcc/ && $^O =~ /MSWin32/i ? "MinGW"
                                  : $^O =~ /Freebsd/i ? "Freebsd"
@@ -568,6 +572,7 @@ sub testcompiler {
    print OUT "      end\n";
    close(OUT);
    debug "Compiling the test Fortran program...\n";
+   debug "Command: $Compiler $Cflags $file.f -o ${file}_exe";
    system "$Compiler $Cflags $file.f -o ${file}_exe";
    debug "Executing the test program...\n";
    if (`${file}_exe` ne " Hello World\n") {
@@ -592,7 +597,7 @@ sub testcompiler {
 
 sub gcclibs {
    my $flibs = shift; # Fortran libs
-   my $isgcc = $Config{'cc'} eq "$gcc";
+   my $isgcc = $Config{'cc'} eq $gcc;
    if (!$isgcc && $^O ne 'VMS') {
       debug "Checking for gcc in disguise:\n";
       $isgcc = 1 if $Config{gccversion};
@@ -635,18 +640,23 @@ sub link_gnufortran_compiler {
    my @try = @_;
    my $compiler = find_in_path( @try );
    return () unless defined $compiler;
+   # Get compiler "family"
+   $compiler=~/(g77|f77|fort77|gfortran|g95)/;
+   my $comp_fam = $1;
+   debug "ExtUtils::F77: compiler family is $comp_fam\n";
    # Get compiler version number
-   my @t =`$compiler --version`; $t[0] =~ /(\d+).(\d)+.(\d+)/;
+   my @t =`$compiler --version`; $t[0] =~ /(\d+)\.(\d+)\.(\d+)/;
    my $version = "$1.$2";  # Major version number
    debug "ExtUtils::F77: $compiler version $version.$3\n";
    # Sigh special case random extra gfortran libs to avoid PERL_DL_NONLAZY meltdowns. KG 25/10/2015
    my $append = "";
-   if ( $Config{osname} =~ /darwin/ && $Config{osvers} >= 14
-      && $compiler eq 'gfortran' && $version >= 4.9 ) {
+   my $osvers = (split(/\./,$Config{osvers}))[0]; # Extract first digit in X.Y.Z version numbers
+   if ( $Config{osname} =~ /darwin/ && $osvers >= 14
+      && $comp_fam eq 'gfortran' && $version >= 4.9 ) {
       # Add extra libs for gfortran versions >= 4.9 and OS X
       $append = "-lgcc_ext.10.5 -lgcc_s.10.5 -lquadmath";
    }
-   my @libs = @{$COMPLIBS{$compiler}};
+   my @libs = @{$COMPLIBS{$comp_fam}};
    my ($dir, $lib, $test);
    foreach $test (@libs) {
       $dir = gfortran_find_libdir($compiler, $test);
@@ -670,7 +680,7 @@ Fortran subroutines on your system. Basically one must add a list
 of Fortran runtime libraries. The problem is their location
 and name varies with each OS/compiler combination! It was originally
 developed to make building and installation of the L<PGPLOT> module easier,
-which links to the pgplot Fortran graphics library. It is now used by a numnber
+which links to the pgplot Fortran graphics library. It is now used by a number
 of perl modules.
 
 This module tries to implement a simple
@@ -686,12 +696,18 @@ which can be gfortran, g77, g95 or fort77 (in that order based on usage) and the
 the appropriate link libraries automatically. (This is the 'Generic' 'GNU' database entry
 in the code.)
 
+The target compiler can be explicitly overriden by setting the
+environment variable F77, e.g.
+
+ % setenv F77 "x86_64-pc-linux-gnu-gfortran"
+ % perl -MExtUtils::F77 -e 'print ExtUtils::F77->compiler, "\n"'
+
 The library list which the module returns
 can be explicitly overridden by setting the environment
 variable F77LIBS, e.g.
 
   % setenv F77LIBS "-lfoo -lbar"
-  % perl -MExtUtils::F77 -e 'print ExtUtils::F77->compiler, "\n"'
+  % perl -MExtUtils::F77 -e 'print ExtUtils::F77->runtime, "\n"'
   ...
 
 =head1 SYNOPSIS

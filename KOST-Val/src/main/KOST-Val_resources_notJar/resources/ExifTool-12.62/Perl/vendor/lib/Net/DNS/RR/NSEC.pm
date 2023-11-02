@@ -2,7 +2,7 @@ package Net::DNS::RR::NSEC;
 
 use strict;
 use warnings;
-our $VERSION = (qw$Id: NSEC.pm 1812 2020-10-07 18:09:53Z willem $)[2];
+our $VERSION = (qw$Id: NSEC.pm 1896 2023-01-30 12:59:25Z willem $)[2];
 
 use base qw(Net::DNS::RR);
 
@@ -20,11 +20,10 @@ use Net::DNS::Parameters qw(:type);
 
 
 sub _decode_rdata {			## decode rdata from wire-format octet string
-	my $self = shift;
-	my ( $data, $offset ) = @_;
+	my ( $self, $data, $offset ) = @_;
 
 	my $limit = $offset + $self->{rdlength};
-	( $self->{nxtdname}, $offset ) = Net::DNS::DomainName->decode(@_);
+	( $self->{nxtdname}, $offset ) = Net::DNS::DomainName->decode( $data, $offset );
 	$self->{typebm} = substr $$data, $offset, $limit - $offset;
 	return;
 }
@@ -47,10 +46,10 @@ sub _format_rdata {			## format rdata portion of RR string.
 
 
 sub _parse_rdata {			## populate RR from rdata in argument list
-	my $self = shift;
+	my ( $self, @argument ) = @_;
 
-	$self->nxtdname(shift);
-	$self->typelist(@_);
+	$self->nxtdname( shift @argument );
+	$self->typelist(@argument);
 	return;
 }
 
@@ -64,18 +63,17 @@ sub _defaults {				## specify RR attribute default values
 
 
 sub nxtdname {
-	my $self = shift;
-
-	$self->{nxtdname} = Net::DNS::DomainName->new(shift) if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{nxtdname} = Net::DNS::DomainName->new($_) }
 	return $self->{nxtdname} ? $self->{nxtdname}->name : undef;
 }
 
 
 sub typelist {
-	my $self = shift;
+	my ( $self, @argument ) = @_;
 
-	if ( scalar(@_) || !defined(wantarray) ) {
-		$self->{typebm} = &_type2bm;
+	if ( scalar(@argument) || !defined(wantarray) ) {
+		$self->{typebm} = &_type2bm(@argument);
 		return;
 	}
 
@@ -85,9 +83,9 @@ sub typelist {
 
 
 sub typemap {
-	my $self = shift;
+	my ( $self, $type ) = @_;
 
-	my $number = typebyname(shift);
+	my $number = typebyname($type);
 	my $window = $number >> 8;
 	my $bitnum = $number & 255;
 
@@ -106,15 +104,15 @@ sub typemap {
 
 
 sub match {
-	my $self = shift;
-	my $name = Net::DNS::DomainName->new(shift)->canonical;
+	my ( $self, $qname ) = @_;
+	my $name = Net::DNS::DomainName->new($qname)->canonical;
 	return $name eq $self->{owner}->canonical;
 }
 
 
 sub covers {
-	my $self = shift;
-	my $name = join chr(0), reverse Net::DNS::DomainName->new(shift)->_wire;
+	my ( $self, $qname ) = @_;
+	my $name = join chr(0), reverse Net::DNS::DomainName->new($qname)->_wire;
 	my $this = join chr(0), reverse $self->{owner}->_wire;
 	my $next = join chr(0), reverse $self->{nxtdname}->_wire;
 	foreach ( $name, $this, $next ) {tr /\101-\132/\141-\172/}
@@ -125,23 +123,23 @@ sub covers {
 
 
 sub encloser {
-	my $self  = shift;
-	my @qname = Net::DNS::Domain->new(shift)->label;
+	my ( $self, $qname ) = @_;
+	my @label = Net::DNS::Domain->new($qname)->label;
 
 	my @owner = $self->{owner}->label;
 	my $depth = scalar(@owner);
 	my $next;
-	while ( scalar(@qname) > $depth ) {
-		$next = shift @qname;
+	while ( scalar(@label) > $depth ) {
+		$next = shift @label;
 	}
 
 	return unless defined $next;
 
-	my $nextcloser = join( '.', $next, @qname );
+	my $nextcloser = join( '.', $next, @label );
 	return if lc($nextcloser) ne lc( join '.', $next, @owner );
 
 	$self->{nextcloser} = $nextcloser;
-	$self->{wildcard}   = join( '.', '*', @qname );
+	$self->{wildcard}   = join( '.', '*', @label );
 	return $self->owner;
 }
 
@@ -154,8 +152,9 @@ sub wildcard { return shift->{wildcard}; }
 ########################################
 
 sub _type2bm {
+	my @typelist = @_;
 	my @typearray;
-	foreach my $typename ( map { split() } @_ ) {
+	foreach my $typename ( map { split() } @typelist ) {
 		my $number = typebyname($typename);
 		my $window = $number >> 8;
 		my $bitnum = $number & 255;
@@ -179,11 +178,12 @@ sub _type2bm {
 
 
 sub _bm2type {
-	my @typelist;
-	my $bitmap = shift || return @typelist;
+	my @empty;
+	my $bitmap = shift || return @empty;
 
 	my $index = 0;
 	my $limit = length $bitmap;
+	my @typelist;
 
 	while ( $index < $limit ) {
 		my ( $block, $size ) = unpack "\@$index C2", $bitmap;
@@ -206,16 +206,18 @@ sub _bm2type {
 
 
 sub typebm {				## historical
-	my $self = shift;					# uncoverable pod
-	$self->{typebm} = shift if scalar @_;
+	my ( $self, @typebm ) = @_;				# uncoverable pod
+	for (@typebm) { $self->{typebm} = $_ }
 	$self->_deprecate('prefer $rr->typelist() or $rr->typemap()');
 	return $self->{typebm};
 }
 
 sub covered {				## historical
-	my $self = shift;					# uncoverable pod
-	return $self->covers(@_);
+	my ( $self, @argument ) = @_;				# uncoverable pod
+	return $self->covers(@argument);
 }
+
+########################################
 
 
 1;
@@ -314,7 +316,7 @@ Package template (c)2009,2012 O.M.Kolkman and R.W.Franks.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -331,6 +333,8 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::RR>, RFC4034, RFC3755
+L<perl> L<Net::DNS> L<Net::DNS::RR>
+L<RFC4034|https://tools.ietf.org/html/rfc4034>
+L<RFC9077|https://tools.ietf.org/html/rfc9077>
 
 =cut

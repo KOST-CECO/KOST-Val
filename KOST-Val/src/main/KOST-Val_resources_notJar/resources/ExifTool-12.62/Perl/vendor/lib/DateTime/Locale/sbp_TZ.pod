@@ -417,6 +417,12 @@ Sangu Tanzania locale.
    1995-12-22T09:05:02 = PK 1995 Muh 22
   -0010-09-15T04:44:23 = AK -10 Mye 15
 
+=head3 GyMd (GGGGG y-MM-dd)
+
+   2008-02-05T18:30:30 = PK 2008-02-05
+   1995-12-22T09:05:02 = PK 1995-12-22
+  -0010-09-15T04:44:23 = AK -10-09-15
+
 =head3 H (HH)
 
    2008-02-05T18:30:30 = 18
@@ -507,17 +513,17 @@ Sangu Tanzania locale.
    1995-12-22T09:05:02 = 9 Lwamilawu
   -0010-09-15T04:44:23 = 4 Lwamilawu
 
-=head3 hm (h:mm a)
+=head3 hm (h:mm a)
 
-   2008-02-05T18:30:30 = 6:30 Pashamihe
-   1995-12-22T09:05:02 = 9:05 Lwamilawu
-  -0010-09-15T04:44:23 = 4:44 Lwamilawu
+   2008-02-05T18:30:30 = 6:30 Pashamihe
+   1995-12-22T09:05:02 = 9:05 Lwamilawu
+  -0010-09-15T04:44:23 = 4:44 Lwamilawu
 
-=head3 hms (h:mm:ss a)
+=head3 hms (h:mm:ss a)
 
-   2008-02-05T18:30:30 = 6:30:30 Pashamihe
-   1995-12-22T09:05:02 = 9:05:02 Lwamilawu
-  -0010-09-15T04:44:23 = 4:44:23 Lwamilawu
+   2008-02-05T18:30:30 = 6:30:30 Pashamihe
+   1995-12-22T09:05:02 = 9:05:02 Lwamilawu
+  -0010-09-15T04:44:23 = 4:44:23 Lwamilawu
 
 =head3 hmsv (h:mm:ss a v)
 

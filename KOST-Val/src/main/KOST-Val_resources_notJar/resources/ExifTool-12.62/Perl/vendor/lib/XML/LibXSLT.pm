@@ -13,7 +13,8 @@ use warnings;
 
 use 5.008;
 
-use vars qw($VERSION @ISA $USE_LIBXML_DATA_TYPES $MatchCB $ReadCB $OpenCB $CloseCB);
+use vars
+    qw($VERSION @ISA $USE_LIBXML_DATA_TYPES $MatchCB $ReadCB $OpenCB $CloseCB);
 
 sub REQUIRE_XML_LIBXML_ABI_VERSION { 2 }
 
@@ -23,60 +24,66 @@ use XML::LibXML::Boolean;
 use XML::LibXML::Number;
 use XML::LibXML::NodeList;
 
+BEGIN
+{
+    use Carp;
 
-BEGIN {
-use Carp;
+    require Exporter;
 
-require Exporter;
+    $VERSION = '2.002001';
 
-$VERSION = '1.99';
+    require DynaLoader;
 
-require DynaLoader;
+    @ISA = qw(DynaLoader);
 
-@ISA = qw(DynaLoader);
+    # avoid possible shared library name conflict on Win32
+    # not using this trick on 5.10.0 (suffering from DynaLoader bug)
+    local $DynaLoader::dl_dlext = "xs.$DynaLoader::dl_dlext"
+        if ( ( $^O eq 'MSWin32' ) && ( $] ne '5.010000' ) );
 
-# avoid possible shared library name conflict on Win32
-# not using this trick on 5.10.0 (suffering from DynaLoader bug)
-local $DynaLoader::dl_dlext = "xs.$DynaLoader::dl_dlext" if (($^O eq 'MSWin32') && ($] ne '5.010000'));
+    bootstrap XML::LibXSLT $VERSION;
 
-bootstrap XML::LibXSLT $VERSION;
-
-# the following magic lets XML::LibXSLT internals know
-# where to register XML::LibXML proxy nodes
-INIT_THREAD_SUPPORT() if XML::LibXML::threads_shared_enabled();
-$USE_LIBXML_DATA_TYPES = 0;
+    # the following magic lets XML::LibXSLT internals know
+    # where to register XML::LibXML proxy nodes
+    INIT_THREAD_SUPPORT() if XML::LibXML::threads_shared_enabled();
+    $USE_LIBXML_DATA_TYPES = 0;
 }
 
-
-sub new {
-    my $class = shift;
+sub new
+{
+    my $class   = shift;
     my %options = @_;
-    my $self = bless \%options, $class;
+    my $self    = bless \%options, $class;
     return $self;
 }
 
 # ido - perl dispatcher
-sub perl_dispatcher {
-    my $func = shift;
-	my $owner_doc = shift;
-    my @params = @_;
+sub perl_dispatcher
+{
+    my $func      = shift;
+    my $owner_doc = shift;
+    my @params    = @_;
     my @perlParams;
 
     my $i = 0;
-    while (@params) {
+    while (@params)
+    {
         my $type = shift(@params);
-        if ($type eq 'XML::LibXML::Literal' or
-            $type eq 'XML::LibXML::Number' or
-            $type eq 'XML::LibXML::Boolean')
+        if (   $type eq 'XML::LibXML::Literal'
+            or $type eq 'XML::LibXML::Number'
+            or $type eq 'XML::LibXML::Boolean' )
         {
             my $val = shift(@params);
-            unshift(@perlParams, $USE_LIBXML_DATA_TYPES ? $type->new($val) : $val);
+            unshift( @perlParams,
+                $USE_LIBXML_DATA_TYPES ? $type->new($val) : $val );
         }
-        elsif ($type eq 'XML::LibXML::NodeList') {
+        elsif ( $type eq 'XML::LibXML::NodeList' )
+        {
             my $node_count = shift(@params);
-            my @nodes = splice(@params, 0, $node_count);
+            my @nodes      = splice( @params, 0, $node_count );
+
             # warn($_->getName) for @nodes;
-            unshift(@perlParams, $type->new(@nodes));
+            unshift( @perlParams, $type->new(@nodes) );
         }
     }
 
@@ -86,21 +93,27 @@ sub perl_dispatcher {
     return $res;
 }
 
-
-sub xpath_to_string {
+sub xpath_to_string
+{
     my @results;
-    while (@_) {
-        my $value = shift(@_); $value = '' unless defined $value;
+    while (@_)
+    {
+        my $value = shift(@_);
+        $value = '' unless defined $value;
         push @results, $value;
-        if (@results % 2) {
+        if ( @results % 2 )
+        {
             # key
-            $results[-1] =~ s/:/_/g; # XSLT doesn't like names with colons
+            $results[-1] =~ s/:/_/g;    # XSLT doesn't like names with colons
         }
-        else {
-            if ($value =~ s/'/', "'", '/g) {
-	        $results[-1] = "concat('$value')";
+        else
+        {
+            if ( $value =~ s/'/', "'", '/g )
+            {
+                $results[-1] = "concat('$value')";
             }
-            else {
+            else
+            {
                 $results[-1] = "'$results[-1]'";
             }
         }
@@ -112,113 +125,146 @@ sub xpath_to_string {
 # callback functions                                                      #
 #-------------------------------------------------------------------------#
 
-sub security_callbacks {
-   my $self = shift;
-   my $scbclass = shift;
+sub security_callbacks
+{
+    my $self     = shift;
+    my $scbclass = shift;
 
-   if ( defined $scbclass ) {
-      $self->{XML_LIBXSLT_SECPREFS} = $scbclass;
-   }
-   return $self->{XML_LIBXSLT_SECPREFS};
+    if ( defined $scbclass )
+    {
+        $self->{XML_LIBXSLT_SECPREFS} = $scbclass;
+    }
+    return $self->{XML_LIBXSLT_SECPREFS};
 }
 
-sub input_callbacks {
-    my $self = shift;
+sub input_callbacks
+{
+    my $self     = shift;
     my $icbclass = shift;
 
-    if ( defined $icbclass ) {
+    if ( defined $icbclass )
+    {
         $self->{XML_LIBXSLT_CALLBACK_STACK} = $icbclass;
     }
     return $self->{XML_LIBXSLT_CALLBACK_STACK};
 }
 
-sub match_callback {
+sub match_callback
+{
     my $self = shift;
-    if ( ref $self ) {
-        if ( scalar @_ ) {
-            $self->{XML_LIBXSLT_MATCH_CB} = shift;
+    if ( ref $self )
+    {
+        if ( scalar @_ )
+        {
+            $self->{XML_LIBXSLT_MATCH_CB}       = shift;
             $self->{XML_LIBXSLT_CALLBACK_STACK} = undef;
         }
         return $self->{XML_LIBXSLT_MATCH_CB};
     }
-    else {
+    else
+    {
         $MatchCB = shift if scalar @_;
         return $MatchCB;
     }
 }
 
-sub read_callback {
+sub read_callback
+{
     my $self = shift;
-    if ( ref $self ) {
-        if ( scalar @_ ) {
-            $self->{XML_LIBXSLT_READ_CB} = shift;
+    if ( ref $self )
+    {
+        if ( scalar @_ )
+        {
+            $self->{XML_LIBXSLT_READ_CB}        = shift;
             $self->{XML_LIBXSLT_CALLBACK_STACK} = undef;
         }
         return $self->{XML_LIBXSLT_READ_CB};
     }
-    else {
+    else
+    {
         $ReadCB = shift if scalar @_;
         return $ReadCB;
     }
 }
 
-sub close_callback {
+sub close_callback
+{
     my $self = shift;
-    if ( ref $self ) {
-        if ( scalar @_ ) {
-            $self->{XML_LIBXSLT_CLOSE_CB} = shift;
+    if ( ref $self )
+    {
+        if ( scalar @_ )
+        {
+            $self->{XML_LIBXSLT_CLOSE_CB}       = shift;
             $self->{XML_LIBXSLT_CALLBACK_STACK} = undef;
         }
         return $self->{XML_LIBXSLT_CLOSE_CB};
     }
-    else {
+    else
+    {
         $CloseCB = shift if scalar @_;
         return $CloseCB;
     }
 }
 
-sub open_callback {
+sub open_callback
+{
     my $self = shift;
-    if ( ref $self ) {
-        if ( scalar @_ ) {
-            $self->{XML_LIBXSLT_OPEN_CB} = shift;
+    if ( ref $self )
+    {
+        if ( scalar @_ )
+        {
+            $self->{XML_LIBXSLT_OPEN_CB}        = shift;
             $self->{XML_LIBXSLT_CALLBACK_STACK} = undef;
         }
         return $self->{XML_LIBXSLT_OPEN_CB};
     }
-    else {
+    else
+    {
         $OpenCB = shift if scalar @_;
         return $OpenCB;
     }
 }
 
-sub callbacks {
+sub callbacks
+{
     my $self = shift;
-    if ( ref $self ) {
-        if (@_) {
-            my ($match, $open, $read, $close) = @_;
-            @{$self}{qw(XML_LIBXSLT_MATCH_CB XML_LIBXSLT_OPEN_CB XML_LIBXSLT_READ_CB XML_LIBXSLT_CLOSE_CB)} = ($match, $open, $read, $close);
+    if ( ref $self )
+    {
+        if (@_)
+        {
+            my ( $match, $open, $read, $close ) = @_;
+            @{$self}{
+                qw(XML_LIBXSLT_MATCH_CB XML_LIBXSLT_OPEN_CB XML_LIBXSLT_READ_CB XML_LIBXSLT_CLOSE_CB)
+            } = ( $match, $open, $read, $close );
             $self->{XML_LIBXSLT_CALLBACK_STACK} = undef;
         }
-        else {
-            return @{$self}{qw(XML_LIBXSLT_MATCH_CB XML_LIBXSLT_OPEN_CB XML_LIBXSLT_READ_CB XML_LIBXSLT_CLOSE_CB)};
+        else
+        {
+            return @{$self}{
+                qw(XML_LIBXSLT_MATCH_CB XML_LIBXSLT_OPEN_CB XML_LIBXSLT_READ_CB XML_LIBXSLT_CLOSE_CB)
+            };
         }
     }
-    else {
-        if (@_) {
+    else
+    {
+        if (@_)
+        {
             ( $MatchCB, $OpenCB, $ReadCB, $CloseCB ) = @_;
         }
-        else {
+        else
+        {
             return ( $MatchCB, $OpenCB, $ReadCB, $CloseCB );
         }
     }
 }
 
-sub _init_callbacks{
+sub _init_callbacks
+{
     my $self = shift;
-    my $icb = $self->{XML_LIBXSLT_CALLBACK_STACK};
+    my $icb  = $self->{XML_LIBXSLT_CALLBACK_STACK};
 
-    unless ( defined $icb ) {
+    unless ( defined $icb )
+    {
         $self->{XML_LIBXSLT_CALLBACK_STACK} = XML::LibXML::InputCallback->new();
         $icb = $self->{XML_LIBXSLT_CALLBACK_STACK};
     }
@@ -228,23 +274,27 @@ sub _init_callbacks{
     my $rcb = $self->read_callback();
     my $ccb = $self->close_callback();
 
-    if ( defined $mcb and defined $ocb and defined $rcb and defined $ccb ) {
-        $icb->register_callbacks( [$mcb, $ocb, $rcb, $ccb] );
+    if ( defined $mcb and defined $ocb and defined $rcb and defined $ccb )
+    {
+        $icb->register_callbacks( [ $mcb, $ocb, $rcb, $ccb ] );
     }
 
     $icb->init_callbacks();
 }
 
-sub _cleanup_callbacks {
+sub _cleanup_callbacks
+{
     my $self = shift;
     $self->{XML_LIBXSLT_CALLBACK_STACK}->cleanup_callbacks();
     my $mcb = $self->match_callback();
-    if ( defined $mcb ) {
+    if ( defined $mcb )
+    {
         $self->{XML_LIBXSLT_CALLBACK_STACK}->unregister_callbacks( [$mcb] );
     }
 }
 
-sub parse_stylesheet {
+sub parse_stylesheet
+{
     my $self = shift;
 
     $self->_init_callbacks();
@@ -255,26 +305,28 @@ sub parse_stylesheet {
     $self->_cleanup_callbacks();
 
     my $err = $@;
-    if ($err) {
+    if ($err)
+    {
         croak $err;
     }
 
     my $rv = {
-               XML_LIBXSLT_STYLESHEET => $stylesheet,
-               XML_LIBXSLT_CALLBACK_STACK => $self->{XML_LIBXSLT_CALLBACK_STACK},
-               XML_LIBXSLT_MATCH_CB => $self->{XML_LIBXSLT_MATCH_CB},
-               XML_LIBXSLT_OPEN_CB => $self->{XML_LIBXSLT_OPEN_CB},
-               XML_LIBXSLT_READ_CB => $self->{XML_LIBXSLT_READ_CB},
-               XML_LIBXSLT_CLOSE_CB => $self->{XML_LIBXSLT_CLOSE_CB},
-               XML_LIBXSLT_SECPREFS => $self->{XML_LIBXSLT_SECPREFS},
-			   XML_LIBXSLT_FUNCTIONS => {},
-			   XML_LIBXSLT_ELEMENTS => {},
-             };
+        XML_LIBXSLT_STYLESHEET     => $stylesheet,
+        XML_LIBXSLT_CALLBACK_STACK => $self->{XML_LIBXSLT_CALLBACK_STACK},
+        XML_LIBXSLT_MATCH_CB       => $self->{XML_LIBXSLT_MATCH_CB},
+        XML_LIBXSLT_OPEN_CB        => $self->{XML_LIBXSLT_OPEN_CB},
+        XML_LIBXSLT_READ_CB        => $self->{XML_LIBXSLT_READ_CB},
+        XML_LIBXSLT_CLOSE_CB       => $self->{XML_LIBXSLT_CLOSE_CB},
+        XML_LIBXSLT_SECPREFS       => $self->{XML_LIBXSLT_SECPREFS},
+        XML_LIBXSLT_FUNCTIONS      => {},
+        XML_LIBXSLT_ELEMENTS       => {},
+    };
 
     return bless $rv, "XML::LibXSLT::StylesheetWrapper";
 }
 
-sub parse_stylesheet_file {
+sub parse_stylesheet_file
+{
     my $self = shift;
 
     $self->_init_callbacks();
@@ -285,28 +337,31 @@ sub parse_stylesheet_file {
     $self->_cleanup_callbacks();
 
     my $err = $@;
-    if ($err) {
+    if ($err)
+    {
         croak $err;
     }
 
     my $rv = {
-               XML_LIBXSLT_STYLESHEET => $stylesheet,
-               XML_LIBXSLT_CALLBACK_STACK => $self->{XML_LIBXSLT_CALLBACK_STACK},
-               XML_LIBXSLT_MATCH_CB => $self->{XML_LIBXSLT_MATCH_CB},
-               XML_LIBXSLT_OPEN_CB => $self->{XML_LIBXSLT_OPEN_CB},
-               XML_LIBXSLT_READ_CB => $self->{XML_LIBXSLT_READ_CB},
-               XML_LIBXSLT_CLOSE_CB => $self->{XML_LIBXSLT_CLOSE_CB},
-               XML_LIBXSLT_SECPREFS => $self->{XML_LIBXSLT_SECPREFS},
-			   XML_LIBXSLT_FUNCTIONS => {},
-			   XML_LIBXSLT_ELEMENTS => {},
-             };
+        XML_LIBXSLT_STYLESHEET     => $stylesheet,
+        XML_LIBXSLT_CALLBACK_STACK => $self->{XML_LIBXSLT_CALLBACK_STACK},
+        XML_LIBXSLT_MATCH_CB       => $self->{XML_LIBXSLT_MATCH_CB},
+        XML_LIBXSLT_OPEN_CB        => $self->{XML_LIBXSLT_OPEN_CB},
+        XML_LIBXSLT_READ_CB        => $self->{XML_LIBXSLT_READ_CB},
+        XML_LIBXSLT_CLOSE_CB       => $self->{XML_LIBXSLT_CLOSE_CB},
+        XML_LIBXSLT_SECPREFS       => $self->{XML_LIBXSLT_SECPREFS},
+        XML_LIBXSLT_FUNCTIONS      => {},
+        XML_LIBXSLT_ELEMENTS       => {},
+    };
 
     return bless $rv, "XML::LibXSLT::StylesheetWrapper";
 }
 
-sub register_xslt_module {
-    my $self = shift;
+sub register_xslt_module
+{
+    my $self   = shift;
     my $module = shift;
+
     # Not implemented
 }
 
@@ -320,113 +375,146 @@ use vars qw($MatchCB $ReadCB $OpenCB $CloseCB);
 use XML::LibXML;
 use Carp;
 
-sub security_callbacks {
-   my $self = shift;
-   my $scbclass = shift;
+sub security_callbacks
+{
+    my $self     = shift;
+    my $scbclass = shift;
 
-   if ( defined $scbclass ) {
-      $self->{XML_LIBXSLT_SECPREFS} = $scbclass;
-   }
-   return $self->{XML_LIBXSLT_SECPREFS};
+    if ( defined $scbclass )
+    {
+        $self->{XML_LIBXSLT_SECPREFS} = $scbclass;
+    }
+    return $self->{XML_LIBXSLT_SECPREFS};
 }
 
-sub input_callbacks {
+sub input_callbacks
+{
     my $self     = shift;
     my $icbclass = shift;
 
-    if ( defined $icbclass ) {
+    if ( defined $icbclass )
+    {
         $self->{XML_LIBXSLT_CALLBACK_STACK} = $icbclass;
     }
     return $self->{XML_LIBXSLT_CALLBACK_STACK};
 }
 
-sub match_callback {
+sub match_callback
+{
     my $self = shift;
-    if ( ref $self ) {
-        if ( scalar @_ ) {
-            $self->{XML_LIBXSLT_MATCH_CB} = shift;
+    if ( ref $self )
+    {
+        if ( scalar @_ )
+        {
+            $self->{XML_LIBXSLT_MATCH_CB}       = shift;
             $self->{XML_LIBXSLT_CALLBACK_STACK} = undef;
         }
         return $self->{XML_LIBXSLT_MATCH_CB};
     }
-    else {
+    else
+    {
         $MatchCB = shift if scalar @_;
         return $MatchCB;
     }
 }
 
-sub read_callback {
+sub read_callback
+{
     my $self = shift;
-    if ( ref $self ) {
-        if ( scalar @_ ) {
-            $self->{XML_LIBXSLT_READ_CB} = shift;
+    if ( ref $self )
+    {
+        if ( scalar @_ )
+        {
+            $self->{XML_LIBXSLT_READ_CB}        = shift;
             $self->{XML_LIBXSLT_CALLBACK_STACK} = undef;
         }
         return $self->{XML_LIBXSLT_READ_CB};
     }
-    else {
+    else
+    {
         $ReadCB = shift if scalar @_;
         return $ReadCB;
     }
 }
 
-sub close_callback {
+sub close_callback
+{
     my $self = shift;
-    if ( ref $self ) {
-        if ( scalar @_ ) {
-            $self->{XML_LIBXSLT_CLOSE_CB} = shift;
+    if ( ref $self )
+    {
+        if ( scalar @_ )
+        {
+            $self->{XML_LIBXSLT_CLOSE_CB}       = shift;
             $self->{XML_LIBXSLT_CALLBACK_STACK} = undef;
         }
         return $self->{XML_LIBXSLT_CLOSE_CB};
     }
-    else {
+    else
+    {
         $CloseCB = shift if scalar @_;
         return $CloseCB;
     }
 }
 
-sub open_callback {
+sub open_callback
+{
     my $self = shift;
-    if ( ref $self ) {
-        if ( scalar @_ ) {
-            $self->{XML_LIBXSLT_OPEN_CB} = shift;
+    if ( ref $self )
+    {
+        if ( scalar @_ )
+        {
+            $self->{XML_LIBXSLT_OPEN_CB}        = shift;
             $self->{XML_LIBXSLT_CALLBACK_STACK} = undef;
         }
         return $self->{XML_LIBXSLT_OPEN_CB};
     }
-    else {
+    else
+    {
         $OpenCB = shift if scalar @_;
         return $OpenCB;
     }
 }
 
-sub callbacks {
+sub callbacks
+{
     my $self = shift;
-    if ( ref $self ) {
-        if (@_) {
-            my ($match, $open, $read, $close) = @_;
-            @{$self}{qw(XML_LIBXSLT_MATCH_CB XML_LIBXSLT_OPEN_CB XML_LIBXSLT_READ_CB XML_LIBXSLT_CLOSE_CB)} = ($match, $open, $read, $close);
+    if ( ref $self )
+    {
+        if (@_)
+        {
+            my ( $match, $open, $read, $close ) = @_;
+            @{$self}{
+                qw(XML_LIBXSLT_MATCH_CB XML_LIBXSLT_OPEN_CB XML_LIBXSLT_READ_CB XML_LIBXSLT_CLOSE_CB)
+            } = ( $match, $open, $read, $close );
             $self->{XML_LIBXSLT_CALLBACK_STACK} = undef;
         }
-        else {
-            return @{$self}{qw(XML_LIBXSLT_MATCH_CB XML_LIBXSLT_OPEN_CB XML_LIBXSLT_READ_CB XML_LIBXSLT_CLOSE_CB)};
+        else
+        {
+            return @{$self}{
+                qw(XML_LIBXSLT_MATCH_CB XML_LIBXSLT_OPEN_CB XML_LIBXSLT_READ_CB XML_LIBXSLT_CLOSE_CB)
+            };
         }
     }
-    else {
-        if (@_) {
+    else
+    {
+        if (@_)
+        {
             ( $MatchCB, $OpenCB, $ReadCB, $CloseCB ) = @_;
         }
-        else {
+        else
+        {
             return ( $MatchCB, $OpenCB, $ReadCB, $CloseCB );
         }
     }
 }
 
-sub _init_callbacks {
+sub _init_callbacks
+{
     my $self = shift;
-    my $icb = $self->{XML_LIBXSLT_CALLBACK_STACK};
+    my $icb  = $self->{XML_LIBXSLT_CALLBACK_STACK};
 
-    unless ( defined $icb ) {
+    unless ( defined $icb )
+    {
         $self->{XML_LIBXSLT_CALLBACK_STACK} = XML::LibXML::InputCallback->new();
         $icb = $self->{XML_LIBXSLT_CALLBACK_STACK};
     }
@@ -436,57 +524,74 @@ sub _init_callbacks {
     my $rcb = $self->read_callback();
     my $ccb = $self->close_callback();
 
-    if ( defined $mcb and defined $ocb and defined $rcb and defined $ccb ) {
-        $icb->register_callbacks( [$mcb, $ocb, $rcb, $ccb] );
+    if ( defined $mcb and defined $ocb and defined $rcb and defined $ccb )
+    {
+        $icb->register_callbacks( [ $mcb, $ocb, $rcb, $ccb ] );
     }
     $icb->init_callbacks();
 
     my $scb = $self->{XML_LIBXSLT_SECPREFS};
-    if ( $scb ) {
-       $scb->init_callbacks();
+    if ($scb)
+    {
+        $scb->init_callbacks();
     }
 }
 
-sub _cleanup_callbacks {
+sub _cleanup_callbacks
+{
     my $self = shift;
     $self->{XML_LIBXSLT_CALLBACK_STACK}->cleanup_callbacks();
     my $mcb = $self->match_callback();
-    if ( defined $mcb ) {
+    if ( defined $mcb )
+    {
         $self->{XML_LIBXSLT_CALLBACK_STACK}->unregister_callbacks( [$mcb] );
     }
 
     my $scb = $self->{XML_LIBXSLT_SECPREFS};
-    if ( $scb ) {
-       $scb->cleanup_callbacks();
+    if ($scb)
+    {
+        $scb->cleanup_callbacks();
     }
 }
 
-sub transform {
+sub transform_into_chars
+{
+    my $self = shift;
+    return $self->output_as_chars( $self->transform(@_) );
+}
+
+sub transform
+{
     my $self = shift;
     my $doc;
 
     $self->_init_callbacks();
-    eval { $doc = $self->{XML_LIBXSLT_STYLESHEET}->transform($self,@_); };
+    eval { $doc = $self->{XML_LIBXSLT_STYLESHEET}->transform( $self, @_ ); };
     $self->_cleanup_callbacks();
 
     my $err = $@;
-    if ($err) {
+    if ($err)
+    {
         croak $err;
     }
 
     return $doc;
 }
 
-sub transform_file {
+sub transform_file
+{
     my $self = shift;
     my $doc;
 
     $self->_init_callbacks();
-    eval { $doc = $self->{XML_LIBXSLT_STYLESHEET}->transform_file($self,@_); };
+    eval {
+        $doc = $self->{XML_LIBXSLT_STYLESHEET}->transform_file( $self, @_ );
+    };
     $self->_cleanup_callbacks();
 
     my $err = $@;
-    if ($err) {
+    if ($err)
+    {
         croak $err;
     }
 
@@ -495,25 +600,36 @@ sub transform_file {
 
 sub register_function
 {
-	my $self = shift;
+    my $self = shift;
 
-	$self->{XML_LIBXSLT_FUNCTIONS}->{"{$_[0]}$_[1]"} = [@_[0,1,2]];
+    $self->{XML_LIBXSLT_FUNCTIONS}->{"{$_[0]}$_[1]"} = [ @_[ 0, 1, 2 ] ];
 }
 
 sub register_element
 {
-	my $self = shift;
+    my $self = shift;
 
-	$self->{XML_LIBXSLT_ELEMENTS}->{"{$_[0]}$_[1]"} = [@_[0,1,2]];
+    $self->{XML_LIBXSLT_ELEMENTS}->{"{$_[0]}$_[1]"} = [ @_[ 0, 1, 2 ] ];
 }
 
-sub output_string { shift->{XML_LIBXSLT_STYLESHEET}->_output_string($_[0],0) }
-sub output_as_bytes { shift->{XML_LIBXSLT_STYLESHEET}->_output_string($_[0],1) }
-sub output_as_chars { shift->{XML_LIBXSLT_STYLESHEET}->_output_string($_[0],2) }
-sub output_fh { shift->{XML_LIBXSLT_STYLESHEET}->output_fh(@_) }
-sub output_file { shift->{XML_LIBXSLT_STYLESHEET}->output_file(@_) }
-sub media_type { shift->{XML_LIBXSLT_STYLESHEET}->media_type(@_) }
-sub output_method { shift->{XML_LIBXSLT_STYLESHEET}->output_method(@_) }
+sub output_string
+{
+    shift->{XML_LIBXSLT_STYLESHEET}->_output_string( $_[0], 0 );
+}
+
+sub output_as_bytes
+{
+    shift->{XML_LIBXSLT_STYLESHEET}->_output_string( $_[0], 1 );
+}
+
+sub output_as_chars
+{
+    shift->{XML_LIBXSLT_STYLESHEET}->_output_string( $_[0], 2 );
+}
+sub output_fh       { shift->{XML_LIBXSLT_STYLESHEET}->output_fh(@_) }
+sub output_file     { shift->{XML_LIBXSLT_STYLESHEET}->output_file(@_) }
+sub media_type      { shift->{XML_LIBXSLT_STYLESHEET}->media_type(@_) }
+sub output_method   { shift->{XML_LIBXSLT_STYLESHEET}->output_method(@_) }
 sub output_encoding { shift->{XML_LIBXSLT_STYLESHEET}->output_encoding(@_) }
 
 1;
@@ -530,29 +646,31 @@ use vars qw(%OPTION_MAP %_GLOBAL_CALLBACKS);
 # Maps the option names used in the perl interface to the numeric values
 # used by libxslt.
 my %OPTION_MAP = (
-   read_file  => 1,
-   write_file => 2,
-   create_dir => 3,
-   read_net   => 4,
-   write_net  => 5,
+    read_file  => 1,
+    write_file => 2,
+    create_dir => 3,
+    read_net   => 4,
+    write_net  => 5,
 );
 
 %_GLOBAL_CALLBACKS = ();
 
-
 #-------------------------------------------------------------------------#
 # global callback                                                         #
 #-------------------------------------------------------------------------#
-sub _security_check {
+sub _security_check
+{
     my $option = shift;
     my $retval = 1;
 
-    if ($option == 3) {
-       $retval = 0;             # Default create_dir to no access
+    if ( $option == 3 )
+    {
+        $retval = 0;    # Default create_dir to no access
     }
 
-    if (exists $_GLOBAL_CALLBACKS{$option}) {
-       $retval = $_GLOBAL_CALLBACKS{$option}->(@_);
+    if ( exists $_GLOBAL_CALLBACKS{$option} )
+    {
+        $retval = $_GLOBAL_CALLBACKS{$option}->(@_);
     }
 
     return $retval;
@@ -562,9 +680,10 @@ sub _security_check {
 # member functions and methods                                            #
 #-------------------------------------------------------------------------#
 
-sub new {
+sub new
+{
     my $class = shift;
-    return bless {'_CALLBACKS' => {}}, $class;
+    return bless { '_CALLBACKS' => {} }, $class;
 }
 
 # Add a callback for the given security option (read_file, write_file,
@@ -572,48 +691,56 @@ sub new {
 #
 # To register a callback that handle network read requests:
 #   $scb->register_callback( read_net => \&callback );
-sub register_callback {
-   my $self = shift;
-   my $option = shift;
-   my $callback = shift;
+sub register_callback
+{
+    my $self     = shift;
+    my $option   = shift;
+    my $callback = shift;
 
-   unless ( exists $OPTION_MAP{$option} ) {
-      croak "Invalid security option '$option'. Must be one of: " .
-            join(', ', keys %OPTION_MAP) . ".";
-   }
+    unless ( exists $OPTION_MAP{$option} )
+    {
+        croak "Invalid security option '$option'. Must be one of: "
+            . join( ', ', keys %OPTION_MAP ) . ".";
+    }
 
-   if ( ref $callback eq 'CODE' ) {
-      $self->{_CALLBACKS}{ $OPTION_MAP{$option} } = $callback;
-   }
-   else {
-      croak "Invalid argument. The callback must be a reference to a subroutine";
-   }
+    if ( ref $callback eq 'CODE' )
+    {
+        $self->{_CALLBACKS}{ $OPTION_MAP{$option} } = $callback;
+    }
+    else
+    {
+        croak
+"Invalid argument. The callback must be a reference to a subroutine";
+    }
 }
 
 # Removes the callback for the given security option. Causes the given option
 # to use the default security handler (which always allows the action).
-sub unregister_callback {
-   my $self = shift;
-   my $option = shift;
+sub unregister_callback
+{
+    my $self   = shift;
+    my $option = shift;
 
-   unless ( exists $OPTION_MAP{$option} ) {
-      croak "Invalid security option '$option'. Must be one of: " .
-            join(', ', keys %OPTION_MAP) . ".";
-   }
+    unless ( exists $OPTION_MAP{$option} )
+    {
+        croak "Invalid security option '$option'. Must be one of: "
+            . join( ', ', keys %OPTION_MAP ) . ".";
+    }
 
-   delete $self->{_CALLBACKS}{ $OPTION_MAP{$option} };
+    delete $self->{_CALLBACKS}{ $OPTION_MAP{$option} };
 }
 
-
 # make it so libxslt can use the callbacks
-sub init_callbacks {
+sub init_callbacks
+{
     my $self = shift;
 
     %_GLOBAL_CALLBACKS = %{ $self->{_CALLBACKS} };
 }
 
 # reset libxslt callbacks
-sub cleanup_callbacks {
+sub cleanup_callbacks
+{
     my $self = shift;
 
     %_GLOBAL_CALLBACKS = ();
@@ -884,6 +1011,12 @@ should be a C<XML::LibXML::InputCallback> object. This will call
 C<init_callbacks> and C<cleanup_callbacks> automatically during
 transformation.
 
+=item transform_into_chars(doc, %params)
+
+Combines C<transform()> and C<output_as_chars()>.
+
+(Added in version 2.0000 .)
+
 =back
 
 =cut
@@ -1083,9 +1216,11 @@ Matt Sergeant, matt@sergeant.org
 
 Security callbacks implementation contributed by Shane Corgatelli.
 
+Petr Pajas , pajas@matfyz.org
+
 =head1 MAINTAINER
 
-Petr Pajas , pajas@matfyz.org
+Shlomi Fish, L<https://www.shlomifish.org/me/contact-me/> .
 
 =head1 BUGS
 
@@ -1095,6 +1230,6 @@ Please report bugs via
 
 =head1 SEE ALSO
 
-XML::LibXML
+L<XML::LibXML> , L<XML::LibXSLT::Quick> .
 
 =cut

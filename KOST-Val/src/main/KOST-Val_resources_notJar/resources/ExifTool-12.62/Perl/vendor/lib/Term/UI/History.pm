@@ -1,11 +1,20 @@
 package Term::UI::History;
+$Term::UI::History::VERSION = '0.50';
 
 use strict;
-use vars qw[$VERSION];
-use base 'Exporter';
-use base 'Log::Message::Simple';
+use warnings;
 
-$VERSION = '0.46';
+use parent
+  qw! Exporter
+      Log::Message::Simple
+    !;
+
+use Log::Message 'private' => 0;
+
+our $HISTORY_FH = \ *STDOUT;
+our @EXPORT = qw[ history ];
+
+my $log = Log::Message->new();
 
 =pod
 
@@ -48,32 +57,21 @@ The C<VERBOSE> option defaults to true.
 
 =cut
 
-BEGIN {
-    use Log::Message private => 0;
+sub history {
+  my $msg = shift;
 
-    use vars      qw[ @EXPORT $HISTORY_FH ];
-    @EXPORT     = qw[ history ];
-    my $log     = new Log::Message;
-    $HISTORY_FH = \*STDOUT;
+  $log
+    ->store( 'message' => $msg,
+             'tag' => 'HISTORY',
+             'level' => 'history',
+             'extra' => [ @_ ],
+           );
+}
 
-    for my $func ( @EXPORT ) {
-        no strict 'refs';
+sub history_as_string {
+    my $class = shift;
 
-        *$func = sub {  my $msg     = shift;
-                        $log->store(
-                                message => $msg,
-                                tag     => uc $func,
-                                level   => $func,
-                                extra   => [@_]
-                        );
-                };
-    }
-
-    sub history_as_string {
-        my $class = shift;
-
-        return join $/, map { $_->message } __PACKAGE__->stack;
-    }
+    return join $/, map { $_->message } __PACKAGE__->stack;
 }
 
 

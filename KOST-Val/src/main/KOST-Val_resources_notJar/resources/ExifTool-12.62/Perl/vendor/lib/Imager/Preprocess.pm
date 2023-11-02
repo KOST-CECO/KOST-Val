@@ -1,14 +1,14 @@
 package Imager::Preprocess;
 use 5.006;
 use strict;
-require Exporter;
+use warnings;
+use Exporter "import";
 use Getopt::Long;
 use Text::ParseWords;
 
 our @EXPORT = qw(preprocess);
-our @ISA = qw(Exporter);
 
-our $VERSION = "1.002";
+our $VERSION = "1.003";
 
 sub preprocess {
   unshift @ARGV, grep /^-/, shellwords($ENV{IMAGER_PREPROCESS_OPTS})
@@ -32,6 +32,7 @@ sub preprocess {
   my $code_line;
   my @out;
   my $failed;
+  my %replace;
 
   push @out, 
     "#define IM_ROUND_8(x) ((int)((x)+0.5))\n",
@@ -43,7 +44,7 @@ sub preprocess {
     if ($line =~ /^\#code\s+(\S.+)$/) {
       $save_code
 	and do { warn "$src:$code_line:Unclosed #code block\n"; ++$failed; };
-      
+
       $cond = $1;
       $cond_line = $.;
       $code_line = $. + 1;
@@ -52,7 +53,7 @@ sub preprocess {
     elsif ($line =~ /^\#code\s*$/) {
       $save_code
 	and do { warn "$src:$code_line:Unclosed #code block\n"; ++$failed; };
-      
+
       $cond = '';
       $cond_line = 0;
       $code_line = $. + 1;
@@ -61,7 +62,7 @@ sub preprocess {
     elsif ($line =~ /^\#\/code\s*$/) {
       $save_code
 	or do { warn "$src:$.:#/code without #code\n"; ++$failed; next; };
-      
+
       if ($cond) {
 	push @out, "#line $cond_line \"$src\"\n" if $keep_lines;
 	push @out, "  if ($cond) {\n";
@@ -73,6 +74,11 @@ sub preprocess {
         "#define IM_FILL_COMBINE(fill) ((fill)->combine)\n",
 	"#undef IM_FILL_FILLER\n",
         "#define IM_FILL_FILLER(fill) ((fill)->f_fill_with_color)\n";
+      for my $key (sort keys %replace) {
+	push @out,
+	  "#undef $key\n",
+	  "#define $key $replace{$key}[0]\n";
+      }
       push @out, "#line $code_line \"$src\"\n" if $keep_lines;
       push @out, byte_samples(@code);
       push @out, "  }\n", "  else {\n"
@@ -83,6 +89,11 @@ sub preprocess {
         "#define IM_FILL_COMBINE(fill) ((fill)->combinef)\n",
 	"#undef IM_FILL_FILLER\n",
         "#define IM_FILL_FILLER(fill) ((fill)->f_fill_with_fcolor)\n";
+      for my $key (sort keys %replace) {
+	push @out,
+	  "#undef $key\n",
+	  "#define $key $replace{$key}[1]\n";
+      }
       push @out, "#line $code_line \"$src\"\n" if $keep_lines;
       push @out, double_samples(@code);
       push @out, "  }\n"
@@ -94,31 +105,36 @@ sub preprocess {
     elsif ($save_code) {
       push @code, $line;
     }
+    elsif ($line =~ /^\#!\s*define\s+(\w+)\s+(\w+)\s+(\w+)\s*$/) {
+      exists $replace{$1}
+	and die "Duplicate definition of $1\n";
+      $replace{$1} = [ $2, $3 ];
+    }
     else {
       push @out, $line;
     }
   }
-  
+
   if ($save_code) {
     warn "$src:$code_line:#code block not closed by EOF\n";
     ++$failed;
   }
 
   close SRC;
-  
+
   $failed 
     and die "Errors during parsing, aborting\n";
-  
+
   open DEST, "> $dest"
     or die "Cannot open $dest: $!\n";
   print DEST @out;
   close DEST;
 }
-  
+
 sub byte_samples {
   # important we make a copy
   my @lines = @_;
-  
+
   for (@lines) {
     s/\bIM_GPIX\b/i_gpix/g;
     s/\bIM_GLIN\b/i_glin/g;
@@ -139,15 +155,16 @@ sub byte_samples {
     s/\bIM_LIMIT\(/IM_LIMIT_8(/g;
     s/\bIM_RENDER_LINE\(/i_render_line(/g;
     s/\bIM_FILL_COMBINE_F\b/i_fill_combine_f/g;
+    s/\bIM_ABS\b/abs/g;
   }
-  
+
   @lines;
 }
 
 sub double_samples {
   # important we make a copy
   my @lines = @_;
-  
+
   for (@lines) {
     s/\bIM_GPIX\b/i_gpixf/g;
     s/\bIM_GLIN\b/i_glinf/g;
@@ -168,6 +185,7 @@ sub double_samples {
     s/\bIM_LIMIT\(/IM_LIMIT_double(/g;
     s/\bIM_RENDER_LINE\(/i_render_linef(/g;
     s/\bIM_FILL_COMBINE_F\b/i_fill_combinef_f/g;
+    s/\bIM_ABS\b/fabs/g;
   }
 
   @lines;
@@ -236,6 +254,14 @@ The end of a sample-independent section of code is terminated by:
 
 #/code without a starting #code is an error.
 
+You can also define extra sample-size dependent macros with C<#!define>:
+
+=over
+
+C<#define> I<common-name> I<eight-bit-name> I<floating-point-name>
+
+=back
+
 The following types and values are defined in a #code section:
 
 =over
@@ -278,6 +304,10 @@ object.
 
 IM_FILL_FILLER(C<fill>) - retrieve the fill_with_* function from a fill
 object.
+
+=item *
+
+IM_ABS(sample) - calculate the absolute value of an IM_WORK_T value.
 
 =item *
 

@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-our $VERSION = '2.46';
+our $VERSION = '2.60';
 
 use Cwd 3;
 use Try::Tiny;
@@ -283,7 +283,7 @@ DateTime::TimeZone::Local::Unix - Determine the local system's time zone on Unix
 
 =head1 VERSION
 
-version 2.46
+version 2.60
 
 =head1 SYNOPSIS
 
@@ -293,13 +293,12 @@ version 2.46
 
 =head1 DESCRIPTION
 
-This module provides methods for determining the local time zone on a
-Unix platform.
+This module provides methods for determining the local time zone on a Unix
+platform.
 
 =head1 HOW THE TIME ZONE IS DETERMINED
 
-This class tries the following methods of determining the local time
-zone:
+This class tries the following methods of determining the local time zone:
 
 =over 4
 
@@ -309,32 +308,30 @@ It checks C<< $ENV{TZ} >> for a valid time zone name.
 
 =item * F</etc/localtime>
 
-If this file is a symlink to an Olson database time zone file (usually
-in F</usr/share/zoneinfo>) then it uses the target file's path name to
-determine the time zone name. For example, if the path is
-F</usr/share/zoneinfo/America/Chicago>, the time zone is
-"America/Chicago".
+If this file is a symlink to an Olson database time zone file (usually in
+F</usr/share/zoneinfo>) then it uses the target file's path name to determine
+the time zone name. For example, if the path is
+F</usr/share/zoneinfo/America/Chicago>, the time zone is "America/Chicago".
 
-Some systems just copy the relevant file to F</etc/localtime> instead
-of making a symlink.  In this case, we look in F</usr/share/zoneinfo>
-for a file that has the same size and content as F</etc/localtime> to
-determine the local time zone.
+Some systems just copy the relevant file to F</etc/localtime> instead of making
+a symlink.  In this case, we look in F</usr/share/zoneinfo> for a file that has
+the same size and content as F</etc/localtime> to determine the local time
+zone.
 
 =item * F</etc/timezone>
 
-If this file exists, it is read and its contents are used as a time
-zone name.
+If this file exists, it is read and its contents are used as a time zone name.
 
 =item * F</etc/TIMEZONE>
 
-If this file exists, it is opened and we look for a line starting like
-"TZ = ...". If this is found, it should indicate a time zone name.
+If this file exists, it is opened and we look for a line starting like "TZ =
+...". If this is found, it should indicate a time zone name.
 
 =item * F</etc/sysconfig/clock>
 
 If this file exists, it is opened and we look for a line starting like
-"TIMEZONE = ..." or "ZONE = ...". If this is found, it should indicate
-a time zone name.
+"TIMEZONE = ..." or "ZONE = ...". If this is found, it should indicate a time
+zone name.
 
 =item * F</etc/default/init>
 
@@ -349,24 +346,21 @@ files. You can confirm that this is case by running:
     $ ls -l /etc/localtime /etc/timezone /etc/TIMEZONE \
         /etc/sysconfig/clock /etc/default/init
 
-If this is the case, then when checking for timezone handling you are
-likely to get an exception:
+If this is the case, then when checking for timezone handling you are likely to
+get an exception:
 
     $ perl -wle 'use DateTime; DateTime->now( time_zone => "local" )'
     Cannot determine local time zone
 
-In that case, you should consult your system F<man> pages for details on how
-to address that problem. In one such case reported to us, a FreeBSD virtual
-machine had been built without any of these files. The user was able to run
-the FreeBSD F<tzsetup> utility. That installed F</etc/localtime>, after which
-the above timezone diagnostic ran silently, I<i.e.>, without throwing an
-exception.
+In that case, you should consult your system F<man> pages for details on how to
+address that problem. In one such case reported to us, a FreeBSD virtual
+machine had been built without any of these files. The user was able to run the
+FreeBSD F<tzsetup> utility. That installed F</etc/localtime>, after which the
+above timezone diagnostic ran silently, I<i.e.>, without throwing an exception.
 
 =head1 SUPPORT
 
 Bugs may be submitted at L<https://github.com/houseabsolute/DateTime-TimeZone/issues>.
-
-I am also usually active on IRC as 'autarch' on C<irc://irc.perl.org>.
 
 =head1 SOURCE
 
@@ -378,7 +372,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2020 by Dave Rolsky.
+This software is copyright (c) 2023 by Dave Rolsky.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

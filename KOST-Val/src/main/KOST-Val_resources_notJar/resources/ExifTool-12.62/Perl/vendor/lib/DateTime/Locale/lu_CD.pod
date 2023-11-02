@@ -417,6 +417,12 @@ Luba-Katanga Congo - Kinshasa locale.
    1995-12-22T09:05:02 = kny. Y. K. 1995 Cis 22
   -0010-09-15T04:44:23 = kmp. Y.K. -10 Lut 15
 
+=head3 GyMd (GGGGG y-MM-dd)
+
+   2008-02-05T18:30:30 = kny. Y. K. 2008-02-05
+   1995-12-22T09:05:02 = kny. Y. K. 1995-12-22
+  -0010-09-15T04:44:23 = kmp. Y.K. -10-09-15
+
 =head3 H (HH)
 
    2008-02-05T18:30:30 = 18
@@ -507,17 +513,17 @@ Luba-Katanga Congo - Kinshasa locale.
    1995-12-22T09:05:02 = 9 Dinda
   -0010-09-15T04:44:23 = 4 Dinda
 
-=head3 hm (h:mm a)
+=head3 hm (h:mm a)
 
-   2008-02-05T18:30:30 = 6:30 Dilolo
-   1995-12-22T09:05:02 = 9:05 Dinda
-  -0010-09-15T04:44:23 = 4:44 Dinda
+   2008-02-05T18:30:30 = 6:30 Dilolo
+   1995-12-22T09:05:02 = 9:05 Dinda
+  -0010-09-15T04:44:23 = 4:44 Dinda
 
-=head3 hms (h:mm:ss a)
+=head3 hms (h:mm:ss a)
 
-   2008-02-05T18:30:30 = 6:30:30 Dilolo
-   1995-12-22T09:05:02 = 9:05:02 Dinda
-  -0010-09-15T04:44:23 = 4:44:23 Dinda
+   2008-02-05T18:30:30 = 6:30:30 Dilolo
+   1995-12-22T09:05:02 = 9:05:02 Dinda
+  -0010-09-15T04:44:23 = 4:44:23 Dinda
 
 =head3 hmsv (h:mm:ss a v)
 

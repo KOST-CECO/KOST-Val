@@ -2,7 +2,7 @@ package Net::DNS::RR::SPF;
 
 use strict;
 use warnings;
-our $VERSION = (qw$Id: SPF.pm 1814 2020-10-14 21:49:16Z willem $)[2];
+our $VERSION = (qw$Id: SPF.pm 1896 2023-01-30 12:59:25Z willem $)[2];
 
 use base qw(Net::DNS::RR::TXT);
 
@@ -17,7 +17,8 @@ use integer;
 
 
 sub spfdata {
-	my @spf = shift->char_str_list(@_);
+	my ( $self, @argument ) = @_;
+	my @spf = shift->char_str_list(@argument);
 	return wantarray ? @spf : join '', @spf;
 }
 
@@ -89,7 +90,7 @@ Package template (c)2009,2012 O.M.Kolkman and R.W.Franks.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -106,6 +107,8 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::RR>, L<Net::DNS::RR::TXT>, RFC7208
+L<perl> L<Net::DNS> L<Net::DNS::RR>
+L<Net::DNS::RR::TXT>
+L<RFC7208|https://tools.ietf.org/html/rfc7208>
 
 =cut

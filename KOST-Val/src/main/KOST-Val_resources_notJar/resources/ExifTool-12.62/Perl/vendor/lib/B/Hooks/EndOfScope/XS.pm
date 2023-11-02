@@ -4,7 +4,7 @@ package B::Hooks::EndOfScope::XS;
 use strict;
 use warnings;
 
-our $VERSION = '0.24';
+our $VERSION = '0.26';
 
 # Limit the V::M-based (XS) version to perl 5.8.4+
 #
@@ -58,7 +58,7 @@ B::Hooks::EndOfScope::XS - Execute code after a scope finished compilation - XS 
 
 =head1 VERSION
 
-version 0.24
+version 0.26
 
 =head1 DESCRIPTION
 

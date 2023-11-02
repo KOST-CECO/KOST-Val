@@ -7,7 +7,7 @@ Log::Report::Die - compatibility routines with Perl's die/croak/confess
 =head1 INHERITANCE
 
  Log::Report::Die
-   is a Exporter
+   is an Exporter
 
 =head1 SYNOPSIS
 
@@ -30,10 +30,10 @@ croak(), or confess().  This routine tries to convert this into
 parameters for L<Log::Report::report()|Log::Report/"Report Production and Configuration">.  This is done in a very
 smart way, even trying to find the stringifications of C<$!>.
 
-Return are four elements: the error string which is used to trigger
-a C<Log::Report> compatible C<die()>, and the options, reason, and
-text message.  The options is a HASH which, amongst other things,
-may contain a stack trace and location.
+Returned are four elements: the error string or object which triggered
+the death originally (the original $@), and the opts, reason, and plain
+text message.  The opts is a HASH which, amongst other things, may contain
+a stack trace and location extracted from the death text or object.
 
 Translated components will have exception classes C<perl>, and C<die> or
 C<confess>.  On the moment, the C<croak> cannot be distiguished from the
@@ -78,12 +78,12 @@ Currently supported:
 
 =head1 SEE ALSO
 
-This module is part of Log-Report distribution version 1.31,
-built on January 15, 2021. Website: F<http://perl.overmeer.net/CPAN/>
+This module is part of Log-Report distribution version 1.34,
+built on September 15, 2022. Website: F<http://perl.overmeer.net/CPAN/>
 
 =head1 LICENSE
 
-Copyrights 2007-2021 by [Mark Overmeer <markov@cpan.org>]. For other contributors see ChangeLog.
+Copyrights 2007-2022 by [Mark Overmeer <markov@cpan.org>]. For other contributors see ChangeLog.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

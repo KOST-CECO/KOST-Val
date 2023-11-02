@@ -1,6 +1,6 @@
 #!/usr/local/bin/perl
 
-my $ignore_re = '^(' . join("|", 
+my $ignore_re = '^(' . join("|",
 	qw(
 		_
 		[a-z]
@@ -45,7 +45,7 @@ foreach my $name (sort tuple glob("[2-9]*"), glob("[1-9][0-9]*"))
     my $file = readFile($inc) ;
     StripCommentsAndStrings($file) ;
     my $result = scan($name, $file) ;
-    print "\n\t#########\n\t# $name\n\t#########\n\n$result" 
+    print "\n\t#########\n\t# $name\n\t#########\n\n$result"
         if $result;
 }
 exit ;
@@ -60,7 +60,7 @@ sub scan
     my $result = "" ;
 
     if (1) {
-        # Preprocess all tri-graphs 
+        # Preprocess all tri-graphs
         # including things stuck in quoted string constants.
         $file =~ s/\?\?=/#/g;                         # | ??=|  #|
         $file =~ s/\?\?\!/|/g;                        # | ??!|  ||
@@ -72,52 +72,52 @@ sub scan
         $file =~ s/\?\?</{/g;                         # | ??<|  {|
         $file =~ s/\?\?>/}/g;                         # | ??>|  }|
     }
-    
-    while ( $file =~ /^\s*#\s*define\s+([\$\w]+)\b(?!\()\s*(.*)/gm ) 
+
+    while ( $file =~ /^\s*#\s*define\s+([\$\w]+)\b(?!\()\s*(.*)/gm )
     {
         my $def = $1;
         my $rest = $2;
         my $ignore = 0 ;
-    
+
         $ignore = 1 if $ignore_def{$def} || $def =~ /$ignore_re/o ;
-    
+
         # Cannot do: (-1) and ((LHANDLE)3) are OK:
         #print("Skip non-wordy $def => $rest\n"),
-    
+
         $rest =~ s/\s*$//;
         #next if $rest =~ /[^\w\$]/;
-    
+
         #print "Matched $_ ($def)\n" ;
 
 	next if $before{$def} ++ ;
-    
+
         if ($ignore)
           { $seen_define{$def} = 'IGNORE' }
-        elsif ($rest =~ /"/) 
+        elsif ($rest =~ /"/)
           { $seen_define{$def} = 'STRING' }
         else
           { $seen_define{$def} = 'DEFINE' }
     }
-    
+
     foreach $define (sort keys %seen_define)
-    { 
+    {
         my $out = $filler ;
         substr($out,0, length $define) = $define;
         $result .= "\t$out => $seen_define{$define},\n" ;
     }
-    
+
     while ($file =~ /\btypedef\s+enum\s*{(.*?)}\s*(\w+)/gs )
     {
         my $enum = $1 ;
         my $name = $2 ;
         my $ignore = 0 ;
-    
+
         $ignore = 1 if $ignore_enums{$name} ;
-    
+
         #$enum =~ s/\s*=\s*\S+\s*(,?)\s*\n/$1/g;
         $enum =~ s/^\s*//;
         $enum =~ s/\s*$//;
-    
+
         my @tokens = map { s/\s*=.*// ; $_} split /\s*,\s*/, $enum ;
         my @new =  grep { ! $Enums{$_}++ } @tokens ;
 
@@ -160,13 +160,13 @@ sub StripCommentsAndStrings
        )*          ##  0-or-more things which don't start with /
                    ##    but do end with '*'
        /           ##  End of /* ... */ comment
- 
+
      |         ##     OR  C++ Comment
-       //          ## Start of C++ comment // 
+       //          ## Start of C++ comment //
        [^\n]*      ## followed by 0-or-more non end of line characters
 
      |         ##     OR  various things which aren't comments:
- 
+
        (
          "           ##  Start of " ... " string
          (
@@ -175,9 +175,9 @@ sub StripCommentsAndStrings
            [^"\\]        ##  Non "\
          )*
          "           ##  End of " ... " string
- 
+
        |         ##     OR
- 
+
          '           ##  Start of ' ... ' string
          (
            \\.           ##  Escaped char
@@ -185,9 +185,9 @@ sub StripCommentsAndStrings
            [^'\\]        ##  Non '\
          )*
          '           ##  End of ' ... ' string
- 
+
        |         ##     OR
- 
+
          .           ##  Anything other char
          [^/"'\\]*   ##  Chars which doesn't start a comment, string or escape
        )
@@ -236,7 +236,6 @@ sub tuple
         $A == $B or return $A <=> $B ;
     }
     return 0;
-}          
+}
 
 __END__
-

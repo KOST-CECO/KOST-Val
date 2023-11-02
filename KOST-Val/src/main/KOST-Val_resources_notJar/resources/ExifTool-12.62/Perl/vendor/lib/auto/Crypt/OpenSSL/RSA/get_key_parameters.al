@@ -3,7 +3,7 @@
 # See AutoSplit.pm.
 package Crypt::OpenSSL::RSA;
 
-#line 299 "blib\lib\Crypt\OpenSSL\RSA.pm (autosplit into blib\lib\auto\Crypt\OpenSSL\RSA\get_key_parameters.al)"
+#line 329 "blib\lib\Crypt\OpenSSL\RSA.pm (autosplit into blib\lib\auto\Crypt\OpenSSL\RSA\get_key_parameters.al)"
 sub get_key_parameters {
     return map { $_ ? Crypt::OpenSSL::Bignum->bless_pointer($_) : undef } shift->_get_key_parameters();
 }

@@ -2,7 +2,7 @@ package Math::BigInt::LTM;
 
 use strict;
 use warnings;
-our $VERSION = '0.069';
+our $VERSION = '0.078';
 
 use CryptX;
 use Carp;
@@ -147,7 +147,7 @@ use overload
                     $x = $_[0];
                     $y = ref($_[1]) ? $class -> _num($_[1]) : $_[1];
                 }
-                return $class -> _blsft($x, $y);
+                return $class -> _lsft($x, $y);
             },
 
   '>>'   => sub {
@@ -160,7 +160,7 @@ use overload
                     $x = $class -> _copy($_[0]);
                     $y = ref($_[1]) ? $_[1] : $class -> _new($_[1]);
                 }
-                return $class -> _brsft($x, $y);
+                return $class -> _rsft($x, $y);
             },
 
   # overload key: num_comparison
@@ -310,6 +310,64 @@ use overload
 
   ;
 
+### same as _from_base_num() in Math::BigInt::Lib
+sub _from_base_num {
+    # Convert an array in the given base to a number.
+    my ($class, $in, $base) = @_;
+
+    # Make sure the base is an object and >= 2.
+    $base = $class -> _new($base) unless ref($base);
+    my $two = $class -> _two();
+    croak "base must be >= 2" unless $class -> _acmp($base, $two) >= 0;
+
+    # @$in = map { ref($_) ? $_ : $class -> _new($_) } @$in;
+
+    my $ele = $in -> [0];
+
+    $ele = $class -> _new($ele) unless ref($ele);
+    my $x = $class -> _copy($ele);
+
+    for my $i (1 .. $#$in) {
+        $x = $class -> _mul($x, $base);
+        $ele = $in -> [$i];
+        $ele = $class -> _new($ele) unless ref($ele);
+        $x = $class -> _add($x, $ele);
+    }
+
+    return $x;
+}
+
+### same as _to_base_num() in Math::BigInt::Lib
+sub _to_base_num {
+    # Convert the number to an array of integers in any base.
+    my ($class, $x, $base) = @_;
+
+    # Make sure the base is an object and >= 2.
+    $base = $class -> _new($base) unless ref($base);
+    my $two = $class -> _two();
+    croak "base must be >= 2" unless $class -> _acmp($base, $two) >= 0;
+
+    my $out   = [];
+    my $xcopy = $class -> _copy($x);
+    my $rem;
+
+    # Do all except the last (most significant) element.
+    until ($class -> _acmp($xcopy, $base) < 0) {
+        ($xcopy, $rem) = $class -> _div($xcopy, $base);
+        unshift @$out, $rem;
+    }
+
+    # Do the last (most significant element).
+    unless ($class -> _is_zero($xcopy)) {
+        unshift @$out, $xcopy;
+    }
+
+    # $out is empty if $x is zero.
+    unshift @$out, $class -> _zero() unless @$out;
+
+    return $out;
+}
+
 ### same as _check() in Math::BigInt::Lib
 sub _check {
     # used by the test suite
@@ -325,13 +383,28 @@ sub _digit {
     substr($class ->_str($x), -($n+1), 1);
 }
 
+### same as _digitsum() in Math::BigInt::Lib
+sub _digitsum {
+    my ($class, $x) = @_;
+
+    my $len = $class -> _len($x);
+    my $sum = $class -> _zero();
+    for (my $i = 0 ; $i < $len ; ++$i) {
+        my $digit = $class -> _digit($x, $i);
+        $digit = $class -> _new($digit);
+        $sum = $class -> _add($sum, $digit);
+    }
+
+    return $sum;
+}
+
 ### same as _num() in Math::BigInt::Lib
 sub _num {
     my ($class, $x) = @_;
     0 + $class -> _str($x);
 }
 
-### PATCHED _fac() from Math::BigInt::Lib
+### PATCHED/OLDER _fac() from Math::BigInt::Lib
 sub _fac {
     # factorial
     my ($class, $x) = @_;
@@ -428,6 +501,56 @@ sub _nok {
     }
 
     return $n;
+}
+
+### same as _sadd() in Math::BigInt::Lib
+# Signed addition. If the flag is false, $xa might be modified, but not $ya. If
+# the false is true, $ya might be modified, but not $xa.
+sub _sadd {
+    my $class = shift;
+    my ($xa, $xs, $ya, $ys, $flag) = @_;
+    my ($za, $zs);
+
+    # If the signs are equal we can add them (-5 + -3 => -(5 + 3) => -8)
+
+    if ($xs eq $ys) {
+        if ($flag) {
+            $za = $class -> _add($ya, $xa);
+        } else {
+            $za = $class -> _add($xa, $ya);
+        }
+        $zs = $class -> _is_zero($za) ? '+' : $xs;
+        return $za, $zs;
+    }
+
+    my $acmp = $class -> _acmp($xa, $ya);       # abs(x) = abs(y)
+
+    if ($acmp == 0) {                           # x = -y or -x = y
+        $za = $class -> _zero();
+        $zs = '+';
+        return $za, $zs;
+    }
+
+    if ($acmp > 0) {                            # abs(x) > abs(y)
+        $za = $class -> _sub($xa, $ya, $flag);
+        $zs = $xs;
+    } else {                                    # abs(x) < abs(y)
+        $za = $class -> _sub($ya, $xa, !$flag);
+        $zs = $ys;
+    }
+    return $za, $zs;
+}
+
+### same as _ssub() in Math::BigInt::Lib
+# Signed subtraction. If the flag is false, $xa might be modified, but not $ya.
+# If the false is true, $ya might be modified, but not $xa.
+sub _ssub {
+    my $class = shift;
+    my ($xa, $xs, $ya, $ys, $flag) = @_;
+
+    # Swap sign of second operand and let _sadd() do the job.
+    $ys = $ys eq '+' ? '-' : '+';
+    $class -> _sadd($xa, $xs, $ya, $ys, $flag);
 }
 
 ### same as _log_int() in Math::BigInt::Lib
@@ -530,8 +653,6 @@ sub _lucas {
         return @y;
     }
 
-    require Scalar::Util;
-
     # In scalar context use that lucas(n) = fib(n-1) + fib(n+1).
     #
     # Remember that _fib() behaves differently in scalar context and list
@@ -539,8 +660,8 @@ sub _lucas {
 
     return $class -> _two() if $n == 0;
 
-    return $class -> _add(scalar $class -> _fib($n - 1),
-                          scalar $class -> _fib($n + 1));
+    return $class -> _add(scalar($class -> _fib($n - 1)),
+                          scalar($class -> _fib($n + 1)));
 }
 
 ### same as _fib() in Math::BigInt::Lib

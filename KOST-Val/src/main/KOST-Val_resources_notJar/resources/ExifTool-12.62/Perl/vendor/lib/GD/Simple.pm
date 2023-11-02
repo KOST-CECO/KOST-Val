@@ -65,7 +65,7 @@ http://perlmaven.com/drawing-images-using-gd-simple.
     $img->line(50);  # 50 pixel line
 
     # draw a cyan polygon edged in blue
-    my $poly = new GD::Polygon;
+    my $poly = GD::Polygon->new;
     $poly->addPt(150,100);
     $poly->addPt(199,199);
     $poly->addPt(100,199);
@@ -741,6 +741,8 @@ contains the following information:
                the 'd'
 
   leading      the distance between two adjacent lines
+
+This description and code was changed with 2.75.
 
 =cut
 

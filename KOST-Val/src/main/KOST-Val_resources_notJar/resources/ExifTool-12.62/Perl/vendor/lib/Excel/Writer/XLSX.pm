@@ -1,10 +1,11 @@
+
 package Excel::Writer::XLSX;
 
 ###############################################################################
 #
 # Excel::Writer::XLSX - Create a new file in the Excel 2007+ XLSX format.
 #
-# Copyright 2000-2020, John McNamara, jmcnamara@cpan.org
+# Copyright 2000-2023, John McNamara, jmcnamara@cpan.org
 #
 # Documentation after __END__
 #
@@ -17,7 +18,7 @@ use Exporter;
 use Excel::Writer::XLSX::Workbook;
 
 our @ISA     = qw(Excel::Writer::XLSX::Workbook Exporter);
-our $VERSION = '1.07';
+our $VERSION = '1.11';
 
 
 ###############################################################################
@@ -82,11 +83,7 @@ To write a string, a formatted string, a number and a formula to the first works
 
 The C<Excel::Writer::XLSX> module can be used to create an Excel file in the 2007+ XLSX format.
 
-The XLSX format is the Office Open XML (OOXML) format used by Excel 2007 and later.
-
 Multiple worksheets can be added to a workbook and formatting can be applied to cells. Text, numbers, and formulas can be written to the cells.
-
-This module cannot, as yet, be used to write to an existing Excel XLSX file.
 
 
 
@@ -94,10 +91,6 @@ This module cannot, as yet, be used to write to an existing Excel XLSX file.
 =head1 Excel::Writer::XLSX and Spreadsheet::WriteExcel
 
 C<Excel::Writer::XLSX> uses the same interface as the L<Spreadsheet::WriteExcel> module which produces an Excel file in binary XLS format.
-
-Excel::Writer::XLSX supports all of the features of Spreadsheet::WriteExcel and in some cases has more functionality. For more details see L</Compatibility with Spreadsheet::WriteExcel>.
-
-The main advantage of the XLSX format over the XLS format is that it allows a larger number of rows and columns in a worksheet. The XLSX file format also produces much smaller files than the XLS file format.
 
 
 
@@ -155,6 +148,7 @@ The Excel::Writer::XLSX module provides an object oriented interface to a new Ex
     set_optimization()
     set_calc_mode()
     get_default_url_format()
+    read_only_recommended()
 
 If you are unfamiliar with object oriented interfaces or the way that they are implemented in Perl have a look at C<perlobj> and C<perltoot> in the main Perl documentation.
 
@@ -489,7 +483,7 @@ The properties that can be set are:
     comments
     status
     hyperlink_base
-    created - File create date. Such be an aref of gmtime() values.
+    created - File create date. Should be an aref of gmtime() values.
 
 See also the C<properties.pl> program in the examples directory of the distro.
 
@@ -692,6 +686,15 @@ The C<get_default_url_format()> method gets a copy of the default url format use
 
 
 
+=head2 read_only_recommended()
+
+The C<read_only_recommended()> method can be used to set the Excel "Read-only Recommended" option that is available when saving a file. This presents the user of the file with an option to open it in "read-only" mode. This means that any changes to the file can't be saved back to the same file and must be saved to a new file. It can be set as follows:
+
+    $workbook->read_only_recommended();
+
+
+
+
 =head1 WORKSHEET METHODS
 
 A new worksheet is created by calling the C<add_worksheet()> method from a workbook object:
@@ -732,10 +735,14 @@ The following methods are available through a new worksheet:
     hide()
     set_first_sheet()
     protect()
+    unprotect_range()
     set_selection()
+    set_top_left_cell()
     set_row()
+    set_row_pixels()
     set_default_row()
     set_column()
+    set_column_pixels()
     outline_settings()
     freeze_panes()
     split_panes()
@@ -744,12 +751,13 @@ The following methods are available through a new worksheet:
     set_zoom()
     right_to_left()
     hide_zero()
+    set_background()
     set_tab_color()
     autofilter()
     filter_column()
     filter_column_list()
     set_vba_name()
-
+    ignore_errors()
 
 
 =head2 Cell notation
@@ -1140,7 +1148,6 @@ To find out more about array references refer to C<perlref> and C<perlreftut> in
 
 The C<write_row()> method returns the first error encountered when writing the elements of the data or zero if no errors were encountered. See the return values described for the C<write()> method above.
 
-See also the C<write_arrays.pl> program in the C<examples> directory of the distro.
 
 The C<write_row()> method allows the following idiomatic conversion of a text file to an Excel file:
 
@@ -1213,7 +1220,6 @@ To find out more about array references refer to C<perlref> and C<perlreftut> in
 
 The C<write_col()> method returns the first error encountered when writing the elements of the data or zero if no errors were encountered. See the return values described for the C<write()> method above.
 
-See also the C<write_arrays.pl> program in the C<examples> directory of the distro.
 
 
 
@@ -1696,7 +1702,7 @@ See the C<write_handler 1-4> programs in the C<examples> directory for further e
 
 =head2 insert_image( $row, $col, $filename, { %options } )
 
-This method can be used to insert a image into a worksheet. The image can be in PNG, JPEG or BMP format.
+This method can be used to insert a image into a worksheet. The image can be in PNG, JPEG, GIF or BMP format.
 
     $worksheet1->insert_image( 'A1', 'perl.bmp' );
     $worksheet2->insert_image( 'A1', '../images/perl.bmp' );
@@ -1712,6 +1718,8 @@ The optional C<options> hash/hashref parameter can be used to set various option
         object_position => 2,
         url             => undef,
         tip             => undef,
+        description     => $filename,
+        decorative      => 0,
     );
 
 The parameters C<x_offset> and C<y_offset> can be used to specify an offset from the top left hand corner of the cell specified by C<$row> and C<$col>. The offset values are in pixels.
@@ -1724,7 +1732,6 @@ The parameters C<x_scale> and C<y_scale> can be used to scale the inserted image
 
     # Scale the inserted image: width x 2.0, height x 0.8
     $worksheet->insert_image( 'A1', 'perl.bmp', { y_scale => 2, y_scale => 0.8 } );
-
 
 The positioning of the image when cells are resized can be set with the C<object_position> parameter:
 
@@ -1755,6 +1762,15 @@ The C<tip> option can be use to used to add a mouseover tip to the hyperlink:
         }
     );
 
+The C<description> parameter can be used to specify a description or "alt text" string for the image. In general this would be used to provide a text description of the image to help accessibility. It is an optional parameter and defaults to the filename of the image. It can be used as follows:
+
+    $worksheet->insert_image( 'E9', 'logo.png',
+                              {description => "This is some alternative text"} );
+
+The optional C<decorative> parameter is also used to help accessibility. It is used to mark the image as decorative, and thus uninformative, for automated screen readers. As in Excel, if this parameter is in use the C<description> field isn't written. It is used as follows:
+
+    $worksheet->insert_image( 'E9', 'logo.png', {decorative => 1} );
+
 Note: you must call C<set_row()> or C<set_column()> before C<insert_image()> if you wish to change the default dimensions of any of the rows or columns that the image occupies. The height of a row can also change if you use a font that is larger than the default. This in turn will affect the scaling of your image. To avoid this you should explicitly set the height of the row using C<set_row()> if it contains a font size that will change the row height.
 
 BMP images must be 24 bit, true colour, bitmaps. In general it is best to avoid BMP images since they aren't compressed.
@@ -1784,6 +1800,8 @@ The optional C<options> hash/hashref parameter can be used to set various option
         x_scale         => 1,
         y_scale         => 1,
         object_position => 1,
+        description     => undef,
+        decorative      => 0,
     );
 
 The parameters C<x_offset> and C<y_offset> can be used to specify an offset from the top left hand corner of the cell specified by C<$row> and C<$col>. The offset values are in pixels.
@@ -1807,6 +1825,15 @@ The C<object_position> parameter can have one of the following allowable values:
     4. Same as Option 1, see below.
 
 Option 4 appears in Excel as Option 1. However, the worksheet object is sized to take hidden rows or columns into account. This is generally only useful for images and not for charts.
+
+The C<description> parameter can be used to specify a description or "alt text" string for the chart. In general this would be used to provide a text description of the chart to help accessibility. It is an optional parameter and has no default. It can be used as follows:
+
+    $worksheet->insert_chart( 'E9', $chart, {description => 'Some alternative text'} );
+
+The optional C<decorative> parameter is also used to help accessibility. It is used to mark the chart as decorative, and thus uninformative, for automated screen readers. As in Excel, if this parameter is in use the C<description> field isn't written. It is used as follows:
+
+    $worksheet->insert_chart( 'E9', $chart, {decorative => 1} );
+
 
 
 =head2 insert_shape( $row, $col, $shape, $x, $y, $x_scale, $y_scale )
@@ -1862,6 +1889,7 @@ The properties of the button that can be set are:
     y_scale
     x_offset
     y_offset
+    description
 
 
 =over
@@ -1918,6 +1946,10 @@ This option is used to change the x offset, in pixels, of a button within a cell
 =item Option: y_offset
 
 This option is used to change the y offset, in pixels, of a comment within a cell.
+
+=item Option: description
+
+The option is used to specify a description or "alt text" string for the button.
 
 =back
 
@@ -2099,7 +2131,7 @@ You can optionally add a password to the worksheet protection:
 
     $worksheet->protect( 'drowssap' );
 
-Passing the empty string C<''> is the same as turning on protection without a password.
+The password should be an ASCII string. Passing the empty string C<''> is the same as turning on protection without a password.
 
 Note, the worksheet level password in Excel provides very weak protection. It does not encrypt your data and is very easy to deactivate. Full workbook encryption is not supported by C<Excel::Writer::XLSX> since it requires a completely different file format and would take several man months to implement.
 
@@ -2137,6 +2169,23 @@ For chartsheets the allowable options and default values are:
 
 
 
+
+=head2 unprotect_range( $cell_range, $range_name )
+
+
+The C<unprotect_range()> method is used to unprotect ranges in a protected worksheet. It can be used to set a single range or multiple ranges:
+
+    $worksheet->unprotect_range( 'A1' );
+    $worksheet->unprotect_range( 'C1' );
+    $worksheet->unprotect_range( 'E1:E3' );
+    $worksheet->unprotect_range( 'G1:K100' );
+
+As in Excel the ranges are given sequential names like C<Range1> and C<Range2> but a user defined name can also be specified:
+
+    $worksheet->unprotect_range( 'G4:I6', 'MyRange' );
+
+
+
 =head2 set_selection( $first_row, $first_col, $last_row, $last_col )
 
 This method can be used to specify which cell or cells are selected in a worksheet. The most common requirement is to select a single cell, in which case C<$last_row> and C<$last_col> can be omitted. The active cell within a selected range is determined by the order in which C<$first> and C<$last> are specified. It is also possible to specify a cell or a range using A1 notation. See the note about L</Cell notation>.
@@ -2155,13 +2204,29 @@ The default cell selections is (0, 0), 'A1'.
 
 
 
+=head2 set_top_left_cell( $row, $col )
+
+This method can be used to set the top leftmost visible cell in the worksheet:
+
+    $worksheet->set_top_left_cell( 31, 26 );
+
+    # Same as:
+    $worksheet->set_top_left_cell( 'AA32' );
+
+You can also use A1 notation, as shown above, see the note about L</Cell notation>.
+
+
+
+
 =head2 set_row( $row, $height, $format, $hidden, $level, $collapsed )
 
 This method can be used to change the default properties of a row. All parameters apart from C<$row> are optional.
 
-The most common use for this method is to change the height of a row:
+The most common use for this method is to change the height of a row.
 
     $worksheet->set_row( 0, 20 );    # Row 1 height set to 20
+
+Note: the row height is in Excel character units. To set the height in pixels use the C<set_row_pixels()> method, see below.
 
 If you wish to set the format without changing the height you can pass C<undef> as the height parameter:
 
@@ -2203,6 +2268,16 @@ Excel allows up to 7 outline levels. Therefore the C<$level> parameter should be
 
 
 
+=head2 set_row_pixels( $row, $height, $format, $hidden, $level, $collapsed )
+
+This method is the same as C<set_row()> except that C<$height> is in pixels.
+
+    $worksheet->set_row       ( 0, 24 );    # Set row height in character units
+    $worksheet->set_row_pixels( 1, 18 );    # Set row to same height in pixels
+
+
+
+
 =head2 set_column( $first_col, $last_col, $width, $format, $hidden, $level, $collapsed )
 
 This method can be used to change the default properties of a single column or a range of columns. All parameters apart from C<$first_col> and C<$last_col> are optional.
@@ -2218,7 +2293,9 @@ Examples:
     $worksheet->set_column( 'E:E', 20 );   # Column  E   width set to 20
     $worksheet->set_column( 'F:H', 30 );   # Columns F-H width set to 30
 
-The width corresponds to the column width value that is specified in Excel. It is approximately equal to the length of a string in the default font of Calibri 11. Unfortunately, there is no way to specify "AutoFit" for a column in the Excel file format. This feature is only available at runtime from within Excel.
+The width corresponds to the column width value that is specified in Excel. It is approximately equal to the length of a string in the default font of Calibri 11. To set the width in pixels use the C<set_column_pixels()> method, see below.
+
+Unfortunately, there is no way to specify "AutoFit" for a column in the Excel file format. This feature is only available at runtime from within Excel.
 
 As usual the C<$format> parameter is optional, for additional information, see L</CELL FORMATTING>. If you wish to set the format without changing the width you can pass C<undef> as the width parameter:
 
@@ -2261,6 +2338,16 @@ For collapsed outlines you should also indicate which row has the collapsed C<+>
 For a more complete example see the C<outline.pl> and C<outline_collapsed.pl> programs in the examples directory of the distro.
 
 Excel allows up to 7 outline levels. Therefore the C<$level> parameter should be in the range C<0 E<lt>= $level E<lt>= 7>.
+
+
+
+
+=head2 set_column_pixels( $first_col, $last_col, $width, $format, $hidden, $level, $collapsed )
+
+This method is the same as C<set_column()> except that C<$width> is in pixels.
+
+    $worksheet->set_column( 0, 0, 10 );    # Column A width set to 20 in character units
+    $worksheet->set_column( 1, 1, 75 );    # Column B set to the same width in pixels
 
 
 
@@ -2439,6 +2526,28 @@ In Excel this option is found under Tools->Options->View.
 
 
 
+=head2 set_background( $filename )
+
+
+The C<set_background()> method can be used to set the background image for the
+worksheet:
+
+    $worksheet->set_background( 'logo.png' )
+
+The C<set_background()> method supports all the image formats supported by
+C<insert_image()>.
+
+Some people use this method to add a watermark background to their
+document. However, Microsoft recommends using a header image L<to set a
+watermark|https://support.microsoft.com/en-us/office/add-a-watermark-in-excel-a372182a-d733-484e-825c-18ddf3edf009>. The
+choice of method depends on whether you want the watermark to be visible in
+normal viewing mode or just when the file is printed. In Excel::Writer::XLSX
+you can get the header watermark effect using C<set_header()>:
+
+    $worksheet->set_header( '&C&G', undef, { image_center => 'watermark.png' } )
+
+
+
 =head2 set_tab_color()
 
 The C<set_tab_color()> method is used to change the colour of the worksheet tab. You can use one of the standard colour names provided by the Format object or a Html style C<#RRGGBB> colour. See L</WORKING WITH COLOURS>.
@@ -2563,7 +2672,6 @@ B<NOTE:> It isn't sufficient to just specify the filter condition. You must also
 
 
 
-
 =head2 convert_date_time( $date_string )
 
 The C<convert_date_time()> method is used internally by the C<write_date_time()> method to convert date strings to a number that represents an Excel date and time.
@@ -2572,13 +2680,76 @@ It is exposed as a public method for utility purposes.
 
 The C<$date_string> format is detailed in the C<write_date_time()> method.
 
-=head2 Worksheet set_vba_name()
 
-The Worksheet C<set_vba_name()> method can be used to set the VBA codename for the
-worksheet (there is a similar method for the workbook VBA name). This is sometimes required when a C<vbaProject> macro included via C<add_vba_project()> refers to the worksheet. The default Excel VBA name of C<Sheet1>, etc., is used if a user defined name isn't specified.
+
+=head2 set_vba_name()
+
+The Worksheet C<set_vba_name()> method can be used to set the VBA codename for the worksheet (there is a similar method for the workbook VBA name). This is sometimes required when a C<vbaProject> macro included via C<add_vba_project()> refers to the worksheet. The default Excel VBA name of C<Sheet1>, etc., is used if a user defined name isn't specified.
 
 See also L<WORKING WITH VBA MACROS>.
 
+
+
+=head2 ignore_errors()
+
+The C<ignore_errors()> method can be used to ignore various worksheet cell errors/warnings. For example the following code writes a string that looks like a number:
+
+    $worksheet->write_string('D2', '123');
+
+This causes Excel to display a small green triangle in the top left hand corner of the cell to indicate an error/warning.
+
+Sometimes these warnings are useful indicators that there is an issue in the spreadsheet but sometimes it is preferable to turn them off. Warnings can be turned off at the Excel level for all workbooks and worksheets by using the using "Excel options -> Formulas -> Error checking rules". Alternatively you can turn them off for individual cells in a worksheet, or ranges of cells, using the C<ignore_errors()> method with a hashref of options and ranges like this:
+
+    $worksheet->ignore_errors({number_stored_as_text => 'A1:H50'});
+
+    # Or for more than one option:
+    $worksheet->ignore_errors({number_stored_as_text => 'A1:H50',
+                               eval_error =>            'A1:H50'});
+
+The range can be a single cell, a range of cells, or multiple cells and ranges separated by spaces:
+
+    # Single cell.
+    $worksheet->ignore_errors({eval_error => 'C6'});
+
+    # Or a single range:
+    $worksheet->ignore_errors({eval_error => 'C6:G8'});
+
+    # Or multiple cells and ranges:
+    $worksheet->ignore_errors({eval_error => 'C6 E6 G1:G20 J2:J6'});
+
+Note: calling C<ignore_errors> multiple times will overwrite the previous settings.
+
+You can turn off warnings for an entire column by specifying the range from the first cell in the column to the last cell in the column:
+
+    $worksheet->ignore_errors({number_stored_as_text => 'A1:A1048576'});
+
+Or for the entire worksheet by specifying the range from the first cell in the worksheet to the last cell in the worksheet:
+
+    $worksheet->ignore_errors({number_stored_as_text => 'A1:XFD1048576'});
+
+The worksheet errors/warnings that can be ignored are:
+
+=over
+
+=item * C<number_stored_as_text>: Turn off errors/warnings for numbers stores as text.
+
+=item * C<eval_error>: Turn off errors/warnings for formula errors (such as divide by zero).
+
+=item * C<formula_differs>: Turn off errors/warnings for formulas that differ from surrounding formulas.
+
+=item * C<formula_range>: Turn off errors/warnings for formulas that omit cells in a range.
+
+=item * C<formula_unlocked>: Turn off errors/warnings for unlocked cells that contain formulas.
+
+=item * C<empty_cell_reference>: Turn off errors/warnings for formulas that refer to empty cells.
+
+=item * C<list_data_validation>: Turn off errors/warnings for cells in a table that do not comply with applicable data validation rules.
+
+=item * C<calculated_column>: Turn off errors/warnings for cell formulas that differ from the column formula.
+
+=item * C<two_digit_text_year>: Turn off errors/warnings for formulas that contain a two digit text representation of a year.
+
+=back
 
 
 =head1 PAGE SET-UP METHODS
@@ -3633,7 +3804,7 @@ This property can be used to prevent modification of a cells contents. Following
     $locked->set_locked( 1 );    # A non-op
 
     my $unlocked = $workbook->add_format();
-    $locked->set_locked( 0 );
+    $unlocked->set_locked( 0 );
 
     # Enable worksheet protection
     $worksheet->protect();
@@ -3987,6 +4158,20 @@ Set the colour of the diagonal cell border:
     $format->set_diag_border( 7 );
     $format->set_diag_color( 'red' );
 
+
+
+
+=head2 set_quote_prefix()
+
+    Default state:      quote prefix is off
+    Default action:     Turn quote prefix on
+    Valid args:         0, 1
+
+Set the quote prefix property of a format to ensure a string is treated as a string after editing. This is the same as prefixing the string with a single quote in Excel. You don't need to add the quote to the string but you do need to add the format.
+
+Set the quote prefix property of the format:
+
+    $format->set_quote_prefix();  # Turn quote prefix on
 
 
 =head2 copy( $format )
@@ -7041,6 +7226,7 @@ different features and options of the module. See L<Excel::Writer::XLSX::Example
 
     Intermediate
     ============
+    autofit.pl              Examples of simulated worksheet autofit.
     autofilter.pl           Examples of worksheet autofilters.
     array_formula.pl        Examples of how to write array formulas.
     cgi.pl                  A simple CGI program.
@@ -7070,6 +7256,7 @@ different features and options of the module. See L<Excel::Writer::XLSX::Example
     date_time.pl            Write dates and times with write_date_time().
     defined_name.pl         Example of how to create defined names.
     diag_border.pl          A simple example of diagonal cell borders.
+    dynamic_arrays.pl       Example of using new Excel 365 dynamic functions.
     filehandle.pl           Examples of working with filehandles.
     headers.pl              Examples of worksheet headers and footers.
     hide_row_col.pl         Example of hiding rows and columns.
@@ -7077,6 +7264,8 @@ different features and options of the module. See L<Excel::Writer::XLSX::Example
     hyperlink1.pl           Shows how to create web hyperlinks.
     hyperlink2.pl           Examples of internal and external hyperlinks.
     indent.pl               An example of cell indentation.
+    ignore_errors.pl        An example of turning off worksheet cells errors/warnings.
+    lambda.pl               Example of using the Excel 365 LAMBDA() function.
     macros.pl               An example of adding macros from an existing file.
     merge1.pl               A simple example of cell merging.
     merge2.pl               A simple example of cell merging with formatting.
@@ -7107,6 +7296,8 @@ different features and options of the module. See L<Excel::Writer::XLSX::Example
     sparklines2.pl          Sparklines demo showing formatting options.
     stats_ext.pl            Same as stats.pl with external references.
     stocks.pl               Demonstrates conditional formatting.
+    watermark.pl            Example of how to set a watermark image for a worksheet.
+    background.pl           Example of how to set the background image for a worksheet.
     tab_colors.pl           Example of how to set worksheet tab colours.
     tables.pl               Add Excel tables to a worksheet.
     write_handler1.pl       Example of extending the write() method. Step 1.
@@ -7114,7 +7305,6 @@ different features and options of the module. See L<Excel::Writer::XLSX::Example
     write_handler3.pl       Example of extending the write() method. Step 3.
     write_handler4.pl       Example of extending the write() method. Step 4.
     write_to_scalar.pl      Example of writing an Excel file to a Perl scalar.
-
 
     Unicode
     =======
@@ -7153,149 +7343,6 @@ The following limits are imposed by Excel 2007+:
 
 
 
-=head1 Compatibility with Spreadsheet::WriteExcel
-
-The C<Excel::Writer::XLSX> module is a drop-in replacement for C<Spreadsheet::WriteExcel>.
-
-It supports all of the features of Spreadsheet::WriteExcel with some minor differences noted below.
-
-    Workbook Methods            Support
-    ================            ======
-    new()                       Yes
-    add_worksheet()             Yes
-    add_format()                Yes
-    add_chart()                 Yes
-    add_shape()                 Yes. Not in Spreadsheet::WriteExcel.
-    add_vba_project()           Yes. Not in Spreadsheet::WriteExcel.
-    close()                     Yes
-    set_properties()            Yes
-    define_name()               Yes
-    set_tempdir()               Yes
-    set_custom_color()          Yes
-    sheets()                    Yes
-    set_1904()                  Yes
-    set_optimization()          Yes. Not required in Spreadsheet::WriteExcel.
-    add_chart_ext()             Not supported. Not required in Excel::Writer::XLSX.
-    compatibility_mode()        Deprecated. Not required in Excel::Writer::XLSX.
-    set_codepage()              Deprecated. Not required in Excel::Writer::XLSX.
-
-
-    Worksheet Methods           Support
-    =================           =======
-    write()                     Yes
-    write_number()              Yes
-    write_string()              Yes
-    write_rich_string()         Yes. Not in Spreadsheet::WriteExcel.
-    write_blank()               Yes
-    write_row()                 Yes
-    write_col()                 Yes
-    write_date_time()           Yes
-    write_url()                 Yes
-    write_formula()             Yes
-    write_array_formula()       Yes. Not in Spreadsheet::WriteExcel.
-    keep_leading_zeros()        Yes
-    write_comment()             Yes
-    show_comments()             Yes
-    set_comments_author()       Yes
-    add_write_handler()         Yes
-    insert_image()              Yes.
-    insert_chart()              Yes
-    insert_shape()              Yes. Not in Spreadsheet::WriteExcel.
-    insert_button()             Yes. Not in Spreadsheet::WriteExcel.
-    data_validation()           Yes
-    conditional_formatting()    Yes. Not in Spreadsheet::WriteExcel.
-    add_sparkline()             Yes. Not in Spreadsheet::WriteExcel.
-    add_table()                 Yes. Not in Spreadsheet::WriteExcel.
-    get_name()                  Yes
-    activate()                  Yes
-    select()                    Yes
-    hide()                      Yes
-    set_first_sheet()           Yes
-    protect()                   Yes
-    set_selection()             Yes
-    set_row()                   Yes.
-    set_column()                Yes.
-    set_default_row()           Yes. Not in Spreadsheet::WriteExcel.
-    outline_settings()          Yes
-    freeze_panes()              Yes
-    split_panes()               Yes
-    merge_range()               Yes
-    merge_range_type()          Yes. Not in Spreadsheet::WriteExcel.
-    set_zoom()                  Yes
-    right_to_left()             Yes
-    hide_zero()                 Yes
-    set_tab_color()             Yes
-    autofilter()                Yes
-    filter_column()             Yes
-    filter_column_list()        Yes. Not in Spreadsheet::WriteExcel.
-    write_utf16be_string()      Deprecated. Use Perl utf8 strings instead.
-    write_utf16le_string()      Deprecated. Use Perl utf8 strings instead.
-    store_formula()             Deprecated. See docs.
-    repeat_formula()            Deprecated. See docs.
-    write_url_range()           Not supported. Not required in Excel::Writer::XLSX.
-
-    Page Set-up Methods         Support
-    ===================         =======
-    set_landscape()             Yes
-    set_portrait()              Yes
-    set_page_view()             Yes
-    set_paper()                 Yes
-    center_horizontally()       Yes
-    center_vertically()         Yes
-    set_margins()               Yes
-    set_header()                Yes
-    set_footer()                Yes
-    repeat_rows()               Yes
-    repeat_columns()            Yes
-    hide_gridlines()            Yes
-    print_row_col_headers()     Yes
-    print_area()                Yes
-    print_across()              Yes
-    fit_to_pages()              Yes
-    set_start_page()            Yes
-    set_print_scale()           Yes
-    set_h_pagebreaks()          Yes
-    set_v_pagebreaks()          Yes
-
-    Format Methods              Support
-    ==============              =======
-    set_font()                  Yes
-    set_size()                  Yes
-    set_color()                 Yes
-    set_bold()                  Yes
-    set_italic()                Yes
-    set_underline()             Yes
-    set_font_strikeout()        Yes
-    set_font_script()           Yes
-    set_font_outline()          Yes
-    set_font_shadow()           Yes
-    set_num_format()            Yes
-    set_locked()                Yes
-    set_hidden()                Yes
-    set_align()                 Yes
-    set_rotation()              Yes
-    set_text_wrap()             Yes
-    set_text_justlast()         Yes
-    set_center_across()         Yes
-    set_indent()                Yes
-    set_shrink()                Yes
-    set_pattern()               Yes
-    set_bg_color()              Yes
-    set_fg_color()              Yes
-    set_border()                Yes
-    set_bottom()                Yes
-    set_top()                   Yes
-    set_left()                  Yes
-    set_right()                 Yes
-    set_border_color()          Yes
-    set_bottom_color()          Yes
-    set_top_color()             Yes
-    set_left_color()            Yes
-    set_right_color()           Yes
-
-
-
-
 =head1 REQUIREMENTS
 
 L<http://search.cpan.org/search?dist=Archive-Zip/>.
@@ -7319,53 +7366,13 @@ This memory usage can be reduced almost completely by using the Workbook C<set_o
 
     $workbook->set_optimization();
 
-This also gives an increase in performance to within 1-10% of Spreadsheet::WriteExcel, see below.
+The trade-off is that you won't be able to take advantage of features that manipulate cell data after it is written. One such feature is Tables.
 
-The trade-off is that you won't be able to take advantage of any new features that manipulate cell data after it is written. One such feature is Tables.
-
-
-=head2 Performance figures
-
-The performance figures below show execution speed and memory usage for 60 columns x N rows for a 50/50 mixture of strings and numbers. Percentage speeds are relative to Spreadsheet::WriteExcel.
-
-    Excel::Writer::XLSX
-         Rows  Time (s)    Memory (bytes)  Rel. Time
-          400      0.66         6,586,254       129%
-          800      1.26        13,099,422       125%
-         1600      2.55        26,126,361       123%
-         3200      5.16        52,211,284       125%
-         6400     10.47       104,401,428       128%
-        12800     21.48       208,784,519       131%
-        25600     43.90       417,700,746       126%
-        51200     88.52       835,900,298       126%
-
-    Excel::Writer::XLSX + set_optimisation()
-         Rows  Time (s)    Memory (bytes)  Rel. Time
-          400      0.70            63,059       135%
-          800      1.10            63,059       110%
-         1600      2.30            63,062       111%
-         3200      4.44            63,062       107%
-         6400      8.91            63,062       109%
-        12800     17.69            63,065       108%
-        25600     35.15            63,065       101%
-        51200     70.67            63,065       101%
-
-    Spreadsheet::WriteExcel
-         Rows  Time (s)    Memory (bytes)
-          400      0.51         1,265,583
-          800      1.01         2,424,855
-         1600      2.07         4,743,400
-         3200      4.14         9,411,139
-         6400      8.20        18,766,915
-        12800     16.39        37,478,468
-        25600     34.72        75,044,423
-        51200     70.21       150,543,431
 
 
 =head1 DOWNLOADING
 
 The latest version of this module is always available at: L<http://search.cpan.org/search?dist=Excel-Writer-XLSX/>.
-
 
 
 
@@ -7377,7 +7384,6 @@ The module can be installed using the standard Perl procedure:
             make
             make test
             make install    # You may need to be sudo/root
-
 
 
 
@@ -7523,32 +7529,11 @@ If you wish to submit a bug report run the C<bug_report.pl> program in the C<exa
 The bug tracker is on Github: L<https://github.com/jmcnamara/excel-writer-xlsx/issues>.
 
 
-=head1 TO DO
-
-The roadmap is as follows:
-
-=over 4
-
-=item * New separated data/formatting API to allow cells to be formatted after data is added.
-
-=item * More charting features.
-
-=back
-
-
-
 
 
 =head1 REPOSITORY
 
 The Excel::Writer::XLSX source code in host on github: L<http://github.com/jmcnamara/excel-writer-xlsx>.
-
-
-
-
-=head1 MAILING LIST
-
-There is a Google group for discussing and asking questions about Excel::Writer::XLSX. This is a good place to search to see if your question has been asked before:  L<http://groups.google.com/group/spreadsheet-writeexcel>.
 
 
 
@@ -7606,23 +7591,11 @@ The Perl Artistic Licence L<http://dev.perl.org/licenses/artistic.html>.
 
 John McNamara jmcnamara@cpan.org
 
-    Wilderness for miles, eyes so mild and wise
-    Oasis child, born and so wild
-    Don't I know you better than the rest
-    All deception, all deception from you
-
-    Any way you run, you run before us
-    Black and white horse arching among us
-    Any way you run, you run before us
-    Black and white horse arching among us
-
-      -- Beach House
-
 
 
 
 =head1 COPYRIGHT
 
-Copyright MM-MMXX, John McNamara.
+Copyright MM-MMXXIII, John McNamara.
 
 All Rights Reserved. This module is free software. It may be used, redistributed and/or modified under the same terms as Perl itself.

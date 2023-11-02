@@ -1,14 +1,14 @@
-# Copyrights 2007-2021 by [Mark Overmeer <markov@cpan.org>].
+# Copyrights 2007-2022 by [Mark Overmeer <markov@cpan.org>].
 #  For other contributors see ChangeLog.
 # See the manual pages for details on the licensing terms.
-# Pod stripped from pm file by OODoc 2.02.
+# Pod stripped from pm file by OODoc 2.03.
 # This code is part of distribution Log-Report. Meta-POD processed with
 # OODoc into POD and HTML manual-pages.  See README.md
 # Copyright Mark Overmeer.  Licensed under the same terms as Perl itself.
 
 package Log::Report::Die;
 use vars '$VERSION';
-$VERSION = '1.31';
+$VERSION = '1.34';
 
 use base 'Exporter';
 
@@ -31,7 +31,6 @@ sub die_decode($%)
     my %opt    = (errno => $! + 0);
     my $err    = "$!";
 
-    my $dietxt = $text[0];
     if($text[0] =~ s/ at (.+) line (\d+)\.?$// )
     {   $opt{location} = [undef, $1, $2, undef];
     }
@@ -61,7 +60,7 @@ sub die_decode($%)
       : @stack      ? 'PANIC'
       :               $args{on_die} || 'ERROR';
 
-    ($dietxt, \%opt, $reason, join("\n", @msg));
+    (\%opt, $reason, join("\n", @msg));
 }
 
 
@@ -94,7 +93,7 @@ sub _exception_dbix($$)
       : @stack       ? 'PANIC'
       :                $on_die || 'ERROR';
 
-    ('caught '.ref $exception, \%opts, $reason, $message);
+    (\%opts, $reason, $message);
 }
 
 my %_libxml_errno2reason = (1 => 'WARNING', 2 => 'MISTAKE', 3 => 'ERROR');
@@ -112,7 +111,7 @@ sub _exception_libxml($$)
             . ' (' . $exc->domain . ' error ' . $exc->code . ')';
 
 	my $reason = $_libxml_errno2reason{$exc->level} || 'PANIC';
-    ('caught '.ref $exc, \%opts, $reason, $msg);
+    (\%opts, $reason, $msg);
 }
 
 sub exception_decode($%)
@@ -127,14 +126,14 @@ sub exception_decode($%)
 
     # Unsupported exception system, sane guesses
     my %opt =
-    ( classes => [ 'unknown exception', 'die', ref $exception ]
-    , errno   => $errno
-    );
+      ( classes => [ 'unknown exception', 'die', ref $exception ]
+      , errno   => $errno
+      );
 
     my $reason = $errno ? 'FAULT' : $args{on_die} || 'ERROR';
 
     # hopefully stringification is overloaded
-    ( "caught ".ref $exception, \%opt, $reason, "$exception");
+    (\%opt, $reason, "$exception");
 }
 
 "to die or not to die, that's the question";

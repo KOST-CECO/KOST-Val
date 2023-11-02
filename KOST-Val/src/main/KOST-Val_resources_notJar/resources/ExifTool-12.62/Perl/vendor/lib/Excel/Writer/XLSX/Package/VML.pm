@@ -6,7 +6,7 @@ package Excel::Writer::XLSX::Package::VML;
 #
 # Used in conjunction with Excel::Writer::XLSX
 #
-# Copyright 2000-2020, John McNamara, jmcnamara@cpan.org
+# Copyright 2000-2023, John McNamara, jmcnamara@cpan.org
 #
 # Documentation after __END__
 #
@@ -20,7 +20,7 @@ use Carp;
 use Excel::Writer::XLSX::Package::XMLwriter;
 
 our @ISA     = qw(Excel::Writer::XLSX::Package::XMLwriter);
-our $VERSION = '1.07';
+our $VERSION = '1.11';
 
 
 ###############################################################################
@@ -604,14 +604,23 @@ sub _write_button_shape {
 
 
     my @attributes = (
-        'id'          => $id,
-        'type'        => $type,
+        'id'   => $id,
+        'type' => $type,
+    );
+
+    if ( $button->{_description} ) {
+        push @attributes, ( 'alt' => $button->{_description} );
+    }
+
+    push @attributes,
+      (
         'style'       => $style,
         'o:button'    => 't',
         'fillcolor'   => 'buttonFace [67]',
         'strokecolor' => 'windowText [64]',
         'o:insetmode' => 'auto',
-    );
+      );
+
 
     $self->xml_start_tag( 'v:shape', @attributes );
 
@@ -1200,7 +1209,7 @@ John McNamara jmcnamara@cpan.org
 
 =head1 COPYRIGHT
 
-(c) MM-MMXX, John McNamara.
+(c) MM-MMXXIII, John McNamara.
 
 All Rights Reserved. This module is free software. It may be used, redistributed and/or modified under the same terms as Perl itself.
 

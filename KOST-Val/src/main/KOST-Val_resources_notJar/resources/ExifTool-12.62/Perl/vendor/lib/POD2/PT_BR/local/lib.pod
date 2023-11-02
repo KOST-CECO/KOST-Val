@@ -335,8 +335,8 @@ módulos deve ser feita. O padrão é C<~/perl5>.
 
 =back
 
-Procura pelo diretório padrão (home) do usuário. Caso esteja instalado,
-utiliza o C<File::HomeDir> para isso. Gera uma exceção caso não encontre
+Procura pelo diretório padrão (home) do usuário.
+Gera uma exceção caso não encontre
 resultado definitivo.
 
 =head2 resolve_relative_path

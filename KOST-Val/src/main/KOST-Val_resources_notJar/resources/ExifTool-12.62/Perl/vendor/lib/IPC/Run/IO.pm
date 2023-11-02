@@ -63,6 +63,7 @@ out of Perl, this class I<no longer> uses the fields pragma.
 ## at some point.  Don't know how far how fast.
 
 use strict;
+use warnings;
 use Carp;
 use Fcntl;
 use Symbol;
@@ -73,7 +74,7 @@ use IPC::Run qw( Win32_MODE );
 use vars qw{$VERSION};
 
 BEGIN {
-    $VERSION = '20200505.0';
+    $VERSION = '20220807.0';
     if (Win32_MODE) {
         eval "use IPC::Run::Win32Helper; require IPC::Run::Win32IO; 1"
           or ( $@ && die )

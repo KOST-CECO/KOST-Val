@@ -52,7 +52,7 @@ __END__
 
 =head1 NAME
 
-Net::IMAP::Client::MsgAddress
+Net::IMAP::Client::MsgAddress - email address object
 
 =head1 DESCRIPTION
 

@@ -2,7 +2,7 @@ package Net::DNS::RR::PX;
 
 use strict;
 use warnings;
-our $VERSION = (qw$Id: PX.pm 1814 2020-10-14 21:49:16Z willem $)[2];
+our $VERSION = (qw$Id: PX.pm 1898 2023-02-15 14:27:22Z willem $)[2];
 
 use base qw(Net::DNS::RR);
 
@@ -19,19 +19,17 @@ use Net::DNS::DomainName;
 
 
 sub _decode_rdata {			## decode rdata from wire-format octet string
-	my $self = shift;
-	my ( $data, $offset, @opaque ) = @_;
+	my ( $self, $data, $offset ) = @_;
 
 	$self->{preference} = unpack( "\@$offset n", $$data );
-	( $self->{map822},  $offset ) = Net::DNS::DomainName2535->decode( $data, $offset + 2, @opaque );
-	( $self->{mapx400}, $offset ) = Net::DNS::DomainName2535->decode( $data, $offset + 0, @opaque );
+	( $self->{map822},  $offset ) = Net::DNS::DomainName2535->decode( $data, $offset + 2 );
+	( $self->{mapx400}, $offset ) = Net::DNS::DomainName2535->decode( $data, $offset );
 	return;
 }
 
 
 sub _encode_rdata {			## encode rdata as wire-format octet string
-	my $self = shift;
-	my ( $offset, @opaque ) = @_;
+	my ( $self, $offset, @opaque ) = @_;
 
 	my $mapx400 = $self->{mapx400};
 	my $rdata   = pack( 'n', $self->{preference} );
@@ -50,35 +48,30 @@ sub _format_rdata {			## format rdata portion of RR string.
 
 
 sub _parse_rdata {			## populate RR from rdata in argument list
-	my $self = shift;
+	my ( $self, @argument ) = @_;
 
-	$self->preference(shift);
-	$self->map822(shift);
-	$self->mapx400(shift);
+	for (qw(preference map822 mapx400)) { $self->$_( shift @argument ) }
 	return;
 }
 
 
 sub preference {
-	my $self = shift;
-
-	$self->{preference} = 0 + shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{preference} = 0 + $_ }
 	return $self->{preference} || 0;
 }
 
 
 sub map822 {
-	my $self = shift;
-
-	$self->{map822} = Net::DNS::DomainName2535->new(shift) if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{map822} = Net::DNS::DomainName2535->new($_) }
 	return $self->{map822} ? $self->{map822}->name : undef;
 }
 
 
 sub mapx400 {
-	my $self = shift;
-
-	$self->{mapx400} = Net::DNS::DomainName2535->new(shift) if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{mapx400} = Net::DNS::DomainName2535->new($_) }
 	return $self->{mapx400} ? $self->{mapx400}->name : undef;
 }
 
@@ -155,7 +148,7 @@ Package template (c)2009,2012 O.M.Kolkman and R.W.Franks.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -172,6 +165,7 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::RR>, RFC2163
+L<perl> L<Net::DNS> L<Net::DNS::RR>
+L<RFC2163|https://tools.ietf.org/html/rfc2163>
 
 =cut

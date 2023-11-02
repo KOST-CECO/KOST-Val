@@ -417,6 +417,12 @@ Sango Central African Republic locale.
    1995-12-22T09:05:02 = NpK 1995 Kak 22
   -0010-09-15T04:44:23 = KnK -10 Mvu 15
 
+=head3 GyMd (GGGGG y-MM-dd)
+
+   2008-02-05T18:30:30 = NpK 2008-02-05
+   1995-12-22T09:05:02 = NpK 1995-12-22
+  -0010-09-15T04:44:23 = KnK -10-09-15
+
 =head3 H (HH)
 
    2008-02-05T18:30:30 = 18

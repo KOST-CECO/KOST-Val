@@ -10,7 +10,7 @@ use strict;
 use warnings;
 our ( %Config, $VERSION );
 
-$VERSION = "5.032001";
+$VERSION = "5.036001";
 
 # Skip @Config::EXPORT because it only contains %Config, which we special
 # case below as it's not a function. @Config::EXPORT won't change in the
@@ -56,11 +56,11 @@ sub import {
     return;
 }
 
-die "$0: Perl lib version (5.32.1) doesn't match executable '$^X' version ($])"
+die "$0: Perl lib version (5.36.1) doesn't match executable '$^X' version ($])"
     unless $^V;
 
-$^V eq 5.32.1
-    or die sprintf "%s: Perl lib version (5.32.1) doesn't match executable '$^X' version (%vd)", $0, $^V;
+$^V eq 5.36.1
+    or die sprintf "%s: Perl lib version (5.36.1) doesn't match executable '$^X' version (%vd)", $0, $^V;
 
 
 sub FETCH {
@@ -87,8 +87,8 @@ tie %Config, 'Config', {
     archlibexp => 'C:\\strawberry\\perl\\lib',
     archname => 'MSWin32-x64-multi-thread',
     cc => 'gcc',
-    d_readlink => undef,
-    d_symlink => undef,
+    d_readlink => 'define',
+    d_symlink => 'define',
     dlext => 'xs.dll',
     dlsrc => 'dl_win32.xs',
     dont_use_nlink => undef,
@@ -96,9 +96,9 @@ tie %Config, 'Config', {
     inc_version_list => '',
     intsize => '4',
     ldlibpthname => '',
-    libpth => 'C:\\strawberry\\c\\lib C:\\strawberry\\c\\x86_64-w64-mingw32\\lib C:\\strawberry\\c\\lib\\gcc\\x86_64-w64-mingw32\\8.3.0',
+    libpth => 'C:\\strawberry\\c\\lib C:\\strawberry\\c\\x86_64-w64-mingw32\\lib C:\\strawberry\\c\\lib\\gcc\\x86_64-w64-mingw32\\13.1.0 C:\\strawberry\\c\\x86_64-w64-mingw32\\lib C:\\strawberry\\c\\lib\\gcc\\x86_64-w64-mingw32\\13.1.0',
     osname => 'MSWin32',
-    osvers => '10.0.19042.746',
+    osvers => '10.0.17763.4499',
     path_sep => ';',
     privlibexp => 'C:\\strawberry\\perl\\lib',
     scriptdir => 'C:\\strawberry\\perl\\bin',
@@ -107,7 +107,7 @@ tie %Config, 'Config', {
     so => 'dll',
     useithreads => 'define',
     usevendorprefix => 'define',
-    version => '5.32.1',
+    version => '5.36.1',
 };
 eval {
 	require Portable;

@@ -1,9 +1,11 @@
-use strict;
+use v5.12.0;
 use warnings;
-package Email::Simple::Header;
+package Email::Simple::Header 2.218;
 # ABSTRACT: the header of an Email::Simple message
-$Email::Simple::Header::VERSION = '2.216';
+
 use Carp ();
+
+our @CARP_NOT = qw(Email::Simple);
 
 require Email::Simple;
 
@@ -58,6 +60,8 @@ sub new {
 
 sub _header_to_list {
   my ($self, $head, $mycrlf) = @_;
+
+  Carp::carp 'Header with wide characters' if ${$head} =~ /[^\x00-\xFF]/;
 
   my @headers;
 
@@ -245,6 +249,9 @@ sub header_raw {
 sub header_raw_set {
   my ($self, $field, @data) = @_;
 
+  Carp::carp "Header name '$field' with wide characters" if $field =~ /[^\x00-\xFF]/;
+  Carp::carp "Value for '$field' header with wide characters" if grep /[^\x00-\xFF]/, @data;
+
   # I hate this block. -- rjbs, 2006-10-06
   if ($Email::Simple::GROUCHY) {
     Carp::croak "field name contains illegal characters"
@@ -302,6 +309,63 @@ sub header_raw_prepend {
     unless defined $value;
 
   unshift @{ $self->{headers} }, $field => $value;
+
+  return;
+}
+
+#pod =method header_rename
+#pod
+#pod   $header->header_rename($field, $new_name, $nth);
+#pod
+#pod This renames the named field to the new name.  If C<$nth> is given, only the
+#pod I<n>th instance of the field will be renamed.  It is fatal to rename an
+#pod instance that does not exist.  The first instance of a header is the 0th.
+#pod
+#pod If C<$nth> is omitted, all instances of the header are renamed.
+#pod
+#pod When picking headers to rename, C<$field> is matched case insensitively.  So,
+#pod given this header:
+#pod
+#pod     happythoughts: yes
+#pod     HappyThoughts: so many
+#pod     hapPyThouGhts: forever
+#pod
+#pod Then this code...
+#pod
+#pod     $header->rename_header('happythoughts', 'Delights');
+#pod
+#pod ...will result in this:
+#pod
+#pod     Delights: yes
+#pod     Delights: so many
+#pod     Delights: forever
+#pod
+#pod Headers may be rewrapped as a result of renaming.
+#pod
+#pod =cut
+
+sub header_rename {
+  my ($self, $field, $new_name, $n) = @_;
+
+  my $headers = $self->{headers};
+  my $lc_field = lc $field;
+
+  my @indices = grep { lc $headers->[$_] eq $lc_field }
+    map { $_ * 2 } 0 .. @$headers / 2 - 1;
+
+  if (defined $n) {
+    if ($n < 0) { Carp::confess("negative header index makes no sense") }
+    if ($n > $#indices) { Carp::confess("$n exceeds count of $field headers") }
+
+    @indices = $indices[$n];
+  }
+
+  for my $i (@indices) {
+    $headers->[$i] = $new_name;
+    if (ref $headers->[$i + 1]) {
+      $headers->[$i + 1] = $headers->[ $i + 1 ][0];
+    }
+  }
 
   return;
 }
@@ -412,7 +476,7 @@ Email::Simple::Header - the header of an Email::Simple message
 
 =head1 VERSION
 
-version 2.216
+version 2.218
 
 =head1 SYNOPSIS
 
@@ -425,6 +489,16 @@ version 2.216
 
 This method implements the headers of an Email::Simple object.  It is a very
 minimal interface, and is mostly for private consumption at the moment.
+
+=head1 PERL VERSION
+
+This library should run on perls released even a long time ago.  It should work
+on any version of perl released in the last five years.
+
+Although it may work on older versions of perl, no guarantee is made that the
+minimum required version will not be increased.  The version may be increased
+for any reason, and there is no promise that patches will be accepted to lower
+the minimum required perl.
 
 =head1 METHODS
 
@@ -506,6 +580,35 @@ you.)
 This method adds a new instance of the name field as the first field in the
 header.
 
+=head2 header_rename
+
+  $header->header_rename($field, $new_name, $nth);
+
+This renames the named field to the new name.  If C<$nth> is given, only the
+I<n>th instance of the field will be renamed.  It is fatal to rename an
+instance that does not exist.  The first instance of a header is the 0th.
+
+If C<$nth> is omitted, all instances of the header are renamed.
+
+When picking headers to rename, C<$field> is matched case insensitively.  So,
+given this header:
+
+    happythoughts: yes
+    HappyThoughts: so many
+    hapPyThouGhts: forever
+
+Then this code...
+
+    $header->rename_header('happythoughts', 'Delights');
+
+...will result in this:
+
+    Delights: yes
+    Delights: so many
+    Delights: forever
+
+Headers may be rewrapped as a result of renaming.
+
 =head2 crlf
 
 This method returns the newline string used in the header.
@@ -524,7 +627,7 @@ Casey West
 
 =item *
 
-Ricardo SIGNES
+Ricardo SIGNES <cpan@semiotic.systems>
 
 =back
 

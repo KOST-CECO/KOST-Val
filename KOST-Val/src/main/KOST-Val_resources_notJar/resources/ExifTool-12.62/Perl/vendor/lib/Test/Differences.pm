@@ -126,8 +126,30 @@ a normal unified diff) or 25 lines.
 
 =item * C<data_type>
 
-C<text> or C<data>. See C<eq_or_diff_text> and C<eq_or_diff_data> to
-understand this. You can usually ignore this.
+C<text> or C<data>. This normally defaults to C<data>. If, however, neither of
+C<$got> or C<$expected> is a reference then  it defaults to C<text>. You can
+also force one or the other by calling C<eq_or_diff_text> or
+C<eq_or_diff_data>.
+
+The difference is that in text mode lines are numbered from 1, but in data mode
+from 0 (and are refered to as 'elements' (Elt) instead of lines):
+
+    # +---+-------+----------+
+    # | Ln|Got    |Expected  |
+    # +---+-------+----------+
+    # *  1|'foo'  |'bar'     *
+    # +---+-------+----------+
+
+    # +----+---------+----+----------+
+    # | Elt|Got      | Elt|Expected  |
+    # +----+---------+----+----------+
+    # *   0|[        *   0|'bar'     *
+    # *   1|  'foo'  *    |          |
+    # *   2|]        *    |          |
+    # +----+---------+----+----------+
+
+The difference is purely cosmetic, it makes no difference to how comparisons
+are performed.
 
 =item * C<Sortkeys>
 
@@ -190,36 +212,12 @@ You can run the following to understand the different diff output styles:
 Generally you'll find that the following test output is disappointing.
 
     use Test::Differences;
-
-    my $want = { 'Traditional Chinese' => '中國' };
-    my $have = { 'Traditional Chinese' => '中国' };
-
-    eq_or_diff $have, $want, 'Unicode, baby';
-
-The output looks like this:
-
-    #   Failed test 'Unicode, baby'
-    #   at t/unicode.t line 12.
-    # +----+----------------------------+----------------------------+
-    # | Elt|Got                         |Expected                    |
-    # +----+----------------------------+----------------------------+
-    # |   0|'Traditional Chinese'       |'Traditional Chinese'       |
-    # *   1|'\xe4\xb8\xad\xe5\x9b\xbd'  |'\xe4\xb8\xad\xe5\x9c\x8b'  *
-    # +----+----------------------------+----------------------------+
-    # Looks like you failed 1 test of 1.
-    Dubious, test returned 1 (wstat 256, 0x100)
-
-This is generally not helpful and someone points out that you didn't declare
-your test program as being utf8, so you do that:
-
-    use Test::Differences;
     use utf8;
 
     my $want = { 'Traditional Chinese' => '中國' };
     my $have = { 'Traditional Chinese' => '中国' };
 
     eq_or_diff $have, $want, 'Unicode, baby';
-
 
 Here's what you get:
 
@@ -235,90 +233,25 @@ Here's what you get:
     Dubious, test returned 1 (wstat 256, 0x100)
     Failed 1/1 subtests
 
-That's better, but still awful. However, if you have C<Text::Diff> 0.40 or
-higher installed, you can add this to your code:
+A patch to fix this would be *most* welcome.
 
-    BEGIN { $ENV{DIFF_OUTPUT_UNICODE} = 1 }
+=head1 Unknown::Values
 
-Make sure you do this I<before> you load L<Text::Diff>. Then this is the output:
+L<Unknown::Values> is a module which provides values which will never compare as being
+the same as anything else, not even the same as itself.
 
-    # +----+-----------------------+-----------------------+
-    # | Elt|Got                    |Expected               |
-    # +----+-----------------------+-----------------------+
-    # |   0|'Traditional Chinese'  |'Traditional Chinese'  |
-    # *   1|'中国'                 |'中國'                 *
-    # +----+-----------------------+-----------------------+
+If code looks too hard at one of these values (and Test::Differences looks very hard indeed)
+that is a fatal error. This means that while we can detect the presence of these beasties,
+and tell you that they compare different, for Complicated Internals Reasons we can't show you
+much context. Sorry.
 
-=head1 DEPLOYING
-
-There are several basic ways of deploying Test::Differences requiring more or less
-labor by you or your users.
-
-=over
-
-=item *
-
-Fallback to C<is_deeply>.
-
-This is your best option if you want this module to be optional.
-
- use Test::More;
- BEGIN {
-     if (!eval q{ use Test::Differences; 1 }) {
-         *eq_or_diff = \&is_deeply;
-     }
- }
-
-=item *
-
- eval "use Test::Differences";
-
-If you want to detect the presence of Test::Differences on the fly, something
-like the following code might do the trick for you:
-
-    use Test qw( !ok );   ## get all syms *except* ok
-
-    eval "use Test::Differences";
-    use Data::Dumper;
-
-    sub ok {
-        goto &eq_or_diff if defined &eq_or_diff && @_ > 1;
-        @_ = map ref $_ ? Dumper( @_ ) : $_, @_;
-        goto Test::&ok;
-    }
-
-    plan tests => 1;
-
-    ok "a", "b";
-
-=item *
-
-PREREQ_PM => { .... "Test::Differences" => 0, ... }
-
-This method will let CPAN and CPANPLUS users download it automatically.  It
-will discomfit those users who choose/have to download all packages manually.
-
-=item *
-
-t/lib/Test/Differences.pm, t/lib/Text/Diff.pm, ...
-
-By placing Test::Differences and its prerequisites in the t/lib directory, you
-avoid forcing your users to download the Test::Differences manually if they
-aren't using CPAN or CPANPLUS.
-
-If you put a C<use lib "t/lib";> in the top of each test suite before the
-C<use Test::Differences;>, C<make test> should work well.
-
-You might want to check once in a while for new Test::Differences releases
-if you do this.
-
-
-
-=back
+NB that the support for these is experimental and relies on an undocumented unstable
+interface in Unknown::Values. If that fails then Test::Differences will I<probably> just die
+when it sees them instead of telling you that the comparison failed.
 
 =cut
 
-our $VERSION = "0.67"; # or "0.001_001" for a dev release
+our $VERSION = "0.69"; # or "0.001_001" for a dev release
 $VERSION = eval $VERSION;
 
 use Exporter;
@@ -388,10 +321,48 @@ sub eq_or_diff_data { $_[3] = { data_type => "data" }; goto &eq_or_diff; }
 ## references and a shallow one for scalars.
 my $joint = chr(0) . "A" . chr(1);
 
+sub _isnt_ARRAY_of_scalars {
+    return 1 if ref ne "ARRAY";
+    return scalar grep ref, @$_;
+}
+
+sub _isnt_HASH_of_scalars {
+    return 1 if ref ne "HASH";
+    return scalar grep ref, values %$_;
+}
+
+use constant ARRAY_of_scalars           => "ARRAY of scalars";
+use constant ARRAY_of_ARRAYs_of_scalars => "ARRAY of ARRAYs of scalars";
+use constant ARRAY_of_HASHes_of_scalars => "ARRAY of HASHes of scalars";
+use constant HASH_of_scalars            => "HASH of scalars";
+
+sub _grok_type {
+    local $_ = shift if @_;
+    return "SCALAR" unless ref;
+    if ( ref eq "ARRAY" ) {
+        return undef unless @$_;
+        return ARRAY_of_scalars
+          unless _isnt_ARRAY_of_scalars;
+        return ARRAY_of_ARRAYs_of_scalars
+          unless grep _isnt_ARRAY_of_scalars, @$_;
+        return ARRAY_of_HASHes_of_scalars
+          unless grep _isnt_HASH_of_scalars, @$_;
+        return 0;
+    }
+    elsif ( ref eq 'HASH' ) {
+        return HASH_of_scalars
+          unless _isnt_HASH_of_scalars($_);
+        return 0;
+    }
+}
+
 sub eq_or_diff {
     my ( @vals, $name, $options );
     $options = pop if @_ > 2 && ref $_[-1];
     ( $vals[0], $vals[1], $name ) = @_;
+
+    my @types = map { _grok_type($_) } @vals;
+    my $dump_it = !$types[0] || !$types[1];
 
     my($data_type, $filename_a, $filename_b);
     if($options) {
@@ -417,23 +388,40 @@ sub eq_or_diff {
     local $Data::Dumper::Useperl   = 1;
     local $Data::Dumper::Sortkeys =
         exists $options->{Sortkeys} ? $options->{Sortkeys} : 1;
-    my ( $got, $expected ) = map
-        [ split /^/, Data::Dumper::Dumper($_) ],
-        @vals;
+
+    my $unknown_value_in_got;
+    my $unknown_value_in_expected;
+    my @unknown_flags = (\$unknown_value_in_got, \$unknown_value_in_expected);
+
+    my($got, $expected) = map {
+        my $t = eval { [ split /^/, Data::Dumper::Dumper($_) ] };
+
+        my $unknown_flag = shift(@unknown_flags);
+        if($@ =~ /^Dereferencing cannot be performed on unknown values at .*Unknown.Values.Instance/) {
+            ${$unknown_flag} = 1;
+        }
+
+        $t;
+    } @vals;
 
     my $caller = caller;
 
-    my $passed
-      = join( $joint, @$got ) eq join( $joint, @$expected );
+    my $passed =
+        !defined($unknown_value_in_got) &&
+        !defined($unknown_value_in_expected) &&
+        join( $joint, @$got ) eq join( $joint, @$expected );
 
     my $diff;
     unless ($passed) {
+        if($unknown_value_in_got) { $got = \"got something containing an Unknown::Values::unknown value" };
+        if($unknown_value_in_expected) { $expected = \"expected something containing an Unknown::Values::unknown value" };
         my $context;
 
         $context = $options->{context}
           if exists $options->{context};
 
-        $context = 2**31 unless defined $context;
+        $context = $dump_it ? 2**31 : grep( @$_ > 25, $got, $expected ) ? 3 : 25
+            unless defined $context;
 
         confess "context must be an integer: '$context'\n"
           unless $context =~ /\A\d+\z/;

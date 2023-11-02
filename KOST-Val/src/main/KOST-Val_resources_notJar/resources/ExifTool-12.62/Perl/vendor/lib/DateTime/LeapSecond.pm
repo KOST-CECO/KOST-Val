@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-our $VERSION = '1.54';
+our $VERSION = '1.59';
 
 our ( @RD, @LEAP_SECONDS, %RD_LENGTH );
 
@@ -112,7 +112,7 @@ sub _initialize {
             2012  Jul. 1  +1
             2015  Jul. 1  +1
             2017  Jan. 1  +1
-            )
+        )
     );
 }
 
@@ -134,7 +134,7 @@ DateTime::LeapSecond - leap seconds table and utilities
 
 =head1 VERSION
 
-version 1.54
+version 1.59
 
 =head1 SYNOPSIS
 
@@ -152,8 +152,8 @@ used when L<DateTime> cannot compile the XS version of this code.
 
 This library is known to be accurate for dates until Jun 2020.
 
-There are no leap seconds before 1972, because that's the year this
-system was implemented.
+There are no leap seconds before 1972, because that's the year this system was
+implemented.
 
 =over 4
 
@@ -163,13 +163,11 @@ Returns the number of accumulated leap seconds for a given day.
 
 =item * extra_seconds($rd)
 
-Returns the number of leap seconds for a given day,
-in the range -2 .. 2.
+Returns the number of leap seconds for a given day, in the range -2 .. 2.
 
 =item * day_length($rd)
 
-Returns the number of seconds for a given day,
-in the range 86398 .. 86402.
+Returns the number of seconds for a given day, in the range 86398 .. 86402.
 
 =back
 
@@ -177,16 +175,12 @@ in the range 86398 .. 86402.
 
 L<http://hpiers.obspm.fr/eop-pc/earthor/utc/leapsecond.html>
 
-http://datetime.perl.org
-
 =head1 SUPPORT
 
 Bugs may be submitted at L<https://github.com/houseabsolute/DateTime.pm/issues>.
 
 There is a mailing list available for users of this distribution,
 L<mailto:datetime@perl.org>.
-
-I am also usually active on IRC as 'autarch' on C<irc://irc.perl.org>.
 
 =head1 SOURCE
 
@@ -198,7 +192,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2003 - 2020 by Dave Rolsky.
+This software is Copyright (c) 2003 - 2022 by Dave Rolsky.
 
 This is free software, licensed under:
 

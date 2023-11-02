@@ -1,41 +1,25 @@
 @rem = '--*-Perl-*--
-@echo off
-if "%OS%" == "Windows_NT" goto WinNT
-IF EXIST "%~dp0perl.exe" (
-"%~dp0perl.exe" -x -S "%0" %1 %2 %3 %4 %5 %6 %7 %8 %9
-) ELSE IF EXIST "%~dp0..\..\bin\perl.exe" (
-"%~dp0..\..\bin\perl.exe" -x -S "%0" %1 %2 %3 %4 %5 %6 %7 %8 %9
-) ELSE (
-perl -x -S "%0" %1 %2 %3 %4 %5 %6 %7 %8 %9
-)
-
-goto endofperl
+@set "ErrorLevel="
+@if "%OS%" == "Windows_NT" @goto WinNT
+@perl -x -S "%0" %1 %2 %3 %4 %5 %6 %7 %8 %9
+@set ErrorLevel=%ErrorLevel%
+@goto endofperl
 :WinNT
-IF EXIST "%~dp0perl.exe" (
-"%~dp0perl.exe" -x -S %0 %*
-) ELSE IF EXIST "%~dp0..\..\bin\perl.exe" (
-"%~dp0..\..\bin\perl.exe" -x -S %0 %*
-) ELSE (
-perl -x -S %0 %*
-)
-
-if NOT "%COMSPEC%" == "%SystemRoot%\system32\cmd.exe" goto endofperl
-if %errorlevel% == 9009 echo You do not have Perl in your PATH.
-if errorlevel 1 goto script_failed_so_exit_with_non_zero_val 2>nul
-goto endofperl
+@perl -x -S %0 %*
+@set ErrorLevel=%ErrorLevel%
+@if NOT "%COMSPEC%" == "%SystemRoot%\system32\cmd.exe" @goto endofperl
+@if %ErrorLevel% == 9009 @echo You do not have Perl in your PATH.
+@goto endofperl
 @rem ';
 #!perl
-#line 29
-    eval 'exec C:\strawberry\perl\bin\perl.exe -S $0 ${1+"$@"}'
-	if $running_under_some_shell;
-#!perl
+#line 30
 
 	## shasum: filter for computing SHA digests (ref. sha1sum/md5sum)
 	##
-	## Copyright (C) 2003-2018 Mark Shelor, All Rights Reserved
+	## Copyright (C) 2003-2023 Mark Shelor, All Rights Reserved
 	##
-	## Version: 6.02
-	## Fri Apr 20 16:25:30 MST 2018
+	## Version: 6.04
+	## Sat Feb 25 12:00:50 PM MST 2023
 
 	## shasum SYNOPSIS adapted from GNU Coreutils sha1sum. Add
 	## "-a" option for algorithm selection,
@@ -127,7 +111,7 @@ the 7-bit message I<0001100>:
 
 =head1 AUTHOR
 
-Copyright (C) 2003-2018 Mark Shelor <mshelor@cpan.org>.
+Copyright (C) 2003-2023 Mark Shelor <mshelor@cpan.org>.
 
 =head1 SEE ALSO
 
@@ -137,7 +121,7 @@ I<shasum> is implemented using the Perl module L<Digest::SHA>.
 
 END_OF_POD
 
-my $VERSION = "6.02";
+my $VERSION = "6.04";
 
 sub usage {
 	my($err, $msg) = @_;
@@ -365,6 +349,6 @@ for $file (@ARGV) {
 	else { $STATUS = 1 }
 }
 exit($STATUS);
-
 __END__
 :endofperl
+@set "ErrorLevel=" & @goto _undefined_label_ 2>NUL || @"%COMSPEC%" /d/c @exit %ErrorLevel%

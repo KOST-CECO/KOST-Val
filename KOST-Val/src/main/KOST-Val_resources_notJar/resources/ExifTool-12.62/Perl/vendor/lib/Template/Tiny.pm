@@ -1,11 +1,12 @@
-package Template::Tiny;
+package Template::Tiny; # git description: v1.13-3-g7fb3b0a
+# ABSTRACT: Template Toolkit reimplemented in as little code as possible
+
 
 # Load overhead: 40k
 
-use 5.00503;
 use strict;
 
-$Template::Tiny::VERSION = '1.12';
+our $VERSION = '1.14';
 
 # Evaluatable expression
 my $EXPR = qr/ [a-z_][\w.]* /xs;
@@ -208,9 +209,15 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 Template::Tiny - Template Toolkit reimplemented in as little code as possible
+
+=head1 VERSION
+
+version 1.14
 
 =head1 SYNOPSIS
 
@@ -317,30 +324,48 @@ If C<process> is called without a third parameter, and in void context, the
 template results will be C<print()>ed to the currently selected file handle
 (probably C<STDOUT>) for compatibility with L<Template>.
 
+=head1 SEE ALSO
+
+L<Template::Tiny::Strict>, L<Config::Tiny>, L<CSS::Tiny>, L<YAML::Tiny>
+
 =head1 SUPPORT
 
-Bugs should be reported via the CPAN bug tracker at
-
-L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Template-Tiny>
-
-For other issues, or commercial enhancement or support, contact the author.
+Bugs may be submitted through L<the RT bug tracker|https://rt.cpan.org/Public/Dist/Display.html?Name=Template-Tiny>
+(or L<bug-Template-Tiny@rt.cpan.org|mailto:bug-Template-Tiny@rt.cpan.org>).
 
 =head1 AUTHOR
 
-Adam Kennedy E<lt>adamk@cpan.orgE<gt>
+Adam Kennedy <adamk@cpan.org>
 
-=head1 SEE ALSO
+=head1 CONTRIBUTORS
 
-L<Config::Tiny>, L<CSS::Tiny>, L<YAML::Tiny>
+=for stopwords Adam Kennedy Karen Etheridge Alexandr Ciornii Matt S Trout
 
-=head1 COPYRIGHT
+=over 4
 
-Copyright 2009 - 2011 Adam Kennedy.
+=item *
 
-This program is free software; you can redistribute
-it and/or modify it under the same terms as Perl itself.
+Adam Kennedy <adam@ali.as>
 
-The full text of the license can be found in the
-LICENSE file included with this module.
+=item *
+
+Karen Etheridge <ether@cpan.org>
+
+=item *
+
+Alexandr Ciornii <alexchorny@gmail.com>
+
+=item *
+
+Matt S Trout <mst@shadowcat.co.uk>
+
+=back
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2009 by Adam Kennedy.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
 
 =cut

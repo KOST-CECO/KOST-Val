@@ -2,7 +2,7 @@ package Net::DNS::RR::AMTRELAY;
 
 use strict;
 use warnings;
-our $VERSION = (qw$Id: AMTRELAY.pm 1814 2020-10-14 21:49:16Z willem $)[2];
+our $VERSION = (qw$Id: AMTRELAY.pm 1896 2023-01-30 12:59:25Z willem $)[2];
 
 use base qw(Net::DNS::RR);
 
@@ -23,18 +23,17 @@ use Net::DNS::RR::AAAA;
 
 
 sub _decode_rdata {			## decode rdata from wire-format octet string
-	my $self = shift;
-	my ( $data, $offset ) = @_;
+	my ( $self, $data, $offset ) = @_;
 
 	my $size = $self->{rdlength} - 2;
 	@{$self}{qw(precedence relaytype relay)} = unpack "\@$offset C2 a$size", $$data;
 
 	for ( $self->relaytype ) {
-		/^0$/ && do { $self->{relay} = '' };
 		/^3$/ && return $self->{relay} = Net::DNS::DomainName->decode( $data, $offset + 2 );
 		/^2$/ && return $self->{relay} = pack( 'a16', $self->{relay} );
 		/^1$/ && return $self->{relay} = pack( 'a4',  $self->{relay} );
 	}
+	$self->{relay} = '';
 	return;
 }
 
@@ -43,28 +42,27 @@ sub _encode_rdata {			## encode rdata as wire-format octet string
 	my $self = shift;
 
 	for ( $self->relaytype ) {
-		/^0$/ && do { $self->{relay} = '' };
 		/^3$/ && return pack( 'C2 a*',	@{$self}{qw(precedence relaytype)}, $self->{relay}->encode );
 		/^2$/ && return pack( 'C2 a16', @{$self}{qw(precedence relaytype relay)} );
 		/^1$/ && return pack( 'C2 a4',	@{$self}{qw(precedence relaytype relay)} );
 	}
-	return pack( 'C2 a*', @{$self}{qw(precedence relaytype relay)} );
+	return pack( 'C2', @{$self}{qw(precedence relaytype)} );
 }
 
 
 sub _format_rdata {			## format rdata portion of RR string.
 	my $self = shift;
 
-	my @rdata = map { $self->$_ } qw(precedence D relaytype relay);
+	my @rdata = map { $self->$_ } qw(precedence dbit relaytype relay);
 	return @rdata;
 }
 
 
 sub _parse_rdata {			## populate RR from rdata in argument list
-	my $self = shift;
+	my ( $self, @argument ) = @_;
 
-	foreach (qw(precedence D relaytype relay)) {
-		$self->$_(shift);
+	foreach (qw(precedence dbit relaytype relay)) {
+		$self->$_( shift @argument );
 	}
 	return;
 }
@@ -79,31 +77,32 @@ sub _defaults {				## specify RR attribute default values
 
 
 sub precedence {
-	my $self = shift;
-
-	$self->{precedence} = 0 + shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{precedence} = 0 + $_ }
 	return $self->{precedence} || 0;
 }
 
 
-sub d {
-	my $self = shift;					# uncoverable pod
-	$self->{relaytype} = $self->relaytype | ( $_[0] ? 0x80 : 0 ) if scalar @_;
-	return $self->{relaytype} ? $self->{relaytype} >> 7 : 0;
+sub dbit {
+	my ( $self, @value ) = @_;				# uncoverable pod
+	for (@value) { $self->{relaytype} = $self->relaytype | ( $_ ? 0x80 : 0 ) }
+	return ( $self->{relaytype} || 0 ) >> 7;
 }
+
+sub d { return &dbit }						# uncoverable pod
 
 
 sub relaytype {
-	my $self = shift;
-	$self->{relaytype} = $self->D ? shift | 0x80 : shift if scalar @_;
-	return $self->{relaytype} ? $self->{relaytype} & 0x7f : 0;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{relaytype} = $self->dbit ? ( 0x80 | $_ ) : $_ }
+	return 0x7f & ( $self->{relaytype} || 0 );
 }
 
 
 sub relay {
-	my $self = shift;
+	my ( $self, @value ) = @_;
 
-	for (@_) {
+	for (@value) {
 		/^\.*$/ && do {
 			$self->relaytype(0);
 			$self->{relay} = '';			# no relay
@@ -154,7 +153,7 @@ __END__
 =head1 SYNOPSIS
 
     use Net::DNS;
-    $rr = Net::DNS::RR->new('owner AMTRELAY precedence D relaytype relay');
+    $rr = Net::DNS::RR->new('owner AMTRELAY precedence Dbit relaytype relay');
 
 =head1 DESCRIPTION
 
@@ -185,10 +184,10 @@ other unpredictable behaviour.
 Relays listed in AMTRELAY records with lower precedence are to be
 attempted first.
 
-=head2 D, Discovery Optional
+=head2 Dbit, Discovery Optional
 
-    $D = $rr->D;
-    $rr->D(1);
+    $Dbit = $rr->Dbit;
+    $rr->Dbit(1);
 
 Boolean field which indicates that the gateway MAY send an AMT Request
 message directly to the discovered relay address without first sending
@@ -237,7 +236,7 @@ Package template (c)2009,2012 O.M.Kolkman and R.W.Franks.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -254,6 +253,7 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::RR>, RFC8777, RFC7450
+L<perl> L<Net::DNS> L<Net::DNS::RR>
+L<RFC8777|https://tools.ietf.org/html/rfc8777>
 
 =cut

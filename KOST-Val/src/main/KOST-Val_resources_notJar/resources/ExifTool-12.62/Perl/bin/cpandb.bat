@@ -14,7 +14,7 @@
 #!usr/bin/perl -w
 #line 30
 
-# $Id: cpandb 84 2020-05-31 06:29:34Z stro $
+# $Id: cpandb 85 2022-10-29 05:44:36Z stro $
 
 use strict;
 use warnings;
@@ -22,7 +22,7 @@ use warnings;
 use CPAN::SQLite;
 use Getopt::Long;
 
-our $VERSION = 0.219;
+our $VERSION = 0.220;
 
 my ($CPAN, $setup, $help, $reindex, $index, $query,
     $db_name, $db_dir, $module, $dist, $cpanid, $update);
@@ -169,7 +169,7 @@ cpandb - interface to C<CPAN::SQLite>
 
 =head1 VERSION
 
-version 0.219
+version 0.220
 
 =head1 DESCRIPTION
 

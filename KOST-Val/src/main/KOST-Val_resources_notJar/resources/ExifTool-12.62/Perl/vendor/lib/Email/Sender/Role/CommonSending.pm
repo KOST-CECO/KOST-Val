@@ -1,6 +1,6 @@
-package Email::Sender::Role::CommonSending;
+package Email::Sender::Role::CommonSending 2.600;
 # ABSTRACT: the common sending tasks most Email::Sender classes will need
-$Email::Sender::Role::CommonSending::VERSION = '1.300035';
+
 use Moo::Role;
 
 use Carp ();
@@ -127,7 +127,7 @@ Email::Sender::Role::CommonSending - the common sending tasks most Email::Sender
 
 =head1 VERSION
 
-version 1.300035
+version 2.600
 
 =head1 DESCRIPTION
 
@@ -147,6 +147,16 @@ consult the source.
 
 The methods documented here may be overridden to alter the behavior of the
 CommonSending role.
+
+=head1 PERL VERSION
+
+This library should run on perls released even a long time ago.  It should work
+on any version of perl released in the last five years.
+
+Although it may work on older versions of perl, no guarantee is made that the
+minimum required version will not be increased.  The version may be increased
+for any reason, and there is no promise that patches will be accepted to lower
+the minimum required perl.
 
 =head1 METHODS
 
@@ -172,11 +182,11 @@ a convenience for returning success from subclasses' C<send_email> methods.
 
 =head1 AUTHOR
 
-Ricardo Signes <rjbs@semiotic.systems>
+Ricardo Signes <cpan@semiotic.systems>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2020 by Ricardo Signes.
+This software is copyright (c) 2022 by Ricardo Signes.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

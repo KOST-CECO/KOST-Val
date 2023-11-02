@@ -31,6 +31,7 @@ sub run {
 
   # Static file
   $self->render_to_rel_file('static', "$name/public/index.html");
+  $self->create_dir("$name/public/assets");
 
   # Templates
   $self->render_to_rel_file('layout',  "$name/templates/layouts/default.html.ep");
@@ -51,6 +52,7 @@ Mojolicious::Command::Author::generate::app - App generator command
 
     mojo generate app
     mojo generate app TestApp
+    mojo generate app My::TestApp
 
   Options:
     -h, --help   Show this summary of available options
@@ -133,7 +135,7 @@ sub startup ($self) {
   my $r = $self->routes;
 
   # Normal route to controller
-  $r->get('/')->to('example#welcome');
+  $r->get('/')->to('Example#welcome');
 }
 
 1;

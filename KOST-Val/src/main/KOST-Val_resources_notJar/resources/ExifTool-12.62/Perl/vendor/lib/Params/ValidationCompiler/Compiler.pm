@@ -3,15 +3,15 @@ package Params::ValidationCompiler::Compiler;
 use strict;
 use warnings;
 
-our $VERSION = '0.30';
+our $VERSION = '0.31';
 
-use Carp qw( croak );
-use Eval::Closure qw( eval_closure );
+use Carp            qw( croak );
+use Eval::Closure   qw( eval_closure );
 use List::Util 1.29 qw( pairkeys pairvalues );
 use Params::ValidationCompiler::Exceptions;
 use Scalar::Util qw( blessed looks_like_number reftype );
-use overload ();
-use B qw( perlstring );
+use overload     ();
+use B            qw( perlstring );
 
 our @CARP_NOT = ( 'Params::ValidationCompiler', __PACKAGE__ );
 
@@ -36,6 +36,7 @@ BEGIN {
 
     my $has_cxsa = eval {
         require Class::XSAccessor;
+        Class::XSAccessor->VERSION(1.17);
         1;
     };
 
@@ -126,7 +127,7 @@ sub _describe {
         return "$article $class object";
     }
     elsif ( ref $thing ) {
-        my $ref = lc ref $thing;
+        my $ref     = lc ref $thing;
         my $article = $ref =~ /^[aeiou]/i ? 'an' : 'a';
         return "$article $ref" . 'ref';
     }
@@ -243,13 +244,13 @@ sub subref {
 
     local $ENV{EVAL_CLOSURE_PRINT_SOURCE} = 1 if $self->{debug};
     my $sub = eval_closure(
-        source => 'sub { ' . ( join "\n", @{ $self->_source } ) . ' };',
+        source      => 'sub { ' . ( join "\n", @{ $self->_source } ) . ' };',
         environment => $self->_env,
     );
 
     if ( $self->_has_name ) {
         my $caller = $self->_has_caller ? $self->_caller : caller(1);
-        my $name = join '::', $caller, $self->name;
+        my $name   = join '::', $caller, $self->name;
 
         return $sub if $self->_name_is_optional && !HAS_SUB_UTIL;
         set_subname( $name, $sub );
@@ -319,7 +320,7 @@ sub _compile_named_args_check {
         }
 
         my $use_cxsa = HAS_CXSA && !$ENV{TEST_NAMED_ARGS_OBJECT_WITHOUT_CXSA};
-        my $class = sprintf(
+        my $class    = sprintf(
             '%s::OO::Args%d::%s',
             __PACKAGE__,
             $class_id++,
@@ -605,7 +606,7 @@ sub _compile_positional_args_check {
     for my $i ( 0 .. $#specs ) {
         my $spec = $specs[$i];
 
-        my $name = "Parameter $i";
+        my $name   = "Parameter $i";
         my $access = sprintf( '%s[%i]', $access_var, $i );
 
         $self->_add_positional_default_assignment(
@@ -1047,15 +1048,13 @@ Params::ValidationCompiler::Compiler - Object that implements the check subrouti
 
 =head1 VERSION
 
-version 0.30
+version 0.31
 
 =for Pod::Coverage .*
 
 =head1 SUPPORT
 
 Bugs may be submitted at L<https://github.com/houseabsolute/Params-ValidationCompiler/issues>.
-
-I am also usually active on IRC as 'autarch' on C<irc://irc.perl.org>.
 
 =head1 SOURCE
 
@@ -1067,7 +1066,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2016 - 2018 by Dave Rolsky.
+This software is Copyright (c) 2016 - 2023 by Dave Rolsky.
 
 This is free software, licensed under:
 
