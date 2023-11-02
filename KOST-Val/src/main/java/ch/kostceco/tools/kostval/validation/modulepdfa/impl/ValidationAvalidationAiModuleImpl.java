@@ -2360,7 +2360,6 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								int index = 0;
 
 								line = line.replace( "ß", "ss" );
-								line = line.replace( "�", "ss" );
 
 								line = line.replace( "Ä", "Ae" );
 								line = line.replace( "‘", "'" );
@@ -2388,37 +2387,27 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								line = line.replace( "ú", "u" );
 								line = line.replace( "û", "u" );
 								line = line.replace( "ü", "ue" );
-								line = line.replace( "�", "a" );
+								line = line.replace( "à", "a" );
 
-								line = line.replace( "�", "Ae" );
-								line = line.replace( "��", "'" );
-								line = line.replace( "�", "'" );
-								line = line.replace( "�", "O" );
-								line = line.replace( "�", "O" );
-								line = line.replace( "�", "O" );
-								line = line.replace( "�", "Oe" );
-								line = line.replace( "�", "oe" );
-								line = line.replace( "�", "Ue" );
-								line = line.replace( "�", "a" );
-								line = line.replace( "�", "a" );
-								line = line.replace( "�", "ae" );
-								line = line.replace( "�", "c" );
-								line = line.replace( "�", "e" );
-								line = line.replace( "�", "e" );
-								line = line.replace( "�", "e" );
-								line = line.replace( "�", "e" );
-								line = line.replace( "�", "i" );
-								line = line.replace( "�", "i" );
-								line = line.replace( "�", "i" );
-								line = line.replace( "�", "i" );
-								line = line.replace( "�", "oe" );
-								line = line.replace( "�", "u" );
-								line = line.replace( "�", "u" );
-								line = line.replace( "�", "u" );
-								line = line.replace( "�", "ue" );
-								line = line.replace( "�", "a" );
-								line = line.replace( "a��", "'" );
-
+								line = line.replace( "a€™", "'" );
+								line = line.replace( "Ãoe", "Ue" );
+								line = line.replace( "Ã¡", "a" );
+								line = line.replace( "Ã¢", "a" );
+								line = line.replace( "Ã¤", "ae" );
+								line = line.replace( "Ã§", "c" );
+								line = line.replace( "Ã¨", "e" );
+								line = line.replace( "Ã©", "e" );
+								line = line.replace( "Ãª", "e" );
+								line = line.replace( "Ã«", "e" );
+								line = line.replace( "Ã¬", "i" );
+								line = line.replace( "Ã®", "i" );
+								line = line.replace( "Ã¯", "i" );
+								line = line.replace( "Ã¶", "oe" );
+								line = line.replace( "Ã¹", "u" );
+								line = line.replace( "Ãº", "u" );
+								line = line.replace( "Ã»", "u" );
+								line = line.replace( "Ã¼", "ue" );
+								line = line.replace( "Ã", "a" );
 								/*
 								 * Die Linien (Fehlermeldung von Callas) anhand
 								 * von Woerter den Modulen zuordnen
