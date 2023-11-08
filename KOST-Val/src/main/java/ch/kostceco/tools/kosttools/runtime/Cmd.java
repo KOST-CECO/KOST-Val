@@ -63,12 +63,12 @@ public class Cmd
 		String lineReturn = line;
 		try {
 			if ( out ) {
-				// System.out.println( "OUTPUT" );
+				 System.out.println( "OUTPUT" );
 				InputStream stream = p.getInputStream();
 				BufferedReader in = new BufferedReader(
 						new InputStreamReader( stream ) );
 				while ( (line = in.readLine()) != null ) {
-					// System.out.println(line);
+					 System.out.println(line);
 					if ( lineReturn.equals( "" ) ) {
 						lineReturn = line;
 					} else {

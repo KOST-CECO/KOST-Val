@@ -102,10 +102,10 @@ public class ConfigController
 	private Button				buttonFlac, buttonWave, buttonMp3;
 
 	@FXML
-	private Label				labelVideo, labelFfv1, labelMp4;
+	private Label				labelVideo, labelMkv, labelMp4;
 
 	@FXML
-	private Button				buttonFfv1, buttonMp4;
+	private Button				buttonMkv, buttonMkvVal, buttonMp4;
 
 	@FXML
 	private Label				labelData, labelXml, labelJson, labelSiard,
@@ -307,8 +307,10 @@ public class ConfigController
 			String noWave = "<wavevalidation>&#x2717;</wavevalidation>";
 			String noMp3 = "<mp3validation>&#x2717;</mp3validation>";
 
-			String noFfv1 = "<mkvvalidation>&#x2717;</mkvvalidation>";
+			String noMkv = "<mkvvalidation>&#x2717;</mkvvalidation>";
+			String yesMkv = "<mkvvalidation>&#x2713;</mkvvalidation>";
 			String noMp4 = "<mp4validation>&#x2717;</mp4validation>";
+			String yesMp4 = "<mp4validation>&#x2713;</mp4validation>";
 
 			String noXml = "<xmlvalidation>&#x2717;</xmlvalidation>";
 			String yesXml = "<xmlvalidation>&#x2713;</xmlvalidation>";
@@ -396,6 +398,7 @@ public class ConfigController
 				buttonTiff.setStyle(
 						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
 			} else {
+				buttonTiffVal.setDisable( true );
 				buttonTiff.setText( "(✓)" );
 				buttonTiff.setStyle(
 						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
@@ -442,19 +445,30 @@ public class ConfigController
 						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
 			}
 
-			if ( config.contains( noFfv1 ) ) {
-				buttonFfv1.setText( "✗" );
-				buttonFfv1.setStyle(
+			if ( config.contains( noMkv ) ) {
+				buttonMkvVal.setDisable( true );
+				buttonMkv.setText( "✗" );
+				buttonMkv.setStyle(
 						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+			} else if ( config.contains( yesMkv ) ) {
+				buttonMkvVal.setDisable( false );
+				buttonMkv.setText( "✓" );
+				buttonMkv.setStyle(
+						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
 			} else {
-				buttonFfv1.setText( "(✓)" );
-				buttonFfv1.setStyle(
+				buttonMkvVal.setDisable( true );
+				buttonMkv.setText( "(✓)" );
+				buttonMkv.setStyle(
 						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
 			}
 			if ( config.contains( noMp4 ) ) {
 				buttonMp4.setText( "✗" );
 				buttonMp4.setStyle(
 						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+			} else if ( config.contains( yesMp4 ) ) {
+				buttonMp4.setText( "✓" );
+				buttonMp4.setStyle(
+						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
 			} else {
 				buttonMp4.setText( "(✓)" );
 				buttonMp4.setStyle(
@@ -494,6 +508,7 @@ public class ConfigController
 				buttonSiard.setStyle(
 						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
 			} else {
+				buttonSiardVal.setDisable( true );
 				buttonSiard.setText( "(✓)" );
 				buttonSiard.setStyle(
 						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
@@ -537,6 +552,7 @@ public class ConfigController
 				buttonSip0160.setStyle(
 						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
 			} else {
+				buttonSipVal.setDisable( true );
 				buttonSip0160.setText( "(✓)" );
 				buttonSip0160.setStyle(
 						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
@@ -878,6 +894,7 @@ public class ConfigController
 		try {
 			String optButton = buttonTiff.getText();
 			if ( optButton.equals( "✗" ) ) {
+				buttonTiffVal.setDisable( true );
 				Util.oldnewstring( no, az, configFile );
 				buttonTiff.setText( "(✓)" );
 				buttonTiff.setStyle(
@@ -1082,37 +1099,98 @@ public class ConfigController
 
 	/* TODO --> Video ================= */
 
-	/* changeFfv1 schaltet zwischen x (v) herum */
+	/* changeMkv schaltet zwischen x (v) V herum */
 	@FXML
-	void changeFfv1( ActionEvent event )
+	void changeMkv( ActionEvent event )
 	{
+		String yes = "<mkvvalidation>&#x2713;</mkvvalidation>";
 		String az = "<mkvvalidation>(&#x2713;)</mkvvalidation>";
 		String no = "<mkvvalidation>&#x2717;</mkvvalidation>";
 		try {
-			String optButton = buttonFfv1.getText();
+			String optButton = buttonMkv.getText();
 			if ( optButton.equals( "✗" ) ) {
+				buttonMkvVal.setDisable( true );
 				Util.oldnewstring( no, az, configFile );
-				buttonFfv1.setText( "(✓)" );
-				buttonFfv1.setStyle(
+				buttonMkv.setText( "(✓)" );
+				buttonMkv.setStyle(
 						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
 				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} else {
-				Util.oldnewstring( az, no, configFile );
-				buttonFfv1.setText( "✗" );
-				buttonFfv1.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+			} else if ( optButton.equals( "(✓)" ) ) {
+				buttonMkvVal.setDisable( false );
+				Util.oldnewstring( az, yes, configFile );
+				buttonMkv.setText( "✓" );
+				buttonMkv.setStyle(
+						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
 				engine.load( "file:///" + configFile.getAbsolutePath() );
-				// TODO Check etwas angewaehlt
+			} else {
+				// abwaehlen nur moeglich wenn noch eines selected / (v) / V ist
+				if ( buttonJpeg2000.getText().equals( "✗" )
+						&& buttonSiard.getText().equals( "✗" )
+						&& buttonTiff.getText().equals( "✗" )
+						&& buttonPdfa.getText().equals( "✗" )
+						&& buttonJpeg.getText().equals( "✗" )
+						&& buttonPng.getText().equals( "✗" )
+						&& buttonXml.getText().equals( "✗" )
+						&& buttonMp4.getText().equals( "✗" )
+						&& buttonSip0160.getText().equals( "✗" ) ) {
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
+				} else {
+					buttonMkvVal.setDisable( true );
+					Util.oldnewstring( yes, no, configFile );
+					buttonMkv.setText( "✗" );
+					buttonMkv.setStyle(
+							"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+					engine.load( "file:///" + configFile.getAbsolutePath() );
+				}
 			}
 		} catch ( IOException e ) {
 			e.printStackTrace();
 		}
 	}
 
-	/* changeMp4 schaltet zwischen x (v) herum */
+	// Mit changeMkvVal wird die MKV-Haupteinstellung umgestellt
+	@FXML
+	void changeMkvVal( ActionEvent eventMkv )
+	{
+		try {
+			StackPane mkvLayout = new StackPane();
+
+			mkvLayout = FXMLLoader
+					.load( getClass().getResource( "ConfigViewMkv.fxml" ) );
+			Scene mkvScene = new Scene( mkvLayout );
+			mkvScene.getStylesheets().add( getClass()
+					.getResource( "application.css" ).toExternalForm() );
+
+			// New window (Stage)
+			Stage mkvStage = new Stage();
+
+			mkvStage.setTitle( "KOST-Val   -   Configuration   -   MKV" );
+			Image kostvalIcon = new Image( "file:" + dirOfJarPath
+					+ File.separator + "doc" + File.separator + "valicon.png" );
+			// Image kostvalIcon = new Image( "file:valicon.png" );
+			mkvStage.initModality( Modality.APPLICATION_MODAL );
+			mkvStage.getIcons().add( kostvalIcon );
+			mkvStage.setScene( mkvScene );
+			mkvStage.setOnCloseRequest( event -> {
+				// hier engeben was beim schliessen gemacht werden soll
+				engine.load( "file:///" + configFile.getAbsolutePath() );
+			} );
+			mkvStage.show();
+			mkvStage.setOnHiding( event -> {
+				// hier engeben was beim schliessen gemacht werden soll
+				engine.load( "file:///" + configFile.getAbsolutePath() );
+			} );
+		} catch ( IOException e1 ) {
+			e1.printStackTrace();
+		}
+	}
+
+	/* changeMp4 schaltet zwischen x (v) V herum */
 	@FXML
 	void changeMp4( ActionEvent event )
 	{
+		String yes = "<mp4validation>&#x2713;</mp4validation>";
 		String az = "<mp4validation>(&#x2713;)</mp4validation>";
 		String no = "<mp4validation>&#x2717;</mp4validation>";
 		try {
@@ -1123,13 +1201,32 @@ public class ConfigController
 				buttonMp4.setStyle(
 						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
 				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} else {
-				Util.oldnewstring( az, no, configFile );
-				buttonMp4.setText( "✗" );
+			} else if ( optButton.equals( "(✓)" ) ) {
+				Util.oldnewstring( az, yes, configFile );
+				buttonMp4.setText( "✓" );
 				buttonMp4.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
 				engine.load( "file:///" + configFile.getAbsolutePath() );
-				// TODO Check etwas angewaehlt
+			} else {
+				// abwaehlen nur moeglich wenn noch eines selected / (v) / V ist
+				if ( buttonJpeg2000.getText().equals( "✗" )
+						&& buttonSiard.getText().equals( "✗" )
+						&& buttonTiff.getText().equals( "✗" )
+						&& buttonPdfa.getText().equals( "✗" )
+						&& buttonJpeg.getText().equals( "✗" )
+						&& buttonPng.getText().equals( "✗" )
+						&& buttonXml.getText().equals( "✗" )
+						&& buttonMkv.getText().equals( "✗" )
+						&& buttonSip0160.getText().equals( "✗" ) ) {
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
+				} else {
+					Util.oldnewstring( yes, no, configFile );
+					buttonMp4.setText( "✗" );
+					buttonMp4.setStyle(
+							"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+					engine.load( "file:///" + configFile.getAbsolutePath() );
+				}
 			}
 		} catch ( IOException e ) {
 			e.printStackTrace();

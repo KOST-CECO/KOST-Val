@@ -498,8 +498,21 @@ public class Controllervalfofile implements MessageConstants
 						intro = countToValidated + "  " + "MKV:  "
 								+ valDatei.getAbsolutePath() + " ";
 						if ( mkvValidation.equals( "yes" ) ) {
+							System.out.print( intro );
 							// akzeptiert und soll validiert werden
-							// Aktuell nicht moeglich, kein Validator dafuer
+							Controllervalfile controller1 = (Controllervalfile) context
+									.getBean( "controllervalfile" );
+							boolean valFile = controller1.valFile( valDatei,
+									logFileName, directoryOfLogfile, verbose,
+									dirOfJarPath, configMap, context, locale,
+									logFile, hash );
+							if ( valFile ) {
+								return "countValid"; // countValid = countValid
+														// + 1;
+							} else {
+								return "countInvalid"; // countInvalid =
+														// countInvalid + 1;
+							}
 						} else {
 							// akzeptiert oder nicht
 							Logtxt.logtxt( logFile, "<Validation>" + hash
@@ -519,8 +532,21 @@ public class Controllervalfofile implements MessageConstants
 						intro = countToValidated + " " + "MP4:   "
 								+ valDatei.getAbsolutePath() + " ";
 						if ( mp4Validation.equals( "yes" ) ) {
+							System.out.print( intro );
 							// akzeptiert und soll validiert werden
-							// Aktuell nicht moeglich, kein Validator dafuer
+							Controllervalfile controller1 = (Controllervalfile) context
+									.getBean( "controllervalfile" );
+							boolean valFile = controller1.valFile( valDatei,
+									logFileName, directoryOfLogfile, verbose,
+									dirOfJarPath, configMap, context, locale,
+									logFile, hash );
+							if ( valFile ) {
+								return "countValid"; // countValid = countValid
+														// + 1;
+							} else {
+								return "countInvalid"; // countInvalid =
+														// countInvalid + 1;
+							}
 						} else {
 							// akzeptiert oder nicht
 							Logtxt.logtxt( logFile, "<Validation>" + hash

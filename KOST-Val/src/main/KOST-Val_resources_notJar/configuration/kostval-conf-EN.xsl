@@ -228,14 +228,26 @@
 
 <!-- VIDEO -->
 					<tr  class="captioninfo">
-						<td>MKV (FFV1-FLAC): Acceptance [(&#x2713;)]</td>
+						<td>MKV (FFV1-FLAC): Acceptance and validation [&#x2713;]</td>
 						<td>
 							<xsl:value-of select="configuration/mkv/mkvvalidation" />
 						</td>
 					</tr>
+					<tr  class="captioninfom">
+						<td>Allowed video codec [FFV1, H.264 (AVC), H.265 (HEVC), AV1]:</td>
+						<td>
+							<xsl:value-of select="configuration/mkv/allowedmkvvideo" />
+						</td>
+					</tr>
+					<tr  class="captioninfom">
+						<td>Allowed audio codec [FLAC, MP3, AAC]:</td>
+						<td>
+							<xsl:value-of select="configuration/mkv/allowedmkvaudio" />
+						</td>
+					</tr>
 
 					<tr  class="captioninfo">
-						<td>MP4 (AVC-MP3): Acceptance [(&#x2713;)]</td>
+						<td>MP4 (AVC-MP3): Acceptance and validation [&#x2713;]</td>
 						<td>
 							<xsl:value-of select="configuration/mp4/mp4validation" />
 						</td>

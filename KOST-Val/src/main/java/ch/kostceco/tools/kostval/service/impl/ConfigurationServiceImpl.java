@@ -577,20 +577,86 @@ public class ConfigurationServiceImpl implements ConfigurationService
 
 			// Gibt an ob mkv akzeptiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
+			String yesMkv = "<mkvvalidation>&#x2713;</mkvvalidation>";
 			String azMkv = "<mkvvalidation>(&#x2713;)</mkvvalidation>";
 			String mkvvalidation = "no";
-			if ( config.contains( azMkv ) ) {
+			if ( config.contains( yesMkv ) ) {
+				mkvvalidation = "yes";
+			} else if ( config.contains( azMkv ) ) {
 				mkvvalidation = "az";
 			} else {
 				mkvvalidation = "no";
 			}
 			configMap.put( "mkvValidation", mkvvalidation );
 
+			// Gibt die Videocodecs aus, welche im MKV vorkommen duerfen.
+			String allowedmkvffv1 = "0";
+			if ( doc.getElementsByTagName( "allowedmkvffv1" )
+					.item( 0 ) != null ) {
+				allowedmkvffv1 = doc
+						.getElementsByTagName( "allowedmkvffv1" ).item( 0 )
+						.getTextContent();
+			}
+			String allowedmkvh264 = "0";
+			if ( doc.getElementsByTagName( "allowedmkvh264" )
+					.item( 0 ) != null ) {
+				allowedmkvh264 = doc
+						.getElementsByTagName( "allowedmkvh264" ).item( 0 )
+						.getTextContent();
+			}
+			String allowedmkvh265 = "0";
+			if ( doc.getElementsByTagName( "allowedmkvh265" )
+					.item( 0 ) != null ) {
+				allowedmkvh265 = doc
+						.getElementsByTagName( "allowedmkvh265" ).item( 0 )
+						.getTextContent();
+			}
+			String allowedmkvav1 = "0";
+			if ( doc.getElementsByTagName( "allowedmkvav1" )
+					.item( 0 ) != null ) {
+				allowedmkvav1 = doc
+						.getElementsByTagName( "allowedmkvav1" ).item( 0 )
+						.getTextContent();
+			}
+			configMap.put( "Allowedmkvffv1", allowedmkvffv1 );
+			configMap.put( "Allowedmkvh264", allowedmkvh264 );
+			configMap.put( "Allowedmkvh265", allowedmkvh265 );
+			configMap.put( "Allowedmkvav1", allowedmkvav1 );
+
+			// Gibt die Audiocodecs aus, welche im MKV vorkommen duerfen.
+			String allowedmkvflac = "0";
+			if ( doc.getElementsByTagName( "allowedmkvflac" )
+					.item( 0 ) != null ) {
+				allowedmkvflac = doc
+						.getElementsByTagName( "allowedmkvflac" ).item( 0 )
+						.getTextContent();
+			}
+			String allowedmkvmp3 = "0";
+			if ( doc.getElementsByTagName( "allowedmkvmp3" )
+					.item( 0 ) != null ) {
+				allowedmkvmp3 = doc
+						.getElementsByTagName( "allowedmkvmp3" ).item( 0 )
+						.getTextContent();
+			}
+			String allowedmkvaac = "0";
+			if ( doc.getElementsByTagName( "allowedmkvaac" )
+					.item( 0 ) != null ) {
+				allowedmkvaac = doc
+						.getElementsByTagName( "allowedmkvaac" ).item( 0 )
+						.getTextContent();
+			}
+			configMap.put( "Allowedmkvflac", allowedmkvflac );
+			configMap.put( "Allowedmkvmp3", allowedmkvmp3 );
+			configMap.put( "Allowedmkvaac", allowedmkvaac );
+
 			// Gibt an ob mp4 akzeptiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
+			String yesMp4 = "<mp4validation>&#x2713;</mp4validation>";
 			String azMp4 = "<mp4validation>(&#x2713;)</mp4validation>";
 			String mp4validation = "no";
-			if ( config.contains( azMp4 ) ) {
+			if ( config.contains( yesMp4 ) ) {
+				mp4validation = "yes";
+			} else if ( config.contains( azMp4 ) ) {
 				mp4validation = "az";
 			} else {
 				mp4validation = "no";

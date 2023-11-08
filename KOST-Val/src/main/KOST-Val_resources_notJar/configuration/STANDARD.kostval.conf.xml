@@ -89,10 +89,21 @@
 	</mp3>
 <!-- VIDEO -->
 	<mkv>
-		<mkvvalidation>(&#x2713;)</mkvvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
+		<mkvvalidation>&#x2713;</mkvvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
+		<allowedmkvvideo>
+			<allowedmkvffv1>FFV1</allowedmkvffv1><!--0 / / FFV1 -->
+			<allowedmkvh264>H.264 (AVC)</allowedmkvh264><!--0 / / H.264 (AVC) -->
+			<allowedmkvh265>H.265 (HEVC)</allowedmkvh265><!--0 / / H.265 (HEVC) -->
+			<allowedmkvav1>AV1</allowedmkvav1><!--0 / / AV1 -->
+		</allowedmkvvideo>
+		<allowedmkvaudio>
+			<allowedmkvflac>FLAC</allowedmkvflac><!--0 / / FLAC -->
+			<allowedmkvmp3>MP3</allowedmkvmp3><!--0 / / MP3 -->
+			<allowedmkvaac>AAC</allowedmkvaac><!--0 / / AAC -->
+		</allowedmkvaudio>
 	</mkv>
 	<mp4>
-		<mp4validation>(&#x2713;)</mp4validation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
+		<mp4validation>&#x2713;</mp4validation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
 	</mp4>
 <!-- DATEN -->
 	<xml>

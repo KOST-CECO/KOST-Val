@@ -113,6 +113,14 @@ public interface MessageConstants
 	String	MESSAGE_XML_MODUL_B_XML						= "val.message.xml.modul.b.xml";
 	String	MESSAGE_XML_MODUL_C_XML						= "val.message.xml.modul.c.xml";
 
+	String	MESSAGE_XML_MODUL_A_MKV					= "val.message.xml.modul.a.mkv";
+//	String	MESSAGE_XML_MODUL_B_MKV					= "val.message.xml.modul.b.mkv";
+//	String	MESSAGE_XML_MODUL_C_MKV					= "val.message.xml.modul.c.mkv";
+
+	String	MESSAGE_XML_MODUL_A_MP4					= "val.message.xml.modul.a.mp4";
+//	String	MESSAGE_XML_MODUL_B_MP4					= "val.message.xml.modul.b.mp4";
+//	String	MESSAGE_XML_MODUL_C_MP4					= "val.message.xml.modul.c.mp4";
+
 	String	MESSAGE_XML_MODUL_Aa_SIP					= "val.message.xml.modul.aa.sip";
 	String	MESSAGE_XML_MODUL_Ab_SIP					= "val.message.xml.modul.ab.sip";
 	String	MESSAGE_XML_MODUL_Ac_SIP					= "val.message.xml.modul.ac.sip";
@@ -360,6 +368,14 @@ public interface MessageConstants
 	// Modul C Meldungen
 	String	ERROR_XML_C_XML_NOXSDFILE					= "val.error.xml.c.xml.noxsdfile";
 	String	ERROR_XML_C_XML_NOSCHEMA					= "val.error.xml.c.xml.noschema";
+
+	// *************MKV-Meldungen*************************************************************************
+	// Modul A Meldungen
+	String	ERROR_XML_A_MKV_FORMAT_NAZ				= "val.error.xml.a.mkv.format.naz";
+	String	ERROR_XML_A_MKV_CODEC_NAZ				= "val.error.xml.a.mkv.codec.naz";
+	String	ERROR_XML_A_MKV_FORMATCODEC				= "val.error.xml.a.mkv.formatcodec";
+	String	ERROR_XML_A_MKV_CODEC_NO				= "val.error.xml.a.mkv.codec.no";
+	String	ERROR_XML_A_MKV_CODEC_ONE				= "val.error.xml.a.mkv.codec.one";
 
 	// *************SIP-Meldungen*************************************************************************
 	// Modul 1a Meldungen

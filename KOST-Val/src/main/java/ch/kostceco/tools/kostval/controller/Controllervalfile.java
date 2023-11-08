@@ -209,6 +209,57 @@ public class Controllervalfile implements MessageConstants
 				System.out.println( " = Invalid" );
 			}
 
+		} else if ( valDateiExt.equals( ".mkv" ) ) {
+			Logtxt.logtxt( logFile, "<Validation>" + hash );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
+					MESSAGE_XML_VALTYPE, "MKV" ) );
+			Logtxt.logtxt( logFile, originalValNameXml );
+			Controllermkv controller1 = (Controllermkv) context
+					.getBean( "controllermkv" );
+			boolean okMandatory = controller1.executeMandatory( valDatei,
+					directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath );
+			valFile = okMandatory;
+
+			if ( okMandatory ) {
+				// Validierte Datei valide
+				Logtxt.logtxt( logFile, "<Valid>valid</Valid></Validation>" );
+				System.out.println( " = Valid" );
+			} else {
+				// Fehler in Validierte Datei --> invalide
+				Logtxt.logtxt( logFile,
+						"<Invalid>invalid</Invalid></Validation>" );
+				System.out.println( " = Invalid" );
+			}
+
+		} else if ( valDateiExt.equals( ".mp4" )
+					|| valDateiExt.equals( ".mpg4" )
+					|| valDateiExt.equals( ".m4v" )
+					|| valDateiExt.equals( ".m4a" )
+					|| valDateiExt.equals( ".f4v" )
+					|| valDateiExt.equals( ".f4a" )) {
+			Logtxt.logtxt( logFile, "<Validation>" + hash );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
+					MESSAGE_XML_VALTYPE, "MP4" ) );
+			Logtxt.logtxt( logFile, originalValNameXml );
+			Controllermp4 controller1 = (Controllermp4) context
+					.getBean( "controllermp4" );
+			boolean okMandatory = controller1.executeMandatory( valDatei,
+					directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath );
+			valFile = okMandatory;
+
+			if ( okMandatory ) {
+				// Validierte Datei valide
+				Logtxt.logtxt( logFile, "<Valid>valid</Valid></Validation>" );
+				System.out.println( " = Valid" );
+			} else {
+				// Fehler in Validierte Datei --> invalide
+				Logtxt.logtxt( logFile,
+						"<Invalid>invalid</Invalid></Validation>" );
+				System.out.println( " = Invalid" );
+			}
+
 		} else if ( (valDateiExt.equals( ".tiff" )
 				|| valDateiExt.equals( ".tif" )) ) {
 			Logtxt.logtxt( logFile, "<Validation>" + hash );

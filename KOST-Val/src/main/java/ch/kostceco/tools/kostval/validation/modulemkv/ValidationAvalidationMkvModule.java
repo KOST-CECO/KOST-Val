@@ -1,4 +1,4 @@
-﻿/* == KOST-Val ==================================================================================
+/* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
@@ -17,29 +17,26 @@
  * <http://www.gnu.org/licenses/>.
  * ============================================================================================== */
 
-package ch.kostceco.tools.kostval.validation;
+package ch.kostceco.tools.kostval.validation.modulemkv;
 
 import java.io.File;
 import java.util.Locale;
 import java.util.Map;
 
-import ch.kostceco.tools.kostval.exception.KOSTValException;
-import ch.kostceco.tools.kostval.service.MessageService;
-import ch.kostceco.tools.kostval.service.Service;
+import ch.kostceco.tools.kostval.exception.modulemkv.ValidationAmkvvalidationException;
+import ch.kostceco.tools.kostval.validation.ValidationModule;
 
 /**
- * Dies ist das Interface f�r alle Validierungs-Module und vereinigt alle
- * Funktionalitaeten, die den jeweiligen Modulen gemeinsam sind.
+ * a) MKV-Erkennung mit ffprobe inkl Codecs
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
 
-public interface ValidationModule extends Service
+public interface ValidationAvalidationMkvModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile,
 			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws KOSTValException;
+			String dirOfJarPath ) throws ValidationAmkvvalidationException;
 
-	public MessageService getMessageService();
 }
