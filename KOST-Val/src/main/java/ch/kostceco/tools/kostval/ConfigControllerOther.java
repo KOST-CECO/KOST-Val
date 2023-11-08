@@ -39,8 +39,8 @@ public class ConfigControllerOther
 	@FXML
 	private Button	buttonConfigApply, buttonRtf, buttonPptx, buttonDocx,
 			buttonHtml, buttonOgg, buttonSvg, buttonJpm, buttonJpx, buttonMpeg2,
-			buttonArc, buttonWarc, buttonInterlis, buttonDwg, buttonIfc,
-			buttonMsg, buttonDicom, buttonDxf;
+			buttonAvi, buttonArc, buttonWarc, buttonInterlis, buttonDwg,
+			buttonIfc, buttonMsg, buttonDicom, buttonDxf;
 
 	private File	configFile	= new File( System.getenv( "USERPROFILE" )
 			+ File.separator + ".kost-val_2x" + File.separator + "configuration"
@@ -152,6 +152,7 @@ public class ConfigControllerOther
 			String noSvg = "<svgvalidation></svgvalidation>";
 			String noOgg = "<oggvalidation></oggvalidation>";
 			String noMpeg2 = "<mpeg2validation></mpeg2validation>";
+			String noAvi = "<avivalidation></avivalidation>";
 			String noHtml = "<htmlvalidation></htmlvalidation>";
 			String noWarc = "<warcvalidation></warcvalidation>";
 			String noArc = "<arcvalidation></arcvalidation>";
@@ -232,6 +233,15 @@ public class ConfigControllerOther
 			} else {
 				buttonMpeg2.setText( "(✓)" );
 				buttonMpeg2.setStyle(
+						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
+			}
+			if ( config.contains( noAvi ) ) {
+				buttonAvi.setText( "✗" );
+				buttonAvi.setStyle(
+						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+			} else {
+				buttonAvi.setText( "(✓)" );
+				buttonAvi.setStyle(
 						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
 			}
 			if ( config.contains( noHtml ) ) {
@@ -518,6 +528,29 @@ public class ConfigControllerOther
 				Util.oldnewstring( az, no, configFile );
 				buttonMpeg2.setText( "✗" );
 				buttonMpeg2.setStyle(
+						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+			}
+		} catch ( IOException e ) {
+			e.printStackTrace();
+		}
+	}
+
+	@FXML
+	void changeAvi( ActionEvent event )
+	{
+		String az = "<avivalidation>AVI </avivalidation>";
+		String no = "<avivalidation></avivalidation>";
+		try {
+			String optButton = buttonAvi.getText();
+			if ( optButton.equals( "✗" ) ) {
+				Util.oldnewstring( no, az, configFile );
+				buttonAvi.setText( "(✓)" );
+				buttonAvi.setStyle(
+						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
+			} else {
+				Util.oldnewstring( az, no, configFile );
+				buttonAvi.setText( "✗" );
+				buttonAvi.setStyle(
 						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
 			}
 		} catch ( IOException e ) {

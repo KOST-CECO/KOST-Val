@@ -144,6 +144,7 @@
 		<svgvalidation></svgvalidation>";
 		<oggvalidation></oggvalidation>";
 		<mpeg2validation></mpeg2validation>";
+		<avivalidation></avivalidation>";
 		<htmlvalidation>HTML </htmlvalidation>";
 		<warcvalidation>WARC </warcvalidation>";
 		<arcvalidation></arcvalidation>";

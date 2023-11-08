@@ -712,14 +712,14 @@ public class Magic
 		return mn;
 	}
 
-	public static boolean magicWave( File file ) throws IOException
+	public static boolean magicRiff( File file ) throws IOException
 	{
 		FileReader fr = null;
 		BufferedReader read = null;
 		boolean mn = false;
 
 		try {
-			// Eine WAVE-Datei (.wav) muss mit 52494646 -> RIFF beginnen
+			// Eine RIFF-Datei (.wav, .avi) muss mit 52494646 -> RIFF beginnen
 			fr = new FileReader( file );
 			read = new BufferedReader( fr );
 

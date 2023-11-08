@@ -557,16 +557,37 @@ public class Recognition
 			} else if ( sb2str1.contains( "52" ) ) {
 				// TODO B) Die moeglichen BOF kontrollieren (beginnt mit 52)
 
-				if ( Magic.magicWave( checkFile ) ) {
-					// Eine WAVE-Datei muss mit RIFF [52494646] beginnen
-					// D) passende Extension kontrollieren (keine SiF)
-					// Eine WAVE-Datei muss die extension .wav haben
-					if ( checkFileExt.equals( ".wav" ) ) {
-						// eindeutig als WAVE-Datei erkannt
-						return "WAVE";
+				if ( Magic.magicRiff( checkFile ) ) {
+					// Eine RIFF-Datei muss mit RIFF [52494646] beginnen
+					// RIFF WAVE AVI
+					if ( Util.stringInFile( "WAVEfmt", checkFile ) ) {
+						// C) fuer WAVE auf SiF weiterkontrollieren
+						// Eine WAVE-Datei muss den String "WAVEfmt" im
+						// File haben
+						// D) passende Extension kontrollieren
+						// Eine WAVE-Datei muss die extension .wav haben
+						if ( checkFileExt.equals( ".wav" ) ) {
+							// eindeutig als IFC-Datei erkannt
+							return "WAVE";
+						} else {
+							// als IFC-Datei erkannt aber falsche Extension
+							return "WAVE_ext";
+						}
+					} else if ( Util.stringInFile( "AVI", checkFile ) ) {
+						// C) fuer AVI auf SiF weiterkontrollieren
+						// Eine AVI-Datei muss den String "AVI" im
+						// File haben
+						// D) passende Extension kontrollieren
+						// Eine AVI-Datei muss die extension .avi haben
+						if ( checkFileExt.equals( ".avi" ) ) {
+							// eindeutig als AVI-Datei erkannt
+							return "AVI";
+						} else {
+							// als AVI-Datei erkannt aber falsche Extension
+							return "AVI_ext";
+						}
 					} else {
-						// als WAVE-Datei erkannt aber falsche Extension
-						return "WAVE_ext";
+						return "RIFF";
 					}
 				} else {
 					// keine passende BOF gefunden ggf. Format ohne BOF (am

@@ -340,6 +340,7 @@
 							<xsl:value-of select="configuration/otherformats/svgvalidation" />
 							<xsl:value-of select="configuration/otherformats/oggvalidation" />
 							<xsl:value-of select="configuration/otherformats/mpeg2validation" />
+							<xsl:value-of select="configuration/otherformats/avivalidation" />
 							<xsl:value-of select="configuration/otherformats/htmlvalidation" />
 							<xsl:value-of select="configuration/otherformats/warcvalidation" />
 							<xsl:value-of select="configuration/otherformats/arcvalidation" />
