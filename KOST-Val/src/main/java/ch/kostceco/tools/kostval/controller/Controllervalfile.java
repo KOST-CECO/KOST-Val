@@ -209,7 +209,8 @@ public class Controllervalfile implements MessageConstants
 				System.out.println( " = Invalid" );
 			}
 
-		} else if ( valDateiExt.equals( ".mkv" ) ) {
+		} else if ( valDateiExt.equals( ".mkv" )
+				|| valDateiExt.equals( ".webm" ) ) {
 			Logtxt.logtxt( logFile, "<Validation>" + hash );
 			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
 					MESSAGE_XML_VALTYPE, "MKV" ) );

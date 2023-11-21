@@ -163,6 +163,10 @@ public class ConfigControllerOther
 			String noDicom = "<dicomvalidation></dicomvalidation>";
 			String noMsg = "<msgvalidation></msgvalidation>";
 
+			// TODO: bei Controllervalfofile ca Zeile 80 muss die Aenderung
+			// neue oder entfernte Formate nachgetragen werden. Damit das Format
+			// in der Header-Zeile des Logs erscheint.
+
 			if ( config.contains( noDocx ) ) {
 				buttonDocx.setText( "✗" );
 				buttonDocx.setStyle(

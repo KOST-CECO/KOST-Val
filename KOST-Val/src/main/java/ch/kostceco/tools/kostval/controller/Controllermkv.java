@@ -24,7 +24,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.modulemkv.ValidationAmkvvalidationException;
-import ch.kostceco.tools.kostval.exception.modulemp4.ValidationAmp4validationException;
 import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;

@@ -17,7 +17,7 @@
  * <http://www.gnu.org/licenses/>.
  * ============================================================================================== */
 
-package ch.kostceco.tools.kostval.validation.modulemkv.impl;
+package ch.kostceco.tools.kostval.validation.modulemp4.impl;
 
 import java.io.File;
 import java.util.Locale;
@@ -26,19 +26,19 @@ import java.util.Scanner;
 
 import ch.kostceco.tools.kosttools.fileservice.ffmpeg;
 import ch.kostceco.tools.kosttools.util.Util;
-import ch.kostceco.tools.kostval.exception.modulemkv.ValidationAmkvvalidationException;
+import ch.kostceco.tools.kostval.exception.modulemp4.ValidationAmp4validationException;
 import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
-import ch.kostceco.tools.kostval.validation.modulemkv.ValidationAvalidationMkvModule;
+import ch.kostceco.tools.kostval.validation.modulemp4.ValidationAvalidationMp4Module;
 
 /**
- * a) MKV-Erkennung mit ffprobe inkl Codecs
+ * a) MP4-Erkennung mit ffprobe inkl Codecs
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
 
-public class ValidationAvalidationMkvModuleImpl extends ValidationModuleImpl
-		implements ValidationAvalidationMkvModule
+public class ValidationAvalidationMp4ModuleImpl extends ValidationModuleImpl
+		implements ValidationAvalidationMp4Module
 {
 
 	private boolean min = false;
@@ -46,7 +46,7 @@ public class ValidationAvalidationMkvModuleImpl extends ValidationModuleImpl
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile,
 			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws ValidationAmkvvalidationException
+			String dirOfJarPath ) throws ValidationAmp4validationException
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
@@ -81,7 +81,7 @@ public class ValidationAvalidationMkvModuleImpl extends ValidationModuleImpl
 			} else {
 				Logtxt.logtxt( logFile,
 						getTextResourceService().getText( locale,
-								MESSAGE_XML_MODUL_A_MKV )
+								MESSAGE_XML_MODUL_A_MP4 )
 								+ getTextResourceService().getText( locale,
 										MESSAGE_XML_MISSING_FILE, checkTool,
 										getTextResourceService()
@@ -119,19 +119,16 @@ public class ValidationAvalidationMkvModuleImpl extends ValidationModuleImpl
 						isValid = false;
 						// Erster Fehler! Meldung A ausgeben und invalid setzten
 						Logtxt.logtxt( logFile, getTextResourceService()
-								.getText( locale, MESSAGE_XML_MODUL_A_MKV )
+								.getText( locale, MESSAGE_XML_MODUL_A_MP4 )
 								+ getTextResourceService().getText( locale,
 										MESSAGE_XML_SERVICEINVALID, "ffprobe",
 										"" ) );
 					}
 				} else {
 					// Report existiert -> Auswerten...
-					String matroska = "format_name=matroska,webm";
-					String ffv1Codec = "codec_name=ffv1";
+					String mp4 = "format_name=mov,mp4,m4a,3gp,3g2,mj2";
 					String avcCodec = "codec_name=h264";
 					String hevcCodec = "codec_name=hevc";
-					String av1Codec = "codec_name=av1";
-					String flacCodec = "codec_name=flac";
 					String mp3Codec = "codec_name=mp3";
 					String aacCodec = "codec_name=aac";
 					String formatCodec = "";
@@ -140,22 +137,22 @@ public class ValidationAvalidationMkvModuleImpl extends ValidationModuleImpl
 					int countVideoCodec = 0;
 					int countAudioCodec = 0;
 					while ( scannerFormat.hasNextLine() ) {
-						// format_name=matroska,webm
+						// format_name=mov,mp4,m4a,3gp,3g2,mj2
 						String line = scannerFormat.nextLine();
 						if ( line.contains( "format_name=" ) ) {
 							// container format auswerten
 							countFormat = countFormat + 1;
 							String format = line.replace( "format_name=", "" );
 							String formatName = format.toUpperCase();
-							if ( line.contains( matroska ) ) {
+							if ( line.contains( mp4 ) ) {
 								// OK
-								formatName = "MKV";
+								formatName = "MP4";
 								formatCodec = " container=" + formatName + "  ";
 							} else {
 								// NOK
 								Logtxt.logtxt( logFile, getTextResourceService()
 										.getText( locale,
-												MESSAGE_XML_MODUL_A_MKV )
+												MESSAGE_XML_MODUL_A_MP4 )
 										+ getTextResourceService().getText(
 												locale,
 												ERROR_XML_A_MKVMP4_FORMAT_NAZ,
@@ -175,13 +172,10 @@ public class ValidationAvalidationMkvModuleImpl extends ValidationModuleImpl
 					 * ref="configurationService" />
 					 */
 
-					String ffv1Config = configMap.get( "Allowedmkvffv1" );
-					String avcConfig = configMap.get( "Allowedmkvavc" );
-					String hevcConfig = configMap.get( "Allowedmkvhevc" );
-					String av1Config = configMap.get( "Allowedmkvav1" );
-					String flacConfig = configMap.get( "Allowedmkvflac" );
-					String mp3Config = configMap.get( "Allowedmkvmp3" );
-					String aacConfig = configMap.get( "Allowedmkvaac" );
+					String avcConfig = configMap.get( "Allowedmp4avc" );
+					String hevcConfig = configMap.get( "Allowedmp4hevc" );
+					String mp3Config = configMap.get( "Allowedmp4mp3" );
+					String aacConfig = configMap.get( "Allowedmp4aac" );
 
 					Scanner scanner = new Scanner( outputProbe );
 					while ( scanner.hasNextLine() ) {
@@ -189,20 +183,13 @@ public class ValidationAvalidationMkvModuleImpl extends ValidationModuleImpl
 						if ( line.contains( "codec_name=" ) ) {
 							// Codec auswerten
 
-							// Video: FFV1 AVC HEVC AV1
-							// Audio: FLAC MP3 AAC
+							// Video: AVC HEVC 
+							// Audio: MP3 AAC
 
 							String codec = line.replace( "codec_name=", "" );
 							String codecName = codec.toUpperCase();
 							String type = "codec";
-							if ( line.contains( ffv1Codec )
-									&& ffv1Config.equals( "FFV1" ) ) {
-								// OK
-								type = "videocodec";
-								formatCodec = formatCodec + type + "="
-										+ ffv1Config + "  ";
-								countVideoCodec = countVideoCodec + 1;
-							} else if ( line.contains( avcCodec )
+							if ( line.contains( avcCodec )
 									&& avcConfig.equals( "AVC" ) ) {
 								// OK
 								type = "videocodec";
@@ -216,20 +203,6 @@ public class ValidationAvalidationMkvModuleImpl extends ValidationModuleImpl
 								formatCodec = formatCodec + type + "="
 										+ hevcConfig + "  ";
 								countVideoCodec = countVideoCodec + 1;
-							} else if ( line.contains( av1Codec )
-									&& av1Config.equals( "AV1" ) ) {
-								// OK
-								type = "videocodec";
-								formatCodec = formatCodec + type + "="
-										+ av1Config + "  ";
-								countVideoCodec = countVideoCodec + 1;
-							} else if ( line.contains( flacCodec )
-									&& flacConfig.equals( "FLAC" ) ) {
-								// OK
-								type = "audiocodec";
-								formatCodec = formatCodec + type + "="
-										+ flacConfig + "  ";
-								countAudioCodec = countAudioCodec + 1;
 							} else if ( line.contains( mp3Codec )
 									&& mp3Config.equals( "MP3" ) ) {
 								// OK
@@ -254,7 +227,7 @@ public class ValidationAvalidationMkvModuleImpl extends ValidationModuleImpl
 										|| codec.equals( "huffyuv" )
 										|| codec.equals( "vp8" )
 										|| codec.equals( "vp9" ) ) {
-									// TODO: laufend erweitern auch bei MP4
+									// TODO: laufend erweitern auch bei MKV
 									type = "videocodec";
 									countVideoCodec = countVideoCodec + 1;
 								} else if ( codec.equals( "mp3" )
@@ -266,7 +239,7 @@ public class ValidationAvalidationMkvModuleImpl extends ValidationModuleImpl
 										|| codec.equals( "opus" )
 										|| codec.equals( "vorbis" )
 										|| codec.contains( "pcm_" ) ) {
-									// TODO: laufend erweitern auch bei MP4
+									// TODO: laufend erweitern auch bei MKV
 									type = "audiocodec";
 									countAudioCodec = countAudioCodec + 1;
 								}
@@ -274,7 +247,7 @@ public class ValidationAvalidationMkvModuleImpl extends ValidationModuleImpl
 										+ codecName + "  ";
 								Logtxt.logtxt( logFile, getTextResourceService()
 										.getText( locale,
-												MESSAGE_XML_MODUL_A_MKV )
+												MESSAGE_XML_MODUL_A_MP4 )
 										+ getTextResourceService().getText(
 												locale,
 												ERROR_XML_A_MKVMP4_CODEC_NAZ,
@@ -285,7 +258,7 @@ public class ValidationAvalidationMkvModuleImpl extends ValidationModuleImpl
 					}
 					Logtxt.logtxt( logFile,
 							getTextResourceService().getText( locale,
-									MESSAGE_XML_MODUL_A_MKV )
+									MESSAGE_XML_MODUL_A_MP4 )
 									+ getTextResourceService().getText( locale,
 											ERROR_XML_A_MKVMP4_FORMATCODEC,
 											formatCodec ) );
@@ -293,57 +266,57 @@ public class ValidationAvalidationMkvModuleImpl extends ValidationModuleImpl
 					if ( countFormat == 0 ) {
 						// NOK
 						Logtxt.logtxt( logFile, getTextResourceService()
-								.getText( locale, MESSAGE_XML_MODUL_A_MKV )
+								.getText( locale, MESSAGE_XML_MODUL_A_MP4 )
 								+ getTextResourceService().getText( locale,
 										ERROR_XML_A_MKVMP4_CODEC_NO, "format",
-										"MKV" ) );
+										"MP4" ) );
 						isValid = false;
 					}
 					if ( countVideoCodec == 0 ) {
-						if ( configMap.get( "Allowedmkvnovideo" )
+						if ( configMap.get( "Allowedmp4novideo" )
 								.equals( "Error" ) ) {
 							// NOK
 							Logtxt.logtxt( logFile, getTextResourceService()
-									.getText( locale, MESSAGE_XML_MODUL_A_MKV )
+									.getText( locale, MESSAGE_XML_MODUL_A_MP4 )
 									+ getTextResourceService().getText( locale,
 											ERROR_XML_A_MKVMP4_CODEC_NOVIDEO_ERROR,
-											"MKV" ) );
+											"MP4" ) );
 							isValid = false;
 						} else {
 							// Warnung
 							Logtxt.logtxt( logFile, getTextResourceService()
-									.getText( locale, MESSAGE_XML_MODUL_A_MKV )
+									.getText( locale, MESSAGE_XML_MODUL_A_MP4 )
 									+ getTextResourceService().getText( locale,
 											ERROR_XML_A_MKVMP4_CODEC_NOVIDEO_WARNING,
-											"MKV" ) );
+											"MP4" ) );
 						}
 					}
 					if ( countAudioCodec == 0 ) {
-						if ( configMap.get( "Allowedmkvnoaudio" )
+						if ( configMap.get( "Allowedmp4noaudio" )
 								.equals( "Error" ) ) {
 							// NOK
 							Logtxt.logtxt( logFile, getTextResourceService()
-									.getText( locale, MESSAGE_XML_MODUL_A_MKV )
+									.getText( locale, MESSAGE_XML_MODUL_A_MP4 )
 									+ getTextResourceService().getText( locale,
 											ERROR_XML_A_MKVMP4_CODEC_NOAUDIO_ERROR,
-											"MKV" ) );
+											"MP4" ) );
 							isValid = false;
 						} else {
 							// Warnung
 							Logtxt.logtxt( logFile, getTextResourceService()
-									.getText( locale, MESSAGE_XML_MODUL_A_MKV )
+									.getText( locale, MESSAGE_XML_MODUL_A_MP4 )
 									+ getTextResourceService().getText( locale,
 											ERROR_XML_A_MKVMP4_CODEC_NOAUDIO_WARNING,
-											"MKV" ) );
+											"MP4" ) );
 						}
 					}
 					if ( countVideoCodec == 0 && countAudioCodec == 0) {
 						// NOK
 						Logtxt.logtxt( logFile, getTextResourceService()
-								.getText( locale, MESSAGE_XML_MODUL_A_MKV )
+								.getText( locale, MESSAGE_XML_MODUL_A_MP4 )
 								+ getTextResourceService().getText( locale,
 										ERROR_XML_A_MKVMP4_CODEC_NO, "codec",
-										"MKV" ) );
+										"MP4" ) );
 						isValid = false;
 					}
 
@@ -352,7 +325,7 @@ public class ValidationAvalidationMkvModuleImpl extends ValidationModuleImpl
 			} catch ( Exception e ) {
 				Logtxt.logtxt( logFile,
 						getTextResourceService().getText( locale,
-								MESSAGE_XML_MODUL_A_MKV )
+								MESSAGE_XML_MODUL_A_MP4 )
 								+ getTextResourceService().getText( locale,
 										ERROR_XML_UNKNOWN, e.getMessage() ) );
 				return false;

@@ -105,7 +105,7 @@ public class ConfigController
 	private Label				labelVideo, labelMkv, labelMp4;
 
 	@FXML
-	private Button				buttonMkv, buttonMkvVal, buttonMp4;
+	private Button				buttonMkv, buttonMkvVal, buttonMp4, buttonMp4Val;
 
 	@FXML
 	private Label				labelData, labelXml, labelJson, labelSiard,
@@ -462,14 +462,17 @@ public class ConfigController
 						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
 			}
 			if ( config.contains( noMp4 ) ) {
+				buttonMp4Val.setDisable( true );
 				buttonMp4.setText( "✗" );
 				buttonMp4.setStyle(
 						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
 			} else if ( config.contains( yesMp4 ) ) {
+				buttonMp4Val.setDisable( false );
 				buttonMp4.setText( "✓" );
 				buttonMp4.setStyle(
 						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
 			} else {
+				buttonMp4Val.setDisable( true );
 				buttonMp4.setText( "(✓)" );
 				buttonMp4.setStyle(
 						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
@@ -1196,12 +1199,14 @@ public class ConfigController
 		try {
 			String optButton = buttonMp4.getText();
 			if ( optButton.equals( "✗" ) ) {
+				buttonMp4Val.setDisable( true );
 				Util.oldnewstring( no, az, configFile );
 				buttonMp4.setText( "(✓)" );
 				buttonMp4.setStyle(
 						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else if ( optButton.equals( "(✓)" ) ) {
+				buttonMp4Val.setDisable( false );
 				Util.oldnewstring( az, yes, configFile );
 				buttonMp4.setText( "✓" );
 				buttonMp4.setStyle(
@@ -1221,6 +1226,7 @@ public class ConfigController
 					engine.loadContent(
 							"<html><h2>" + minOne + "</h2></html>" );
 				} else {
+					buttonMp4Val.setDisable( true );
 					Util.oldnewstring( yes, no, configFile );
 					buttonMp4.setText( "✗" );
 					buttonMp4.setStyle(
@@ -1230,6 +1236,43 @@ public class ConfigController
 			}
 		} catch ( IOException e ) {
 			e.printStackTrace();
+		}
+	}
+
+	// Mit changeMp4Val wird die MP4-Haupteinstellung umgestellt
+	@FXML
+	void changeMp4Val( ActionEvent eventMp4 )
+	{
+		try {
+			StackPane mp4Layout = new StackPane();
+
+			mp4Layout = FXMLLoader
+					.load( getClass().getResource( "ConfigViewMp4.fxml" ) );
+			Scene mp4Scene = new Scene( mp4Layout );
+			mp4Scene.getStylesheets().add( getClass()
+					.getResource( "application.css" ).toExternalForm() );
+
+			// New window (Stage)
+			Stage mp4Stage = new Stage();
+
+			mp4Stage.setTitle( "KOST-Val   -   Configuration   -   MP4" );
+			Image kostvalIcon = new Image( "file:" + dirOfJarPath
+					+ File.separator + "doc" + File.separator + "valicon.png" );
+			// Image kostvalIcon = new Image( "file:valicon.png" );
+			mp4Stage.initModality( Modality.APPLICATION_MODAL );
+			mp4Stage.getIcons().add( kostvalIcon );
+			mp4Stage.setScene( mp4Scene );
+			mp4Stage.setOnCloseRequest( event -> {
+				// hier engeben was beim schliessen gemacht werden soll
+				engine.load( "file:///" + configFile.getAbsolutePath() );
+			} );
+			mp4Stage.show();
+			mp4Stage.setOnHiding( event -> {
+				// hier engeben was beim schliessen gemacht werden soll
+				engine.load( "file:///" + configFile.getAbsolutePath() );
+			} );
+		} catch ( IOException e1 ) {
+			e1.printStackTrace();
 		}
 	}
 

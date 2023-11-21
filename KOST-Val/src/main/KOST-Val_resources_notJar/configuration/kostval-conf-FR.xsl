@@ -228,28 +228,64 @@
 
 <!-- VIDEO -->
 					<tr  class="captioninfo">
-						<td>MKV (FFV1-FLAC) : Acceptation et validation [&#x2713;]</td>
+						<td>MKV : Acceptation et validation [&#x2713;]</td>
 						<td>
 							<xsl:value-of select="configuration/mkv/mkvvalidation" />
 						</td>
 					</tr>
 					<tr  class="captioninfom">
-						<td>Codec vidéo autorisé [FFV1, H.264 (AVC), H.265 (HEVC), AV1]:</td>
+						<td>- Codec vidéo autorisé [FFV1, AVC, HEVC, AV1] :</td>
 						<td>
 							<xsl:value-of select="configuration/mkv/allowedmkvvideo" />
 						</td>
 					</tr>
 					<tr  class="captioninfom">
-						<td>Codec audio autorisé [FLAC, MP3, AAC]:</td>
+						<td>- Codec audio autorisé [FLAC, MP3, AAC] :</td>
 						<td>
 							<xsl:value-of select="configuration/mkv/allowedmkvaudio" />
 						</td>
 					</tr>
+					<tr  class="captioninfom">
+						<td>- Film muet autorisé (pas de codec audio) [Warning]:</td>
+						<td>
+							<xsl:value-of select="configuration/mkv/allowedmkvnoaudio" />
+						</td>
+					</tr>
+					<tr  class="captioninfom">
+						<td>- Fichier audio pur autorisé (pas de codec vidéo) [Warning]:</td>
+						<td>
+							<xsl:value-of select="configuration/mkv/allowedmkvnovideo" />
+						</td>
+					</tr>
 
 					<tr  class="captioninfo">
-						<td>MP4 (AVC-MP3) : Acceptation et validation [&#x2713;]</td>
+						<td>MP4 : Acceptation et validation [&#x2713;]</td>
 						<td>
 							<xsl:value-of select="configuration/mp4/mp4validation" />
+						</td>
+					</tr>
+					<tr  class="captioninfom">
+						<td>- Codec vidéo autorisé [AVC, HEVC] :</td>
+						<td>
+							<xsl:value-of select="configuration/mp4/allowedmp4video" />
+						</td>
+					</tr>
+					<tr  class="captioninfom">
+						<td>- Codec audio autorisé [MP3, AAC] :</td>
+						<td>
+							<xsl:value-of select="configuration/mp4/allowedmp4audio" />
+						</td>
+					</tr>
+					<tr  class="captioninfom">
+						<td>- Film muet autorisé (pas de codec audio) [Warning]:</td>
+						<td>
+							<xsl:value-of select="configuration/mp4/allowedmp4noaudio" />
+						</td>
+					</tr>
+					<tr  class="captioninfom">
+						<td>- Fichier audio pur autorisé (pas de codec vidéo) [Warning]:</td>
+						<td>
+							<xsl:value-of select="configuration/mp4/allowedmp4novideo" />
 						</td>
 					</tr>
 

@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="860.0" prefHeight="310.0" style="-fx-background-color: silver;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.kostceco.tools.kostval.ConfigControllerMkv">
+<StackPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="860.0" prefHeight="310.0" style="-fx-background-color: silver;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.kostceco.tools.kostval.ConfigControllerMp4">
 	<children>
 		<GridPane minHeight="310.0">
 			<columnConstraints>
@@ -34,7 +34,7 @@
             <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
  			</rowConstraints>
 			<children>
-            <Label fx:id="labelMkv" text="Validierungseinstellungen MKV" GridPane.columnSpan="2">
+            <Label fx:id="labelMp4" text="Validierungseinstellungen MP4" GridPane.columnSpan="2">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -46,18 +46,15 @@
 				</Button>
 				<Label fx:id="labelVideocodec" text="Videocodec" GridPane.columnSpan="2" GridPane.rowIndex="2" />
 				<Label fx:id="labelAudiocodec" text="Audiocodec" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
-				<CheckBox fx:id="checkH264" mnemonicParsing="false" onAction="#changeH264" selected="true" text="AVC (H.264)" GridPane.rowIndex="4" />
-				<CheckBox fx:id="checkH265" mnemonicParsing="false" onAction="#changeH265" selected="true" text="HEVC (H.265)" GridPane.rowIndex="5" />
-				<CheckBox fx:id="checkFfv1" mnemonicParsing="false" onAction="#changeFfv1" selected="true" text="FFV1" GridPane.rowIndex="3" />
-				<CheckBox fx:id="checkAv1" mnemonicParsing="false" onAction="#changeAv1" selected="true" text="AV1" GridPane.rowIndex="6" />
-				<CheckBox fx:id="checkMp3" mnemonicParsing="false" onAction="#changeMp3" selected="true" text="MP3" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-				<CheckBox fx:id="checkAac" mnemonicParsing="false" onAction="#changeAac" selected="true" text="AAC" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-				<CheckBox fx:id="checkFlac" mnemonicParsing="false" onAction="#changeFlac" selected="true" text="FLAC" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+				<CheckBox fx:id="checkH264" mnemonicParsing="false" onAction="#changeH264" selected="true" text="AVC (H.264)" GridPane.rowIndex="3" />
+				<CheckBox fx:id="checkH265" mnemonicParsing="false" onAction="#changeH265" selected="true" text="HEVC (H.265)" GridPane.rowIndex="4" />
+				<CheckBox fx:id="checkMp3" mnemonicParsing="false" onAction="#changeMp3" selected="true" text="MP3" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+				<CheckBox fx:id="checkAac" mnemonicParsing="false" onAction="#changeAac" selected="true" text="AAC" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 				<Label fx:id="labelConfig" alignment="CENTER" contentDisplay="CENTER" maxHeight="20.0" maxWidth="780.0" minHeight="20.0" minWidth="780.0" prefHeight="20.0" prefWidth="780.0" text="Copyright © KOST/CECO" textAlignment="CENTER" textFill="WHITESMOKE" GridPane.columnSpan="5" GridPane.halignment="CENTER" GridPane.rowIndex="10" GridPane.valignment="CENTER" />
-            <Label fx:id="labelMessage" text="Meldung Validierungseinstellungen MKV" textFill="RED" GridPane.columnSpan="5" GridPane.rowIndex="8" />
-            <Label fx:id="labelOther" text="Sonstiges" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <CheckBox fx:id="checkNoVideo" mnemonicParsing="false" onAction="#changeNoVideo" selected="true" text="Reine Audiodatei erlaubt (kein Videocodec)" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="4" />
+            <Label fx:id="labelMessage" text="Meldung Validierungseinstellungen MP4" textFill="RED" GridPane.columnSpan="5" GridPane.rowIndex="8" />
             <CheckBox fx:id="checkNoAudio" mnemonicParsing="false" onAction="#changeNoAudio" selected="true" text="Stummfilm erlaubt (kein Audiocodec)" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+            <CheckBox fx:id="checkNoVideo" mnemonicParsing="false" onAction="#changeNoVideo" selected="true" text="Reine Audiodatei erlaubt (kein Videocodec)" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="4" />
+            <Label fx:id="labelOther" text="Sonstiges" GridPane.columnIndex="2" GridPane.rowIndex="2" />
 			</children>
 			<padding>
 				<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

@@ -15,11 +15,11 @@
 		<nentry>W</nentry><!--W verwenden wenn Warnung ansonsten E fuer Fehler -->
 		<!--Angeben welche Conformancelevel mindestens erreicht werden muss -->
 		<!--no verwenden wenn diese Version nicht erlaubt ist -->
-		<pdfa1a>1A</pdfa1a><!--1A / / no -->
-		<pdfa1b>1B</pdfa1b><!--1B / / no -->
-		<pdfa2a>2A</pdfa2a><!--2A / / no -->
-		<pdfa2b>2B</pdfa2b><!--2B / / no -->
-		<pdfa2u>2U</pdfa2u><!--2U / / no -->
+		<pdfa1a>1A</pdfa1a><!--1A / -->
+		<pdfa1b>1B</pdfa1b><!--1B / -->
+		<pdfa2a>2A</pdfa2a><!--2A / -->
+		<pdfa2b>2B</pdfa2b><!--2B / -->
+		<pdfa2u>2U</pdfa2u><!--2U / -->
 		<warning3to2>yes</warning3to2><!-- validiert wenn eingeschaltet PDF/A-3 nach PDF/A-2 und ignoriert den Fehler betreffend der Version und gibt stattdessten eine Warnung aus. -->	
 		<jbig2allowed>yes</jbig2allowed><!--no verwenden wenn JBIG2 in pdfa nicht erlaubt werden sollen, ansonsten yes -->
 	</pdfa>
@@ -41,32 +41,32 @@
 		<!--TIFF-Praezisierungen -->
 		<!--Wenn erlaubt "Text" einfuegen ansonsten "0" -->
 		<allowedcompression>
-			<allowedcompression1>Uncompressed</allowedcompression1><!--0 / / Uncompressed -->
-			<allowedcompression2>CCITT 1D</allowedcompression2><!--0 / / CCITT 1D -->
-			<allowedcompression3>T4/Group 3 Fax</allowedcompression3><!--0 / / T4/Group 3 Fax -->
-			<allowedcompression4>T6/Group 4 Fax</allowedcompression4><!--0 / / T6/Group 4 Fax -->
-			<allowedcompression5>LZW</allowedcompression5><!--0 / / LZW -->
-			<allowedcompression7></allowedcompression7><!--0 / / JPEG -->
-			<allowedcompression8></allowedcompression8><!--0 / / Deflate -->
-			<allowedcompression32773>PackBits</allowedcompression32773><!--0 / / PackBits -->
+			<allowedcompression1>Uncompressed</allowedcompression1><!-- / Uncompressed -->
+			<allowedcompression2>CCITT 1D</allowedcompression2><!-- / CCITT 1D -->
+			<allowedcompression3>T4/Group 3 Fax</allowedcompression3><!-- / T4/Group 3 Fax -->
+			<allowedcompression4>T6/Group 4 Fax</allowedcompression4><!-- / T6/Group 4 Fax -->
+			<allowedcompression5>LZW</allowedcompression5><!-- / LZW -->
+			<allowedcompression7></allowedcompression7><!-- / JPEG -->
+			<allowedcompression8></allowedcompression8><!-- / Deflate -->
+			<allowedcompression32773>PackBits</allowedcompression32773><!-- / PackBits -->
 		</allowedcompression>
 		<allowedphotointer>
-			<allowedphotointer0>WhiteIsZero</allowedphotointer0><!--0 / / WhiteIsZero -->
-			<allowedphotointer1>BlackIsZero</allowedphotointer1><!--0 / / BlackIsZero -->
-			<allowedphotointer2>RGB</allowedphotointer2><!--0 / / RGB -->
-			<allowedphotointer3>RGB Palette</allowedphotointer3><!--0 / / RGB Palette -->
-			<allowedphotointer4></allowedphotointer4><!--0 / / transparency mask -->
-			<allowedphotointer5></allowedphotointer5><!--0 / / CMYK -->
-			<allowedphotointer6></allowedphotointer6><!--0 / / YCbCr -->
-			<allowedphotointer8></allowedphotointer8><!--0 / / CIE L*a*b* -->
+			<allowedphotointer0>WhiteIsZero</allowedphotointer0><!-- / WhiteIsZero -->
+			<allowedphotointer1>BlackIsZero</allowedphotointer1><!-- / BlackIsZero -->
+			<allowedphotointer2>RGB</allowedphotointer2><!-- / RGB -->
+			<allowedphotointer3>RGB Palette</allowedphotointer3><!-- / RGB Palette -->
+			<allowedphotointer4></allowedphotointer4><!-- / transparency mask -->
+			<allowedphotointer5></allowedphotointer5><!-- / CMYK -->
+			<allowedphotointer6></allowedphotointer6><!-- / YCbCr -->
+			<allowedphotointer8></allowedphotointer8><!-- / CIE L*a*b* -->
 		</allowedphotointer>
 		<allowedbitspersample>
-			<allowedbitspersample1>1</allowedbitspersample1><!--0 / / 1 -->
-			<allowedbitspersample2></allowedbitspersample2><!--0 / / 2 -->
-			<allowedbitspersample4>4</allowedbitspersample4><!--0 / / 4 -->
-			<allowedbitspersample8>8</allowedbitspersample8><!--0 / / 8 -->
-			<allowedbitspersample16>16</allowedbitspersample16><!--0 / / 16 -->
-			<allowedbitspersample32></allowedbitspersample32><!--0 / / 32 -->
+			<allowedbitspersample1>1</allowedbitspersample1><!-- / 1 -->
+			<allowedbitspersample2></allowedbitspersample2><!-- / 2 -->
+			<allowedbitspersample4>4</allowedbitspersample4><!-- / 4 -->
+			<allowedbitspersample8>8</allowedbitspersample8><!-- / 8 -->
+			<allowedbitspersample16>16</allowedbitspersample16><!-- / 16 -->
+			<allowedbitspersample32></allowedbitspersample32><!-- / 32 -->
 		</allowedbitspersample>
 		<allowedother>
 			<allowedmultipage>yes</allowedmultipage><!--no / yes -->
@@ -91,19 +91,31 @@
 	<mkv>
 		<mkvvalidation>&#x2713;</mkvvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
 		<allowedmkvvideo>
-			<allowedmkvffv1>FFV1</allowedmkvffv1><!--0 / / FFV1 -->
-			<allowedmkvh264>H.264 (AVC)</allowedmkvh264><!--0 / / H.264 (AVC) -->
-			<allowedmkvh265>H.265 (HEVC)</allowedmkvh265><!--0 / / H.265 (HEVC) -->
-			<allowedmkvav1>AV1</allowedmkvav1><!--0 / / AV1 -->
+			<allowedmkvffv1>FFV1</allowedmkvffv1><!-- / FFV1 -->
+			<allowedmkvavc>AVC</allowedmkvavc><!-- / AVC -->
+			<allowedmkvhevc>HEVC</allowedmkvhevc><!-- / HEVC -->
+			<allowedmkvav1>AV1</allowedmkvav1><!-- / AV1 -->
 		</allowedmkvvideo>
 		<allowedmkvaudio>
-			<allowedmkvflac>FLAC</allowedmkvflac><!--0 / / FLAC -->
-			<allowedmkvmp3>MP3</allowedmkvmp3><!--0 / / MP3 -->
-			<allowedmkvaac>AAC</allowedmkvaac><!--0 / / AAC -->
+			<allowedmkvflac>FLAC</allowedmkvflac><!-- / FLAC -->
+			<allowedmkvmp3>MP3</allowedmkvmp3><!-- / MP3 -->
+			<allowedmkvaac>AAC</allowedmkvaac><!-- / AAC -->
 		</allowedmkvaudio>
+		<allowedmkvnoaudio>Warning</allowedmkvnoaudio><!--Warning / / Error -->
+		<allowedmkvnovideo>Warning</allowedmkvnovideo><!--Warning / / Error -->
 	</mkv>
 	<mp4>
 		<mp4validation>&#x2713;</mp4validation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
+		<allowedmp4video>
+			<allowedmp4avc>AVC</allowedmp4avc><!-- / AVC -->
+			<allowedmp4hevc>HEVC</allowedmp4hevc><!-- / HEVC -->
+		</allowedmp4video>
+		<allowedmp4audio>
+			<allowedmp4mp3>MP3</allowedmp4mp3><!-- / MP3 -->
+			<allowedmp4aac>AAC</allowedmp4aac><!-- / AAC -->
+		</allowedmp4audio>
+		<allowedmp4noaudio>Warning</allowedmp4noaudio><!--Warning / Error -->
+		<allowedmp4novideo>Warning</allowedmp4novideo><!--Warning / Error -->
 	</mp4>
 <!-- DATEN -->
 	<xml>

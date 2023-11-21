@@ -196,8 +196,9 @@ public class Recognition
 				if ( Magic.magicMkv( checkFile ) ) {
 					// Eine MKV-Datei muss mit.Eß£ [1A45DFA3] beginnen
 					// D) passende Extension kontrollieren (keine SiF)
-					// Eine MKV-Datei muss die extension .mkv haben
-					if ( checkFileExt.equals( ".mkv" ) ) {
+					// Eine MKV-Datei muss die extension .mkv .webm haben
+					if ( checkFileExt.equals( ".mkv" )
+							|| checkFileExt.equals( ".webm" ) ) {
 						// eindeutig als MKV-Datei erkannt
 						return "MKV";
 					} else {
@@ -477,8 +478,12 @@ public class Recognition
 				if ( Magic.magicOgg( checkFile ) ) {
 					// Eine OGG-Datei muss mit OggS.. [4F6767530002] beginnen
 					// D) passende Extension kontrollieren (keine SiF)
-					// Eine OGG-Datei muss die extension .ogg haben
-					if ( checkFileExt.equals( ".ogg" ) ) {
+					// Eine OGG-Datei muss die extension .ogg .oga .ogv .ogx
+					// haben
+					if ( checkFileExt.equals( ".ogg" )
+							|| checkFileExt.equals( ".oga" )
+							|| checkFileExt.equals( ".ogv" )
+							|| checkFileExt.equals( ".ogx" ) ) {
 						// eindeutig als OGG-Datei erkannt
 						return "OGG";
 					} else {

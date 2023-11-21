@@ -34,12 +34,12 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
-public class ConfigControllerMkv
+public class ConfigControllerMp4
 {
 
 	@FXML
-	private CheckBox	checkFfv1, checkH264, checkH265, checkAv1, checkFlac,
-			checkMp3, checkAac, checkNoVideo, checkNoAudio;
+	private CheckBox	checkH264, checkH265, checkMp3, checkAac, checkNoVideo,
+			checkNoAudio;
 
 	@FXML
 	private Button		buttonConfigApply;
@@ -52,7 +52,7 @@ public class ConfigControllerMkv
 			minOne = "Mindestens eine Variante muss erlaubt sein!";
 
 	@FXML
-	private Label		labelVideocodec, labelAudiocodec, labelMkv, labelOther,
+	private Label		labelVideocodec, labelAudiocodec, labelMp4, labelOther,
 			labelMessage, labelConfig;
 
 	@FXML
@@ -93,7 +93,7 @@ public class ConfigControllerMkv
 			if ( Util.stringInFileLine( "kostval-conf-DE.xsl", configFile ) ) {
 				labelVideocodec.setText( "Videocodec" );
 				labelAudiocodec.setText( "Audiocodec" );
-				labelMkv.setText( "Validierungseinstellung: MKV" );
+				labelMp4.setText( "Validierungseinstellung: MKV" );
 				labelOther.setText( "Sonstiges" );
 				checkNoVideo.setText( "Reine Audiodatei erlaubt (kein Videocodec)" );
 				checkNoAudio.setText( "Stummfilm erlaubt (kein Audiocodec)" );				
@@ -103,7 +103,7 @@ public class ConfigControllerMkv
 					configFile ) ) {
 				labelVideocodec.setText( "Codec vidéo" );
 				labelAudiocodec.setText( "Codec audio" );
-				labelMkv.setText( "Paramètre de validation: MKV" );
+				labelMp4.setText( "Paramètre de validation: MKV" );
 				labelOther.setText( "Autre" );
 				checkNoVideo.setText( "Fichier audio pur autorisé (pas de codec vidéo)" );
 				checkNoAudio.setText( "Film muet autorisé (pas de codec audio)" );
@@ -113,7 +113,7 @@ public class ConfigControllerMkv
 					configFile ) ) {
 				labelVideocodec.setText( "Codec video" );
 				labelAudiocodec.setText( "Codec audio" );
-				labelMkv.setText( "Parametro di convalida: MKV" );
+				labelMp4.setText( "Parametro di convalida: MKV" );
 				labelOther.setText( "Altro" );
 				checkNoVideo.setText( "File audio puro consentito (nessun codec video)" );
 				checkNoAudio.setText( "Film muto consentito (nessun codec audio)" );
@@ -122,7 +122,7 @@ public class ConfigControllerMkv
 			} else {
 				labelVideocodec.setText( "Video codec" );
 				labelAudiocodec.setText( "Audio codec" );
-				labelMkv.setText( "Validation setting: MKV" );
+				labelMp4.setText( "Validation setting: MKV" );
 				labelOther.setText( "Other" );
 				checkNoVideo.setText( "Pure audio file allowed (no video codec)" );
 				checkNoAudio.setText( "Silent movie allowed (no audio codec)" );
@@ -139,30 +139,18 @@ public class ConfigControllerMkv
 			encoded = Files
 					.readAllBytes( Paths.get( configFile.getAbsolutePath() ) );
 			config = new String( encoded, StandardCharsets.UTF_8 );
-			String noFfv1 = "<allowedmkvffv1></allowedmkvffv1>";
-			String noAvc = "<allowedmkvavc></allowedmkvavc>";
-			String noHevc = "<allowedmkvhevc></allowedmkvhevc>";
-			String noAv1 = "<allowedmkvav1></allowedmkvav1>";
-			String noFlac = "<allowedmkvflac></allowedmkvflac>";
-			String noMp3 = "<allowedmkvmp3></allowedmkvmp3>";
-			String noAac = "<allowedmkvaac></allowedmkvaac>";
-			String noVideo = "<allowedmkvnovideo>Error</allowedmkvnovideo>";
-			String noAudio = "<allowedmkvnoaudio>Error</allowedmkvnoaudio>";
+			String noAvc = "<allowedmp4avc></allowedmp4avc>";
+			String noHevc = "<allowedmp4hevc></allowedmp4hevc>";
+			String noMp3 = "<allowedmp4mp3></allowedmp4mp3>";
+			String noAac = "<allowedmp4aac></allowedmp4aac>";
+			String noVideo = "<allowedmp4novideo>Error</allowedmp4novideo>";
+			String noAudio = "<allowedmp4noaudio>Error</allowedmp4noaudio>";
 
-			if ( config.contains( noFfv1 ) ) {
-				checkFfv1.setSelected( false );
-			}
 			if ( config.contains( noAvc ) ) {
 				checkH264.setSelected( false );
 			}
 			if ( config.contains( noHevc ) ) {
 				checkH265.setSelected( false );
-			}
-			if ( config.contains( noAv1 ) ) {
-				checkAv1.setSelected( false );
-			}
-			if ( config.contains( noFlac ) ) {
-				checkFlac.setSelected( false );
 			}
 			if ( config.contains( noMp3 ) ) {
 				checkMp3.setSelected( false );
@@ -205,42 +193,17 @@ public class ConfigControllerMkv
 
 	/* checkComp schaltet diesen Codec in der Konfiguration ein oder aus */
 	@FXML
-	void changeFfv1( ActionEvent event )
-	{
-		labelMessage.setText( "" );
-		String yes = "<allowedmkvffv1>FFV1</allowedmkvffv1>";
-		String no = "<allowedmkvffv1></allowedmkvffv1>";
-		try {
-			if ( checkFfv1.isSelected() ) {
-				Util.oldnewstring( no, yes, configFile );
-			} else {
-				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkH264.isSelected() && !checkH265.isSelected()
-						&& !checkAv1.isSelected() ) {
-					labelMessage.setText( minOne );
-					checkFfv1.setSelected( true );
-				} else {
-					Util.oldnewstring( yes, no, configFile );
-				}
-			}
-		} catch ( IOException e ) {
-			e.printStackTrace();
-		}
-	}
-
-	@FXML
 	void changeH264( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedmkvavc>AVC</allowedmkvavc>";
-		String no = "<allowedmkvavc></allowedmkvavc>";
+		String yes = "<allowedmp4avc>AVC</allowedmp4avc>";
+		String no = "<allowedmp4avc></allowedmp4avc>";
 		try {
 			if ( checkH264.isSelected() ) {
 				Util.oldnewstring( no, yes, configFile );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkFfv1.isSelected() && !checkH265.isSelected()
-						&& !checkAv1.isSelected() ) {
+				if ( !checkH265.isSelected() ) {
 					labelMessage.setText( minOne );
 					checkH264.setSelected( true );
 				} else {
@@ -256,64 +219,16 @@ public class ConfigControllerMkv
 	void changeH265( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedmkvhevc>HEVC</allowedmkvhevc>";
-		String no = "<allowedmkvhevc></allowedmkvhevc>";
+		String yes = "<allowedmp4hevc>HEVC</allowedmp4hevc>";
+		String no = "<allowedmp4hevc></allowedmp4hevc>";
 		try {
 			if ( checkH265.isSelected() ) {
 				Util.oldnewstring( no, yes, configFile );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkH264.isSelected() && !checkFfv1.isSelected()
-						&& !checkAv1.isSelected() ) {
+				if ( !checkH264.isSelected() ) {
 					labelMessage.setText( minOne );
 					checkH265.setSelected( true );
-				} else {
-					Util.oldnewstring( yes, no, configFile );
-				}
-			}
-		} catch ( IOException e ) {
-			e.printStackTrace();
-		}
-	}
-
-	@FXML
-	void changeAv1( ActionEvent event )
-	{
-		labelMessage.setText( "" );
-		String yes = "<allowedmkvav1>AV1</allowedmkvav1>";
-		String no = "<allowedmkvav1></allowedmkvav1>";
-		try {
-			if ( checkAv1.isSelected() ) {
-				Util.oldnewstring( no, yes, configFile );
-			} else {
-				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkH264.isSelected() && !checkH265.isSelected()
-						&& !checkFfv1.isSelected() ) {
-					labelMessage.setText( minOne );
-					checkAv1.setSelected( true );
-				} else {
-					Util.oldnewstring( yes, no, configFile );
-				}
-			}
-		} catch ( IOException e ) {
-			e.printStackTrace();
-		}
-	}
-
-	@FXML
-	void changeFlac( ActionEvent event )
-	{
-		labelMessage.setText( "" );
-		String yes = "<allowedmkvflac>FLAC</allowedmkvflac>";
-		String no = "<allowedmkvflac></allowedmkvflac>";
-		try {
-			if ( checkFlac.isSelected() ) {
-				Util.oldnewstring( no, yes, configFile );
-			} else {
-				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkMp3.isSelected() && !checkAac.isSelected() ) {
-					labelMessage.setText( minOne );
-					checkFlac.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
 				}
@@ -327,14 +242,14 @@ public class ConfigControllerMkv
 	void changeMp3( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedmkvmp3>MP3</allowedmkvmp3>";
-		String no = "<allowedmkvmp3></allowedmkvmp3>";
+		String yes = "<allowedmp4mp3>MP3</allowedmp4mp3>";
+		String no = "<allowedmp4mp3></allowedmp4mp3>";
 		try {
 			if ( checkMp3.isSelected() ) {
 				Util.oldnewstring( no, yes, configFile );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkFlac.isSelected() && !checkAac.isSelected() ) {
+				if ( !checkAac.isSelected() ) {
 					labelMessage.setText( minOne );
 					checkMp3.setSelected( true );
 				} else {
@@ -350,14 +265,14 @@ public class ConfigControllerMkv
 	void changeAac( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedmkvaac>AAC</allowedmkvaac>";
-		String no = "<allowedmkvaac></allowedmkvaac>";
+		String yes = "<allowedmp4aac>AAC</allowedmp4aac>";
+		String no = "<allowedmp4aac></allowedmp4aac>";
 		try {
 			if ( checkAac.isSelected() ) {
 				Util.oldnewstring( no, yes, configFile );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkMp3.isSelected() && !checkFlac.isSelected() ) {
+				if ( !checkMp3.isSelected() ) {
 					labelMessage.setText( minOne );
 					checkAac.setSelected( true );
 				} else {
@@ -373,8 +288,8 @@ public class ConfigControllerMkv
 	void changeNoVideo( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedmkvnovideo>Warning</allowedmkvnovideo>";
-		String no = "<allowedmkvnovideo>Error</allowedmkvnovideo>";
+		String yes = "<allowedmp4novideo>Warning</allowedmp4novideo>";
+		String no = "<allowedmp4novideo>Error</allowedmp4novideo>";
 		try {
 			if ( checkNoVideo.isSelected() ) {
 				Util.oldnewstring( no, yes, configFile );
@@ -390,8 +305,8 @@ public class ConfigControllerMkv
 	void changeNoAudio( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedmkvnoaudio>Warning</allowedmkvnoaudio>";
-		String no = "<allowedmkvnoaudio>Error</allowedmkvnoaudio>";
+		String yes = "<allowedmp4noaudio>Warning</allowedmp4noaudio>";
+		String no = "<allowedmp4noaudio>Error</allowedmp4noaudio>";
 		try {
 			if ( checkNoAudio.isSelected() ) {
 				Util.oldnewstring( no, yes, configFile );

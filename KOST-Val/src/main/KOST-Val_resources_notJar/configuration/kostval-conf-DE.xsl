@@ -234,22 +234,58 @@
 						</td>
 					</tr>
 					<tr  class="captioninfom">
-						<td>Erlaubter Videocodec [FFV1, H.264 (AVC), H.265 (HEVC), AV1]:</td>
+						<td>- Erlaubter Videocodec [FFV1, AVC, HEVC, AV1]:</td>
 						<td>
 							<xsl:value-of select="configuration/mkv/allowedmkvvideo" />
 						</td>
 					</tr>
 					<tr  class="captioninfom">
-						<td>Erlaubter Audiocodec [FLAC, MP3, AAC]:</td>
+						<td>- Erlaubter Audiocodec [FLAC, MP3, AAC]:</td>
 						<td>
 							<xsl:value-of select="configuration/mkv/allowedmkvaudio" />
 						</td>
 					</tr>
+					<tr  class="captioninfom">
+						<td>- Stummfilm erlaubt (kein Audiocodec) [Warning]:</td>
+						<td>
+							<xsl:value-of select="configuration/mkv/allowedmkvnoaudio" />
+						</td>
+					</tr>
+					<tr  class="captioninfom">
+						<td>- Reine Audiodatei erlaubt (kein Videocodec) [Warning]:</td>
+						<td>
+							<xsl:value-of select="configuration/mkv/allowedmkvnovideo" />
+						</td>
+					</tr>
 
 					<tr  class="captioninfo">
-						<td>MP4 (AVC-MP3): Akzeptanz und Validierung [&#x2713;]</td>
+						<td>MP4: Akzeptanz und Validierung [&#x2713;]</td>
 						<td>
 							<xsl:value-of select="configuration/mp4/mp4validation" />
+						</td>
+					</tr>
+					<tr  class="captioninfom">
+						<td>- Erlaubter Videocodec [AVC, HEVC]:</td>
+						<td>
+							<xsl:value-of select="configuration/mp4/allowedmp4video" />
+						</td>
+					</tr>
+					<tr  class="captioninfom">
+						<td>- Erlaubter Audiocodec [MP3, AAC]:</td>
+						<td>
+							<xsl:value-of select="configuration/mp4/allowedmp4audio" />
+						</td>
+					</tr>
+					<tr  class="captioninfom">
+						<td>- Stummfilm erlaubt (kein Audiocodec) [Warning]:</td>
+						<td>
+							<xsl:value-of select="configuration/mp4/allowedmp4noaudio" />
+						</td>
+					</tr>
+					<tr  class="captioninfom">
+						<td>- Reine Audiodatei erlaubt (kein Videocodec) [Warning]:</td>
+						<td>
+							<xsl:value-of select="configuration/mp4/allowedmp4novideo" />
 						</td>
 					</tr>
 
