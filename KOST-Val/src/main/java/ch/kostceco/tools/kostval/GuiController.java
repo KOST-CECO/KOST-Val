@@ -115,7 +115,7 @@ public class GuiController
 	private String				arg0, arg1, arg2, arg3 = "--xml", dirOfJarPath,
 			initInstructionsDe, initInstructionsFr, initInstructionsIt,
 			initInstructionsEn;
-	private String				versionKostVal	= "2.1.4.0";
+	private String				versionKostVal	= "2.2.0.0";
 	/*
 	 * TODO: versionKostVal auch hier anpassen:
 	 * 
@@ -123,13 +123,13 @@ public class GuiController
 	 *
 	 * 3) ConfigController inkl SubControllers
 	 * 
-	 * 4) Konfigurationsdatei inkl 3x xsl
+	 * 4) Konfigurationsdatei inkl 3x xsl -> TODO
 	 * 
-	 * 5) xsl der Logdatei
+	 * 5) xsl der Logdatei -> TODO
 	 * 
-	 * 6) Start-Bild (make_exe)
+	 * 6) Start-Bild (make_exe) -> TODO
 	 * 
-	 * 7) launch_KOST-Val_exe.xml --> VersionInfo
+	 * 7) launch_KOST-Val_exe.xml --> VersionInfo -> TODO
 	 */
 
 	/*

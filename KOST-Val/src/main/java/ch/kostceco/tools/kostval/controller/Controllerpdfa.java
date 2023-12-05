@@ -23,7 +23,7 @@ import java.io.File;
 import java.util.Locale;
 import java.util.Map;
 
-import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfvalidationException;
+import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfavalidationException;
 import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
@@ -101,7 +101,7 @@ public class Controllerpdfa implements MessageConstants
 						.print();
 				return false;
 			}
-		} catch ( ValidationApdfvalidationException e ) {
+		} catch ( ValidationApdfavalidationException e ) {
 			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
 					MESSAGE_XML_MODUL_A_PDFA )
 					+ getTextResourceService().getText( locale,
@@ -148,7 +148,7 @@ public class Controllerpdfa implements MessageConstants
 					valid = false;
 				}
 			}
-		} catch ( ValidationApdfvalidationException e ) {
+		} catch ( ValidationApdfavalidationException e ) {
 			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
 					MESSAGE_XML_MODUL_A_PDFA )
 					+ getTextResourceService().getText( locale,

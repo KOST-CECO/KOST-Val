@@ -122,7 +122,6 @@
 		<property name="messageService" ref="messageService" />
 	</bean>
 
-
 	<bean id="validationAinitialisationModule"
 		class="ch.kostceco.tools.kostval.validation.modulepdfa.impl.ValidationAinitialisationModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />

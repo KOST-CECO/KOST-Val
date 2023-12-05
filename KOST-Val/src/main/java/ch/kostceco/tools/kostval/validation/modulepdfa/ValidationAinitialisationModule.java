@@ -23,7 +23,7 @@ import java.io.File;
 import java.util.Locale;
 import java.util.Map;
 
-import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfvalidationException;
+import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfavalidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
 /**
@@ -39,6 +39,6 @@ public interface ValidationAinitialisationModule extends ValidationModule
 
 	public boolean validate( File valDatei, File directoryOfLogfile,
 			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws ValidationApdfvalidationException;
+			String dirOfJarPath ) throws ValidationApdfavalidationException;
 
 }

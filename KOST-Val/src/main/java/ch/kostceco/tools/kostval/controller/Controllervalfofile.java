@@ -28,6 +28,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.context.ApplicationContext;
 
 import ch.kostceco.tools.kosttools.fileservice.Recognition;
+import ch.kostceco.tools.kosttools.fileservice.egovdv;
 import ch.kostceco.tools.kosttools.util.Hash;
 import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.logging.Logtxt;
@@ -238,6 +239,104 @@ public class Controllervalfofile implements MessageConstants
 									+ getTextResourceService().getText( locale,
 											MESSAGE_XML_AZTYPE, "PDF/A" )
 									+ valDateiXml );
+
+							/*
+							 * Fuer das weitere Vorgehen ist es wichtig zu
+							 * wissen ob Signaturen enthalten sind.
+							 * 
+							 * Entsprechend werden diese jetzt hier ermittelt:
+							 */
+
+							// TODO: Ermittlung ob Signaturen enthalten sind
+							File workDir2 = new File( pathToWorkDir );
+							try {
+								Integer countSig = egovdv.execEgovdvCountSig(
+										valDatei, workDir2, dirOfJarPath );
+								/*
+								 * Gibt mit egovdv via cmd die Anzahl Signaturen
+								 * in pdf aus
+								 * 
+								 * 0 = keine Signatur
+								 * 
+								 * 999 = Fehler: Es existiert nicht alles zu
+								 * egovdv
+								 * 
+								 * 998 = Fehler: Exception oder Report existiert
+								 * nicht
+								 * 
+								 * 997 = Fehler: Die ersten beiden Zeilen zu
+								 * egovdv fehlen
+								 * 
+								 * 996 = Fehler: Exception UNKNOWN Catch
+								 * 
+								 * @return Integer mit der Anzahl Signaturen
+								 */
+								if ( countSig == 999 ) {
+									// 999 = Fehler: Es existiert nicht alles zu
+									// egovdv
+									Logtxt.logtxt( logFile,
+											getTextResourceService().getText(
+													locale,
+													MESSAGE_XML_MODUL_A_PDFA )
+													+ getTextResourceService()
+															.getText( locale,
+																	MESSAGE_XML_MISSING_FILE,
+																	"checkTool" ) );
+								} else if ( countSig == 998 ) {
+									// 998 = Fehler: Exception oder Report
+									// existiert nicht
+									Logtxt.logtxt( logFile,
+											getTextResourceService().getText(
+													locale,
+													MESSAGE_XML_MODUL_A_PDFA )
+													+ getTextResourceService()
+															.getText( locale,
+																	MESSAGE_XML_SERVICEINVALID,
+																	"egovdv",
+																	"" ) );
+								} else if ( countSig == 997 ) {
+									// die ersten beiden Zeilen fehlen
+									Logtxt.logtxt( logFile,
+											getTextResourceService().getText(
+													locale,
+													MESSAGE_XML_MODUL_A_PDFA )
+													+ getTextResourceService()
+															.getText( locale,
+																	ERROR_XML_SERVICEFAILED,
+																	"egovdv",
+																	"missing lines" ) );
+								} else if ( countSig == 996 ) {
+									Logtxt.logtxt( logFile,
+											getTextResourceService().getText(
+													locale,
+													MESSAGE_XML_MODUL_A_PDFA )
+													+ getTextResourceService()
+															.getText( locale,
+																	ERROR_XML_UNKNOWN,
+																	"egovdv: catch-Error" ) );
+								} else if ( countSig == 0 ) {
+									// keine Signature
+								} else {
+									// Warnung mit Anzahl Signaturen ausgeben
+									Logtxt.logtxt( logFile,
+											getTextResourceService().getText(
+													locale,
+													MESSAGE_XML_MODUL_A_PDFA )
+													+ getTextResourceService()
+															.getText( locale,
+																	WARNING_XML_A_SIGNATURE,
+																	countSig ) );
+								}
+							} catch ( Exception e ) {
+								Logtxt.logtxt( logFile, getTextResourceService()
+										.getText( locale,
+												MESSAGE_XML_MODUL_A_PDFA )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_UNKNOWN,
+												"egovdv: " + e.getMessage() ) );
+							}
+							// TODO: Ende Ermittlung ob Signaturen enthalten
+							// sind
 							if ( pdfaValidation.equals( "az" ) ) {
 								// nur akzeptiert -> KEINE Validierung, nur
 								// Erkennung
@@ -280,6 +379,104 @@ public class Controllervalfofile implements MessageConstants
 									+ getTextResourceService().getText( locale,
 											MESSAGE_XML_AZTYPE, "PDF" )
 									+ valDateiXml );
+
+							/*
+							 * Fuer das weitere Vorgehen ist es wichtig zu
+							 * wissen ob Signaturen enthalten sind.
+							 * 
+							 * Entsprechend werden diese jetzt hier ermittelt:
+							 */
+
+							// TODO: Ermittlung ob Signaturen enthalten sind
+							File workDir2 = new File( pathToWorkDir );
+							try {
+								Integer countSig = egovdv.execEgovdvCountSig(
+										valDatei, workDir2, dirOfJarPath );
+								/*
+								 * Gibt mit egovdv via cmd die Anzahl Signaturen
+								 * in pdf aus
+								 * 
+								 * 0 = keine Signatur
+								 * 
+								 * 999 = Fehler: Es existiert nicht alles zu
+								 * egovdv
+								 * 
+								 * 998 = Fehler: Exception oder Report existiert
+								 * nicht
+								 * 
+								 * 997 = Fehler: Die ersten beiden Zeilen zu
+								 * egovdv fehlen
+								 * 
+								 * 996 = Fehler: Exception UNKNOWN Catch
+								 * 
+								 * @return Integer mit der Anzahl Signaturen
+								 */
+								if ( countSig == 999 ) {
+									// 999 = Fehler: Es existiert nicht alles zu
+									// egovdv
+									Logtxt.logtxt( logFile,
+											getTextResourceService().getText(
+													locale,
+													MESSAGE_XML_MODUL_A_PDF )
+													+ getTextResourceService()
+															.getText( locale,
+																	MESSAGE_XML_MISSING_FILE,
+																	"checkTool" ) );
+								} else if ( countSig == 998 ) {
+									// 998 = Fehler: Exception oder Report
+									// existiert nicht
+									Logtxt.logtxt( logFile,
+											getTextResourceService().getText(
+													locale,
+													MESSAGE_XML_MODUL_A_PDF )
+													+ getTextResourceService()
+															.getText( locale,
+																	MESSAGE_XML_SERVICEINVALID,
+																	"egovdv",
+																	"" ) );
+								} else if ( countSig == 997 ) {
+									// die ersten beiden Zeilen fehlen
+									Logtxt.logtxt( logFile,
+											getTextResourceService().getText(
+													locale,
+													MESSAGE_XML_MODUL_A_PDF )
+													+ getTextResourceService()
+															.getText( locale,
+																	ERROR_XML_SERVICEFAILED,
+																	"egovdv",
+																	"missing lines" ) );
+								} else if ( countSig == 996 ) {
+									Logtxt.logtxt( logFile,
+											getTextResourceService().getText(
+													locale,
+													MESSAGE_XML_MODUL_A_PDF )
+													+ getTextResourceService()
+															.getText( locale,
+																	ERROR_XML_UNKNOWN,
+																	"egovdv: catch-Error" ) );
+								} else if ( countSig == 0 ) {
+									// keine Signature
+								} else {
+									// Warnung mit Anzahl Signaturen ausgeben
+									Logtxt.logtxt( logFile,
+											getTextResourceService().getText(
+													locale,
+													MESSAGE_XML_MODUL_A_PDF )
+													+ getTextResourceService()
+															.getText( locale,
+																	WARNING_XML_A_SIGNATURE,
+																	countSig ) );
+								}
+							} catch ( Exception e ) {
+								Logtxt.logtxt( logFile, getTextResourceService()
+										.getText( locale,
+												MESSAGE_XML_MODUL_A_PDF )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_UNKNOWN,
+												"egovdv: " + e.getMessage() ) );
+							}
+							// TODO: Ende Ermittlung ob Signaturen enthalten
+							// sind
 							if ( pdfValidation.equals( "az" ) ) {
 								// nur akzeptiert -> KEINE Validierung, nur
 								// Erkennung

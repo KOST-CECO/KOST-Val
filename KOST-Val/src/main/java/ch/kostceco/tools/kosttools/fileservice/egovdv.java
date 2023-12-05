@@ -17,6 +17,7 @@
 package ch.kostceco.tools.kosttools.fileservice;
 
 import java.io.File;
+import java.util.Scanner;
 
 import ch.kostceco.tools.kosttools.runtime.Cmd;
 
@@ -90,6 +91,119 @@ public class egovdv
 		return resultExec;
 	}
 
+	/**
+	 * Gibt mit egovdv via cmd die Anzahl Signaturen in pdf aus
+	 * 
+	 * 0 = keine Signatur
+	 * 
+	 * 999 = Fehler: Es existiert nicht alles zu egovdv
+	 * 
+	 * 998 = Fehler: Exception oder Report existiert nicht
+	 * 
+	 * 997 = Fehler: Die ersten beiden Zeilen zu egovdv fehlen
+	 * 
+	 * 996 = Fehler: Exception UNKNOWN Catch
+	 * 
+	 * @return Integer mit der Anzahl Signaturen
+	 */
+	public static Integer execEgovdvCountSig( File valDatei, 
+			File workDir, String dirOfJarPath ) throws InterruptedException
+	{
+		Integer count=0;
+		
+		// Ermittlung ob Signaturen enthalten sind
+		if ( !workDir.exists() ) {
+			workDir.mkdir();
+		}
+		
+		File outputList = new File(
+				workDir.getAbsolutePath() + File.separator + "egovdvList.txt" );
+		// falls das File von einem vorhergehenden Durchlauf bereits
+		// existiert, loeschen wir es
+		if ( outputList.exists() ) {
+			outputList.delete();
+		}
+
+		// - Initialisierung egovdv -> existiert alles zu egovdv?
+
+		// Pfad zum Programm existiert die Dateien?
+		String checkTool = egovdv.checkEgovdv( dirOfJarPath );
+		if ( !checkTool.equals( "OK" ) ) {
+			// es fehlen Dateien
+			count=999;
+			return count;
+		} else {
+			// egovdv sollte vorhanden sein
+			try {
+				String resultExec = egovdv.execEgovdvList( valDatei, outputList,
+						workDir, dirOfJarPath );
+				if ( !resultExec.equals( "OK" ) || !outputList.exists() ) {
+					// Exception oder Report existiert nicht
+					count=998;
+					return count;
+				} else {
+					// Report existiert -> Auswerten...
+
+					// valDateiMit2Signaturen.pdf
+					// 15:09:12.042 [main] INFO de.intarsys.tools.yalf.api -
+					// Yalf implementation is class
+					// de.intarsys.tools.yalf.logback.LogbackProvider
+					// Signature1
+					// SignatureAttributeName_20230308T081454
+
+					// valDateiOhneSignatur.pdf
+					// 15:14:14.741 [main] INFO de.intarsys.tools.yalf.api -
+					// Yalf implementation is class
+					// de.intarsys.tools.yalf.logback.LogbackProvider
+
+					String valDateiName = valDatei.getName();
+					String mainInfo = "[main] INFO  de.intarsys.tools.yalf.api";
+					Boolean valDateiNameBoo = false;
+					Boolean mainInfoBoo = false;
+					int counterSig = 0;
+					Scanner scannerFormat = new Scanner( outputList );
+					while ( scannerFormat.hasNextLine() ) {
+						// format_name=mov,mp4,m4a,3gp,3g2,mj2
+						String line = scannerFormat.nextLine();
+						// System.out.println("egovdv: "+line);
+						if ( line.equals( valDateiName ) ) {
+							// erste Linie vorhanden
+							valDateiNameBoo = true;
+						} else if ( line.contains( mainInfo ) ) {
+							// zweite Linie vorhanden
+							mainInfoBoo = true;
+						} else {
+							// andere Linie
+							if ( valDateiNameBoo && mainInfoBoo ) {
+								if ( line.contains( "   " ) ) {
+									counterSig = counterSig + 1;
+									// Signame ausgeben
+									// System.out.println("egovdv Signame:
+									// "+line);
+								}
+							}
+						}
+					}
+					count=counterSig;
+
+					scannerFormat.close();
+
+					if ( !valDateiNameBoo && !mainInfoBoo ) {
+						// die ersten beiden Zeilen fehlen
+						count=997;
+						return count;
+					}
+				}
+			} catch ( Exception e ) {
+				count=996;
+				return count;
+			}
+		}
+		// Ende Ermittlung ob Signaturen enthalten sind
+		// System.out.println( "Anzahl Signaturen= " +count );
+		return count;
+	}
+	
 	/**
 	 * fuehrt eine Kontrolle aller benoetigten Dateien von egovdv durch und gibt
 	 * das Ergebnis als String zurueck

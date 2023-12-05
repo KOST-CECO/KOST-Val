@@ -161,6 +161,21 @@ public class Recognition
 							return "JP?";
 						}
 					}
+				} else if ( Magic.magicVob( checkFile ) ) {
+					// Eine VOB-Datei muss mit ...° [000001BA] beginnen
+					if ( Util.stringInFile( "¿.ú", checkFile ) ) {
+						// Eine VOB-Datei muss den String "¿.ú" im File
+						// haben
+						// passende Extension kontrollieren
+						// Eine VOB-Datei muss die extension .vob haben
+						if ( checkFileExt.equals( ".vob" ) ) {
+							// eindeutig als VOB-Datei erkannt
+							return "VOB";
+						} else {
+							// als VOB-Datei erkannt aber falsche Extension
+							return "VOB_ext";
+						}
+					}
 				} else if ( Magic.magicMpeg2( checkFile ) ) {
 					// BOF entspricht einer MPEG2-Datei (...³ [000001B3])
 					// D) passende Extension kontrollieren (keine SiF)

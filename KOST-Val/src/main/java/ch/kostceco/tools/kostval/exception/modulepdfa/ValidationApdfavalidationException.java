@@ -21,13 +21,13 @@ package ch.kostceco.tools.kostval.exception.modulepdfa;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-public class ValidationApdfvalidationException extends KOSTValException
+public class ValidationApdfavalidationException extends KOSTValException
 {
 
 	/** @author Rc Claire Roethlisberger, KOST-CECO */
 	private static final long serialVersionUID = -8816841335398903517L;
 
-	public ValidationApdfvalidationException( String message )
+	public ValidationApdfavalidationException( String message )
 	{
 		super( message );
 	}

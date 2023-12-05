@@ -36,7 +36,6 @@ import java.nio.file.StandardOpenOption;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -67,7 +66,7 @@ import ch.kostceco.tools.kosttools.fileservice.egovdv;
 import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kosttools.util.UtilCallas;
 import ch.kostceco.tools.kosttools.util.UtilCharacter;
-import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfvalidationException;
+import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfavalidationException;
 import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationAvalidationAiModule;
@@ -107,7 +106,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile,
 			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws ValidationApdfvalidationException
+			String dirOfJarPath ) throws ValidationApdfavalidationException
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
@@ -379,7 +378,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 
 		// Die Erkennung erfolgt bereits im Vorfeld
 
-		// Ermittlung ob Signaturen enthalten sind
+		// TODO: Ermittlung ob Signaturen enthalten sind
 		File workDir2 = new File( pathToWorkDir );
 		if ( !workDir2.exists() ) {
 			workDir2.mkdir();
@@ -410,11 +409,39 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 			}
 		} else {
 			// egovdv sollte vorhanden sein
+
 			try {
-				String resultExec = egovdv.execEgovdvList( valDatei, outputList,
+				Integer countSig = egovdv.execEgovdvCountSig( valDatei,
 						workDir2, dirOfJarPath );
-				if ( !resultExec.equals( "OK" ) || !outputList.exists() ) {
-					// Exception oder Report existiert nicht
+				/*
+				 * Gibt mit egovdv via cmd die Anzahl Signaturen in pdf aus
+				 * 
+				 * 0 = keine Signatur
+				 * 
+				 * 999 = Fehler: Es existiert nicht alles zu egovdv
+				 * 
+				 * 998 = Fehler: Exception oder Report existiert nicht
+				 * 
+				 * 997 = Fehler: Die ersten beiden Zeilen zu egovdv fehlen
+				 * 
+				 * 996 = Fehler: Exception UNKNOWN Catch
+				 * 
+				 * @return Integer mit der Anzahl Signaturen
+				 */
+				if ( countSig == 999 ) {
+					// 999 = Fehler: Es existiert nicht alles zu egovdv
+
+					/*
+					 * Wurde bereits abgefragt Logtxt.logtxt( logFile,
+					 * getTextResourceService() .getText( locale,
+					 * MESSAGE_XML_MODUL_A_PDFA ) +
+					 * getTextResourceService().getText( locale,
+					 * MESSAGE_XML_MISSING_FILE, checkTool, "" ) ); isValidSig =
+					 * false;
+					 */
+
+				} else if ( countSig == 998 ) {
+					// 998 = Fehler: Exception oder Report existiert nicht
 					if ( min ) {
 						// return false;
 						isValidSig = false;
@@ -428,71 +455,31 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 										MESSAGE_XML_SERVICEINVALID, "egovdv",
 										"" ) );
 					}
+				} else if ( countSig == 997 ) {
+					isValidSig = false;
+					// die ersten beiden Zeilen fehlen
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_A_PDFA )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_SERVICEFAILED, "egovdv",
+											"missing lines" ) );
+				} else if ( countSig == 996 ) {
+					isValidSig = false;
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_A_PDFA )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_UNKNOWN,
+											"egovdv: catch-Error" ) );
+				} else if ( countSig == 0 ) {
+					// keine Signature
 				} else {
-					// Report existiert -> Auswerten...
-
-					// valDateiMit2Signaturen.pdf
-					// 15:09:12.042 [main] INFO de.intarsys.tools.yalf.api -
-					// Yalf implementation is class
-					// de.intarsys.tools.yalf.logback.LogbackProvider
-					// Signature1
-					// SignatureAttributeName_20230308T081454
-
-					// valDateiOhneSignatur.pdf
-					// 15:14:14.741 [main] INFO de.intarsys.tools.yalf.api -
-					// Yalf implementation is class
-					// de.intarsys.tools.yalf.logback.LogbackProvider
-
-					String valDateiName = valDatei.getName();
-					String mainInfo = "[main] INFO  de.intarsys.tools.yalf.api";
-					Boolean valDateiNameBoo = false;
-					Boolean mainInfoBoo = false;
-					int counterSig = 0;
-					Scanner scannerFormat = new Scanner( outputList );
-					while ( scannerFormat.hasNextLine() ) {
-						// format_name=mov,mp4,m4a,3gp,3g2,mj2
-						String line = scannerFormat.nextLine();
-						// System.out.println("egovdv: "+line);
-						if ( line.equals( valDateiName ) ) {
-							// erste Linie vorhanden
-							valDateiNameBoo = true;
-						} else if ( line.contains( mainInfo ) ) {
-							// zweite Linie vorhanden
-							mainInfoBoo = true;
-						} else {
-							// andere Linie
-							if ( valDateiNameBoo && mainInfoBoo ) {
-								if ( line.contains( "   " ) ) {
-									counterSig = counterSig + 1;
-									// Signame ausgeben
-									// System.out.println("egovdv Signame:
-									// "+line);
-								}
-							}
-						}
-					}
-					if ( counterSig == 0 ) {
-						// keine Signature
-					} else {
-						// Warnung mit Anzahl Signaturen ausgeben
-						Logtxt.logtxt( logFile, getTextResourceService()
-								.getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-								+ getTextResourceService().getText( locale,
-										WARNING_XML_A_SIGNATURE, counterSig ) );
-					}
-
-					scannerFormat.close();
-
-					if ( !valDateiNameBoo && !mainInfoBoo ) {
-						isValidSig = false;
-						// die ersten beiden Zeilen fehlen
-						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale,
-										MESSAGE_XML_MODUL_A_PDFA )
-										+ getTextResourceService().getText(
-												locale, ERROR_XML_SERVICEFAILED,
-												"egovdv", "missing lines" ) );
-					}
+					// Warnung mit Anzahl Signaturen ausgeben
+					Logtxt.logtxt( logFile, getTextResourceService()
+							.getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+							+ getTextResourceService().getText( locale,
+									WARNING_XML_A_SIGNATURE, countSig ) );
 				}
 			} catch ( Exception e ) {
 				Logtxt.logtxt( logFile,
@@ -503,7 +490,6 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 										"egovdv: " + e.getMessage() ) );
 				return false;
 			}
-			// TODO: Erledigt: Codec Auswertung
 		}
 		// TODO: Ende Ermittlung ob Signaturen enthalten sind
 
@@ -2610,7 +2596,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								line = line.replace( "Ã¹", "u" );
 								line = line.replace( "Ã»", "u" );
 								line = line.replace( "Ã¼", "ue" );
-								
+
 								line = line.replace( "Â", " " );
 								line = line.replace( "Å", "S" );
 								line = line.replace( "Ã", "a" );

@@ -66,7 +66,7 @@ public class ConfigControllerMkv
 		String javaVersion = System.getProperty( "java.version" );
 		String javafxVersion = System.getProperty( "javafx.version" );
 		labelConfig.setText(
-				"Copyright © KOST/CECO          KOST-Val v2.1.4.0          JavaFX "
+				"Copyright © KOST/CECO          KOST-Val v2.2.0.0          JavaFX "
 						+ javafxVersion + "   &   Java-" + java6432 + " "
 						+ javaVersion + "." );
 
