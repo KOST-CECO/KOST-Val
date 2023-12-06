@@ -220,9 +220,23 @@ public class Controllervalfile implements MessageConstants
 			boolean okMandatory = controller1.executeMandatory( valDatei,
 					directoryOfLogfile, configMap, locale, logFile,
 					dirOfJarPath );
-			valFile = okMandatory;
+			boolean ok = false;
 
+			/*
+			 * die Validierung A ist obligatorisch, wenn sie bestanden
+			 * wurden, koennen die restlichen Validierungen, welche nicht zum
+			 * Abbruch der Applikation fuehren, ausgefuehrt werden.
+			 */
 			if ( okMandatory ) {
+				ok = controller1.executeOptional( valDatei, directoryOfLogfile,
+						configMap, locale, logFile, dirOfJarPath );
+				// Ausfuehren der optionalen Schritte
+			}
+
+			ok = (ok && okMandatory);
+			valFile = ok;
+
+			if ( ok ) {
 				// Validierte Datei valide
 				Logtxt.logtxt( logFile, "<Valid>valid</Valid></Validation>" );
 				System.out.println( " = Valid" );
@@ -232,7 +246,6 @@ public class Controllervalfile implements MessageConstants
 						"<Invalid>invalid</Invalid></Validation>" );
 				System.out.println( " = Invalid" );
 			}
-
 		} else if ( valDateiExt.equals( ".mp4" )
 					|| valDateiExt.equals( ".mpg4" )
 					|| valDateiExt.equals( ".m4v" )

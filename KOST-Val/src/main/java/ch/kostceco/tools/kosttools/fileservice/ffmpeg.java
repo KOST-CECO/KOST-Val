@@ -32,8 +32,6 @@ public class ffmpeg
 			+ "ffplay.exe";
 	private static String	ffprobeExe	= exeDir + File.separator
 			+ "ffprobe.exe";
-	private static String	ffprobeExe2	= File.separator + "ffmpeg" + File.separator + "bin"+ File.separator
-			+ "ffprobe.exe";
 
 	/**
 	 * fuehrt eine Analyse mit ffprobe via cmd durch und speichert das Ergebnis

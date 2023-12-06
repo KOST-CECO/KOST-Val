@@ -69,7 +69,7 @@ public class ValidationAvalidationMkvModuleImpl extends ValidationModuleImpl
 
 		boolean isValid = true;
 
-		// TODO: inArbeit: codec-Erkennung mit ffprobe
+		// TODO: Start: codec-Erkennung mit ffprobe
 
 		// - Initialisierung ffprobe -> existiert alles zu ffmpeg?
 
@@ -92,19 +92,22 @@ public class ValidationAvalidationMkvModuleImpl extends ValidationModuleImpl
 			// ffprobe sollte vorhanden sein
 			try {
 				/*
-				 * Doppelleerschlag im Pfad einer Datei bereitet Probleme
-				 * (leerer Report) Video-Datei wird bei Doppelleerschlag in
-				 * temp-Verzeichnis kopiert
+				 * Doppelleerschlag im Pfad oder im Namen einer Datei bereitet
+				 * Probleme (leerer Report) Video-Datei wird bei
+				 * Doppelleerschlag in temp-Verzeichnis kopiert
 				 */
 				String valDateiPath = valDatei.getAbsolutePath();
+				String valDateiName = valDatei.getName().replace( "  ", " " );
+				valDateiName = valDateiName.replace( "  ", " " );
+				valDateiName = valDateiName.replace( "  ", " " );
 
 				File valDateiTemp = new File(
-						pathToWorkDir + File.separator + valDatei.getName() );
+						pathToWorkDir + File.separator + valDateiName );
 				if ( valDateiPath.contains( "  " ) ) {
 					Util.copyFile( valDatei, valDateiTemp );
-					System.out.println( " " );
-					System.out.println(
-							"   copy " + valDatei + " -> " + valDateiTemp );
+					// System.out.println( " " );
+					// System.out.println(" copy " + valDatei + " -> " +
+					// valDateiTemp );
 				} else {
 					valDateiTemp = valDatei;
 				}
@@ -337,7 +340,7 @@ public class ValidationAvalidationMkvModuleImpl extends ValidationModuleImpl
 											"MKV" ) );
 						}
 					}
-					if ( countVideoCodec == 0 && countAudioCodec == 0) {
+					if ( countVideoCodec == 0 && countAudioCodec == 0 ) {
 						// NOK
 						Logtxt.logtxt( logFile, getTextResourceService()
 								.getText( locale, MESSAGE_XML_MODUL_A_MKV )
@@ -357,7 +360,7 @@ public class ValidationAvalidationMkvModuleImpl extends ValidationModuleImpl
 										ERROR_XML_UNKNOWN, e.getMessage() ) );
 				return false;
 			}
-			// TODO: Erledigt: Codec Auswertung
+			// TODO: Ende: Codec Auswertung
 		}
 		return isValid;
 	}

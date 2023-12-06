@@ -162,6 +162,11 @@
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 	</bean>
+	<bean id="validationBHvalidationMkvModule"
+		class="ch.kostceco.tools.kostval.validation.modulemkv.impl.ValidationBHvalidationMkvModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+	</bean>
 
 	<bean id="validationAvalidationMp4Module"
 		class="ch.kostceco.tools.kostval.validation.modulemp4.impl.ValidationAvalidationMp4ModuleImpl">
@@ -333,6 +338,7 @@
 	<bean id="controllermkv" class="ch.kostceco.tools.kostval.controller.Controllermkv">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="validationAvalidationMkvModule" ref="validationAvalidationMkvModule" />
+		<property name="validationBHvalidationMkvModule" ref="validationBHvalidationMkvModule" />
 	</bean>
 
 	<bean id="controllermp4" class="ch.kostceco.tools.kostval.controller.Controllermp4">

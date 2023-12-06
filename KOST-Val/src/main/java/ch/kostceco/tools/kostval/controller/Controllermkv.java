@@ -24,10 +24,12 @@ import java.util.Locale;
 import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.modulemkv.ValidationAmkvvalidationException;
+import ch.kostceco.tools.kostval.exception.modulemkv.ValidationBHmkvvalidationException;
 import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
 import ch.kostceco.tools.kostval.validation.modulemkv.ValidationAvalidationMkvModule;
+import ch.kostceco.tools.kostval.validation.modulemkv.ValidationBHvalidationMkvModule;
 
 /**
  * kostval -->
@@ -45,6 +47,7 @@ public class Controllermkv implements MessageConstants
 	private TextResourceService				textResourceService;
 
 	private ValidationAvalidationMkvModule	validationAvalidationMkvModule;
+	private ValidationBHvalidationMkvModule	validationBHvalidationMkvModule;
 
 	public ValidationAvalidationMkvModule getValidationAvalidationMkvModule()
 	{
@@ -55,6 +58,17 @@ public class Controllermkv implements MessageConstants
 			ValidationAvalidationMkvModule validationAvalidationMkvModule )
 	{
 		this.validationAvalidationMkvModule = validationAvalidationMkvModule;
+	}
+
+	public ValidationBHvalidationMkvModule getValidationBHvalidationMkvModule()
+	{
+		return validationBHvalidationMkvModule;
+	}
+
+	public void setValidationBHvalidationMkvModule(
+			ValidationBHvalidationMkvModule validationBHvalidationMkvModule )
+	{
+		this.validationBHvalidationMkvModule = validationBHvalidationMkvModule;
 	}
 
 	public TextResourceService getTextResourceService()
@@ -105,5 +119,43 @@ public class Controllermkv implements MessageConstants
 		}
 		return valid;
 
+	}
+	public boolean executeOptional( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath )
+	{
+
+		boolean valid = true;
+		// Validation Step B-H
+		try {
+			if ( this.getValidationBHvalidationMkvModule().validate( valDatei,
+					directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath ) ) {
+				this.getValidationBHvalidationMkvModule().getMessageService()
+						.print();
+			} else {
+				this.getValidationBHvalidationMkvModule().getMessageService()
+						.print();
+					valid = false;
+			}
+		} catch ( ValidationBHmkvvalidationException e ) {
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_B_MKV )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
+			this.getValidationBHvalidationMkvModule().getMessageService()
+					.print();
+			return false;
+		} catch ( Exception e ) {
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_B_MKV )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
+			return false;
+		}
+
+		return valid;
 	}
 }
