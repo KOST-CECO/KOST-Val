@@ -39,12 +39,8 @@ public class ffmpeg
 	 * 
 	 * ffprobe -show_format -show_streams -loglevel quiet videofile
 	 * 
-	 * @param insensitiveOption
-	 *            Option betreffend Gross- und Kleinschreibung
-	 * @param searchString
-	 *            gesuchter Text
-	 * @param fileToGrep
-	 *            Datei in welcher gesucht werden soll
+	 * @param fileToProbe
+	 *            Die zu analysierende Datei
 	 * @param output
 	 *            Ausgabe des Resultates
 	 * @param workDir
@@ -57,21 +53,22 @@ public class ffmpeg
 			File workDir, String dirOfJarPath ) throws InterruptedException
 	{
 		boolean out = true;
-		File fffprobeExe = new File( dirOfJarPath + File.separator + ffprobeExe  );
+		File fffprobeExe = new File(
+				dirOfJarPath + File.separator + ffprobeExe );
 		// falls das File von einem vorhergehenden Durchlauf bereits existiert,
 		// loeschen wir es
 		if ( output.exists() ) {
 			output.delete();
 		}
 
-		// Doppelleerschlag im Pfad einer Datei bereitet Probleme (leerer Report)
-		// Video-Datei muss zuvor bei Doppelleerschlag in temp-Verzeichnis kopiert werden
+		/*
+		 * Doppelleerschlag im Pfad oder im Namen einer Datei bereitet Probleme
+		 * (leerer Report) Video-Datei wird bei Doppelleerschlag in
+		 * temp-Verzeichnis kopiert
+		 */
 
 		// ffprobe -show_format -show_streams -loglevel quiet -o outputfile
 		// videofile
-/*		String command = "\"\"" + fffprobeExe.getAbsolutePath() + "\" "
-				+ " -show_format -show_streams -loglevel quiet \""
-				+ fileToProbe.getAbsolutePath() + "\"\"";*/
 		String command = "\"\"" + fffprobeExe.getAbsolutePath() + "\" "
 				+ "-show_format -show_streams -loglevel quiet -o \""
 				+ output.getAbsolutePath() + "\" \""
@@ -80,6 +77,62 @@ public class ffmpeg
 		// System.out.println( "command: " + command );
 
 		String resultExec = Cmd.execToStringSplit( command, out, workDir );
+		// System.out.println( "resultExec: " + resultExec );
+
+		// ffprobe gibt keine Info raus, die replaced oder ignoriert werden muss
+
+		if ( resultExec.equals( "OK" ) ) {
+			if ( output.exists() ) {
+				// alles io bleibt bei OK
+			} else {
+				// Datei nicht angelegt...
+				resultExec = "NoReport";
+			}
+		}
+		return resultExec;
+	}
+
+	/**
+	 * fuehrt eine Analyse mit ffmpeg via cmd durch und speichert das Ergebnis
+	 * in ein File (Output). Gibt zurueck ob Output existiert oder nicht
+	 * 
+	 * ffmpeg.exe -v error "fileToFfmpeg" -f null - 2> output
+	 * 
+	 * @param fileToFfmpeg
+	 *            Die zu analysierende Datei
+	 * @param output
+	 *            Ausgabe des Resultates
+	 * @param workDir
+	 *            Temporaeres Verzeichnis
+	 * @param dirOfJarPath
+	 *            String mit dem Pfad von wo das Programm gestartet wurde
+	 * @return String ob Report existiert oder nicht ggf Exception
+	 */
+	public static String execFfmpeg( File fileToFfmpeg, File output,
+			File workDir, String dirOfJarPath ) throws InterruptedException
+	{
+		boolean out = true;
+		File fffmpegExe = new File( dirOfJarPath + File.separator + ffmpegExe );
+		// falls das File von einem vorhergehenden Durchlauf bereits existiert,
+		// loeschen wir es
+		if ( output.exists() ) {
+			output.delete();
+		}
+
+		/*
+		 * Doppelleerschlag im Pfad oder im Namen einer Datei bereitet Probleme
+		 * (leerer Report) Video-Datei wird bei Doppelleerschlag in
+		 * temp-Verzeichnis kopiert
+		 */
+
+		// ffmpeg.exe -v error -i "fileToFfmpeg" -f null - 2> output
+		String command = "\"\"" + fffmpegExe.getAbsolutePath() + "\" "
+				+ "-v error -i \"" + fileToFfmpeg.getAbsolutePath()
+				+ "\" -f null - 2> \"" + output.getAbsolutePath() + "\"\"";
+
+		// System.out.println( "command: " + command );
+
+		String resultExec = Cmd.execToString( command, out, workDir );
 		// System.out.println( "resultExec: " + resultExec );
 
 		// ffprobe gibt keine Info raus, die replaced oder ignoriert werden muss

@@ -59,15 +59,21 @@ public class ValidationAvalidationMp4ModuleImpl extends ValidationModuleImpl
 		}
 		File outputProbe = new File(
 				pathToWorkDir + File.separator + "ffprobe.txt" );
+		File outputFfmpeg = new File(
+				directoryOfLogfile + File.separator + "ffmpeg.txt" );
 		// falls das File von einem vorhergehenden Durchlauf bereits
 		// existiert, loeschen wir es
 		if ( outputProbe.exists() ) {
 			outputProbe.delete();
 		}
+		if ( outputFfmpeg.exists() ) {
+			outputFfmpeg.delete();
+		}
 
 		// Die Container-Erkennung erfolgt bereits im Vorfeld
 
 		boolean isValid = true;
+		boolean isValidB = true;
 
 		// TODO: inArbeit: codec-Erkennung mit ffprobe
 
@@ -89,17 +95,20 @@ public class ValidationAvalidationMp4ModuleImpl extends ValidationModuleImpl
 				isValid = false;
 			}
 		} else {
-			// ffprobe sollte vorhanden sein
+			// ffmpeg, ffplay und ffprobe sollte vorhanden sein
 			try {
 				/*
-				 * Doppelleerschlag im Pfad einer Datei bereitet Probleme
-				 * (leerer Report) Video-Datei wird bei Doppelleerschlag in
-				 * temp-Verzeichnis kopiert
+				 * Doppelleerschlag im Pfad oder im Namen einer Datei bereitet
+				 * Probleme (leerer Report) Video-Datei wird bei
+				 * Doppelleerschlag in temp-Verzeichnis kopiert
 				 */
 				String valDateiPath = valDatei.getAbsolutePath();
+				String valDateiName = valDatei.getName().replace( "  ", " " );
+				valDateiName = valDateiName.replace( "  ", " " );
+				valDateiName = valDateiName.replace( "  ", " " );
 
 				File valDateiTemp = new File(
-						pathToWorkDir + File.separator + valDatei.getName() );
+						pathToWorkDir + File.separator + valDateiName );
 				if ( valDateiPath.contains( "  " ) ) {
 					Util.copyFile( valDatei, valDateiTemp );
 					System.out.println( " " );
@@ -183,7 +192,7 @@ public class ValidationAvalidationMp4ModuleImpl extends ValidationModuleImpl
 						if ( line.contains( "codec_name=" ) ) {
 							// Codec auswerten
 
-							// Video: AVC HEVC 
+							// Video: AVC HEVC
 							// Audio: MP3 AAC
 
 							String codec = line.replace( "codec_name=", "" );
@@ -310,7 +319,7 @@ public class ValidationAvalidationMp4ModuleImpl extends ValidationModuleImpl
 											"MP4" ) );
 						}
 					}
-					if ( countVideoCodec == 0 && countAudioCodec == 0) {
+					if ( countVideoCodec == 0 && countAudioCodec == 0 ) {
 						// NOK
 						Logtxt.logtxt( logFile, getTextResourceService()
 								.getText( locale, MESSAGE_XML_MODUL_A_MP4 )
@@ -322,6 +331,113 @@ public class ValidationAvalidationMp4ModuleImpl extends ValidationModuleImpl
 
 					scanner.close();
 				}
+				// TODO: Erledigt: Codec Auswertung
+
+				if ( isValid ) {
+					// Start: Analyse ffmpeg
+					String errB1 = "";
+					String errB2 = "";
+					String errB3 = "";
+					String errB4 = "";
+					String errB5 = "";
+					String errB6 = "";
+					String errB7 = "";
+					String errB8 = "";
+					String errB9 = "";
+					String errB10 = "";
+					if ( outputFfmpeg.exists() ) {
+						outputFfmpeg.delete();
+					}
+
+					String resultFfmpegExec = ffmpeg.execFfmpeg( valDateiTemp,
+							outputFfmpeg, workDir, dirOfJarPath );
+					if ( !resultFfmpegExec.equals( "OK" )
+							|| !outputFfmpeg.exists() ) {
+						// Exception oder Report existiert nicht
+						if ( min ) {
+							return false;
+						} else {
+							isValid = false;
+							// Erster Fehler! Meldung B ausgeben und invalid
+							// setzten
+							Logtxt.logtxt( logFile, getTextResourceService()
+									.getText( locale, MESSAGE_XML_MODUL_B_MP4 )
+									+ getTextResourceService().getText( locale,
+											MESSAGE_XML_SERVICEINVALID,
+											"ffmpeg", "" ) );
+						}
+					} else {
+						// Report existiert -> Auswerten...
+						String errorFilePathName = "Error opening output file "
+								+ valDateiTemp.getAbsolutePath();
+						Scanner scannerFormat = new Scanner( outputFfmpeg );
+						while ( scannerFormat.hasNextLine() ) {
+							String line = "";
+							line = scannerFormat.nextLine();
+							// [out#0/mp4 @ 0000023c307ec780] Output file does
+							// not contain any stream
+							// Error opening output file
+							// C:\Users\clair\Documents\PPEG_Video\div_Murmeli_Container_Codecs\MP4_AVC_MP3_az_Murmeli_2018.mp4.
+							// Error opening output files: Invalid argument
+							if ( line.startsWith( "[" )
+									|| line.startsWith( "Error " ) ) {
+								if ( line.contains( errorFilePathName ) ) {
+									// Meldung ignorieren, kein Mehrwert
+								} else {
+									// NOK
+									isValidB = false;
+									if ( errB1 == "" ) {
+										errB1 = "<Message> - " + line
+												+ "</Message>";
+									} else if ( errB2 == "" ) {
+										errB2 = "<Message> - " + line
+												+ "</Message>";
+									} else if ( errB3 == "" ) {
+										errB3 = "<Message> - " + line
+												+ "</Message>";
+									} else if ( errB4 == "" ) {
+										errB4 = "<Message> - " + line
+												+ "</Message>";
+									} else if ( errB5 == "" ) {
+										errB5 = "<Message> - " + line
+												+ "</Message>";
+									} else if ( errB6 == "" ) {
+										errB6 = "<Message> - " + line
+												+ "</Message>";
+									} else if ( errB7 == "" ) {
+										errB7 = "<Message> - " + line
+												+ "</Message>";
+									} else if ( errB8 == "" ) {
+										errB8 = "<Message> - " + line
+												+ "</Message>";
+									} else if ( errB9 == "" ) {
+										errB9 = "<Message> - " + line
+												+ "</Message>";
+									} else if ( errB10 == "" ) {
+										errB10 = "<Message> - " + line
+												+ "</Message>";
+									} else {
+										errB10 = errB10.replace( "</Message>",
+												" ... </Message>" );
+									}
+								}
+							}
+						}
+						scannerFormat.close();
+					}
+					if ( !isValidB ) {
+						// Fehlermeldungen ausgeben
+						isValid = false;
+						Logtxt.logtxt( logFile, getTextResourceService()
+								.getText( locale, MESSAGE_XML_MODUL_B_MP4 )
+								+ getTextResourceService().getText( locale,
+										ERROR_XML_B_MP4_ERROR,
+										errB1 + errB2 + errB3 + errB4 + errB5
+												+ errB6 + errB7 + errB8 + errB9
+												+ errB10 ) );
+					}
+				}
+				// TODO: Erledigt: Analyse ffmpeg
 			} catch ( Exception e ) {
 				Logtxt.logtxt( logFile,
 						getTextResourceService().getText( locale,
@@ -330,7 +446,6 @@ public class ValidationAvalidationMp4ModuleImpl extends ValidationModuleImpl
 										ERROR_XML_UNKNOWN, e.getMessage() ) );
 				return false;
 			}
-			// TODO: Erledigt: Codec Auswertung
 		}
 		return isValid;
 	}

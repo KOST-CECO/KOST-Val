@@ -125,7 +125,7 @@ public interface MessageConstants
 	String	MESSAGE_XML_MODUL_H_MKV						= "val.message.xml.modul.h.mkv";
 
 	String	MESSAGE_XML_MODUL_A_MP4						= "val.message.xml.modul.a.mp4";
-	// String MESSAGE_XML_MODUL_B_MP4 = "val.message.xml.modul.b.mp4";
+	String	MESSAGE_XML_MODUL_B_MP4						= "val.message.xml.modul.b.mp4";
 	// String MESSAGE_XML_MODUL_C_MP4 = "val.message.xml.modul.c.mp4";
 
 	String	MESSAGE_XML_MODUL_Aa_SIP					= "val.message.xml.modul.aa.sip";
@@ -389,13 +389,16 @@ public interface MessageConstants
 	String	ERROR_XML_A_MKVMP4_CODEC_NOAUDIO_WARNING	= "val.error.xml.a.mkvmp4.codec.noaudio.warning";
 
 	// Modul B-H Meldungen
-	String	ERROR_XML_B_MKV_ERROR				= "val.error.xml.b.mkv.error";
-	String	ERROR_XML_C_MKV_ERROR				= "val.error.xml.c.mkv.error";
-	String	ERROR_XML_D_MKV_ERROR				= "val.error.xml.d.mkv.error";
-	String	ERROR_XML_E_MKV_ERROR				= "val.error.xml.e.mkv.error";
-	String	ERROR_XML_F_MKV_ERROR				= "val.error.xml.f.mkv.error";
-	String	ERROR_XML_G_MKV_ERROR				= "val.error.xml.g.mkv.error";
-	String	ERROR_XML_H_MKV_ERROR				= "val.error.xml.h.mkv.error";
+	String	ERROR_XML_B_MKV_ERROR						= "val.error.xml.b.mkv.error";
+	String	ERROR_XML_C_MKV_ERROR						= "val.error.xml.c.mkv.error";
+	String	ERROR_XML_D_MKV_ERROR						= "val.error.xml.d.mkv.error";
+	String	ERROR_XML_E_MKV_ERROR						= "val.error.xml.e.mkv.error";
+	String	ERROR_XML_F_MKV_ERROR						= "val.error.xml.f.mkv.error";
+	String	ERROR_XML_G_MKV_ERROR						= "val.error.xml.g.mkv.error";
+	String	ERROR_XML_H_MKV_ERROR						= "val.error.xml.h.mkv.error";
+
+	// Modul B Meldungen
+	String	ERROR_XML_B_MP4_ERROR						= "val.error.xml.b.mp4.error";
 
 	// *************SIP-Meldungen*************************************************************************
 	// Modul 1a Meldungen

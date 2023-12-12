@@ -21,6 +21,8 @@
 					tr.captionm {background-color: #f8dfdf }
 					tr.captionio {background-color: #afeeaf; font-weight:bold }
 					tr.captioniom {background-color: #ccffcc }
+					tr.captionwarn {background-color: #f9cb9c; font-weight:bold }
+					tr.captionwarnm {background-color: #fce5cd }
 					tr.captioninfo {background-color: #b2b2c5; font-weight:bold }
 					tr.captioninfom {background-color: #e7e7ed }
 				</style>
@@ -345,9 +347,81 @@
 						<br/>
 					</xsl:if>
 				</xsl:for-each>
+				<h2>Warning:</h2>
+				<xsl:for-each select="KOSTValLog/Format/Validation">
+					<xsl:if test="(Warning) and (Valid)">
+						<div>
+							<table width="100%">
+								<tr class="captionwarn">
+									<td>
+										<xsl:value-of select="ValType"/>
+										<xsl:value-of select="FormatVL"/>
+										->
+										<xsl:value-of select="ValFile"/>
+									</td>
+								</tr>
+							</table>
+							<table width="100%">
+								<xsl:if test="md5">
+									<tr class="captionwarnm">
+										<td width="25%">
+											Info: MD5 
+										</td>
+										<td width="75%">
+											<xsl:value-of select="md5"/>
+										</td>
+									</tr>
+								</xsl:if>
+								<xsl:if test="sha1">
+									<tr class="captionwarnm">
+										<td width="25%">
+											Info: SHA-1
+										</td>
+										<td width="75%">
+											<xsl:value-of select="sha1"/>
+										</td>
+									</tr>
+								</xsl:if>
+								<xsl:if test="sha256">
+									<tr class="captionwarnm">
+										<td width="25%">
+											Info: SHA-256 
+										</td>
+										<td width="75%">
+											<xsl:value-of select="sha256"/>
+										</td>
+									</tr>
+								</xsl:if>
+								<xsl:if test="sha512">
+									<tr class="captionwarnm">
+										<td width="25%">
+											Info: SHA-512 
+										</td>
+										<td width="75%">
+											<xsl:value-of select="sha512"/>
+										</td>
+									</tr>
+								</xsl:if>
+								<xsl:for-each select="Error">
+									<tr class="captionwarnm">
+										<td width="25%">
+											<xsl:value-of select="Modul"/>
+										</td>
+										<td width="75%">
+											<xsl:for-each select="Message">
+												<xsl:value-of select="."/>
+												<br/>
+											</xsl:for-each>
+										</td>
+									</tr>
+								</xsl:for-each>
+							</table>
+						</div>
+					</xsl:if>
+				</xsl:for-each>
 				<h2>Valid:</h2>
 				<xsl:for-each select="KOSTValLog/Format/Validation">
-					<xsl:if test="Valid">
+					<xsl:if test="not(Warning) and (Valid)">
 						<div>
 							<table width="100%">
 								<tr class="captionio">
