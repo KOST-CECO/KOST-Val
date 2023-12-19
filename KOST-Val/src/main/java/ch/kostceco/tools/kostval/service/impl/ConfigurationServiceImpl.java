@@ -542,9 +542,12 @@ public class ConfigurationServiceImpl implements ConfigurationService
 
 			// Gibt an ob flac akzeptiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
+			String yesFlac = "<flacvalidation>&#x2713;</flacvalidation>";
 			String azFlac = "<flacvalidation>(&#x2713;)</flacvalidation>";
 			String flacvalidation = "no";
-			if ( config.contains( azFlac ) ) {
+			if ( config.contains( yesFlac ) ) {
+				flacvalidation = "yes";
+			} else if ( config.contains( azFlac ) ) {
 				flacvalidation = "az";
 			} else {
 				flacvalidation = "no";
@@ -553,9 +556,12 @@ public class ConfigurationServiceImpl implements ConfigurationService
 
 			// Gibt an ob wave akzeptiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
+			String yesWave = "<wavevalidation>&#x2713;</wavevalidation>";
 			String azWave = "<wavevalidation>(&#x2713;)</wavevalidation>";
 			String wavevalidation = "no";
-			if ( config.contains( azWave ) ) {
+			if ( config.contains( yesWave ) ) {
+				wavevalidation = "yes";
+			} else if ( config.contains( azWave ) ) {
 				wavevalidation = "az";
 			} else {
 				wavevalidation = "no";
@@ -564,9 +570,12 @@ public class ConfigurationServiceImpl implements ConfigurationService
 
 			// Gibt an ob mp3 akzeptiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
+			String yesMp3 = "<mp3validation>&#x2713;</mp3validation>";
 			String azMp3 = "<mp3validation>(&#x2713;)</mp3validation>";
 			String mp3validation = "no";
-			if ( config.contains( azMp3 ) ) {
+			if ( config.contains( yesMp3 ) ) {
+				mp3validation = "yes";
+			} else if ( config.contains( azMp3 ) ) {
 				mp3validation = "az";
 			} else {
 				mp3validation = "no";
@@ -641,22 +650,24 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			configMap.put( "Allowedmkvflac", allowedmkvflac );
 			configMap.put( "Allowedmkvmp3", allowedmkvmp3 );
 			configMap.put( "Allowedmkvaac", allowedmkvaac );
-			
+
 			// Gibt an ob Videocodes fehlen duerfen.
 			String allowedmkvnovideo = "Error";
 			if ( doc.getElementsByTagName( "allowedmkvnovideo" )
 					.item( 0 ) != null ) {
-				allowedmkvnovideo = doc.getElementsByTagName( "allowedmkvnovideo" )
-						.item( 0 ).getTextContent();
+				allowedmkvnovideo = doc
+						.getElementsByTagName( "allowedmkvnovideo" ).item( 0 )
+						.getTextContent();
 			}
 			configMap.put( "Allowedmkvnovideo", allowedmkvnovideo );
-			
+
 			// Gibt an ob Audiocodes fehlen duerfen.
 			String allowedmkvnoaudio = "Error";
 			if ( doc.getElementsByTagName( "allowedmkvnoaudio" )
 					.item( 0 ) != null ) {
-				allowedmkvnoaudio = doc.getElementsByTagName( "allowedmkvnoaudio" )
-						.item( 0 ).getTextContent();
+				allowedmkvnoaudio = doc
+						.getElementsByTagName( "allowedmkvnoaudio" ).item( 0 )
+						.getTextContent();
 			}
 			configMap.put( "Allowedmkvnoaudio", allowedmkvnoaudio );
 
@@ -705,22 +716,24 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			}
 			configMap.put( "Allowedmp4mp3", allowedmp4mp3 );
 			configMap.put( "Allowedmp4aac", allowedmp4aac );
-			
+
 			// Gibt an ob Videocodes fehlen duerfen.
 			String allowedmp4novideo = "Error";
 			if ( doc.getElementsByTagName( "allowedmp4novideo" )
 					.item( 0 ) != null ) {
-				allowedmp4novideo = doc.getElementsByTagName( "allowedmp4novideo" )
-						.item( 0 ).getTextContent();
+				allowedmp4novideo = doc
+						.getElementsByTagName( "allowedmp4novideo" ).item( 0 )
+						.getTextContent();
 			}
 			configMap.put( "Allowedmp4novideo", allowedmp4novideo );
-			
+
 			// Gibt an ob Audiocodes fehlen duerfen.
 			String allowedmp4noaudio = "Error";
 			if ( doc.getElementsByTagName( "allowedmp4noaudio" )
 					.item( 0 ) != null ) {
-				allowedmp4noaudio = doc.getElementsByTagName( "allowedmp4noaudio" )
-						.item( 0 ).getTextContent();
+				allowedmp4noaudio = doc
+						.getElementsByTagName( "allowedmp4noaudio" ).item( 0 )
+						.getTextContent();
 			}
 			configMap.put( "Allowedmp4noaudio", allowedmp4noaudio );
 
@@ -831,6 +844,17 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String hash = doc.getElementsByTagName( "hash" ).item( 0 )
 					.getTextContent();
 			configMap.put( "hash", hash );
+
+			// sizeWarning
+			/*
+			 * Warnung bei kleineren Dateien ausgeben. "no Warning" bedeutet keine
+			 * Warnung [no Warning]
+			 * 
+			 * [no Warning] / 512 / 1024 / 5120
+			 */
+			String sizeWarning = doc.getElementsByTagName( "sizeWarning" ).item( 0 )
+					.getTextContent();
+			configMap.put( "sizeWarning", sizeWarning );
 
 			// TODO SIP
 

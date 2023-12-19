@@ -164,7 +164,7 @@ public class ValidationAvalidationMp4ModuleImpl extends ValidationModuleImpl
 												MESSAGE_XML_MODUL_A_MP4 )
 										+ getTextResourceService().getText(
 												locale,
-												ERROR_XML_A_MKVMP4_FORMAT_NAZ,
+												ERROR_XML_A_AUDIOVIDEO_FORMAT_NAZ,
 												formatName ) );
 								isValid = false;
 							}
@@ -259,7 +259,7 @@ public class ValidationAvalidationMp4ModuleImpl extends ValidationModuleImpl
 												MESSAGE_XML_MODUL_A_MP4 )
 										+ getTextResourceService().getText(
 												locale,
-												ERROR_XML_A_MKVMP4_CODEC_NAZ,
+												ERROR_XML_A_AUDIOVIDEO_CODEC_NAZ,
 												codecName, type ) );
 								isValid = false;
 							}
@@ -269,7 +269,7 @@ public class ValidationAvalidationMp4ModuleImpl extends ValidationModuleImpl
 							getTextResourceService().getText( locale,
 									MESSAGE_XML_MODUL_A_MP4 )
 									+ getTextResourceService().getText( locale,
-											ERROR_XML_A_MKVMP4_FORMATCODEC,
+											ERROR_XML_A_AUDIOVIDEO_FORMATCODEC,
 											formatCodec ) );
 
 					if ( countFormat == 0 ) {
@@ -277,8 +277,8 @@ public class ValidationAvalidationMp4ModuleImpl extends ValidationModuleImpl
 						Logtxt.logtxt( logFile, getTextResourceService()
 								.getText( locale, MESSAGE_XML_MODUL_A_MP4 )
 								+ getTextResourceService().getText( locale,
-										ERROR_XML_A_MKVMP4_CODEC_NO, "format",
-										"MP4" ) );
+										ERROR_XML_A_AUDIOVIDEO_CODEC_NO,
+										"format", "MP4" ) );
 						isValid = false;
 					}
 					if ( countVideoCodec == 0 ) {
@@ -288,7 +288,7 @@ public class ValidationAvalidationMp4ModuleImpl extends ValidationModuleImpl
 							Logtxt.logtxt( logFile, getTextResourceService()
 									.getText( locale, MESSAGE_XML_MODUL_A_MP4 )
 									+ getTextResourceService().getText( locale,
-											ERROR_XML_A_MKVMP4_CODEC_NOVIDEO_ERROR,
+											ERROR_XML_A_VIDEO_CODEC_NOVIDEO_ERROR,
 											"MP4" ) );
 							isValid = false;
 						} else {
@@ -296,7 +296,7 @@ public class ValidationAvalidationMp4ModuleImpl extends ValidationModuleImpl
 							Logtxt.logtxt( logFile, getTextResourceService()
 									.getText( locale, MESSAGE_XML_MODUL_A_MP4 )
 									+ getTextResourceService().getText( locale,
-											ERROR_XML_A_MKVMP4_CODEC_NOVIDEO_WARNING,
+											ERROR_XML_A_VIDEO_CODEC_NOVIDEO_WARNING,
 											"MP4" ) );
 						}
 					}
@@ -307,7 +307,7 @@ public class ValidationAvalidationMp4ModuleImpl extends ValidationModuleImpl
 							Logtxt.logtxt( logFile, getTextResourceService()
 									.getText( locale, MESSAGE_XML_MODUL_A_MP4 )
 									+ getTextResourceService().getText( locale,
-											ERROR_XML_A_MKVMP4_CODEC_NOAUDIO_ERROR,
+											ERROR_XML_A_AUDIOVIDEO_CODEC_NOAUDIO_ERROR,
 											"MP4" ) );
 							isValid = false;
 						} else {
@@ -315,7 +315,7 @@ public class ValidationAvalidationMp4ModuleImpl extends ValidationModuleImpl
 							Logtxt.logtxt( logFile, getTextResourceService()
 									.getText( locale, MESSAGE_XML_MODUL_A_MP4 )
 									+ getTextResourceService().getText( locale,
-											ERROR_XML_A_MKVMP4_CODEC_NOAUDIO_WARNING,
+											ERROR_XML_A_VIDEO_CODEC_NOAUDIO_WARNING,
 											"MP4" ) );
 						}
 					}
@@ -324,8 +324,8 @@ public class ValidationAvalidationMp4ModuleImpl extends ValidationModuleImpl
 						Logtxt.logtxt( logFile, getTextResourceService()
 								.getText( locale, MESSAGE_XML_MODUL_A_MP4 )
 								+ getTextResourceService().getText( locale,
-										ERROR_XML_A_MKVMP4_CODEC_NO, "codec",
-										"MP4" ) );
+										ERROR_XML_A_AUDIOVIDEO_CODEC_NO,
+										"codec", "MP4" ) );
 						isValid = false;
 					}
 
@@ -431,7 +431,7 @@ public class ValidationAvalidationMp4ModuleImpl extends ValidationModuleImpl
 						Logtxt.logtxt( logFile, getTextResourceService()
 								.getText( locale, MESSAGE_XML_MODUL_B_MP4 )
 								+ getTextResourceService().getText( locale,
-										ERROR_XML_B_MP4_ERROR,
+										ERROR_XML_B_AUDIOVIDEO_ERROR,
 										errB1 + errB2 + errB3 + errB4 + errB5
 												+ errB6 + errB7 + errB8 + errB9
 												+ errB10 ) );

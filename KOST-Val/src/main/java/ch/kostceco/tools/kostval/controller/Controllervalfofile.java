@@ -46,8 +46,9 @@ import ch.kostceco.tools.kostval.service.TextResourceService;
 
 public class Controllervalfofile implements MessageConstants
 {
-	private boolean						min		= false;
-	private String						hash	= "";
+	private boolean						min				= false;
+	private String						hash			= "";
+	private String						sizeWarningTxt	= "";
 
 	private static TextResourceService	textResourceService;
 
@@ -100,6 +101,7 @@ public class Controllervalfofile implements MessageConstants
 		String otherformats = configMap.get( "otherformats" );
 
 		String configHash = configMap.get( "hash" );
+		String sizeWarning = configMap.get( "sizeWarning" );
 
 		try {
 			hash = "";
@@ -107,8 +109,6 @@ public class Controllervalfofile implements MessageConstants
 				String valDateiName = valDatei.getName();
 				String valDateiExt = "." + FilenameUtils
 						.getExtension( valDateiName ).toLowerCase();
-				String valDateiXml = "<ValFile>" + valDatei.getAbsolutePath()
-						+ "</ValFile>";
 
 				// Formaterkennung der Datei
 				String recFormat = "new";
@@ -135,6 +135,38 @@ public class Controllervalfofile implements MessageConstants
 				} else {
 					hash = "";
 				}
+
+				// Warnung bei kleinen Dateien ausgeben falls gewuenscht
+				sizeWarning = configMap.get( "sizeWarning" );
+				int sizeWarningInt = -1;
+				if ( sizeWarning.equals( "512" ) ) {
+					sizeWarningInt = 512;
+				} else if ( sizeWarning.equals( "1024" ) ) {
+					sizeWarningInt = 1024;
+				} else if ( sizeWarning.equals( "5120" ) ) {
+					sizeWarningInt = 5120;
+				} else {
+					sizeWarningInt = -1;
+				}
+
+				long length = 99999;
+				sizeWarningTxt = "";
+				if ( sizeWarningInt == -1 ) {
+					// Keine Warnung ausgeben
+				} else {
+					length = valDatei.length();
+					if ( sizeWarningInt > length ) {
+						// System.out.println( "Warnung ausgeben" );
+						sizeWarningTxt = getTextResourceService().getText(
+								locale, MESSAGE_WARNING_XML_SIZE, length,
+								sizeWarningInt );
+					} else {
+						// System.out.println( "keine Warnung ausgeben" );
+					}
+				}
+
+				String valDateiXml = "<ValFile>" + valDatei.getAbsolutePath()
+						+ "</ValFile>" + sizeWarningTxt;
 
 				/*
 				 * Ergebnis ist die Datei z.B. PDFA oder SIARD wenn einwandfrei
@@ -247,7 +279,7 @@ public class Controllervalfofile implements MessageConstants
 							 * Entsprechend werden diese jetzt hier ermittelt:
 							 */
 
-							// TODO: Ermittlung ob Signaturen enthalten sind
+							// Ermittlung ob Signaturen enthalten sind
 							File workDir2 = new File( pathToWorkDir );
 							try {
 								Integer countSig = egovdv.execEgovdvCountSig(
@@ -335,8 +367,7 @@ public class Controllervalfofile implements MessageConstants
 												locale, ERROR_XML_UNKNOWN,
 												"egovdv: " + e.getMessage() ) );
 							}
-							// TODO: Ende Ermittlung ob Signaturen enthalten
-							// sind
+							// Ende Ermittlung ob Signaturen enthalten sind
 							if ( pdfaValidation.equals( "az" ) ) {
 								// nur akzeptiert -> KEINE Validierung, nur
 								// Erkennung
@@ -387,7 +418,7 @@ public class Controllervalfofile implements MessageConstants
 							 * Entsprechend werden diese jetzt hier ermittelt:
 							 */
 
-							// TODO: Ermittlung ob Signaturen enthalten sind
+							// Ermittlung ob Signaturen enthalten sind
 							File workDir2 = new File( pathToWorkDir );
 							try {
 								Integer countSig = egovdv.execEgovdvCountSig(
@@ -475,8 +506,7 @@ public class Controllervalfofile implements MessageConstants
 												locale, ERROR_XML_UNKNOWN,
 												"egovdv: " + e.getMessage() ) );
 							}
-							// TODO: Ende Ermittlung ob Signaturen enthalten
-							// sind
+							// Ende Ermittlung ob Signaturen enthalten sind
 							if ( pdfValidation.equals( "az" ) ) {
 								// nur akzeptiert -> KEINE Validierung, nur
 								// Erkennung
@@ -627,11 +657,24 @@ public class Controllervalfofile implements MessageConstants
 
 						// TODO Audio
 					} else if ( recFormat.equals( "FLAC" ) ) {
-						intro = countToValidated + " " + "FLAC:  "
+						intro = countToValidated + "  " + "FLAC:  "
 								+ valDatei.getAbsolutePath() + " ";
 						if ( flacValidation.equals( "yes" ) ) {
+							System.out.print( intro );
 							// akzeptiert und soll validiert werden
-							// Aktuell nicht moeglich, kein Validator dafuer
+							Controllervalfile controller1 = (Controllervalfile) context
+									.getBean( "controllervalfile" );
+							boolean valFile = controller1.valFile( valDatei,
+									logFileName, directoryOfLogfile, verbose,
+									dirOfJarPath, configMap, context, locale,
+									logFile, hash );
+							if ( valFile ) {
+								return "countValid"; // countValid = countValid
+														// + 1;
+							} else {
+								return "countInvalid"; // countInvalid =
+														// countInvalid + 1;
+							}
 						} else {
 							// akzeptiert oder nicht
 							Logtxt.logtxt( logFile, "<Validation>" + hash
@@ -648,11 +691,24 @@ public class Controllervalfofile implements MessageConstants
 							}
 						}
 					} else if ( recFormat.equals( "WAVE" ) ) {
-						intro = countToValidated + " " + "WAVE:  "
+						intro = countToValidated + "  " + "WAVE:  "
 								+ valDatei.getAbsolutePath() + " ";
 						if ( waveValidation.equals( "yes" ) ) {
+							System.out.print( intro );
 							// akzeptiert und soll validiert werden
-							// Aktuell nicht moeglich, kein Validator dafuer
+							Controllervalfile controller1 = (Controllervalfile) context
+									.getBean( "controllervalfile" );
+							boolean valFile = controller1.valFile( valDatei,
+									logFileName, directoryOfLogfile, verbose,
+									dirOfJarPath, configMap, context, locale,
+									logFile, hash );
+							if ( valFile ) {
+								return "countValid"; // countValid = countValid
+														// + 1;
+							} else {
+								return "countInvalid"; // countInvalid =
+														// countInvalid + 1;
+							}
 						} else {
 							// akzeptiert oder nicht
 							Logtxt.logtxt( logFile, "<Validation>" + hash
@@ -669,11 +725,24 @@ public class Controllervalfofile implements MessageConstants
 							}
 						}
 					} else if ( recFormat.equals( "MP3" ) ) {
-						intro = countToValidated + " " + "MP3:   "
+						intro = countToValidated + "  " + "MP3:  "
 								+ valDatei.getAbsolutePath() + " ";
 						if ( mp3Validation.equals( "yes" ) ) {
+							System.out.print( intro );
 							// akzeptiert und soll validiert werden
-							// Aktuell nicht moeglich, kein Validator dafuer
+							Controllervalfile controller1 = (Controllervalfile) context
+									.getBean( "controllervalfile" );
+							boolean valFile = controller1.valFile( valDatei,
+									logFileName, directoryOfLogfile, verbose,
+									dirOfJarPath, configMap, context, locale,
+									logFile, hash );
+							if ( valFile ) {
+								return "countValid"; // countValid = countValid
+														// + 1;
+							} else {
+								return "countInvalid"; // countInvalid =
+														// countInvalid + 1;
+							}
 						} else {
 							// akzeptiert oder nicht
 							Logtxt.logtxt( logFile, "<Validation>" + hash

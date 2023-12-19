@@ -209,6 +209,76 @@ public class Controllervalfile implements MessageConstants
 				System.out.println( " = Invalid" );
 			}
 
+		} else if ( valDateiExt.equals( ".flac" ) ) {
+			Logtxt.logtxt( logFile, "<Validation>" + hash );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
+					MESSAGE_XML_VALTYPE, "FLAC" ) );
+			Logtxt.logtxt( logFile, originalValNameXml );
+			Controllerflac controller1 = (Controllerflac) context
+					.getBean( "controllerflac" );
+			boolean okMandatory = controller1.executeMandatory( valDatei,
+					directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath );
+			valFile = okMandatory;
+
+			if ( okMandatory ) {
+				// Validierte Datei valide
+				Logtxt.logtxt( logFile, "<Valid>valid</Valid></Validation>" );
+				System.out.println( " = Valid" );
+			} else {
+				// Fehler in Validierte Datei --> invalide
+				Logtxt.logtxt( logFile,
+						"<Invalid>invalid</Invalid></Validation>" );
+				System.out.println( " = Invalid" );
+			}
+
+		} else if ( valDateiExt.equals( ".wave" )
+				|| valDateiExt.equals( ".wav" ) ) {
+			Logtxt.logtxt( logFile, "<Validation>" + hash );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
+					MESSAGE_XML_VALTYPE, "WAVE" ) );
+			Logtxt.logtxt( logFile, originalValNameXml );
+			Controllerwave controller1 = (Controllerwave) context
+					.getBean( "controllerwave" );
+			boolean okMandatory = controller1.executeMandatory( valDatei,
+					directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath );
+			valFile = okMandatory;
+
+			if ( okMandatory ) {
+				// Validierte Datei valide
+				Logtxt.logtxt( logFile, "<Valid>valid</Valid></Validation>" );
+				System.out.println( " = Valid" );
+			} else {
+				// Fehler in Validierte Datei --> invalide
+				Logtxt.logtxt( logFile,
+						"<Invalid>invalid</Invalid></Validation>" );
+				System.out.println( " = Invalid" );
+			}
+
+		} else if ( valDateiExt.equals( ".mp3" ) ) {
+			Logtxt.logtxt( logFile, "<Validation>" + hash );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
+					MESSAGE_XML_VALTYPE, "MP3" ) );
+			Logtxt.logtxt( logFile, originalValNameXml );
+			Controllermp3 controller1 = (Controllermp3) context
+					.getBean( "controllermp3" );
+			boolean okMandatory = controller1.executeMandatory( valDatei,
+					directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath );
+			valFile = okMandatory;
+
+			if ( okMandatory ) {
+				// Validierte Datei valide
+				Logtxt.logtxt( logFile, "<Valid>valid</Valid></Validation>" );
+				System.out.println( " = Valid" );
+			} else {
+				// Fehler in Validierte Datei --> invalide
+				Logtxt.logtxt( logFile,
+						"<Invalid>invalid</Invalid></Validation>" );
+				System.out.println( " = Invalid" );
+			}
+
 		} else if ( valDateiExt.equals( ".mkv" )
 				|| valDateiExt.equals( ".webm" ) ) {
 			Logtxt.logtxt( logFile, "<Validation>" + hash );
@@ -223,9 +293,9 @@ public class Controllervalfile implements MessageConstants
 			boolean ok = false;
 
 			/*
-			 * die Validierung A ist obligatorisch, wenn sie bestanden
-			 * wurden, koennen die restlichen Validierungen, welche nicht zum
-			 * Abbruch der Applikation fuehren, ausgefuehrt werden.
+			 * die Validierung A ist obligatorisch, wenn sie bestanden wurden,
+			 * koennen die restlichen Validierungen, welche nicht zum Abbruch
+			 * der Applikation fuehren, ausgefuehrt werden.
 			 */
 			if ( okMandatory ) {
 				ok = controller1.executeOptional( valDatei, directoryOfLogfile,
@@ -246,12 +316,11 @@ public class Controllervalfile implements MessageConstants
 						"<Invalid>invalid</Invalid></Validation>" );
 				System.out.println( " = Invalid" );
 			}
+
 		} else if ( valDateiExt.equals( ".mp4" )
-					|| valDateiExt.equals( ".mpg4" )
-					|| valDateiExt.equals( ".m4v" )
-					|| valDateiExt.equals( ".m4a" )
-					|| valDateiExt.equals( ".f4v" )
-					|| valDateiExt.equals( ".f4a" )) {
+				|| valDateiExt.equals( ".mpg4" ) || valDateiExt.equals( ".m4v" )
+				|| valDateiExt.equals( ".m4a" ) || valDateiExt.equals( ".f4v" )
+				|| valDateiExt.equals( ".f4a" ) ) {
 			Logtxt.logtxt( logFile, "<Validation>" + hash );
 			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
 					MESSAGE_XML_VALTYPE, "MP4" ) );

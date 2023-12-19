@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?><?xml-stylesheet type="text/xsl" href="kostval-conf-DE.xsl"?>
-<configuration><!-- kostval.conf.xml_v2.1.4.0 -->
+<configuration><!-- kostval.conf.xml_v2.2.0.0 -->
 <!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
 <!-- TEXT -->
 	<pdfa>
@@ -79,13 +79,13 @@
 	</png>
 <!-- AUDIO -->
 	<flac>
-		<flacvalidation>(&#x2713;)</flacvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
+		<flacvalidation>&#x2713;</flacvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
 	</flac>
 	<wave>
-		<wavevalidation>(&#x2713;)</wavevalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
+		<wavevalidation>&#x2713;</wavevalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
 	</wave>
 	<mp3>
-		<mp3validation>(&#x2713;)</mp3validation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
+		<mp3validation>&#x2713;</mp3validation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
 	</mp3>
 <!-- VIDEO -->
 	<mkv>
@@ -167,9 +167,10 @@
 		<dicomvalidation></dicomvalidation>";
 		<msgvalidation></msgvalidation>";
 	</otherformats>
+	<hash></hash><!--wenn leer wird kein Hashwert berechnet und ausgegeben / MD5 / SHA-1 / SHA-256 / SHA-512 -->
+	<sizeWarning>no Warning</sizeWarning><!--wenn "no Warning" wird keine Warnung bei kleinen Dateien ausgegeben ansonsten limite in Byte / 512 / 1024 / 5120 -->
 	<pathtoworkdir></pathtoworkdir><!--wenn leer wird "USERPROFILE/.kost-val_2x/temp_KOST-Val" verwendet -->
 	<standardinputdir></standardinputdir><!--wenn leer wird "Dieser PC" verwendet -->
-	<hash></hash><!--wenn leer wird kein Hashwert berechnet und ausgegeben -->
 	<ignoreerror>
 		<!-- Zu ignorierende Fehlermeldungen. Aktuell nur details von pdftools unterstuetzt -->
 		<ignore>The document does not conform to the requested standard. [PDF Tools: 0x83410612]

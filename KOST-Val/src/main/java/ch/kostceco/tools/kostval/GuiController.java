@@ -1,8 +1,8 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
- * Submission Information Package (SIP). Copyright (C) Claire Roethlisberger (KOST-CECO),
- * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
- * (coderslagoon), Daniel Ludin (BEDAG AG)
+ * The KOST-Val application is used for validate PDF/A, JP2, JPEG, TIFF, PNG, FLAC, MKV, XML, 
+ * SIARD-Files and Submission Information Package (SIP). 
+ * Copyright (C) Claire Roethlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
+ * Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
  * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -123,20 +123,22 @@ public class GuiController
 	 *
 	 * 3) ConfigController inkl SubControllers
 	 * 
-	 * 4) Konfigurationsdatei inkl 3x xsl -> TODO
+	 * 4) Konfigurationsdatei (2x) inkl 3x xsl
 	 * 
-	 * 5) xsl der Logdatei -> TODO
+	 * 5) xsl der Logdatei
 	 * 
-	 * 6) Start-Bild (make_exe) -> TODO
+	 * 6) Start-Bild (make_exe)
 	 * 
-	 * 7) launch_KOST-Val_exe.xml --> VersionInfo -> TODO
+	 * 7) launch_KOST-Val_exe.xml --> VersionInfo
 	 */
 
 	/*
-	 * TODO: Jahreszahl in allen val.message.xml.info anpassen
+	 * fuer Februar-Release Jahreszahl in allen val.message.xml.info anpassen
 	 * 
-	 * val.message.xml.info = <Info>KOST-Val v{0}, Copyright (C) 2012-2023
-	 * Claire Roethlisberger ...
+	 * val.message.xml.info = <Info>KOST-Val v{0}, Copyright (C) 2012-202x
+	 * 
+	 * sowie im Readme inkl Kontrolle der validierten Formate (Readme und
+	 * Header in den Java-Dateien
 	 */
 
 	private Locale				locale			= Locale.getDefault();

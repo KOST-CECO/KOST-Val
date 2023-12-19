@@ -105,7 +105,8 @@ public class ConfigController
 	private Label				labelVideo, labelMkv, labelMp4;
 
 	@FXML
-	private Button				buttonMkv, buttonMkvVal, buttonMp4, buttonMp4Val;
+	private Button				buttonMkv, buttonMkvVal, buttonMp4,
+			buttonMp4Val;
 
 	@FXML
 	private Label				labelData, labelXml, labelJson, labelSiard,
@@ -122,8 +123,8 @@ public class ConfigController
 	private Button				buttonSip0160, buttonSipVal;
 
 	@FXML
-	private Label				labelOther, labelWork, labelInput, labelHint,
-			labelHint1, labelConfig;
+	private Label				labelOther, labelWarning9, labelWork, labelInput,
+			labelHint, labelHint1, labelConfig;
 
 	@FXML
 	private Button				buttonPuid, buttonWork, buttonInput;
@@ -132,6 +133,12 @@ public class ConfigController
 			.observableArrayList( "MD5", "SHA-1", "SHA-256", "SHA-512", "" );
 	@FXML
 	private ChoiceBox<String>	hashAlgo;
+
+	ObservableList<String>		sizeWarningList		= FXCollections
+			.observableArrayList( "no Warning", "<512B", "<1KB", "<5KB" );
+
+	@FXML
+	private ChoiceBox<String>	sizeWarning;
 
 	@FXML
 	private WebView				wbv;
@@ -177,20 +184,34 @@ public class ConfigController
 		}
 
 		hashAlgo.getItems().addAll( hashAlgoList );
+		sizeWarning.getItems().addAll( sizeWarningList );
 		try {
-			Document doc = null;
-			BufferedInputStream bis = new BufferedInputStream(
+			Document docH = null;
+			BufferedInputStream bisH = new BufferedInputStream(
 					new FileInputStream( configFile ) );
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			doc = db.parse( bis );
-			doc.normalize();
+			DocumentBuilderFactory dbfH = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dbH = dbfH.newDocumentBuilder();
+			docH = dbH.parse( bisH );
+			docH.normalize();
 			String hashAlgoInit = "";
-			hashAlgoInit = doc.getElementsByTagName( "hash" ).item( 0 )
+			hashAlgoInit = docH.getElementsByTagName( "hash" ).item( 0 )
 					.getTextContent();
-			bis.close();
-			doc = null;
+			bisH.close();
+			docH = null;
 			hashAlgo.setValue( hashAlgoInit );
+			Document docS = null;
+			BufferedInputStream bisS = new BufferedInputStream(
+					new FileInputStream( configFile ) );
+			DocumentBuilderFactory dbfS = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dbS = dbfS.newDocumentBuilder();
+			docS = dbS.parse( bisS );
+			docS.normalize();
+			String sizeWarningInit = "512";
+			sizeWarningInit = docS.getElementsByTagName( "sizeWarning" ).item( 0 )
+					.getTextContent();
+			bisS.close();
+			docS = null;
+			sizeWarning.setValue( sizeWarningInit );
 		} catch ( IOException | ParserConfigurationException
 				| SAXException e1 ) {
 			e1.printStackTrace();
@@ -303,9 +324,12 @@ public class ConfigController
 			String noPng = "<pngvalidation>&#x2717;</pngvalidation>";
 			String yesPng = "<pngvalidation>&#x2713;</pngvalidation>";
 
-			String noFlac = "<flacvalidation>&#x2717;</pdfvalidation>";
+			String noFlac = "<flacvalidation>&#x2717;</flacvalidation>";
+			String yesFlac = "<flacvalidation>&#x2713;</flacvalidation>";
 			String noWave = "<wavevalidation>&#x2717;</wavevalidation>";
+			String yesWave = "<wavevalidation>&#x2713;</wavevalidation>";
 			String noMp3 = "<mp3validation>&#x2717;</mp3validation>";
+			String yesMp3 = "<mp3validation>&#x2713;</mp3validation>";
 
 			String noMkv = "<mkvvalidation>&#x2717;</mkvvalidation>";
 			String yesMkv = "<mkvvalidation>&#x2713;</mkvvalidation>";
@@ -421,6 +445,10 @@ public class ConfigController
 				buttonFlac.setText( "✗" );
 				buttonFlac.setStyle(
 						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+			} else if ( config.contains( yesFlac ) ) {
+				buttonFlac.setText( "✓" );
+				buttonFlac.setStyle(
+						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
 			} else {
 				buttonFlac.setText( "(✓)" );
 				buttonFlac.setStyle(
@@ -430,6 +458,10 @@ public class ConfigController
 				buttonWave.setText( "✗" );
 				buttonWave.setStyle(
 						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+			} else if ( config.contains( yesWave ) ) {
+				buttonWave.setText( "✓" );
+				buttonWave.setStyle(
+						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
 			} else {
 				buttonWave.setText( "(✓)" );
 				buttonWave.setStyle(
@@ -439,6 +471,10 @@ public class ConfigController
 				buttonMp3.setText( "✗" );
 				buttonMp3.setStyle(
 						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+			} else if ( config.contains( yesMp3 ) ) {
+				buttonMp3.setText( "✓" );
+				buttonMp3.setStyle(
+						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
 			} else {
 				buttonMp3.setText( "(✓)" );
 				buttonMp3.setStyle(
@@ -670,11 +706,16 @@ public class ConfigController
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected / (v) / V ist
 				if ( buttonJpeg2000.getText().equals( "✗" )
-						&& buttonSiard.getText().equals( "✗" )
+						&& buttonJpeg.getText().equals( "✗" )
 						&& buttonTiff.getText().equals( "✗" )
-						&& buttonPdfa.getText().equals( "✗" )
 						&& buttonPng.getText().equals( "✗" )
+						&& buttonFlac.getText().equals( "✗" )
+						&& buttonWave.getText().equals( "✗" )
+						&& buttonMp3.getText().equals( "✗" )
+						&& buttonMkv.getText().equals( "✗" )
+						&& buttonMp4.getText().equals( "✗" )
 						&& buttonXml.getText().equals( "✗" )
+						&& buttonSiard.getText().equals( "✗" )
 						&& buttonSip0160.getText().equals( "✗" ) ) {
 					engine.loadContent(
 							"<html><h2>" + minOne + "</h2></html>" );
@@ -745,14 +786,18 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected / (v) / V ist
-				if ( buttonJpeg2000.getText().equals( "✗" )
-						&& buttonSiard.getText().equals( "✗" )
-						&& buttonTiff.getText().equals( "✗" )
-						&& buttonPdfa.getText().equals( "✗" )
-						&& buttonPdf.getText().equals( "✗" )
+				if ( buttonPdfa.getText().equals( "✗" )
+						&& buttonJpeg2000.getText().equals( "✗" )
 						&& buttonJpeg.getText().equals( "✗" )
+						&& buttonTiff.getText().equals( "✗" )
 						&& buttonPng.getText().equals( "✗" )
+						&& buttonFlac.getText().equals( "✗" )
+						&& buttonWave.getText().equals( "✗" )
+						&& buttonMp3.getText().equals( "✗" )
+						&& buttonMkv.getText().equals( "✗" )
+						&& buttonMp4.getText().equals( "✗" )
 						&& buttonXml.getText().equals( "✗" )
+						&& buttonSiard.getText().equals( "✗" )
 						&& buttonSip0160.getText().equals( "✗" ) ) {
 					engine.loadContent(
 							"<html><h2>" + minOne + "</h2></html>" );
@@ -821,11 +866,17 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected / (v) / V ist
-				if ( buttonSiard.getText().equals( "✗" )
+				if ( buttonPdfa.getText().equals( "✗" )
+						&& buttonJpeg.getText().equals( "✗" )
 						&& buttonTiff.getText().equals( "✗" )
-						&& buttonPdfa.getText().equals( "✗" )
 						&& buttonPng.getText().equals( "✗" )
+						&& buttonFlac.getText().equals( "✗" )
+						&& buttonWave.getText().equals( "✗" )
+						&& buttonMp3.getText().equals( "✗" )
+						&& buttonMkv.getText().equals( "✗" )
+						&& buttonMp4.getText().equals( "✗" )
 						&& buttonXml.getText().equals( "✗" )
+						&& buttonSiard.getText().equals( "✗" )
 						&& buttonSip0160.getText().equals( "✗" ) ) {
 					engine.loadContent(
 							"<html><h2>" + minOne + "</h2></html>" );
@@ -865,12 +916,17 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected / (v) / V ist
-				if ( buttonJpeg2000.getText().equals( "✗" )
-						&& buttonSiard.getText().equals( "✗" )
+				if ( buttonPdfa.getText().equals( "✗" )
+						&& buttonJpeg2000.getText().equals( "✗" )
 						&& buttonTiff.getText().equals( "✗" )
-						&& buttonPdfa.getText().equals( "✗" )
 						&& buttonPng.getText().equals( "✗" )
+						&& buttonFlac.getText().equals( "✗" )
+						&& buttonWave.getText().equals( "✗" )
+						&& buttonMp3.getText().equals( "✗" )
+						&& buttonMkv.getText().equals( "✗" )
+						&& buttonMp4.getText().equals( "✗" )
 						&& buttonXml.getText().equals( "✗" )
+						&& buttonSiard.getText().equals( "✗" )
 						&& buttonSip0160.getText().equals( "✗" ) ) {
 					engine.loadContent(
 							"<html><h2>" + minOne + "</h2></html>" );
@@ -912,12 +968,17 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected / (v) / V ist
-				if ( buttonJpeg2000.getText().equals( "✗" )
-						&& buttonSiard.getText().equals( "✗" )
+				if ( buttonPdfa.getText().equals( "✗" )
+						&& buttonJpeg2000.getText().equals( "✗" )
 						&& buttonJpeg.getText().equals( "✗" )
-						&& buttonPdfa.getText().equals( "✗" )
 						&& buttonPng.getText().equals( "✗" )
+						&& buttonFlac.getText().equals( "✗" )
+						&& buttonWave.getText().equals( "✗" )
+						&& buttonMp3.getText().equals( "✗" )
+						&& buttonMkv.getText().equals( "✗" )
+						&& buttonMp4.getText().equals( "✗" )
 						&& buttonXml.getText().equals( "✗" )
+						&& buttonSiard.getText().equals( "✗" )
 						&& buttonSip0160.getText().equals( "✗" ) ) {
 					engine.loadContent(
 							"<html><h2>" + minOne + "</h2></html>" );
@@ -995,12 +1056,17 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected / (v) / V ist
-				if ( buttonJpeg2000.getText().equals( "✗" )
-						&& buttonSiard.getText().equals( "✗" )
-						&& buttonTiff.getText().equals( "✗" )
-						&& buttonPdfa.getText().equals( "✗" )
+				if ( buttonPdfa.getText().equals( "✗" )
+						&& buttonJpeg2000.getText().equals( "✗" )
 						&& buttonJpeg.getText().equals( "✗" )
+						&& buttonTiff.getText().equals( "✗" )
+						&& buttonFlac.getText().equals( "✗" )
+						&& buttonWave.getText().equals( "✗" )
+						&& buttonMp3.getText().equals( "✗" )
+						&& buttonMkv.getText().equals( "✗" )
+						&& buttonMp4.getText().equals( "✗" )
 						&& buttonXml.getText().equals( "✗" )
+						&& buttonSiard.getText().equals( "✗" )
 						&& buttonSip0160.getText().equals( "✗" ) ) {
 					engine.loadContent(
 							"<html><h2>" + minOne + "</h2></html>" );
@@ -1019,10 +1085,11 @@ public class ConfigController
 
 	/* TODO --> Audio ================= */
 
-	/* changeFlac schaltet zwischen x (v) herum */
+	/* changeFlac schaltet zwischen x (v) V herum */
 	@FXML
 	void changeFlac( ActionEvent event )
 	{
+		String yes = "<flacvalidation>&#x2713;</flacvalidation>";
 		String az = "<flacvalidation>(&#x2713;)</flacvalidation>";
 		String no = "<flacvalidation>&#x2717;</flacvalidation>";
 		try {
@@ -1033,23 +1100,46 @@ public class ConfigController
 				buttonFlac.setStyle(
 						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
 				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} else {
-				Util.oldnewstring( az, no, configFile );
-				buttonFlac.setText( "✗" );
+			} else if ( optButton.equals( "(✓)" ) ) {
+				Util.oldnewstring( az, yes, configFile );
+				buttonFlac.setText( "✓" );
 				buttonFlac.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
 				engine.load( "file:///" + configFile.getAbsolutePath() );
-				// TODO Check etwas angewaehlt
+			} else {
+				// abwaehlen nur moeglich wenn noch eines selected / (v) / V ist
+				if ( buttonPdfa.getText().equals( "✗" )
+						&& buttonJpeg2000.getText().equals( "✗" )
+						&& buttonJpeg.getText().equals( "✗" )
+						&& buttonTiff.getText().equals( "✗" )
+						&& buttonPng.getText().equals( "✗" )
+						&& buttonWave.getText().equals( "✗" )
+						&& buttonMp3.getText().equals( "✗" )
+						&& buttonMkv.getText().equals( "✗" )
+						&& buttonMp4.getText().equals( "✗" )
+						&& buttonXml.getText().equals( "✗" )
+						&& buttonSiard.getText().equals( "✗" )
+						&& buttonSip0160.getText().equals( "✗" ) ) {
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
+				} else {
+					Util.oldnewstring( yes, no, configFile );
+					buttonFlac.setText( "✗" );
+					buttonFlac.setStyle(
+							"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+					engine.load( "file:///" + configFile.getAbsolutePath() );
+				}
 			}
 		} catch ( IOException e ) {
 			e.printStackTrace();
 		}
 	}
 
-	/* changeWave schaltet zwischen x (v) herum */
+	/* changeWave schaltet zwischen x (v) V herum */
 	@FXML
 	void changeWave( ActionEvent event )
 	{
+		String yes = "<wavevalidation>&#x2713;</wavevalidation>";
 		String az = "<wavevalidation>(&#x2713;)</wavevalidation>";
 		String no = "<wavevalidation>&#x2717;</wavevalidation>";
 		try {
@@ -1060,23 +1150,46 @@ public class ConfigController
 				buttonWave.setStyle(
 						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
 				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} else {
-				Util.oldnewstring( az, no, configFile );
-				buttonWave.setText( "✗" );
+			} else if ( optButton.equals( "(✓)" ) ) {
+				Util.oldnewstring( az, yes, configFile );
+				buttonWave.setText( "✓" );
 				buttonWave.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
 				engine.load( "file:///" + configFile.getAbsolutePath() );
-				// TODO Check etwas angewaehlt
+			} else {
+				// abwaehlen nur moeglich wenn noch eines selected / (v) / V ist
+				if ( buttonPdfa.getText().equals( "✗" )
+						&& buttonJpeg2000.getText().equals( "✗" )
+						&& buttonJpeg.getText().equals( "✗" )
+						&& buttonTiff.getText().equals( "✗" )
+						&& buttonPng.getText().equals( "✗" )
+						&& buttonFlac.getText().equals( "✗" )
+						&& buttonMp3.getText().equals( "✗" )
+						&& buttonMkv.getText().equals( "✗" )
+						&& buttonMp4.getText().equals( "✗" )
+						&& buttonXml.getText().equals( "✗" )
+						&& buttonSiard.getText().equals( "✗" )
+						&& buttonSip0160.getText().equals( "✗" ) ) {
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
+				} else {
+					Util.oldnewstring( yes, no, configFile );
+					buttonWave.setText( "✗" );
+					buttonWave.setStyle(
+							"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+					engine.load( "file:///" + configFile.getAbsolutePath() );
+				}
 			}
 		} catch ( IOException e ) {
 			e.printStackTrace();
 		}
 	}
 
-	/* changeMp3 schaltet zwischen x (v) herum */
+	/* changeMp3 schaltet zwischen x (v) V herum */
 	@FXML
 	void changeMp3( ActionEvent event )
 	{
+		String yes = "<mp3validation>&#x2713;</mp3validation>";
 		String az = "<mp3validation>(&#x2713;)</mp3validation>";
 		String no = "<mp3validation>&#x2717;</mp3validation>";
 		try {
@@ -1087,13 +1200,35 @@ public class ConfigController
 				buttonMp3.setStyle(
 						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
 				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} else {
-				Util.oldnewstring( az, no, configFile );
-				buttonMp3.setText( "✗" );
+			} else if ( optButton.equals( "(✓)" ) ) {
+				Util.oldnewstring( az, yes, configFile );
+				buttonMp3.setText( "✓" );
 				buttonMp3.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
 				engine.load( "file:///" + configFile.getAbsolutePath() );
-				// TODO Check etwas angewaehlt
+			} else {
+				// abwaehlen nur moeglich wenn noch eines selected / (v) / V ist
+				if ( buttonPdfa.getText().equals( "✗" )
+						&& buttonJpeg2000.getText().equals( "✗" )
+						&& buttonJpeg.getText().equals( "✗" )
+						&& buttonTiff.getText().equals( "✗" )
+						&& buttonPng.getText().equals( "✗" )
+						&& buttonFlac.getText().equals( "✗" )
+						&& buttonWave.getText().equals( "✗" )
+						&& buttonMkv.getText().equals( "✗" )
+						&& buttonMp4.getText().equals( "✗" )
+						&& buttonXml.getText().equals( "✗" )
+						&& buttonSiard.getText().equals( "✗" )
+						&& buttonSip0160.getText().equals( "✗" ) ) {
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
+				} else {
+					Util.oldnewstring( yes, no, configFile );
+					buttonMp3.setText( "✗" );
+					buttonMp3.setStyle(
+							"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+					engine.load( "file:///" + configFile.getAbsolutePath() );
+				}
 			}
 		} catch ( IOException e ) {
 			e.printStackTrace();
@@ -1127,14 +1262,17 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected / (v) / V ist
-				if ( buttonJpeg2000.getText().equals( "✗" )
-						&& buttonSiard.getText().equals( "✗" )
-						&& buttonTiff.getText().equals( "✗" )
-						&& buttonPdfa.getText().equals( "✗" )
+				if ( buttonPdfa.getText().equals( "✗" )
+						&& buttonJpeg2000.getText().equals( "✗" )
 						&& buttonJpeg.getText().equals( "✗" )
+						&& buttonTiff.getText().equals( "✗" )
 						&& buttonPng.getText().equals( "✗" )
-						&& buttonXml.getText().equals( "✗" )
+						&& buttonFlac.getText().equals( "✗" )
+						&& buttonWave.getText().equals( "✗" )
+						&& buttonMp3.getText().equals( "✗" )
 						&& buttonMp4.getText().equals( "✗" )
+						&& buttonXml.getText().equals( "✗" )
+						&& buttonSiard.getText().equals( "✗" )
 						&& buttonSip0160.getText().equals( "✗" ) ) {
 					engine.loadContent(
 							"<html><h2>" + minOne + "</h2></html>" );
@@ -1214,14 +1352,17 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected / (v) / V ist
-				if ( buttonJpeg2000.getText().equals( "✗" )
-						&& buttonSiard.getText().equals( "✗" )
-						&& buttonTiff.getText().equals( "✗" )
-						&& buttonPdfa.getText().equals( "✗" )
+				if ( buttonPdfa.getText().equals( "✗" )
+						&& buttonJpeg2000.getText().equals( "✗" )
 						&& buttonJpeg.getText().equals( "✗" )
+						&& buttonTiff.getText().equals( "✗" )
 						&& buttonPng.getText().equals( "✗" )
-						&& buttonXml.getText().equals( "✗" )
+						&& buttonFlac.getText().equals( "✗" )
+						&& buttonWave.getText().equals( "✗" )
+						&& buttonMp3.getText().equals( "✗" )
 						&& buttonMkv.getText().equals( "✗" )
+						&& buttonXml.getText().equals( "✗" )
+						&& buttonSiard.getText().equals( "✗" )
 						&& buttonSip0160.getText().equals( "✗" ) ) {
 					engine.loadContent(
 							"<html><h2>" + minOne + "</h2></html>" );
@@ -1301,12 +1442,17 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected / (v) / V ist
-				if ( buttonJpeg2000.getText().equals( "✗" )
-						&& buttonSiard.getText().equals( "✗" )
+				if ( buttonPdfa.getText().equals( "✗" )
+						&& buttonJpeg2000.getText().equals( "✗" )
+						&& buttonJpeg.getText().equals( "✗" )
 						&& buttonTiff.getText().equals( "✗" )
-						&& buttonPdfa.getText().equals( "✗" )
 						&& buttonPng.getText().equals( "✗" )
-						&& buttonXml.getText().equals( "✗" )
+						&& buttonFlac.getText().equals( "✗" )
+						&& buttonWave.getText().equals( "✗" )
+						&& buttonMp3.getText().equals( "✗" )
+						&& buttonMkv.getText().equals( "✗" )
+						&& buttonMp4.getText().equals( "✗" )
+						&& buttonSiard.getText().equals( "✗" )
 						&& buttonSip0160.getText().equals( "✗" ) ) {
 					engine.loadContent(
 							"<html><h2>" + minOne + "</h2></html>" );
@@ -1347,11 +1493,16 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected / (v) / V ist
-				if ( buttonJpeg2000.getText().equals( "✗" )
-						&& buttonPng.getText().equals( "✗" )
-						&& buttonTiff.getText().equals( "✗" )
-						&& buttonPdfa.getText().equals( "✗" )
+				if ( buttonPdfa.getText().equals( "✗" )
+						&& buttonJpeg2000.getText().equals( "✗" )
 						&& buttonJpeg.getText().equals( "✗" )
+						&& buttonTiff.getText().equals( "✗" )
+						&& buttonPng.getText().equals( "✗" )
+						&& buttonFlac.getText().equals( "✗" )
+						&& buttonWave.getText().equals( "✗" )
+						&& buttonMp3.getText().equals( "✗" )
+						&& buttonMkv.getText().equals( "✗" )
+						&& buttonMp4.getText().equals( "✗" )
 						&& buttonXml.getText().equals( "✗" )
 						&& buttonSip0160.getText().equals( "✗" ) ) {
 					engine.loadContent(
@@ -1541,11 +1692,16 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected / (v) / V ist
-				if ( buttonJpeg2000.getText().equals( "✗" )
-						&& buttonPng.getText().equals( "✗" )
-						&& buttonTiff.getText().equals( "✗" )
-						&& buttonPdfa.getText().equals( "✗" )
+				if ( buttonPdfa.getText().equals( "✗" )
+						&& buttonJpeg2000.getText().equals( "✗" )
 						&& buttonJpeg.getText().equals( "✗" )
+						&& buttonTiff.getText().equals( "✗" )
+						&& buttonPng.getText().equals( "✗" )
+						&& buttonFlac.getText().equals( "✗" )
+						&& buttonWave.getText().equals( "✗" )
+						&& buttonMp3.getText().equals( "✗" )
+						&& buttonMkv.getText().equals( "✗" )
+						&& buttonMp4.getText().equals( "✗" )
 						&& buttonXml.getText().equals( "✗" )
 						&& buttonSiard.getText().equals( "✗" ) ) {
 					engine.loadContent(
@@ -1806,7 +1962,52 @@ public class ConfigController
 				| SAXException e1 ) {
 			e1.printStackTrace();
 		}
+	}
 
+	// Mit changeSizeWarning wird die Warnung kleiner Dateien umgestellt
+
+	@FXML
+	void changeSizeWarning( ActionEvent event )
+	{
+		try {
+			System.out.println("changeSizeWarning ausgeloest");
+			Document doc = null;
+			BufferedInputStream bis = new BufferedInputStream(
+					new FileInputStream( configFile ) );
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			doc = db.parse( bis );
+			doc.normalize();
+			String sizeWarningInit = "";
+			sizeWarningInit = doc.getElementsByTagName( "sizeWarning" ).item( 0 )
+					.getTextContent();
+			bis.close();
+			doc = null;
+			String sizeWarningOld = "<sizeWarning>" + sizeWarningInit + "</sizeWarning>";
+			String selSizeWarning = sizeWarning.getValue();
+			String sizeWarningNew = sizeWarningOld;
+			System.out.println("sizeWarningOld = "+sizeWarningOld);
+			System.out.println("selSizeWarning = "+selSizeWarning);
+			System.out.println("sizeWarningNew = "+sizeWarningNew);
+			if ( selSizeWarning.equals( "<512B" ) ) {
+				sizeWarningNew = "<sizeWarning>512</sizeWarning>";
+			} else if ( selSizeWarning.equals( "<1KB" ) ) {
+				sizeWarningNew = "<sizeWarning>1024</sizeWarning>";
+			} else if ( selSizeWarning.equals( "<5KB" ) ) {
+				sizeWarningNew = "<sizeWarning>5120</sizeWarning>";
+			} else {
+				sizeWarningNew = "<sizeWarning>no Warning</sizeWarning>";
+			}
+			System.out.println("sizeWarningOld_2 = "+sizeWarningOld);
+			System.out.println("sizeWarningNew_2 = "+sizeWarningNew);
+			Util.oldnewstring( sizeWarningOld, sizeWarningNew, configFile );
+
+			engine = wbv.getEngine();
+			engine.load( "file:///" + configFile.getAbsolutePath() );
+		} catch ( IOException | ParserConfigurationException
+				| SAXException e1 ) {
+			e1.printStackTrace();
+		}
 	}
 
 }

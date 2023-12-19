@@ -157,6 +157,24 @@
 		<property name="messageService" ref="messageService" />
 	</bean>
 
+	<bean id="validationAvalidationFlacModule"
+		class="ch.kostceco.tools.kostval.validation.moduleflac.impl.ValidationAvalidationFlacModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+	</bean>
+
+	<bean id="validationAvalidationWaveModule"
+		class="ch.kostceco.tools.kostval.validation.modulewave.impl.ValidationAvalidationWaveModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+	</bean>
+
+	<bean id="validationAvalidationMp3Module"
+		class="ch.kostceco.tools.kostval.validation.modulemp3.impl.ValidationAvalidationMp3ModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+	</bean>
+
 	<bean id="validationAvalidationMkvModule"
 		class="ch.kostceco.tools.kostval.validation.modulemkv.impl.ValidationAvalidationMkvModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
@@ -333,6 +351,21 @@
 	<bean id="controllerxml" class="ch.kostceco.tools.kostval.controller.Controllerxml">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="validationAvalidationXmlModule" ref="validationAvalidationXmlModule" />
+	</bean>
+
+	<bean id="controllerflac" class="ch.kostceco.tools.kostval.controller.Controllerflac">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="validationAvalidationFlacModule" ref="validationAvalidationFlacModule" />
+	</bean>
+
+	<bean id="controllerwave" class="ch.kostceco.tools.kostval.controller.Controllerwave">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="validationAvalidationWaveModule" ref="validationAvalidationWaveModule" />
+	</bean>
+
+	<bean id="controllermp3" class="ch.kostceco.tools.kostval.controller.Controllermp3">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="validationAvalidationMp3Module" ref="validationAvalidationMp3Module" />
 	</bean>
 
 	<bean id="controllermkv" class="ch.kostceco.tools.kostval.controller.Controllermkv">

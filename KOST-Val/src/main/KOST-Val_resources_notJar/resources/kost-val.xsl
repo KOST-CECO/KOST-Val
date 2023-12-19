@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	<xsl:template match="/"><!-- kost-val.xsl_v2.1.4.0 -->
+	<xsl:template match="/"><!-- kost-val.xsl_v2.2.0.0 -->
 		<html>
 			<head>
 				<style>
@@ -349,7 +349,7 @@
 				</xsl:for-each>
 				<h2>Warning:</h2>
 				<xsl:for-each select="KOSTValLog/Format/Validation">
-					<xsl:if test="(Warning) and (Valid)">
+					<xsl:if test="(Warning) and ((Valid) or (Accepted))">
 						<div>
 							<table width="100%">
 								<tr class="captionwarn">
@@ -492,7 +492,7 @@
 					</xsl:if>
 				</xsl:for-each>
 				<xsl:for-each select="KOSTValLog/Format/Validation">
-					<xsl:if test="Accepted">
+					<xsl:if test="not(Warning) and (Accepted)">
 						<div>
 							<table width="100%">
 								<tr class="captionio">
