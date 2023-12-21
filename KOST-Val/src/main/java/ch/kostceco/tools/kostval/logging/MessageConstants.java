@@ -117,6 +117,7 @@ public interface MessageConstants
 
 	String	MESSAGE_XML_MODUL_A_FLAC					= "val.message.xml.modul.a.flac";
 	String	MESSAGE_XML_MODUL_B_FLAC					= "val.message.xml.modul.b.flac";
+	String	MESSAGE_XML_MODUL_C_FLAC					= "val.message.xml.modul.c.flac";
 
 	String	MESSAGE_XML_MODUL_A_WAVE					= "val.message.xml.modul.a.wave";
 	String	MESSAGE_XML_MODUL_B_WAVE					= "val.message.xml.modul.b.wave";
@@ -156,6 +157,7 @@ public interface MessageConstants
 	String	MESSAGE_XML_MODUL_A_AZ						= "val.message.xml.modul.a.az";
 	String	ERROR_XML_A_AZ_INCORRECTFILE				= "val.error.xml.a.az.incorrectfile";
 	String	ERROR_XML_A_NOTAZ							= "val.error.xml.a.notaz";
+	String	ERROR_XML_A_NOTAZ_DROID						= "val.error.xml.a.notaz.droid";
 
 	String	MESSAGE_XML_CONFIGURATION_ERROR_1			= "val.message.xml.configuration.error.1";
 	String	MESSAGE_XML_CONFIGURATION_ERROR_2			= "val.message.xml.configuration.error.2";
@@ -175,7 +177,7 @@ public interface MessageConstants
 	String	ERROR_XML_SERVICEFAILED						= "val.error.xml.servicefailed";
 	String	MESSAGE_XML_SERVICEINVALID					= "val.message.xml.serviceinvalid";
 	String	MESSAGE_XML_SERVICEMESSAGE					= "val.message.xml.servicemessage";
-	
+
 	String	MESSAGE_WARNING_XML_SIZE					= "val.warning.xml.size";
 
 	// *************TIFF-Meldungen*************************************************************************
@@ -401,6 +403,10 @@ public interface MessageConstants
 
 	// Modul B Meldungen
 	String	ERROR_XML_B_AUDIOVIDEO_ERROR				= "val.error.xml.b.audiovideo.error";
+
+	// Modul C Meldungen
+	String	ERROR_XML_C_FLAC_ERROR						= "val.error.xml.c.flac.error";
+	String	ERROR_XML_C_FLAC_WARNING					= "val.error.xml.c.flac.warning";
 
 	// Modul B-H Meldungen
 	String	ERROR_XML_B_MKV_ERROR						= "val.error.xml.b.mkv.error";

@@ -123,8 +123,8 @@ public class ConfigController
 	private Button				buttonSip0160, buttonSipVal;
 
 	@FXML
-	private Label				labelOther, labelWarning9, labelWork, labelInput,
-			labelHint, labelHint1, labelConfig;
+	private Label				labelOther, labelWarning, labelSize, labelWork,
+			labelInput, labelHint, labelHint1, labelConfig;
 
 	@FXML
 	private Button				buttonPuid, buttonWork, buttonInput;
@@ -135,7 +135,7 @@ public class ConfigController
 	private ChoiceBox<String>	hashAlgo;
 
 	ObservableList<String>		sizeWarningList		= FXCollections
-			.observableArrayList( "no Warning", "<512B", "<1KB", "<5KB" );
+			.observableArrayList( "", "0.5KB", "1KB", "5KB" );
 
 	@FXML
 	private ChoiceBox<String>	sizeWarning;
@@ -206,9 +206,9 @@ public class ConfigController
 			DocumentBuilder dbS = dbfS.newDocumentBuilder();
 			docS = dbS.parse( bisS );
 			docS.normalize();
-			String sizeWarningInit = "512";
-			sizeWarningInit = docS.getElementsByTagName( "sizeWarning" ).item( 0 )
-					.getTextContent();
+			String sizeWarningInit = "";
+			sizeWarningInit = docS.getElementsByTagName( "sizeWarning" )
+					.item( 0 ).getTextContent();
 			bisS.close();
 			docS = null;
 			sizeWarning.setValue( sizeWarningInit );
@@ -231,6 +231,9 @@ public class ConfigController
 				labelData.setText( "Daten" );
 				labelSip.setText( "SIP" );
 				labelOther.setText( "Sonstige" );
+				labelWarning.setText( "Dateigrösse" );
+				labelSize.setText(
+						"Warnung ausgeben, wenn die Datei kleiner als die ausgewählte Dateigrösse ist" );
 				buttonWork.setText( "Arbeitsverzeichnis" );
 				buttonInput.setText( "Inputverzeichnis" );
 				labelHint1.setText( "Hinweis:" );
@@ -250,6 +253,9 @@ public class ConfigController
 				labelData.setText( "Données" );
 				labelSip.setText( "SIP" );
 				labelOther.setText( "Autres" );
+				labelWarning.setText( "Taille" );
+				labelSize.setText(
+						"Afficher un avertissement si le fichier est plus petit que la taille de fichier sélectionnée" );
 				buttonWork.setText( "Répertoire de travail" );
 				buttonInput.setText( "Répertoire d'entrée" );
 				labelHint1.setText( "Remarque :" );
@@ -270,6 +276,9 @@ public class ConfigController
 				labelData.setText( "Dati" );
 				labelSip.setText( "SIP" );
 				labelOther.setText( "Altro" );
+				labelWarning.setText( "Dimensione" );
+				labelSize.setText(
+						"Visualizza l'avviso se il file è più piccolo della dimensione selezionata" );
 				buttonWork.setText( "Directory di lavoro" );
 				buttonInput.setText( "Directory di ingresso" );
 				labelHint1.setText( "Nota:" );
@@ -289,6 +298,9 @@ public class ConfigController
 				labelData.setText( "Data" );
 				labelSip.setText( "SIP" );
 				labelOther.setText( "Other" );
+				labelWarning.setText( "File size" );
+				labelSize.setText(
+						"Display warning if the file is smaller than the selected file size" );
 				buttonWork.setText( "Working directory" );
 				buttonInput.setText( "Input directory" );
 				labelHint1.setText( "Note:" );
@@ -1970,7 +1982,6 @@ public class ConfigController
 	void changeSizeWarning( ActionEvent event )
 	{
 		try {
-			System.out.println("changeSizeWarning ausgeloest");
 			Document doc = null;
 			BufferedInputStream bis = new BufferedInputStream(
 					new FileInputStream( configFile ) );
@@ -1979,27 +1990,26 @@ public class ConfigController
 			doc = db.parse( bis );
 			doc.normalize();
 			String sizeWarningInit = "";
-			sizeWarningInit = doc.getElementsByTagName( "sizeWarning" ).item( 0 )
-					.getTextContent();
+			sizeWarningInit = doc.getElementsByTagName( "sizeWarning" )
+					.item( 0 ).getTextContent();
 			bis.close();
 			doc = null;
-			String sizeWarningOld = "<sizeWarning>" + sizeWarningInit + "</sizeWarning>";
+			String sizeWarningOld = "<sizeWarning>" + sizeWarningInit
+					+ "</sizeWarning>";
 			String selSizeWarning = sizeWarning.getValue();
 			String sizeWarningNew = sizeWarningOld;
-			System.out.println("sizeWarningOld = "+sizeWarningOld);
-			System.out.println("selSizeWarning = "+selSizeWarning);
-			System.out.println("sizeWarningNew = "+sizeWarningNew);
-			if ( selSizeWarning.equals( "<512B" ) ) {
-				sizeWarningNew = "<sizeWarning>512</sizeWarning>";
-			} else if ( selSizeWarning.equals( "<1KB" ) ) {
-				sizeWarningNew = "<sizeWarning>1024</sizeWarning>";
-			} else if ( selSizeWarning.equals( "<5KB" ) ) {
-				sizeWarningNew = "<sizeWarning>5120</sizeWarning>";
+			if ( selSizeWarning.equals( "0.5KB" ) ) {
+				sizeWarningNew = "<sizeWarning>" + selSizeWarning
+						+ "</sizeWarning>";
+			} else if ( selSizeWarning.equals( "1KB" ) ) {
+				sizeWarningNew = "<sizeWarning>" + selSizeWarning
+						+ "</sizeWarning>";
+			} else if ( selSizeWarning.equals( "5KB" ) ) {
+				sizeWarningNew = "<sizeWarning>" + selSizeWarning
+						+ "</sizeWarning>";
 			} else {
-				sizeWarningNew = "<sizeWarning>no Warning</sizeWarning>";
+				sizeWarningNew = "<sizeWarning></sizeWarning>";
 			}
-			System.out.println("sizeWarningOld_2 = "+sizeWarningOld);
-			System.out.println("sizeWarningNew_2 = "+sizeWarningNew);
 			Util.oldnewstring( sizeWarningOld, sizeWarningNew, configFile );
 
 			engine = wbv.getEngine();

@@ -60,7 +60,7 @@ public class ValidationAvalidationMp4ModuleImpl extends ValidationModuleImpl
 		File outputProbe = new File(
 				pathToWorkDir + File.separator + "ffprobe.txt" );
 		File outputFfmpeg = new File(
-				directoryOfLogfile + File.separator + "ffmpeg.txt" );
+				pathToWorkDir + File.separator + "ffmpeg.txt" );
 		// falls das File von einem vorhergehenden Durchlauf bereits
 		// existiert, loeschen wir es
 		if ( outputProbe.exists() ) {
@@ -111,9 +111,6 @@ public class ValidationAvalidationMp4ModuleImpl extends ValidationModuleImpl
 						pathToWorkDir + File.separator + valDateiName );
 				if ( valDateiPath.contains( "  " ) ) {
 					Util.copyFile( valDatei, valDateiTemp );
-					System.out.println( " " );
-					System.out.println(
-							"   copy " + valDatei + " -> " + valDateiTemp );
 				} else {
 					valDateiTemp = valDatei;
 				}

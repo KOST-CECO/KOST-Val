@@ -139,11 +139,11 @@ public class Controllervalfofile implements MessageConstants
 				// Warnung bei kleinen Dateien ausgeben falls gewuenscht
 				sizeWarning = configMap.get( "sizeWarning" );
 				int sizeWarningInt = -1;
-				if ( sizeWarning.equals( "512" ) ) {
+				if ( sizeWarning.equals( "0.5KB" ) ) {
 					sizeWarningInt = 512;
-				} else if ( sizeWarning.equals( "1024" ) ) {
+				} else if ( sizeWarning.equals( "1KB" ) ) {
 					sizeWarningInt = 1024;
-				} else if ( sizeWarning.equals( "5120" ) ) {
+				} else if ( sizeWarning.equals( "5KB" ) ) {
 					sizeWarningInt = 5120;
 				} else {
 					sizeWarningInt = -1;
@@ -204,7 +204,7 @@ public class Controllervalfofile implements MessageConstants
 							Logtxt.logtxt( logFile, getTextResourceService()
 									.getText( locale, MESSAGE_XML_MODUL_A_AZ )
 									+ getTextResourceService().getText( locale,
-											ERROR_XML_A_NOTAZ, "" ) );
+											ERROR_XML_A_NOTAZ_DROID ) );
 						}
 						Logtxt.logtxt( logFile,
 								"<Notaccepted>not accepted</Notaccepted></Validation>" );

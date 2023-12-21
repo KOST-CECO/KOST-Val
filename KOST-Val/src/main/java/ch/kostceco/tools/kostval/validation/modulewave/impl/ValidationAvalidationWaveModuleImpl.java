@@ -60,7 +60,7 @@ public class ValidationAvalidationWaveModuleImpl extends ValidationModuleImpl
 		File outputProbe = new File(
 				pathToWorkDir + File.separator + "ffprobe.txt" );
 		File outputFfmpeg = new File(
-				directoryOfLogfile + File.separator + "ffmpeg.txt" );
+				pathToWorkDir + File.separator + "ffmpeg.txt" );
 		// falls das File von einem vorhergehenden Durchlauf bereits
 		// existiert, loeschen wir es
 		if ( outputProbe.exists() ) {
@@ -111,9 +111,6 @@ public class ValidationAvalidationWaveModuleImpl extends ValidationModuleImpl
 						pathToWorkDir + File.separator + valDateiName );
 				if ( valDateiPath.contains( "  " ) ) {
 					Util.copyFile( valDatei, valDateiTemp );
-					System.out.println( " " );
-					System.out.println(
-							"   copy " + valDatei + " -> " + valDateiTemp );
 				} else {
 					valDateiTemp = valDatei;
 				}
@@ -146,7 +143,7 @@ public class ValidationAvalidationWaveModuleImpl extends ValidationModuleImpl
 						String line = scannerFormat.nextLine();
 						if ( line.contains( "format_name=" ) ) {
 							// container format auswerten
-							System.out.println(line);
+							// System.out.println( line );
 
 							countFormat = countFormat + 1;
 							String format = line.replace( "format_name=", "" );
@@ -183,8 +180,8 @@ public class ValidationAvalidationWaveModuleImpl extends ValidationModuleImpl
 						String line = scanner.nextLine();
 						if ( line.contains( "codec_name=" ) ) {
 							// Codec auswerten
-							
-							System.out.println(line);
+
+							// System.out.println( line );
 
 							String codec = line.replace( "codec_name=", "" );
 							String codecName = codec.toUpperCase();

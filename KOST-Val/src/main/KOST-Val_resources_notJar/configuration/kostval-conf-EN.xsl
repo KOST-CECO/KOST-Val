@@ -407,7 +407,7 @@
 						</td>
 					</tr>
 					<tr class="captioninfo">
-						<td>Issue warning for small files [no Warning]:</td>
+						<td>Issue warning for small files. Empty means no warning []:</td>
 						<td>
 							<xsl:value-of select="configuration/sizeWarning" />
 						</td>

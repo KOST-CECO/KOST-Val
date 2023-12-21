@@ -407,7 +407,7 @@
 						</td>
 					</tr>
 					<tr class="captioninfo">
-						<td>Afficher un avertissement pour les petits fichiers. "no Warning" signifie pas d'avertissement [no Warning] :</td>
+						<td>Afficher un avertissement pour les petits fichiers. Vide signifie pas d'avertissement [] :</td>
 						<td>
 							<xsl:value-of select="configuration/sizeWarning" />
 						</td>

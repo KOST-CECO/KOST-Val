@@ -20,11 +20,14 @@
 package ch.kostceco.tools.kostval.validation.moduleflac.impl;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
 
 import ch.kostceco.tools.kosttools.fileservice.ffmpeg;
+import ch.kostceco.tools.kosttools.fileservice.flac;
 import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.exception.moduleflac.ValidationAflacvalidationException;
 import ch.kostceco.tools.kostval.logging.Logtxt;
@@ -60,7 +63,9 @@ public class ValidationAvalidationFlacModuleImpl extends ValidationModuleImpl
 		File outputProbe = new File(
 				pathToWorkDir + File.separator + "ffprobe.txt" );
 		File outputFfmpeg = new File(
-				directoryOfLogfile + File.separator + "ffmpeg.txt" );
+				pathToWorkDir + File.separator + "ffmpeg.txt" );
+		File outputFlac = new File(
+				pathToWorkDir + File.separator + "flac.txt" );
 		// falls das File von einem vorhergehenden Durchlauf bereits
 		// existiert, loeschen wir es
 		if ( outputProbe.exists() ) {
@@ -69,11 +74,41 @@ public class ValidationAvalidationFlacModuleImpl extends ValidationModuleImpl
 		if ( outputFfmpeg.exists() ) {
 			outputFfmpeg.delete();
 		}
+		if ( outputFlac.exists() ) {
+			outputFlac.delete();
+		}
 
 		// Die Container-Erkennung erfolgt bereits im Vorfeld
 
 		boolean isValid = true;
 		boolean isValidB = true;
+		boolean isValidC = true;
+
+		/*
+		 * Doppelleerschlag im Pfad oder im Namen einer Datei bereitet Probleme
+		 * (leerer Report) Video-Datei wird bei Doppelleerschlag in
+		 * temp-Verzeichnis kopiert
+		 */
+		String valDateiPath = valDatei.getAbsolutePath();
+		String valDateiName = valDatei.getName().replace( "  ", " " );
+		valDateiName = valDateiName.replace( "  ", " " );
+		valDateiName = valDateiName.replace( "  ", " " );
+
+		File valDateiTemp = new File(
+				pathToWorkDir + File.separator + valDateiName );
+		if ( valDateiPath.contains( "  " ) ) {
+			try {
+				Util.copyFile( valDatei, valDateiTemp );
+			} catch ( FileNotFoundException e ) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch ( IOException e ) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			valDateiTemp = valDatei;
+		}
 
 		// TODO: inArbeit: codec-Erkennung mit ffprobe
 
@@ -97,27 +132,6 @@ public class ValidationAvalidationFlacModuleImpl extends ValidationModuleImpl
 		} else {
 			// ffmpeg, ffplay und ffprobe sollte vorhanden sein
 			try {
-				/*
-				 * Doppelleerschlag im Pfad oder im Namen einer Datei bereitet
-				 * Probleme (leerer Report) Video-Datei wird bei
-				 * Doppelleerschlag in temp-Verzeichnis kopiert
-				 */
-				String valDateiPath = valDatei.getAbsolutePath();
-				String valDateiName = valDatei.getName().replace( "  ", " " );
-				valDateiName = valDateiName.replace( "  ", " " );
-				valDateiName = valDateiName.replace( "  ", " " );
-
-				File valDateiTemp = new File(
-						pathToWorkDir + File.separator + valDateiName );
-				if ( valDateiPath.contains( "  " ) ) {
-					Util.copyFile( valDatei, valDateiTemp );
-					System.out.println( " " );
-					System.out.println(
-							"   copy " + valDatei + " -> " + valDateiTemp );
-				} else {
-					valDateiTemp = valDatei;
-				}
-
 				String resultExec = ffmpeg.execFfprobe( valDateiTemp,
 						outputProbe, workDir, dirOfJarPath );
 				if ( !resultExec.equals( "OK" ) || !outputProbe.exists() ) {
@@ -348,6 +362,291 @@ public class ValidationAvalidationFlacModuleImpl extends ValidationModuleImpl
 										ERROR_XML_UNKNOWN, e.getMessage() ) );
 				return false;
 			}
+		}
+
+		// TODO: Start: Test mit flac
+
+		// - Initialisierung flac -> existiert alles zu flac?
+
+		// Pfad zum Programm existiert die Dateien?
+		String checkToolFlac = flac.checkFlac( dirOfJarPath );
+		if ( !checkToolFlac.equals( "OK" ) ) {
+			if ( min ) {
+				return false;
+			} else {
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_C_FLAC )
+								+ getTextResourceService().getText( locale,
+										MESSAGE_XML_MISSING_FILE, checkToolFlac,
+										getTextResourceService()
+												.getText( locale, ABORTED ) ) );
+				return false;
+			}
+		} else {
+			// flac sollte vorhanden sein
+			try {
+				String resultExec = flac.execFlac( valDateiTemp, outputFlac,
+						workDir, dirOfJarPath );
+
+				if ( !resultExec.equals( "OK" ) || !outputFlac.exists() ) {
+					// Exception oder Report existiert nicht
+					if ( min ) {
+						return false;
+					} else {
+						isValidC = false;
+						// Erster Fehler! Meldung B ausgeben und invalid setzten
+						Logtxt.logtxt( logFile, getTextResourceService()
+								.getText( locale, MESSAGE_XML_MODUL_C_FLAC )
+								+ getTextResourceService().getText( locale,
+										MESSAGE_XML_SERVICEINVALID, "flac",
+										"" ) );
+					}
+				} else {
+					// Report existiert -> Auswerten...
+
+					/*
+					 * FLAC_valid_Murmeli_2018 - Kopie.flac: *** Got error code
+					 * 4:FLAC__STREAM_DECODER_ERROR_STATUS_BAD_METADATA
+					 * 
+					 * 
+					 * FLAC_valid_Murmeli_2018 - Kopie.flac: ERROR while
+					 * decoding metadata state =
+					 * FLAC__STREAM_DECODER_SEARCH_FOR_FRAME_SYNC
+					 * 
+					 * FLAC_valid_Murmeli_2018.flac: ok
+					 * 
+					 * FLAC_az_KOST.flac: WARNING, cannot check MD5 signature
+					 * since it was unset in the STREAMINFO ok
+					 * 
+					 * MP3_az_KOST.mp3: *** Got error code
+					 * 0:FLAC__STREAM_DECODER_ERROR_STATUS_LOST_SYNC
+					 * 
+					 * The input file is either not a FLAC file or is corrupted.
+					 * If you are convinced it is a FLAC file, you can rerun the
+					 * same command and add the -F parameter to try and recover
+					 * as much as possible from the file.
+					 */
+
+					// zu ignorierende Info-Zeilen startend mit:
+					// flac 1.4.3 Copyright (C) ...
+					// flac comes ...
+					// welcome to redistribute it ...
+
+					String lineEmpty = "";
+					String line2 = "flac 1";
+					String line3 = "Copyright (";
+					String line4 = "flac comes";
+					String line5 = "welcome to";
+
+					String ok1 = valDateiTemp.getName() + ": ok";
+					String ok2 = "ok";
+					String error1 = valDateiTemp.getName() + ": ERROR";
+					String error2 = "Got error code";
+					String error3 = "FLAC__";
+					String warning = "WARNING, ";
+					Boolean warningFlac = false;
+					String logError1 = "";
+					String logError2 = "";
+					String logError3 = "";
+					String logError4 = "";
+					String logError5 = "";
+					String logWarning1 = "";
+					String logWarning2 = "";
+					String logWarning3 = "";
+					String logWarning4 = "";
+					String logWarning5 = "";
+					Scanner scannerOutputFlac = new Scanner( outputFlac );
+					while ( scannerOutputFlac.hasNextLine() ) {
+						String line = scannerOutputFlac.nextLine();
+						if ( line.equals( lineEmpty ) ) {
+							// Zeile ignorieren
+						} else if ( line.startsWith( line2 ) ) {
+							// Info-Zeile ignorieren
+						} else if ( line.startsWith( line3 ) ) {
+							// Info-Zeile ignorieren
+						} else if ( line.startsWith( line4 ) ) {
+							// Info-Zeile ignorieren
+						} else if ( line.startsWith( line5 ) ) {
+							// Info-Zeile ignorieren
+						} else {
+							if ( line.contains( ok1 ) ) {
+								// Validierung mit mkvalidator bestanden
+								// isValidC= true;
+							} else {
+								String lineShort = line.replace(
+										valDateiTemp.getName() + ": ", "" );
+								lineShort = lineShort.replace( "*** ", "" );
+								lineShort = lineShort.trim();
+								if ( line.startsWith( ok2 ) && warningFlac ) {
+									// Valid und warnung wurde bereits ausgeben
+
+								} else if ( line.contains( warning ) ) {
+									warningFlac = true;
+									String lineShort2 = lineShort.substring(
+											lineShort.indexOf( "WARNING" ),
+											lineShort.length() );
+									lineShort = lineShort2;
+									// die ersten 5 Warnungen speichern wenn neu
+									if ( logWarning1 == "" ) {
+										logWarning1 = lineShort;
+									} else if ( logWarning2 == "" ) {
+										if ( logWarning1 == lineShort ) {
+											// alter Fehler
+										} else {
+											logWarning2 = "</Message><Message> - "
+													+ lineShort;
+										}
+									} else if ( logWarning3 == "" ) {
+										if ( logWarning1 == lineShort
+												|| logWarning2 == lineShort ) {
+											// alter Fehler
+										} else {
+											logWarning3 = "</Message><Message> - "
+													+ lineShort;
+										}
+									} else if ( logWarning4 == "" ) {
+										if ( logWarning1 == lineShort
+												|| logWarning2 == lineShort
+												|| logWarning3 == lineShort ) {
+											// alter Fehler
+										} else {
+											logWarning4 = "</Message><Message> - "
+													+ lineShort;
+										}
+									} else if ( logWarning5 == "" ) {
+										if ( logWarning1 == lineShort
+												|| logWarning2 == lineShort
+												|| logWarning3 == lineShort
+												|| logWarning4 == lineShort ) {
+											// alter Fehler
+										} else {
+											logWarning5 = "</Message><Message> - "
+													+ lineShort;
+										}
+
+									} else if ( logWarning3 == ""
+											&& (logWarning1 != lineShort
+													|| logWarning2 != lineShort) ) {
+										logWarning3 = "</Message><Message> - "
+												+ lineShort;
+									} else if ( logWarning4 == ""
+											&& (logWarning1 != lineShort
+													|| logWarning2 != lineShort
+													|| logWarning3 != lineShort) ) {
+										logWarning4 = "</Message><Message> - "
+												+ lineShort;
+									} else if ( logWarning5 == ""
+											&& (logWarning1 != lineShort
+													|| logWarning2 != lineShort
+													|| logWarning3 != lineShort
+													|| logWarning4 != lineShort) ) {
+										logWarning5 = "</Message><Message> - "
+												+ lineShort;
+									}
+								} else if ( line.startsWith( error1 )
+										|| line.contains( error2 )
+										|| line.contains( error3 ) ) {
+									// NOK
+									isValidC = false;
+									// die ersten 5 Fehleren speichern wenn neu
+									if ( logError1 == "" ) {
+										logError1 = lineShort;
+									} else if ( logError2 == "" ) {
+										if ( logError1 == lineShort ) {
+											// alter Fehler
+										} else {
+											logError2 = "</Message><Message> - "
+													+ lineShort;
+										}
+									} else if ( logError3 == "" ) {
+										if ( logError1 == lineShort
+												|| logError2 == lineShort ) {
+											// alter Fehler
+										} else {
+											logError3 = "</Message><Message> - "
+													+ lineShort;
+										}
+									} else if ( logError4 == "" ) {
+										if ( logError1 == lineShort
+												|| logError2 == lineShort
+												|| logError3 == lineShort ) {
+											// alter Fehler
+										} else {
+											logError4 = "</Message><Message> - "
+													+ lineShort;
+										}
+									} else if ( logError5 == "" ) {
+										if ( logError1 == lineShort
+												|| logError2 == lineShort
+												|| logError3 == lineShort
+												|| logError4 == lineShort ) {
+											// alter Fehler
+										} else {
+											logError5 = "</Message><Message> - "
+													+ lineShort;
+										}
+
+									} else if ( logError3 == ""
+											&& (logError1 != lineShort
+													|| logError2 != lineShort) ) {
+										logError3 = "</Message><Message> - "
+												+ lineShort;
+									} else if ( logError4 == ""
+											&& (logError1 != lineShort
+													|| logError2 != lineShort
+													|| logError3 != lineShort) ) {
+										logError4 = "</Message><Message> - "
+												+ lineShort;
+									} else if ( logError5 == ""
+											&& (logError1 != lineShort
+													|| logError2 != lineShort
+													|| logError3 != lineShort
+													|| logError4 != lineShort) ) {
+										logError5 = "</Message><Message> - "
+												+ lineShort;
+									}
+								} else {
+									// Infos nicht ausgeben
+								}
+							}
+						}
+					}
+					scannerOutputFlac.close();
+					if ( logWarning1 != "" ) {
+						// warnung ausgeben
+						Logtxt.logtxt( logFile, getTextResourceService()
+								.getText( locale, MESSAGE_XML_MODUL_C_FLAC )
+								+ getTextResourceService().getText( locale,
+										ERROR_XML_C_FLAC_WARNING,
+										logWarning1 + logWarning2 + logWarning3
+												+ logWarning4 + logWarning5 ) );
+					}
+
+					if ( logError1 != "" ) {
+						// Fehler ausgeben
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_C_FLAC )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_C_FLAC_ERROR,
+												logError1 + logError2
+														+ logError3 + logError4
+														+ logError5 ) );
+					}
+					if ( !isValidC ) {
+						isValid = false;
+					}
+				}
+			} catch ( Exception e ) {
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_C_FLAC )
+								+ getTextResourceService().getText( locale,
+										ERROR_XML_UNKNOWN, e.getMessage() ) );
+				return false;
+			}
+			// TODO: Ende: Codec Auswertung
 		}
 		return isValid;
 	}

@@ -168,7 +168,7 @@
 		<msgvalidation></msgvalidation>";
 	</otherformats>
 	<hash></hash><!--wenn leer wird kein Hashwert berechnet und ausgegeben / MD5 / SHA-1 / SHA-256 / SHA-512 -->
-	<sizeWarning>no Warning</sizeWarning><!--wenn "no Warning" wird keine Warnung bei kleinen Dateien ausgegeben ansonsten limite in Byte / 512 / 1024 / 5120 -->
+	<sizeWarning>no Warning</sizeWarning><!--wenn leer wird keine Warnung bei kleinen Dateien ausgegeben ansonsten limite in Kilobyte / 0.5KB / 1KB / 5KB -->
 	<pathtoworkdir></pathtoworkdir><!--wenn leer wird "USERPROFILE/.kost-val_2x/temp_KOST-Val" verwendet -->
 	<standardinputdir></standardinputdir><!--wenn leer wird "Dieser PC" verwendet -->
 	<ignoreerror>

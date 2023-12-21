@@ -105,9 +105,6 @@ public class ValidationAvalidationMkvModuleImpl extends ValidationModuleImpl
 						pathToWorkDir + File.separator + valDateiName );
 				if ( valDateiPath.contains( "  " ) ) {
 					Util.copyFile( valDatei, valDateiTemp );
-					// System.out.println( " " );
-					// System.out.println(" copy " + valDatei + " -> " +
-					// valDateiTemp );
 				} else {
 					valDateiTemp = valDatei;
 				}

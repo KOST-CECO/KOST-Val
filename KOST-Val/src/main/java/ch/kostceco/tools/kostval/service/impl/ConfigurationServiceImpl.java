@@ -847,10 +847,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 
 			// sizeWarning
 			/*
-			 * Warnung bei kleineren Dateien ausgeben. "no Warning" bedeutet keine
-			 * Warnung [no Warning]
+			 * Warnung bei kleineren Dateien ausgeben. "" bedeutet keine ueberpruefung und Warnung []
 			 * 
-			 * [no Warning] / 512 / 1024 / 5120
+			 * [] / 0.5KB / 1KB / 5KB
 			 */
 			String sizeWarning = doc.getElementsByTagName( "sizeWarning" ).item( 0 )
 					.getTextContent();
