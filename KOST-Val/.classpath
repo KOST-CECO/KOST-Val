@@ -17,7 +17,7 @@
 	<classpathentry kind="lib" path="lib/commons-io-2.13.1.jar" sourcepath="external-sources/commons-io-2.13.0-sources.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl-2.12.2.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis-2.7.1.jar"/>
-	<classpathentry kind="lib" path="lib/VALA-6.26.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/VALA-6.27.2.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/jhove-apps-1.28.0.jar"/>
 	<classpathentry kind="lib" path="lib/tiff-hul-1.9.4.jar"/>
 	<classpathentry kind="lib" path="lib/spring-context-5.3.27.jar"/>

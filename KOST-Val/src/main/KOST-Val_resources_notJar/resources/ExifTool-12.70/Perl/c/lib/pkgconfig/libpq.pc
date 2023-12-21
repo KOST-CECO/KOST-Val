@@ -1,0 +1,14 @@
+prefix=${pcfiledir}/../..
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: libpq
+Description: PostgreSQL libpq library
+Url: https://www.postgresql.org/
+Version: 15.1
+Requires: 
+Requires.private: libssl libcrypto
+Cflags: -I${includedir}
+Libs: -L${libdir} -lpq
+Libs.private: -L${pcfiledir}/../../lib -lpgcommon -lpgport -lm -lwldap32 -lshell32 -lws2_32 -lsecur32 -lssleay32 -leay32

@@ -1,0 +1,13 @@
+prefix=${pcfiledir}/../..
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: gd
+Description: GD graphics library
+Version: 2.3.2
+Requires:
+Requires.private:   zlib  libpng  libjpeg  xpm
+Cflags: -I${includedir}
+Libs.private:    -ltiff ${pcfiledir}/../../lib/libiconv.a
+Libs: -L${libdir} -lgd

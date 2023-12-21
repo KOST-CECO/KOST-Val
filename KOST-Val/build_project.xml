@@ -25,7 +25,7 @@
 		<pathelement location="lib/zip64-1.0.jar" />
 		<pathelement location="lib/jhove-apps-1.28.0.jar" />
 		<pathelement location="lib/tiff-hul-1.9.4.jar" />
-		<pathelement location="lib/VALA-6.26.0.5.RELEASE.jar" />
+		<pathelement location="lib/VALA-6.27.2.1.RELEASE.jar" />
 		<pathelement location="lib/badpeggy-2.0.jar" />
 	</path>
 	<target name="init">

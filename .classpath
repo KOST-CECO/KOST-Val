@@ -22,6 +22,6 @@
 	<classpathentry kind="lib" path="KOST-Val/lib/xercesImpl-2.12.2.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/zip64-1.0.jar" sourcepath="KOST-Val/external-sources/zip64-sources.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/zip64file-1.0.jar" sourcepath="KOST-Val/external-sources/Zip64File-sources.jar"/>
-	<classpathentry kind="lib" path="KOST-Val/lib/VALA-6.26.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="KOST-Val/lib/VALA-6.27.2.1.RELEASE.jar"/>
 	<classpathentry kind="output" path="KOST-Val/target/classes"/>
 </classpath>

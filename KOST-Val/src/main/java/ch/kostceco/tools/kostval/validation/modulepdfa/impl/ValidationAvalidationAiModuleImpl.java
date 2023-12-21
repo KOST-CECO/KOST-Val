@@ -1978,7 +1978,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 				try {
 					// Initialisierung callas -> existiert pdfaPilot in den
 					// resources?
-					String folderCallas = "callas_pdfaPilotServer_x64_Win_12-2-366_cli";
+					String folderCallas = "callas_pdfaPilotServer_x64_Win_12-4-372_cli";
 					/*
 					 * Update von Callas: callas_pdfaPilotServer_Win_...-Version
 					 * herunterladen, installieren, odner im Workbench

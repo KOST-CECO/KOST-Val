@@ -1,0 +1,4 @@
+Package: tiff-4.5.0
+Sources: http://download.osgeo.org/libtiff/tiff-4.5.0.tar.gz
+Patch: tiff-4.5.0.diff
+Homepage: http://remotesensing.org/libtiff/

@@ -27,10 +27,11 @@ import ch.kostceco.tools.kosttools.util.Util;
 public class Exiftool
 {
 	private static String	exeDir		= "resources" + File.separator
-			+ "ExifTool-12.62";
+			+ "ExifTool-12.70";
 	private static String	identifyPl	= exeDir + File.separator + "exiftool";
 	private static String	perl		= exeDir + File.separator + "Perl"
-			+ File.separator + "bin" + File.separator + "perl.exe";
+			+ File.separator + "perl" + File.separator + "bin" + File.separator
+			+ "perl.exe";
 
 	/**
 	 * fuehrt eine Validierung mit Exiftool via cmd durch und speichert das

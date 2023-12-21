@@ -1,0 +1,4 @@
+Package: patch-2.7.5
+Sources: https://ftp.gnu.org/gnu/patch/patch-2.7.5.tar.gz
+Patch: patch-2.7.5.diff
+Homepage: http://savannah.gnu.org/projects/patch/

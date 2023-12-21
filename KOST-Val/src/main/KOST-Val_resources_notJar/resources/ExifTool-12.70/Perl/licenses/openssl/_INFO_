@@ -1,0 +1,3 @@
+Package: openssl-1.1.1q
+Sources: https://www.openssl.org/source/openssl-1.1.1q.tar.gz
+Homepage: http://www.openssl.org/
