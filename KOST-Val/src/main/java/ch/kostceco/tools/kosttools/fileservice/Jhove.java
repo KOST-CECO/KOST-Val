@@ -116,7 +116,7 @@ public class Jhove
 							dirFileOrUri );
 					/*
 					 * TODO: beim Ausfuehren von je.dispatch gibt es in seltenen
-					 * Fuellen einen Fehler:
+					 * Faellen einen Fehler:
 					 * 
 					 * [Fatal Error] :174:20: Content is not allowed in trailing
 					 * section.

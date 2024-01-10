@@ -57,36 +57,33 @@ public class ValidationFmultipageValidationModuleImpl extends
 
 		boolean isValid = true;
 
-		// Informationen zum Logverzeichnis holen
-		String pathToExiftoolOutput = directoryOfLogfile.getAbsolutePath();
-		File exiftoolReport = new File( pathToExiftoolOutput,
-				valDatei.getName() + ".exiftool-log.txt" );
-		pathToExiftoolOutput = exiftoolReport.getAbsolutePath();
+		/*
+		 * TODO: jhoveReport auswerten! Auf Exiftool wird verzichtet. Exiftool
+		 * verwendet Perl, welche seit einiger Zeit hohe nicht geloese
+		 * Sicherheitsrisiken birgt. zudem koennen die Metadaten vermehrt
+		 * komplett durch jhove ausgelesen werden. Jhove hat bereits einen der
+		 * Probleme, welche das teilweise die Ausgabe der Metadaten verhindert
+		 * behoben.
+		 */
+		File jhoveReport = new File( directoryOfLogfile,
+				valDatei.getName() + ".jhove-log.txt" );
 
-		if ( !exiftoolReport.exists() ) {
-			// Report existiert nicht
-
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_F_TIFF )
-							+ getTextResourceService().getText( locale,
-									MESSAGE_XML_MISSING_REPORT,
-									exiftoolReport.getAbsolutePath(),
-									getTextResourceService().getText( locale,
-											ABORTED ) ) );
-			return false;
+		if ( !jhoveReport.exists() ) {
+			isValid = false;
+			if ( min ) {
+				return false;
+			} else {
+				Logtxt.logtxt( logFile, getTextResourceService()
+						.getText( locale, MESSAGE_XML_MODUL_B_TIFF )
+						+ getTextResourceService().getText( locale,
+								ERROR_XML_UNKNOWN, "No Jhove report." ) );
+				return false;
+			}
 		} else {
-			/*
-			 * Nicht vergessen in
-			 * "src/main/resources/config/applicationContext-services.xml" beim
-			 * entsprechenden Modul die property anzugeben: <property
-			 * name="configurationService" ref="configurationService" />
-			 */
-
 			String mp = configMap.get( "AllowedMultipage" );
 			// 0=Singelpage / 1=Multipage
 
-			Integer exiftoolio = 0;
+			Integer jhoveio = 0;
 			Integer ifdCount = 0;
 			String ifdMsg;
 			if ( mp.equalsIgnoreCase( "yes" ) ) {
@@ -94,35 +91,28 @@ public class ValidationFmultipageValidationModuleImpl extends
 			} else {
 				try {
 					BufferedReader in = new BufferedReader(
-							new FileReader( exiftoolReport ) );
+							new FileReader( jhoveReport ) );
 					String line;
 					while ( (line = in.readLine()) != null ) {
 
-						// Number und IFD: enthalten auch Exif Eintraege.
-						// Ensprechend muss "Type: TIFF" gezaehlt
-						// werden
-						if ( line.contains( "Compression: " )
-								&& line.contains( "[EXIF:IFD" ) ) {
-							exiftoolio = 1;
+						// Anzahl "IFD:" zaehlen
+						if ( line.contains( " IFD: " ) ) {
+							jhoveio = 1;
 							ifdCount = ifdCount + 1;
 						}
 					}
-					if ( exiftoolio == 0 ) {
+					if ( jhoveio == 0 ) {
 						// Invalider Status
 						isValid = false;
 						if ( min ) {
 							in.close();
-							/* exiftoolReport loeschen */
-							if ( exiftoolReport.exists() ) {
-								exiftoolReport.delete();
-							}
 							return false;
 						} else {
 
 							Logtxt.logtxt( logFile, getTextResourceService()
 									.getText( locale, MESSAGE_XML_MODUL_F_TIFF )
 									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_CG_ETNIO, "F" ) );
+											MESSAGE_XML_CG_JHOVENIO, "F" ) );
 						}
 					}
 					if ( ifdCount == 1 ) {
@@ -133,10 +123,6 @@ public class ValidationFmultipageValidationModuleImpl extends
 						isValid = false;
 						if ( min ) {
 							in.close();
-							/* exiftoolReport loeschen */
-							if ( exiftoolReport.exists() ) {
-								exiftoolReport.delete();
-							}
 							return false;
 						} else {
 							Logtxt.logtxt( logFile, getTextResourceService()
@@ -148,10 +134,6 @@ public class ValidationFmultipageValidationModuleImpl extends
 					in.close();
 				} catch ( Exception e ) {
 					if ( min ) {
-						/* exiftoolReport loeschen */
-						if ( exiftoolReport.exists() ) {
-							exiftoolReport.delete();
-						}
 						return false;
 					} else {
 						Logtxt.logtxt( logFile, getTextResourceService()

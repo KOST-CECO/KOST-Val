@@ -189,7 +189,7 @@ public interface MessageConstants
 	// Modul C-G Meldungen
 	String	MESSAGE_XML_CG_CANNOTFINDETREPORT			= "val.message.xml.cg.cannotfindetreport";
 	String	MESSAGE_XML_CG_INVALID						= "val.message.xml.cg.invalid";
-	String	MESSAGE_XML_CG_ETNIO						= "val.message.xml.cg.etnio";
+	String	MESSAGE_XML_CG_JHOVENIO						= "val.message.xml.cg.jhovenio";
 
 	// *************SIARD-Meldungen*************************************************************************
 	// Modul A Meldungen

@@ -386,9 +386,9 @@ public class Controllervalfile implements MessageConstants
 			 */
 			File jhoveReport = new File( directoryOfLogfile,
 					valDatei.getName() + ".jhove-log.txt" );
-			File exifReport = new File( directoryOfLogfile,
+/*			File exifReport = new File( directoryOfLogfile,
 					valDatei.getName() + ".exiftool-log.txt" );
-
+*/
 			if ( verbose ) {
 				// optionaler Parameter --> Reports lassen
 			} else {
@@ -396,11 +396,11 @@ public class Controllervalfile implements MessageConstants
 					// kein optionaler Parameter --> Jhove-Report loeschen!
 					Util.deleteFile( jhoveReport );
 				}
-				if ( exifReport.exists() ) {
+/*				if ( exifReport.exists() ) {
 					// kein optionaler Parameter --> Exiftool-Report loeschen!
 					Util.deleteFile( exifReport );
 				}
-			}
+*/			}
 
 		} else if ( (valDateiExt.equals( ".siard" )) ) {
 			Logtxt.logtxt( logFile, "<Validation>" + hash );

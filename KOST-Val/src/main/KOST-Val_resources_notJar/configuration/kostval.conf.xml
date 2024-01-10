@@ -41,20 +41,20 @@
 		<!--TIFF-Praezisierungen -->
 		<!--Wenn erlaubt "Text" einfuegen ansonsten "0" -->
 		<allowedcompression>
-			<allowedcompression1>Uncompressed</allowedcompression1><!-- / Uncompressed -->
+			<allowedcompression1>uncompressed</allowedcompression1><!-- / uncompressed -->
 			<allowedcompression2>CCITT 1D</allowedcompression2><!-- / CCITT 1D -->
-			<allowedcompression3>T4/Group 3 Fax</allowedcompression3><!-- / T4/Group 3 Fax -->
-			<allowedcompression4>T6/Group 4 Fax</allowedcompression4><!-- / T6/Group 4 Fax -->
+			<allowedcompression3>CCITT Group 3</allowedcompression3><!-- / CCITT Group 3 -->
+			<allowedcompression4>CCITT Group 4</allowedcompression4><!-- / CCITT Group 4 -->
 			<allowedcompression5>LZW</allowedcompression5><!-- / LZW -->
-			<allowedcompression7></allowedcompression7><!-- / JPEG -->
+			<allowedcompression7></allowedcompression7><!-- / ISO JPEG -->
 			<allowedcompression8></allowedcompression8><!-- / Deflate -->
 			<allowedcompression32773>PackBits</allowedcompression32773><!-- / PackBits -->
 		</allowedcompression>
 		<allowedphotointer>
-			<allowedphotointer0>WhiteIsZero</allowedphotointer0><!-- / WhiteIsZero -->
-			<allowedphotointer1>BlackIsZero</allowedphotointer1><!-- / BlackIsZero -->
+			<allowedphotointer0>white is zero</allowedphotointer0><!-- / white is zero -->
+			<allowedphotointer1>black is zero</allowedphotointer1><!-- / black is zero -->
 			<allowedphotointer2>RGB</allowedphotointer2><!-- / RGB -->
-			<allowedphotointer3>RGB Palette</allowedphotointer3><!-- / RGB Palette -->
+			<allowedphotointer3>palette color</allowedphotointer3><!-- / palette color -->
 			<allowedphotointer4></allowedphotointer4><!-- / transparency mask -->
 			<allowedphotointer5></allowedphotointer5><!-- / CMYK -->
 			<allowedphotointer6></allowedphotointer6><!-- / YCbCr -->

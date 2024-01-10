@@ -25,7 +25,6 @@ import java.io.FileReader;
 import java.util.Locale;
 import java.util.Map;
 
-import ch.kostceco.tools.kosttools.fileservice.Exiftool;
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationCcompressionValidationException;
 import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
@@ -111,7 +110,7 @@ public class ValidationCcompressionValidationModuleImpl extends
 			com32773 = "DieseKompressionIstNichtErlaubt";
 		}
 
-		Integer exiftoolio = 0;
+		Integer jhoveio = 0;
 		String oldErrorLine1 = "";
 		String oldErrorLine2 = "";
 		String oldErrorLine3 = "";
@@ -119,87 +118,32 @@ public class ValidationCcompressionValidationModuleImpl extends
 		String oldErrorLine5 = "";
 
 		/*
-		 * TODO: Exiftool starten. Anschliessend auswerten! Auf jhove wird
-		 * verzichtet
+		 * TODO: jhoveReport auswerten! Auf Exiftool wird verzichtet. Exiftool
+		 * verwendet Perl, welche seit einiger Zeit hohe nicht geloese
+		 * Sicherheitsrisiken birgt. zudem koennen die Metadaten vermehrt
+		 * komplett durch jhove ausgelesen werden. Jhove hat bereits einen der
+		 * Probleme, welche das teilweise die Ausgabe der Metadaten verhindert
+		 * behoben.
 		 */
+		File jhoveReport = new File( directoryOfLogfile,
+				valDatei.getName() + ".jhove-log.txt" );
 
-		// Pfad zum Programm existiert die Dateien?
-		String checkTool = Exiftool.checkExiftool( dirOfJarPath );
-		if ( !checkTool.equals( "OK" ) ) {
-			// mindestens eine Datei fehlt fuer die Validierung
+		// existiert der jhoveReport?
+		if ( !jhoveReport.exists() ) {
+			isValid = false;
 			if ( min ) {
 				return false;
 			} else {
-				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale,
-								MESSAGE_XML_MODUL_C_TIFF )
-								+ getTextResourceService().getText( locale,
-										MESSAGE_XML_MISSING_FILE, checkTool,
-										getTextResourceService()
-												.getText( locale, ABORTED ) ) );
-				isValid = false;
+				Logtxt.logtxt( logFile, getTextResourceService()
+						.getText( locale, MESSAGE_XML_MODUL_B_TIFF )
+						+ getTextResourceService().getText( locale,
+								ERROR_XML_UNKNOWN, "No Jhove report." ) );
+				return false;
 			}
 		} else {
 			try {
-				String options = "-ver -a -s2 -FileName -Directory -Compression -PhotometricInterpretation"
-						+ " -PlanarConfiguration -BitsPerSample -StripByteCounts -RowsPerStrip -FileSize"
-						+ " -TileWidth -TileLength -TileDepth -G0:1";
-
-				// Exiftool-Befehl: pathToPerl pathToExiftoolExe options
-				// tiffFile >> report
-
-				String resultExec = Exiftool.execExiftool( options, valDatei,
-						exiftoolReport, workDir, dirOfJarPath );
-				if ( !resultExec.equals( "OK" ) ) {
-					// Exception oder Report existiert nicht
-					if ( min ) {
-						return false;
-					} else {
-						if ( resultExec.equals( "NoReport" ) ) {
-							// Report existiert nicht
-
-							Logtxt.logtxt( logFile, getTextResourceService()
-									.getText( locale, MESSAGE_XML_MODUL_C_TIFF )
-									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_MISSING_REPORT,
-											exiftoolReport.getAbsolutePath(),
-											getTextResourceService().getText(
-													locale, ABORTED ) ) );
-							return false;
-						} else {
-							// Exception
-
-							Logtxt.logtxt( logFile, getTextResourceService()
-									.getText( locale, MESSAGE_XML_MODUL_C_TIFF )
-									+ getTextResourceService().getText( locale,
-											ERROR_XML_SERVICEFAILED, "Exiftool",
-											resultExec ) );
-							return false;
-						}
-					}
-				}
-				// Ende Exiftool direkt auszuloesen
-
-			} catch ( Exception e ) {
-				if ( min ) {
-					/* exiftoolReport loeschen */
-					if ( exiftoolReport.exists() ) {
-						exiftoolReport.delete();
-					}
-					return false;
-				} else {
-
-					Logtxt.logtxt( logFile, getTextResourceService()
-							.getText( locale, MESSAGE_XML_MODUL_C_TIFF )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
-					return false;
-				}
-			}
-
-			try {
 				BufferedReader in = new BufferedReader(
-						new FileReader( exiftoolReport ) );
+						new FileReader( jhoveReport ) );
 				String line;
 				while ( (line = in.readLine()) != null ) {
 					/*
@@ -207,28 +151,29 @@ public class ValidationCcompressionValidationModuleImpl extends
 					 * CompressionScheme-Zeile enthält einer dieser Freitexte
 					 * der Komprimierungsart
 					 */
-					if ( line.contains( "Compression: " )
-							&& line.contains( "[EXIF:IFD" ) ) {
-						exiftoolio = 1;
-						if ( line.contains( "Compression: " + com1 )
-								|| line.contains( "Compression: " + com2 )
-								|| line.contains( "Compression: " + com3 )
-								|| line.contains( "Compression: " + com4 )
-								|| line.contains( "Compression: " + com5 )
-								|| line.contains( "Compression: " + com7 )
-								|| line.contains( "Compression: " + com8 )
+					if ( line.contains( " CompressionScheme: " ) ) {
+						jhoveio = 1;
+						if ( line.contains( " CompressionScheme: " + com1 )
 								|| line.contains(
-										"Compression: " + com32773 ) ) {
+										" CompressionScheme: " + com2 )
+								|| line.contains(
+										" CompressionScheme: " + com3 )
+								|| line.contains(
+										" CompressionScheme: " + com4 )
+								|| line.contains(
+										" CompressionScheme: " + com5 )
+								|| line.contains(
+										" CompressionScheme: " + com7 )
+								|| line.contains(
+										" CompressionScheme: " + com8 )
+								|| line.contains(
+										" CompressionScheme: " + com32773 ) ) {
 							// Valider Status
 						} else {
 							// Invalider Status
 							isValid = false;
 							if ( min ) {
 								in.close();
-								/* exiftoolReport loeschen */
-								if ( exiftoolReport.exists() ) {
-									exiftoolReport.delete();
-								}
 								return false;
 							} else {
 								if ( !line.equals( oldErrorLine1 )
@@ -261,22 +206,18 @@ public class ValidationCcompressionValidationModuleImpl extends
 						}
 					}
 				}
-				if ( exiftoolio == 0 ) {
+				if ( jhoveio == 0 ) {
 					// Invalider Status
 					isValid = false;
 					if ( min ) {
 						in.close();
-						/* exiftoolReport loeschen */
-						if ( exiftoolReport.exists() ) {
-							exiftoolReport.delete();
-						}
 						return false;
 					} else {
 
 						Logtxt.logtxt( logFile, getTextResourceService()
 								.getText( locale, MESSAGE_XML_MODUL_C_TIFF )
 								+ getTextResourceService().getText( locale,
-										MESSAGE_XML_CG_ETNIO, "C" ) );
+										MESSAGE_XML_CG_JHOVENIO, "C" ) );
 					}
 				}
 				in.close();

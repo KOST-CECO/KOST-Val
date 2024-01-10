@@ -169,13 +169,13 @@
 						</td>
 					</tr>
 					<tr class="captioninfom">
-						<td>Erlaubten Komprimierungsalgorithmen [Uncompressed, CCITT 1D, T4/Group 3 Fax, T6/Group 4 Fax, LZW, PackBits]:</td>
+						<td>Erlaubten Komprimierungsalgorithmen [uncompressed, CCITT 1D, CCITT Group 3, CCITT Group 4, LZW, PackBits]:</td>
 						<td>
 							<xsl:value-of select="configuration/tiff/allowedcompression" />
 						</td>
 					</tr>
 					<tr class="captioninfom">
-						<td>Erlaubten Farbräume [WhiteIsZero, BlackIsZero, RGB, RGB Palette]:</td>
+						<td>Erlaubten Farbräume [white is zero,  black is zero, RGB, palette color]:</td>
 						<td>
 							<xsl:value-of select="configuration/tiff/allowedphotointer" />
 						</td>
