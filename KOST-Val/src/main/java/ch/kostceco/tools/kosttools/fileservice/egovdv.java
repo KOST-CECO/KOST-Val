@@ -199,6 +199,11 @@ public class egovdv
 				return count;
 			}
 		}
+
+		if ( outputList.exists() ) {
+			outputList.delete();
+		}
+
 		// Ende Ermittlung ob Signaturen enthalten sind
 		// System.out.println( "Anzahl Signaturen= " +count );
 		return count;

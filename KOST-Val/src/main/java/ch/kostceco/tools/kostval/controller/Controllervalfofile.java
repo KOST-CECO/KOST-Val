@@ -255,7 +255,7 @@ public class Controllervalfofile implements MessageConstants
 							boolean valFile = controller1.valFile( valDatei,
 									logFileName, directoryOfLogfile, verbose,
 									dirOfJarPath, configMap, context, locale,
-									logFile, hash );
+									logFile, hash, valDateiXml );
 							if ( valFile ) {
 								return "countValid"; // countValid = countValid
 														// + 1;
@@ -529,7 +529,7 @@ public class Controllervalfofile implements MessageConstants
 							boolean valFile = controller1.valFile( valDatei,
 									logFileName, directoryOfLogfile, verbose,
 									dirOfJarPath, configMap, context, locale,
-									logFile, hash );
+									logFile, hash, valDateiXml );
 							if ( valFile ) {
 								return "countValid"; // countValid = countValid
 														// + 1;
@@ -563,7 +563,7 @@ public class Controllervalfofile implements MessageConstants
 							boolean valFile = controller1.valFile( valDatei,
 									logFileName, directoryOfLogfile, verbose,
 									dirOfJarPath, configMap, context, locale,
-									logFile, hash );
+									logFile, hash, valDateiXml );
 							if ( valFile ) {
 								return "countValid"; // countValid = countValid
 														// + 1;
@@ -597,7 +597,7 @@ public class Controllervalfofile implements MessageConstants
 							boolean valFile = controller1.valFile( valDatei,
 									logFileName, directoryOfLogfile, verbose,
 									dirOfJarPath, configMap, context, locale,
-									logFile, hash );
+									logFile, hash, valDateiXml );
 							if ( valFile ) {
 								return "countValid"; // countValid = countValid
 														// + 1;
@@ -631,7 +631,7 @@ public class Controllervalfofile implements MessageConstants
 							boolean valFile = controller1.valFile( valDatei,
 									logFileName, directoryOfLogfile, verbose,
 									dirOfJarPath, configMap, context, locale,
-									logFile, hash );
+									logFile, hash, valDateiXml );
 							if ( valFile ) {
 								return "countValid"; // countValid = countValid
 														// + 1;
@@ -667,7 +667,7 @@ public class Controllervalfofile implements MessageConstants
 							boolean valFile = controller1.valFile( valDatei,
 									logFileName, directoryOfLogfile, verbose,
 									dirOfJarPath, configMap, context, locale,
-									logFile, hash );
+									logFile, hash, valDateiXml );
 							if ( valFile ) {
 								return "countValid"; // countValid = countValid
 														// + 1;
@@ -701,7 +701,7 @@ public class Controllervalfofile implements MessageConstants
 							boolean valFile = controller1.valFile( valDatei,
 									logFileName, directoryOfLogfile, verbose,
 									dirOfJarPath, configMap, context, locale,
-									logFile, hash );
+									logFile, hash, valDateiXml );
 							if ( valFile ) {
 								return "countValid"; // countValid = countValid
 														// + 1;
@@ -735,7 +735,7 @@ public class Controllervalfofile implements MessageConstants
 							boolean valFile = controller1.valFile( valDatei,
 									logFileName, directoryOfLogfile, verbose,
 									dirOfJarPath, configMap, context, locale,
-									logFile, hash );
+									logFile, hash, valDateiXml );
 							if ( valFile ) {
 								return "countValid"; // countValid = countValid
 														// + 1;
@@ -771,7 +771,7 @@ public class Controllervalfofile implements MessageConstants
 							boolean valFile = controller1.valFile( valDatei,
 									logFileName, directoryOfLogfile, verbose,
 									dirOfJarPath, configMap, context, locale,
-									logFile, hash );
+									logFile, hash, valDateiXml );
 							if ( valFile ) {
 								return "countValid"; // countValid = countValid
 														// + 1;
@@ -805,7 +805,7 @@ public class Controllervalfofile implements MessageConstants
 							boolean valFile = controller1.valFile( valDatei,
 									logFileName, directoryOfLogfile, verbose,
 									dirOfJarPath, configMap, context, locale,
-									logFile, hash );
+									logFile, hash, valDateiXml );
 							if ( valFile ) {
 								return "countValid"; // countValid = countValid
 														// + 1;
@@ -839,7 +839,7 @@ public class Controllervalfofile implements MessageConstants
 							boolean valFile = controller1.valFile( valDatei,
 									logFileName, directoryOfLogfile, verbose,
 									dirOfJarPath, configMap, context, locale,
-									logFile, hash );
+									logFile, hash, valDateiXml );
 							if ( valFile ) {
 								return "countValid"; // countValid = countValid
 														// + 1;
@@ -894,7 +894,7 @@ public class Controllervalfofile implements MessageConstants
 							boolean valFile = controller1.valFile( valDatei,
 									logFileName, directoryOfLogfile, verbose,
 									dirOfJarPath, configMap, context, locale,
-									logFile, hash );
+									logFile, hash, valDateiXml );
 							if ( valFile ) {
 								return "countValid"; // countValid = countValid
 														// + 1;

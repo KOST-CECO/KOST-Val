@@ -67,11 +67,11 @@ public class Controllervalfile implements MessageConstants
 	public boolean valFile( File valDatei, String logFileName,
 			File directoryOfLogfile, boolean verbose, String dirOfJarPath,
 			Map<String, String> configMap, ApplicationContext context,
-			Locale locale, File logFile, String hash ) throws IOException
+			Locale locale, File logFile, String hash, String valDateiXml )
+			throws IOException
 	{
 		String originalValName = valDatei.getAbsolutePath();
-		String originalValNameXml = "<ValFile>" + originalValName
-				+ "</ValFile>";
+		String originalValNameXml = valDateiXml;
 		String valDateiName = valDatei.getName();
 		String valDateiExt = "."
 				+ FilenameUtils.getExtension( valDateiName ).toLowerCase();

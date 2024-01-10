@@ -2661,12 +2661,15 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 									}
 
 									String callasAwarningDE = "Ungueltige PDF/A-Versionsnummer (muss \"2\" sein) [callas] ";
+									String callasAwarningDE2 = "Ungultige PDF/A-Versionsnummer (muss \"2\" sein) [callas] ";
 									String callasAwarningFR = "Numero de version PDF/A incorrect (doit etre 2) [callas] ";
 									String callasAwarningIT = "Numero di versione PDF/A scorretto (deve essere 2) [callas] ";
 									String callasAwarningEN = "Incorrect PDF/A version number (must be 2) [callas] ";
 									if ( warning3to2.equalsIgnoreCase( "yes" )
 											&& (line.contains(
 													callasAwarningDE )
+													|| line.contains(
+															callasAwarningDE2 )
 													|| line.contains(
 															callasAwarningFR )
 													|| line.contains(
