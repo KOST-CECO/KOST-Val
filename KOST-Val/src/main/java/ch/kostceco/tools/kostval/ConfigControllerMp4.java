@@ -93,7 +93,7 @@ public class ConfigControllerMp4
 			if ( Util.stringInFileLine( "kostval-conf-DE.xsl", configFile ) ) {
 				labelVideocodec.setText( "Videocodec" );
 				labelAudiocodec.setText( "Audiocodec" );
-				labelMp4.setText( "Validierungseinstellung: MKV" );
+				labelMp4.setText( "Validierungseinstellung: MP4" );
 				labelOther.setText( "Sonstiges" );
 				checkNoVideo.setText( "Reine Audiodatei erlaubt (kein Videocodec)" );
 				checkNoAudio.setText( "Stummfilm erlaubt (kein Audiocodec)" );				
@@ -103,7 +103,7 @@ public class ConfigControllerMp4
 					configFile ) ) {
 				labelVideocodec.setText( "Codec vidéo" );
 				labelAudiocodec.setText( "Codec audio" );
-				labelMp4.setText( "Paramètre de validation: MKV" );
+				labelMp4.setText( "Paramètre de validation: MP4" );
 				labelOther.setText( "Autre" );
 				checkNoVideo.setText( "Fichier audio pur autorisé (pas de codec vidéo)" );
 				checkNoAudio.setText( "Film muet autorisé (pas de codec audio)" );
@@ -113,7 +113,7 @@ public class ConfigControllerMp4
 					configFile ) ) {
 				labelVideocodec.setText( "Codec video" );
 				labelAudiocodec.setText( "Codec audio" );
-				labelMp4.setText( "Parametro di convalida: MKV" );
+				labelMp4.setText( "Parametro di convalida: MP4" );
 				labelOther.setText( "Altro" );
 				checkNoVideo.setText( "File audio puro consentito (nessun codec video)" );
 				checkNoAudio.setText( "Film muto consentito (nessun codec audio)" );
@@ -122,7 +122,7 @@ public class ConfigControllerMp4
 			} else {
 				labelVideocodec.setText( "Video codec" );
 				labelAudiocodec.setText( "Audio codec" );
-				labelMp4.setText( "Validation setting: MKV" );
+				labelMp4.setText( "Validation setting: MP4" );
 				labelOther.setText( "Other" );
 				checkNoVideo.setText( "Pure audio file allowed (no video codec)" );
 				checkNoAudio.setText( "Silent movie allowed (no audio codec)" );

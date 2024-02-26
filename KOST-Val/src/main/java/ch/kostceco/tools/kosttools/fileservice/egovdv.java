@@ -17,15 +17,18 @@
 package ch.kostceco.tools.kosttools.fileservice;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 import ch.kostceco.tools.kosttools.runtime.Cmd;
+import ch.kostceco.tools.kosttools.util.Util;
 
 /** @author Rc Claire Roethlisberger, KOST-CECO */
 
 public class egovdv
 {
-	private static String	exeDir		= ".." + File.separator
+	private static String	exeDir		= "resources" + File.separator
 			+ "egov-validationclient-cli";
 	private static String	validateBat	= exeDir + File.separator
 			+ "validate.bat";
@@ -106,16 +109,43 @@ public class egovdv
 	 * 
 	 * @return Integer mit der Anzahl Signaturen
 	 */
-	public static Integer execEgovdvCountSig( File valDatei, 
-			File workDir, String dirOfJarPath ) throws InterruptedException
+	public static Integer execEgovdvCountSig( File valDatei, File workDir,
+			String dirOfJarPath ) throws InterruptedException
 	{
-		Integer count=0;
-		
+		/*
+		 * Doppelleerschlag im Pfad oder im Namen einer Datei bereitet Probleme
+		 * (leerer Report) Video-Datei wird bei Doppelleerschlag in
+		 * temp-Verzeichnis kopiert
+		 */
+		String pathToWorkDir = workDir.getAbsolutePath();
+		String valDateiPath = valDatei.getAbsolutePath();
+		String valDateiName = valDatei.getName().replace( "  ", " " );
+		valDateiName = valDateiName.replace( "  ", " " );
+		valDateiName = valDateiName.replace( "  ", " " );
+
+		File valDateiTemp = new File(
+				pathToWorkDir + File.separator + valDateiName );
+		File valDateiTempWorkDir = new File(
+				pathToWorkDir + File.separator + valDateiName );
+		if ( valDateiPath.contains( "  " ) ) {
+			try {
+				Util.copyFile( valDatei, valDateiTemp );
+			} catch ( FileNotFoundException e ) {
+				e.printStackTrace();
+			} catch ( IOException e ) {
+				e.printStackTrace();
+			}
+		} else {
+			valDateiTemp = valDatei;
+		}
+
+		Integer count = 0;
+
 		// Ermittlung ob Signaturen enthalten sind
 		if ( !workDir.exists() ) {
 			workDir.mkdir();
 		}
-		
+
 		File outputList = new File(
 				workDir.getAbsolutePath() + File.separator + "egovdvList.txt" );
 		// falls das File von einem vorhergehenden Durchlauf bereits
@@ -130,16 +160,16 @@ public class egovdv
 		String checkTool = egovdv.checkEgovdv( dirOfJarPath );
 		if ( !checkTool.equals( "OK" ) ) {
 			// es fehlen Dateien
-			count=999;
+			count = 999;
 			return count;
 		} else {
 			// egovdv sollte vorhanden sein
 			try {
-				String resultExec = egovdv.execEgovdvList( valDatei, outputList,
-						workDir, dirOfJarPath );
+				String resultExec = egovdv.execEgovdvList( valDateiTemp,
+						outputList, workDir, dirOfJarPath );
 				if ( !resultExec.equals( "OK" ) || !outputList.exists() ) {
 					// Exception oder Report existiert nicht
-					count=998;
+					count = 998;
 					return count;
 				} else {
 					// Report existiert -> Auswerten...
@@ -156,8 +186,9 @@ public class egovdv
 					// Yalf implementation is class
 					// de.intarsys.tools.yalf.logback.LogbackProvider
 
-					String valDateiName = valDatei.getName();
+					String valDateiTempName = valDateiTemp.getName();
 					String mainInfo = "[main] INFO  de.intarsys.tools.yalf.api";
+					String mainExeption = "[main] ERROR d.intarsys.egov.validationclient.cli - Unexpected exception";
 					Boolean valDateiNameBoo = false;
 					Boolean mainInfoBoo = false;
 					int counterSig = 0;
@@ -165,37 +196,40 @@ public class egovdv
 					while ( scannerFormat.hasNextLine() ) {
 						// format_name=mov,mp4,m4a,3gp,3g2,mj2
 						String line = scannerFormat.nextLine();
-						// System.out.println("egovdv: "+line);
-						if ( line.equals( valDateiName ) ) {
+						// System.out.println( "egovdv: " + line );
+						if ( line.equals( valDateiTempName ) ) {
 							// erste Linie vorhanden
 							valDateiNameBoo = true;
 						} else if ( line.contains( mainInfo ) ) {
 							// zweite Linie vorhanden
 							mainInfoBoo = true;
+						} else if ( line.contains( mainExeption ) ) {
+							// Unexpected exception vorhanden
+							mainInfoBoo = false;
 						} else {
 							// andere Linie
 							if ( valDateiNameBoo && mainInfoBoo ) {
 								if ( line.contains( "   " ) ) {
 									counterSig = counterSig + 1;
 									// Signame ausgeben
-									// System.out.println("egovdv Signame:
-									// "+line);
+									// System.out.println( "egovdv Signame: " +
+									// line );
 								}
 							}
 						}
 					}
-					count=counterSig;
+					count = counterSig;
 
 					scannerFormat.close();
 
 					if ( !valDateiNameBoo && !mainInfoBoo ) {
 						// die ersten beiden Zeilen fehlen
-						count=997;
+						count = 997;
 						return count;
 					}
 				}
 			} catch ( Exception e ) {
-				count=996;
+				count = 996;
 				return count;
 			}
 		}
@@ -203,12 +237,15 @@ public class egovdv
 		if ( outputList.exists() ) {
 			outputList.delete();
 		}
+		if ( !valDateiTempWorkDir.exists() ) {
+			valDateiTempWorkDir.delete();
+		}
 
 		// Ende Ermittlung ob Signaturen enthalten sind
 		// System.out.println( "Anzahl Signaturen= " +count );
 		return count;
 	}
-	
+
 	/**
 	 * fuehrt eine Kontrolle aller benoetigten Dateien von egovdv durch und gibt
 	 * das Ergebnis als String zurueck

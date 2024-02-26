@@ -24,8 +24,8 @@ import ch.kostceco.tools.kosttools.runtime.Cmd;
 
 public class flac
 {
-	private static String	exeDir					= ".." + File.separator
-			+ "flac" + File.separator + "Win64";
+	private static String	exeDir					= "resources"
+			+ File.separator + "flac" + File.separator + "Win64";
 	private static String	resourcesFlacExe		= exeDir + File.separator
 			+ "flac.exe";
 	private static String	resourcesLibFlacPpDll	= exeDir + File.separator
