@@ -161,6 +161,9 @@ public class egovdv
 		if ( !checkTool.equals( "OK" ) ) {
 			// es fehlen Dateien
 			count = 999;
+			if ( valDateiTempWorkDir.exists() ) {
+				valDateiTempWorkDir.delete();
+			}
 			return count;
 		} else {
 			// egovdv sollte vorhanden sein
@@ -170,6 +173,9 @@ public class egovdv
 				if ( !resultExec.equals( "OK" ) || !outputList.exists() ) {
 					// Exception oder Report existiert nicht
 					count = 998;
+					if ( valDateiTempWorkDir.exists() ) {
+						valDateiTempWorkDir.delete();
+					}
 					return count;
 				} else {
 					// Report existiert -> Auswerten...
@@ -225,11 +231,17 @@ public class egovdv
 					if ( !valDateiNameBoo && !mainInfoBoo ) {
 						// die ersten beiden Zeilen fehlen
 						count = 997;
+						if ( valDateiTempWorkDir.exists() ) {
+							valDateiTempWorkDir.delete();
+						}
 						return count;
 					}
 				}
 			} catch ( Exception e ) {
 				count = 996;
+				if ( valDateiTempWorkDir.exists() ) {
+					valDateiTempWorkDir.delete();
+				}
 				return count;
 			}
 		}
@@ -237,7 +249,7 @@ public class egovdv
 		if ( outputList.exists() ) {
 			outputList.delete();
 		}
-		if ( !valDateiTempWorkDir.exists() ) {
+		if ( valDateiTempWorkDir.exists() ) {
 			valDateiTempWorkDir.delete();
 		}
 

@@ -2051,6 +2051,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					}
 					File valDateiNormalisiert = new File(
 							workDir + File.separator + "callas.pdf" );
+					File valDateiNormalisiertDel = valDateiNormalisiert;
 					try {
 						Util.copyFile( valDatei, valDateiNormalisiert );
 					} catch ( IOException e ) {
@@ -2255,6 +2256,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 						} else {
 							isValid = false;
 							callasServiceFailed = true;
+						}
+						
+						if ( valDateiNormalisiertDel.exists() ) {
+							valDateiNormalisiertDel.delete();
 						}
 
 						// Ende callas direkt auszuloesen
