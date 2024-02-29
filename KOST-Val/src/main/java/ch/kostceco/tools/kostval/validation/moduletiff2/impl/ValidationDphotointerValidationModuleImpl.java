@@ -1,8 +1,7 @@
 ﻿/* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
- * Submission Information Package (SIP). Copyright (C) Claire Roethlisberger (KOST-CECO),
- * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
- * (coderslagoon), Daniel Ludin (BEDAG AG)
+ * The KOST-Val application is used for validate Files and Submission Information Package (SIP).
+ * Copyright (C) Claire Roethlisberger (KOST-CECO), Christian Eugster, Olivier Debenath,
+ * Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
  * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -58,32 +57,29 @@ public class ValidationDphotointerValidationModuleImpl extends
 
 		boolean isValid = true;
 
-		// Informationen zum Logverzeichnis holen
-		String pathToExiftoolOutput = directoryOfLogfile.getAbsolutePath();
-		File exiftoolReport = new File( pathToExiftoolOutput,
-				valDatei.getName() + ".exiftool-log.txt" );
-		pathToExiftoolOutput = exiftoolReport.getAbsolutePath();
+		/*
+		 * TODO: jhoveReport auswerten! Auf Exiftool wird verzichtet. Exiftool
+		 * verwendet Perl, welche seit einiger Zeit hohe nicht geloese
+		 * Sicherheitsrisiken birgt. zudem koennen die Metadaten vermehrt
+		 * komplett durch jhove ausgelesen werden. Jhove hat bereits einen der
+		 * Probleme, welche das teilweise die Ausgabe der Metadaten verhindert
+		 * behoben.
+		 */
+		File jhoveReport = new File( directoryOfLogfile,
+				valDatei.getName() + ".jhove-log.txt" );
 
-		if ( !exiftoolReport.exists() ) {
-			// Report existiert nicht
-
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_D_TIFF )
-							+ getTextResourceService().getText( locale,
-									MESSAGE_XML_MISSING_REPORT,
-									exiftoolReport.getAbsolutePath(),
-									getTextResourceService().getText( locale,
-											ABORTED ) ) );
-			return false;
+		if ( !jhoveReport.exists() ) {
+			isValid = false;
+			if ( min ) {
+				return false;
+			} else {
+				Logtxt.logtxt( logFile, getTextResourceService()
+						.getText( locale, MESSAGE_XML_MODUL_B_TIFF )
+						+ getTextResourceService().getText( locale,
+								ERROR_XML_UNKNOWN, "No Jhove report." ) );
+				return false;
+			}
 		} else {
-			/*
-			 * Nicht vergessen in
-			 * "src/main/resources/config/applicationContext-services.xml" beim
-			 * entsprechenden Modul die property anzugeben: <property
-			 * name="configurationService" ref="configurationService" />
-			 */
-
 			String pi0 = configMap.get( "AllowedPhotointer0" );
 			String pi1 = configMap.get( "AllowedPhotointer1" );
 			String pi2 = configMap.get( "AllowedPhotointer2" );
@@ -118,7 +114,7 @@ public class ValidationDphotointerValidationModuleImpl extends
 				pi8 = "DiesePhotointerIstNichtErlaubt";
 			}
 
-			Integer exiftoolio = 0;
+			Integer jhoveio = 0;
 			String oldErrorLine1 = "";
 			String oldErrorLine2 = "";
 			String oldErrorLine3 = "";
@@ -127,40 +123,27 @@ public class ValidationDphotointerValidationModuleImpl extends
 
 			try {
 				BufferedReader in = new BufferedReader(
-						new FileReader( exiftoolReport ) );
+						new FileReader( jhoveReport ) );
 				String line;
 				while ( (line = in.readLine()) != null ) {
-					// die PhotometricInterpretation-Zeile enthält einer dieser
+					// die ColorSpace-Zeile enthält einer dieser
 					// Freitexte der Farbraumart
-					if ( line.contains( "PhotometricInterpretation: " )
-							&& line.contains( "[EXIF:IFD" ) ) {
-						exiftoolio = 1;
-						if ( line
-								.contains( "PhotometricInterpretation: " + pi0 )
-								|| line.contains(
-										"PhotometricInterpretation: " + pi1 )
-								|| line.contains(
-										"PhotometricInterpretation: " + pi2 )
-								|| line.contains(
-										"PhotometricInterpretation: " + pi3 )
-								|| line.contains(
-										"PhotometricInterpretation: " + pi4 )
-								|| line.contains(
-										"PhotometricInterpretation: " + pi5 )
-								|| line.contains(
-										"PhotometricInterpretation: " + pi6 )
-								|| line.contains( "PhotometricInterpretation: "
-										+ pi8 ) ) {
+					if ( line.contains( " ColorSpace: " ) ) {
+						jhoveio = 1;
+						if ( line.contains( " ColorSpace: " + pi0 )
+								|| line.contains( " ColorSpace: " + pi1 )
+								|| line.contains( " ColorSpace: " + pi2 )
+								|| line.contains( " ColorSpace: " + pi3 )
+								|| line.contains( " ColorSpace: " + pi4 )
+								|| line.contains( " ColorSpace: " + pi5 )
+								|| line.contains( " ColorSpace: " + pi6 )
+								|| line.contains( " ColorSpace: " + pi8 ) ) {
 							// Valider Status
 						} else {
 							// Invalider Status
 							isValid = false;
 							if ( min ) {
 								in.close();
-								/* exiftoolReport loeschen */
-								if ( exiftoolReport.exists() ) {
-									exiftoolReport.delete();
-								}
 								return false;
 							} else {
 								if ( !line.equals( oldErrorLine1 )
@@ -191,68 +174,26 @@ public class ValidationDphotointerValidationModuleImpl extends
 								}
 							}
 						}
-						/*
-						 * die PlanarConfiguration-Zeile muss Chunkey sein, da
-						 * ansonsten nicht Baseline. Planar wird kaum
-						 * unterstützt
-						 */
-						if ( line.contains( "PlanarConfiguration: " )
-								&& line.contains( "[EXIF:IFD" ) ) {
-							exiftoolio = 1;
-							if ( line.contains( "Chunky" ) ) {
-								// Valider Status
-							} else {
-								// Invalider Status
-								isValid = false;
-								if ( min ) {
-									in.close();
-									/* exiftoolReport loeschen */
-									if ( exiftoolReport.exists() ) {
-										exiftoolReport.delete();
-									}
-									return false;
-								} else {
-									Logtxt.logtxt( logFile,
-											getTextResourceService().getText(
-													locale,
-													MESSAGE_XML_MODUL_D_TIFF )
-													+ getTextResourceService()
-															.getText( locale,
-																	MESSAGE_XML_CG_INVALID,
-																	line ) );
-								}
-							}
-						}
 					}
 				}
-				if ( exiftoolio == 0 ) {
+				if ( jhoveio == 0 ) {
 					// Invalider Status
 					isValid = false;
 					if ( min ) {
 						in.close();
-						/* exiftoolReport loeschen */
-						if ( exiftoolReport.exists() ) {
-							exiftoolReport.delete();
-						}
 						return false;
 					} else {
-
 						Logtxt.logtxt( logFile, getTextResourceService()
 								.getText( locale, MESSAGE_XML_MODUL_D_TIFF )
 								+ getTextResourceService().getText( locale,
-										MESSAGE_XML_CG_ETNIO, "D" ) );
+										MESSAGE_XML_CG_JHOVENIO, "D" ) );
 					}
 				}
 				in.close();
 			} catch ( Exception e ) {
 				if ( min ) {
-					/* exiftoolReport loeschen */
-					if ( exiftoolReport.exists() ) {
-						exiftoolReport.delete();
-					}
 					return false;
 				} else {
-
 					Logtxt.logtxt( logFile, getTextResourceService()
 							.getText( locale, MESSAGE_XML_MODUL_D_TIFF )
 							+ getTextResourceService().getText( locale,

@@ -68,7 +68,7 @@ public class Cmd
 				BufferedReader in = new BufferedReader(
 						new InputStreamReader( stream ) );
 				while ( (line = in.readLine()) != null ) {
-					// System.out.println(line);
+					 System.out.println(line);
 					if ( lineReturn.equals( "" ) ) {
 						lineReturn = line;
 					} else {

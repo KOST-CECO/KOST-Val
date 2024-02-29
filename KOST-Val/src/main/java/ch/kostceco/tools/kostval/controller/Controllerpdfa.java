@@ -1,8 +1,7 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
- * Submission Information Package (SIP). Copyright (C) Claire Roethlisberger (KOST-CECO),
- * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
- * (coderslagoon), Daniel Ludin (BEDAG AG)
+ * The KOST-Val application is used for validate Files and Submission Information Package (SIP).
+ * Copyright (C) Claire Roethlisberger (KOST-CECO), Christian Eugster, Olivier Debenath,
+ * Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
  * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -23,7 +22,7 @@ import java.io.File;
 import java.util.Locale;
 import java.util.Map;
 
-import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfvalidationException;
+import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfavalidationException;
 import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
@@ -101,7 +100,7 @@ public class Controllerpdfa implements MessageConstants
 						.print();
 				return false;
 			}
-		} catch ( ValidationApdfvalidationException e ) {
+		} catch ( ValidationApdfavalidationException e ) {
 			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
 					MESSAGE_XML_MODUL_A_PDFA )
 					+ getTextResourceService().getText( locale,
@@ -148,7 +147,7 @@ public class Controllerpdfa implements MessageConstants
 					valid = false;
 				}
 			}
-		} catch ( ValidationApdfvalidationException e ) {
+		} catch ( ValidationApdfavalidationException e ) {
 			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
 					MESSAGE_XML_MODUL_A_PDFA )
 					+ getTextResourceService().getText( locale,

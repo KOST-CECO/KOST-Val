@@ -1,8 +1,7 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
- * Submission Information Package (SIP). Copyright (C) Claire Roethlisberger (KOST-CECO),
- * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
- * (coderslagoon), Daniel Ludin (BEDAG AG)
+ * The KOST-Val application is used for validate Files and Submission Information Package (SIP).
+ * Copyright (C) Claire Roethlisberger (KOST-CECO), Christian Eugster, Olivier Debenath,
+ * Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
  * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -542,9 +541,12 @@ public class ConfigurationServiceImpl implements ConfigurationService
 
 			// Gibt an ob flac akzeptiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
+			String yesFlac = "<flacvalidation>&#x2713;</flacvalidation>";
 			String azFlac = "<flacvalidation>(&#x2713;)</flacvalidation>";
 			String flacvalidation = "no";
-			if ( config.contains( azFlac ) ) {
+			if ( config.contains( yesFlac ) ) {
+				flacvalidation = "yes";
+			} else if ( config.contains( azFlac ) ) {
 				flacvalidation = "az";
 			} else {
 				flacvalidation = "no";
@@ -553,9 +555,12 @@ public class ConfigurationServiceImpl implements ConfigurationService
 
 			// Gibt an ob wave akzeptiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
+			String yesWave = "<wavevalidation>&#x2713;</wavevalidation>";
 			String azWave = "<wavevalidation>(&#x2713;)</wavevalidation>";
 			String wavevalidation = "no";
-			if ( config.contains( azWave ) ) {
+			if ( config.contains( yesWave ) ) {
+				wavevalidation = "yes";
+			} else if ( config.contains( azWave ) ) {
 				wavevalidation = "az";
 			} else {
 				wavevalidation = "no";
@@ -564,9 +569,12 @@ public class ConfigurationServiceImpl implements ConfigurationService
 
 			// Gibt an ob mp3 akzeptiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
+			String yesMp3 = "<mp3validation>&#x2713;</mp3validation>";
 			String azMp3 = "<mp3validation>(&#x2713;)</mp3validation>";
 			String mp3validation = "no";
-			if ( config.contains( azMp3 ) ) {
+			if ( config.contains( yesMp3 ) ) {
+				mp3validation = "yes";
+			} else if ( config.contains( azMp3 ) ) {
 				mp3validation = "az";
 			} else {
 				mp3validation = "no";
@@ -577,25 +585,156 @@ public class ConfigurationServiceImpl implements ConfigurationService
 
 			// Gibt an ob mkv akzeptiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
+			String yesMkv = "<mkvvalidation>&#x2713;</mkvvalidation>";
 			String azMkv = "<mkvvalidation>(&#x2713;)</mkvvalidation>";
 			String mkvvalidation = "no";
-			if ( config.contains( azMkv ) ) {
+			if ( config.contains( yesMkv ) ) {
+				mkvvalidation = "yes";
+			} else if ( config.contains( azMkv ) ) {
 				mkvvalidation = "az";
 			} else {
 				mkvvalidation = "no";
 			}
 			configMap.put( "mkvValidation", mkvvalidation );
 
+			// Gibt die Videocodecs aus, welche im MKV vorkommen duerfen.
+			String allowedmkvffv1 = "0";
+			if ( doc.getElementsByTagName( "allowedmkvffv1" )
+					.item( 0 ) != null ) {
+				allowedmkvffv1 = doc.getElementsByTagName( "allowedmkvffv1" )
+						.item( 0 ).getTextContent();
+			}
+			String allowedmkvavc = "0";
+			if ( doc.getElementsByTagName( "allowedmkvavc" )
+					.item( 0 ) != null ) {
+				allowedmkvavc = doc.getElementsByTagName( "allowedmkvavc" )
+						.item( 0 ).getTextContent();
+			}
+			String allowedmkvhevc = "0";
+			if ( doc.getElementsByTagName( "allowedmkvhevc" )
+					.item( 0 ) != null ) {
+				allowedmkvhevc = doc.getElementsByTagName( "allowedmkvhevc" )
+						.item( 0 ).getTextContent();
+			}
+			String allowedmkvav1 = "0";
+			if ( doc.getElementsByTagName( "allowedmkvav1" )
+					.item( 0 ) != null ) {
+				allowedmkvav1 = doc.getElementsByTagName( "allowedmkvav1" )
+						.item( 0 ).getTextContent();
+			}
+			configMap.put( "Allowedmkvffv1", allowedmkvffv1 );
+			configMap.put( "Allowedmkvavc", allowedmkvavc );
+			configMap.put( "Allowedmkvhevc", allowedmkvhevc );
+			configMap.put( "Allowedmkvav1", allowedmkvav1 );
+
+			// Gibt die Audiocodecs aus, welche im MKV vorkommen duerfen.
+			String allowedmkvflac = "0";
+			if ( doc.getElementsByTagName( "allowedmkvflac" )
+					.item( 0 ) != null ) {
+				allowedmkvflac = doc.getElementsByTagName( "allowedmkvflac" )
+						.item( 0 ).getTextContent();
+			}
+			String allowedmkvmp3 = "0";
+			if ( doc.getElementsByTagName( "allowedmkvmp3" )
+					.item( 0 ) != null ) {
+				allowedmkvmp3 = doc.getElementsByTagName( "allowedmkvmp3" )
+						.item( 0 ).getTextContent();
+			}
+			String allowedmkvaac = "0";
+			if ( doc.getElementsByTagName( "allowedmkvaac" )
+					.item( 0 ) != null ) {
+				allowedmkvaac = doc.getElementsByTagName( "allowedmkvaac" )
+						.item( 0 ).getTextContent();
+			}
+			configMap.put( "Allowedmkvflac", allowedmkvflac );
+			configMap.put( "Allowedmkvmp3", allowedmkvmp3 );
+			configMap.put( "Allowedmkvaac", allowedmkvaac );
+
+			// Gibt an ob Videocodes fehlen duerfen.
+			String allowedmkvnovideo = "Error";
+			if ( doc.getElementsByTagName( "allowedmkvnovideo" )
+					.item( 0 ) != null ) {
+				allowedmkvnovideo = doc
+						.getElementsByTagName( "allowedmkvnovideo" ).item( 0 )
+						.getTextContent();
+			}
+			configMap.put( "Allowedmkvnovideo", allowedmkvnovideo );
+
+			// Gibt an ob Audiocodes fehlen duerfen.
+			String allowedmkvnoaudio = "Error";
+			if ( doc.getElementsByTagName( "allowedmkvnoaudio" )
+					.item( 0 ) != null ) {
+				allowedmkvnoaudio = doc
+						.getElementsByTagName( "allowedmkvnoaudio" ).item( 0 )
+						.getTextContent();
+			}
+			configMap.put( "Allowedmkvnoaudio", allowedmkvnoaudio );
+
 			// Gibt an ob mp4 akzeptiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
+			String yesMp4 = "<mp4validation>&#x2713;</mp4validation>";
 			String azMp4 = "<mp4validation>(&#x2713;)</mp4validation>";
 			String mp4validation = "no";
-			if ( config.contains( azMp4 ) ) {
+			if ( config.contains( yesMp4 ) ) {
+				mp4validation = "yes";
+			} else if ( config.contains( azMp4 ) ) {
 				mp4validation = "az";
 			} else {
 				mp4validation = "no";
 			}
 			configMap.put( "mp4Validation", mp4validation );
+
+			// Gibt die Videocodecs aus, welche im MP4 vorkommen duerfen.
+			String allowedmp4avc = "0";
+			if ( doc.getElementsByTagName( "allowedmp4avc" )
+					.item( 0 ) != null ) {
+				allowedmp4avc = doc.getElementsByTagName( "allowedmp4avc" )
+						.item( 0 ).getTextContent();
+			}
+			String allowedmp4hevc = "0";
+			if ( doc.getElementsByTagName( "allowedmp4hevc" )
+					.item( 0 ) != null ) {
+				allowedmp4hevc = doc.getElementsByTagName( "allowedmp4hevc" )
+						.item( 0 ).getTextContent();
+			}
+			configMap.put( "Allowedmp4avc", allowedmp4avc );
+			configMap.put( "Allowedmp4hevc", allowedmp4hevc );
+
+			// Gibt die Audiocodecs aus, welche im MP4 vorkommen duerfen.
+			String allowedmp4mp3 = "0";
+			if ( doc.getElementsByTagName( "allowedmp4mp3" )
+					.item( 0 ) != null ) {
+				allowedmp4mp3 = doc.getElementsByTagName( "allowedmp4mp3" )
+						.item( 0 ).getTextContent();
+			}
+			String allowedmp4aac = "0";
+			if ( doc.getElementsByTagName( "allowedmp4aac" )
+					.item( 0 ) != null ) {
+				allowedmp4aac = doc.getElementsByTagName( "allowedmp4aac" )
+						.item( 0 ).getTextContent();
+			}
+			configMap.put( "Allowedmp4mp3", allowedmp4mp3 );
+			configMap.put( "Allowedmp4aac", allowedmp4aac );
+
+			// Gibt an ob Videocodes fehlen duerfen.
+			String allowedmp4novideo = "Error";
+			if ( doc.getElementsByTagName( "allowedmp4novideo" )
+					.item( 0 ) != null ) {
+				allowedmp4novideo = doc
+						.getElementsByTagName( "allowedmp4novideo" ).item( 0 )
+						.getTextContent();
+			}
+			configMap.put( "Allowedmp4novideo", allowedmp4novideo );
+
+			// Gibt an ob Audiocodes fehlen duerfen.
+			String allowedmp4noaudio = "Error";
+			if ( doc.getElementsByTagName( "allowedmp4noaudio" )
+					.item( 0 ) != null ) {
+				allowedmp4noaudio = doc
+						.getElementsByTagName( "allowedmp4noaudio" ).item( 0 )
+						.getTextContent();
+			}
+			configMap.put( "Allowedmp4noaudio", allowedmp4noaudio );
 
 			// TODO Daten
 
@@ -704,6 +843,16 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String hash = doc.getElementsByTagName( "hash" ).item( 0 )
 					.getTextContent();
 			configMap.put( "hash", hash );
+
+			// sizeWarning
+			/*
+			 * Warnung bei kleineren Dateien ausgeben. "" bedeutet keine ueberpruefung und Warnung []
+			 * 
+			 * [] / 0.5KB / 1KB / 5KB
+			 */
+			String sizeWarning = doc.getElementsByTagName( "sizeWarning" ).item( 0 )
+					.getTextContent();
+			configMap.put( "sizeWarning", sizeWarning );
 
 			// TODO SIP
 

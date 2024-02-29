@@ -1,8 +1,7 @@
 ﻿/* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
- * Submission Information Package (SIP). Copyright (C) Claire Roethlisberger (KOST-CECO),
- * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
- * (coderslagoon), Daniel Ludin (BEDAG AG)
+ * The KOST-Val application is used for validate Files and Submission Information Package (SIP).
+ * Copyright (C) Claire Roethlisberger (KOST-CECO), Christian Eugster, Olivier Debenath,
+ * Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
  * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -57,35 +56,32 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl
 
 		boolean isValid = true;
 
-		// Informationen zum Logverzeichnis holen
-		String pathToExiftoolOutput = directoryOfLogfile.getAbsolutePath();
-		File exiftoolReport = new File( pathToExiftoolOutput,
-				valDatei.getName() + ".exiftool-log.txt" );
-		pathToExiftoolOutput = exiftoolReport.getAbsolutePath();
+		/*
+		 * TODO: jhoveReport auswerten! Auf Exiftool wird verzichtet. Exiftool
+		 * verwendet Perl, welche seit einiger Zeit hohe nicht geloese
+		 * Sicherheitsrisiken birgt. zudem koennen die Metadaten vermehrt
+		 * komplett durch jhove ausgelesen werden. Jhove hat bereits einen der
+		 * Probleme, welche das teilweise die Ausgabe der Metadaten verhindert
+		 * behoben.
+		 */
+		File jhoveReport = new File( directoryOfLogfile,
+				valDatei.getName() + ".jhove-log.txt" );
 
-		if ( !exiftoolReport.exists() ) {
-			// Report existiert nicht
-
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_G_TIFF )
-							+ getTextResourceService().getText( locale,
-									MESSAGE_XML_MISSING_REPORT,
-									exiftoolReport.getAbsolutePath(),
-									getTextResourceService().getText( locale,
-											ABORTED ) ) );
-			return false;
+		if ( !jhoveReport.exists() ) {
+			isValid = false;
+			if ( min ) {
+				return false;
+			} else {
+				Logtxt.logtxt( logFile, getTextResourceService()
+						.getText( locale, MESSAGE_XML_MODUL_B_TIFF )
+						+ getTextResourceService().getText( locale,
+								ERROR_XML_UNKNOWN, "No Jhove report." ) );
+				return false;
+			}
 		} else {
-			/*
-			 * Nicht vergessen in
-			 * "src/main/resources/config/applicationContext-services.xml" beim
-			 * entsprechenden Modul die property anzugeben: <property
-			 * name="configurationService" ref="configurationService" />
-			 */
-
 			String tiles = configMap.get( "AllowedTiles" );
 
-			Integer exiftoolio = 0;
+			Integer jhoveio = 0;
 			String oldErrorLine1 = "";
 			String oldErrorLine2 = "";
 			String oldErrorLine3 = "";
@@ -97,7 +93,7 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl
 			} else {
 				try {
 					BufferedReader in = new BufferedReader(
-							new FileReader( exiftoolReport ) );
+							new FileReader( jhoveReport ) );
 					String line;
 					while ( (line = in.readLine()) != null ) {
 						/*
@@ -105,25 +101,18 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl
 						 * oder TileOffsets-Zeile gibt Auskunft ueber die
 						 * Aufteilungsart
 						 * 
-						 * -StripByteCounts -RowsPerStrip -FileSize -TileWidth
-						 * -TileLength -TileDepth
+						 * TODO: im neuen jhove hat es nur noch ein Offset ->
+						 * Kacheln koennen so nicht mehr erkannt werden
 						 */
-						if ( (line.contains( "StripByteCounts: " )
-								&& line.contains( "[EXIF:IFD" ))
-								|| (line.contains( "RowsPerStrip: " )
-										&& line.contains( "[EXIF:IFD" ))
-								|| (line.contains( "Tile" )
-										&& line.contains( "[EXIF:IFD" )) ) {
-							exiftoolio = 1;
+						if ( (line.contains( " Offset:" )) ) {
+							jhoveio = 1;
 							if ( line.contains( "Tile" ) ) {
+								// TODO: Funktioniert noch nicht, Jhove muss
+								// noch was betreffend Tiles ausgeben
 								// Invalider Status (Kacheln sind nicht erlaubt)
 								isValid = false;
 								if ( min ) {
 									in.close();
-									/* exiftoolReport loeschen */
-									if ( exiftoolReport.exists() ) {
-										exiftoolReport.delete();
-									}
 									return false;
 								} else {
 									if ( !line.equals( oldErrorLine1 )
@@ -161,31 +150,23 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl
 							}
 						}
 					}
-					if ( exiftoolio == 0 ) {
+					if ( jhoveio == 0 ) {
 						// Invalider Status
 						isValid = false;
 						if ( min ) {
 							in.close();
-							/* exiftoolReport loeschen */
-							if ( exiftoolReport.exists() ) {
-								exiftoolReport.delete();
-							}
 							return false;
 						} else {
 
 							Logtxt.logtxt( logFile, getTextResourceService()
 									.getText( locale, MESSAGE_XML_MODUL_G_TIFF )
 									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_CG_ETNIO, "G" ) );
+											MESSAGE_XML_CG_JHOVENIO, "G" ) );
 						}
 					}
 					in.close();
 				} catch ( Exception e ) {
 					if ( min ) {
-						/* exiftoolReport loeschen */
-						if ( exiftoolReport.exists() ) {
-							exiftoolReport.delete();
-						}
 						return false;
 					} else {
 						Logtxt.logtxt( logFile, getTextResourceService()

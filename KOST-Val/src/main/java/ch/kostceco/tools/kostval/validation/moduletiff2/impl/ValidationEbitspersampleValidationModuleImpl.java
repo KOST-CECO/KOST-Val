@@ -1,8 +1,7 @@
 ﻿/* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
- * Submission Information Package (SIP). Copyright (C) Claire Roethlisberger (KOST-CECO),
- * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
- * (coderslagoon), Daniel Ludin (BEDAG AG)
+ * The KOST-Val application is used for validate Files and Submission Information Package (SIP).
+ * Copyright (C) Claire Roethlisberger (KOST-CECO), Christian Eugster, Olivier Debenath,
+ * Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
  * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -58,32 +57,29 @@ public class ValidationEbitspersampleValidationModuleImpl extends
 
 		boolean isValid = true;
 
-		// Informationen zum Logverzeichnis holen
-		String pathToExiftoolOutput = directoryOfLogfile.getAbsolutePath();
-		File exiftoolReport = new File( pathToExiftoolOutput,
-				valDatei.getName() + ".exiftool-log.txt" );
-		pathToExiftoolOutput = exiftoolReport.getAbsolutePath();
+		/*
+		 * TODO: jhoveReport auswerten! Auf Exiftool wird verzichtet. Exiftool
+		 * verwendet Perl, welche seit einiger Zeit hohe nicht geloese
+		 * Sicherheitsrisiken birgt. zudem koennen die Metadaten vermehrt
+		 * komplett durch jhove ausgelesen werden. Jhove hat bereits einen der
+		 * Probleme, welche das teilweise die Ausgabe der Metadaten verhindert
+		 * behoben.
+		 */
+		File jhoveReport = new File( directoryOfLogfile,
+				valDatei.getName() + ".jhove-log.txt" );
 
-		if ( !exiftoolReport.exists() ) {
-			// Report existiert nicht
-
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_E_TIFF )
-							+ getTextResourceService().getText( locale,
-									MESSAGE_XML_MISSING_REPORT,
-									exiftoolReport.getAbsolutePath(),
-									getTextResourceService().getText( locale,
-											ABORTED ) ) );
-			return false;
+		if ( !jhoveReport.exists() ) {
+			isValid = false;
+			if ( min ) {
+				return false;
+			} else {
+				Logtxt.logtxt( logFile, getTextResourceService()
+						.getText( locale, MESSAGE_XML_MODUL_B_TIFF )
+						+ getTextResourceService().getText( locale,
+								ERROR_XML_UNKNOWN, "No Jhove report." ) );
+				return false;
+			}
 		} else {
-			/*
-			 * Nicht vergessen in
-			 * "src/main/resources/config/applicationContext-services.xml" beim
-			 * entsprechenden Modul die property anzugeben: <property
-			 * name="configurationService" ref="configurationService" />
-			 */
-
 			String bps1 = configMap.get( "AllowedBitspersample1" );
 			String bps2 = configMap.get( "AllowedBitspersample2" );
 			String bps4 = configMap.get( "AllowedBitspersample4" );
@@ -110,7 +106,7 @@ public class ValidationEbitspersampleValidationModuleImpl extends
 				bps32 = "DieseBitspersampleIstNichtErlaubt";
 			}
 
-			Integer exiftoolio = 0;
+			Integer jhoveio = 0;
 			String oldErrorLine1 = "";
 			String oldErrorLine2 = "";
 			String oldErrorLine3 = "";
@@ -119,20 +115,19 @@ public class ValidationEbitspersampleValidationModuleImpl extends
 
 			try {
 				BufferedReader in = new BufferedReader(
-						new FileReader( exiftoolReport ) );
+						new FileReader( jhoveReport ) );
 				String line;
 				while ( (line = in.readLine()) != null ) {
 					/*
 					 * zu analysierende TIFF-IFD-Zeile die BitsPerSample-Zeile
-					 * enth�lt einer dieser Freitexte der BitsPerSampleart max
+					 * enthaaelt einer dieser Freitexte der BitsPerSampleart max
 					 * ist 1, 2, 4, 8, 16, 32 erlaubt
 					 * 
 					 * Varianten: BitsPerSample: 8 BitsPerSample: 8 8 8
 					 * BitsPerSample: 8, 8, 8 evtl noch mehr
 					 */
-					if ( line.contains( "BitsPerSample: " )
-							&& line.contains( "[EXIF:IFD" ) ) {
-						exiftoolio = 1;
+					if ( line.contains( " BitsPerSample: " ) ) {
+						jhoveio = 1;
 						if ( ((line.contains( "BitsPerSample: 1 " )
 								|| (line.contains( "BitsPerSample: 1," ))
 								|| (line.endsWith( "BitsPerSample: 1" )))
@@ -173,10 +168,6 @@ public class ValidationEbitspersampleValidationModuleImpl extends
 							isValid = false;
 							if ( min ) {
 								in.close();
-								/* exiftoolReport loeschen */
-								if ( exiftoolReport.exists() ) {
-									exiftoolReport.delete();
-								}
 								return false;
 							} else {
 								if ( !line.equals( oldErrorLine1 )
@@ -209,7 +200,7 @@ public class ValidationEbitspersampleValidationModuleImpl extends
 						}
 					}
 				}
-				if ( exiftoolio == 0 ) {
+				if ( jhoveio == 0 ) {
 					// default = 1
 					if ( bps1.contains( "1" ) ) {
 						// Valid
@@ -225,10 +216,6 @@ public class ValidationEbitspersampleValidationModuleImpl extends
 				in.close();
 			} catch ( Exception e ) {
 				if ( min ) {
-					/* exiftoolReport loeschen */
-					if ( exiftoolReport.exists() ) {
-						exiftoolReport.delete();
-					}
 					return false;
 				} else {
 

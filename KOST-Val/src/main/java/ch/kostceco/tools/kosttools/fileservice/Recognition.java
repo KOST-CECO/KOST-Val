@@ -161,6 +161,21 @@ public class Recognition
 							return "JP?";
 						}
 					}
+				} else if ( Magic.magicVob( checkFile ) ) {
+					// Eine VOB-Datei muss mit ...° [000001BA] beginnen
+					if ( Util.stringInFile( "¿.ú", checkFile ) ) {
+						// Eine VOB-Datei muss den String "¿.ú" im File
+						// haben
+						// passende Extension kontrollieren
+						// Eine VOB-Datei muss die extension .vob haben
+						if ( checkFileExt.equals( ".vob" ) ) {
+							// eindeutig als VOB-Datei erkannt
+							return "VOB";
+						} else {
+							// als VOB-Datei erkannt aber falsche Extension
+							return "VOB_ext";
+						}
+					}
 				} else if ( Magic.magicMpeg2( checkFile ) ) {
 					// BOF entspricht einer MPEG2-Datei (...³ [000001B3])
 					// D) passende Extension kontrollieren (keine SiF)
@@ -196,8 +211,9 @@ public class Recognition
 				if ( Magic.magicMkv( checkFile ) ) {
 					// Eine MKV-Datei muss mit.Eß£ [1A45DFA3] beginnen
 					// D) passende Extension kontrollieren (keine SiF)
-					// Eine MKV-Datei muss die extension .mkv haben
-					if ( checkFileExt.equals( ".mkv" ) ) {
+					// Eine MKV-Datei muss die extension .mkv .webm haben
+					if ( checkFileExt.equals( ".mkv" )
+							|| checkFileExt.equals( ".webm" ) ) {
 						// eindeutig als MKV-Datei erkannt
 						return "MKV";
 					} else {
@@ -477,8 +493,12 @@ public class Recognition
 				if ( Magic.magicOgg( checkFile ) ) {
 					// Eine OGG-Datei muss mit OggS.. [4F6767530002] beginnen
 					// D) passende Extension kontrollieren (keine SiF)
-					// Eine OGG-Datei muss die extension .ogg haben
-					if ( checkFileExt.equals( ".ogg" ) ) {
+					// Eine OGG-Datei muss die extension .ogg .oga .ogv .ogx
+					// haben
+					if ( checkFileExt.equals( ".ogg" )
+							|| checkFileExt.equals( ".oga" )
+							|| checkFileExt.equals( ".ogv" )
+							|| checkFileExt.equals( ".ogx" ) ) {
 						// eindeutig als OGG-Datei erkannt
 						return "OGG";
 					} else {
@@ -557,16 +577,37 @@ public class Recognition
 			} else if ( sb2str1.contains( "52" ) ) {
 				// TODO B) Die moeglichen BOF kontrollieren (beginnt mit 52)
 
-				if ( Magic.magicWave( checkFile ) ) {
-					// Eine WAVE-Datei muss mit RIFF [52494646] beginnen
-					// D) passende Extension kontrollieren (keine SiF)
-					// Eine WAVE-Datei muss die extension .wav haben
-					if ( checkFileExt.equals( ".wav" ) ) {
-						// eindeutig als WAVE-Datei erkannt
-						return "WAVE";
+				if ( Magic.magicRiff( checkFile ) ) {
+					// Eine RIFF-Datei muss mit RIFF [52494646] beginnen
+					// RIFF WAVE AVI
+					if ( Util.stringInFile( "WAVEfmt", checkFile ) ) {
+						// C) fuer WAVE auf SiF weiterkontrollieren
+						// Eine WAVE-Datei muss den String "WAVEfmt" im
+						// File haben
+						// D) passende Extension kontrollieren
+						// Eine WAVE-Datei muss die extension .wav haben
+						if ( checkFileExt.equals( ".wav" ) ) {
+							// eindeutig als IFC-Datei erkannt
+							return "WAVE";
+						} else {
+							// als IFC-Datei erkannt aber falsche Extension
+							return "WAVE_ext";
+						}
+					} else if ( Util.stringInFile( "AVI", checkFile ) ) {
+						// C) fuer AVI auf SiF weiterkontrollieren
+						// Eine AVI-Datei muss den String "AVI" im
+						// File haben
+						// D) passende Extension kontrollieren
+						// Eine AVI-Datei muss die extension .avi haben
+						if ( checkFileExt.equals( ".avi" ) ) {
+							// eindeutig als AVI-Datei erkannt
+							return "AVI";
+						} else {
+							// als AVI-Datei erkannt aber falsche Extension
+							return "AVI_ext";
+						}
 					} else {
-						// als WAVE-Datei erkannt aber falsche Extension
-						return "WAVE_ext";
+						return "RIFF";
 					}
 				} else {
 					// keine passende BOF gefunden ggf. Format ohne BOF (am

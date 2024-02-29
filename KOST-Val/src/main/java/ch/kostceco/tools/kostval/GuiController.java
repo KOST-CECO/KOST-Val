@@ -1,8 +1,7 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
- * Submission Information Package (SIP). Copyright (C) Claire Roethlisberger (KOST-CECO),
- * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
- * (coderslagoon), Daniel Ludin (BEDAG AG)
+ * The KOST-Val application is used for validate Files and Submission Information Package (SIP).
+ * Copyright (C) Claire Roethlisberger (KOST-CECO), Christian Eugster, Olivier Debenath,
+ * Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
  * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -115,7 +114,7 @@ public class GuiController
 	private String				arg0, arg1, arg2, arg3 = "--xml", dirOfJarPath,
 			initInstructionsDe, initInstructionsFr, initInstructionsIt,
 			initInstructionsEn;
-	private String				versionKostVal	= "2.1.4.0";
+	private String				versionKostVal	= "2.2.0.0";
 	/*
 	 * TODO: versionKostVal auch hier anpassen:
 	 * 
@@ -123,7 +122,7 @@ public class GuiController
 	 *
 	 * 3) ConfigController inkl SubControllers
 	 * 
-	 * 4) Konfigurationsdatei inkl 3x xsl
+	 * 4) Konfigurationsdatei (2x) inkl 3x xsl
 	 * 
 	 * 5) xsl der Logdatei
 	 * 
@@ -133,10 +132,12 @@ public class GuiController
 	 */
 
 	/*
-	 * TODO: Jahreszahl in allen val.message.xml.info anpassen
+	 * fuer Februar-Release Jahreszahl in allen val.message.xml.info anpassen
 	 * 
-	 * val.message.xml.info = <Info>KOST-Val v{0}, Copyright (C) 2012-2023
-	 * Claire Roethlisberger ...
+	 * val.message.xml.info = <Info>KOST-Val v{0}, Copyright (C) 2012-202x
+	 * 
+	 * sowie im Readme inkl Kontrolle der validierten Formate (Readme und
+	 * Header in den Java-Dateien
 	 */
 
 	private Locale				locale			= Locale.getDefault();

@@ -1,8 +1,7 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
- * Submission Information Package (SIP). Copyright (C) Claire Roethlisberger (KOST-CECO),
- * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
- * (coderslagoon), Daniel Ludin (BEDAG AG)
+ * The KOST-Val application is used for validate Files and Submission Information Package (SIP).
+ * Copyright (C) Claire Roethlisberger (KOST-CECO), Christian Eugster, Olivier Debenath,
+ * Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
  * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -349,16 +348,16 @@ public class Controllervalinitlog implements MessageConstants
 				MESSAGE_XML_HEADER ) );
 		Logtxt.logtxt( logFile, "<Infos><Start>" + ausgabeStart + "</Start>" );
 		Logtxt.logtxt( logFile, "<End></End>" );
-		String val=getTextResourceService().getText( locale,
+		String val = getTextResourceService().getText( locale,
 				MESSAGE_XML_VALTYPE, formatValOn );
-		String rec=getTextResourceService().getText( locale,
+		String rec = getTextResourceService().getText( locale,
 				MESSAGE_XML_AZTYPE, formatRecOn );
 		// val.message.xml.valtype = <ValType>Validierung: {0}</ValType>
 		// val.message.xml.aztype = <ValType>Erkennung: {0}</ValType>
 		formatValOn = val.replace( "ValType", "FormatValOn" );
 		formatRecOn = rec.replace( "ValType", "FormatRecOn" );
-		Logtxt.logtxt( logFile,				 formatValOn );
-		Logtxt.logtxt( logFile,				 formatRecOn );
+		Logtxt.logtxt( logFile, formatValOn );
+		Logtxt.logtxt( logFile, formatRecOn );
 		Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
 				MESSAGE_XML_INFO, versionKostVal ) );
 		String config = "";
@@ -387,18 +386,17 @@ public class Controllervalinitlog implements MessageConstants
 				+ File.separator + "kost-val.xsl" );
 		File xslCopy = new File( directoryOfLogfile.getAbsolutePath()
 				+ File.separator + "kost-val.xsl" );
-		String xslLog="<!-- kost-val.xsl_v"+versionKostVal+" -->";
-		Boolean oldXslLog=!Util.stringInFile( xslLog, xslCopy );
+		String xslLog = "<!-- kost-val.xsl_v" + versionKostVal + " -->";
+		Boolean oldXslLog = !Util.stringInFile( xslLog, xslCopy );
 		if ( !xslCopy.exists() ) {
 			Util.copyFile( xslOrig, xslCopy );
-		} else if (oldXslLog ){
+		} else if ( oldXslLog ) {
 			Util.copyFile( xslOrig, xslCopy );
 		}
 
 		/*
-		 * Java 64 oder 32 bit? bei 32 dll austauschen wenn nicht bereits
-		 * geschehen Auch 64 kontrollieren, da es ja zwischenzeitlich geaendert
-		 * haben koennte
+		 * Java 64 kontrollieren, da es ja zwischenzeitlich geaendert haben
+		 * koennte
 		 */
 		String java64 = System.getProperty( "sun.arch.data.model" );
 		File PdfValidatorAPIDll = new File(
@@ -414,21 +412,6 @@ public class Controllervalinitlog implements MessageConstants
 		String lengthNow = PdfValidatorAPIDll.length() + "";
 		// System.out.println( PdfValidatorAPIDll.getAbsolutePath() + " " +
 		// lengthNow );
-		File PdfValidatorAPIDll32 = new File(
-				dirOfJarPath + File.separator + "resources" + File.separator
-						+ "3-Heights_PDF-Validator_dll" + File.separator
-						+ "Win32" + File.separator + "PdfValidatorAPI.dll" );
-		if ( !PdfValidatorAPIDll32.exists() ) {
-			String dll32 = (getTextResourceService().getText( locale,
-					ERROR_MISSING, PdfValidatorAPIDll32.getAbsolutePath() ));
-			Logtxt.logtxt( logFile, dll32 );
-			System.out.println( dll32 );
-			valInitlog = false;
-			return valInitlog;
-		}
-		String length32 = PdfValidatorAPIDll32.length() + "";
-		// System.out.println( PdfValidatorAPIDll32.getAbsolutePath() + " " +
-		// length32 );
 		File PdfValidatorAPIDll64 = new File(
 				dirOfJarPath + File.separator + "resources" + File.separator
 						+ "3-Heights_PDF-Validator_dll" + File.separator + "x64"
@@ -444,75 +427,7 @@ public class Controllervalinitlog implements MessageConstants
 		String length64 = PdfValidatorAPIDll64.length() + "";
 		// System.out.println( PdfValidatorAPIDll64.getAbsolutePath() + " " +
 		// length64 );
-		if ( java64.contains( "32" ) ) {
-			if ( !lengthNow.equals( length32 ) ) {
-				if ( !PdfValidatorAPIDll.getParentFile().canWrite() ) {
-					// kein Schreibrecht
-					// Installationsverzeichnis {0}; bestehende {3}-dll "{1}";
-					// neu {4}-dll "{2}"
-					String warning32xml = getTextResourceService().getText(
-							locale, WARNING_JARDIRECTORY_NOTWRITABLEXML,
-							PdfValidatorAPIDll.getParentFile(),
-							PdfValidatorAPIDll.getAbsolutePath(),
-							PdfValidatorAPIDll32.getAbsolutePath(), "64",
-							java64 );
-					Logtxt.logtxt( logFile, warning32xml );
-					String warning32 = getTextResourceService().getText( locale,
-							WARNING_JARDIRECTORY_NOTWRITABLE,
-							PdfValidatorAPIDll.getParentFile(),
-							PdfValidatorAPIDll.getAbsolutePath(),
-							PdfValidatorAPIDll32.getAbsolutePath(), "64",
-							java64 );
-					System.out.println( warning32 );
-					configMap.put( "pdftools", "no" );
-				} else {
-					Util.deleteFile( PdfValidatorAPIDll );
-					if ( PdfValidatorAPIDll.exists() ) {
-						// dll konnte nicht ersetzt werden
-						String warning32xml = getTextResourceService().getText(
-								locale, WARNING_JARDIRECTORY_NOTWRITABLEXML,
-								PdfValidatorAPIDll.getParentFile(),
-								PdfValidatorAPIDll.getAbsolutePath(),
-								PdfValidatorAPIDll32.getAbsolutePath(), "64",
-								java64 );
-						Logtxt.logtxt( logFile, warning32xml );
-						String warning32 = getTextResourceService().getText(
-								locale, WARNING_JARDIRECTORY_NOTWRITABLE,
-								PdfValidatorAPIDll.getParentFile(),
-								PdfValidatorAPIDll.getAbsolutePath(),
-								PdfValidatorAPIDll32.getAbsolutePath(), "64",
-								java64 );
-						System.out.println( warning32 );
-						configMap.put( "pdftools", "no" );
-					} else {
-						Util.copyFile( PdfValidatorAPIDll32,
-								PdfValidatorAPIDll );
-						lengthNow = PdfValidatorAPIDll.length() + "";
-						if ( !lengthNow.equals( length32 ) ) {
-							// dll konnte nicht ersetzt werden
-							String warning32xml = getTextResourceService()
-									.getText( locale,
-											WARNING_JARDIRECTORY_NOTWRITABLEXML,
-											PdfValidatorAPIDll.getParentFile(),
-											PdfValidatorAPIDll
-													.getAbsolutePath(),
-											PdfValidatorAPIDll32
-													.getAbsolutePath(),
-											"64", java64 );
-							Logtxt.logtxt( logFile, warning32xml );
-							String warning32 = getTextResourceService().getText(
-									locale, WARNING_JARDIRECTORY_NOTWRITABLE,
-									PdfValidatorAPIDll.getParentFile(),
-									PdfValidatorAPIDll.getAbsolutePath(),
-									PdfValidatorAPIDll32.getAbsolutePath(),
-									"64", java64 );
-							System.out.println( warning32 );
-							configMap.put( "pdftools", "no" );
-						}
-					}
-				}
-			}
-		} else if ( java64.contains( "64" ) ) {
+		if ( java64.contains( "64" ) ) {
 			if ( !lengthNow.equals( length64 ) ) {
 				if ( !PdfValidatorAPIDll.getParentFile().canWrite() ) {
 					// kein Schreibrecht
@@ -554,27 +469,6 @@ public class Controllervalinitlog implements MessageConstants
 						Util.copyFile( PdfValidatorAPIDll64,
 								PdfValidatorAPIDll );
 						lengthNow = PdfValidatorAPIDll.length() + "";
-						if ( !lengthNow.equals( length32 ) ) {
-							// dll konnte nicht ersetzt werden
-							String warning64xml = getTextResourceService()
-									.getText( locale,
-											WARNING_JARDIRECTORY_NOTWRITABLEXML,
-											PdfValidatorAPIDll.getParentFile(),
-											PdfValidatorAPIDll
-													.getAbsolutePath(),
-											PdfValidatorAPIDll64
-													.getAbsolutePath(),
-											"32", java64 );
-							Logtxt.logtxt( logFile, warning64xml );
-							String warning64 = getTextResourceService().getText(
-									locale, WARNING_JARDIRECTORY_NOTWRITABLE,
-									PdfValidatorAPIDll.getParentFile(),
-									PdfValidatorAPIDll.getAbsolutePath(),
-									PdfValidatorAPIDll64.getAbsolutePath(),
-									"32", java64 );
-							System.out.println( warning64 );
-							configMap.put( "pdftools", "no" );
-						}
 					}
 				}
 			}

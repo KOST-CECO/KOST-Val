@@ -1,8 +1,7 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
- * Submission Information Package (SIP). Copyright (C) Claire Roethlisberger (KOST-CECO),
- * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
- * (coderslagoon), Daniel Ludin (BEDAG AG)
+ * The KOST-Val application is used for validate Files and Submission Information Package (SIP).
+ * Copyright (C) Claire Roethlisberger (KOST-CECO), Christian Eugster, Olivier Debenath,
+ * Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
  * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -39,8 +38,8 @@ public class ConfigControllerOther
 	@FXML
 	private Button	buttonConfigApply, buttonRtf, buttonPptx, buttonDocx,
 			buttonHtml, buttonOgg, buttonSvg, buttonJpm, buttonJpx, buttonMpeg2,
-			buttonArc, buttonWarc, buttonInterlis, buttonDwg, buttonIfc,
-			buttonMsg, buttonDicom, buttonDxf;
+			buttonAvi, buttonArc, buttonWarc, buttonInterlis, buttonDwg,
+			buttonIfc, buttonMsg, buttonDicom, buttonDxf;
 
 	private File	configFile	= new File( System.getenv( "USERPROFILE" )
 			+ File.separator + ".kost-val_2x" + File.separator + "configuration"
@@ -64,7 +63,7 @@ public class ConfigControllerOther
 		String javaVersion = System.getProperty( "java.version" );
 		String javafxVersion = System.getProperty( "javafx.version" );
 		labelConfig.setText(
-				"Copyright © KOST/CECO          KOST-Val v2.1.4.0          JavaFX "
+				"Copyright © KOST/CECO          KOST-Val v2.2.0.0          JavaFX "
 						+ javafxVersion + "   &   Java-" + java6432 + " "
 						+ javaVersion + "." );
 
@@ -152,6 +151,7 @@ public class ConfigControllerOther
 			String noSvg = "<svgvalidation></svgvalidation>";
 			String noOgg = "<oggvalidation></oggvalidation>";
 			String noMpeg2 = "<mpeg2validation></mpeg2validation>";
+			String noAvi = "<avivalidation></avivalidation>";
 			String noHtml = "<htmlvalidation></htmlvalidation>";
 			String noWarc = "<warcvalidation></warcvalidation>";
 			String noArc = "<arcvalidation></arcvalidation>";
@@ -161,6 +161,10 @@ public class ConfigControllerOther
 			String noInterlis = "<interlisvalidation></interlisvalidation>";
 			String noDicom = "<dicomvalidation></dicomvalidation>";
 			String noMsg = "<msgvalidation></msgvalidation>";
+
+			// TODO: bei Controllervalfofile ca Zeile 80 muss die Aenderung
+			// neue oder entfernte Formate nachgetragen werden. Damit das Format
+			// in der Header-Zeile des Logs erscheint.
 
 			if ( config.contains( noDocx ) ) {
 				buttonDocx.setText( "✗" );
@@ -232,6 +236,15 @@ public class ConfigControllerOther
 			} else {
 				buttonMpeg2.setText( "(✓)" );
 				buttonMpeg2.setStyle(
+						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
+			}
+			if ( config.contains( noAvi ) ) {
+				buttonAvi.setText( "✗" );
+				buttonAvi.setStyle(
+						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+			} else {
+				buttonAvi.setText( "(✓)" );
+				buttonAvi.setStyle(
 						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
 			}
 			if ( config.contains( noHtml ) ) {
@@ -518,6 +531,29 @@ public class ConfigControllerOther
 				Util.oldnewstring( az, no, configFile );
 				buttonMpeg2.setText( "✗" );
 				buttonMpeg2.setStyle(
+						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+			}
+		} catch ( IOException e ) {
+			e.printStackTrace();
+		}
+	}
+
+	@FXML
+	void changeAvi( ActionEvent event )
+	{
+		String az = "<avivalidation>AVI </avivalidation>";
+		String no = "<avivalidation></avivalidation>";
+		try {
+			String optButton = buttonAvi.getText();
+			if ( optButton.equals( "✗" ) ) {
+				Util.oldnewstring( no, az, configFile );
+				buttonAvi.setText( "(✓)" );
+				buttonAvi.setStyle(
+						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
+			} else {
+				Util.oldnewstring( az, no, configFile );
+				buttonAvi.setText( "✗" );
+				buttonAvi.setStyle(
 						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
 			}
 		} catch ( IOException e ) {

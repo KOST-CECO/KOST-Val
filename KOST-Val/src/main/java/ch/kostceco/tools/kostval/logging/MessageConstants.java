@@ -1,8 +1,7 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
- * Submission Information Package (SIP). Copyright (C) Claire Roethlisberger (KOST-CECO),
- * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
- * (coderslagoon), Daniel Ludin (BEDAG AG)
+ * The KOST-Val application is used for validate Files and Submission Information Package (SIP).
+ * Copyright (C) Claire Roethlisberger (KOST-CECO), Christian Eugster, Olivier Debenath,
+ * Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
  * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -92,6 +91,8 @@ public interface MessageConstants
 	String	MESSAGE_XML_MODUL_J_PDFA					= "val.message.xml.modul.j.pdfa";
 	String	MESSAGE_XML_MODUL_K_PDFA					= "val.message.xml.modul.k.pdfa";
 
+	String	MESSAGE_XML_MODUL_A_PDF						= "val.message.xml.modul.a.pdf";
+
 	String	MESSAGE_XML_MODUL_A_JP2						= "val.message.xml.modul.a.jp2";
 	String	MESSAGE_XML_MODUL_B_JP2						= "val.message.xml.modul.b.jp2";
 	String	MESSAGE_XML_MODUL_C_JP2						= "val.message.xml.modul.c.jp2";
@@ -113,6 +114,29 @@ public interface MessageConstants
 	String	MESSAGE_XML_MODUL_B_XML						= "val.message.xml.modul.b.xml";
 	String	MESSAGE_XML_MODUL_C_XML						= "val.message.xml.modul.c.xml";
 
+	String	MESSAGE_XML_MODUL_A_FLAC					= "val.message.xml.modul.a.flac";
+	String	MESSAGE_XML_MODUL_B_FLAC					= "val.message.xml.modul.b.flac";
+	String	MESSAGE_XML_MODUL_C_FLAC					= "val.message.xml.modul.c.flac";
+
+	String	MESSAGE_XML_MODUL_A_WAVE					= "val.message.xml.modul.a.wave";
+	String	MESSAGE_XML_MODUL_B_WAVE					= "val.message.xml.modul.b.wave";
+
+	String	MESSAGE_XML_MODUL_A_MP3						= "val.message.xml.modul.a.mp3";
+	String	MESSAGE_XML_MODUL_B_MP3						= "val.message.xml.modul.b.mp3";
+
+	String	MESSAGE_XML_MODUL_A_MKV						= "val.message.xml.modul.a.mkv";
+	String	MESSAGE_XML_MODUL_B_MKV						= "val.message.xml.modul.b.mkv";
+	String	MESSAGE_XML_MODUL_C_MKV						= "val.message.xml.modul.c.mkv";
+	String	MESSAGE_XML_MODUL_D_MKV						= "val.message.xml.modul.d.mkv";
+	String	MESSAGE_XML_MODUL_E_MKV						= "val.message.xml.modul.e.mkv";
+	String	MESSAGE_XML_MODUL_F_MKV						= "val.message.xml.modul.f.mkv";
+	String	MESSAGE_XML_MODUL_G_MKV						= "val.message.xml.modul.g.mkv";
+	String	MESSAGE_XML_MODUL_H_MKV						= "val.message.xml.modul.h.mkv";
+
+	String	MESSAGE_XML_MODUL_A_MP4						= "val.message.xml.modul.a.mp4";
+	String	MESSAGE_XML_MODUL_B_MP4						= "val.message.xml.modul.b.mp4";
+	// String MESSAGE_XML_MODUL_C_MP4 = "val.message.xml.modul.c.mp4";
+
 	String	MESSAGE_XML_MODUL_Aa_SIP					= "val.message.xml.modul.aa.sip";
 	String	MESSAGE_XML_MODUL_Ab_SIP					= "val.message.xml.modul.ab.sip";
 	String	MESSAGE_XML_MODUL_Ac_SIP					= "val.message.xml.modul.ac.sip";
@@ -132,6 +156,7 @@ public interface MessageConstants
 	String	MESSAGE_XML_MODUL_A_AZ						= "val.message.xml.modul.a.az";
 	String	ERROR_XML_A_AZ_INCORRECTFILE				= "val.error.xml.a.az.incorrectfile";
 	String	ERROR_XML_A_NOTAZ							= "val.error.xml.a.notaz";
+	String	ERROR_XML_A_NOTAZ_DROID						= "val.error.xml.a.notaz.droid";
 
 	String	MESSAGE_XML_CONFIGURATION_ERROR_1			= "val.message.xml.configuration.error.1";
 	String	MESSAGE_XML_CONFIGURATION_ERROR_2			= "val.message.xml.configuration.error.2";
@@ -152,6 +177,8 @@ public interface MessageConstants
 	String	MESSAGE_XML_SERVICEINVALID					= "val.message.xml.serviceinvalid";
 	String	MESSAGE_XML_SERVICEMESSAGE					= "val.message.xml.servicemessage";
 
+	String	MESSAGE_WARNING_XML_SIZE					= "val.warning.xml.size";
+
 	// *************TIFF-Meldungen*************************************************************************
 	// Modul A Meldungen --> neu in der Erkennung
 
@@ -161,7 +188,7 @@ public interface MessageConstants
 	// Modul C-G Meldungen
 	String	MESSAGE_XML_CG_CANNOTFINDETREPORT			= "val.message.xml.cg.cannotfindetreport";
 	String	MESSAGE_XML_CG_INVALID						= "val.message.xml.cg.invalid";
-	String	MESSAGE_XML_CG_ETNIO						= "val.message.xml.cg.etnio";
+	String	MESSAGE_XML_CG_JHOVENIO						= "val.message.xml.cg.jhovenio";
 
 	// *************SIARD-Meldungen*************************************************************************
 	// Modul A Meldungen
@@ -240,6 +267,7 @@ public interface MessageConstants
 	String	ERROR_XML_A_PDFTOOLS_ENCRYPTED				= "val.error.xml.a.pdftools.encrypted";
 	String	ERROR_XML_A_PDFTOOLS_DAMAGED				= "val.error.xml.a.pdftools.damaged";
 	String	WARNING_XML_A_PDFA3							= "val.warning.xml.a.pdfa3";
+	String	WARNING_XML_A_SIGNATURE						= "val.warning.xml.a.signature";
 
 	String	ERROR_XML_AI_0								= "val.error.xml.ai.0";
 	String	ERROR_XML_AI_1								= "val.error.xml.ai.1";
@@ -360,6 +388,33 @@ public interface MessageConstants
 	// Modul C Meldungen
 	String	ERROR_XML_C_XML_NOXSDFILE					= "val.error.xml.c.xml.noxsdfile";
 	String	ERROR_XML_C_XML_NOSCHEMA					= "val.error.xml.c.xml.noschema";
+
+	// *************Audio-/Video-Meldungen*************************************************************************
+	// Modul A Meldungen
+	String	ERROR_XML_A_AUDIOVIDEO_FORMAT_NAZ			= "val.error.xml.a.audiovideo.format.naz";
+	String	ERROR_XML_A_AUDIOVIDEO_CODEC_NAZ			= "val.error.xml.a.audiovideo.codec.naz";
+	String	ERROR_XML_A_AUDIOVIDEO_FORMATCODEC			= "val.error.xml.a.audiovideo.formatcodec";
+	String	ERROR_XML_A_AUDIOVIDEO_CODEC_NO				= "val.error.xml.a.audiovideo.codec.no";
+	String	ERROR_XML_A_AUDIOVIDEO_CODEC_NOAUDIO_ERROR	= "val.error.xml.a.audiovideo.codec.noaudio.error";
+	String	ERROR_XML_A_VIDEO_CODEC_NOVIDEO_ERROR		= "val.error.xml.a.video.codec.novideo.error";
+	String	ERROR_XML_A_VIDEO_CODEC_NOVIDEO_WARNING		= "val.error.xml.a.video.codec.novideo.warning";
+	String	ERROR_XML_A_VIDEO_CODEC_NOAUDIO_WARNING		= "val.error.xml.a.video.codec.noaudio.warning";
+
+	// Modul B Meldungen
+	String	ERROR_XML_B_AUDIOVIDEO_ERROR				= "val.error.xml.b.audiovideo.error";
+
+	// Modul C Meldungen
+	String	ERROR_XML_C_FLAC_ERROR						= "val.error.xml.c.flac.error";
+	String	ERROR_XML_C_FLAC_WARNING					= "val.error.xml.c.flac.warning";
+
+	// Modul B-H Meldungen
+	String	ERROR_XML_B_MKV_ERROR						= "val.error.xml.b.mkv.error";
+	String	ERROR_XML_C_MKV_ERROR						= "val.error.xml.c.mkv.error";
+	String	ERROR_XML_D_MKV_ERROR						= "val.error.xml.d.mkv.error";
+	String	ERROR_XML_E_MKV_ERROR						= "val.error.xml.e.mkv.error";
+	String	ERROR_XML_F_MKV_ERROR						= "val.error.xml.f.mkv.error";
+	String	ERROR_XML_G_MKV_ERROR						= "val.error.xml.g.mkv.error";
+	String	ERROR_XML_H_MKV_ERROR						= "val.error.xml.h.mkv.error";
 
 	// *************SIP-Meldungen*************************************************************************
 	// Modul 1a Meldungen

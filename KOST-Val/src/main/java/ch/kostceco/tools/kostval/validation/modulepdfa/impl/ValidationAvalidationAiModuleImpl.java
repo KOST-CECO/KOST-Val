@@ -1,8 +1,7 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
- * Submission Information Package (SIP). Copyright (C) Claire Roethlisberger (KOST-CECO),
- * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
- * (coderslagoon), Daniel Ludin (BEDAG AG)
+ * The KOST-Val application is used for validate Files and Submission Information Package (SIP).
+ * Copyright (C) Claire Roethlisberger (KOST-CECO), Christian Eugster, Olivier Debenath,
+ * Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
  * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -62,10 +61,11 @@ import com.pdftools.Stream;
 import com.pdftools.pdfvalidator.PdfError;
 import com.pdftools.pdfvalidator.PdfValidatorAPI;
 
+import ch.kostceco.tools.kosttools.fileservice.egovdv;
 import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kosttools.util.UtilCallas;
 import ch.kostceco.tools.kosttools.util.UtilCharacter;
-import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfvalidationException;
+import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfavalidationException;
 import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationAvalidationAiModule;
@@ -88,6 +88,9 @@ import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationAvalidationAiMo
  * Tools und oder callas. Die Fehler werden den Einzelnen Gruppen (Modulen)
  * zugeordnet
  * 
+ * Direkt nach der Erkennung wird noch ausgegeben ob signaturen enthalten sind
+ * oder nicht
+ * 
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
 
@@ -102,7 +105,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile,
 			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws ValidationApdfvalidationException
+			String dirOfJarPath ) throws ValidationApdfavalidationException
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
@@ -373,6 +376,121 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 		Logtxt.logtxt( logFile, "<FormatVL>-" + level + "</FormatVL>" );
 
 		// Die Erkennung erfolgt bereits im Vorfeld
+
+		// TODO: Ermittlung ob Signaturen enthalten sind
+		File workDir2 = new File( pathToWorkDir );
+		if ( !workDir2.exists() ) {
+			workDir2.mkdir();
+		}
+		File outputList = new File(
+				pathToWorkDir + File.separator + "egovdvList.txt" );
+		// falls das File von einem vorhergehenden Durchlauf bereits
+		// existiert, loeschen wir es
+		if ( outputList.exists() ) {
+			outputList.delete();
+		}
+
+		boolean isValidSig = true;
+
+		// - Initialisierung egovdv -> existiert alles zu egovdv?
+
+		// Pfad zum Programm existiert die Dateien?
+		String checkTool = egovdv.checkEgovdv( dirOfJarPath );
+		if ( !checkTool.equals( "OK" ) ) {
+			if ( min ) {
+				return false;
+			} else {
+				Logtxt.logtxt( logFile, getTextResourceService()
+						.getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+						+ getTextResourceService().getText( locale,
+								MESSAGE_XML_MISSING_FILE, checkTool, "" ) );
+				isValidSig = false;
+			}
+		} else {
+			// egovdv sollte vorhanden sein
+
+			try {
+				Integer countSig = egovdv.execEgovdvCountSig( valDatei,
+						workDir2, dirOfJarPath );
+				/*
+				 * Gibt mit egovdv via cmd die Anzahl Signaturen in pdf aus
+				 * 
+				 * 0 = keine Signatur
+				 * 
+				 * 999 = Fehler: Es existiert nicht alles zu egovdv
+				 * 
+				 * 998 = Fehler: Exception oder Report existiert nicht
+				 * 
+				 * 997 = Fehler: Die ersten beiden Zeilen zu egovdv fehlen
+				 * 
+				 * 996 = Fehler: Exception UNKNOWN Catch
+				 * 
+				 * @return Integer mit der Anzahl Signaturen
+				 */
+				if ( countSig == 999 ) {
+					// 999 = Fehler: Es existiert nicht alles zu egovdv
+
+					/*
+					 * Wurde bereits abgefragt Logtxt.logtxt( logFile,
+					 * getTextResourceService() .getText( locale,
+					 * MESSAGE_XML_MODUL_A_PDFA ) +
+					 * getTextResourceService().getText( locale,
+					 * MESSAGE_XML_MISSING_FILE, checkTool, "" ) ); isValidSig =
+					 * false;
+					 */
+
+				} else if ( countSig == 998 ) {
+					// 998 = Fehler: Exception oder Report existiert nicht
+					if ( min ) {
+						// return false;
+						isValidSig = false;
+					} else {
+						isValidSig = false;
+						// Erster Fehler! Meldung A ausgeben und Sig invalid
+						// setzten
+						Logtxt.logtxt( logFile, getTextResourceService()
+								.getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+								+ getTextResourceService().getText( locale,
+										MESSAGE_XML_SERVICEINVALID, "egovdv",
+										"" ) );
+					}
+				} else if ( countSig == 997 ) {
+					isValidSig = false;
+					// die ersten beiden Zeilen fehlen
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_A_PDFA )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_SERVICEFAILED, "egovdv",
+											"missing lines" ) );
+				} else if ( countSig == 996 ) {
+					isValidSig = false;
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_A_PDFA )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_UNKNOWN,
+											"egovdv: catch-Error" ) );
+				} else if ( countSig == 0 ) {
+					// keine Signature
+				} else {
+					// Warnung mit Anzahl Signaturen ausgeben
+					Logtxt.logtxt( logFile, getTextResourceService()
+							.getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+							+ getTextResourceService().getText( locale,
+									WARNING_XML_A_SIGNATURE, countSig ) );
+				}
+			} catch ( Exception e ) {
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_A_PDFA )
+								+ getTextResourceService().getText( locale,
+										ERROR_XML_UNKNOWN,
+										"egovdv: " + e.getMessage() ) );
+				return false;
+			}
+		}
+		// TODO: Ende Ermittlung ob Signaturen enthalten sind
 
 		boolean isValid = false;
 		boolean isValidPdftools = true;
@@ -1859,7 +1977,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 				try {
 					// Initialisierung callas -> existiert pdfaPilot in den
 					// resources?
-					String folderCallas = "callas_pdfaPilotServer_x64_Win_12-2-366_cli";
+					String folderCallas = "callas_pdfaPilotServer_x64_Win_12-4-372_cli";
 					/*
 					 * Update von Callas: callas_pdfaPilotServer_Win_...-Version
 					 * herunterladen, installieren, odner im Workbench
@@ -1933,6 +2051,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					}
 					File valDateiNormalisiert = new File(
 							workDir + File.separator + "callas.pdf" );
+					File valDateiNormalisiertDel = valDateiNormalisiert;
 					try {
 						Util.copyFile( valDatei, valDateiNormalisiert );
 					} catch ( IOException e ) {
@@ -1942,7 +2061,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					if ( !valDateiNormalisiert.exists() ) {
 						valDateiNormalisiert = valDatei;
 					}
-					
+
 					String valPath = valDateiNormalisiert.getAbsolutePath();
 					String reportPath = report.getAbsolutePath();
 
@@ -2137,6 +2256,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 						} else {
 							isValid = false;
 							callasServiceFailed = true;
+						}
+						
+						if ( valDateiNormalisiertDel.exists() ) {
+							valDateiNormalisiertDel.delete();
 						}
 
 						// Ende callas direkt auszuloesen
@@ -2359,9 +2482,129 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 											.readLine() ) {
 								int index = 0;
 
-								line = line.replace( "ß", "ss" );
-								line = line.replace( "�", "ss" );
+								line = line.replace( "â€“", "-" );
+								line = line.replace( "â€”", "-" );
+								line = line.replace( "â€˜", "'" );
+								line = line.replace( "â€™", "'" );
+								line = line.replace( "â€š", "," );
+								line = line.replace( "â€œ", "'" );
+								line = line.replace( "â€?", "'" );
+								line = line.replace( "â€ž", "'" );
+								line = line.replace( "â€¢", "-" );
+								line = line.replace( "â€°", "‰" );
+								line = line.replace( "â€¹", "<" );
+								line = line.replace( "â€º", ">" );
+								line = line.replace( "â‚¬", "E" );
+								line = line.replace( "â„¢", "TM" );
+								line = line.replace( "â€“", "–" );
+								line = line.replace( "a€™", "'" );
+								line = line.replace( "Ãoe", "Ue" );
 
+								line = line.replace( "Ã´", "o" );
+								line = line.replace( "Å¡", "s" );
+								line = line.replace( "Ã¶", "o" );
+								line = line.replace( "Ãº", "u" );
+								line = line.replace( "Å¤", "?" );
+								line = line.replace( "Ã¼", "u" );
+								line = line.replace( "Å¥", "?" );
+								line = line.replace( "Â©", "(c) " );
+								line = line.replace( "Ã½", "y" );
+								line = line.replace( "Å®", "U" );
+								line = line.replace( "Â«", "'" );
+								line = line.replace( "Ä‚", "A" );
+								line = line.replace( "Å¯", "u" );
+								line = line.replace( "Äƒ", "a" );
+								line = line.replace( "Å°", "U" );
+								line = line.replace( "Â-", "-" );
+								line = line.replace( "Ä„", "Y" );
+								line = line.replace( "Å±", "u" );
+								line = line.replace( "Â®", "(R) " );
+								line = line.replace( "Ä…", "1" );
+								line = line.replace( "Å¹", "?" );
+								line = line.replace( "Ä†", "Ae" );
+								line = line.replace( "Åº", "Y" );
+								line = line.replace( "Â±", "+-" );
+								line = line.replace( "Ä‡", "ae" );
+								line = line.replace( "ÄŒ", "E" );
+								line = line.replace( "Å¼", "?" );
+								line = line.replace( "Âµ", "u" );
+								line = line.replace( "Ä?", "e" );
+								line = line.replace( "Å½", "Z" );
+								line = line.replace( "ÄŽ", "I" );
+								line = line.replace( "Å¾", "z" );
+								line = line.replace( "Â·", "" );
+								line = line.replace( "Ä?", "I" );
+								line = line.replace( "Ë‡", "i" );
+								line = line.replace( "Â¸", "" );
+								line = line.replace( "Ä?", "D" );
+								line = line.replace( "Ë˜", "c" );
+								line = line.replace( "Â»", "'" );
+								line = line.replace( "Ä‘", "d" );
+								line = line.replace( "Ë™", "y" );
+								line = line.replace( "Ã?", "A" );
+								line = line.replace( "Ä˜", "E" );
+								line = line.replace( "Ë›", "2" );
+								line = line.replace( "Ã‚", "A" );
+								line = line.replace( "Ä™", "e" );
+								line = line.replace( "Ë?", "1/2" );
+								line = line.replace( "Ã„", "Ae" );
+								line = line.replace( "Äš", "I" );
+								line = line.replace( "Ã‡", "C" );
+								line = line.replace( "Ä›", "i" );
+								line = line.replace( "Ã‰", "E" );
+								line = line.replace( "Ä¹", "A" );
+								line = line.replace( "Ã‹", "E" );
+								line = line.replace( "Äº", "a" );
+								line = line.replace( "Ã?", "I" );
+								line = line.replace( "Ä½", "1/4" );
+								line = line.replace( "ÃŽ", "I" );
+								line = line.replace( "Ä¾", "3/4" );
+								line = line.replace( "Ã“", "O" );
+								line = line.replace( "Å?", "L" );
+								line = line.replace( "Ã”", "O" );
+								line = line.replace( "Å‚", "3" );
+								line = line.replace( "Ã–", "Oe" );
+								line = line.replace( "Åƒ", "N" );
+								line = line.replace( "Ã—", "x" );
+								line = line.replace( "Å„", "n" );
+								line = line.replace( "Ãš", "U" );
+								line = line.replace( "Å‡", "O" );
+								line = line.replace( "Ãœ", "Ue" );
+								line = line.replace( "Åˆ", "o" );
+								line = line.replace( "Ã?", "Y" );
+								line = line.replace( "Å?", "O" );
+								line = line.replace( "ÃŸ", "ss" );
+								line = line.replace( "Å‘", "o" );
+								line = line.replace( "Ã¡", "a" );
+								line = line.replace( "Å”", "A" );
+								line = line.replace( "Ã¢", "a" );
+								line = line.replace( "Å•", "a" );
+								line = line.replace( "Ã¤", "ae" );
+								line = line.replace( "Å˜", "O" );
+								line = line.replace( "Ã§", "c" );
+								line = line.replace( "Å™", "o" );
+								line = line.replace( "Ã©", "e" );
+								line = line.replace( "Åš", "Oe" );
+								line = line.replace( "Ã«", "e" );
+								line = line.replace( "Å›", "oe" );
+								line = line.replace( "Ã-", "i" );
+								line = line.replace( "Åž", "a" );
+								line = line.replace( "Ã®", "i" );
+								line = line.replace( "ÅŸ", "o" );
+								line = line.replace( "Ã³", "o" );
+								line = line.replace( "Ã¨", "e" );
+								line = line.replace( "Ãª", "e" );
+								line = line.replace( "Ã¬", "i" );
+								line = line.replace( "Ã¯", "i" );
+								line = line.replace( "Ã¶", "oe" );
+								line = line.replace( "Ã¹", "u" );
+								line = line.replace( "Ã»", "u" );
+								line = line.replace( "Ã¼", "ue" );
+
+								line = line.replace( "Â", " " );
+								line = line.replace( "Å", "S" );
+								line = line.replace( "Ã", "a" );
+								line = line.replace( "ß", "ss" );
 								line = line.replace( "Ä", "Ae" );
 								line = line.replace( "‘", "'" );
 								line = line.replace( "’", "'" );
@@ -2388,36 +2631,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								line = line.replace( "ú", "u" );
 								line = line.replace( "û", "u" );
 								line = line.replace( "ü", "ue" );
-								line = line.replace( "�", "a" );
-
-								line = line.replace( "�", "Ae" );
-								line = line.replace( "��", "'" );
-								line = line.replace( "�", "'" );
-								line = line.replace( "�", "O" );
-								line = line.replace( "�", "O" );
-								line = line.replace( "�", "O" );
-								line = line.replace( "�", "Oe" );
-								line = line.replace( "�", "oe" );
-								line = line.replace( "�", "Ue" );
-								line = line.replace( "�", "a" );
-								line = line.replace( "�", "a" );
-								line = line.replace( "�", "ae" );
-								line = line.replace( "�", "c" );
-								line = line.replace( "�", "e" );
-								line = line.replace( "�", "e" );
-								line = line.replace( "�", "e" );
-								line = line.replace( "�", "e" );
-								line = line.replace( "�", "i" );
-								line = line.replace( "�", "i" );
-								line = line.replace( "�", "i" );
-								line = line.replace( "�", "i" );
-								line = line.replace( "�", "oe" );
-								line = line.replace( "�", "u" );
-								line = line.replace( "�", "u" );
-								line = line.replace( "�", "u" );
-								line = line.replace( "�", "ue" );
-								line = line.replace( "�", "a" );
-								line = line.replace( "a��", "'" );
+								line = line.replace( "à", "a" );
 
 								/*
 								 * Die Linien (Fehlermeldung von Callas) anhand
@@ -2451,12 +2665,15 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 									}
 
 									String callasAwarningDE = "Ungueltige PDF/A-Versionsnummer (muss \"2\" sein) [callas] ";
+									String callasAwarningDE2 = "Ungultige PDF/A-Versionsnummer (muss \"2\" sein) [callas] ";
 									String callasAwarningFR = "Numero de version PDF/A incorrect (doit etre 2) [callas] ";
 									String callasAwarningIT = "Numero di versione PDF/A scorretto (deve essere 2) [callas] ";
 									String callasAwarningEN = "Incorrect PDF/A version number (must be 2) [callas] ";
 									if ( warning3to2.equalsIgnoreCase( "yes" )
 											&& (line.contains(
 													callasAwarningDE )
+													|| line.contains(
+															callasAwarningDE2 )
 													|| line.contains(
 															callasAwarningFR )
 													|| line.contains(
@@ -3163,7 +3380,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 				isValid = false;
 			}
 		}
-		if ( !isValidFont || !isValidJ ) {
+		if ( !isValidFont || !isValidJ || !isValidSig ) {
 			isValid = false;
 		}
 

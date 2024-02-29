@@ -1,7 +1,0 @@
-# Index created by AutoSplit for blib\lib\Crypt\CAST5_PP.pm
-#    (file acts as timestamp)
-package Crypt::CAST5_PP;
-sub init  ;
-sub encrypt  ;
-sub decrypt  ;
-1;
