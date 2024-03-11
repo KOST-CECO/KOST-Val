@@ -75,6 +75,7 @@ public class Validation3aFormatRecognitionModuleImpl extends
 		String mkvValidation = configMap.get( "mkvValidation" );
 		String mp4Validation = configMap.get( "mp4Validation" );
 		String xmlValidation = configMap.get( "xmlValidation" );
+		String jsonValidation = configMap.get( "jsonValidation" );
 		String siardValidation = configMap.get( "siardValidation" );
 		String csvValidation = configMap.get( "csvValidation" );
 		String xlsxValidation = configMap.get( "xlsxValidation" );
@@ -154,9 +155,9 @@ public class Validation3aFormatRecognitionModuleImpl extends
 		}
 		if ( !mkvValidation.equals( "no" ) ) {
 			if ( formatValOn.equals( "" ) ) {
-				formatValOn = " FFV1 ";
+				formatValOn = " MKV ";
 			} else {
-				formatValOn = formatValOn + " FFV1 ";
+				formatValOn = formatValOn + " MKV ";
 			}
 		}
 		if ( !mp4Validation.equals( "no" ) ) {
@@ -171,6 +172,13 @@ public class Validation3aFormatRecognitionModuleImpl extends
 				formatValOn = " XML ";
 			} else {
 				formatValOn = formatValOn + " XML ";
+			}
+		}
+		if ( !jsonValidation.equals( "no" ) ) {
+			if ( formatValOn.equals( "" ) ) {
+				formatValOn = " JSON ";
+			} else {
+				formatValOn = formatValOn + " JSON ";
 			}
 		}
 		if ( !siardValidation.equals( "no" ) ) {
@@ -244,6 +252,15 @@ public class Validation3aFormatRecognitionModuleImpl extends
 				if ( formatValOnCtr.contains( "PDF/A" ) ) {
 					formatValOnCtr = formatValOnCtr.replace( "PDF/A", "PDFA" );
 				}
+				if ( formatValOnCtr.contains( "," ) ) {
+					formatValOnCtr = formatValOnCtr.replace( ",", " " );
+				}
+				if ( formatValOnCtr.contains( "\n" ) ) {
+					formatValOnCtr = formatValOnCtr.replace( "\n", " " );
+				}
+				if ( formatValOnCtr.contains( "\t" ) ) {
+					formatValOnCtr = formatValOnCtr.replace( "\t", " " );
+				}
 
 				String recFormatSpace = " " + recFormat + " ";
 
@@ -265,14 +282,14 @@ public class Validation3aFormatRecognitionModuleImpl extends
 								MESSAGE_XML_MODUL_Cb_SIP )
 								+ getTextResourceService().getText( locale,
 										MESSAGE_XML_SERVICEMESSAGE, contentPath,
-										"(" + recFormat + ")" );
+										" (" + recFormat + ")" );
 					} else {
 						error3b = error3b + " "
 								+ getTextResourceService().getText( locale,
 										MESSAGE_XML_MODUL_Cb_SIP )
 								+ getTextResourceService().getText( locale,
 										MESSAGE_XML_SERVICEMESSAGE, contentPath,
-										"(" + recFormat + ")" );
+										" (" + recFormat + ")" );
 					}
 					valid = false;
 				}
