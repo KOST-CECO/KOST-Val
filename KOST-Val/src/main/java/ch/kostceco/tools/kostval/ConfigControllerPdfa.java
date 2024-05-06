@@ -67,7 +67,7 @@ public class ConfigControllerPdfa
 		String javaVersion = System.getProperty( "java.version" );
 		String javafxVersion = System.getProperty( "javafx.version" );
 		labelConfig.setText(
-				"Copyright © KOST/CECO          KOST-Val v2.2.0.0          JavaFX "
+				"Copyright © KOST/CECO          KOST-Val v2.2.0.1          JavaFX "
 						+ javafxVersion + "   &   Java-" + java6432 + " "
 						+ javaVersion + "." );
 
@@ -109,7 +109,7 @@ public class ConfigControllerPdfa
 				labelOtherPdfa.setText( "Altro" );
 				labelVersion.setText( "Versioni" );
 				labelVal.setText( "Parametro di convalida: PDF/A" );
-				buttonConfigApply.setText( "Applicare" );
+				buttonConfigApply.setText( "Applica" );
 				minOne = "Almeno una variante deve essere consentita!";
 			} else {
 				labelOtherPdfa.setText( "Other" );

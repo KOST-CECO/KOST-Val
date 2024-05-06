@@ -1,8 +1,8 @@
 KOST-Val
 ========
 
-The KOST-Val application is used for validate PDF/A, JP2, JPEG, TIFF, PNG, FLAC,
-MKV, XML, SIARD-Files and Submission Information Package (SIP).
+The KOST-Val application is used for validate Files and 
+Submission Information Package (SIP).
 
 KOST-Val, Copyright (C) 2012-2024 Claire Roethlisberger (KOST-CECO), 
 Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau),

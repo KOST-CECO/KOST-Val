@@ -725,9 +725,37 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 						}
 
 						// Write font validation information
+						boolean fontReportFailed = true;
 						FileStream fs = new FileStream( fontReport, "rw" );
 						Stream xmlStream = fs;
-						if ( !docPdf.writeFontValidationXML( xmlStream ) ) {
+						boolean docPdfXML = false;
+						try {
+							docPdfXML = docPdf
+									.writeFontValidationXML( xmlStream );
+						} catch ( Error e2 ) {
+							Logtxt.logtxt( logFile, getTextResourceService()
+									.getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_UNKNOWN,
+											"Failed to write font validation information (error): "
+													+ e2.getMessage() ) );
+						} catch ( IllegalArgumentException
+								| SecurityException e ) {
+							Logtxt.logtxt( logFile, getTextResourceService()
+									.getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_UNKNOWN,
+											"Failed to write font validation information (exception): "
+													+ e.getMessage() ) );
+						} catch ( Exception ex ) {
+							Logtxt.logtxt( logFile, getTextResourceService()
+									.getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_UNKNOWN,
+											"Failed to write font validation information: "
+													+ ex.getMessage() ) );
+						}
+						if ( !docPdfXML ) {
 							// throw new
 							// Exception(String.format("Failed to write font
 							// validation information: %s",
@@ -739,212 +767,208 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 						fs.close();
 						// set to null
 						fs = null;
+						fontReportFailed = false;
+
+						if ( !fontReportFailed ) {
+							long length = 99999;
+							length = fontReport.length();
+							if ( 10 > length ) {
+								// System.out.println( "Warnung ausgeben" );
+								Logtxt.logtxt( logFile, getTextResourceService()
+										.getText( locale,
+												MESSAGE_XML_MODUL_A_PDFA )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_UNKNOWN,
+												"Failed to write font validation information" ) );
+								fontReportFailed = true;
+
+							} else {
+								fontReportFailed = false;
+							}
+						}
 
 						// TODO erledigt: Start der Font-Auswertung betreffend
 						// unbekannt und undefiniert
-						try {
-							FileChannel inputChannel = null;
-							FileChannel outputChannel = null;
-							FileInputStream fis = null;
-							FileOutputStream fos = null;
+
+						if ( !fontReportFailed ) {
 							try {
-								fis = new FileInputStream( fontReport );
-								inputChannel = fis.getChannel();
-								fos = new FileOutputStream( fontReportError );
-								outputChannel = fos.getChannel();
-								outputChannel.transferFrom( inputChannel, 0,
-										inputChannel.size() );
-							} finally {
-								inputChannel.close();
-								outputChannel.close();
-								// set to null
-								inputChannel = null;
-								outputChannel = null;
-							}
-							fis.close();
-							fos.close();
-							// set to null
-							fis = null;
-							fos = null;
-						} catch ( Exception e ) {
-
-							Logtxt.logtxt( logFile, getTextResourceService()
-									.getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-									+ getTextResourceService().getText( locale,
-											ERROR_XML_UNKNOWN,
-											"Exec PDF Tools FileChannel: "
-													+ e.getMessage() ) );
-							return false;
-						}
-
-						Document doc = null;
-						Document docError = null;
-
-						BufferedInputStream bis = new BufferedInputStream(
-								new FileInputStream( fontReportError ) );
-						DocumentBuilderFactory dbf = DocumentBuilderFactory
-								.newInstance();
-						DocumentBuilder db = dbf.newDocumentBuilder();
-						doc = db.parse( bis );
-						doc.normalize();
-
-						// <characterCount>122</characterCount>
-						// <characterUnknown>0</characterUnknown>
-						// <characterUnknownPercentage>0</characterUnknownPercentage>
-						// <characterUndefined>122</characterUndefined>
-						// <characterUndefinedPercentage>100</characterUndefinedPercentage>
-
-						String elementCount = doc
-								.getElementsByTagName( "characterCount" )
-								.item( 0 ).getTextContent();
-						int count = Integer.valueOf( elementCount );
-						String elementUnknown = doc
-								.getElementsByTagName( "characterUnknown" )
-								.item( 0 ).getTextContent();
-						// int unknown=Integer.valueOf( elementUnknown );
-						String elementUnknownP = doc
-								.getElementsByTagName(
-										"characterUnknownPercentage" )
-								.item( 0 ).getTextContent();
-						double unknownPdouble = Double
-								.valueOf( elementUnknownP );
-						String elementUndefined = doc
-								.getElementsByTagName( "characterUndefined" )
-								.item( 0 ).getTextContent();
-						// int undefined=Integer.valueOf( elementUndefined );
-						String elementUndefinedP = doc
-								.getElementsByTagName(
-										"characterUndefinedPercentage" )
-								.item( 0 ).getTextContent();
-						double undefinedPdouble = Double
-								.valueOf( elementUndefinedP );
-						double elementTolerance = unknownPdouble
-								+ undefinedPdouble;
-						String docInfo = nodeToString( doc
-								.getElementsByTagName( "docInfo" ).item( 0 ) );
-						String docInfoCharacterCount = docInfo
-								+ "<characterCount>" + elementCount
-								+ "</characterCount>";
-						docInfoCharacterCount = docInfoCharacterCount
-								.replaceAll( "\n  ", "" );
-						docInfoCharacterCount = docInfoCharacterCount
-								.replaceAll( "\n ", "" );
-						docInfoCharacterCount = docInfoCharacterCount
-								.replaceAll( "\n", "" );
-						docInfoCharacterCount = docInfoCharacterCount
-								.replaceAll( "\n  ", "" );
-						docInfoCharacterCount = docInfoCharacterCount
-								.replaceAll( "\n ", "" );
-						docInfoCharacterCount = docInfoCharacterCount
-								.replaceAll( "\n", "" );
-
-						if ( elementUnknown.equals( "0" )
-								&& elementUndefined.equals( "0" ) ) {
-							if ( fontYesNo.equalsIgnoreCase( "only" ) ) {
-								// Modul K bestanden
-
-								/*
-								 * Bei only wird in Log_Modul_K.txt die Dateien,
-								 * hereingeschrieben, welche die Strikte
-								 * Validierung nicht bestanden haben. Dies ist
-								 * hier nicht der Fall. Entsprechend wird mit
-								 * return true die Validierung beendet
-								 */
-								return false;
-							} else {
-								// Modul K bestanden
-
-								// <docInfo> und <characterCount> auf eine Zeile
-								// ausgeben
-								if ( min ) {
-								} else {
-									Logtxt.logtxt( logFile,
-											docInfoCharacterCount );
+								FileChannel inputChannel = null;
+								FileChannel outputChannel = null;
+								FileInputStream fis = null;
+								FileOutputStream fos = null;
+								try {
+									fis = new FileInputStream( fontReport );
+									inputChannel = fis.getChannel();
+									fos = new FileOutputStream(
+											fontReportError );
+									outputChannel = fos.getChannel();
+									outputChannel.transferFrom( inputChannel, 0,
+											inputChannel.size() );
+								} finally {
+									inputChannel.close();
+									outputChannel.close();
+									// set to null
+									inputChannel = null;
+									outputChannel = null;
 								}
+								fis.close();
+								fos.close();
+								// set to null
+								fis = null;
+								fos = null;
+							} catch ( Exception e ) {
+
+								Logtxt.logtxt( logFile, getTextResourceService()
+										.getText( locale,
+												MESSAGE_XML_MODUL_A_PDFA )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_UNKNOWN,
+												"Exec PDF Tools FileChannel: "
+														+ e.getMessage() ) );
+								return false;
 							}
-						} else {
-							// Modul K evtl nicht bestanden
-							try {
+
+							Document doc = null;
+							Document docError = null;
+
+							BufferedInputStream bis = new BufferedInputStream(
+									new FileInputStream( fontReportError ) );
+							DocumentBuilderFactory dbf = DocumentBuilderFactory
+									.newInstance();
+							DocumentBuilder db = dbf.newDocumentBuilder();
+							doc = db.parse( bis );
+							doc.normalize();
+
+							// <characterCount>122</characterCount>
+							// <characterUnknown>0</characterUnknown>
+							// <characterUnknownPercentage>0</characterUnknownPercentage>
+							// <characterUndefined>122</characterUndefined>
+							// <characterUndefinedPercentage>100</characterUndefinedPercentage>
+
+							String elementCount = doc
+									.getElementsByTagName( "characterCount" )
+									.item( 0 ).getTextContent();
+							int count = Integer.valueOf( elementCount );
+							String elementUnknown = doc
+									.getElementsByTagName( "characterUnknown" )
+									.item( 0 ).getTextContent();
+							// int unknown=Integer.valueOf( elementUnknown );
+							String elementUnknownP = doc
+									.getElementsByTagName(
+											"characterUnknownPercentage" )
+									.item( 0 ).getTextContent();
+							double unknownPdouble = Double
+									.valueOf( elementUnknownP );
+							String elementUndefined = doc
+									.getElementsByTagName(
+											"characterUndefined" )
+									.item( 0 ).getTextContent();
+							// int undefined=Integer.valueOf( elementUndefined
+							// );
+							String elementUndefinedP = doc
+									.getElementsByTagName(
+											"characterUndefinedPercentage" )
+									.item( 0 ).getTextContent();
+							double undefinedPdouble = Double
+									.valueOf( elementUndefinedP );
+							double elementTolerance = unknownPdouble
+									+ undefinedPdouble;
+							String docInfo = nodeToString(
+									doc.getElementsByTagName( "docInfo" )
+											.item( 0 ) );
+							String docInfoCharacterCount = docInfo
+									+ "<characterCount>" + elementCount
+									+ "</characterCount>";
+							docInfoCharacterCount = docInfoCharacterCount
+									.replaceAll( "\n  ", "" );
+							docInfoCharacterCount = docInfoCharacterCount
+									.replaceAll( "\n ", "" );
+							docInfoCharacterCount = docInfoCharacterCount
+									.replaceAll( "\n", "" );
+							docInfoCharacterCount = docInfoCharacterCount
+									.replaceAll( "\n  ", "" );
+							docInfoCharacterCount = docInfoCharacterCount
+									.replaceAll( "\n ", "" );
+							docInfoCharacterCount = docInfoCharacterCount
+									.replaceAll( "\n", "" );
+
+							if ( elementUnknown.equals( "0" )
+									&& elementUndefined.equals( "0" ) ) {
 								if ( fontYesNo.equalsIgnoreCase( "only" ) ) {
-									// only=strict -> Modul K nicht bestanden
+									// Modul K bestanden
 
 									/*
 									 * Bei only wird in Log_Modul_K.txt die
 									 * Dateien, hereingeschrieben, welche die
 									 * Strikte Validierung nicht bestanden
-									 * haben. Danach wird mit return false die
+									 * haben. Dies ist hier nicht der Fall.
+									 * Entsprechend wird mit return true die
 									 * Validierung beendet
 									 */
-									String modulKFilePath = directoryOfLogfile
-											.getAbsolutePath() + File.separator
-											+ "Log_Modul_K.txt";
-									String line = valDatei.getAbsolutePath()
-											+ " ";
-									Files.write( Paths.get( modulKFilePath ),
-											line.getBytes(),
-											StandardOpenOption.APPEND );
 									return false;
-								} else if ( fontYesNo
-										.equalsIgnoreCase( "tolerant" ) ) {
-									/*
-									 * Ausnahmen ermitteln und abfangen bei
-									 * tolerant:
-									 * 
-									 * A) max 5 Zeichen
-									 * 
-									 * B) Undefinierte Zeichen ignorieren wenn
-									 * Maengel<=20%
-									 * 
-									 * C) Bekannte Abstaende und
-									 * Aufzaehlungszeichen ignorieren
-									 * 
-									 * D) Symbol-Schriften ignorieren
-									 * 
-									 * E) Wenn am Schluss nur noch max 4 Zeichen
-									 * bemaengelt werden
-									 */
-									if ( count <= 5 ) {
-										/*
-										 * => A) max 5 Zeichen
-										 * 
-										 * -> Modul K bestanden, keine
-										 * Auswertung noetig
-										 * 
-										 * <docInfo> und <characterCount> auf
-										 * eine Zeile ausgeben
-										 */
-										if ( min ) {
-										} else {
-											Logtxt.logtxt( logFile,
-													docInfoCharacterCount );
-										}
-									} else {
-										double tolerance = 20.000;
-										fontErrorIgnor = "I";
-										if ( tolerance > elementTolerance ) {
-											// elementTolerance = unknownPdouble
-											// + undefinedPdouble;
-											// toleranzschwelle nicht
-											// ueberschritten
-											// undefiniertes kann bei tolerant
-											// ignoriert werden
-											ignorUndefinied = true;
-										} else {
-											// toleranzschwelle ueberschritten
-											// -> Modul K nicht bestanden
-											ignorUndefinied = false;
-											fontErrorIgnor = "E";
-										}
+								} else {
+									// Modul K bestanden
 
-										if ( elementUnknown.equals( "0" )
-												&& ignorUndefinied ) {
+									// <docInfo> und <characterCount> auf eine
+									// Zeile
+									// ausgeben
+									if ( min ) {
+									} else {
+										Logtxt.logtxt( logFile,
+												docInfoCharacterCount );
+									}
+								}
+							} else {
+								// Modul K evtl nicht bestanden
+								try {
+									if ( fontYesNo
+											.equalsIgnoreCase( "only" ) ) {
+										// only=strict -> Modul K nicht
+										// bestanden
+
+										/*
+										 * Bei only wird in Log_Modul_K.txt die
+										 * Dateien, hereingeschrieben, welche
+										 * die Strikte Validierung nicht
+										 * bestanden haben. Danach wird mit
+										 * return false die Validierung beendet
+										 */
+										String modulKFilePath = directoryOfLogfile
+												.getAbsolutePath()
+												+ File.separator
+												+ "Log_Modul_K.txt";
+										String line = valDatei.getAbsolutePath()
+												+ " ";
+										Files.write(
+												Paths.get( modulKFilePath ),
+												line.getBytes(),
+												StandardOpenOption.APPEND );
+										return false;
+									} else if ( fontYesNo
+											.equalsIgnoreCase( "tolerant" ) ) {
+										/*
+										 * Ausnahmen ermitteln und abfangen bei
+										 * tolerant:
+										 * 
+										 * A) max 5 Zeichen
+										 * 
+										 * B) Undefinierte Zeichen ignorieren
+										 * wenn Maengel<=20%
+										 * 
+										 * C) Bekannte Abstaende und
+										 * Aufzaehlungszeichen ignorieren
+										 * 
+										 * D) Symbol-Schriften ignorieren
+										 * 
+										 * E) Wenn am Schluss nur noch max 4
+										 * Zeichen bemaengelt werden
+										 */
+										if ( count <= 5 ) {
 											/*
-											 * => B) Undefinierte Zeichen
-											 * ignorieren wenn Maengel<=20%
+											 * => A) max 5 Zeichen
 											 * 
 											 * -> Modul K bestanden, keine
-											 * Auswertung noetig da nur
-											 * undefiniertes
+											 * Auswertung noetig
 											 * 
 											 * <docInfo> und <characterCount>
 											 * auf eine Zeile ausgeben
@@ -955,673 +979,754 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 														docInfoCharacterCount );
 											}
 										} else {
-											// weiter auswerten
-											NodeList nodeCharacterLst = doc
-													.getElementsByTagName(
-															"character" );
-											Set<Node> targetNode = new HashSet<Node>();
-
-											for ( int s = 0; s < nodeCharacterLst
-													.getLength(); s++ ) {
-												// unnoetige character aus log
-												// loeschen
-												boolean charUndef = false;
-												boolean unicode = false;
-												Node charNode = nodeCharacterLst
-														.item( s );
-
-												if ( charNode
-														.hasAttributes() ) {
-													NamedNodeMap attrs = charNode
-															.getAttributes();
-													for ( int i = 0; i < attrs
-															.getLength(); i++ ) {
-														Attr attribute = (Attr) attrs
-																.item( i );
-														String attName = attribute
-																.getName();
-														String attNameValue = attribute
-																.getName()
-																+ " = "
-																+ attribute
-																		.getValue();
-
-														/*
-														 * -> cid = 60 ->
-														 * glyphId = 60 ->
-														 * unicode = U+FFFD ->
-														 * unicodeUndefined =
-														 * true
-														 */
-														if ( attName
-																.equalsIgnoreCase(
-																		"unicode" ) ) {
-															unicode = true;
-														}
-														if ( attNameValue
-																.equalsIgnoreCase(
-																		"unicodeUndefined = true" ) ) {
-															charUndef = true;
-														}
-													}
-													if ( !unicode ) {
-														// unicode nicht bekannt
-														// -> node
-														// weiteranalysieren
-
-														/*
-														 * wenn I = tolerant
-														 * analysieren ob es ein
-														 * bekanntes Abstand-
-														 * oder
-														 * Aufzaehlungszeichen
-														 * ist.
-														 * 
-														 * ist es ein solches
-														 * bekanntes Zeichen das
-														 * Zeichen ignorieren
-														 * ansonsten belassen
-														 */
-														if ( fontErrorIgnor
-																.equalsIgnoreCase(
-																		"I" ) ) {
-															String characterTextContent = charNode
-																	.getTextContent();
-															characterTextContent = characterTextContent
-																	.replaceAll(
-																			"\n",
-																			"" );
-															boolean ignoreCharacter = UtilCharacter
-																	.ignoreCharacter(
-																			characterTextContent );
-
-															if ( ignoreCharacter ) {
-																// => C)
-																// Bekannte
-																// Abstaende und
-																// Aufzaehlungszeichen
-																// ignorieren
-
-																/*
-																 * Node zum
-																 * leschen
-																 * vormerken, da
-																 * er ein
-																 * bekanntes
-																 * Aufzaehlungszeichen
-																 * oder Abstand
-																 * ist
-																 */
-																targetNode.add(
-																		charNode );
-															}
-														}
-													} else if ( charUndef ) {
-														// System.out.println( "
-														// unicode nicht
-														// definiert ");
-
-														// wenn I ignorieren und
-														// sonst belassen
-														if ( fontErrorIgnor
-																.equalsIgnoreCase(
-																		"I" ) ) {
-															// => B)
-															// Undefinierte
-															// Zeichen
-															// ignorieren wenn
-															// Maengel<=20%
-
-															// Node zum loeschen
-															// vormerken, da er
-															// ignoriert werden
-															// kann (I)
-															targetNode.add(
-																	charNode );
-														}
-													} else {
-														// unicode bekannt ->
-														// dieser node kann
-														// geloescht werden
-
-														// Node zum loeschen
-														// vormerken
-														targetNode.add(
-																charNode );
-													}
-												}
+											double tolerance = 20.000;
+											fontErrorIgnor = "I";
+											if ( tolerance > elementTolerance ) {
+												// elementTolerance =
+												// unknownPdouble
+												// + undefinedPdouble;
+												// toleranzschwelle nicht
+												// ueberschritten
+												// undefiniertes kann bei
+												// tolerant
+												// ignoriert werden
+												ignorUndefinied = true;
+											} else {
+												// toleranzschwelle
+												// ueberschritten
+												// -> Modul K nicht bestanden
+												ignorUndefinied = false;
+												fontErrorIgnor = "E";
 											}
 
-											for ( Node e : targetNode ) {
-												e.getParentNode()
-														.removeChild( e );
-											}
-
-											// write the content into xml file
-											TransformerFactory transformerFactory = TransformerFactory
-													.newInstance();
-											Transformer transformer = transformerFactory
-													.newTransformer();
-											DOMSource source = new DOMSource(
-													doc );
-											StreamResult result = new StreamResult(
-													fontReportError );
-											// Output to console for testing
-											// result = new StreamResult(
-											// System.out );
-
-											transformer.transform( source,
-													result );
-
-											// Fonts ohne character loeschen
-											BufferedInputStream bisError = new BufferedInputStream(
-													new FileInputStream(
-															fontReportError ) );
-											DocumentBuilderFactory dbfError = DocumentBuilderFactory
-													.newInstance();
-											DocumentBuilder dbError = dbfError
-													.newDocumentBuilder();
-											docError = dbError
-													.parse( bisError );
-											docError.normalize();
-
-											NodeList nodeFontLst = docError
-													.getElementsByTagName(
-															"font" );
-											Set<Node> targetNodeFont = new HashSet<Node>();
-
-											for ( int s = 0; s < nodeFontLst
-													.getLength(); s++ ) {
-												Node fontNode = nodeFontLst
-														.item( s );
-
-												NodeList nodeFontCharLst = fontNode
-														.getChildNodes();
-												if ( nodeFontCharLst
-														.getLength() <= 1 ) {
-													// Leeren Font durch B) und
-													// C) oder unicode-Zeichen
-
-													// font Node zum leschen
-													// vormerken
-													targetNodeFont
-															.add( fontNode );
-												} else if ( fontNode
-														.hasAttributes()
-														&& fontErrorIgnor
-																.equalsIgnoreCase(
-																		"I" ) ) {
-													NamedNodeMap attrs = fontNode
-															.getAttributes();
-													for ( int i = 0; i < attrs
-															.getLength(); i++ ) {
-														Attr attribute = (Attr) attrs
-																.item( i );
-														String attName = attribute
-																.getName();
-														String attValue = attribute
-																.getValue();
-
-														/*
-														 * <font
-														 * fontfile="TrueType"
-														 * fullname="Symbol"
-														 * name="Symbol"
-														 * objectNo="161"
-														 * type="Type0 (CIDFontType2)"
-														 * >
-														 */
-														if ( attName
-																.equalsIgnoreCase(
-																		"name" ) ) {
-															if ( attValue
-																	.contains(
-																			"Symbol" )
-																	|| attValue
-																			.contains(
-																					"Webdings" )
-																	|| attValue
-																			.contains(
-																					"Wingdings" )
-																	|| attValue
-																			.contains(
-																					"Math" )
-																	|| attValue
-																			.contains(
-																					"symbol" )
-																	|| attValue
-																			.contains(
-																					"webdings" )
-																	|| attValue
-																			.contains(
-																					"wingdings" )
-																	|| attValue
-																			.contains(
-																					"math" ) ) {
-																// => D)
-																// Symbol-Schriften
-																// ignorieren
-
-																// font Node zum
-																// leschen
-																// vormerken
-																targetNodeFont
-																		.add( fontNode );
-															}
-														}
-													}
-												}
-											}
-
-											for ( Node f : targetNodeFont ) {
-												f.getParentNode()
-														.removeChild( f );
-											}
-											docError.getDocumentElement()
-													.normalize();
-											XPathExpression xpath = XPathFactory
-													.newInstance().newXPath()
-													.compile(
-															"//text()[normalize-space(.) = '']" );
-											NodeList blankTextNodes = (NodeList) xpath
-													.evaluate( docError,
-															XPathConstants.NODESET );
-
-											for ( int i = 0; i < blankTextNodes
-													.getLength(); i++ ) {
-												blankTextNodes.item( i )
-														.getParentNode()
-														.removeChild(
-																blankTextNodes
-																		.item( i ) );
-											}
-
-											// Ende Bereinigung
-
-											/*
-											 * Nach der Bereinigung ermitteln
-											 * wieviele unbekannt und
-											 * undefiniert sind und ob es ein
-											 * Fehler ist oder nicht
-											 * 
-											 * unbekannt unknown = count -
-											 * undefined
-											 * 
-											 * undefiniert undefined =
-											 * (unicodeUndefined = true)
-											 */
-											int undefinedE = 0;
-
-											NodeList nodeCharacterLstError = docError
-													.getElementsByTagName(
-															"character" );
-
-											for ( int s = 0; s < nodeCharacterLstError
-													.getLength(); s++ ) {
-												Node charNode = nodeCharacterLstError
-														.item( s );
-
-												if ( charNode
-														.hasAttributes() ) {
-													NamedNodeMap attrs = charNode
-															.getAttributes();
-													for ( int i = 0; i < attrs
-															.getLength(); i++ ) {
-														Attr attribute = (Attr) attrs
-																.item( i );
-														String attNameValue = attribute
-																.getName()
-																+ " = "
-																+ attribute
-																		.getValue();
-														if ( attNameValue
-																.equalsIgnoreCase(
-																		"unicodeUndefined = true" ) ) {
-															if ( fontErrorIgnor
-																	.equalsIgnoreCase(
-																			"E" ) ) {
-																undefinedE = undefinedE
-																		+ 1;
-															}
-														}
-													}
-												}
-											}
-											int unknownW = nodeCharacterLstError
-													.getLength();
-											float unknownPdoubleW = 100
-													/ (float) count
-													* (float) unknownW;
-
-											if ( unknownW <= 4 ) {
+											if ( elementUnknown.equals( "0" )
+													&& ignorUndefinied ) {
 												/*
-												 * => E) Wenn am Schluss nur
-												 * noch max 4 Zeichen bemaengelt
-												 * werden
+												 * => B) Undefinierte Zeichen
+												 * ignorieren wenn Maengel<=20%
 												 * 
 												 * -> Modul K bestanden, keine
-												 * Auswertung noetig
+												 * Auswertung noetig da nur
+												 * undefiniertes
+												 * 
+												 * <docInfo> und
+												 * <characterCount> auf eine
+												 * Zeile ausgeben
 												 */
-												isValidFont = true;
-												errorK = "";
-											} else {
-												// Fehler im Modul K
-												if ( fontErrorIgnor
-														.equalsIgnoreCase(
-																"I" ) ) {
-													isValidFont = false;
-													errorK = errorK
-															+ getTextResourceService()
-																	.getText(
-																			locale,
-																			MESSAGE_XML_MODUL_K_PDFA )
-															+ getTextResourceService()
-																	.getText(
-																			locale,
-																			ERROR_XML_K_OVERVIEW2,
-																			count,
-																			unknownW,
-																			unknownPdoubleW );
-												} else {
-													isValidFont = false;
-													errorK = errorK
-															+ getTextResourceService()
-																	.getText(
-																			locale,
-																			MESSAGE_XML_MODUL_K_PDFA )
-															+ getTextResourceService()
-																	.getText(
-																			locale,
-																			ERROR_XML_K_OVERVIEW,
-																			elementCount,
-																			elementUnknown,
-																			elementUnknownP,
-																			elementUndefined,
-																			elementUndefinedP );
-												}
-											}
-											if ( !isValidFont ) {
-												Node nodeInfo = docError
-														.getElementsByTagName(
-																"docInfo" )
-														.item( 0 );
-												String stringInfo = nodeToString(
-														nodeInfo );
-												Node nodeFonts = docError
-														.getElementsByTagName(
-																"fonts" )
-														.item( 0 );
-												String stringFonts = nodeToString(
-														nodeFonts );
-												errorK = errorK
-														+ getTextResourceService()
-																.getText(
-																		locale,
-																		ERROR_XML_K_DETAIL,
-																		stringInfo,
-																		stringFonts );
-											} else {
-												// <docInfo> und
-												// <characterCount> auf eine
-												// Zeile ausgeben
 												if ( min ) {
 												} else {
 													Logtxt.logtxt( logFile,
 															docInfoCharacterCount );
 												}
-											}
-											bisError.close();
-											// set to null
-											bisError = null;
-											source = null;
-											result = null;
-										}
-									}
-								} else {
-									/* strict: Fehler ausgeben */
-									NodeList nodeCharacterLst = doc
-											.getElementsByTagName(
-													"character" );
-									Set<Node> targetNode = new HashSet<Node>();
+											} else {
+												// weiter auswerten
+												NodeList nodeCharacterLst = doc
+														.getElementsByTagName(
+																"character" );
+												Set<Node> targetNode = new HashSet<Node>();
 
-									for ( int s = 0; s < nodeCharacterLst
-											.getLength(); s++ ) {
-										// unnoetige character aus log loeschen
-										boolean charUndef = false;
-										boolean unicode = false;
-										Node charNode = nodeCharacterLst
-												.item( s );
+												for ( int s = 0; s < nodeCharacterLst
+														.getLength(); s++ ) {
+													// unnoetige character aus
+													// log
+													// loeschen
+													boolean charUndef = false;
+													boolean unicode = false;
+													Node charNode = nodeCharacterLst
+															.item( s );
 
-										if ( charNode.hasAttributes() ) {
-											NamedNodeMap attrs = charNode
-													.getAttributes();
-											for ( int i = 0; i < attrs
-													.getLength(); i++ ) {
-												Attr attribute = (Attr) attrs
-														.item( i );
-												String attName = attribute
-														.getName();
-												String attNameValue = attribute
-														.getName() + " = "
-														+ attribute.getValue();
+													if ( charNode
+															.hasAttributes() ) {
+														NamedNodeMap attrs = charNode
+																.getAttributes();
+														for ( int i = 0; i < attrs
+																.getLength(); i++ ) {
+															Attr attribute = (Attr) attrs
+																	.item( i );
+															String attName = attribute
+																	.getName();
+															String attNameValue = attribute
+																	.getName()
+																	+ " = "
+																	+ attribute
+																			.getValue();
+
+															/*
+															 * -> cid = 60 ->
+															 * glyphId = 60 ->
+															 * unicode = U+FFFD
+															 * ->
+															 * unicodeUndefined
+															 * = true
+															 */
+															if ( attName
+																	.equalsIgnoreCase(
+																			"unicode" ) ) {
+																unicode = true;
+															}
+															if ( attNameValue
+																	.equalsIgnoreCase(
+																			"unicodeUndefined = true" ) ) {
+																charUndef = true;
+															}
+														}
+														if ( !unicode ) {
+															// unicode nicht
+															// bekannt
+															// -> node
+															// weiteranalysieren
+
+															/*
+															 * wenn I = tolerant
+															 * analysieren ob es
+															 * ein bekanntes
+															 * Abstand- oder
+															 * Aufzaehlungszeichen
+															 * ist.
+															 * 
+															 * ist es ein
+															 * solches bekanntes
+															 * Zeichen das
+															 * Zeichen
+															 * ignorieren
+															 * ansonsten
+															 * belassen
+															 */
+															if ( fontErrorIgnor
+																	.equalsIgnoreCase(
+																			"I" ) ) {
+																String characterTextContent = charNode
+																		.getTextContent();
+																characterTextContent = characterTextContent
+																		.replaceAll(
+																				"\n",
+																				"" );
+																boolean ignoreCharacter = UtilCharacter
+																		.ignoreCharacter(
+																				characterTextContent );
+
+																if ( ignoreCharacter ) {
+																	// => C)
+																	// Bekannte
+																	// Abstaende
+																	// und
+																	// Aufzaehlungszeichen
+																	// ignorieren
+
+																	/*
+																	 * Node zum
+																	 * leschen
+																	 * vormerken,
+																	 * da er ein
+																	 * bekanntes
+																	 * Aufzaehlungszeichen
+																	 * oder
+																	 * Abstand
+																	 * ist
+																	 */
+																	targetNode
+																			.add( charNode );
+																}
+															}
+														} else if ( charUndef ) {
+															// System.out.println(
+															// "
+															// unicode nicht
+															// definiert ");
+
+															// wenn I ignorieren
+															// und
+															// sonst belassen
+															if ( fontErrorIgnor
+																	.equalsIgnoreCase(
+																			"I" ) ) {
+																// => B)
+																// Undefinierte
+																// Zeichen
+																// ignorieren
+																// wenn
+																// Maengel<=20%
+
+																// Node zum
+																// loeschen
+																// vormerken, da
+																// er
+																// ignoriert
+																// werden
+																// kann (I)
+																targetNode.add(
+																		charNode );
+															}
+														} else {
+															// unicode bekannt
+															// ->
+															// dieser node kann
+															// geloescht werden
+
+															// Node zum loeschen
+															// vormerken
+															targetNode.add(
+																	charNode );
+														}
+													}
+												}
+
+												for ( Node e : targetNode ) {
+													e.getParentNode()
+															.removeChild( e );
+												}
+
+												// write the content into xml
+												// file
+												TransformerFactory transformerFactory = TransformerFactory
+														.newInstance();
+												Transformer transformer = transformerFactory
+														.newTransformer();
+												DOMSource source = new DOMSource(
+														doc );
+												StreamResult result = new StreamResult(
+														fontReportError );
+												// Output to console for testing
+												// result = new StreamResult(
+												// System.out );
+
+												transformer.transform( source,
+														result );
+
+												// Fonts ohne character loeschen
+												BufferedInputStream bisError = new BufferedInputStream(
+														new FileInputStream(
+																fontReportError ) );
+												DocumentBuilderFactory dbfError = DocumentBuilderFactory
+														.newInstance();
+												DocumentBuilder dbError = dbfError
+														.newDocumentBuilder();
+												docError = dbError
+														.parse( bisError );
+												docError.normalize();
+
+												NodeList nodeFontLst = docError
+														.getElementsByTagName(
+																"font" );
+												Set<Node> targetNodeFont = new HashSet<Node>();
+
+												for ( int s = 0; s < nodeFontLst
+														.getLength(); s++ ) {
+													Node fontNode = nodeFontLst
+															.item( s );
+
+													NodeList nodeFontCharLst = fontNode
+															.getChildNodes();
+													if ( nodeFontCharLst
+															.getLength() <= 1 ) {
+														// Leeren Font durch B)
+														// und
+														// C) oder
+														// unicode-Zeichen
+
+														// font Node zum leschen
+														// vormerken
+														targetNodeFont.add(
+																fontNode );
+													} else if ( fontNode
+															.hasAttributes()
+															&& fontErrorIgnor
+																	.equalsIgnoreCase(
+																			"I" ) ) {
+														NamedNodeMap attrs = fontNode
+																.getAttributes();
+														for ( int i = 0; i < attrs
+																.getLength(); i++ ) {
+															Attr attribute = (Attr) attrs
+																	.item( i );
+															String attName = attribute
+																	.getName();
+															String attValue = attribute
+																	.getValue();
+
+															/*
+															 * <font fontfile=
+															 * "TrueType"
+															 * fullname="Symbol"
+															 * name="Symbol"
+															 * objectNo="161"
+															 * type="Type0 (CIDFontType2)"
+															 * >
+															 */
+															if ( attName
+																	.equalsIgnoreCase(
+																			"name" ) ) {
+																if ( attValue
+																		.contains(
+																				"Symbol" )
+																		|| attValue
+																				.contains(
+																						"Webdings" )
+																		|| attValue
+																				.contains(
+																						"Wingdings" )
+																		|| attValue
+																				.contains(
+																						"Math" )
+																		|| attValue
+																				.contains(
+																						"symbol" )
+																		|| attValue
+																				.contains(
+																						"webdings" )
+																		|| attValue
+																				.contains(
+																						"wingdings" )
+																		|| attValue
+																				.contains(
+																						"math" ) ) {
+																	// => D)
+																	// Symbol-Schriften
+																	// ignorieren
+
+																	// font Node
+																	// zum
+																	// leschen
+																	// vormerken
+																	targetNodeFont
+																			.add( fontNode );
+																}
+															}
+														}
+													}
+												}
+
+												for ( Node f : targetNodeFont ) {
+													f.getParentNode()
+															.removeChild( f );
+												}
+												docError.getDocumentElement()
+														.normalize();
+												XPathExpression xpath = XPathFactory
+														.newInstance()
+														.newXPath().compile(
+																"//text()[normalize-space(.) = '']" );
+												NodeList blankTextNodes = (NodeList) xpath
+														.evaluate( docError,
+																XPathConstants.NODESET );
+
+												for ( int i = 0; i < blankTextNodes
+														.getLength(); i++ ) {
+													blankTextNodes.item( i )
+															.getParentNode()
+															.removeChild(
+																	blankTextNodes
+																			.item( i ) );
+												}
+
+												// Ende Bereinigung
 
 												/*
-												 * -> cid = 60 -> glyphId = 60
-												 * -> unicode = U+FFFD ->
-												 * unicodeUndefined = true
+												 * Nach der Bereinigung
+												 * ermitteln wieviele unbekannt
+												 * und undefiniert sind und ob
+												 * es ein Fehler ist oder nicht
+												 * 
+												 * unbekannt unknown = count -
+												 * undefined
+												 * 
+												 * undefiniert undefined =
+												 * (unicodeUndefined = true)
 												 */
-												if ( attName.equalsIgnoreCase(
-														"unicode" ) ) {
-													unicode = true;
+												int undefinedE = 0;
+
+												NodeList nodeCharacterLstError = docError
+														.getElementsByTagName(
+																"character" );
+
+												for ( int s = 0; s < nodeCharacterLstError
+														.getLength(); s++ ) {
+													Node charNode = nodeCharacterLstError
+															.item( s );
+
+													if ( charNode
+															.hasAttributes() ) {
+														NamedNodeMap attrs = charNode
+																.getAttributes();
+														for ( int i = 0; i < attrs
+																.getLength(); i++ ) {
+															Attr attribute = (Attr) attrs
+																	.item( i );
+															String attNameValue = attribute
+																	.getName()
+																	+ " = "
+																	+ attribute
+																			.getValue();
+															if ( attNameValue
+																	.equalsIgnoreCase(
+																			"unicodeUndefined = true" ) ) {
+																if ( fontErrorIgnor
+																		.equalsIgnoreCase(
+																				"E" ) ) {
+																	undefinedE = undefinedE
+																			+ 1;
+																}
+															}
+														}
+													}
 												}
-												if ( attNameValue
-														.equalsIgnoreCase(
-																"unicodeUndefined = true" ) ) {
-													charUndef = true;
-												}
-											}
-											if ( !unicode ) {
-												// unicode nicht bekannt -> node
-												// behalten da strict
+												int unknownW = nodeCharacterLstError
+														.getLength();
+												float unknownPdoubleW = 100
+														/ (float) count
+														* (float) unknownW;
 
-											} else if ( charUndef ) {
-												// unicode nicht definiert ->
-												// node behalten da strict
-											} else {
-												// unicode bekannt -> dieser
-												// node kann geloescht werden
-
-												// Node zum leschen vormerken
-												targetNode.add( charNode );
-											}
-										}
-									}
-
-									for ( Node e : targetNode ) {
-										e.getParentNode().removeChild( e );
-									}
-
-									// write the content into xml file
-									TransformerFactory transformerFactory = TransformerFactory
-											.newInstance();
-									Transformer transformer = transformerFactory
-											.newTransformer();
-									DOMSource source = new DOMSource( doc );
-									StreamResult result = new StreamResult(
-											fontReportError );
-									// Output to console for testing
-									// result = new StreamResult( System.out );
-
-									transformer.transform( source, result );
-
-									// Fonts ohne character loeschen
-									BufferedInputStream bisError = new BufferedInputStream(
-											new FileInputStream(
-													fontReportError ) );
-									DocumentBuilderFactory dbfError = DocumentBuilderFactory
-											.newInstance();
-									DocumentBuilder dbError = dbfError
-											.newDocumentBuilder();
-									docError = dbError.parse( bisError );
-									docError.normalize();
-
-									NodeList nodeFontLst = docError
-											.getElementsByTagName( "font" );
-									Set<Node> targetNodeFont = new HashSet<Node>();
-
-									for ( int s = 0; s < nodeFontLst
-											.getLength(); s++ ) {
-										Node fontNode = nodeFontLst.item( s );
-
-										NodeList nodeFontCharLst = fontNode
-												.getChildNodes();
-										if ( nodeFontCharLst
-												.getLength() <= 1 ) {
-											// Leeren Font durch B) und C) oder
-											// unicode-Zeichen
-
-											// font Node zum leschen vormerken
-											targetNodeFont.add( fontNode );
-										}
-									}
-
-									for ( Node f : targetNodeFont ) {
-										f.getParentNode().removeChild( f );
-									}
-									docError.getDocumentElement().normalize();
-									XPathExpression xpath = XPathFactory
-											.newInstance().newXPath().compile(
-													"//text()[normalize-space(.) = '']" );
-									NodeList blankTextNodes = (NodeList) xpath
-											.evaluate( docError,
-													XPathConstants.NODESET );
-
-									for ( int i = 0; i < blankTextNodes
-											.getLength(); i++ ) {
-										blankTextNodes.item( i ).getParentNode()
-												.removeChild( blankTextNodes
-														.item( i ) );
-									}
-
-									// Ende Bereinigung
-
-									/*
-									 * Nach der Bereinigung ermitteln wieviele
-									 * unbekannt und undefiniert sind
-									 * 
-									 * unbekannt unknown = count - undefined
-									 * 
-									 * undefiniert undefined = (unicodeUndefined
-									 * = true)
-									 */
-									int undefinedE = 0;
-
-									NodeList nodeCharacterLstError = docError
-											.getElementsByTagName(
-													"character" );
-
-									for ( int s = 0; s < nodeCharacterLstError
-											.getLength(); s++ ) {
-										Node charNode = nodeCharacterLstError
-												.item( s );
-
-										if ( charNode.hasAttributes() ) {
-											NamedNodeMap attrs = charNode
-													.getAttributes();
-											for ( int i = 0; i < attrs
-													.getLength(); i++ ) {
-												Attr attribute = (Attr) attrs
-														.item( i );
-												String attNameValue = attribute
-														.getName() + " = "
-														+ attribute.getValue();
-												if ( attNameValue
-														.equalsIgnoreCase(
-																"unicodeUndefined = true" ) ) {
+												if ( unknownW <= 4 ) {
+													/*
+													 * => E) Wenn am Schluss nur
+													 * noch max 4 Zeichen
+													 * bemaengelt werden
+													 * 
+													 * -> Modul K bestanden,
+													 * keine Auswertung noetig
+													 */
+													isValidFont = true;
+													errorK = "";
+												} else {
+													// Fehler im Modul K
 													if ( fontErrorIgnor
 															.equalsIgnoreCase(
-																	"E" ) ) {
-														undefinedE = undefinedE
-																+ 1;
+																	"I" ) ) {
+														isValidFont = false;
+														errorK = errorK
+																+ getTextResourceService()
+																		.getText(
+																				locale,
+																				MESSAGE_XML_MODUL_K_PDFA )
+																+ getTextResourceService()
+																		.getText(
+																				locale,
+																				ERROR_XML_K_OVERVIEW2,
+																				count,
+																				unknownW,
+																				unknownPdoubleW );
+													} else {
+														isValidFont = false;
+														errorK = errorK
+																+ getTextResourceService()
+																		.getText(
+																				locale,
+																				MESSAGE_XML_MODUL_K_PDFA )
+																+ getTextResourceService()
+																		.getText(
+																				locale,
+																				ERROR_XML_K_OVERVIEW,
+																				elementCount,
+																				elementUnknown,
+																				elementUnknownP,
+																				elementUndefined,
+																				elementUndefinedP );
+													}
+												}
+												if ( !isValidFont ) {
+													Node nodeInfo = docError
+															.getElementsByTagName(
+																	"docInfo" )
+															.item( 0 );
+													String stringInfo = nodeToString(
+															nodeInfo );
+													Node nodeFonts = docError
+															.getElementsByTagName(
+																	"fonts" )
+															.item( 0 );
+													String stringFonts = nodeToString(
+															nodeFonts );
+													errorK = errorK
+															+ getTextResourceService()
+																	.getText(
+																			locale,
+																			ERROR_XML_K_DETAIL,
+																			stringInfo,
+																			stringFonts );
+												} else {
+													// <docInfo> und
+													// <characterCount> auf eine
+													// Zeile ausgeben
+													if ( min ) {
+													} else {
+														Logtxt.logtxt( logFile,
+																docInfoCharacterCount );
+													}
+												}
+												bisError.close();
+												// set to null
+												bisError = null;
+												source = null;
+												result = null;
+											}
+										}
+									} else {
+										/* strict: Fehler ausgeben */
+										NodeList nodeCharacterLst = doc
+												.getElementsByTagName(
+														"character" );
+										Set<Node> targetNode = new HashSet<Node>();
+
+										for ( int s = 0; s < nodeCharacterLst
+												.getLength(); s++ ) {
+											// unnoetige character aus log
+											// loeschen
+											boolean charUndef = false;
+											boolean unicode = false;
+											Node charNode = nodeCharacterLst
+													.item( s );
+
+											if ( charNode.hasAttributes() ) {
+												NamedNodeMap attrs = charNode
+														.getAttributes();
+												for ( int i = 0; i < attrs
+														.getLength(); i++ ) {
+													Attr attribute = (Attr) attrs
+															.item( i );
+													String attName = attribute
+															.getName();
+													String attNameValue = attribute
+															.getName() + " = "
+															+ attribute
+																	.getValue();
+
+													/*
+													 * -> cid = 60 -> glyphId =
+													 * 60 -> unicode = U+FFFD ->
+													 * unicodeUndefined = true
+													 */
+													if ( attName
+															.equalsIgnoreCase(
+																	"unicode" ) ) {
+														unicode = true;
+													}
+													if ( attNameValue
+															.equalsIgnoreCase(
+																	"unicodeUndefined = true" ) ) {
+														charUndef = true;
+													}
+												}
+												if ( !unicode ) {
+													// unicode nicht bekannt ->
+													// node
+													// behalten da strict
+
+												} else if ( charUndef ) {
+													// unicode nicht definiert
+													// ->
+													// node behalten da strict
+												} else {
+													// unicode bekannt -> dieser
+													// node kann geloescht
+													// werden
+
+													// Node zum leschen
+													// vormerken
+													targetNode.add( charNode );
+												}
+											}
+										}
+
+										for ( Node e : targetNode ) {
+											e.getParentNode().removeChild( e );
+										}
+
+										// write the content into xml file
+										TransformerFactory transformerFactory = TransformerFactory
+												.newInstance();
+										Transformer transformer = transformerFactory
+												.newTransformer();
+										DOMSource source = new DOMSource( doc );
+										StreamResult result = new StreamResult(
+												fontReportError );
+										// Output to console for testing
+										// result = new StreamResult( System.out
+										// );
+
+										transformer.transform( source, result );
+
+										// Fonts ohne character loeschen
+										BufferedInputStream bisError = new BufferedInputStream(
+												new FileInputStream(
+														fontReportError ) );
+										DocumentBuilderFactory dbfError = DocumentBuilderFactory
+												.newInstance();
+										DocumentBuilder dbError = dbfError
+												.newDocumentBuilder();
+										docError = dbError.parse( bisError );
+										docError.normalize();
+
+										NodeList nodeFontLst = docError
+												.getElementsByTagName( "font" );
+										Set<Node> targetNodeFont = new HashSet<Node>();
+
+										for ( int s = 0; s < nodeFontLst
+												.getLength(); s++ ) {
+											Node fontNode = nodeFontLst
+													.item( s );
+
+											NodeList nodeFontCharLst = fontNode
+													.getChildNodes();
+											if ( nodeFontCharLst
+													.getLength() <= 1 ) {
+												// Leeren Font durch B) und C)
+												// oder
+												// unicode-Zeichen
+
+												// font Node zum leschen
+												// vormerken
+												targetNodeFont.add( fontNode );
+											}
+										}
+
+										for ( Node f : targetNodeFont ) {
+											f.getParentNode().removeChild( f );
+										}
+										docError.getDocumentElement()
+												.normalize();
+										XPathExpression xpath = XPathFactory
+												.newInstance().newXPath()
+												.compile(
+														"//text()[normalize-space(.) = '']" );
+										NodeList blankTextNodes = (NodeList) xpath
+												.evaluate( docError,
+														XPathConstants.NODESET );
+
+										for ( int i = 0; i < blankTextNodes
+												.getLength(); i++ ) {
+											blankTextNodes.item( i )
+													.getParentNode()
+													.removeChild( blankTextNodes
+															.item( i ) );
+										}
+
+										// Ende Bereinigung
+
+										/*
+										 * Nach der Bereinigung ermitteln
+										 * wieviele unbekannt und undefiniert
+										 * sind
+										 * 
+										 * unbekannt unknown = count - undefined
+										 * 
+										 * undefiniert undefined =
+										 * (unicodeUndefined = true)
+										 */
+										int undefinedE = 0;
+
+										NodeList nodeCharacterLstError = docError
+												.getElementsByTagName(
+														"character" );
+
+										for ( int s = 0; s < nodeCharacterLstError
+												.getLength(); s++ ) {
+											Node charNode = nodeCharacterLstError
+													.item( s );
+
+											if ( charNode.hasAttributes() ) {
+												NamedNodeMap attrs = charNode
+														.getAttributes();
+												for ( int i = 0; i < attrs
+														.getLength(); i++ ) {
+													Attr attribute = (Attr) attrs
+															.item( i );
+													String attNameValue = attribute
+															.getName() + " = "
+															+ attribute
+																	.getValue();
+													if ( attNameValue
+															.equalsIgnoreCase(
+																	"unicodeUndefined = true" ) ) {
+														if ( fontErrorIgnor
+																.equalsIgnoreCase(
+																		"E" ) ) {
+															undefinedE = undefinedE
+																	+ 1;
+														}
 													}
 												}
 											}
 										}
-									}
 
-									if ( !elementUnknown.equals( "0" )
-											|| !elementUndefined
-													.equals( "0" ) ) {
-										isValidFont = false;
-										errorK = errorK
-												+ getTextResourceService()
-														.getText( locale,
-																MESSAGE_XML_MODUL_K_PDFA )
-												+ getTextResourceService()
-														.getText( locale,
-																ERROR_XML_K_OVERVIEW,
-																elementCount,
-																elementUnknown,
-																elementUnknownP,
-																elementUndefined,
-																elementUndefinedP );
-									}
-
-									if ( !isValidFont ) {
-										Node nodeInfo = docError
-												.getElementsByTagName(
-														"docInfo" )
-												.item( 0 );
-										String stringInfo = nodeToString(
-												nodeInfo );
-										Node nodeFonts = docError
-												.getElementsByTagName( "fonts" )
-												.item( 0 );
-										String stringFonts = nodeToString(
-												nodeFonts );
-										errorK = errorK
-												+ getTextResourceService()
-														.getText( locale,
-																ERROR_XML_K_DETAIL,
-																stringInfo,
-																stringFonts );
-									} else {
-										// <docInfo> und <characterCount> auf
-										// eine Zeile ausgeben
-										if ( min ) {
-										} else {
-											Logtxt.logtxt( logFile,
-													docInfoCharacterCount );
+										if ( !elementUnknown.equals( "0" )
+												|| !elementUndefined
+														.equals( "0" ) ) {
+											isValidFont = false;
+											errorK = errorK
+													+ getTextResourceService()
+															.getText( locale,
+																	MESSAGE_XML_MODUL_K_PDFA )
+													+ getTextResourceService()
+															.getText( locale,
+																	ERROR_XML_K_OVERVIEW,
+																	elementCount,
+																	elementUnknown,
+																	elementUnknownP,
+																	elementUndefined,
+																	elementUndefinedP );
 										}
+
+										if ( !isValidFont ) {
+											Node nodeInfo = docError
+													.getElementsByTagName(
+															"docInfo" )
+													.item( 0 );
+											String stringInfo = nodeToString(
+													nodeInfo );
+											Node nodeFonts = docError
+													.getElementsByTagName(
+															"fonts" )
+													.item( 0 );
+											String stringFonts = nodeToString(
+													nodeFonts );
+											errorK = errorK
+													+ getTextResourceService()
+															.getText( locale,
+																	ERROR_XML_K_DETAIL,
+																	stringInfo,
+																	stringFonts );
+										} else {
+											// <docInfo> und <characterCount>
+											// auf
+											// eine Zeile ausgeben
+											if ( min ) {
+											} else {
+												Logtxt.logtxt( logFile,
+														docInfoCharacterCount );
+											}
+										}
+										bisError.close();
+										// set to null
+										bisError = null;
+										source = null;
+										result = null;
+
 									}
-									bisError.close();
-									// set to null
-									bisError = null;
-									source = null;
-									result = null;
+								} catch ( Exception e ) {
 
+									Logtxt.logtxt( logFile,
+											getTextResourceService().getText(
+													locale,
+													MESSAGE_XML_MODUL_A_PDFA )
+													+ getTextResourceService()
+															.getText( locale,
+																	ERROR_XML_UNKNOWN,
+																	"Exec PDF Tools Font: "
+																			+ e.getMessage() ) );
+									return false;
 								}
-							} catch ( Exception e ) {
-
-								Logtxt.logtxt( logFile, getTextResourceService()
-										.getText( locale,
-												MESSAGE_XML_MODUL_A_PDFA )
-										+ getTextResourceService().getText(
-												locale, ERROR_XML_UNKNOWN,
-												"Exec PDF Tools Font: "
-														+ e.getMessage() ) );
-								return false;
 							}
-						}
-						bis.close();
-						// set to null
-						bis = null;
-						doc = null;
-						docError = null;
-						if ( fontReportError.exists() ) {
-							// Kann noch nicht geloescht werden, da noch aktiv
-							// fontReportError wird in Controllervalfile
-							// geloescht (je nach verbose)
+							bis.close();
+							// set to null
+							bis = null;
+							doc = null;
+							docError = null;
+							if ( fontReportError.exists() ) {
+								// Kann noch nicht geloescht werden, da noch
+								// aktiv
+								// fontReportError wird in Controllervalfile
+								// geloescht (je nach verbose)
+							}
 						}
 					} else {
 						isValidFont = true;
@@ -2257,7 +2362,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 							isValid = false;
 							callasServiceFailed = true;
 						}
-						
+
 						if ( valDateiNormalisiertDel.exists() ) {
 							valDateiNormalisiertDel.delete();
 						}

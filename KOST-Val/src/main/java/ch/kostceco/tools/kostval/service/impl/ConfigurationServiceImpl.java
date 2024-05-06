@@ -61,15 +61,22 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	}
 
 	public Map<String, String> configMap( Locale locale, String logtype,
-			File valDatei )
+			File valDatei, String dirOfJarPath )
 	{
 		File logFile = new File( "LOGS.kost-val.log.xml" );
+		String pathToKostValDir = System.getenv( "USERPROFILE" )
+				+ File.separator + ".kost-val_2x";
+		String pathToKostValDirAlt = dirOfJarPath + File.separator
+				+ ".kost-val_2x";
+		File fileToKostValDir = new File( pathToKostValDir );
+		if ( !fileToKostValDir.exists() ) {
+			pathToKostValDir = pathToKostValDirAlt;
+			fileToKostValDir = new File( pathToKostValDir );
+		}
 
 		try {
 			File directoryOfConfigfile = new File(
-					System.getenv( "USERPROFILE" ) + File.separator
-							+ ".kost-val_2x" + File.separator
-							+ "configuration" );
+					pathToKostValDir + File.separator + "configuration" );
 			File configFile = new File( directoryOfConfigfile + File.separator
 					+ "kostval.conf.xml" );
 
@@ -105,8 +112,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 				}
 			}
 			if ( !work ) {
-				pathtoworkdir = System.getenv( "USERPROFILE" ) + File.separator
-						+ ".kost-val_2x" + File.separator + "temp_KOST-Val";
+				pathtoworkdir = pathToKostValDir + File.separator
+						+ "temp_KOST-Val";
 				File dir = new File( pathtoworkdir );
 				if ( !dir.exists() ) {
 					dir.mkdirs();
@@ -846,12 +853,13 @@ public class ConfigurationServiceImpl implements ConfigurationService
 
 			// sizeWarning
 			/*
-			 * Warnung bei kleineren Dateien ausgeben. "" bedeutet keine ueberpruefung und Warnung []
+			 * Warnung bei kleineren Dateien ausgeben. "" bedeutet keine
+			 * ueberpruefung und Warnung []
 			 * 
 			 * [] / 0.5KB / 1KB / 5KB
 			 */
-			String sizeWarning = doc.getElementsByTagName( "sizeWarning" ).item( 0 )
-					.getTextContent();
+			String sizeWarning = doc.getElementsByTagName( "sizeWarning" )
+					.item( 0 ).getTextContent();
 			configMap.put( "sizeWarning", sizeWarning );
 
 			// TODO SIP

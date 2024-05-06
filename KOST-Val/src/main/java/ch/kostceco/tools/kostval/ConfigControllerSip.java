@@ -76,7 +76,7 @@ public class ConfigControllerSip
 		String javaVersion = System.getProperty( "java.version" );
 		String javafxVersion = System.getProperty( "javafx.version" );
 		labelConfig.setText(
-				"Copyright © KOST/CECO          KOST-Val v2.2.0.0          JavaFX "
+				"Copyright © KOST/CECO          KOST-Val v2.2.0.1          JavaFX "
 						+ javafxVersion + "   &   Java-" + java6432 + " "
 						+ javaVersion + "." );
 
@@ -121,7 +121,7 @@ public class ConfigControllerSip
 				labelLength.setText( "Lunghezza percorso" );
 				labelName.setText( "Nome SIP" );
 				checkWarningOldDok.setText( "Avviso solo per i vecchi documenti (Entstehungszeitraum)" );
-				buttonConfigApply.setText( "Applicare" );
+				buttonConfigApply.setText( "Applica" );
 				locale = new Locale( "it" );
 			} else {
 				labelVal.setText( "Validation setting: SIP" );

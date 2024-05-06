@@ -155,7 +155,7 @@ public class ConfigController
 		String javaVersion = System.getProperty( "java.version" );
 		String javafxVersion = System.getProperty( "javafx.version" );
 		labelConfig.setText(
-				"Copyright © KOST/CECO          KOST-Val v2.2.0.0          JavaFX "
+				"Copyright © KOST/CECO          KOST-Val v2.2.0.1          JavaFX "
 						+ javafxVersion + "   &   Java-" + java6432 + " "
 						+ javaVersion + "." );
 
@@ -265,9 +265,9 @@ public class ConfigController
 			} else if ( Util.stringInFileLine( "kostval-conf-IT.xsl",
 					configFile ) ) {
 				locale = new Locale( "it" );
-				buttonConfigApply.setText( "Applicare" );
-				buttonConfigApplyStandard.setText( "Applicare predefinito" );
-				buttonConfigCancel.setText( "Scartare" );
+				buttonConfigApply.setText( "Applica" );
+				buttonConfigApplyStandard.setText( "Applica predefinito" );
+				buttonConfigCancel.setText( "Annulla" );
 				labelText.setText( "Testo" );
 				labelImage.setText( "Immagine" );
 				labelAudio.setText( "Audio" );
@@ -279,7 +279,7 @@ public class ConfigController
 				labelSize.setText(
 						"Visualizza l'avviso se il file è più piccolo della dimensione selezionata" );
 				buttonWork.setText( "Directory di lavoro" );
-				buttonInput.setText( "Directory di ingresso" );
+				buttonInput.setText( "Directory di input" );
 				labelHint1.setText( "Nota:" );
 				labelHint.setText(
 						"apre la configurazione dettagliata corrispondente" );

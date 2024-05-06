@@ -114,7 +114,7 @@ public class GuiController
 	private String				arg0, arg1, arg2, arg3 = "--xml", dirOfJarPath,
 			initInstructionsDe, initInstructionsFr, initInstructionsIt,
 			initInstructionsEn;
-	private String				versionKostVal	= "2.2.0.0";
+	private String				versionKostVal	= "2.2.0.1";
 	/*
 	 * TODO: versionKostVal auch hier anpassen:
 	 * 
@@ -122,7 +122,7 @@ public class GuiController
 	 *
 	 * 3) ConfigController inkl SubControllers
 	 * 
-	 * 4) Konfigurationsdatei (2x) inkl 3x xsl
+	 * 4) Konfigurationsdatei (2x) inkl 4x xsl
 	 * 
 	 * 5) xsl der Logdatei
 	 * 
@@ -136,8 +136,8 @@ public class GuiController
 	 * 
 	 * val.message.xml.info = <Info>KOST-Val v{0}, Copyright (C) 2012-202x
 	 * 
-	 * sowie im Readme inkl Kontrolle der validierten Formate (Readme und
-	 * Header in den Java-Dateien
+	 * sowie im Readme inkl Kontrolle der validierten Formate (Readme und Header
+	 * in den Java-Dateien
 	 */
 
 	private Locale				locale			= Locale.getDefault();
@@ -237,12 +237,12 @@ public class GuiController
 				buttonFormat.setText( "Solo formati" );
 				buttonSip.setText( "SIP incl. formati" );
 				buttonOnlySip.setText( "Solo SIP" );
-				labelFileFolder.setText( "Selezionare" );
+				labelFileFolder.setText( "Seleziona" );
 				buttonFolder.setText( "Directory" );
 				buttonFile.setText( "File" );
-				buttonHelp.setText( "Aiuto?" );
+				buttonHelp.setText( "Aiuto ?" );
 				buttonLicence.setText( "Informazioni sulla licenza" );
-				buttonChange.setText( "Adattare" );
+				buttonChange.setText( "Modifica" );
 				buttonShowConfig.setText( "Visualizza" );
 				labelStart.setText( "Avvia convalida" );
 				labelConfig.setText( "Configurazione" );
@@ -369,25 +369,37 @@ public class GuiController
 		help2 = "<hr>";
 		help3 = "<h3>1. Précisez / sélectionnez le fichier ou le dossier à valider</h3>";
 		help4 = "<h3>2. Ajuster la configuration et le LogType si nécessaire</h3>";
-		help5 = "<h3>3. Commencer la validation</h3>";
+		help5 = "<h3>3. Commencer la validation"
+				+ "<br/>&emsp;Formats uniquement -> validation du format de tous les formats dans le dossier entier"
+				+ "<br/>&emsp;SIP y compris les formats -> Validation SIP et validation du format de tous les formats dans le dossier de content"
+				+ "<br/>&emsp;SIP uniquement -> Validation SIP sans validation de format</h3>";
 		initInstructionsFr = "<html>" + help1 + help2 + help3 + help4 + help5
 				+ "<br/></html>";
 		help1 = "<h2>Brief instructions</h2>";
 		help3 = "<h3>1. Specify / select file or folder for validation</h3>";
 		help4 = "<h3>2. Adjust configuration and LogType if necessary</h3>";
-		help5 = "<h3>3. Start validation</h3>";
+		help5 = "<h3>3. Start validation"
+				+ "<br/>&emsp;Formats only -> format validation of all formats in the entire folder"
+				+ "<br/>&emsp;SIP incl. formats -> SIP validation and format validation of all formats in the content folder"
+				+ "<br/>&emsp;SIP only -> SIP validation without format validation;</h3>";
 		initInstructionsEn = "<html>" + help1 + help2 + help3 + help4 + help5
 				+ "<br/></html>";
 		help1 = "<h2>Istruzioni brevi</h2>";
 		help3 = "<h3>1. Specificare/selezionare il file o la directory per la convalida</h3>";
 		help4 = "<h3>2. Regolare la configurazione e il LogType, se necessario</h3>";
-		help5 = "<h3>3. Avviare la convalida.</h3>";
+		help5 = "<h3>3. Avviare la convalida."
+				+ "<br/>&emsp;Solo formati -> convalida del formato di tutti i formati dell'intera cartella"
+				+ "<br/>&emsp;SIP incl. formati -> validazione SIP e validazione del formato di tutti i formati nella cartella dei content"
+				+ "<br/>&emsp;Solo SIP -> convalida SIP senza convalida del formato;</h3>";
 		initInstructionsIt = "<html>" + help1 + help2 + help3 + help4 + help5
 				+ "<br/></html>";
 		help1 = "<h2>Kurzanleitung</h2>";
 		help3 = "<h3>1. Datei oder Ordner zur Validierung angeben / auswählen</h3>";
 		help4 = "<h3>2. Ggf. Konfiguration und LogType anpassen</h3>";
-		help5 = "<h3>3. Validierung starten</h3>";
+		help5 = "<h3>3. Validierung starten"
+				+ "<br/>&emsp;Nur Formate -> Formatvalidierung aller Formate im gesamten Ordner"
+				+ "<br/>&emsp;SIP inkl. Formate -> SIP-Validierung und Formatvalidierung aller Formate im content-Ordner"
+				+ "<br/>&emsp;Nur SIP -> SIP-Validierung ohne Formatvalidierung</h3>";
 		initInstructionsDe = "<html>" + help1 + help2 + help3 + help4 + help5
 				+ "<br/></html>";
 		String initInstructions = initInstructionsDe;
@@ -1219,25 +1231,45 @@ public class GuiController
 			 * Minianleitung in engine anzeigen falls dann datei doch nicht
 			 * angezeigt werden kann...
 			 */
-			String sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgewählte Datei: <br>"
+			String sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/></h3></td><td><h3>Ausgewählte Datei: <br>"
 					+ valFile.getAbsolutePath()
-					+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr> <tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
+					+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>"
+					+ "<tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Validierung starten "
+					+ "<br/>&emsp;Nur Formate -> Formatvalidierung aller Formate im gesamten Ordner"
+					+ "<br/>&emsp;SIP inkl. Formate -> SIP-Validierung und Formatvalidierung aller Formate im content-Ordner"
+					+ "<br/>&emsp;Nur SIP -> SIP-Validierung ohne Formatvalidierung</h3></td></tr></table>";
 			if ( locale.toString().startsWith( "fr" ) ) {
-				sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Fichier sélectionné : <br>"
+				sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/></h3></td><td><h3>Fichier sélectionné : <br>"
 						+ valFile.getAbsolutePath()
-						+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Ajuster la configuration et le LogType si nécessaire </h3></td></tr> <tr><td><h3>3.</h3></td><td><h3>Démarrer la validation </h3></td></tr></table>";
+						+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Ajuster la configuration et le LogType si nécessaire </h3></td></tr>"
+						+ " <tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Commencer la validation"
+						+ "<br/>&emsp;Formats uniquement -> validation du format de tous les formats dans le dossier entier"
+						+ "<br/>&emsp;SIP y compris les formats -> Validation SIP et validation du format de tous les formats dans le dossier de content"
+						+ "<br/>&emsp;SIP uniquement -> Validation SIP sans validation de format</h3></td></tr></table>";
 			} else if ( locale.toString().startsWith( "en" ) ) {
-				sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Selected file: <br>"
+				sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/></h3></td><td><h3>Selected file: <br>"
 						+ valFile.getAbsolutePath()
-						+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Adjust configuration and LogType if necessary </h3></td></tr> <tr><td><h3>3.</h3></td><td><h3>Start validation </h3></td></tr></table>";
+						+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Adjust configuration and LogType if necessary </h3></td></tr> "
+						+ "<tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Start validation"
+						+ "<br/>&emsp;Formats only -> format validation of all formats in the entire folder"
+						+ "<br/>&emsp;SIP incl. formats -> SIP validation and format validation of all formats in the content folder"
+						+ "<br/>&emsp;SIP only -> SIP validation without format validation;</h3></td></tr></table>";
 			} else if ( locale.toString().startsWith( "it" ) ) {
-				sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>File selezionato: <br>"
+				sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/></h3></td><td><h3>File selezionato: <br>"
 						+ valFile.getAbsolutePath()
-						+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Regolare la configurazione e il LogType, se necessario </h3></td></tr> <tr><td><h3>3.</h3></td><td><h3>Avviare la convalida  </h3></td></tr></table>";
+						+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Regolare la configurazione e il LogType, se necessario </h3></td></tr>"
+						+ " <tr><td><h3>3.</h3></td><td><h3>Avviare la convalida."
+						+ "<br/>&emsp;Solo formati -> convalida del formato di tutti i formati dell'intera cartella"
+						+ "<br/>&emsp;SIP incl. formati -> validazione SIP e validazione del formato di tutti i formati nella cartella dei content"
+						+ "<br/>&emsp;Solo SIP -> convalida SIP senza convalida del formato;</h3></td></tr></table>";
 			} else {
-				sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgewählte Datei: <br>"
+				sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/></h3></td><td><h3>Ausgewählte Datei: <br>"
 						+ valFile.getAbsolutePath()
-						+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr> <tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
+						+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>"
+						+ "<tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Validierung starten "
+						+ "<br/>&emsp;Nur Formate -> Formatvalidierung aller Formate im gesamten Ordner"
+						+ "<br/>&emsp;SIP inkl. Formate -> SIP-Validierung und Formatvalidierung aller Formate im content-Ordner"
+						+ "<br/>&emsp;Nur SIP -> SIP-Validierung ohne Formatvalidierung</h3></td></tr></table>";
 			}
 			String text = "<html><body>" + sel + "</body></html>";
 			engine.loadContent( text );
@@ -1391,29 +1423,41 @@ public class GuiController
 			int numberFile = fileMap.size();
 			String numberInFileMap = String.format( "%,d", numberFile );
 
-			String sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br><br>&nbsp;</h3></td><td><h3>Ausgewählter Ordner: <br>"
+			String sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/><br/></h3></td><td><h3>Ausgewählter Ordner: <br>"
 					+ valFolder.getAbsolutePath() + "<br>(" + numberInFileMap
 					+ " Dateien)</h3></td></tr>";
 			String sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>";
-			String sel3 = "<tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
+			String sel3 = "<tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Validierung starten "
+					+ "<br/>&emsp;Nur Formate -> Formatvalidierung aller Formate im gesamten Ordner"
+					+ "<br/>&emsp;SIP inkl. Formate -> SIP-Validierung und Formatvalidierung aller Formate im content-Ordner"
+					+ "<br/>&emsp;Nur SIP -> SIP-Validierung ohne Formatvalidierung</h3></td></tr></table>";
 			if ( locale.toString().startsWith( "fr" ) ) {
-				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br><br>&nbsp;</h3></td><td><h3>Dossier sélectionné : <br>"
+				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/><br/></h3></td><td><h3>Dossier sélectionné : <br>"
 						+ valFolder.getAbsolutePath() + "<br>("
 						+ numberInFileMap + " fichier)</h3></td></tr>";
 				sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ajuster la configuration et le LogType si nécessaire </h3></td></tr>";
-				sel3 = "<tr><td><h3>3.</h3></td><td><h3>Démarrer la validation </h3></td></tr></table>";
+				sel3 = "<tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Commencer la validation"
+						+ "<br/>&emsp;Formats uniquement -> validation du format de tous les formats dans le dossier entier"
+						+ "<br/>&emsp;SIP y compris les formats -> Validation SIP et validation du format de tous les formats dans le dossier de content"
+						+ "<br/>&emsp;SIP uniquement -> Validation SIP sans validation de format</h3></td></tr></table>";
 			} else if ( locale.toString().startsWith( "it" ) ) {
-				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br><br>&nbsp;</h3></td><td><h3>Directory selezionata: <br>"
+				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/><br/></h3></td><td><h3>Directory selezionata: <br>"
 						+ valFolder.getAbsolutePath() + "<br>("
 						+ numberInFileMap + " file)</h3></td></tr>";
 				sel2 = "<tr><td><h3>2.</h3></td><td><h3>Regolare la configurazione e il LogType, se necessario </h3></td></tr>";
-				sel3 = "<tr><td><h3>3.</h3></td><td><h3>Avviare la convalida </h3></td></tr></table>";
+				sel3 = "<tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Avviare la convalida."
+						+ "<br/>&emsp;Solo formati -> convalida del formato di tutti i formati dell'intera cartella"
+						+ "<br/>&emsp;SIP incl. formati -> validazione SIP e validazione del formato di tutti i formati nella cartella dei content"
+						+ "<br/>&emsp;Solo SIP -> convalida SIP senza convalida del formato;</h3></td></tr></table>";
 			} else if ( locale.toString().startsWith( "en" ) ) {
-				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br><br>&nbsp;</h3></td><td><h3>Selected folder: <br>"
+				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/><br/></h3></td><td><h3>Selected folder: <br>"
 						+ valFolder.getAbsolutePath() + "<br>("
 						+ numberInFileMap + " files)</h3></td></tr>";
 				sel2 = "<tr><td><h3>2.</h3></td><td><h3>Adjust configuration and LogType if necessary </h3></td></tr>";
-				sel3 = "<tr><td><h3>3.</h3></td><td><h3>Start validation </h3></td></tr></table>";
+				sel3 = "<tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Start validation"
+						+ "<br/>&emsp;Formats only -> format validation of all formats in the entire folder"
+						+ "<br/>&emsp;SIP incl. formats -> SIP validation and format validation of all formats in the content folder"
+						+ "<br/>&emsp;SIP only -> SIP validation without format validation;</h3></td></tr></table>";
 			}
 			String text = "<html><body>" + sel1 + sel2 + sel3
 					+ "</body></html>";
@@ -1542,25 +1586,45 @@ public class GuiController
 					 * Minianleitung in engine anzeigen falls dann datei doch
 					 * nicht angezeigt werden kann...
 					 */
-					String sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgewählte Datei: <br>"
+					String sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/></h3></td><td><h3>Ausgewählte Datei: <br>"
 							+ valFileFolder.getAbsolutePath()
-							+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr> <tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
+							+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>"
+							+ "<tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Validierung starten "
+							+ "<br/>&emsp;Nur Formate -> Formatvalidierung aller Formate im gesamten Ordner"
+							+ "<br/>&emsp;SIP inkl. Formate -> SIP-Validierung und Formatvalidierung aller Formate im content-Ordner"
+							+ "<br/>&emsp;Nur SIP -> SIP-Validierung ohne Formatvalidierung</h3></td></tr></table>";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Fichier sélectionné : <br>"
+						sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/></h3></td><td><h3>Fichier sélectionné : <br>"
 								+ valFileFolder.getAbsolutePath()
-								+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Ajuster la configuration et le LogType si nécessaire </h3></td></tr> <tr><td><h3>3.</h3></td><td><h3>Démarrer la validation </h3></td></tr></table>";
+								+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Ajuster la configuration et le LogType si nécessaire </h3></td></tr>"
+								+ "<tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Commencer la validation"
+								+ "<br/>&emsp;Formats uniquement -> validation du format de tous les formats dans le dossier entier"
+								+ "<br/>&emsp;SIP y compris les formats -> Validation SIP et validation du format de tous les formats dans le dossier de content"
+								+ "<br/>&emsp;SIP uniquement -> Validation SIP sans validation de format</h3></td></tr></table>";
 					} else if ( locale.toString().startsWith( "en" ) ) {
-						sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Selected file: <br>"
+						sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/></h3></td><td><h3>Selected file: <br>"
 								+ valFileFolder.getAbsolutePath()
-								+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Adjust configuration and LogType if necessary </h3></td></tr> <tr><td><h3>3.</h3></td><td><h3>Start validation </h3></td></tr></table>";
+								+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Adjust configuration and LogType if necessary </h3></td></tr>"
+								+ "<tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Start validation"
+								+ "<br/>&emsp;Formats only -> format validation of all formats in the entire folder"
+								+ "<br/>&emsp;SIP incl. formats -> SIP validation and format validation of all formats in the content folder"
+								+ "<br/>&emsp;SIP only -> SIP validation without format validation;</h3></td></tr></table>";
 					} else if ( locale.toString().startsWith( "it" ) ) {
-						sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>File selezionato: <br>"
+						sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/></h3></td><td><h3>File selezionato: <br>"
 								+ valFileFolder.getAbsolutePath()
-								+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Regolare la configurazione e il LogType, se necessario </h3></td></tr> <tr><td><h3>3.</h3></td><td><h3>Avviare la convalida  </h3></td></tr></table>";
+								+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Regolare la configurazione e il LogType, se necessario </h3></td></tr>"
+								+ "<tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Avviare la convalida."
+								+ "<br/>&emsp;Solo formati -> convalida del formato di tutti i formati dell'intera cartella"
+								+ "<br/>&emsp;SIP incl. formati -> validazione SIP e validazione del formato di tutti i formati nella cartella dei content"
+								+ "<br/>&emsp;Solo SIP -> convalida SIP senza convalida del formato;</h3></td></tr></table>";
 					} else {
-						sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgewählte Datei: <br>"
+						sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/></h3></td><td><h3>Ausgewählte Datei: <br>"
 								+ valFileFolder.getAbsolutePath()
-								+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr> <tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
+								+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>"
+								+ "<tr><td><h3>3.</h3></td><td><h3>Validierung starten "
+								+ "<br/>&emsp;Nur Formate -> Formatvalidierung aller Formate im gesamten Ordner"
+								+ "<br/>&emsp;SIP inkl. Formate -> SIP-Validierung und Formatvalidierung aller Formate im content-Ordner"
+								+ "<br/>&emsp;Nur SIP -> SIP-Validierung ohne Formatvalidierung</h3></td></tr></table>";
 					}
 					String text = "<html><body>" + sel + "</body></html>";
 					engine.loadContent( text );
@@ -1640,29 +1704,41 @@ public class GuiController
 				int numberFile = fileMap.size();
 				String numberInFileMap = String.format( "%,d", numberFile );
 
-				String sel1Folder = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br><br>&nbsp;</h3></td><td><h3>Ausgewählter Ordner: <br>"
+				String sel1Folder = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/><br/></h3></td><td><h3>Ausgewählter Ordner: <br>"
 						+ valFileFolder.getAbsolutePath() + "<br>("
 						+ numberInFileMap + " Dateien)</h3></td></tr>";
 				String sel2Folder = "<tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>";
-				String sel3Folder = "<tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
+				String sel3Folder = "<tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Validierung starten "
+						+ "<br/>&emsp;Nur Formate -> Formatvalidierung aller Formate im gesamten Ordner"
+						+ "<br/>&emsp;SIP inkl. Formate -> SIP-Validierung und Formatvalidierung aller Formate im content-Ordner"
+						+ "<br/>&emsp;Nur SIP -> SIP-Validierung ohne Formatvalidierung</h3></td></tr></table>";
 				if ( locale.toString().startsWith( "fr" ) ) {
-					sel1Folder = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br><br>&nbsp;</h3></td><td><h3>Dossier sélectionné : <br>"
+					sel1Folder = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/><br><br>&nbsp;</h3></td><td><h3>Dossier sélectionné : <br>"
 							+ valFileFolder.getAbsolutePath() + "<br>("
 							+ numberInFileMap + " fichier)</h3></td></tr>";
 					sel2Folder = "<tr><td><h3>2.</h3></td><td><h3>Ajuster la configuration et le LogType si nécessaire </h3></td></tr>";
-					sel3Folder = "<tr><td><h3>3.</h3></td><td><h3>Démarrer la validation </h3></td></tr></table>";
+					sel3Folder = "<tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Commencer la validation"
+							+ "<br/>&emsp;Formats uniquement -> validation du format de tous les formats dans le dossier entier"
+							+ "<br/>&emsp;SIP y compris les formats -> Validation SIP et validation du format de tous les formats dans le dossier de content"
+							+ "<br/>&emsp;SIP uniquement -> Validation SIP sans validation de format</h3></td></tr></table>";
 				} else if ( locale.toString().startsWith( "it" ) ) {
-					sel1Folder = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br><br>&nbsp;</h3></td><td><h3>Directory selezionata: <br>"
+					sel1Folder = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/><br><br>&nbsp;</h3></td><td><h3>Directory selezionata: <br>"
 							+ valFileFolder.getAbsolutePath() + "<br>("
 							+ numberInFileMap + " file)</h3></td></tr>";
 					sel2Folder = "<tr><td><h3>2.</h3></td><td><h3>Regolare la configurazione e il LogType, se necessario </h3></td></tr>";
-					sel3Folder = "<tr><td><h3>3.</h3></td><td><h3>Avviare la convalida </h3></td></tr></table>";
+					sel3Folder = "<tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Avviare la convalida."
+							+ "<br/>&emsp;Solo formati -> convalida del formato di tutti i formati dell'intera cartella"
+							+ "<br/>&emsp;SIP incl. formati -> validazione SIP e validazione del formato di tutti i formati nella cartella dei content"
+							+ "<br/>&emsp;Solo SIP -> convalida SIP senza convalida del formato;</h3></td></tr></table>";
 				} else if ( locale.toString().startsWith( "en" ) ) {
-					sel1Folder = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br><br>&nbsp;</h3></td><td><h3>Selected folder: <br>"
+					sel1Folder = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/><br><br>&nbsp;</h3></td><td><h3>Selected folder: <br>"
 							+ valFileFolder.getAbsolutePath() + "<br>("
 							+ numberInFileMap + " files)</h3></td></tr>";
 					sel2Folder = "<tr><td><h3>2.</h3></td><td><h3>Adjust configuration and LogType if necessary </h3></td></tr>";
-					sel3Folder = "<tr><td><h3>3.</h3></td><td><h3>Start validation </h3></td></tr></table>";
+					sel3Folder = "<tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Start validation"
+							+ "<br/>&emsp;Formats only -> format validation of all formats in the entire folder"
+							+ "<br/>&emsp;SIP incl. formats -> SIP validation and format validation of all formats in the content folder"
+							+ "<br/>&emsp;SIP only -> SIP validation without format validation;</h3></td></tr></table>";
 				}
 				String text = "<html><body>" + sel1Folder + sel2Folder
 						+ sel3Folder + "</body></html>";
@@ -1763,12 +1839,12 @@ public class GuiController
 				buttonFormat.setText( "Solo formati" );
 				buttonSip.setText( "SIP incl. formati" );
 				buttonOnlySip.setText( "Solo SIP" );
-				labelFileFolder.setText( "Selezionare" );
+				labelFileFolder.setText( "Seleziona" );
 				buttonFolder.setText( "Directory" );
 				buttonFile.setText( "File" );
-				buttonHelp.setText( "Aiuto?" );
+				buttonHelp.setText( "Aiuto ?" );
 				buttonLicence.setText( "Informazioni sulla licenza" );
-				buttonChange.setText( "Adattare" );
+				buttonChange.setText( "Modifica" );
 				buttonShowConfig.setText( "Visualizza" );
 				labelStart.setText( "Avvia convalida" );
 				labelConfig.setText( "Configurazione" );

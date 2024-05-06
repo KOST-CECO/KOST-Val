@@ -68,7 +68,7 @@ public class ConfigControllerTiff
 		String javaVersion = System.getProperty( "java.version" );
 		String javafxVersion = System.getProperty( "javafx.version" );
 		labelConfig.setText(
-				"Copyright © KOST/CECO          KOST-Val v2.2.0.0          JavaFX "
+				"Copyright © KOST/CECO          KOST-Val v2.2.0.1          JavaFX "
 						+ javafxVersion + "   &   Java-" + java6432 + " "
 						+ javaVersion + "." );
 
@@ -116,7 +116,7 @@ public class ConfigControllerTiff
 				labelOther.setText( "Diversi" );
 				labelPi.setText( "Spazio colore" );
 				labelImage.setText( "Parametro di convalida: TIFF" );
-				buttonConfigApply.setText( "Applicare" );
+				buttonConfigApply.setText( "Applica" );
 				minOne = "Almeno una variante deve essere consentita!";
 			} else {
 				labelBps.setText( "Bits per sample (per channel)" );

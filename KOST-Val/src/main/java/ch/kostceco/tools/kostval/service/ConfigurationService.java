@@ -29,7 +29,7 @@ import java.util.Map;
  */
 public interface ConfigurationService extends Service
 {
-	Map<String, String> configMap( Locale locale, String logtype,
-			File valDatei );
+	Map<String, String> configMap( Locale locale, String logtype, File valDatei,
+			String dirOfJarPath );
 
 }

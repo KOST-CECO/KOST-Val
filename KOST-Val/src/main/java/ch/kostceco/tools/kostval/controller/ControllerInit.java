@@ -43,6 +43,8 @@ public class ControllerInit implements MessageConstants
 	private static TextResourceService	textResourceService;
 	private String						pathToKostValDir	= System
 			.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x";
+	private String						pathToUserWinDir	= System
+			.getenv( "USERPROFILE" );
 
 	public static TextResourceService getTextResourceService()
 	{
@@ -61,8 +63,21 @@ public class ControllerInit implements MessageConstants
 	{
 		boolean init = true;
 		File directoryOfKostValDir = new File( pathToKostValDir );
+		File directoryOfUserWinDir = new File( pathToUserWinDir );
+		String pathToKostValDirAlt = dirOfJarPath + File.separator
+				+ ".kost-val_2x";
+		
 		if ( !directoryOfKostValDir.exists() ) {
-			directoryOfKostValDir.mkdir();
+
+			if ( directoryOfUserWinDir.exists() ) {
+				directoryOfKostValDir.mkdir();
+			} else {
+				pathToKostValDir = pathToKostValDirAlt;
+				directoryOfKostValDir = new File( pathToKostValDir );
+				if ( directoryOfKostValDir.exists() ) {
+					directoryOfKostValDir.mkdir();
+				}
+			}
 		}
 
 		// Ueberpruefung des Parameters (Log-Verzeichnis)
