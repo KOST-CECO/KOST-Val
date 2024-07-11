@@ -95,10 +95,20 @@ public class ValidationFmultipageValidationModuleImpl extends
 					while ( (line = in.readLine()) != null ) {
 
 						// Anzahl "IFD:" zaehlen
-						if ( line.contains( " IFD: " ) ) {
+
+						if ( line.contains( " Type: TIFF" ) ) {
 							jhoveio = 1;
 							ifdCount = ifdCount + 1;
+							// Diese IFD zaehelen, da TIFF
+						} else if ( line.contains( " Type: " ) ) {
+							// Diese IFD NICHT zaehelen, da keine TIFF sondern
+							// z.B. Exif
 						}
+
+						/*
+						 * if ( line.contains( " IFD: " )&& tiffLine ) { jhoveio
+						 * = 1; ifdCount = ifdCount + 1; }
+						 */
 					}
 					if ( jhoveio == 0 ) {
 						// Invalider Status

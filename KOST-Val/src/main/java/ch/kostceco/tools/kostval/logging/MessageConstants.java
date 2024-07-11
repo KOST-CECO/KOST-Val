@@ -188,6 +188,7 @@ public interface MessageConstants
 	// Modul C-G Meldungen
 	String	MESSAGE_XML_CG_CANNOTFINDETREPORT			= "val.message.xml.cg.cannotfindetreport";
 	String	MESSAGE_XML_CG_INVALID						= "val.message.xml.cg.invalid";
+	String	MESSAGE_XML_G_INVALID						= "val.message.xml.g.invalid";
 	String	MESSAGE_XML_CG_JHOVENIO						= "val.message.xml.cg.jhovenio";
 
 	// *************SIARD-Meldungen*************************************************************************
@@ -268,6 +269,9 @@ public interface MessageConstants
 	String	ERROR_XML_A_PDFTOOLS_DAMAGED				= "val.error.xml.a.pdftools.damaged";
 	String	WARNING_XML_A_PDFA3							= "val.warning.xml.a.pdfa3";
 	String	WARNING_XML_A_SIGNATURE						= "val.warning.xml.a.signature";
+	String	WARNING_XML_A_SIGNATURE_SUM1				= "val.warning.xml.a.signature.sum1";
+	String	ERROR_XML_A_EGOVDV_LICENSE					= "val.error.xml.a.egovdv.license";
+	String	ERROR_XML_A_EGOVDV_NOREPORT					= "val.error.xml.a.egovdv.noreport";
 
 	String	ERROR_XML_AI_0								= "val.error.xml.ai.0";
 	String	ERROR_XML_AI_1								= "val.error.xml.ai.1";

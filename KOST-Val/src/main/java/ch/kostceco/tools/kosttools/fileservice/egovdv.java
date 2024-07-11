@@ -16,10 +16,22 @@
 
 package ch.kostceco.tools.kosttools.fileservice;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Scanner;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 import ch.kostceco.tools.kosttools.runtime.Cmd;
 import ch.kostceco.tools.kosttools.util.Util;
@@ -256,6 +268,510 @@ public class egovdv
 		// Ende Ermittlung ob Signaturen enthalten sind
 		// System.out.println( "Anzahl Signaturen= " +count );
 		return count;
+	}
+
+	/**
+	 * Validiert mit egovdv via cmd die Signaturen in pdf und speichert das
+	 * Ergebnis in ein File (Output). Dazu wird der Mandant Mixed verwendet.
+	 * Gibt zurueck ob Output existiert oder nicht
+	 * 
+	 * Fuer diesen Schritt braucht es jetzt Internet/URL sowie einen account
+	 * 
+	 * validate -list -f <filename> -l de -u no
+	 * 
+	 * validate <account> -u https://egovsigval-backend.bit.admin.ch -m Mixed -f
+	 * <filename> -c -e -d -o <report>
+	 * 
+	 * @param -c
+	 *            Container check, validates all signatures in the pdf file.
+	 * @param -d
+	 *            Logs the JSON object of the request and response.
+	 * @param -e
+	 *            Generate report even for unsigned files
+	 * @param -f
+	 *            file to validate
+	 * @param -l
+	 *            get pdf report in the given language, supported codes: de, fr,
+	 *            it, en. This is an optional parameter, if omitted de is used.
+	 * @param -m
+	 *            mandator to use
+	 * @param -o
+	 *            pdf report will be saved at the given name
+	 * 
+	 * @param -u
+	 *            URL of the validation webservice.
+	 *
+	 * @return String ob Report existiert oder nicht ggf Exception
+	 */
+	public static String execEgovdvCheck( File fileToCheck, File output,
+			File workDir, String dirOfJarPath, String mandant )
+			throws InterruptedException
+	{
+		boolean out = true;
+		File fvalidateBat = new File(
+				dirOfJarPath + File.separator + validateBat );
+		File fexeDir = new File( exeDir );
+		// falls das File von einem vorhergehenden Durchlauf bereits existiert,
+		// loeschen wir es
+		if ( output.exists() ) {
+			output.delete();
+		}
+
+		String pathToKostValDir = System.getenv( "USERPROFILE" )
+				+ File.separator + ".kost-val_2x";
+		File directoryOfConfigfile = new File(
+				pathToKostValDir + File.separator + "configuration" );
+		File configFile = new File(
+				directoryOfConfigfile + File.separator + "kostval.conf.xml" );
+
+		Document doc = null;
+		String Institut = "Institut";
+
+		try {
+			BufferedInputStream bis;
+			bis = new BufferedInputStream( new FileInputStream( configFile ) );
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			doc = db.parse( bis );
+			doc.normalize();
+
+			Institut = doc.getElementsByTagName( "Institut" ).item( 0 )
+					.getTextContent();
+			bis.close();
+		} catch ( IOException | ParserConfigurationException
+				| SAXException e ) {
+			e.printStackTrace();
+			System.out.println( "Fehler beim auslesen der config (egovdv)" );
+		}
+
+		String account = egovdvIntern.egovdvInternas( Institut,
+				directoryOfConfigfile.getAbsolutePath() );
+		// System.out.println( "" );
+		// System.out.println( "account: " + account );
+
+		String resultSummary = "_";
+
+		if ( account.equals( "noLicense" ) ) {
+			resultSummary = "noLicense";
+		} else {
+
+			String command = "\"\"cd " + fexeDir.getAbsolutePath() + "\" & \""
+					+ fvalidateBat.getAbsolutePath() + "\" " + account
+					+ "-u https://egovsigval-backend.bit.admin.ch -m " + mandant
+					+ " -f \"" + fileToCheck.getAbsolutePath()
+					+ "\" -c -e -o \"" + output.getAbsolutePath() + "\"\"";
+
+			// validate <account> -u https://egovsigval-backend.bit.admin.ch -m
+			// Mixed -f <filename> -c -e -d -o <report>
+
+			// System.out.println( "command: " + command );
+
+			String resultExec = Cmd.execToStringSplit( command, out, workDir );
+
+			// System.out.println( "resultExec: " + resultExec );
+
+			// egovdv gibt zu viele Infos raus. Entsprechend hier eine kleine
+			// vorab
+			// analyse
+
+			/*
+			 * Validity of file report: VALID was the document modified after
+			 * last signature?: false mandator requirements not met?: false
+			 * results for signature with name: Name of check: CERTIFICATE
+			 * status: VALID Name of check: INTEGRITY status: VALID Name of
+			 * check: MANDATOR status: VALID Name of check: REVOCATION status:
+			 * VALID Name of check: TIMESTAMP status: VALID
+			 */
+
+			if ( resultExec.contains( "Validity of file report: VALID" ) ) {
+				resultSummary = resultSummary + "Validity-VALID_";
+			}
+			if ( resultExec.contains( "Validity of file report: INVALID" ) ) {
+				resultSummary = resultSummary + "Validity-INVALID_";
+			}
+			if ( resultExec.contains(
+					"was the document modified after last signature?: false" ) ) {
+				resultSummary = resultSummary + "Modified-NO_";
+			}
+			if ( resultExec.contains(
+					"was the document modified after last signature?: true" ) ) {
+				resultSummary = resultSummary + "Modified-YES_";
+			}
+			if ( resultExec
+					.contains( "mandator requirements not met?: false" ) ) {
+				resultSummary = resultSummary + "MIXED-YES_";
+			}
+			if ( resultExec
+					.contains( "mandator requirements not met?: true" ) ) {
+				resultSummary = resultSummary + "MIXED-NO_";
+			}
+			if ( resultExec.contains( "CERTIFICATE status: VALID" ) ) {
+				resultSummary = resultSummary + "CERTIFICATE-VALID_";
+			}
+			if ( resultExec.contains( "CERTIFICATE status: INVALID" ) ) {
+				resultSummary = resultSummary + "CERTIFICATE-INVALID_";
+			}
+			if ( resultExec.contains( "INTEGRITY status: VALID" ) ) {
+				resultSummary = resultSummary + "INTEGRITY-VALID_";
+			}
+			if ( resultExec.contains( "INTEGRITY status: INVALID" ) ) {
+				resultSummary = resultSummary + "INTEGRITY-INVALID_";
+			}
+			if ( resultExec.contains( "MANDATOR status: VALID" ) ) {
+				resultSummary = resultSummary + "MANDATOR-VALID_";
+			}
+			if ( resultExec.contains( "MANDATOR status: INVALID" ) ) {
+				resultSummary = resultSummary + "MANDATOR-INVALID_";
+			}
+			if ( resultExec.contains( "REVOCATION status: VALID" ) ) {
+				resultSummary = resultSummary + "REVOCATION-VALID_";
+			}
+			if ( resultExec.contains( "REVOCATION status: INVALID" ) ) {
+				resultSummary = resultSummary + "REVOCATION-INVALID_";
+			}
+			if ( resultExec.contains( "TIMESTAMP status: VALID" ) ) {
+				resultSummary = resultSummary + "TIMESTAMP-VALID_";
+			}
+			if ( resultExec.contains( "TIMESTAMP status: INVALID" ) ) {
+				resultSummary = resultSummary + "TIMESTAMP-INVALID_";
+			}
+
+			if ( !output.exists() ) {
+				// Datei nicht angelegt...
+				resultSummary = resultSummary + "NoReport_";
+
+			}
+		}
+		// System.out.println( "resultSummary= " + resultSummary );
+		return resultSummary;
+	}
+
+	/**
+	 * List den PDF-Report aus und gibt das Ergebnis aus.
+	 * 
+	 * Prüfbericht für elektronische Signaturen
+	 * 
+	 * @param File
+	 *            output, welcher analysiert wird
+	 * @return String mit PDF-ergebnis
+	 */
+	public static String analyseEgovdvPdf( File output )
+	{
+		String lineOut = "LineNotFound";
+		try {
+			/*
+			 * BufferedReader in = new BufferedReader( new FileReader( output )
+			 * ); String line; while ( (line = in.readLine()) != null ) { /* zu
+			 * analysierende PDF-Zeile die
+			 * "Prüfbericht für elektronische Signaturen" enthält finden und
+			 * auslesen
+			 */
+
+			/*
+			 * if ( line.contains( "Prüfbericht für elektronische Signaturen" )
+			 * ) { // System.out.println( "Line=" + line ); String linePP =
+			 * prettyEgovdvPdfOld( line );
+			 * 
+			 * lineOut = linePP; }
+			 * 
+			 * if ( line.contains( "Prüfdetails Signatur" ) ) { //
+			 * System.out.println( "Line=" + line ); String linePP =
+			 * prettyEgovdvPdfOld( line );
+			 * 
+			 * lineOut = lineOut + linePP; }
+			 * 
+			 * }
+			 */
+
+			if ( lineOut.equals( "LineNotFound" ) ) {
+				// TODO Auslesen mit pdfbox
+				lineOut = pdfbox.getTextPdfbox( output );
+				// System.out.println( "lineOut=" + lineOut );
+				lineOut = prettyEgovdvPdf( lineOut );
+
+			}
+			// in.close();
+		} catch ( Exception e ) {
+			e.printStackTrace();
+			System.out.println(
+					"Fehler beim auslesen des egovdv-Reports (analyseEgovdvPdf)" );
+		}
+		return lineOut;
+	}
+
+	/**
+	 * Bereinigung des Ergebnisses aus dem PDF-Report
+	 * 
+	 * @param String
+	 *            line, welcher bereinigt wird
+	 * @return String bereinigter String
+	 */
+	public static String prettyEgovdvPdf( String line )
+	{
+		String lineOut = "LineNotFound";
+		// System.out.println( "1 " + line );
+
+		String newLine = "</Message><Message></Message><Message>" + line;
+		// System.out.println( "newLine=" + newLine );
+		String prettyPrint = newLine.replaceAll( ":__", ": " );
+		prettyPrint = prettyPrint.replaceAll( "__ __",
+				"</Message><Message> - " );
+
+		String pathToKostValDir = System.getenv( "USERPROFILE" )
+				+ File.separator + ".kost-val_2x";
+		File directoryOfConfigfile = new File(
+				pathToKostValDir + File.separator + "configuration" );
+		File configFile = new File(
+				directoryOfConfigfile + File.separator + "kostval.conf.xml" );
+
+		Document doc = null;
+		String Institut = "Institut";
+
+		try {
+			BufferedInputStream bis;
+			bis = new BufferedInputStream( new FileInputStream( configFile ) );
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			doc = db.parse( bis );
+			doc.normalize();
+
+			Institut = doc.getElementsByTagName( "Institut" ).item( 0 )
+					.getTextContent();
+			bis.close();
+		} catch ( IOException | ParserConfigurationException
+				| SAXException e ) {
+			e.printStackTrace();
+			System.out.println( "Fehler beim auslesen der config (egovdv)" );
+		}
+		prettyPrint = prettyPrint.replaceAll(
+				"Prüfbericht für elektronische Signaturen",
+				"Prüfbericht für elektronische Signaturen</Message><Message> - Geprüft durch: "
+						+ Institut );
+
+		prettyPrint = prettyPrint.replaceAll( "__Datum/Zeit der Prüfung:",
+				"</Message><Message> - Datum/Zeit der Prüfung:" );
+		prettyPrint = prettyPrint.replaceAll( "__Name der signierten __Datei:",
+				"</Message><Message> - Name der signierten __Datei:" );
+		prettyPrint = prettyPrint.replaceAll( "__Name der signierten",
+				"</Message><Message> - Name der signierten" );
+		prettyPrint = prettyPrint.replaceAll( "__Datei:", "Datei:" );
+		prettyPrint = prettyPrint.replaceAll( "__Hash der Datei ",
+				"</Message><Message> - Hash der Datei " );
+
+		/*
+		 * Der Validator prüft, ob die in einem Dokument enthaltenen Signaturen
+		 * den für die Prüfung auszuwählenden Kriterien entsprechen. Die
+		 * Kriterien können sich auf die Gültigkeit des Dokuments als Ganzes (z.
+		 * B. gültiger Strafregisterauszug) oder auf die Gültigkeit aller darin
+		 * enthaltenen Unterschriften beziehen (z.B . qualifiziert signiertes
+		 * Dokument).
+		 */
+		// __Der Validator prüft, ob die in einem Dokument enthaltenen
+		// Signaturen den für die Prüfung
+		// __auszuwählenden Kriterien entsprechen. Die Kriterien können sich auf
+		// die Gültigkeit des Dokuments
+		// __als Ganzes (z. B. gültiger Strafregisterauszug) oder auf die
+		// Gültigkeit aller darin enthaltenen
+		// __Unterschriften beziehen (z.B . qualifiziert signiertes Dokument).
+
+		prettyPrint = prettyPrint.replaceAll(
+				"__Der Validator prüft, ob die in einem Dokument enthaltenen Signaturen den für die Prüfung ",
+				"" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__auszuwählenden Kriterien entsprechen. Die Kriterien können sich auf die Gültigkeit des Dokuments ",
+				"" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__als Ganzes \\(z. B. gültiger Strafregisterauszug\\) oder auf die Gültigkeit aller darin enthaltenen",
+				"" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__Unterschriften beziehen \\(z.B . qualifiziert signiertes Dokument\\).",
+				"" );
+
+		// invalide Fehlermeldungen
+		prettyPrint = prettyPrint
+				.replaceAll( "__Zusammenfassung der Dokumentprüfung", "" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__Das Dokument weist mehrere elektronische Signaturen mit",
+				"" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__unterschiedlichen Zertifikatsklassen auf. Mindestens eine der ",
+				"" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__elektronischen Signaturen auf dem validierten Dokument",
+				"" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__konnte keiner Dokumentenart \\(Mandant\\) zugeordnet werden. ",
+				"" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__Die Prüfergebnisse der einzelnen Signaturen sind im", "" );
+		prettyPrint = prettyPrint.replaceAll( "__Detailbericht ersichtlich.",
+				"" );
+		prettyPrint = prettyPrint
+				.replaceAll( "__Anzahl Signaturen im Dokument: 1", "" );
+		prettyPrint = prettyPrint
+				.replaceAll( "__Anzahl Signaturen im Dokument: 0", "" );
+		prettyPrint = prettyPrint
+				.replaceAll( "__Anzahl Signaturen im Dokument: 2", "" );
+		prettyPrint = prettyPrint
+				.replaceAll( "__Anzahl Signaturen im Dokument: 3", "" );
+		prettyPrint = prettyPrint
+				.replaceAll( "__Anzahl Signaturen im Dokument: 4", "" );
+		prettyPrint = prettyPrint
+				.replaceAll( "__Anzahl Signaturen im Dokument: 5", "" );
+		prettyPrint = prettyPrint
+				.replaceAll( "__Anzahl Signaturen im Dokument: 6", "" );
+		prettyPrint = prettyPrint
+				.replaceAll( "__Anzahl Signaturen im Dokument: 7", "" );
+		prettyPrint = prettyPrint
+				.replaceAll( "__Anzahl Signaturen im Dokument: 8", "" );
+		prettyPrint = prettyPrint
+				.replaceAll( "__Anzahl Signaturen im Dokument: 9", "" );
+
+		prettyPrint = prettyPrint
+				.replaceAll( "__Folgende Prüfungen wurden durchgeführt:", "" );
+		prettyPrint = prettyPrint.replaceAll( "__Das Dokument ist ",
+				"</Message><Message></Message><Message>Das Dokument ist " );
+		prettyPrint = prettyPrint.replaceAll( "__ Das Dokument ist ",
+				"</Message><Message> - Das Dokument ist " );
+		prettyPrint = prettyPrint.replaceAll( "__ Das Dokument weist ",
+				"</Message><Message> - Das Dokument weist " );
+		prettyPrint = prettyPrint.replaceAll( "__ Alle validierten ",
+				"</Message><Message> - Alle validierten " );
+		prettyPrint = prettyPrint.replaceAll( "__ Alle zur Signatur",
+				"</Message><Message> - Alle zur Signatur" );
+		if (prettyPrint.contains( "Diese Signatur ist nicht LTV-fähig" )) {
+			prettyPrint = prettyPrint.replaceAll( "</Message><Message> - Das Dokument ist ",
+					"</Message><Message> - Nicht alle Signaturen sind LTV-fähig.</Message><Message> - Das Dokument ist " );
+		}else {
+			prettyPrint = prettyPrint.replaceAll( "</Message><Message> - Das Dokument ist ",
+					"</Message><Message> - Alle Signaturen sind LTV-fähig.</Message><Message> - Das Dokument ist " );
+		}
+		prettyPrint = prettyPrint.replaceAll( "__ Alle in diesem Dokument",
+				"</Message><Message> - Alle in diesem Dokument" );
+
+		// Bereinigung Prüfdetails
+		prettyPrint = prettyPrint.replaceAll( "__Prüfdetails Signatur",
+				"</Message><Message></Message><Message>Prüfdetails Signatur" );
+		prettyPrint = prettyPrint.replaceAll( "__Informationen zur Signatur",
+				"" );
+		prettyPrint = prettyPrint.replaceAll( "__Zeitpunkt der ",
+				"</Message><Message> - Zeitpunkt der " );
+		prettyPrint = prettyPrint.replaceAll( "__Signaturalgorithmus:",
+				"</Message><Message> - Signaturalgorithmus:" );
+		prettyPrint = prettyPrint.replaceAll( "__Die digitale Signatur ist",
+				"</Message><Message> - Die digitale Signatur ist" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__Information über den Zeitstempel",
+				"</Message><Message> - Information über den Zeitstempel" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__Information über das Unterzeichnerzertifikat",
+				"</Message><Message> - Information über das Unterzeichnerzertifikat" );
+		prettyPrint = prettyPrint.replaceAll( "__Zertifikat ausgestellt für",
+				"</Message><Message> - Zertifikat ausgestellt für" );
+		prettyPrint = prettyPrint.replaceAll( "__Zertifikat ausgestellt",
+				"</Message><Message> - Zertifikat ausgestellt" );
+		prettyPrint = prettyPrint.replaceAll( "__Gültigkeit des",
+				"</Message><Message> - Gültigkeit des" );
+		prettyPrint = prettyPrint.replaceAll( "__Der Zeitstempel ist gültig",
+				"</Message><Message> - Der Zeitstempel ist gültig" );
+		prettyPrint = prettyPrint.replaceAll( "__Revokationsstatus:",
+				"</Message><Message> - Revokationsstatus:" );
+		prettyPrint = prettyPrint.replaceAll( "__Zertifikatsträger:",
+				"</Message><Message> - Zertifikatsträger:" );
+		prettyPrint = prettyPrint.replaceAll( "__Zertifikatsklasse:",
+				"</Message><Message> - Zertifikatsklasse:" );
+		prettyPrint = prettyPrint.replaceAll( "__Diese Signatur ist",
+				"</Message><Message> - Diese Signatur ist" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__Informationen über die unterzeichnende staatliche Einrichtung",
+				"</Message><Message> - Informationen über die unterzeichnende staatliche Einrichtung: " );
+		prettyPrint = prettyPrint.replaceAll( "__Bezeichnung der",
+				"</Message><Message> - Bezeichnung der" );
+
+		prettyPrint = prettyPrint.replaceAll(
+				"__Prüfung: Die Zertifikate entsprechen unterschiedlichen Zertifikatsklassen",
+				"" );
+		prettyPrint = prettyPrint.replaceAll( "__gemäss ZertES.", "" );
+
+		// Entferne alle Zeichen nach "__Prozessbezogene Prüfung"
+		prettyPrint = prettyPrint.replaceAll( "__Prozessbezogene Prüfung", "" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__Validator: Mehrere elektronische Signaturen mit unterschiedlichen",
+				"" );
+		prettyPrint = prettyPrint
+				.replaceAll( "__Zertifikatsklassen gemäss ZertES.", "" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__Speicherung, Ausdruck oder Übermittlung durch elektronische Medien. Das Ergebnis einer",
+				"" );
+		prettyPrint = prettyPrint.replaceAll( "__Gültigkeit einer Signatur",
+				"" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__\\(A\\) Eine gültige Signatur besitzt folgende Eigenschaften:",
+				"" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__Alle Zertifikate in der Signatur wurden mathematisch geprüft.",
+				"" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__Es ist sichergestellt, dass der Unterzeichner den Schlüssel seines Zertifikats für die Signatur ",
+				"" );
+		prettyPrint = prettyPrint.replaceAll( "__verwendete.", "" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__Der Zertifikatspfad jedes Zertifikats wurde geprüft. Dadurch wird die Echtheit des Zertifikats ",
+				"" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__des Unterzeichners durch unabhängige, vertrauenswürdige Zertifikate bestätigt.",
+				"" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__Das Zertifikat des Unterzeichners sowie alle übergeordneten Zertifikate des Ausstellers ",
+				"" );
+		prettyPrint = prettyPrint
+				.replaceAll( "__waren zum Zeitpunkt der Signatur gültig.", "" );
+		prettyPrint = prettyPrint
+				.replaceAll( "__Wichtige rechtliche Hinweise zur Prüfung", "" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__Diese Signaturprüfung wurde zum oben angegebenen Datum und Uhrzeit durchgeführt und ",
+				"" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__bestätigt die Richtigkeit der Angaben zum jeweiligen Zeitpunkt. Der Betreiber dieses Dienstes ",
+				"" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__übernimmt keine Gewähr für die Angaben Dritter sowie die Unveränderlichkeit dieses Berichts nach ",
+				"" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__Speicherung, Ausdruck oder ￜbermittlung durch elektronische Medien. Das Ergebnis einer ",
+				"" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__Verifikation einer Signatur beruht ausschliesslich auf der Auskunft des jeweiligen Ausstellers des ",
+				"" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__Zertifikats, welches der Ersteller zur Erstellung der elektronischen Signatur verwendet hat. Es wird ",
+				"" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__darauf hingewiesen, dass die Verifikation von Signaturen von der Verfügbarkeit und technischen ",
+				"" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__Kompatibilität von Auskunftsdiensten des jeweiligen Ausstellers des Zertifikats abhängt, welches ",
+				"" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__zur Erstellung der Signatur verwendet wurde. Um eine eindeutige und überprüfbare Zeitangabe zu ",
+				"" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__ermöglichen, entsprechen alle in diesem Verifikationsbericht angezeigten Zeitangaben der UTC ",
+				"" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__Zeitzone. Diese Zeitangabe kann von der jeweiligen gesetzlich gültigen Lokalzeit abweichen.",
+				"" );
+		prettyPrint = prettyPrint.replaceAll( ":", ": " );
+		prettyPrint = prettyPrint.replaceAll( ":  ", ": " );
+		
+		prettyPrint = prettyPrint.replaceAll("__Das geprüfte Dokument trägt mehrere elektronische ", "");
+		prettyPrint = prettyPrint.replaceAll("__Signaturen mit unterschiedlichen Zertifikatsklassen, gemäss ", "");
+		prettyPrint = prettyPrint.replaceAll("__ZertES.", "");
+		// System.out.println( "2 " + prettyPrint );
+
+		lineOut = prettyPrint;
+
+		return lineOut;
 	}
 
 	/**

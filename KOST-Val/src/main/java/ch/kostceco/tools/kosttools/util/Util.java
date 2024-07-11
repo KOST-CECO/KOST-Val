@@ -439,7 +439,7 @@ public class Util
 	 */
 
 	/**
-	 * Veraendert [& mit &amp;], [ '<' mit '&lt;' ] sowie [ '>' mit '&gt;' ] und
+	 * Veraendert [& mit &amp;], [ '<' mit '&lt;' ], [\n\t mit \n] sowie [ '>' mit '&gt;' ] und
 	 * ergaenzt das XML-Element "<End></End>" mit dem ergebnis (stringEnd) sowie
 	 * <Message>3c</Message></Error> mit dem ergebnis (string3c) in dem
 	 * kost-val.log.xml (file)
@@ -481,6 +481,21 @@ public class Util
 			newtext = newtext.replace( "'>'", "'&gt;'" );
 			newtext = newtext.replace( "<<", "<" );
 			newtext = newtext.replace( "& ", "&amp; " );
+			newtext = newtext.replace( "\r\n\r\n\t", "\r\n" );
+			newtext = newtext.replace( "\r\n\t", "" );
+			newtext = newtext.replace( "\t\t", "" );
+			newtext = newtext.replace( "\r\n\t", "" );
+			newtext = newtext.replace( "\r\n\r\n", "\r\n" );
+			newtext = newtext.replace( "\r\n \r\n", "\r\n" );
+			newtext = newtext.replace( "\r\n__", "" );
+			newtext = newtext.replace( "\t", "" );
+			newtext = newtext.replace( "\r\n__", "" );
+			newtext = newtext.replace( "\r\n \r\n", "\r\n" );
+			newtext = newtext.replace( "\r\n \r\n", "\r\n" );
+			newtext = newtext.replace( "\r\n\r\n\r\n", "\r\n" );
+			newtext = newtext.replace( "\r\n</Message>", "</Message>" );
+			newtext = newtext.replace( "\r\n\r\n", "\r\n" );
+			newtext = newtext.replace( "\r\n\r\n", "\r\n" );
 			newtext = newtext.replace( (char) 0, (char) 32 );
 			FileWriter writer = new FileWriter( file );
 			writer.write( newtext );

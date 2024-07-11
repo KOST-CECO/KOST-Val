@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?><?xml-stylesheet type="text/xsl" href="kostval-conf-DE.xsl"?>
-<configuration><!-- kostval.conf.xml_v2.2.0.1 -->
+<configuration><!-- kostval.conf.xml_v2.2.1.0 -->
 <!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
 <!-- TEXT -->
 	<pdfa>
@@ -148,25 +148,42 @@
 	</sip>
 <!-- SONSTIGES -->
 	<otherformats><!--&#x2717; / Leer = nicht akzeptiert / (&#x2713;) / Bezeichnung = akzeptiert -->
-		<docxvalidation></docxvalidation>";
-		<pptxvalidation></pptxvalidation>";
-		<rtfvalidation></rtfvalidation>";
-		<jpxvalidation></jpxvalidation>";
-		<jpmvalidation></jpmvalidation>";
-		<svgvalidation></svgvalidation>";
-		<oggvalidation></oggvalidation>";
-		<mpeg2validation></mpeg2validation>";
-		<avivalidation></avivalidation>";
-		<htmlvalidation>HTML </htmlvalidation>";
-		<warcvalidation>WARC </warcvalidation>";
-		<arcvalidation></arcvalidation>";
-		<dwgvalidation>DWG </dwgvalidation>";
-		<ifcvalidation></ifcvalidation>";
-		<dxfvalidation></dxfvalidation>";
-		<interlisvalidation></interlisvalidation>";
-		<dicomvalidation></dicomvalidation>";
-		<msgvalidation></msgvalidation>";
+		<docxvalidation></docxvalidation>
+		<pptxvalidation></pptxvalidation>
+		<rtfvalidation></rtfvalidation>
+		<jpxvalidation></jpxvalidation>
+		<jpmvalidation></jpmvalidation>
+		<svgvalidation></svgvalidation>
+		<oggvalidation></oggvalidation>
+		<mpeg2validation></mpeg2validation>
+		<avivalidation></avivalidation>
+		<htmlvalidation>HTML </htmlvalidation>
+		<warcvalidation>WARC </warcvalidation>
+		<arcvalidation></arcvalidation>
+		<dwgvalidation>DWG </dwgvalidation>
+		<ifcvalidation></ifcvalidation>
+		<dxfvalidation></dxfvalidation>
+		<interlisvalidation></interlisvalidation>
+		<dicomvalidation></dicomvalidation>
+		<msgvalidation></msgvalidation>
 	</otherformats>
+	<egovdv>
+		<egovdvvalidation>&#x2717;</egovdvvalidation>
+		<Institut></Institut>
+		<Mandant>
+			<Mixed>yes</Mixed>
+			<Qualified>yes</Qualified>
+			<SwissGovPKI>yes</SwissGovPKI>
+			<Upregfn>yes</Upregfn>
+			<Siegel>yes</Siegel>
+			<Amtsblattportal>yes</Amtsblattportal>
+			<Edec>yes</Edec>
+			<ESchKG>yes</ESchKG>
+			<FederalLaw>yes</FederalLaw>
+			<Strafregisterauszug>yes</Strafregisterauszug>
+			<KantonZugFinanzdirektion>yes</KantonZugFinanzdirektion>
+		</Mandant>
+	</egovdv>
 	<hash></hash><!--wenn leer wird kein Hashwert berechnet und ausgegeben / MD5 / SHA-1 / SHA-256 / SHA-512 -->
 	<sizeWarning></sizeWarning><!--wenn leer wird keine Warnung bei kleinen Dateien ausgegeben ansonsten limite in Kilobyte / 0.5KB / 1KB / 5KB -->
 	<pathtoworkdir></pathtoworkdir><!--wenn leer wird "USERPROFILE/.kost-val_2x/temp_KOST-Val" verwendet -->

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<StackPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="860.0" prefHeight="460.0" style="-fx-background-color: silver;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.kostceco.tools.kostval.ConfigControllerDv">
+	<children>
+		<GridPane minHeight="400.0">
+			<columnConstraints>
+				<ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="170.0" />
+				<ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="170.0" />
+				<ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="170.0" />
+				<ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="170.0" />
+				<ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="160.0" />
+			</columnConstraints>
+			<rowConstraints>
+				<RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="5.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="5.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+			</rowConstraints>
+			<children>
+				<Label fx:id="labelVal" text="Einstellungen für eGov diskret Signaturvalidator" GridPane.columnSpan="4">
+					<font>
+						<Font name="System Bold" size="18.0" />
+					</font>
+				</Label>
+				<Button fx:id="buttonConfigApply" alignment="TOP_LEFT" maxHeight="26.0" maxWidth="160.0" minHeight="26.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#configApply" prefHeight="26.0" prefWidth="160.0" style="-fx-border-color: LimeGreen;" text="Anwenden" GridPane.columnIndex="4">
+					<GridPane.margin>
+						<Insets />
+					</GridPane.margin>
+				</Button>
+				<Label fx:id="labelConfig" alignment="CENTER" contentDisplay="CENTER" maxHeight="20.0" maxWidth="780.0" minHeight="20.0" minWidth="780.0" prefHeight="20.0" prefWidth="780.0" text="Copyright © KOST/CECO" textAlignment="CENTER" textFill="WHITESMOKE" GridPane.columnSpan="5" GridPane.halignment="CENTER" GridPane.rowIndex="15" GridPane.valignment="CENTER" />
+				<Label fx:id="labelMessage" text="Meldung Validierungseinstellungen" textFill="RED" GridPane.columnIndex="1" GridPane.columnSpan="4" GridPane.rowIndex="3" />
+				<CheckBox fx:id="checkEdec" mnemonicParsing="false" onAction="#changeEdec" selected="true" text="eDec (Bundesamtes für Zoll und Grenzsicherheit BAZG) °" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="6" />
+				<CheckBox fx:id="checkMixed" mnemonicParsing="false" onAction="#changeMixed" selected="true" text="Mixed (unterschiedlichen Zertifikatsklassen) *" GridPane.columnSpan="2" GridPane.rowIndex="4" />
+				<CheckBox fx:id="checkSwissGovPKI" mnemonicParsing="false" onAction="#changeSwissGovPKI" selected="true" text="SG-PKI (Swiss Government PKI Signaturen) °" GridPane.columnSpan="2" GridPane.rowIndex="6" />
+				<CheckBox fx:id="checkQualified" mnemonicParsing="false" onAction="#changeQualified" selected="true" text="Qualifizierte Signatur (QES) °" GridPane.columnSpan="2" GridPane.rowIndex="5" />
+				<CheckBox fx:id="checkUpregfn" mnemonicParsing="false" onAction="#changeUpregfn" selected="true" text="Urkunde (Signatur einer Urkundspersonen) °" GridPane.columnSpan="2" GridPane.rowIndex="7" />
+				<CheckBox fx:id="checkAmtsblattportal" mnemonicParsing="false" onAction="#changeAmtsblattportal" selected="true" text="Amtsblatt-Portal (offizielle amtliche Meldungen) °" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="5" />
+				<CheckBox fx:id="checkESchKG" mnemonicParsing="false" onAction="#changeESchKG" selected="true" text="eSchKG (Betreibungsamt) °" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="7" />
+				<CheckBox fx:id="checkFederalLaw" mnemonicParsing="false" onAction="#changeFederalLaw" selected="true" text="Bundesrecht (Publikationsplattform des Bundes) °" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="8" />
+				<CheckBox fx:id="checkStrafregisterauszug" mnemonicParsing="false" onAction="#changeStrafregisterauszug" selected="true" text="Strafregister (Strafregisterauszüge vom BJ) °" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="9" />
+				<CheckBox fx:id="checkKantonZugFinanzdirektion" mnemonicParsing="false" onAction="#changeKantonZugFinanzdirektion" selected="true" text="Kt. Zug (Dokumente der Zuger Verwaltungsbehörden) °" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="10" />
+				<CheckBox fx:id="checkSiegel" mnemonicParsing="false" onAction="#changeSiegel" selected="true" text="Siegel (geregeltes elektronisches Siegel) °" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="4" />
+				<Label fx:id="labelMandant" text="Mandant" GridPane.rowIndex="3" />
+				<Label fx:id="labelInstitut" text="Institution" GridPane.rowIndex="2" />
+            <ChoiceBox fx:id="institut" maxWidth="300.0" minHeight="26.0" minWidth="300.0" nodeOrientation="LEFT_TO_RIGHT" onAction="#changeInstitut" prefHeight="26.0" prefWidth="300.0" value="" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+            <Label fx:id="labelStar" text="* Wird immer geprüft, aber nur wenn es angewählt ist, wird der valide Report nicht gelöscht." GridPane.columnSpan="5" GridPane.rowIndex="12" />
+            <Label fx:id="labelStar1" text="° Wird nur geprüft, wenn es angewählt ist und der valide Report wird nicht gelöscht." GridPane.columnSpan="5" GridPane.rowIndex="13" />
+			</children>
+			<padding>
+				<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+			</padding>
+		</GridPane>
+	</children>
+</StackPane>

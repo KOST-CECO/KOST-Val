@@ -46,6 +46,7 @@
             <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 				<RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" vgrow="SOMETIMES" />
 				<RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
             <RowConstraints />
@@ -94,20 +95,20 @@
 					</GridPane.margin>
 				</Button>
 				<Button fx:id="buttonConfigApplyStandard" alignment="TOP_LEFT" layoutX="851.0" layoutY="47.0" maxHeight="26.0" maxWidth="170.0" minHeight="26.0" minWidth="170.0" mnemonicParsing="false" onAction="#configApplyStandard" prefHeight="26.0" prefWidth="170.0" style="-fx-border-color: LimeGreen;" text="Standard anwenden" GridPane.columnIndex="5" GridPane.rowIndex="4" />
-				<Button fx:id="buttonWork" alignment="TOP_LEFT" maxHeight="26.0" minHeight="26.0" mnemonicParsing="false" onAction="#chooseWork" prefHeight="26.0" prefWidth="260.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="Arbeitsverzeichnis" GridPane.columnSpan="2" GridPane.rowIndex="16">
+				<Button fx:id="buttonWork" alignment="TOP_LEFT" maxHeight="26.0" minHeight="26.0" mnemonicParsing="false" onAction="#chooseWork" prefHeight="26.0" prefWidth="260.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="Arbeitsverzeichnis" GridPane.columnSpan="2" GridPane.rowIndex="17">
 					<GridPane.margin>
 						<Insets right="10.0" />
 					</GridPane.margin>
 				</Button>
-				<Button fx:id="buttonInput" alignment="TOP_LEFT" maxHeight="26.0" minHeight="26.0" mnemonicParsing="false" onAction="#chooseInput" prefHeight="26.0" prefWidth="260.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="Inputverzeichnis" GridPane.columnSpan="2" GridPane.rowIndex="17">
+				<Button fx:id="buttonInput" alignment="TOP_LEFT" maxHeight="26.0" minHeight="26.0" mnemonicParsing="false" onAction="#chooseInput" prefHeight="26.0" prefWidth="260.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="Inputverzeichnis" GridPane.columnSpan="2" GridPane.rowIndex="18">
 					<GridPane.margin>
 						<Insets right="10.0" />
 					</GridPane.margin>
 				</Button>
-				<Label fx:id="labelWork" layoutX="131.0" layoutY="372.0" text="(work)" GridPane.columnIndex="2" GridPane.columnSpan="4" GridPane.rowIndex="16" />
-				<Label fx:id="labelInput" layoutX="131.0" layoutY="467.0" text="(input)" GridPane.columnIndex="2" GridPane.columnSpan="4" GridPane.rowIndex="17" />
+				<Label fx:id="labelWork" layoutX="131.0" layoutY="372.0" text="(work)" GridPane.columnIndex="2" GridPane.columnSpan="4" GridPane.rowIndex="17" />
+				<Label fx:id="labelInput" layoutX="131.0" layoutY="467.0" text="(input)" GridPane.columnIndex="2" GridPane.columnSpan="4" GridPane.rowIndex="18" />
 				<WebView fx:id="wbv" minHeight="-1.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="7" GridPane.rowSpan="34" />
-				<Label fx:id="labelConfig" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="670.0" text="Copyright © KOST/CECO" textAlignment="CENTER" textFill="WHITESMOKE" GridPane.columnSpan="6" GridPane.halignment="CENTER" GridPane.rowIndex="21" GridPane.valignment="CENTER" />
+				<Label fx:id="labelConfig" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="670.0" text="Copyright © KOST/CECO" textAlignment="CENTER" textFill="WHITESMOKE" GridPane.columnSpan="6" GridPane.halignment="CENTER" GridPane.rowIndex="22" GridPane.valignment="CENTER" />
             <Label fx:id="labelText" text="Text">
                <font>
                   <Font name="System Bold" size="18.0" />
@@ -545,18 +546,18 @@
                   <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
                </padding>
             </Button>
-            <Label fx:id="labelHash" text="Hash" GridPane.rowIndex="14">
+            <Label fx:id="labelHash" text="Hash" GridPane.rowIndex="15">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <ChoiceBox fx:id="hashAlgo" maxWidth="90.0" minHeight="26.0" minWidth="90.0" nodeOrientation="LEFT_TO_RIGHT" onAction="#changeHashAlgo" prefHeight="26.0" prefWidth="90.0" value="" GridPane.columnIndex="1" GridPane.rowIndex="14" />
-            <Label fx:id="labelHint1" alignment="CENTER_RIGHT" contentDisplay="RIGHT" minHeight="20.0" minWidth="-Infinity" prefHeight="20.0" prefWidth="96.0" text="Hinweis:" textAlignment="RIGHT" GridPane.rowIndex="20">
+            <ChoiceBox fx:id="hashAlgo" maxWidth="90.0" minHeight="26.0" minWidth="90.0" nodeOrientation="LEFT_TO_RIGHT" onAction="#changeHashAlgo" prefHeight="26.0" prefWidth="90.0" value="" GridPane.columnIndex="1" GridPane.rowIndex="15" />
+            <Label fx:id="labelHint1" alignment="CENTER_RIGHT" contentDisplay="RIGHT" minHeight="20.0" minWidth="-Infinity" prefHeight="20.0" prefWidth="96.0" text="Hinweis:" textAlignment="RIGHT" GridPane.rowIndex="21">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <Label fx:id="labelHint" alignment="CENTER" contentDisplay="CENTER" minHeight="20.0" minWidth="-Infinity" prefHeight="20.0" text="öffnet die jeweilige Detailkonfiguration" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="20">
+            <Label fx:id="labelHint" alignment="CENTER" contentDisplay="CENTER" minHeight="20.0" minWidth="-Infinity" prefHeight="20.0" text="öffnet die jeweilige Detailkonfiguration" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="21">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -564,7 +565,7 @@
                   <Insets left="17.0" />
                </GridPane.margin>
             </Label>
-            <Label fx:id="labelHint2" alignment="CENTER" contentDisplay="CENTER" minHeight="20.0" minWidth="-Infinity" prefHeight="20.0" text="▼" textAlignment="CENTER" textFill="WHITESMOKE" GridPane.columnIndex="1" GridPane.rowIndex="20">
+            <Label fx:id="labelHint2" alignment="CENTER" contentDisplay="CENTER" minHeight="20.0" minWidth="-Infinity" prefHeight="20.0" text="▼" textAlignment="CENTER" textFill="WHITESMOKE" GridPane.columnIndex="1" GridPane.rowIndex="21">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -616,13 +617,52 @@
                   <Insets left="55.0" />
                </GridPane.margin>
             </Button>
-            <Label fx:id="labelWarning" text="Dateigrösse" GridPane.rowIndex="15">
+            <Label fx:id="labelWarning" text="Dateigrösse" GridPane.rowIndex="16">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <ChoiceBox fx:id="sizeWarning" maxWidth="90.0" minHeight="26.0" minWidth="90.0" nodeOrientation="LEFT_TO_RIGHT" onAction="#changeSizeWarning" prefHeight="26.0" prefWidth="90.0" value="" GridPane.columnIndex="1" GridPane.rowIndex="15" />
-            <Label fx:id="labelSize" text="Warnung ausgeben, wenn die Datei kleiner als die ausgewählte Dateigrösse ist" GridPane.columnIndex="2" GridPane.columnSpan="4" GridPane.rowIndex="15" />
+            <ChoiceBox fx:id="sizeWarning" maxWidth="90.0" minHeight="26.0" minWidth="90.0" nodeOrientation="LEFT_TO_RIGHT" onAction="#changeSizeWarning" prefHeight="26.0" prefWidth="90.0" value="" GridPane.columnIndex="1" GridPane.rowIndex="16" />
+            <Label fx:id="labelSize" text="Warnung ausgeben, wenn die Datei kleiner als die ausgewählte Dateigrösse ist" GridPane.columnIndex="2" GridPane.columnSpan="4" GridPane.rowIndex="16" />
+            <Label fx:id="labelDv" text="egovDV" GridPane.columnIndex="1" GridPane.rowIndex="14">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <padding>
+                  <Insets left="25.0" />
+               </padding>
+            </Label>
+            <Button fx:id="buttonDv" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changeDv" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="O" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="14">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
+               </padding>
+            </Button>
+            <Button fx:id="buttonDvVal" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changeDvVal" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: silver; -fx-background-color: silver;" text="▼" textAlignment="RIGHT" textFill="WHITESMOKE" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="14">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
+               </padding>
+               <GridPane.margin>
+                  <Insets left="72.0" />
+               </GridPane.margin>
+            </Button>
+            <Label fx:id="labelSignatur" text="Signatur" GridPane.rowIndex="14">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelEgovDV" text="Validierung von el. Signaturen in PDF/A- und PDF-Dateien (Lizenz erforderlich)" GridPane.columnIndex="2" GridPane.columnSpan="4" GridPane.rowIndex="14" />
 			</children>
 			<padding>
 				<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

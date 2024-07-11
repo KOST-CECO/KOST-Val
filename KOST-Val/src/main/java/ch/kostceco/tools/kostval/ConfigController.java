@@ -122,11 +122,13 @@ public class ConfigController
 	private Button				buttonSip0160, buttonSipVal;
 
 	@FXML
-	private Label				labelOther, labelWarning, labelSize, labelWork,
-			labelInput, labelHint, labelHint1, labelConfig;
+	private Label				labelOther, labelSignatur, labelDv, labelEgovDV,
+			labelWarning, labelSize, labelWork, labelInput, labelHint,
+			labelHint1, labelConfig;
 
 	@FXML
-	private Button				buttonPuid, buttonWork, buttonInput;
+	private Button				buttonDv, buttonDvVal, buttonPuid, buttonWork,
+			buttonInput;
 
 	ObservableList<String>		hashAlgoList		= FXCollections
 			.observableArrayList( "MD5", "SHA-1", "SHA-256", "SHA-512", "" );
@@ -155,7 +157,7 @@ public class ConfigController
 		String javaVersion = System.getProperty( "java.version" );
 		String javafxVersion = System.getProperty( "javafx.version" );
 		labelConfig.setText(
-				"Copyright © KOST/CECO          KOST-Val v2.2.0.1          JavaFX "
+				"Copyright © KOST/CECO          KOST-Val v2.2.1.0          JavaFX "
 						+ javafxVersion + "   &   Java-" + java6432 + " "
 						+ javaVersion + "." );
 
@@ -230,6 +232,7 @@ public class ConfigController
 				labelData.setText( "Daten" );
 				labelSip.setText( "SIP" );
 				labelOther.setText( "Sonstige" );
+				labelEgovDV.setText("Prüfung von el. Signaturen in PDF/A- und PDF-Dateien (Lizenz erforderlich)");
 				labelWarning.setText( "Dateigrösse" );
 				labelSize.setText(
 						"Warnung ausgeben, wenn die Datei kleiner als die ausgewählte Dateigrösse ist" );
@@ -252,6 +255,7 @@ public class ConfigController
 				labelData.setText( "Données" );
 				labelSip.setText( "SIP" );
 				labelOther.setText( "Autres" );
+				labelEgovDV.setText("Vérification des signatures él. dans PDF/A et PDF (licence requise)");
 				labelWarning.setText( "Taille" );
 				labelSize.setText(
 						"Afficher un avertissement si le fichier est plus petit que la taille de fichier sélectionnée" );
@@ -275,6 +279,7 @@ public class ConfigController
 				labelData.setText( "Dati" );
 				labelSip.setText( "SIP" );
 				labelOther.setText( "Altro" );
+				labelEgovDV.setText("Verifica delle firme el. nei file PDF/A e PDF (licenza necessaria)");
 				labelWarning.setText( "Dimensione" );
 				labelSize.setText(
 						"Visualizza l'avviso se il file è più piccolo della dimensione selezionata" );
@@ -297,6 +302,7 @@ public class ConfigController
 				labelData.setText( "Data" );
 				labelSip.setText( "SIP" );
 				labelOther.setText( "Other" );
+				labelEgovDV.setText("Verification of el. signatures in PDF/A and PDF files (license required)");
 				labelWarning.setText( "File size" );
 				labelSize.setText(
 						"Display warning if the file is smaller than the selected file size" );
@@ -358,6 +364,9 @@ public class ConfigController
 
 			String noSip0160 = "<ech0160validation>&#x2717;</ech0160validation>";
 			String yesSip0160 = "<ech0160validation>&#x2713;</ech0160validation>";
+
+			String noDv = "<egovdvvalidation>&#x2717;</egovdvvalidation>";
+			String yesDv = "<egovdvvalidation>&#x2713;</egovdvvalidation>";
 
 			if ( config.contains( noPdfa ) ) {
 				buttonPdfaVal.setDisable( true );
@@ -606,6 +615,23 @@ public class ConfigController
 				buttonSip0160.setText( "(✓)" );
 				buttonSip0160.setStyle(
 						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
+			}
+
+			if ( config.contains( noDv ) ) {
+				buttonDvVal.setDisable( true );
+				buttonDv.setText( "✗" );
+				buttonDv.setStyle(
+						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+			} else if ( config.contains( yesDv ) ) {
+				buttonDvVal.setDisable( false );
+				buttonDv.setText( "✓" );
+				buttonDv.setStyle(
+						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
+			} else {
+				buttonDvVal.setDisable( false );
+				buttonDv.setText( "✓" );
+				buttonDv.setStyle(
+						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
 			}
 
 			Document doc = null;
@@ -1731,7 +1757,7 @@ public class ConfigController
 		}
 	}
 
-	// Mit changeSipVal wird die Pdfa-Haupteinstellung umgestellt
+	// Mit changeSipVal wird die SIP-Haupteinstellung umgestellt
 	@FXML
 	void changeSipVal( ActionEvent eventSip )
 	{
@@ -1934,6 +1960,73 @@ public class ConfigController
 			e1.printStackTrace();
 		}
 	}
+
+	/* changeDv schaltet zwischen x V herum */
+	@FXML
+	void changeDv( ActionEvent event )
+	{
+		String yes = "<egovdvvalidation>&#x2713;</egovdvvalidation>";
+		String no = "<egovdvvalidation>&#x2717;</egovdvvalidation>";
+		try {
+			String optButton = buttonDv.getText();
+			if ( optButton.equals( "✗" ) ) {
+				buttonDvVal.setDisable( false );
+				Util.oldnewstring( no, yes, configFile );
+				buttonDv.setText( "✓" );
+				buttonDv.setStyle(
+						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
+				engine.load( "file:///" + configFile.getAbsolutePath() );
+			} else {
+				buttonDvVal.setDisable( true );
+				Util.oldnewstring( yes, no, configFile );
+				buttonDv.setText( "✗" );
+				buttonDv.setStyle(
+						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+				engine.load( "file:///" + configFile.getAbsolutePath() );
+			}
+		} catch ( IOException e ) {
+			e.printStackTrace();
+		}
+	}
+
+	// Mit changeDvVal wird die Signatur-Haupteinstellung umgestellt
+	@FXML
+	void changeDvVal( ActionEvent eventpdfa )
+	{
+		try {
+			StackPane dvLayout = new StackPane();
+
+			dvLayout = FXMLLoader
+					.load( getClass().getResource( "ConfigViewDv.fxml" ) );
+			Scene dvScene = new Scene( dvLayout );
+			dvScene.getStylesheets().add( getClass()
+					.getResource( "application.css" ).toExternalForm() );
+
+			// New window (Stage)
+			Stage dvStage = new Stage();
+
+			dvStage.setTitle(
+					"KOST-Val   -   Configuration   -    eGov diskret Signaturvalidator " );
+			Image kostvalIcon = new Image( "file:" + dirOfJarPath
+					+ File.separator + "doc" + File.separator + "valicon.png" );
+			// Image kostvalIcon = new Image( "file:valicon.png" );
+			dvStage.initModality( Modality.APPLICATION_MODAL );
+			dvStage.getIcons().add( kostvalIcon );
+			dvStage.setScene( dvScene );
+			dvStage.setOnCloseRequest( event -> {
+				// hier engeben was beim schliessen gemacht werden soll
+				engine.load( "file:///" + configFile.getAbsolutePath() );
+			} );
+			dvStage.show();
+			dvStage.setOnHiding( event -> {
+				// hier engeben was beim schliessen gemacht werden soll
+				engine.load( "file:///" + configFile.getAbsolutePath() );
+			} );
+		} catch ( IOException e1 ) {
+			e1.printStackTrace();
+		}
+	}
+
 	/* TODO --> ChoiceBox ================= */
 
 	// Mit changeHashAlgo wird die Hash-Auswahl umgestellt

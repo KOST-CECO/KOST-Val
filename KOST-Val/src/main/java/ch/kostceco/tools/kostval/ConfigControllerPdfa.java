@@ -67,7 +67,7 @@ public class ConfigControllerPdfa
 		String javaVersion = System.getProperty( "java.version" );
 		String javafxVersion = System.getProperty( "javafx.version" );
 		labelConfig.setText(
-				"Copyright © KOST/CECO          KOST-Val v2.2.0.1          JavaFX "
+				"Copyright © KOST/CECO          KOST-Val v2.2.1.0          JavaFX "
 						+ javafxVersion + "   &   Java-" + java6432 + " "
 						+ javaVersion + "." );
 

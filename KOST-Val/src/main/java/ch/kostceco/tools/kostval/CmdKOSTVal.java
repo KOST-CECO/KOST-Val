@@ -79,7 +79,7 @@ public class CmdKOSTVal implements MessageConstants
 		CmdKOSTVal cmdkostval = (CmdKOSTVal) context.getBean( "cmdkostval" );
 		Util.switchOnConsole();
 
-		String versionKostVal = "2.2.0.1";
+		String versionKostVal = "2.2.1.0";
 		System.out.println( "KOST-Val " + versionKostVal );
 
 		// Ist die Anzahl Parameter (mind 2) korrekt?

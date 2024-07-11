@@ -85,7 +85,6 @@ public class GuiController
 	ObservableList<String>		logTypeList		= FXCollections
 			.observableArrayList( " --xml (default)", " --min (valid/invalid)",
 					" --max (verbose)" );
-	// TODO "LogType: --min",
 
 	@FXML
 	private ChoiceBox<String>	lang, logType;
@@ -114,7 +113,7 @@ public class GuiController
 	private String				arg0, arg1, arg2, arg3 = "--xml", dirOfJarPath,
 			initInstructionsDe, initInstructionsFr, initInstructionsIt,
 			initInstructionsEn;
-	private String				versionKostVal	= "2.2.0.1";
+	private String				versionKostVal	= "2.2.1.0";
 	/*
 	 * TODO: versionKostVal auch hier anpassen:
 	 * 

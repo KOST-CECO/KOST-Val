@@ -121,6 +121,7 @@ public class ValidationDphotointerValidationModuleImpl extends
 			String oldErrorLine4 = "";
 			String oldErrorLine5 = "";
 
+			Boolean tiffLine = false;
 			try {
 				BufferedReader in = new BufferedReader(
 						new FileReader( jhoveReport ) );
@@ -128,7 +129,14 @@ public class ValidationDphotointerValidationModuleImpl extends
 				while ( (line = in.readLine()) != null ) {
 					// die ColorSpace-Zeile enthält einer dieser
 					// Freitexte der Farbraumart
-					if ( line.contains( " ColorSpace: " ) ) {
+
+					if ( line.contains( " Type: TIFF" ) ) {
+						tiffLine = true;
+					} else if ( line.contains( " Type: " ) ) {
+						tiffLine = false;
+					}
+
+					if ( line.contains( " ColorSpace: " ) && tiffLine ) {
 						jhoveio = 1;
 						if ( line.contains( " ColorSpace: " + pi0 )
 								|| line.contains( " ColorSpace: " + pi1 )

@@ -87,7 +87,7 @@ public class Jhove
 				String RIGHTS = new String( "LGPL v2.1" );
 				App app = new App( NAME, RELEASE, DATE, USAGE, RIGHTS );
 				JhoveBase je = new JhoveBase();
-				OutputHandler handler = je.getHandler( "XML" );
+				OutputHandler handler = je.getHandler( "TXT" );
 
 				// check all modules => null oder new TiffModule ();
 				Module module = new TiffModule();

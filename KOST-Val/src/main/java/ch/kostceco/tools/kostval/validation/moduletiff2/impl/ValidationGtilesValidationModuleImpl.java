@@ -106,45 +106,43 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl
 						 */
 						if ( (line.contains( " Offset:" )) ) {
 							jhoveio = 1;
-							if ( line.contains( "Tile" ) ) {
-								// TODO: Funktioniert noch nicht, Jhove muss
-								// noch was betreffend Tiles ausgeben
-								// Invalider Status (Kacheln sind nicht erlaubt)
-								isValid = false;
-								if ( min ) {
-									in.close();
-									return false;
-								} else {
-									if ( !line.equals( oldErrorLine1 )
-											&& !line.equals( oldErrorLine2 )
-											&& !line.equals( oldErrorLine3 )
-											&& !line.equals( oldErrorLine4 )
-											&& !line.equals( oldErrorLine5 ) ) {
-										// neuer Fehler
-										Logtxt.logtxt( logFile,
-												getTextResourceService()
-														.getText( locale,
-																MESSAGE_XML_MODUL_G_TIFF )
-														+ getTextResourceService()
-																.getText(
-																		locale,
-																		MESSAGE_XML_CG_INVALID,
-																		line ) );
-										if ( oldErrorLine1.equals( "" ) ) {
-											oldErrorLine1 = line;
-										} else if ( oldErrorLine2
-												.equals( "" ) ) {
-											oldErrorLine2 = line;
-										} else if ( oldErrorLine3
-												.equals( "" ) ) {
-											oldErrorLine3 = line;
-										} else if ( oldErrorLine4
-												.equals( "" ) ) {
-											oldErrorLine4 = line;
-										} else if ( oldErrorLine5
-												.equals( "" ) ) {
-											oldErrorLine5 = line;
-										}
+						}
+						if ( (!line.contains( "RepresentationInformation" )
+								&& line.contains( "Tile" ))
+								|| (!line
+										.contains( "RepresentationInformation" )
+										&& line.contains( "tile" )) ) {
+							// TODO: Funktioniert noch nicht, Jhove muss
+							// noch was betreffend Tiles ausgeben
+							// Invalider Status (Kacheln sind nicht erlaubt)
+							isValid = false;
+							if ( min ) {
+								in.close();
+								return false;
+							} else {
+								if ( !line.equals( oldErrorLine1 )
+										&& !line.equals( oldErrorLine2 )
+										&& !line.equals( oldErrorLine3 )
+										&& !line.equals( oldErrorLine4 )
+										&& !line.equals( oldErrorLine5 ) ) {
+									// neuer Fehler
+									Logtxt.logtxt( logFile,
+											getTextResourceService().getText(
+													locale,
+													MESSAGE_XML_MODUL_G_TIFF )
+													+ getTextResourceService()
+															.getText( locale,
+																	MESSAGE_XML_G_INVALID ) );
+									if ( oldErrorLine1.equals( "" ) ) {
+										oldErrorLine1 = line;
+									} else if ( oldErrorLine2.equals( "" ) ) {
+										oldErrorLine2 = line;
+									} else if ( oldErrorLine3.equals( "" ) ) {
+										oldErrorLine3 = line;
+									} else if ( oldErrorLine4.equals( "" ) ) {
+										oldErrorLine4 = line;
+									} else if ( oldErrorLine5.equals( "" ) ) {
+										oldErrorLine5 = line;
 									}
 								}
 							}

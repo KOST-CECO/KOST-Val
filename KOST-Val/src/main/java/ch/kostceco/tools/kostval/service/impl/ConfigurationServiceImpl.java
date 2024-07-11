@@ -840,6 +840,111 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			otherformats = otherformats.replace( ";", "" );
 			configMap.put( "otherformats", otherformats );
 
+			// egovdv
+			// Wie soll der egovdv verwendet werden
+			/* durch die Sonderzeichen muss es anders ausgelesen werden */
+			String yesDV = "<egovdvvalidation>&#x2713;</egovdvvalidation>";
+			String dvvalidation = "no";
+			if ( config.contains( yesDV ) ) {
+				dvvalidation = "yes";
+			} else {
+				dvvalidation = "no";
+			}
+			configMap.put( "dvvalidation", dvvalidation );
+			String Institut = doc.getElementsByTagName( "Institut" ).item( 0 )
+					.getTextContent();
+			configMap.put( "Institut", Institut );
+
+			String yesMixed = "<Mixed>yes</Mixed>";
+			String strMixed = "no";
+			if ( config.contains( yesMixed ) ) {
+				strMixed = "Mixed";
+			} else {
+				strMixed = "no";
+			}
+			configMap.put( "Mixed", strMixed );
+			String yesQualified = "<Qualified>yes</Qualified>";
+			String strQualified = "no";
+			if ( config.contains( yesQualified ) ) {
+				strQualified = "Qualified";
+			} else {
+				strQualified = "no";
+			}
+			configMap.put( "Qualified", strQualified );
+			String yesSwissGovPKI = "<SwissGovPKI>yes</SwissGovPKI>";
+			String strSwissGovPKI = "no";
+			if ( config.contains( yesSwissGovPKI ) ) {
+				strSwissGovPKI = "SwissGov-PKI";
+			} else {
+				strSwissGovPKI = "no";
+			}
+			configMap.put( "SwissGovPKI", strSwissGovPKI );
+			String yesUpregfn = "<Upregfn>yes</Upregfn>";
+			String strUpregfn = "no";
+			if ( config.contains( yesUpregfn ) ) {
+				strUpregfn = "upreg-fn";
+			} else {
+				strUpregfn = "no";
+			}
+			configMap.put( "Upregfn", strUpregfn );
+			String yesSiegel = "<Siegel>yes</Siegel>";
+			String strSiegel = "no";
+			if ( config.contains( yesSiegel ) ) {
+				strSiegel = "Siegel";
+			} else {
+				strSiegel = "no";
+			}
+			configMap.put( "Siegel", strSiegel );
+			String yesAmtsblattportal = "<Amtsblattportal>yes</Amtsblattportal>";
+			String strAmtsblattportal = "no";
+			if ( config.contains( yesAmtsblattportal ) ) {
+				strAmtsblattportal = "Amtsblattportal";
+			} else {
+				strAmtsblattportal = "no";
+			}
+			configMap.put( "Amtsblattportal", strAmtsblattportal );
+			String yesEdec = "<Edec>yes</Edec>";
+			String strEdec = "no";
+			if ( config.contains( yesEdec ) ) {
+				strEdec = "edec";
+			} else {
+				strEdec = "no";
+			}
+			configMap.put( "Edec", strEdec );
+			String yesESchKG = "<ESchKG>yes</ESchKG>";
+			String strESchKG = "no";
+			if ( config.contains( yesESchKG ) ) {
+				strESchKG = "eSchKG";
+			} else {
+				strESchKG = "no";
+			}
+			configMap.put( "ESchKG", strESchKG );
+			String yesFederalLaw = "<FederalLaw>yes</FederalLaw>";
+			String strFederalLaw = "no";
+			if ( config.contains( yesFederalLaw ) ) {
+				strFederalLaw = "FederalLaw";
+			} else {
+				strFederalLaw = "no";
+			}
+			configMap.put( "FederalLaw", strFederalLaw );
+			String yesStrafregisterauszug = "<Strafregisterauszug>yes</Strafregisterauszug>";
+			String strStrafregisterauszug = "no";
+			if ( config.contains( yesStrafregisterauszug ) ) {
+				strStrafregisterauszug = "Strafregisterauszug";
+			} else {
+				strStrafregisterauszug = "no";
+			}
+			configMap.put( "Strafregisterauszug", strStrafregisterauszug );
+			String yesKantonZugFinanzdirektion = "<KantonZugFinanzdirektion>yes</KantonZugFinanzdirektion>";
+			String strKantonZugFinanzdirektion = "no";
+			if ( config.contains( yesKantonZugFinanzdirektion ) ) {
+				strKantonZugFinanzdirektion = "Kanton-Zug-Finanzdirektion";
+			} else {
+				strKantonZugFinanzdirektion = "no";
+			}
+			configMap.put( "KantonZugFinanzdirektion",
+					strKantonZugFinanzdirektion );
+
 			// hash
 			/*
 			 * Hashwert von Dateien berechnen und ausgeben. Leer bedeutet keine

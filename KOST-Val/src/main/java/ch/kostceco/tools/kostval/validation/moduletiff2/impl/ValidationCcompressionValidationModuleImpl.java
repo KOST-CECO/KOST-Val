@@ -140,6 +140,7 @@ public class ValidationCcompressionValidationModuleImpl extends
 				return false;
 			}
 		} else {
+			Boolean tiffLine = false;
 			try {
 				BufferedReader in = new BufferedReader(
 						new FileReader( jhoveReport ) );
@@ -150,7 +151,16 @@ public class ValidationCcompressionValidationModuleImpl extends
 					 * CompressionScheme-Zeile enthält einer dieser Freitexte
 					 * der Komprimierungsart
 					 */
-					if ( line.contains( " CompressionScheme: " ) ) {
+
+					if ( line.contains( " Type: TIFF" ) ) {
+						// System.out.println( "Line=" + line );
+						tiffLine = true;
+					} else if ( line.contains( " Type: " ) ) {
+						// System.out.println( "Line=" + line );
+						tiffLine = false;
+					}
+
+					if ( line.contains( " CompressionScheme: " ) && tiffLine ) {
 						jhoveio = 1;
 						if ( line.contains( " CompressionScheme: " + com1 )
 								|| line.contains(

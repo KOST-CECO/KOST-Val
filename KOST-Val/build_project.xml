@@ -23,7 +23,7 @@
 		<pathelement location="lib/xercesImpl-2.12.2.jar" />
 		<pathelement location="lib/jdom-2.0.6.1.jar" />
 		<pathelement location="lib/zip64-1.0.jar" />
-		<pathelement location="lib/jhove-apps-1.28.0.jar" />
+		<pathelement location="lib/jhove-apps-1.30.0.jar" />
 		<pathelement location="lib/tiff-hul-1.9.4.jar" />
 		<pathelement location="lib/VALA-6.27.2.1.RELEASE.jar" />
 		<pathelement location="lib/badpeggy-2.0.jar" />

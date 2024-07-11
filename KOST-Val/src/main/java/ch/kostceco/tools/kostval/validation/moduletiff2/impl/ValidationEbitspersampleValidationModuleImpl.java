@@ -113,6 +113,7 @@ public class ValidationEbitspersampleValidationModuleImpl extends
 			String oldErrorLine4 = "";
 			String oldErrorLine5 = "";
 
+			Boolean tiffLine = false;
 			try {
 				BufferedReader in = new BufferedReader(
 						new FileReader( jhoveReport ) );
@@ -126,7 +127,14 @@ public class ValidationEbitspersampleValidationModuleImpl extends
 					 * Varianten: BitsPerSample: 8 BitsPerSample: 8 8 8
 					 * BitsPerSample: 8, 8, 8 evtl noch mehr
 					 */
-					if ( line.contains( " BitsPerSample: " ) ) {
+
+					if ( line.contains( " Type: TIFF" ) ) {
+						tiffLine = true;
+					} else if ( line.contains( " Type: " ) ) {
+						tiffLine = false;
+					}
+
+					if ( line.contains( " BitsPerSample: " ) && tiffLine ) {
 						jhoveio = 1;
 						if ( ((line.contains( "BitsPerSample: 1 " )
 								|| (line.contains( "BitsPerSample: 1," ))

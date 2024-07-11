@@ -61,10 +61,10 @@ import com.pdftools.Stream;
 import com.pdftools.pdfvalidator.PdfError;
 import com.pdftools.pdfvalidator.PdfValidatorAPI;
 
-import ch.kostceco.tools.kosttools.fileservice.egovdv;
 import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kosttools.util.UtilCallas;
 import ch.kostceco.tools.kosttools.util.UtilCharacter;
+import ch.kostceco.tools.kostval.controller.Controllervalfofile;
 import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfavalidationException;
 import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
@@ -377,120 +377,27 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 
 		// Die Erkennung erfolgt bereits im Vorfeld
 
-		// TODO: Ermittlung ob Signaturen enthalten sind
-		File workDir2 = new File( pathToWorkDir );
-		if ( !workDir2.exists() ) {
-			workDir2.mkdir();
+		/*
+		 * Fuer das weitere Vorgehen ist es wichtig zu wissen ob Signaturen
+		 * enthalten sind.
+		 * 
+		 * Entsprechend werden diese jetzt hier ermittelt:
+		 * 
+		 * ggf auch direkt validieren und dokumentieren
+		 */
+		String egovdvMsg = "";
+		try {
+			egovdvMsg = Controllervalfofile.valFoFileEgodv( valDatei,
+					directoryOfLogfile, dirOfJarPath, configMap, locale );
+		} catch ( IOException e1 ) {
+			e1.printStackTrace();
+			System.out.println( "Fehler beim auslesen der config (pdfa)" );
 		}
-		File outputList = new File(
-				pathToWorkDir + File.separator + "egovdvList.txt" );
-		// falls das File von einem vorhergehenden Durchlauf bereits
-		// existiert, loeschen wir es
-		if ( outputList.exists() ) {
-			outputList.delete();
-		}
-
-		boolean isValidSig = true;
-
-		// - Initialisierung egovdv -> existiert alles zu egovdv?
-
-		// Pfad zum Programm existiert die Dateien?
-		String checkTool = egovdv.checkEgovdv( dirOfJarPath );
-		if ( !checkTool.equals( "OK" ) ) {
-			if ( min ) {
-				return false;
-			} else {
-				Logtxt.logtxt( logFile, getTextResourceService()
-						.getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-						+ getTextResourceService().getText( locale,
-								MESSAGE_XML_MISSING_FILE, checkTool, "" ) );
-				isValidSig = false;
-			}
+		if ( egovdvMsg == "NoSignature" ) {
+			// keine Signature
 		} else {
-			// egovdv sollte vorhanden sein
-
-			try {
-				Integer countSig = egovdv.execEgovdvCountSig( valDatei,
-						workDir2, dirOfJarPath );
-				/*
-				 * Gibt mit egovdv via cmd die Anzahl Signaturen in pdf aus
-				 * 
-				 * 0 = keine Signatur
-				 * 
-				 * 999 = Fehler: Es existiert nicht alles zu egovdv
-				 * 
-				 * 998 = Fehler: Exception oder Report existiert nicht
-				 * 
-				 * 997 = Fehler: Die ersten beiden Zeilen zu egovdv fehlen
-				 * 
-				 * 996 = Fehler: Exception UNKNOWN Catch
-				 * 
-				 * @return Integer mit der Anzahl Signaturen
-				 */
-				if ( countSig == 999 ) {
-					// 999 = Fehler: Es existiert nicht alles zu egovdv
-
-					/*
-					 * Wurde bereits abgefragt Logtxt.logtxt( logFile,
-					 * getTextResourceService() .getText( locale,
-					 * MESSAGE_XML_MODUL_A_PDFA ) +
-					 * getTextResourceService().getText( locale,
-					 * MESSAGE_XML_MISSING_FILE, checkTool, "" ) ); isValidSig =
-					 * false;
-					 */
-
-				} else if ( countSig == 998 ) {
-					// 998 = Fehler: Exception oder Report existiert nicht
-					if ( min ) {
-						// return false;
-						isValidSig = false;
-					} else {
-						isValidSig = false;
-						// Erster Fehler! Meldung A ausgeben und Sig invalid
-						// setzten
-						Logtxt.logtxt( logFile, getTextResourceService()
-								.getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-								+ getTextResourceService().getText( locale,
-										MESSAGE_XML_SERVICEINVALID, "egovdv",
-										"" ) );
-					}
-				} else if ( countSig == 997 ) {
-					isValidSig = false;
-					// die ersten beiden Zeilen fehlen
-					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale,
-									MESSAGE_XML_MODUL_A_PDFA )
-									+ getTextResourceService().getText( locale,
-											ERROR_XML_SERVICEFAILED, "egovdv",
-											"missing lines" ) );
-				} else if ( countSig == 996 ) {
-					isValidSig = false;
-					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale,
-									MESSAGE_XML_MODUL_A_PDFA )
-									+ getTextResourceService().getText( locale,
-											ERROR_XML_UNKNOWN,
-											"egovdv: catch-Error" ) );
-				} else if ( countSig == 0 ) {
-					// keine Signature
-				} else {
-					// Warnung mit Anzahl Signaturen ausgeben
-					Logtxt.logtxt( logFile, getTextResourceService()
-							.getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-							+ getTextResourceService().getText( locale,
-									WARNING_XML_A_SIGNATURE, countSig ) );
-				}
-			} catch ( Exception e ) {
-				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale,
-								MESSAGE_XML_MODUL_A_PDFA )
-								+ getTextResourceService().getText( locale,
-										ERROR_XML_UNKNOWN,
-										"egovdv: " + e.getMessage() ) );
-				return false;
-			}
+			Logtxt.logtxt( logFile, egovdvMsg );
 		}
-		// TODO: Ende Ermittlung ob Signaturen enthalten sind
 
 		boolean isValid = false;
 		boolean isValidPdftools = true;
@@ -1918,6 +1825,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 										|| errorMsgCode0x.toLowerCase()
 												.contains( " structelem" )
 										|| errorMsgCode0x.toLowerCase()
+												.contains( " xref" )
+										|| errorMsgCode0x.toLowerCase()
 												.contains( " eol" ) ) {
 									if ( pdftoolsB.toLowerCase().contains(
 											errorMsgCode0x.toLowerCase() ) ) {
@@ -2910,6 +2819,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 											|| line.toLowerCase()
 													.contains( "lzw" )
 											|| line.toLowerCase()
+													.contains( "xref" )
+											|| line.toLowerCase()
 													.contains( " eol" ) ) {
 										isValidCb = false;
 										if ( callasB.toLowerCase().contains(
@@ -3485,7 +3396,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 				isValid = false;
 			}
 		}
-		if ( !isValidFont || !isValidJ || !isValidSig ) {
+		if ( !isValidFont || !isValidJ ) {
 			isValid = false;
 		}
 
