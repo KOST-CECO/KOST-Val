@@ -180,8 +180,14 @@ public class Controllervalfofile implements MessageConstants
 				if ( recFormat.contains( "UNKNOWN_" ) ) {
 					// TODO Unbekanntes oder weiteres Format
 
-					String formatUK = recFormat.replace( "UNKNOWN_", "" );
+					String formatUK = recFormat.replace( "UNKNOWN_.", "" );
+					formatUK = formatUK.replace( "UNKNOWN_", "" );
 
+					/*
+					 * System.out.println("recFormat "+recFormat);
+					 * System.out.println("formatUK "+formatUK);
+					 * System.out.println("otherformats "+otherformats);
+					 */
 					if ( otherformats.contains( formatUK ) ) {
 						// nur akzeptiert -> KEINE Validierung,
 						// nur Erkennung
@@ -1001,7 +1007,8 @@ public class Controllervalfofile implements MessageConstants
 									+ "_dvReport_Mixed.pdf" );
 
 					String mixedSig = egovdv.execEgovdvCheck( valDatei,
-							outMixedSig, workDir2, dirOfJarPath, "Mixed" );
+							outMixedSig, workDir2, dirOfJarPath, "Mixed",
+							locale );
 
 					if ( mixedSig.contains( "noLicense" ) ) {
 						// Warnung mit Anzahl Signaturen ausgeben
@@ -1041,7 +1048,7 @@ public class Controllervalfofile implements MessageConstants
 
 							String strAnalysePdf = egovdv
 									.analyseEgovdvPdf( outMixedSig );
-							
+
 							// System.out.println(strAnalysePdf);
 
 							String oldMsg = "<Message>Das Dokument ist gültig signiert.";
@@ -1061,7 +1068,7 @@ public class Controllervalfofile implements MessageConstants
 												+ "_dvReport_Qualified.pdf" );
 								String QualifiedSig = egovdv.execEgovdvCheck(
 										valDatei, outQualifiedSig, workDir2,
-										dirOfJarPath, Qualified );
+										dirOfJarPath, Qualified, locale );
 								if ( QualifiedSig
 										.contains( "Validity-VALID_" ) ) {
 									// pdf behalten
@@ -1085,7 +1092,7 @@ public class Controllervalfofile implements MessageConstants
 												+ "_dvReport_SwissGovPKI.pdf" );
 								String SwissGovPKISig = egovdv.execEgovdvCheck(
 										valDatei, outSwissGovPKISig, workDir2,
-										dirOfJarPath, SwissGovPKI );
+										dirOfJarPath, SwissGovPKI, locale );
 								if ( SwissGovPKISig
 										.contains( "Validity-VALID_" ) ) {
 									// pdf behalten
@@ -1109,7 +1116,7 @@ public class Controllervalfofile implements MessageConstants
 												+ "_dvReport_Upregfn.pdf" );
 								String UpregfnSig = egovdv.execEgovdvCheck(
 										valDatei, outUpregfnSig, workDir2,
-										dirOfJarPath, Upregfn );
+										dirOfJarPath, Upregfn, locale );
 								if ( UpregfnSig
 										.contains( "Validity-VALID_" ) ) {
 									// pdf behalten
@@ -1135,7 +1142,8 @@ public class Controllervalfofile implements MessageConstants
 										.execEgovdvCheck( valDatei,
 												outKantonZugFinanzdirektionSig,
 												workDir2, dirOfJarPath,
-												KantonZugFinanzdirektion );
+												KantonZugFinanzdirektion,
+												locale );
 								if ( KantonZugFinanzdirektionSig
 										.contains( "Validity-VALID_" ) ) {
 									// pdf behalten
@@ -1159,7 +1167,7 @@ public class Controllervalfofile implements MessageConstants
 											+ "_dvReport_Siegel.pdf" );
 							String SiegelSig = egovdv.execEgovdvCheck( valDatei,
 									outSiegelSig, workDir2, dirOfJarPath,
-									Siegel );
+									Siegel, locale );
 							if ( SiegelSig.contains( "Validity-VALID_" ) ) {
 								if ( Siegel != "no" ) {
 									// pdf behalten
@@ -1185,7 +1193,7 @@ public class Controllervalfofile implements MessageConstants
 											.execEgovdvCheck( valDatei,
 													outAmtsblattportalSig,
 													workDir2, dirOfJarPath,
-													Amtsblattportal );
+													Amtsblattportal, locale );
 									if ( AmtsblattportalSig
 											.contains( "Validity-VALID_" ) ) {
 										// pdf behalten
@@ -1210,7 +1218,7 @@ public class Controllervalfofile implements MessageConstants
 													+ "_dvReport_Edec.pdf" );
 									String EdecSig = egovdv.execEgovdvCheck(
 											valDatei, outEdecSig, workDir2,
-											dirOfJarPath, Edec );
+											dirOfJarPath, Edec, locale );
 									if ( EdecSig
 											.contains( "Validity-VALID_" ) ) {
 										// pdf behalten
@@ -1234,7 +1242,7 @@ public class Controllervalfofile implements MessageConstants
 													+ "_dvReport_ESchKG.pdf" );
 									String ESchKGSig = egovdv.execEgovdvCheck(
 											valDatei, outESchKGSig, workDir2,
-											dirOfJarPath, ESchKG );
+											dirOfJarPath, ESchKG, locale );
 									if ( ESchKGSig
 											.contains( "Validity-VALID_" ) ) {
 										// pdf behalten
@@ -1259,7 +1267,8 @@ public class Controllervalfofile implements MessageConstants
 									String FederalLawSig = egovdv
 											.execEgovdvCheck( valDatei,
 													outFederalLawSig, workDir2,
-													dirOfJarPath, FederalLaw );
+													dirOfJarPath, FederalLaw,
+													locale );
 									if ( FederalLawSig
 											.contains( "Validity-VALID_" ) ) {
 										// pdf behalten
@@ -1285,7 +1294,8 @@ public class Controllervalfofile implements MessageConstants
 											.execEgovdvCheck( valDatei,
 													outStrafregisterauszugSig,
 													workDir2, dirOfJarPath,
-													Strafregisterauszug );
+													Strafregisterauszug,
+													locale );
 									if ( StrafregisterauszugSig
 											.contains( "Validity-VALID_" ) ) {
 										// pdf behalten

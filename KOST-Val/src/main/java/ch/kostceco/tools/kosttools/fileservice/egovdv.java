@@ -17,11 +17,9 @@
 package ch.kostceco.tools.kosttools.fileservice;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Scanner;
@@ -304,7 +302,7 @@ public class egovdv
 	 * @return String ob Report existiert oder nicht ggf Exception
 	 */
 	public static String execEgovdvCheck( File fileToCheck, File output,
-			File workDir, String dirOfJarPath, String mandant )
+			File workDir, String dirOfJarPath, String mandant, Locale locale )
 			throws InterruptedException
 	{
 		boolean out = true;
@@ -359,7 +357,13 @@ public class egovdv
 					+ fvalidateBat.getAbsolutePath() + "\" " + account
 					+ "-u https://egovsigval-backend.bit.admin.ch -m " + mandant
 					+ " -f \"" + fileToCheck.getAbsolutePath()
-					+ "\" -c -e -o \"" + output.getAbsolutePath() + "\"\"";
+					+ "\" -l de -c -e -o \"" + output.getAbsolutePath()
+					+ "\"\"";
+
+			/*
+			 * TODO: Spaeter auch noch die anderen Sprachen locale de fr it und
+			 * en werden alle unterstuetzt
+			 */
 
 			// validate <account> -u https://egovsigval-backend.bit.admin.ch -m
 			// Mixed -f <filename> -c -e -d -o <report>
@@ -459,38 +463,11 @@ public class egovdv
 	{
 		String lineOut = "LineNotFound";
 		try {
-			/*
-			 * BufferedReader in = new BufferedReader( new FileReader( output )
-			 * ); String line; while ( (line = in.readLine()) != null ) { /* zu
-			 * analysierende PDF-Zeile die
-			 * "Prüfbericht für elektronische Signaturen" enthält finden und
-			 * auslesen
-			 */
+			// Auslesen mit pdfbox
+			lineOut = pdfbox.getTextPdfbox( output );
+			// System.out.println( "lineOut=" + lineOut );
+			lineOut = prettyEgovdvPdf( lineOut );
 
-			/*
-			 * if ( line.contains( "Prüfbericht für elektronische Signaturen" )
-			 * ) { // System.out.println( "Line=" + line ); String linePP =
-			 * prettyEgovdvPdfOld( line );
-			 * 
-			 * lineOut = linePP; }
-			 * 
-			 * if ( line.contains( "Prüfdetails Signatur" ) ) { //
-			 * System.out.println( "Line=" + line ); String linePP =
-			 * prettyEgovdvPdfOld( line );
-			 * 
-			 * lineOut = lineOut + linePP; }
-			 * 
-			 * }
-			 */
-
-			if ( lineOut.equals( "LineNotFound" ) ) {
-				// TODO Auslesen mit pdfbox
-				lineOut = pdfbox.getTextPdfbox( output );
-				// System.out.println( "lineOut=" + lineOut );
-				lineOut = prettyEgovdvPdf( lineOut );
-
-			}
-			// in.close();
 		} catch ( Exception e ) {
 			e.printStackTrace();
 			System.out.println(
@@ -639,11 +616,13 @@ public class egovdv
 				"</Message><Message> - Alle validierten " );
 		prettyPrint = prettyPrint.replaceAll( "__ Alle zur Signatur",
 				"</Message><Message> - Alle zur Signatur" );
-		if (prettyPrint.contains( "Diese Signatur ist nicht LTV-fähig" )) {
-			prettyPrint = prettyPrint.replaceAll( "</Message><Message> - Das Dokument ist ",
+		if ( prettyPrint.contains( "Diese Signatur ist nicht LTV-fähig" ) ) {
+			prettyPrint = prettyPrint.replaceAll(
+					"</Message><Message> - Das Dokument ist ",
 					"</Message><Message> - Nicht alle Signaturen sind LTV-fähig.</Message><Message> - Das Dokument ist " );
-		}else {
-			prettyPrint = prettyPrint.replaceAll( "</Message><Message> - Das Dokument ist ",
+		} else {
+			prettyPrint = prettyPrint.replaceAll(
+					"</Message><Message> - Das Dokument ist ",
 					"</Message><Message> - Alle Signaturen sind LTV-fähig.</Message><Message> - Das Dokument ist " );
 		}
 		prettyPrint = prettyPrint.replaceAll( "__ Alle in diesem Dokument",
@@ -763,10 +742,13 @@ public class egovdv
 				"" );
 		prettyPrint = prettyPrint.replaceAll( ":", ": " );
 		prettyPrint = prettyPrint.replaceAll( ":  ", ": " );
-		
-		prettyPrint = prettyPrint.replaceAll("__Das geprüfte Dokument trägt mehrere elektronische ", "");
-		prettyPrint = prettyPrint.replaceAll("__Signaturen mit unterschiedlichen Zertifikatsklassen, gemäss ", "");
-		prettyPrint = prettyPrint.replaceAll("__ZertES.", "");
+
+		prettyPrint = prettyPrint.replaceAll(
+				"__Das geprüfte Dokument trägt mehrere elektronische ", "" );
+		prettyPrint = prettyPrint.replaceAll(
+				"__Signaturen mit unterschiedlichen Zertifikatsklassen, gemäss ",
+				"" );
+		prettyPrint = prettyPrint.replaceAll( "__ZertES.", "" );
 		// System.out.println( "2 " + prettyPrint );
 
 		lineOut = prettyPrint;

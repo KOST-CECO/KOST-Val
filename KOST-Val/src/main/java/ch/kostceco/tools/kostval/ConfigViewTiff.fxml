@@ -74,7 +74,7 @@
 				<CheckBox fx:id="checkBps4" mnemonicParsing="false" onAction="#changeBps4" selected="true" text="Bps 4" GridPane.columnIndex="2" GridPane.rowIndex="5" />
 				<CheckBox fx:id="checkBps32" mnemonicParsing="false" onAction="#changeBps32" selected="true" text="Bps 32" GridPane.columnIndex="2" GridPane.rowIndex="8" />
 				<CheckBox fx:id="checkMultipage" mnemonicParsing="false" onAction="#changeMultipage" selected="true" text="Multipage" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-				<CheckBox fx:id="checkTiles" mnemonicParsing="false" onAction="#changeTiles" selected="true" text="Tiles" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+				<CheckBox fx:id="checkTiles" mnemonicParsing="false" onAction="#changeTiles" selected="true" text="Tiles" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="4" />
 				<CheckBox fx:id="checkSize" mnemonicParsing="false" onAction="#changeSize" selected="true" text="Size" GridPane.columnIndex="3" GridPane.rowIndex="5" />
 				<Label fx:id="labelConfig" alignment="CENTER" contentDisplay="CENTER" maxHeight="20.0" maxWidth="780.0" minHeight="20.0" minWidth="780.0" prefHeight="20.0" prefWidth="780.0" text="Copyright © KOST/CECO" textAlignment="CENTER" textFill="WHITESMOKE" GridPane.columnSpan="5" GridPane.halignment="CENTER" GridPane.rowIndex="13" GridPane.valignment="CENTER" />
             <Label fx:id="labelMessage" text="Meldung Validierungseinstellungen TIFF" textFill="RED" GridPane.columnSpan="5" GridPane.rowIndex="11" />

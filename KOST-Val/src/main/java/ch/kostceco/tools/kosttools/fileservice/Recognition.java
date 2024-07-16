@@ -919,6 +919,9 @@ public class Recognition
 				// und enthaelt auch } alternativ [ (5B) respektive ]
 				// als JSON-Datei erkannt (keine SiF)
 				return "JSON";
+			} else if ( checkFileExt.equals( ".eml" ) ) {
+				// Eine EML-Datei muss die extension .eml haben
+				return "EML";
 			} else {
 				// System.out.println("kein bekannte Archivformat erkannt " +
 				// checkFileExt );

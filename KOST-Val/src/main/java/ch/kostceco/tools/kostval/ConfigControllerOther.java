@@ -18,18 +18,30 @@
 
 package ch.kostceco.tools.kostval;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Locale;
+import java.util.Optional;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 import ch.kostceco.tools.kosttools.util.Util;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
 
 public class ConfigControllerOther
@@ -39,13 +51,16 @@ public class ConfigControllerOther
 	private Button	buttonConfigApply, buttonRtf, buttonPptx, buttonDocx,
 			buttonHtml, buttonOgg, buttonSvg, buttonJpm, buttonJpx, buttonMpeg2,
 			buttonAvi, buttonArc, buttonWarc, buttonInterlis, buttonDwg,
-			buttonIfc, buttonMsg, buttonDicom, buttonDxf;
+			buttonIfc, buttonMsg, buttonEml, buttonDicom, buttonDxf,
+			buttonOther2;
 
 	private File	configFile	= new File( System.getenv( "USERPROFILE" )
 			+ File.separator + ".kost-val_2x" + File.separator + "configuration"
 			+ File.separator + "kostval.conf.xml" );
 
-	private String	dirOfJarPath, config;
+	private String	dirOfJarPath, config, stringPuid;
+
+	private Locale	locale;
 
 	@FXML
 	private Label	labelOther, labelConfig, labelText, labelImage,
@@ -86,6 +101,7 @@ public class ConfigControllerOther
 		// Sprache anhand configFile (HauptGui) setzten
 		try {
 			if ( Util.stringInFileLine( "kostval-conf-DE.xsl", configFile ) ) {
+				locale = new Locale( "de" );
 				labelOther.setText( "Einstellungen weitere Formate" );
 				buttonConfigApply.setText( "anwenden" );
 				labelText.setText( "Text" );
@@ -98,6 +114,7 @@ public class ConfigControllerOther
 				labelMail.setText( "Mail" );
 			} else if ( Util.stringInFileLine( "kostval-conf-FR.xsl",
 					configFile ) ) {
+				locale = new Locale( "fr" );
 				labelOther.setText( "Paramètres d'autres formats" );
 				buttonConfigApply.setText( "appliquer" );
 				labelText.setText( "Texte" );
@@ -110,6 +127,7 @@ public class ConfigControllerOther
 				labelMail.setText( "Courriel" );
 			} else if ( Util.stringInFileLine( "kostval-conf-IT.xsl",
 					configFile ) ) {
+				locale = new Locale( "it" );
 				labelOther.setText( "Impostazioni di altri formati" );
 				buttonConfigApply.setText( "Applica" );
 				labelText.setText( "Testo" );
@@ -121,6 +139,7 @@ public class ConfigControllerOther
 				labelMedicine.setText( "Medicina" );
 				labelMail.setText( "Mail" );
 			} else {
+				locale = new Locale( "en" );
 				labelOther.setText( "Settings other formats" );
 				buttonConfigApply.setText( "apply" );
 				labelText.setText( "Text" );
@@ -161,6 +180,7 @@ public class ConfigControllerOther
 			String noInterlis = "<interlisvalidation></interlisvalidation>";
 			String noDicom = "<dicomvalidation></dicomvalidation>";
 			String noMsg = "<msgvalidation></msgvalidation>";
+			String noEml = "<emlvalidation></emlvalidation>";
 
 			// TODO: bei Controllervalfofile ca Zeile 80 muss die Aenderung
 			// neue oder entfernte Formate nachgetragen werden. Damit das Format
@@ -328,7 +348,29 @@ public class ConfigControllerOther
 				buttonMsg.setStyle(
 						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
 			}
-		} catch ( IOException e1 ) {
+			if ( config.contains( noEml ) ) {
+				buttonEml.setText( "✗" );
+				buttonEml.setStyle(
+						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+			} else {
+				buttonEml.setText( "(✓)" );
+				buttonEml.setStyle(
+						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
+			}
+			Document doc = null;
+			BufferedInputStream bis = new BufferedInputStream(
+					new FileInputStream( configFile ) );
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			doc = db.parse( bis );
+			doc.normalize();
+
+			stringPuid = doc.getElementsByTagName( "othervalidation" ).item( 0 )
+					.getTextContent();
+			buttonOther2.setText( stringPuid );
+			bis.close();
+		} catch ( IOException | ParserConfigurationException
+				| SAXException e1 ) {
 			e1.printStackTrace();
 		}
 	}
@@ -765,6 +807,77 @@ public class ConfigControllerOther
 			}
 		} catch ( IOException e ) {
 			e.printStackTrace();
+		}
+	}
+
+	@FXML
+	void changeEml( ActionEvent event )
+	{
+		String az = "<emlvalidation>EML </emlvalidation>";
+		String no = "<emlvalidation></emlvalidation>";
+		try {
+			String optButton = buttonEml.getText();
+			if ( optButton.equals( "✗" ) ) {
+				Util.oldnewstring( no, az, configFile );
+				buttonEml.setText( "(✓)" );
+				buttonEml.setStyle(
+						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
+			} else {
+				Util.oldnewstring( az, no, configFile );
+				buttonEml.setText( "✗" );
+				buttonEml.setStyle(
+						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+			}
+		} catch ( IOException e ) {
+			e.printStackTrace();
+		}
+	}
+
+	/* Wenn Aenderungen an changeOther2 gemacht wird, wird es ausgeloest */
+	@FXML
+	void changeOther2( ActionEvent event )
+	{
+		stringPuid = buttonOther2.getText();
+		// create a TextInputDialog mit der Texteingabe der Puid
+		TextInputDialog dialog = new TextInputDialog( stringPuid );
+
+		// Set title & header text
+		String puidIntInit = stringPuid;
+
+		dialog.setTitle( "KOST-Val - Configuration" );
+		String headerDeFrItEn = "Auflistung der weiteren akzeptierten Dateiformate []:";
+		if ( locale.toString().startsWith( "fr" ) ) {
+			headerDeFrItEn = "Liste des autres formats de fichiers acceptés [] :";
+		} else if ( locale.toString().startsWith( "it" ) ) {
+			headerDeFrItEn = "Elenco degli altri formati di file accettati []:";
+		} else if ( locale.toString().startsWith( "en" ) ) {
+			headerDeFrItEn = "List of other accepted file formats []:";
+		}
+		dialog.setHeaderText( headerDeFrItEn );
+		dialog.setContentText( "" );
+
+		// Show the dialog and capture the result.
+		Optional<String> result = dialog.showAndWait();
+
+		// If the "Okay" button was clicked, the result will contain our String
+		// in the get() method
+		String stringPuidNew = "";
+		if ( result.isPresent() ) {
+			try {
+				stringPuidNew = result.get();
+				stringPuid = stringPuidNew;
+				buttonOther2.setText( stringPuid );
+				String allowedformats = "<othervalidation>" + puidIntInit
+						+ "</othervalidation>";
+				String allowedformatsNew = "<othervalidation>" + stringPuidNew
+						+ "</othervalidation>";
+				Util.oldnewstring( allowedformats, allowedformatsNew,
+						configFile );
+			} catch ( NumberFormatException | IOException e ) {
+				e.printStackTrace();
+			}
+		} else {
+			// Keine Aktion
 		}
 	}
 

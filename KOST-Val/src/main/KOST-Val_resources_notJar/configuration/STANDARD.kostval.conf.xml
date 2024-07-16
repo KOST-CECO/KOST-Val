@@ -166,22 +166,24 @@
 		<interlisvalidation></interlisvalidation>
 		<dicomvalidation></dicomvalidation>
 		<msgvalidation></msgvalidation>
+		<emlvalidation></emlvalidation>
+		<othervalidation></othervalidation>
 	</otherformats>
 	<egovdv>
 		<egovdvvalidation>&#x2717;</egovdvvalidation>
 		<Institut></Institut>
 		<Mandant>
-			<Mixed>yes</Mixed>
-			<Qualified>yes</Qualified>
-			<SwissGovPKI>yes</SwissGovPKI>
-			<Upregfn>yes</Upregfn>
-			<Siegel>yes</Siegel>
-			<Amtsblattportal>yes</Amtsblattportal>
-			<Edec>yes</Edec>
-			<ESchKG>yes</ESchKG>
-			<FederalLaw>yes</FederalLaw>
-			<Strafregisterauszug>yes</Strafregisterauszug>
-			<KantonZugFinanzdirektion>yes</KantonZugFinanzdirektion>
+			<Mixed>no</Mixed>
+			<Qualified>no</Qualified>
+			<SwissGovPKI>no</SwissGovPKI>
+			<Upregfn>no</Upregfn>
+			<Siegel>no</Siegel>
+			<Amtsblattportal>no</Amtsblattportal>
+			<Edec>no</Edec>
+			<ESchKG>no</ESchKG>
+			<FederalLaw>no</FederalLaw>
+			<Strafregisterauszug>no</Strafregisterauszug>
+			<KantonZugFinanzdirektion>no</KantonZugFinanzdirektion>
 		</Mandant>
 	</egovdv>
 	<hash></hash><!--wenn leer wird kein Hashwert berechnet und ausgegeben / MD5 / SHA-1 / SHA-256 / SHA-512 -->

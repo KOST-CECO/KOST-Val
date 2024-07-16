@@ -100,6 +100,7 @@ public class ConfigControllerTiff
 				labelImage.setText( "Validierungseinstellung: TIFF" );
 				buttonConfigApply.setText( "anwenden" );
 				minOne = "Mindestens eine Variante muss erlaubt sein!";
+				checkTiles.setText( "Tiles (nur teilweise kontrollierbar)" );
 			} else if ( Util.stringInFileLine( "kostval-conf-FR.xsl",
 					configFile ) ) {
 				labelBps.setText( "Bits par échantillon (par canal)" );
@@ -109,6 +110,7 @@ public class ConfigControllerTiff
 				labelImage.setText( "Paramètre de validation: TIFF" );
 				buttonConfigApply.setText( "appliquer" );
 				minOne = "Au moins une variante doit etre autorisee !";
+				checkTiles.setText( "Tiles (ne peuvent être contrôlés que partiellement)" );
 			} else if ( Util.stringInFileLine( "kostval-conf-IT.xsl",
 					configFile ) ) {
 				labelBps.setText( "Bit per campione (per canale)" );
@@ -118,6 +120,7 @@ public class ConfigControllerTiff
 				labelImage.setText( "Parametro di convalida: TIFF" );
 				buttonConfigApply.setText( "Applica" );
 				minOne = "Almeno una variante deve essere consentita!";
+				checkTiles.setText( "Tiles (controllabili solo parzialmente)" );
 			} else {
 				labelBps.setText( "Bits per sample (per channel)" );
 				labelComp.setText( "Compression algorithm" );
@@ -126,6 +129,7 @@ public class ConfigControllerTiff
 				labelImage.setText( "Validation setting: TIFF" );
 				buttonConfigApply.setText( "apply" );
 				minOne = "At least one variant must be allowed!";
+				checkTiles.setText( "Tiles (only partially controllable)" );
 			}
 		} catch ( Exception e ) {
 			e.printStackTrace();

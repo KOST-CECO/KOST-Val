@@ -29,26 +29,22 @@ public class pdfbox
 {
 
 	/**
-	 * fuehrt eine Normalisierte Validierung mit xmllint via cmd durch und gibt
-	 * das Ergebnis als String zurueck
+	 * Extrahiert den Text einer PDF-Datei und gibt das Ergebnis als String
+	 * zurueck
 	 * 
 	 * @param pdfFile
 	 *            PDF-Datei, welche ausgelesen werden soll
-	 * @return String mit Text aus dem PDF 
+	 * @return String mit Text aus dem PDF
 	 */
-	public static String getTextPdfbox( File pdfFile) throws InterruptedException
+	public static String getTextPdfbox( File pdfFile )
+			throws InterruptedException
 	{
 		String resultExec = "NoTextInPdf";
 
 		try {
-			// Loading an existing document
 			File file = pdfFile;
 			PDDocument pdDoc = Loader.loadPDF( file );
-
-			// Instantiate PDFTextStripper class
 			PDFTextStripper pdfStripper = new PDFTextStripper();
-
-			// Retrieving text from PDF document
 			resultExec = pdfStripper.getText( pdDoc );
 			resultExec = resultExec.replaceAll( "\n", "__" );
 

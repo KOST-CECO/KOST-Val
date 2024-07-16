@@ -398,6 +398,8 @@
 							<xsl:value-of select="configuration/otherformats/interlisvalidation" />
 							<xsl:value-of select="configuration/otherformats/dicomvalidation" />
 							<xsl:value-of select="configuration/otherformats/msgvalidation" />
+							<xsl:value-of select="configuration/otherformats/emlvalidation" />
+							<xsl:value-of select="configuration/otherformats/othervalidation" />
 						</td>
 					</tr>
 					
@@ -414,57 +416,55 @@
 						</td>
 					</tr>
 					<tr class="captioninfom">
-						<td>Mandante, welche geprüft werden:</td>
-						<td>
-							<xsl:value-of select="configuration/egovdv/siard10" />
-							&#160;
-							<xsl:value-of select="configuration/egovdv/siard21" />
-							&#160;
-							<xsl:value-of select="configuration/egovdv/siard22" />
-						</td>
+						<td>Report, welcher gesichert wird, wenn valide und yes:</td>
+						<td></td>
 					</tr>
 					<tr class="captioninfom">
-						<td> - Mixed (unterschiedlichen Zertifikatsklassen)  [yes]:</td>
+						<td> - Mixed (unterschiedlichen Zertifikatsklassen)  [no]:</td>
 						<td><xsl:value-of select="configuration/egovdv/Mandant/Mixed" /></td>
 					</tr>
 					<tr class="captioninfom">
-						<td> - Qualifizierte Signatur (QES)  [yes]:</td>
+						<td>Mandante, welche geprüft und gesichert werden, wenn valide und yes:</td>
+						<td></td>
+					</tr>
+					<tr class="captioninfom">
+						<td> - Qualifizierte Signatur (QES)  [no]:</td>
 						<td><xsl:value-of select="configuration/egovdv/Mandant/Qualified" /></td>
 					</tr>
 					<tr class="captioninfom">
-						<td> - SG-PKI (Swiss Government PKI Signaturen)  [yes]:</td>
+						<td> - SG-PKI (Swiss Government PKI Signaturen)  [no]:</td>
 						<td><xsl:value-of select="configuration/egovdv/Mandant/SwissGovPKI" /></td>
 					</tr>
 					<tr class="captioninfom">
-						<td> - Urkunde (Signatur einer Urkundspersonen)  [yes]:</td>
+						<td> - Urkunde (Signatur einer Urkundspersonen)  [no]:</td>
 						<td><xsl:value-of select="configuration/egovdv/Mandant/Upregfn" /></td>
 					</tr>
 					<tr class="captioninfom">
-						<td> - Siegel (geregeltes elektronisches Siegel)  [yes]:</td>
+						<td> - Siegel (geregeltes elektronisches Siegel)  [no]:</td>
 						<td><xsl:value-of select="configuration/egovdv/Mandant/Siegel" /></td>
 					</tr>
 					<tr class="captioninfom">
-						<td> - Amtsblatt-Portal (offizielle amtliche Meldungen)  [yes]:</td>
+						<td> - Amtsblatt-Portal (offizielle amtliche Meldungen)  [no]:</td>
 						<td><xsl:value-of select="configuration/egovdv/Mandant/Amtsblattportal" /></td>
 					</tr>
 					<tr class="captioninfom">
-						<td> - eDec (Bundesamtes für Zoll und Grenzsicherheit BAZG)  [yes]:</td>
+						<td> - eDec (Bundesamtes für Zoll und Grenzsicherheit BAZG)  [no]:</td>
 						<td><xsl:value-of select="configuration/egovdv/Mandant/Edec" /></td>
 					</tr>
 					<tr class="captioninfom">
-						<td> - eSchKG (Betreibungsamt)  [yes]:</td>
+						<td> - eSchKG (Betreibungsamt)  [no]:</td>
 						<td><xsl:value-of select="configuration/egovdv/Mandant/ESchKG" /></td>
 					</tr>
 					<tr class="captioninfom">
-						<td> - Bundesrecht (Publikationsplattform des Bundes)  [yes]:</td>
+						<td> - Bundesrecht (Publikationsplattform des Bundes)  [no]:</td>
 						<td><xsl:value-of select="configuration/egovdv/Mandant/FederalLaw" /></td>
 					</tr>
 					<tr class="captioninfom">
-						<td> - Strafregister (Strafregisterauszüge vom BJ)  [yes]:</td>
+						<td> - Strafregister (Strafregisterauszüge vom BJ)  [no]:</td>
 						<td><xsl:value-of select="configuration/egovdv/Mandant/Strafregisterauszug" /></td>
 					</tr>
 					<tr class="captioninfom">
-						<td> - Kt. Zug (Dokumente von den Zuger Verwaltungsbehörden)  [yes]:</td>
+						<td> - Kt. Zug (Dokumente von den Zuger Verwaltungsbehörden)  [no]:</td>
 						<td><xsl:value-of select="configuration/egovdv/Mandant/KantonZugFinanzdirektion" /></td>
 					</tr>
 					
