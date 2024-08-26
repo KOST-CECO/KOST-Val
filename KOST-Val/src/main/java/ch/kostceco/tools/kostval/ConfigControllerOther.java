@@ -65,7 +65,7 @@ public class ConfigControllerOther
 	@FXML
 	private Label	labelOther, labelConfig, labelText, labelImage,
 			labelAudioVideo, labelHyper, labelGis, labelCad, labelMedicine,
-			labelMail;
+			labelMail, labelOther2;
 
 	@FXML
 	void initialize()
@@ -112,6 +112,7 @@ public class ConfigControllerOther
 				labelCad.setText( "CAD/CAM" );
 				labelMedicine.setText( "Medizin" );
 				labelMail.setText( "Mail" );
+				labelOther2.setText( "Weitere" );
 			} else if ( Util.stringInFileLine( "kostval-conf-FR.xsl",
 					configFile ) ) {
 				locale = new Locale( "fr" );
@@ -125,6 +126,7 @@ public class ConfigControllerOther
 				labelCad.setText( "CAD/CAM" );
 				labelMedicine.setText( "Médecine" );
 				labelMail.setText( "Courriel" );
+				labelOther2.setText( "Autres" );
 			} else if ( Util.stringInFileLine( "kostval-conf-IT.xsl",
 					configFile ) ) {
 				locale = new Locale( "it" );
@@ -138,6 +140,7 @@ public class ConfigControllerOther
 				labelCad.setText( "CAD/CAM" );
 				labelMedicine.setText( "Medicina" );
 				labelMail.setText( "Mail" );
+				labelOther2.setText( "Altri" );
 			} else {
 				locale = new Locale( "en" );
 				labelOther.setText( "Settings other formats" );
@@ -150,6 +153,7 @@ public class ConfigControllerOther
 				labelCad.setText( "CAD/CAM" );
 				labelMedicine.setText( "Medicine" );
 				labelMail.setText( "Mail" );
+				labelOther2.setText( "Other" );
 			}
 		} catch ( Exception e ) {
 			e.printStackTrace();

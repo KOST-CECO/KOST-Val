@@ -1,0 +1,44 @@
+########################
+# Booklet Runlist
+########################
+# Environmanet vars
+#
+# "BOA_CROP_MARKS"                
+# "BOA_CROP_MARK_LENGTH"          
+# "BOA_CROP_MARK_GAP"             
+# "BOA_CROP_MARK_WIDTH"           
+
+##########################
+# Set up params
+#
+Set	CropMarkGap	ENVIRONMENT("BOA_CROP_MARK_GAP")
+Set	CropMarkLength	ENVIRONMENT("BOA_CROP_MARK_LENGTH")
+Set	CropMarkWidth	ENVIRONMENT("BOA_CROP_MARK_WIDTH")
+Set	ShinglingOffset	ENVIRONMENT("BOA_SHINGLING")
+
+##########################
+AppendPages
+
+##########################
+# Loop
+#
+Loop
+
+NewSheet	1
+
+PositionPage	FirstPage	Slot_2
+Increment	FirstPage
+
+PositionPage	LastPage	Slot_1
+Decrement	LastPage
+
+NewSheet	1
+
+PositionPage	FirstPage	Slot_3
+Increment	FirstPage
+
+PositionPage	LastPage	Slot_4
+Decrement	LastPage
+
+###########################
+# EOF

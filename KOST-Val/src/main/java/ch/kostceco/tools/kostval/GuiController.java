@@ -149,15 +149,6 @@ public class GuiController
 	@FXML
 	void initialize()
 	{
-		/*
-		 * TODO
-		 * 
-		 * LogTyp --min programmieren
-		 * 
-		 * openjdk inkl javafx FULL-Version
-		 * (https://bell-sw.com/pages/downloads/#/java-14-current)
-		 */
-
 		// TODO --> initialize (wird einmalig am Anfang ausgefuehrt)
 
 		Util.switchOffConsole();
@@ -906,7 +897,7 @@ public class GuiController
 		 * 
 		 * args[2] "--de" / "--fr" / "--en"
 		 * 
-		 * args[3] "--xml" / "--min" / "--max" (= xml+verbose TODO GUI)
+		 * args[3] "--xml" / "--min" / "--max" (= xml+verbose)
 		 * 
 		 * 2 und 3 waeren optional werden aber mitgegeben
 		 */
@@ -1062,8 +1053,8 @@ public class GuiController
 		 * 
 		 * args[2] "--de" / "--fr" / "--en"
 		 * 
-		 * args[3] "--xml" / "--min" (TODO nur valid oder invalid) / "--max" (=
-		 * xml+verbose TODO GUI)
+		 * args[3] "--xml" / "--min" (nur valid oder invalid) / "--max" (=
+		 * xml+verbose)
 		 * 
 		 * 2 und 3 waeren optional werden aber mitgegeben
 		 */

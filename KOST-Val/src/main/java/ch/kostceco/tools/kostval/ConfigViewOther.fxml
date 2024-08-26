@@ -451,7 +451,7 @@
                   <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
                </padding>
             </Button>
-            <Label fx:id="labelMail1" text="Weitere" GridPane.rowIndex="10">
+            <Label fx:id="labelOther2" text="Weitere" GridPane.rowIndex="10">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>

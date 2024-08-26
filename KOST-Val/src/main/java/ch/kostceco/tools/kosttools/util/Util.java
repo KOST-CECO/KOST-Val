@@ -439,10 +439,10 @@ public class Util
 	 */
 
 	/**
-	 * Veraendert [& mit &amp;], [ '<' mit '&lt;' ], [\n\t mit \n] sowie [ '>' mit '&gt;' ] und
-	 * ergaenzt das XML-Element "<End></End>" mit dem ergebnis (stringEnd) sowie
-	 * <Message>3c</Message></Error> mit dem ergebnis (string3c) in dem
-	 * kost-val.log.xml (file)
+	 * Veraendert [& mit &amp;], [ '<' mit '&lt;' ], [\n\t mit \n] sowie [ '>'
+	 * mit '&gt;' ] und ergaenzt das XML-Element "<End></End>" mit dem ergebnis
+	 * (stringEnd) sowie <Message>3c</Message></Error> mit dem ergebnis
+	 * (string3c) in dem kost-val.log.xml (file)
 	 * 
 	 * ! Solche Ersetzungen duerfen nicht in einer Schleife gemacht werden
 	 * sondern erst am Schluss, da diese sehr Zeitintensiv sind !!!
@@ -466,7 +466,7 @@ public class Util
 			java.text.SimpleDateFormat sdfEnd = new java.text.SimpleDateFormat(
 					"dd.MM.yyyy HH:mm:ss" );
 			String ausgabeEnd = sdfEnd.format( nowEnd );
-			ausgabeEnd = "<End>" + ausgabeEnd + "</End>";
+			ausgabeEnd = "<End> - " + ausgabeEnd + "</End>";
 			String stringEnd = ausgabeEnd;
 			oldtext = sb.toString();
 			reader.close();

@@ -1,0 +1,114 @@
+:root {
+    --main-color: #bf0d3e;
+    --secondary-color: #861f41;
+}
+
+@font-face {
+    font-family: "OpenSans";
+    src: url("../fonts/OpenSans-Regular.eot");
+    src: url("../fonts/OpenSans-Regular.eot?#iefix") format("embedded-opentype"),
+         url("../fonts/OpenSans-Regular.ttf");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "OpenSans";
+    src: url("../fonts/OpenSans-Bold.eot");
+    src: url("../fonts/OpenSans-Bold.eot?#iefix") format("embedded-opentype"),
+         url("../fonts/OpenSans-Bold.ttf");
+    font-weight: bold;
+    font-style: normal;
+}
+
+* {
+    font-family: OpenSans;
+    box-sizing: border-box;
+}
+
+@page {
+    size: A4 portrait;
+    marks: crop;
+    margin: 10mm;
+    margin-top: 24mm;
+}
+
+body {
+    margin: 0;
+}
+
+.page-overview {}
+.optional-page {
+    display: none;
+    page-break-before: always;
+}
+
+.hidden {
+    display: none;
+}
+
+.txt-bold {
+    font-weight: bold;
+}
+
+.txt-xsmall {
+    font-size: x-small;
+}
+
+.txt-small {
+    font-size: small;
+}
+
+.txt-medium {
+    font-size: medium;
+}
+
+.txt-large {
+    font-size: large;
+}
+
+.txt-xlarge {
+    font-size: x-large;
+}
+
+.txt-2xlarge {
+    font-size: xx-large;
+}
+
+.txt-3xlarge {
+    font-size: xxx-large;
+}
+
+.txt-col-red {
+    color: var(--secondary-color);
+}
+
+.txt-col-grey {
+    color: rgb(105,105,105);
+}
+
+.underline-header-container {
+    position: relative;
+    margin: 4mm 0 3mm 0;
+}
+
+.underline-header-container:first-child {
+    margin: 0 0 3mm 0;
+}
+
+.underline-header-container h1 {
+    margin: 0;
+    text-transform: uppercase;
+    color: var(--main-color);
+    font-size: x-large;
+}
+
+.underline-header-container h1::after {
+    content: '';
+    position: absolute;
+    height: 1px;
+    width: 100%;
+    left: 0;
+    bottom: -4px;
+    background-color: var(--main-color);
+}

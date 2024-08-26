@@ -349,9 +349,9 @@ public class Controllervalinitlog implements MessageConstants
 		Logtxt.logtxt( logFile, "<Infos><Start>" + ausgabeStart + "</Start>" );
 		Logtxt.logtxt( logFile, "<End></End>" );
 		String val = getTextResourceService().getText( locale,
-				MESSAGE_XML_VALTYPE, formatValOn );
+				MESSAGE_XML_VALTYPE, " " + formatValOn );
 		String rec = getTextResourceService().getText( locale,
-				MESSAGE_XML_AZTYPE, formatRecOn );
+				MESSAGE_XML_AZTYPE, " " + formatRecOn );
 		// val.message.xml.valtype = <ValType>Validierung: {0}</ValType>
 		// val.message.xml.aztype = <ValType>Erkennung: {0}</ValType>
 		formatValOn = val.replace( "ValType", "FormatValOn" );

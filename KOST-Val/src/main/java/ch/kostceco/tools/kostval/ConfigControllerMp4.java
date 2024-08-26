@@ -195,7 +195,7 @@ public class ConfigControllerMp4
 	void changeH264( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedmp4avc>AVC</allowedmp4avc>";
+		String yes = "<allowedmp4avc>AVC </allowedmp4avc>";
 		String no = "<allowedmp4avc></allowedmp4avc>";
 		try {
 			if ( checkH264.isSelected() ) {
@@ -218,7 +218,7 @@ public class ConfigControllerMp4
 	void changeH265( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedmp4hevc>HEVC</allowedmp4hevc>";
+		String yes = "<allowedmp4hevc>HEVC </allowedmp4hevc>";
 		String no = "<allowedmp4hevc></allowedmp4hevc>";
 		try {
 			if ( checkH265.isSelected() ) {
@@ -241,7 +241,7 @@ public class ConfigControllerMp4
 	void changeMp3( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedmp4mp3>MP3</allowedmp4mp3>";
+		String yes = "<allowedmp4mp3>MP3 </allowedmp4mp3>";
 		String no = "<allowedmp4mp3></allowedmp4mp3>";
 		try {
 			if ( checkMp3.isSelected() ) {
@@ -264,7 +264,7 @@ public class ConfigControllerMp4
 	void changeAac( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedmp4aac>AAC</allowedmp4aac>";
+		String yes = "<allowedmp4aac>AAC </allowedmp4aac>";
 		String no = "<allowedmp4aac></allowedmp4aac>";
 		try {
 			if ( checkAac.isSelected() ) {

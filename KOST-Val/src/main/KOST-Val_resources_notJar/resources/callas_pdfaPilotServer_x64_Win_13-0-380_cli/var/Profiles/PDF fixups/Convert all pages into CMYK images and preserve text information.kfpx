@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="21.0">
+	<package>
+		<id3>5f6465f00200fb41435c65fbdc278155</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+		</fspolicies>
+		<resources>
+		</resources>
+		<variables>
+		</variables>
+		<conditions>
+		</conditions>
+		<rules>
+		</rules>
+		<rulesets>
+		</rulesets>
+		<fixups>
+			<fixup>
+				<id1>F6377a986413d0d780ac5ad744034ce63</id1>
+				<id2>Fde944c1e90aea4b2cf9c90b69b407214</id2>
+				<id3>266505d8acd9a494a1bcfec1cbaa10cf</id3>
+				<id4>89ee03eee5124bbbce38d2bbded47b9e</id4>
+				<id5>Fde944c1e90aea4b2cf9c90b69b407214</id5>
+				<name>F_13_Createaninvisibletextcopyforalltext</name>
+				<comment>F_13_Createaninvisibletextcopyforalltext</comment>
+				<flags user_units="1" scope="16" edit="1" visible="1" dict="1"></flags>
+				<creation>D:20180409081325+01&apos;00&apos;</creation>
+				<modification>D:20240301113940+01&apos;00&apos;</modification>
+				<fcfgs>
+					<fcfg>
+						<ffeat>DuplicateTextAsInvisible</ffeat>
+						<fparams>
+							<fparam>All</fparam>
+						</fparams>
+					</fcfg>
+				</fcfgs>
+				<reportFailed></reportFailed>
+				<proc_steps_options>0</proc_steps_options>
+			</fixup>
+			<fixup>
+				<id1>F544d4112ce789a736d959b3095c166f5</id1>
+				<id2>F865b2dd077cdb7e2f42b50f5fc4b4b36</id2>
+				<id3>f33e6215575a887e954219299b54e19e</id3>
+				<id4>a58d574cb021977f0f0eb2df4aaa98bf</id4>
+				<id5>F865b2dd077cdb7e2f42b50f5fc4b4b36</id5>
+				<name>F_15_ConvertpagecontentintoCMYKimage150ppihighJPEGquality</name>
+				<comment>F_15_ConvertpagecontentintoCMYKimage150ppihighJPEGquality</comment>
+				<flags user_units="1" scope="16" edit="1" visible="1" dict="1"></flags>
+				<creation>D:20180409081325+01&apos;00&apos;</creation>
+				<modification>D:20240301113940+01&apos;00&apos;</modification>
+				<fcfgs>
+					<fcfg>
+						<ffeat>RemoveContentByImage</ffeat>
+						<fparams>
+							<fparam>150</fparam>
+							<fparam>All</fparam>
+							<fparam>JPEGHigh</fparam>
+							<fparam>CMYK</fparam>
+							<fparam>LineArtTextImages</fparam>
+							<fparam>0</fparam>
+							<fparam>1</fparam>
+							<fparam>0</fparam>
+							<fparam>None</fparam>
+							<fparam>1</fparam>
+							<fparam>0</fparam>
+							<fparam>0</fparam>
+							<fparam>1</fparam>
+						</fparams>
+					</fcfg>
+				</fcfgs>
+				<reportFailed></reportFailed>
+				<proc_steps_options>0</proc_steps_options>
+			</fixup>
+		</fixups>
+		<fixupsets>
+			<fixupset>
+				<id1>U9bddeeb87ded5b090e4c88f87bd1ca4f</id1>
+				<id2>Ueb92749661a07226404714003882739c</id2>
+				<id3>e7af72d89c94df7d0e3a4c7d9f6901fb</id3>
+				<id4>957aee5b67827afc77a44db00503ed83</id4>
+				<id5>Ueb92749661a07226404714003882739c</id5>
+				<name>UUUU_FIXUPSET_DEF_NAME</name>
+				<comment>UUUU_FIXUPSET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<fixups>
+					<fixup>F6377a986413d0d780ac5ad744034ce63</fixup>
+					<fixup>F544d4112ce789a736d959b3095c166f5</fixup>
+				</fixups>
+			</fixupset>
+		</fixupsets>
+		<actions>
+		</actions>
+		<quickfixes>
+		</quickfixes>
+		<profiles>
+			<profile>
+				<id1>P78f096f00b98bc9138a415b38ea0623e</id1>
+				<id2>P790b81ddd8199c126083993d5366328a</id2>
+				<id3>b9b43ae61b690940680d296a8c589cf5</id3>
+				<id4>191169bf9c689712ded8e49fdb74547a</id4>
+				<id5>P790b81ddd8199c126083993d5366328a</id5>
+				<name>P_13_ConvertallpagesintoCMYKimagesandpreservetextinformation</name>
+				<comment>P_13_ConvertallpagesintoCMYKimagesandpreservetextinformation</comment>
+				<flags edit="0" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas software</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20140113133537+01&apos;00&apos;</creation>
+				<modification>D:20240301114657+01&apos;00&apos;</modification>
+				<aar_template></aar_template>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond>ISO Coated v2 (ECI)</outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<pdfstdemb>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond></outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+					<afrelationship set_relationship="0"></afrelationship>
+				</pdfstdemb>
+				<wizard>
+					<check name="PRCWzDocu_SyntaxChecks" check_severity="0">
+					</check>
+				</wizard>
+				<rulesets>
+				</rulesets>
+				<fixupsets>
+					<fixupset>U9bddeeb87ded5b090e4c88f87bd1ca4f</fixupset>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<metaprofs>
+		</metaprofs>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

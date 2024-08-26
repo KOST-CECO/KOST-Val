@@ -1,0 +1,29 @@
+/*====================SPOTCOLORS====================*/
+
+.page-ink-coverage h2 {
+    font-size: large;
+}
+
+.ink-coverage-table {
+    text-align: left;
+    border-collapse: collapse;
+    width: 70%;
+}
+
+.ink-coverage-table .page-head th,
+.ink-coverage-table .page-head td {
+    padding-top: 2.5mm;
+}
+
+/* .ink-coverage-table .page-head th,
+.ink-coverage-table .page-head td {
+    padding-top: 3mm;
+} */
+
+.ink-coverage-table th {
+    width: 45mm;
+}
+
+.ink-coverage-table td {
+    text-align: right;
+}

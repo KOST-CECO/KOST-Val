@@ -173,7 +173,7 @@ public class ConfigControllerSiard
 	void changeSiard10( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<siard10>1.0</siard10>";
+		String yes = "<siard10>1.0 </siard10>";
 		String no = "<siard10></siard10>";
 		try {
 			if ( checkSiard10.isSelected() ) {
@@ -200,7 +200,7 @@ public class ConfigControllerSiard
 	void changeSiard21( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<siard21>2.1</siard21>";
+		String yes = "<siard21>2.1 </siard21>";
 		String no = "<siard21></siard21>";
 		try {
 			if ( checkSiard21.isSelected() ) {
@@ -227,7 +227,7 @@ public class ConfigControllerSiard
 	void changeSiard22( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<siard22>2.2</siard22>";
+		String yes = "<siard22>2.2 </siard22>";
 		String no = "<siard22></siard22>";
 		try {
 			if ( checkSiard22.isSelected() ) {

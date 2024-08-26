@@ -1,0 +1,54 @@
+/*====================INKAMOUNTHEATMAPS====================*/
+
+.ink-amount-heatmap-no-ink {
+    display: flex;
+    align-items: center;
+}
+
+.ink-amount-heatmap-no-ink img {
+    width: 5mm;
+    height: 5mm;
+    margin-right: 1mm;
+}
+
+.ink-amount-threshold {
+    margin: 5mm 0;
+}
+
+.ink-amount-heatmap {
+    margin: 5mm 0;
+    display: flex;
+}
+
+.ink-amount-heatmap .color-block-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 0.2mm;
+}
+
+.ink-amount-heatmap .color-block {
+    width: 13mm;
+    height: 13mm;
+}
+
+.ink-amount-images {
+}
+
+.ink-amount-image-box {
+    display: inline-block;
+    page-break-inside: avoid;
+    margin-right: 10mm;
+    width: 50mm;
+}
+
+.ink-amount-image-container {
+    margin-top: 1.5mm;
+    width: inherit;
+    height: 85mm;
+}
+
+.ink-amount-image-container img {
+    max-width: 100%;
+    max-height: 100%;
+}

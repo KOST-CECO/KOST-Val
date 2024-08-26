@@ -109,15 +109,7 @@
 					<tr class="captioninfom">
 						<td>Versioni PDF/A permesse [1A, 1B, 2A, 2B, 2U]:</td>
 						<td>
-							<xsl:value-of select="configuration/pdfa/pdfa1a" />
-							&#160;
-							<xsl:value-of select="configuration/pdfa/pdfa1b" />
-							&#160;
-							<xsl:value-of select="configuration/pdfa/pdfa2a" />
-							&#160;
-							<xsl:value-of select="configuration/pdfa/pdfa2b" />
-							&#160;
-							<xsl:value-of select="configuration/pdfa/pdfa2u" />
+							<xsl:value-of select="configuration/pdfa/pdfaversion" />
 						</td>
 					</tr>
 					<tr class="captioninfom">
@@ -321,11 +313,7 @@
 					<tr class="captioninfom">
 						<td>Versioni SIARD ammesse [1.0, 2.1, 2.2]:</td>
 						<td>
-							<xsl:value-of select="configuration/siard/siard10" />
-							&#160;
-							<xsl:value-of select="configuration/siard/siard21" />
-							&#160;
-							<xsl:value-of select="configuration/siard/siard22" />
+							<xsl:value-of select="configuration/siard/siardversion" />
 						</td>
 					</tr>
 

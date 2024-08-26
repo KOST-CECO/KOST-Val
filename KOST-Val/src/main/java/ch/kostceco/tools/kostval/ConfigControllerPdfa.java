@@ -339,7 +339,7 @@ public class ConfigControllerPdfa
 	void changePdfa1a( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<pdfa1a>1A</pdfa1a>";
+		String yes = "<pdfa1a>1A </pdfa1a>";
 		String no = "<pdfa1a></pdfa1a>";
 		try {
 			if ( checkPdfa1a.isSelected() ) {
@@ -364,7 +364,7 @@ public class ConfigControllerPdfa
 	void changePdfa1b( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<pdfa1b>1B</pdfa1b>";
+		String yes = "<pdfa1b>1B </pdfa1b>";
 		String no = "<pdfa1b></pdfa1b>";
 		try {
 			if ( checkPdfa1b.isSelected() ) {
@@ -390,7 +390,7 @@ public class ConfigControllerPdfa
 	void changePdfa2a( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<pdfa2a>2A</pdfa2a>";
+		String yes = "<pdfa2a>2A </pdfa2a>";
 		String no = "<pdfa2a></pdfa2a>";
 		try {
 			if ( checkPdfa2a.isSelected() ) {
@@ -422,7 +422,7 @@ public class ConfigControllerPdfa
 	void changePdfa2b( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<pdfa2b>2B</pdfa2b>";
+		String yes = "<pdfa2b>2B </pdfa2b>";
 		String no = "<pdfa2b></pdfa2b>";
 		try {
 			if ( checkPdfa2b.isSelected() ) {
@@ -454,7 +454,7 @@ public class ConfigControllerPdfa
 	void changePdfa2u( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<pdfa2u>2U</pdfa2u>";
+		String yes = "<pdfa2u>2U </pdfa2u>";
 		String no = "<pdfa2u></pdfa2u>";
 		try {
 			if ( checkPdfa2u.isSelected() ) {

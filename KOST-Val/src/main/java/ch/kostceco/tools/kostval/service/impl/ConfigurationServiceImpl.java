@@ -215,35 +215,35 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String pdfa1a = "no";
 			if ( doc.getElementsByTagName( "pdfa1a" ).item( 0 ) != null ) {
 				pdfa1a = doc.getElementsByTagName( "pdfa1a" ).item( 0 )
-						.getTextContent();
+						.getTextContent().replace( " ","" );
 			}
 			configMap.put( "pdfa1a", pdfa1a );
 
 			String pdfa1b = "no";
 			if ( doc.getElementsByTagName( "pdfa1b" ).item( 0 ) != null ) {
 				pdfa1b = doc.getElementsByTagName( "pdfa1b" ).item( 0 )
-						.getTextContent();
+						.getTextContent().replace( " ","" );
 			}
 			configMap.put( "pdfa1b", pdfa1b );
 
 			String pdfa2a = "no";
 			if ( doc.getElementsByTagName( "pdfa2a" ).item( 0 ) != null ) {
 				pdfa2a = doc.getElementsByTagName( "pdfa2a" ).item( 0 )
-						.getTextContent();
+						.getTextContent().replace( " ","" );
 			}
 			configMap.put( "pdfa2a", pdfa2a );
 
 			String pdfa2b = "no";
 			if ( doc.getElementsByTagName( "pdfa2b" ).item( 0 ) != null ) {
 				pdfa2b = doc.getElementsByTagName( "pdfa2b" ).item( 0 )
-						.getTextContent();
+						.getTextContent().replace( " ","" );
 			}
 			configMap.put( "pdfa2b", pdfa2b );
 
 			String pdfa2u = "no";
 			if ( doc.getElementsByTagName( "pdfa2u" ).item( 0 ) != null ) {
 				pdfa2u = doc.getElementsByTagName( "pdfa2u" ).item( 0 )
-						.getTextContent();
+						.getTextContent().replace( " ","" );
 			}
 			configMap.put( "pdfa2u", pdfa2u );
 
@@ -352,56 +352,60 @@ public class ConfigurationServiceImpl implements ConfigurationService
 					.item( 0 ) != null ) {
 				allowedcompression1 = doc
 						.getElementsByTagName( "allowedcompression1" ).item( 0 )
-						.getTextContent();
+						.getTextContent().replace( " ","" );
 			}
 			String allowedcompression2 = "0";
 			if ( doc.getElementsByTagName( "allowedcompression2" )
 					.item( 0 ) != null ) {
 				allowedcompression2 = doc
 						.getElementsByTagName( "allowedcompression2" ).item( 0 )
-						.getTextContent();
+						.getTextContent().replace( " ","" );
+			allowedcompression2=allowedcompression2.replace( "CCITT1D","CCITT 1D");
 			}
 			String allowedcompression3 = "0";
 			if ( doc.getElementsByTagName( "allowedcompression3" )
 					.item( 0 ) != null ) {
 				allowedcompression3 = doc
 						.getElementsByTagName( "allowedcompression3" ).item( 0 )
-						.getTextContent();
+						.getTextContent().replace( " ","" );
+				allowedcompression3=allowedcompression3.replace( "CCITTGroup3","CCITT Group 3");
 			}
 			String allowedcompression4 = "0";
 			if ( doc.getElementsByTagName( "allowedcompression4" )
 					.item( 0 ) != null ) {
 				allowedcompression4 = doc
 						.getElementsByTagName( "allowedcompression4" ).item( 0 )
-						.getTextContent();
+						.getTextContent().replace( " ","" );
+				allowedcompression4=allowedcompression4.replace( "CCITTGroup4","CCITT Group 4");
 			}
 			String allowedcompression5 = "0";
 			if ( doc.getElementsByTagName( "allowedcompression5" )
 					.item( 0 ) != null ) {
 				allowedcompression5 = doc
 						.getElementsByTagName( "allowedcompression5" ).item( 0 )
-						.getTextContent();
+						.getTextContent().replace( " ","" );
 			}
 			String allowedcompression7 = "0";
 			if ( doc.getElementsByTagName( "allowedcompression7" )
 					.item( 0 ) != null ) {
 				allowedcompression7 = doc
 						.getElementsByTagName( "allowedcompression7" ).item( 0 )
-						.getTextContent();
+						.getTextContent().replace( " ","" );
+				allowedcompression7=allowedcompression7.replace( "ISOJPEG","ISO JPEG");
 			}
 			String allowedcompression8 = "0";
 			if ( doc.getElementsByTagName( "allowedcompression8" )
 					.item( 0 ) != null ) {
 				allowedcompression8 = doc
 						.getElementsByTagName( "allowedcompression8" ).item( 0 )
-						.getTextContent();
+						.getTextContent().replace( " ","" );
 			}
 			String allowedcompression32773 = "0";
 			if ( doc.getElementsByTagName( "allowedcompression32773" )
 					.item( 0 ) != null ) {
 				allowedcompression32773 = doc
 						.getElementsByTagName( "allowedcompression32773" )
-						.item( 0 ).getTextContent();
+						.item( 0 ).getTextContent().replace( " ","" );
 			}
 			configMap.put( "AllowedCompression1", allowedcompression1 );
 			configMap.put( "AllowedCompression2", allowedcompression2 );
@@ -418,56 +422,61 @@ public class ConfigurationServiceImpl implements ConfigurationService
 					.item( 0 ) != null ) {
 				allowedphotointer0 = doc
 						.getElementsByTagName( "allowedphotointer0" ).item( 0 )
-						.getTextContent();
+						.getTextContent().replace( " ","" );
+				allowedphotointer0=allowedphotointer0.replace( "whiteiszero","white is zero");
 			}
 			String allowedphotointer1 = "0";
 			if ( doc.getElementsByTagName( "allowedphotointer1" )
 					.item( 0 ) != null ) {
 				allowedphotointer1 = doc
 						.getElementsByTagName( "allowedphotointer1" ).item( 0 )
-						.getTextContent();
+						.getTextContent().replace( " ","" );
+				allowedphotointer1=allowedphotointer1.replace( "blackiszero","black is zero");
 			}
 			String allowedphotointer2 = "0";
 			if ( doc.getElementsByTagName( "allowedphotointer2" )
 					.item( 0 ) != null ) {
 				allowedphotointer2 = doc
 						.getElementsByTagName( "allowedphotointer2" ).item( 0 )
-						.getTextContent();
+						.getTextContent().replace( " ","" );
 			}
 			String allowedphotointer3 = "0";
 			if ( doc.getElementsByTagName( "allowedphotointer3" )
 					.item( 0 ) != null ) {
 				allowedphotointer3 = doc
 						.getElementsByTagName( "allowedphotointer3" ).item( 0 )
-						.getTextContent();
+						.getTextContent().replace( " ","" );
+				allowedphotointer3=allowedphotointer3.replace( "palettecolor","palette color");
 			}
 			String allowedphotointer4 = "0";
 			if ( doc.getElementsByTagName( "allowedphotointer4" )
 					.item( 0 ) != null ) {
 				allowedphotointer4 = doc
 						.getElementsByTagName( "allowedphotointer4" ).item( 0 )
-						.getTextContent();
-			}
+						.getTextContent().replace( " ","" );
+				allowedphotointer4=allowedphotointer4.replace( "transparencymask","transparency mask");
+		}
 			String allowedphotointer5 = "0";
 			if ( doc.getElementsByTagName( "allowedphotointer5" )
 					.item( 0 ) != null ) {
 				allowedphotointer5 = doc
 						.getElementsByTagName( "allowedphotointer5" ).item( 0 )
-						.getTextContent();
+						.getTextContent().replace( " ","" );
 			}
 			String allowedphotointer6 = "0";
 			if ( doc.getElementsByTagName( "allowedphotointer6" )
 					.item( 0 ) != null ) {
 				allowedphotointer6 = doc
 						.getElementsByTagName( "allowedphotointer6" ).item( 0 )
-						.getTextContent();
+						.getTextContent().replace( " ","" );
 			}
 			String allowedphotointer8 = "0";
 			if ( doc.getElementsByTagName( "allowedphotointer8" )
 					.item( 0 ) != null ) {
 				allowedphotointer8 = doc
 						.getElementsByTagName( "allowedphotointer8" ).item( 0 )
-						.getTextContent();
+						.getTextContent().replace( " ","" );
+				allowedphotointer8=allowedphotointer8.replace( "CIEL*a*b*","CIE L*a*b*");
 			}
 			configMap.put( "AllowedPhotointer0", allowedphotointer0 );
 			configMap.put( "AllowedPhotointer1", allowedphotointer1 );
@@ -484,42 +493,42 @@ public class ConfigurationServiceImpl implements ConfigurationService
 					.item( 0 ) != null ) {
 				allowedbitspersample1 = doc
 						.getElementsByTagName( "allowedbitspersample1" )
-						.item( 0 ).getTextContent();
+						.item( 0 ).getTextContent().replace( " ","" );
 			}
 			String allowedbitspersample2 = "0";
 			if ( doc.getElementsByTagName( "allowedbitspersample2" )
 					.item( 0 ) != null ) {
 				allowedbitspersample2 = doc
 						.getElementsByTagName( "allowedbitspersample2" )
-						.item( 0 ).getTextContent();
+						.item( 0 ).getTextContent().replace( " ","" );
 			}
 			String allowedbitspersample4 = "0";
 			if ( doc.getElementsByTagName( "allowedbitspersample4" )
 					.item( 0 ) != null ) {
 				allowedbitspersample4 = doc
 						.getElementsByTagName( "allowedbitspersample4" )
-						.item( 0 ).getTextContent();
+						.item( 0 ).getTextContent().replace( " ","" );
 			}
 			String allowedbitspersample8 = "0";
 			if ( doc.getElementsByTagName( "allowedbitspersample8" )
 					.item( 0 ) != null ) {
 				allowedbitspersample8 = doc
 						.getElementsByTagName( "allowedbitspersample8" )
-						.item( 0 ).getTextContent();
+						.item( 0 ).getTextContent().replace( " ","" );
 			}
 			String allowedbitspersample16 = "0";
 			if ( doc.getElementsByTagName( "allowedbitspersample16" )
 					.item( 0 ) != null ) {
 				allowedbitspersample16 = doc
 						.getElementsByTagName( "allowedbitspersample16" )
-						.item( 0 ).getTextContent();
+						.item( 0 ).getTextContent().replace( " ","" );
 			}
 			String allowedbitspersample32 = "0";
 			if ( doc.getElementsByTagName( "allowedbitspersample32" )
 					.item( 0 ) != null ) {
 				allowedbitspersample32 = doc
 						.getElementsByTagName( "allowedbitspersample32" )
-						.item( 0 ).getTextContent();
+						.item( 0 ).getTextContent().replace( " ","" );
 			}
 			configMap.put( "AllowedBitspersample1", allowedbitspersample1 );
 			configMap.put( "AllowedBitspersample2", allowedbitspersample2 );
@@ -609,25 +618,25 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			if ( doc.getElementsByTagName( "allowedmkvffv1" )
 					.item( 0 ) != null ) {
 				allowedmkvffv1 = doc.getElementsByTagName( "allowedmkvffv1" )
-						.item( 0 ).getTextContent();
+						.item( 0 ).getTextContent().replace( " ","" );
 			}
 			String allowedmkvavc = "0";
 			if ( doc.getElementsByTagName( "allowedmkvavc" )
 					.item( 0 ) != null ) {
 				allowedmkvavc = doc.getElementsByTagName( "allowedmkvavc" )
-						.item( 0 ).getTextContent();
+						.item( 0 ).getTextContent().replace( " ","" );
 			}
 			String allowedmkvhevc = "0";
 			if ( doc.getElementsByTagName( "allowedmkvhevc" )
 					.item( 0 ) != null ) {
 				allowedmkvhevc = doc.getElementsByTagName( "allowedmkvhevc" )
-						.item( 0 ).getTextContent();
+						.item( 0 ).getTextContent().replace( " ","" );
 			}
 			String allowedmkvav1 = "0";
 			if ( doc.getElementsByTagName( "allowedmkvav1" )
 					.item( 0 ) != null ) {
 				allowedmkvav1 = doc.getElementsByTagName( "allowedmkvav1" )
-						.item( 0 ).getTextContent();
+						.item( 0 ).getTextContent().replace( " ","" );
 			}
 			configMap.put( "Allowedmkvffv1", allowedmkvffv1 );
 			configMap.put( "Allowedmkvavc", allowedmkvavc );
@@ -639,19 +648,19 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			if ( doc.getElementsByTagName( "allowedmkvflac" )
 					.item( 0 ) != null ) {
 				allowedmkvflac = doc.getElementsByTagName( "allowedmkvflac" )
-						.item( 0 ).getTextContent();
+						.item( 0 ).getTextContent().replace( " ","" );
 			}
 			String allowedmkvmp3 = "0";
 			if ( doc.getElementsByTagName( "allowedmkvmp3" )
 					.item( 0 ) != null ) {
 				allowedmkvmp3 = doc.getElementsByTagName( "allowedmkvmp3" )
-						.item( 0 ).getTextContent();
+						.item( 0 ).getTextContent().replace( " ","" );
 			}
 			String allowedmkvaac = "0";
 			if ( doc.getElementsByTagName( "allowedmkvaac" )
 					.item( 0 ) != null ) {
 				allowedmkvaac = doc.getElementsByTagName( "allowedmkvaac" )
-						.item( 0 ).getTextContent();
+						.item( 0 ).getTextContent().replace( " ","" );
 			}
 			configMap.put( "Allowedmkvflac", allowedmkvflac );
 			configMap.put( "Allowedmkvmp3", allowedmkvmp3 );
@@ -696,13 +705,13 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			if ( doc.getElementsByTagName( "allowedmp4avc" )
 					.item( 0 ) != null ) {
 				allowedmp4avc = doc.getElementsByTagName( "allowedmp4avc" )
-						.item( 0 ).getTextContent();
+						.item( 0 ).getTextContent().replace( " ","" );
 			}
 			String allowedmp4hevc = "0";
 			if ( doc.getElementsByTagName( "allowedmp4hevc" )
 					.item( 0 ) != null ) {
 				allowedmp4hevc = doc.getElementsByTagName( "allowedmp4hevc" )
-						.item( 0 ).getTextContent();
+						.item( 0 ).getTextContent().replace( " ","" );
 			}
 			configMap.put( "Allowedmp4avc", allowedmp4avc );
 			configMap.put( "Allowedmp4hevc", allowedmp4hevc );
@@ -712,13 +721,13 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			if ( doc.getElementsByTagName( "allowedmp4mp3" )
 					.item( 0 ) != null ) {
 				allowedmp4mp3 = doc.getElementsByTagName( "allowedmp4mp3" )
-						.item( 0 ).getTextContent();
+						.item( 0 ).getTextContent().replace( " ","" );
 			}
 			String allowedmp4aac = "0";
 			if ( doc.getElementsByTagName( "allowedmp4aac" )
 					.item( 0 ) != null ) {
 				allowedmp4aac = doc.getElementsByTagName( "allowedmp4aac" )
-						.item( 0 ).getTextContent();
+						.item( 0 ).getTextContent().replace( " ","" );
 			}
 			configMap.put( "Allowedmp4mp3", allowedmp4mp3 );
 			configMap.put( "Allowedmp4aac", allowedmp4aac );
@@ -786,17 +795,17 @@ public class ConfigurationServiceImpl implements ConfigurationService
 
 			// Gibt an ob siard 1.0 validiert werden soll
 			String siard10 = doc.getElementsByTagName( "siard10" ).item( 0 )
-					.getTextContent();
+					.getTextContent().replace( " ","" );
 			configMap.put( "siard10", siard10 );
 
 			// Gibt an ob siard 2.1 validiert werden soll
 			String siard21 = doc.getElementsByTagName( "siard21" ).item( 0 )
-					.getTextContent();
+					.getTextContent().replace( " ","" );
 			configMap.put( "siard21", siard21 );
 
 			// Gibt an ob siard 2.2 validiert werden soll
 			String siard22 = doc.getElementsByTagName( "siard22" ).item( 0 )
-					.getTextContent();
+					.getTextContent().replace( " ","" );
 			configMap.put( "siard22", siard22 );
 
 			// Gibt an ob csv akzeptiert werden soll

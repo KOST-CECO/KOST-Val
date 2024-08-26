@@ -207,7 +207,7 @@ public class ConfigControllerMkv
 	void changeFfv1( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedmkvffv1>FFV1</allowedmkvffv1>";
+		String yes = "<allowedmkvffv1>FFV1 </allowedmkvffv1>";
 		String no = "<allowedmkvffv1></allowedmkvffv1>";
 		try {
 			if ( checkFfv1.isSelected() ) {
@@ -231,7 +231,7 @@ public class ConfigControllerMkv
 	void changeH264( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedmkvavc>AVC</allowedmkvavc>";
+		String yes = "<allowedmkvavc>AVC </allowedmkvavc>";
 		String no = "<allowedmkvavc></allowedmkvavc>";
 		try {
 			if ( checkH264.isSelected() ) {
@@ -255,7 +255,7 @@ public class ConfigControllerMkv
 	void changeH265( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedmkvhevc>HEVC</allowedmkvhevc>";
+		String yes = "<allowedmkvhevc>HEVC </allowedmkvhevc>";
 		String no = "<allowedmkvhevc></allowedmkvhevc>";
 		try {
 			if ( checkH265.isSelected() ) {
@@ -279,7 +279,7 @@ public class ConfigControllerMkv
 	void changeAv1( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedmkvav1>AV1</allowedmkvav1>";
+		String yes = "<allowedmkvav1>AV1 </allowedmkvav1>";
 		String no = "<allowedmkvav1></allowedmkvav1>";
 		try {
 			if ( checkAv1.isSelected() ) {
@@ -303,7 +303,7 @@ public class ConfigControllerMkv
 	void changeFlac( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedmkvflac>FLAC</allowedmkvflac>";
+		String yes = "<allowedmkvflac>FLAC </allowedmkvflac>";
 		String no = "<allowedmkvflac></allowedmkvflac>";
 		try {
 			if ( checkFlac.isSelected() ) {
@@ -326,7 +326,7 @@ public class ConfigControllerMkv
 	void changeMp3( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedmkvmp3>MP3</allowedmkvmp3>";
+		String yes = "<allowedmkvmp3>MP3 </allowedmkvmp3>";
 		String no = "<allowedmkvmp3></allowedmkvmp3>";
 		try {
 			if ( checkMp3.isSelected() ) {
@@ -349,7 +349,7 @@ public class ConfigControllerMkv
 	void changeAac( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedmkvaac>AAC</allowedmkvaac>";
+		String yes = "<allowedmkvaac>AAC </allowedmkvaac>";
 		String no = "<allowedmkvaac></allowedmkvaac>";
 		try {
 			if ( checkAac.isSelected() ) {

@@ -152,8 +152,8 @@ public class Controllervalsip implements MessageConstants
 					Logtxt.logtxt( logFile, "</Format><Sip><Validation>" );
 					valDatei = originalSipFile;
 					Logtxt.logtxt( logFile, getTextResourceService()
-							.getText( locale, MESSAGE_XML_VALTYPE, "SIP" ) );
-					Logtxt.logtxt( logFile, "<ValFile>"
+							.getText( locale, MESSAGE_XML_VALTYPE, "SIP " ) );
+					Logtxt.logtxt( logFile, "<ValFile> -> "
 							+ valDatei.getAbsolutePath() + "</ValFile>" );
 					System.out.println( "" );
 					System.out
@@ -259,9 +259,9 @@ public class Controllervalsip implements MessageConstants
 							valDatei = originalSipFile;
 							Logtxt.logtxt( logFile,
 									getTextResourceService().getText( locale,
-											MESSAGE_XML_VALTYPE, "SIP" ) );
+											MESSAGE_XML_VALTYPE, "SIP " ) );
 							Logtxt.logtxt( logFile,
-									"<ValFile>" + valDatei.getAbsolutePath()
+									"<ValFile> -> " + valDatei.getAbsolutePath()
 											+ "</ValFile>" );
 							System.out.println( "" );
 							System.out.println(
@@ -436,8 +436,8 @@ public class Controllervalsip implements MessageConstants
 			Logtxt.logtxt( logFile, "<Sip><Validation>" );
 			valDatei = unSipFile;
 			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_VALTYPE, "SIP" ) );
-			Logtxt.logtxt( logFile, "<ValFile>"
+					MESSAGE_XML_VALTYPE, "SIP " ) );
+			Logtxt.logtxt( logFile, "<ValFile> -> "
 					+ originalSipFile.getAbsolutePath() + "</ValFile>" );
 			System.out.println( "" );
 			System.out.println( "SIP:   " + valDatei.getAbsolutePath() );

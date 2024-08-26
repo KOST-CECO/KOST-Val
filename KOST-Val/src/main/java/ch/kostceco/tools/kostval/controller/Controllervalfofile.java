@@ -164,7 +164,7 @@ public class Controllervalfofile implements MessageConstants
 					}
 				}
 
-				String valDateiXml = "<ValFile>" + valDatei.getAbsolutePath()
+				String valDateiXml = "<ValFile> -> " + valDatei.getAbsolutePath()
 						+ "</ValFile>" + sizeWarningTxt;
 
 				/*
@@ -193,7 +193,7 @@ public class Controllervalfofile implements MessageConstants
 						// nur Erkennung
 						Logtxt.logtxt( logFile, "<Validation>" + hash
 								+ getTextResourceService().getText( locale,
-										MESSAGE_XML_AZTYPE, formatUK )
+										MESSAGE_XML_AZTYPE, " " + formatUK )
 								+ valDateiXml );
 						Logtxt.logtxt( logFile,
 								"<Accepted>accepted</Accepted></Validation>" );
@@ -203,7 +203,7 @@ public class Controllervalfofile implements MessageConstants
 						// NICHT akzeptiert -> invalid
 						Logtxt.logtxt( logFile, "<Validation>" + hash
 								+ getTextResourceService().getText( locale,
-										MESSAGE_XML_AZTYPE, "???" )
+										MESSAGE_XML_AZTYPE, " ???" )
 								+ valDateiXml );
 						if ( !min ) {
 							Logtxt.logtxt( logFile, getTextResourceService()
@@ -222,11 +222,10 @@ public class Controllervalfofile implements MessageConstants
 
 					String formatEXT = recFormat.replace( "_ext", "" );
 
-					Logtxt.logtxt( logFile,
-							"<Validation>" + hash
-									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_AZTYPE, formatEXT )
-									+ valDateiXml );
+					Logtxt.logtxt( logFile, "<Validation>" + hash
+							+ getTextResourceService().getText( locale,
+									MESSAGE_XML_AZTYPE, " " + formatEXT )
+							+ valDateiXml );
 					// NICHT akzeptiert -> invalid
 					if ( !min ) {
 						Logtxt.logtxt( logFile, getTextResourceService()
@@ -274,7 +273,7 @@ public class Controllervalfofile implements MessageConstants
 							// akzeptiert oder nicht
 							Logtxt.logtxt( logFile, "<Validation>" + hash
 									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_AZTYPE, "PDF/A" )
+											MESSAGE_XML_AZTYPE, " PDF/A" )
 									+ valDateiXml );
 
 							/*
@@ -315,7 +314,7 @@ public class Controllervalfofile implements MessageConstants
 							// akzeptiert oder nicht
 							Logtxt.logtxt( logFile, "<Validation>" + hash
 									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_AZTYPE, "TXT" )
+											MESSAGE_XML_AZTYPE, " TXT" )
 									+ valDateiXml );
 							if ( txtValidation.equals( "az" ) ) {
 								// nur akzeptiert -> KEINE Validierung, nur
@@ -336,7 +335,7 @@ public class Controllervalfofile implements MessageConstants
 							// akzeptiert oder nicht
 							Logtxt.logtxt( logFile, "<Validation>" + hash
 									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_AZTYPE, "PDF" )
+											MESSAGE_XML_AZTYPE, " PDF" )
 									+ valDateiXml );
 
 							/*
@@ -391,7 +390,7 @@ public class Controllervalfofile implements MessageConstants
 							// akzeptiert oder nicht
 							Logtxt.logtxt( logFile, "<Validation>" + hash
 									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_AZTYPE, "JP2" )
+											MESSAGE_XML_AZTYPE, " JP2" )
 									+ valDateiXml );
 							if ( jp2Validation.equals( "az" ) ) {
 								// nur akzeptiert -> KEINE Validierung, nur
@@ -425,7 +424,7 @@ public class Controllervalfofile implements MessageConstants
 							// akzeptiert oder nicht
 							Logtxt.logtxt( logFile, "<Validation>" + hash
 									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_AZTYPE, "JPEG" )
+											MESSAGE_XML_AZTYPE, " JPEG" )
 									+ valDateiXml );
 							if ( jpegValidation.equals( "az" ) ) {
 								// nur akzeptiert -> KEINE Validierung, nur
@@ -459,7 +458,7 @@ public class Controllervalfofile implements MessageConstants
 							// akzeptiert oder nicht
 							Logtxt.logtxt( logFile, "<Validation>" + hash
 									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_AZTYPE, "TIFF" )
+											MESSAGE_XML_AZTYPE, " TIFF" )
 									+ valDateiXml );
 							if ( tiffValidation.equals( "az" ) ) {
 								// nur akzeptiert -> KEINE Validierung, nur
@@ -493,7 +492,7 @@ public class Controllervalfofile implements MessageConstants
 							// akzeptiert oder nicht
 							Logtxt.logtxt( logFile, "<Validation>" + hash
 									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_AZTYPE, "PNG" )
+											MESSAGE_XML_AZTYPE, " PNG" )
 									+ valDateiXml );
 							if ( pngValidation.equals( "az" ) ) {
 								// nur akzeptiert -> KEINE Validierung, nur
@@ -529,7 +528,7 @@ public class Controllervalfofile implements MessageConstants
 							// akzeptiert oder nicht
 							Logtxt.logtxt( logFile, "<Validation>" + hash
 									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_AZTYPE, "FLAC" )
+											MESSAGE_XML_AZTYPE, " FLAC" )
 									+ valDateiXml );
 							if ( flacValidation.equals( "az" ) ) {
 								// nur akzeptiert -> KEINE Validierung, nur
@@ -563,7 +562,7 @@ public class Controllervalfofile implements MessageConstants
 							// akzeptiert oder nicht
 							Logtxt.logtxt( logFile, "<Validation>" + hash
 									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_AZTYPE, "WAVE" )
+											MESSAGE_XML_AZTYPE, " WAVE" )
 									+ valDateiXml );
 							if ( waveValidation.equals( "az" ) ) {
 								// nur akzeptiert -> KEINE Validierung, nur
@@ -597,7 +596,7 @@ public class Controllervalfofile implements MessageConstants
 							// akzeptiert oder nicht
 							Logtxt.logtxt( logFile, "<Validation>" + hash
 									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_AZTYPE, "MP3" )
+											MESSAGE_XML_AZTYPE, " MP3" )
 									+ valDateiXml );
 							if ( mp3Validation.equals( "az" ) ) {
 								// nur akzeptiert -> KEINE Validierung, nur
@@ -633,7 +632,7 @@ public class Controllervalfofile implements MessageConstants
 							// akzeptiert oder nicht
 							Logtxt.logtxt( logFile, "<Validation>" + hash
 									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_AZTYPE, "MKV" )
+											MESSAGE_XML_AZTYPE, " MKV" )
 									+ valDateiXml );
 							if ( mkvValidation.equals( "az" ) ) {
 								// nur akzeptiert -> KEINE Validierung, nur
@@ -667,7 +666,7 @@ public class Controllervalfofile implements MessageConstants
 							// akzeptiert oder nicht
 							Logtxt.logtxt( logFile, "<Validation>" + hash
 									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_AZTYPE, "MP4" )
+											MESSAGE_XML_AZTYPE, " MP4" )
 									+ valDateiXml );
 							if ( mp4Validation.equals( "az" ) ) {
 								// nur akzeptiert -> KEINE Validierung, nur
@@ -701,7 +700,7 @@ public class Controllervalfofile implements MessageConstants
 							// akzeptiert oder nicht
 							Logtxt.logtxt( logFile, "<Validation>" + hash
 									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_AZTYPE, "XML" )
+											MESSAGE_XML_AZTYPE, " XML" )
 									+ valDateiXml );
 							if ( xmlValidation.equals( "az" ) ) {
 								// nur akzeptiert -> KEINE Validierung, nur
@@ -722,7 +721,7 @@ public class Controllervalfofile implements MessageConstants
 							// akzeptiert oder nicht
 							Logtxt.logtxt( logFile, "<Validation>" + hash
 									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_AZTYPE, "JSON" )
+											MESSAGE_XML_AZTYPE, " JSON" )
 									+ valDateiXml );
 							if ( jsonValidation.equals( "az" ) ) {
 								// nur akzeptiert -> KEINE Validierung, nur
@@ -756,7 +755,7 @@ public class Controllervalfofile implements MessageConstants
 							// akzeptiert oder nicht
 							Logtxt.logtxt( logFile, "<Validation>" + hash
 									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_AZTYPE, "SIARD" )
+											MESSAGE_XML_AZTYPE, " SIARD" )
 									+ valDateiXml );
 							if ( siardValidation.equals( "az" ) ) {
 								// nur akzeptiert -> KEINE Validierung, nur
@@ -777,7 +776,7 @@ public class Controllervalfofile implements MessageConstants
 							// akzeptiert oder nicht
 							Logtxt.logtxt( logFile, "<Validation>" + hash
 									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_AZTYPE, "CSV" )
+											MESSAGE_XML_AZTYPE, " CSV" )
 									+ valDateiXml );
 							if ( csvValidation.equals( "az" ) ) {
 								// nur akzeptiert -> KEINE Validierung, nur
@@ -798,7 +797,7 @@ public class Controllervalfofile implements MessageConstants
 							// akzeptiert oder nicht
 							Logtxt.logtxt( logFile, "<Validation>" + hash
 									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_AZTYPE, "XLSX" )
+											MESSAGE_XML_AZTYPE, " XLSX" )
 									+ valDateiXml );
 							if ( xlsxValidation.equals( "az" ) ) {
 								// nur akzeptiert -> KEINE Validierung, nur
@@ -819,7 +818,7 @@ public class Controllervalfofile implements MessageConstants
 							// akzeptiert oder nicht
 							Logtxt.logtxt( logFile, "<Validation>" + hash
 									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_AZTYPE, "ODS" )
+											MESSAGE_XML_AZTYPE, " ODS" )
 									+ valDateiXml );
 							if ( odsValidation.equals( "az" ) ) {
 								// nur akzeptiert -> KEINE Validierung, nur
@@ -838,7 +837,7 @@ public class Controllervalfofile implements MessageConstants
 
 						Logtxt.logtxt( logFile, "<Validation>" + hash
 								+ getTextResourceService().getText( locale,
-										MESSAGE_XML_AZTYPE, recFormat )
+										MESSAGE_XML_AZTYPE, " " + recFormat )
 								+ valDateiXml );
 						if ( otherformats.contains( recFormat ) ) {
 							// nur akzeptiert -> KEINE Validierung, nur
@@ -1361,7 +1360,7 @@ public class Controllervalfofile implements MessageConstants
 					returnEgovdvSum = getTextResourceService().getText( locale,
 							MESSAGE_XML_MODUL_A_PDFA )
 							+ getTextResourceService().getText( locale,
-									WARNING_XML_A_SIGNATURE, countSig );
+									WARNING_XML_A_SIGNATURE, countSig, " " );
 				}
 			}
 		} catch ( Exception e ) {

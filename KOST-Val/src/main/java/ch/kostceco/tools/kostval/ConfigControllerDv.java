@@ -57,7 +57,7 @@ public class ConfigControllerDv
 	@FXML
 	private Button				buttonConfigApply;
 
-	private File				configFile		= new File(
+	private File				configFile			= new File(
 			System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x"
 					+ File.separator + "configuration" + File.separator
 					+ "kostval.conf.xml" );
@@ -70,16 +70,17 @@ public class ConfigControllerDv
 	private Label				labelInstitut, labelVal, labelMessage,
 			labelMandant, labelConfig;
 
-	ObservableList<String>		sizeWarningList	= FXCollections
+	ObservableList<String>		sizeInstitutList	= FXCollections
 			.observableArrayList( "", "Staatsarchiv Bern",
-					"Burgerbibliothek Bern", "Stadtarchiv Bern" );
+					"Staatsarchiv Luzern", "Stadtarchiv Bern",
+					"Stadtarchiv Luzern", "Burgerbibliothek Bern" );
 
 	@FXML
 	private ChoiceBox<String>	institut;
 
 	/*
-	 * ObservableList<String> listInstitut = FXCollections .observableArrayList(
-	 * "", "andere", "Staatsarchiv Aargau",
+	 * ObservableList<String> sizeInstitutList = FXCollections
+	 * .observableArrayList( "", "andere", "Staatsarchiv Aargau",
 	 * "Staatsarchiv Appenzell Ausserrhoden",
 	 * "Landesarchiv Appenzell Innerrhoden", "Staatsarchiv Basel-Land",
 	 * "Staatsarchiv Basel-Stadt", "Staatsarchiv Bern", "Staatsarchiv Freiburg",
@@ -168,7 +169,7 @@ public class ConfigControllerDv
 			e.printStackTrace();
 		}
 
-		institut.getItems().addAll( sizeWarningList );
+		institut.getItems().addAll( sizeInstitutList );
 		try {
 			Document docS = null;
 			BufferedInputStream bisS = new BufferedInputStream(
@@ -513,13 +514,7 @@ public class ConfigControllerDv
 			String institutOld = "<Institut>" + institutInit + "</Institut>";
 			String selInstitut = institut.getValue();
 			String institutNew = institutOld;
-			if ( selInstitut.equals( "Staatsarchiv Bern" )
-					|| selInstitut.equals( "Burgerbibliothek Bern" )
-					|| selInstitut.equals( "Stadtarchiv Bern" ) ) {
-				institutNew = "<Institut>" + selInstitut + "</Institut>";
-			} else {
-				institutNew = "<Institut></Institut>";
-			}
+			institutNew = "<Institut>" + selInstitut + "</Institut>";
 			Util.oldnewstring( institutOld, institutNew, configFile );
 
 		} catch ( IOException | ParserConfigurationException

@@ -274,7 +274,7 @@ public class ConfigControllerTiff
 	void changeComp1( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedcompression1>uncompressed</allowedcompression1>";
+		String yes = "<allowedcompression1>uncompressed </allowedcompression1>";
 		String no = "<allowedcompression1></allowedcompression1>";
 		try {
 			if ( checkComp1.isSelected() ) {
@@ -300,7 +300,7 @@ public class ConfigControllerTiff
 	void changeComp2( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedcompression2>CCITT 1D</allowedcompression2>";
+		String yes = "<allowedcompression2>CCITT 1D </allowedcompression2>";
 		String no = "<allowedcompression2></allowedcompression2>";
 		try {
 			if ( checkComp2.isSelected() ) {
@@ -326,7 +326,7 @@ public class ConfigControllerTiff
 	void changeComp3( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedcompression3>CCITT Group 3</allowedcompression3>";
+		String yes = "<allowedcompression3>CCITT Group 3 </allowedcompression3>";
 		String no = "<allowedcompression3></allowedcompression3>";
 		try {
 			if ( checkComp3.isSelected() ) {
@@ -352,7 +352,7 @@ public class ConfigControllerTiff
 	void changeComp4( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedcompression4>CCITT Group 4</allowedcompression4>";
+		String yes = "<allowedcompression4>CCITT Group 4 </allowedcompression4>";
 		String no = "<allowedcompression4></allowedcompression4>";
 		try {
 			if ( checkComp4.isSelected() ) {
@@ -378,7 +378,7 @@ public class ConfigControllerTiff
 	void changeComp5( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedcompression5>LZW</allowedcompression5>";
+		String yes = "<allowedcompression5>LZW </allowedcompression5>";
 		String no = "<allowedcompression5></allowedcompression5>";
 		try {
 			if ( checkComp5.isSelected() ) {
@@ -404,7 +404,7 @@ public class ConfigControllerTiff
 	void changeComp7( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedcompression7>ISO JPEG</allowedcompression7>";
+		String yes = "<allowedcompression7>ISO JPEG </allowedcompression7>";
 		String no = "<allowedcompression7></allowedcompression7>";
 		try {
 			if ( checkComp7.isSelected() ) {
@@ -430,7 +430,7 @@ public class ConfigControllerTiff
 	void changeComp8( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedcompression8>Deflate</allowedcompression8>";
+		String yes = "<allowedcompression8>Deflate </allowedcompression8>";
 		String no = "<allowedcompression8></allowedcompression8>";
 		try {
 			if ( checkComp8.isSelected() ) {
@@ -456,7 +456,7 @@ public class ConfigControllerTiff
 	void changeComp32773( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedcompression32773>PackBits</allowedcompression32773>";
+		String yes = "<allowedcompression32773>PackBits </allowedcompression32773>";
 		String no = "<allowedcompression32773></allowedcompression32773>";
 		try {
 			if ( checkComp32773.isSelected() ) {
@@ -483,7 +483,7 @@ public class ConfigControllerTiff
 	void changePi0( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedphotointer0>white is zero</allowedphotointer0>";
+		String yes = "<allowedphotointer0>white is zero </allowedphotointer0>";
 		String no = "<allowedphotointer0></allowedphotointer0>";
 		try {
 			if ( checkPi0.isSelected() ) {
@@ -509,7 +509,7 @@ public class ConfigControllerTiff
 	void changePi1( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedphotointer1>black is zero</allowedphotointer1>";
+		String yes = "<allowedphotointer1>black is zero </allowedphotointer1>";
 		String no = "<allowedphotointer1></allowedphotointer1>";
 		try {
 			if ( checkPi1.isSelected() ) {
@@ -535,7 +535,7 @@ public class ConfigControllerTiff
 	void changePi2( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedphotointer2>RGB</allowedphotointer2>";
+		String yes = "<allowedphotointer2>RGB </allowedphotointer2>";
 		String no = "<allowedphotointer2></allowedphotointer2>";
 		try {
 			if ( checkPi2.isSelected() ) {
@@ -561,7 +561,7 @@ public class ConfigControllerTiff
 	void changePi3( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedphotointer3>palette color</allowedphotointer3>";
+		String yes = "<allowedphotointer3>palette color </allowedphotointer3>";
 		String no = "<allowedphotointer3></allowedphotointer3>";
 		try {
 			if ( checkPi3.isSelected() ) {
@@ -587,7 +587,7 @@ public class ConfigControllerTiff
 	void changePi4( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedphotointer4>transparency mask</allowedphotointer4>";
+		String yes = "<allowedphotointer4>transparency mask </allowedphotointer4>";
 		String no = "<allowedphotointer4></allowedphotointer4>";
 		try {
 			if ( checkPi4.isSelected() ) {
@@ -613,7 +613,7 @@ public class ConfigControllerTiff
 	void changePi5( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedphotointer5>CMYK</allowedphotointer5>";
+		String yes = "<allowedphotointer5>CMYK </allowedphotointer5>";
 		String no = "<allowedphotointer5></allowedphotointer5>";
 		try {
 			if ( checkPi5.isSelected() ) {
@@ -639,7 +639,7 @@ public class ConfigControllerTiff
 	void changePi6( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedphotointer6>YCbCr</allowedphotointer6>";
+		String yes = "<allowedphotointer6>YCbCr </allowedphotointer6>";
 		String no = "<allowedphotointer6></allowedphotointer6>";
 		try {
 			if ( checkPi6.isSelected() ) {
@@ -665,7 +665,7 @@ public class ConfigControllerTiff
 	void changePi8( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedphotointer8>CIE L*a*b*</allowedphotointer8>";
+		String yes = "<allowedphotointer8>CIE L*a*b* </allowedphotointer8>";
 		String no = "<allowedphotointer8></allowedphotointer8>";
 		try {
 			if ( checkPi8.isSelected() ) {
@@ -694,7 +694,7 @@ public class ConfigControllerTiff
 	void changeBps1( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedbitspersample1>1</allowedbitspersample1>";
+		String yes = "<allowedbitspersample1>1 </allowedbitspersample1>";
 		String no = "<allowedbitspersample1></allowedbitspersample1>";
 		try {
 			if ( checkBps1.isSelected() ) {
@@ -719,7 +719,7 @@ public class ConfigControllerTiff
 	void changeBps2( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedbitspersample2>2</allowedbitspersample2>";
+		String yes = "<allowedbitspersample2>2 </allowedbitspersample2>";
 		String no = "<allowedbitspersample2></allowedbitspersample2>";
 		try {
 			if ( checkBps2.isSelected() ) {
@@ -744,7 +744,7 @@ public class ConfigControllerTiff
 	void changeBps4( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedbitspersample4>4</allowedbitspersample4>";
+		String yes = "<allowedbitspersample4>4 </allowedbitspersample4>";
 		String no = "<allowedbitspersample4></allowedbitspersample4>";
 		try {
 			if ( checkBps4.isSelected() ) {
@@ -769,7 +769,7 @@ public class ConfigControllerTiff
 	void changeBps8( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedbitspersample8>8</allowedbitspersample8>";
+		String yes = "<allowedbitspersample8>8 </allowedbitspersample8>";
 		String no = "<allowedbitspersample8></allowedbitspersample8>";
 		try {
 			if ( checkBps8.isSelected() ) {
@@ -794,7 +794,7 @@ public class ConfigControllerTiff
 	void changeBps16( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedbitspersample16>16</allowedbitspersample16>";
+		String yes = "<allowedbitspersample16>16 </allowedbitspersample16>";
 		String no = "<allowedbitspersample16></allowedbitspersample16>";
 		try {
 			if ( checkBps16.isSelected() ) {
@@ -819,7 +819,7 @@ public class ConfigControllerTiff
 	void changeBps32( ActionEvent event )
 	{
 		labelMessage.setText( "" );
-		String yes = "<allowedbitspersample32>32</allowedbitspersample32>";
+		String yes = "<allowedbitspersample32>32 </allowedbitspersample32>";
 		String no = "<allowedbitspersample32></allowedbitspersample32>";
 		try {
 			if ( checkBps32.isSelected() ) {

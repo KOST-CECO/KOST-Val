@@ -99,7 +99,7 @@ public class Controllervalfile implements MessageConstants
 		if ( (valDateiExt.equals( ".jp2" )) ) {
 			Logtxt.logtxt( logFile, "<Validation>" + hash );
 			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_VALTYPE, "JP2" ) );
+					MESSAGE_XML_VALTYPE, " JP2" ) );
 			Logtxt.logtxt( logFile, originalValNameXml );
 			Controllerjp2 controller1 = (Controllerjp2) context
 					.getBean( "controllerjp2" );
@@ -140,7 +140,7 @@ public class Controllervalfile implements MessageConstants
 				|| valDateiExt.equals( ".jpe" )) ) {
 			Logtxt.logtxt( logFile, "<Validation>" + hash );
 			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_VALTYPE, "JPEG" ) );
+					MESSAGE_XML_VALTYPE, " JPEG" ) );
 			Logtxt.logtxt( logFile, originalValNameXml );
 			Controllerjpeg controller1 = (Controllerjpeg) context
 					.getBean( "controllerjpeg" );
@@ -163,7 +163,7 @@ public class Controllervalfile implements MessageConstants
 		} else if ( (valDateiExt.equals( ".png" )) ) {
 			Logtxt.logtxt( logFile, "<Validation>" + hash );
 			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_VALTYPE, "PNG" ) );
+					MESSAGE_XML_VALTYPE, " PNG" ) );
 			Logtxt.logtxt( logFile, originalValNameXml );
 			Controllerpng controller1 = (Controllerpng) context
 					.getBean( "controllerpng" );
@@ -188,7 +188,7 @@ public class Controllervalfile implements MessageConstants
 				|| valDateiExt.equals( ".xsl" )) ) {
 			Logtxt.logtxt( logFile, "<Validation>" + hash );
 			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_VALTYPE, "XML (XSD, XSL)" ) );
+					MESSAGE_XML_VALTYPE, " XML (XSD, XSL)" ) );
 			Logtxt.logtxt( logFile, originalValNameXml );
 			Controllerxml controller1 = (Controllerxml) context
 					.getBean( "controllerxml" );
@@ -211,7 +211,7 @@ public class Controllervalfile implements MessageConstants
 		} else if ( valDateiExt.equals( ".flac" ) ) {
 			Logtxt.logtxt( logFile, "<Validation>" + hash );
 			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_VALTYPE, "FLAC" ) );
+					MESSAGE_XML_VALTYPE, " FLAC" ) );
 			Logtxt.logtxt( logFile, originalValNameXml );
 			Controllerflac controller1 = (Controllerflac) context
 					.getBean( "controllerflac" );
@@ -235,7 +235,7 @@ public class Controllervalfile implements MessageConstants
 				|| valDateiExt.equals( ".wav" ) ) {
 			Logtxt.logtxt( logFile, "<Validation>" + hash );
 			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_VALTYPE, "WAVE" ) );
+					MESSAGE_XML_VALTYPE, " WAVE" ) );
 			Logtxt.logtxt( logFile, originalValNameXml );
 			Controllerwave controller1 = (Controllerwave) context
 					.getBean( "controllerwave" );
@@ -258,7 +258,7 @@ public class Controllervalfile implements MessageConstants
 		} else if ( valDateiExt.equals( ".mp3" ) ) {
 			Logtxt.logtxt( logFile, "<Validation>" + hash );
 			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_VALTYPE, "MP3" ) );
+					MESSAGE_XML_VALTYPE, " MP3" ) );
 			Logtxt.logtxt( logFile, originalValNameXml );
 			Controllermp3 controller1 = (Controllermp3) context
 					.getBean( "controllermp3" );
@@ -282,7 +282,7 @@ public class Controllervalfile implements MessageConstants
 				|| valDateiExt.equals( ".webm" ) ) {
 			Logtxt.logtxt( logFile, "<Validation>" + hash );
 			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_VALTYPE, "MKV" ) );
+					MESSAGE_XML_VALTYPE, " MKV" ) );
 			Logtxt.logtxt( logFile, originalValNameXml );
 			Controllermkv controller1 = (Controllermkv) context
 					.getBean( "controllermkv" );
@@ -322,7 +322,7 @@ public class Controllervalfile implements MessageConstants
 				|| valDateiExt.equals( ".f4a" ) ) {
 			Logtxt.logtxt( logFile, "<Validation>" + hash );
 			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_VALTYPE, "MP4" ) );
+					MESSAGE_XML_VALTYPE, " MP4" ) );
 			Logtxt.logtxt( logFile, originalValNameXml );
 			Controllermp4 controller1 = (Controllermp4) context
 					.getBean( "controllermp4" );
@@ -346,7 +346,7 @@ public class Controllervalfile implements MessageConstants
 				|| valDateiExt.equals( ".tif" )) ) {
 			Logtxt.logtxt( logFile, "<Validation>" + hash );
 			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_VALTYPE, "TIFF" ) );
+					MESSAGE_XML_VALTYPE, " TIFF" ) );
 			Logtxt.logtxt( logFile, originalValNameXml );
 			Controllertiff controller1 = (Controllertiff) context
 					.getBean( "controllertiff" );
@@ -385,9 +385,10 @@ public class Controllervalfile implements MessageConstants
 			 */
 			File jhoveReport = new File( directoryOfLogfile,
 					valDatei.getName() + ".jhove-log.txt" );
-/*			File exifReport = new File( directoryOfLogfile,
-					valDatei.getName() + ".exiftool-log.txt" );
-*/
+			/*
+			 * File exifReport = new File( directoryOfLogfile,
+			 * valDatei.getName() + ".exiftool-log.txt" );
+			 */
 			if ( verbose ) {
 				// optionaler Parameter --> Reports lassen
 			} else {
@@ -395,16 +396,15 @@ public class Controllervalfile implements MessageConstants
 					// kein optionaler Parameter --> Jhove-Report loeschen!
 					Util.deleteFile( jhoveReport );
 				}
-/*				if ( exifReport.exists() ) {
-					// kein optionaler Parameter --> Exiftool-Report loeschen!
-					Util.deleteFile( exifReport );
-				}
-*/			}
+				/*
+				 * if ( exifReport.exists() ) { // kein optionaler Parameter -->
+				 * Exiftool-Report loeschen! Util.deleteFile( exifReport ); }
+				 */ }
 
 		} else if ( (valDateiExt.equals( ".siard" )) ) {
 			Logtxt.logtxt( logFile, "<Validation>" + hash );
 			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_VALTYPE, "SIARD" ) );
+					MESSAGE_XML_VALTYPE, " SIARD" ) );
 			Logtxt.logtxt( logFile, originalValNameXml );
 			Controllersiard controller2 = (Controllersiard) context
 					.getBean( "controllersiard" );
@@ -442,7 +442,7 @@ public class Controllervalfile implements MessageConstants
 				|| valDateiExt.equals( ".pdfa" )) ) {
 			Logtxt.logtxt( logFile, "<Validation>" + hash );
 			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_VALTYPE, "PDFA" ) );
+					MESSAGE_XML_VALTYPE, " PDFA" ) );
 			Logtxt.logtxt( logFile, originalValNameXml );
 			Controllerpdfa controller3 = (Controllerpdfa) context
 					.getBean( "controllerpdfa" );

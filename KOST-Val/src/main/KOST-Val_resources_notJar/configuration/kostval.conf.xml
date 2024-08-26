@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?><?xml-stylesheet type="text/xsl" href="kostval-conf-DE.xsl"?>
+<?xml version="1.0" encoding="ISO-8859-1"?><?xml-stylesheet type="text/xsl" href="kostval-conf-FR.xsl"?>
 <configuration><!-- kostval.conf.xml_v2.2.1.0 -->
 <!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
 <!-- TEXT -->
@@ -15,11 +15,13 @@
 		<nentry>W</nentry><!--W verwenden wenn Warnung ansonsten E fuer Fehler -->
 		<!--Angeben welche Conformancelevel mindestens erreicht werden muss -->
 		<!--no verwenden wenn diese Version nicht erlaubt ist -->
-		<pdfa1a>1A</pdfa1a><!--1A / -->
-		<pdfa1b>1B</pdfa1b><!--1B / -->
-		<pdfa2a>2A</pdfa2a><!--2A / -->
-		<pdfa2b>2B</pdfa2b><!--2B / -->
-		<pdfa2u>2U</pdfa2u><!--2U / -->
+		<pdfaversion>
+			<pdfa1a>1A </pdfa1a><!--1A / -->
+			<pdfa1b>1B </pdfa1b><!--1B / -->
+			<pdfa2a>2A </pdfa2a><!--2A / -->
+			<pdfa2b>2B </pdfa2b><!--2B / -->
+			<pdfa2u>2U </pdfa2u><!--2U / -->
+		</pdfaversion>
 		<warning3to2>yes</warning3to2><!-- validiert wenn eingeschaltet PDF/A-3 nach PDF/A-2 und ignoriert den Fehler betreffend der Version und gibt stattdessten eine Warnung aus. -->	
 		<jbig2allowed>yes</jbig2allowed><!--no verwenden wenn JBIG2 in pdfa nicht erlaubt werden sollen, ansonsten yes -->
 	</pdfa>
@@ -41,31 +43,31 @@
 		<!--TIFF-Praezisierungen -->
 		<!--Wenn erlaubt "Text" einfuegen ansonsten "0" -->
 		<allowedcompression>
-			<allowedcompression1>uncompressed</allowedcompression1><!-- / uncompressed -->
-			<allowedcompression2>CCITT 1D</allowedcompression2><!-- / CCITT 1D -->
-			<allowedcompression3>CCITT Group 3</allowedcompression3><!-- / CCITT Group 3 -->
-			<allowedcompression4>CCITT Group 4</allowedcompression4><!-- / CCITT Group 4 -->
-			<allowedcompression5>LZW</allowedcompression5><!-- / LZW -->
+			<allowedcompression1>uncompressed </allowedcompression1><!-- / uncompressed -->
+			<allowedcompression2>CCITT 1D </allowedcompression2><!-- / CCITT 1D -->
+			<allowedcompression3>CCITT Group 3 </allowedcompression3><!-- / CCITT Group 3 -->
+			<allowedcompression4>CCITT Group 4 </allowedcompression4><!-- / CCITT Group 4 -->
+			<allowedcompression5>LZW </allowedcompression5><!-- / LZW -->
 			<allowedcompression7></allowedcompression7><!-- / ISO JPEG -->
 			<allowedcompression8></allowedcompression8><!-- / Deflate -->
-			<allowedcompression32773>PackBits</allowedcompression32773><!-- / PackBits -->
+			<allowedcompression32773>PackBits </allowedcompression32773><!-- / PackBits -->
 		</allowedcompression>
 		<allowedphotointer>
-			<allowedphotointer0>white is zero</allowedphotointer0><!-- / white is zero -->
-			<allowedphotointer1>black is zero</allowedphotointer1><!-- / black is zero -->
-			<allowedphotointer2>RGB</allowedphotointer2><!-- / RGB -->
-			<allowedphotointer3>palette color</allowedphotointer3><!-- / palette color -->
+			<allowedphotointer0>white is zero </allowedphotointer0><!-- / white is zero -->
+			<allowedphotointer1>black is zero </allowedphotointer1><!-- / black is zero -->
+			<allowedphotointer2>RGB </allowedphotointer2><!-- / RGB -->
+			<allowedphotointer3>palette color </allowedphotointer3><!-- / palette color -->
 			<allowedphotointer4></allowedphotointer4><!-- / transparency mask -->
 			<allowedphotointer5></allowedphotointer5><!-- / CMYK -->
 			<allowedphotointer6></allowedphotointer6><!-- / YCbCr -->
 			<allowedphotointer8></allowedphotointer8><!-- / CIE L*a*b* -->
 		</allowedphotointer>
 		<allowedbitspersample>
-			<allowedbitspersample1>1</allowedbitspersample1><!-- / 1 -->
+			<allowedbitspersample1>1 </allowedbitspersample1><!-- / 1 -->
 			<allowedbitspersample2></allowedbitspersample2><!-- / 2 -->
-			<allowedbitspersample4>4</allowedbitspersample4><!-- / 4 -->
-			<allowedbitspersample8>8</allowedbitspersample8><!-- / 8 -->
-			<allowedbitspersample16>16</allowedbitspersample16><!-- / 16 -->
+			<allowedbitspersample4>4 </allowedbitspersample4><!-- / 4 -->
+			<allowedbitspersample8>8 </allowedbitspersample8><!-- / 8 -->
+			<allowedbitspersample16>16 </allowedbitspersample16><!-- / 16 -->
 			<allowedbitspersample32></allowedbitspersample32><!-- / 32 -->
 		</allowedbitspersample>
 		<allowedother>
@@ -91,15 +93,15 @@
 	<mkv>
 		<mkvvalidation>&#x2713;</mkvvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
 		<allowedmkvvideo>
-			<allowedmkvffv1>FFV1</allowedmkvffv1><!-- / FFV1 -->
-			<allowedmkvavc>AVC</allowedmkvavc><!-- / AVC -->
-			<allowedmkvhevc>HEVC</allowedmkvhevc><!-- / HEVC -->
-			<allowedmkvav1>AV1</allowedmkvav1><!-- / AV1 -->
+			<allowedmkvffv1>FFV1 </allowedmkvffv1><!-- / FFV1 -->
+			<allowedmkvavc>AVC </allowedmkvavc><!-- / AVC -->
+			<allowedmkvhevc>HEVC </allowedmkvhevc><!-- / HEVC -->
+			<allowedmkvav1>AV1 </allowedmkvav1><!-- / AV1 -->
 		</allowedmkvvideo>
 		<allowedmkvaudio>
-			<allowedmkvflac>FLAC</allowedmkvflac><!-- / FLAC -->
-			<allowedmkvmp3>MP3</allowedmkvmp3><!-- / MP3 -->
-			<allowedmkvaac>AAC</allowedmkvaac><!-- / AAC -->
+			<allowedmkvflac>FLAC </allowedmkvflac><!-- / FLAC -->
+			<allowedmkvmp3>MP3 </allowedmkvmp3><!-- / MP3 -->
+			<allowedmkvaac>AAC </allowedmkvaac><!-- / AAC -->
 		</allowedmkvaudio>
 		<allowedmkvnoaudio>Warning</allowedmkvnoaudio><!--Warning / / Error -->
 		<allowedmkvnovideo>Warning</allowedmkvnovideo><!--Warning / / Error -->
@@ -107,12 +109,12 @@
 	<mp4>
 		<mp4validation>&#x2713;</mp4validation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
 		<allowedmp4video>
-			<allowedmp4avc>AVC</allowedmp4avc><!-- / AVC -->
-			<allowedmp4hevc>HEVC</allowedmp4hevc><!-- / HEVC -->
+			<allowedmp4avc>AVC </allowedmp4avc><!-- / AVC -->
+			<allowedmp4hevc>HEVC </allowedmp4hevc><!-- / HEVC -->
 		</allowedmp4video>
 		<allowedmp4audio>
-			<allowedmp4mp3>MP3</allowedmp4mp3><!-- / MP3 -->
-			<allowedmp4aac>AAC</allowedmp4aac><!-- / AAC -->
+			<allowedmp4mp3>MP3 </allowedmp4mp3><!-- / MP3 -->
+			<allowedmp4aac>AAC </allowedmp4aac><!-- / AAC -->
 		</allowedmp4audio>
 		<allowedmp4noaudio>Warning</allowedmp4noaudio><!--Warning / Error -->
 		<allowedmp4novideo>Warning</allowedmp4novideo><!--Warning / Error -->
@@ -126,9 +128,11 @@
 	</json>
 	<siard>
 		<siardvalidation>&#x2713;</siardvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
-		<siard10>1.0</siard10><!--1.0 / / no -->
-		<siard21>2.1</siard21><!--2.1 / / no -->
-		<siard22>2.2</siard22><!--2.2 / / no -->
+		<siardversion>
+			<siard10>1.0 </siard10><!--1.0 / / no -->
+			<siard21>2.1 </siard21><!--2.1 / / no -->
+			<siard22>2.2 </siard22><!--2.2 / / no -->
+		</siardversion>
 	</siard>
 	<csv>
 		<csvvalidation>(&#x2713;)</csvvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->

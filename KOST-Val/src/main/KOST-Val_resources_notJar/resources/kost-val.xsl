@@ -75,7 +75,6 @@
 								<tr class="caption">
 									<td>
 										<xsl:value-of select="ValType"/>
-										->
 										<xsl:value-of select="ValFile"/>
 									</td>
 								</tr>
@@ -105,7 +104,6 @@
 								<tr class="captionio">
 									<td>
 										<xsl:value-of select="ValType"/>
-										->
 										<xsl:value-of select="ValFile"/>
 									</td>
 								</tr>
@@ -161,7 +159,6 @@
 									<td>
 										<xsl:value-of select="ValType"/>
 										<xsl:value-of select="FormatVL"/>
-										-> 
 										<xsl:value-of select="ValFile"/>
 									</td>
 								</tr>
@@ -283,7 +280,6 @@
 									<td>
 										<xsl:value-of select="ValType"/>
 										<xsl:value-of select="FormatVL"/>
-										->
 										<xsl:value-of select="ValFile"/>
 									</td>
 								</tr>
@@ -356,7 +352,6 @@
 									<td>
 										<xsl:value-of select="ValType"/>
 										<xsl:value-of select="FormatVL"/>
-										->
 										<xsl:value-of select="ValFile"/>
 									</td>
 								</tr>
@@ -428,7 +423,6 @@
 									<td>
 										<xsl:value-of select="ValType"/>
 										<xsl:value-of select="FormatVL"/>
-										->
 										<xsl:value-of select="ValFile"/>
 									</td>
 								</tr>
@@ -499,7 +493,6 @@
 									<td>
 										<xsl:value-of select="ValType"/>
 										<xsl:value-of select="FormatVL"/>
-										->
 										<xsl:value-of select="ValFile"/>
 									</td>
 								</tr>
@@ -566,7 +559,6 @@
 				<hr noshade="noshade" size="1"/>
 				<h3>
 					<xsl:value-of select="KOSTValLog/Infos/Start"/>
-					-
 					<xsl:value-of select="KOSTValLog/Infos/End"/>
 				</h3>
 				<p class="footer">
