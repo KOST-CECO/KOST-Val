@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="base.xsd"/>
+	<xs:simpleType name="ablieferungsnummer">
+		<xs:restriction base="text1"/>
+	</xs:simpleType>
+	<xs:simpleType name="ablieferungstyp">
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="GEVER"/>
+			<xs:enumeration value="FILES"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="angebotsnummer">
+		<xs:restriction base="text1"/>
+	</xs:simpleType>
+	<xs:simpleType name="ablieferndeStelle">
+		<xs:restriction base="text2"/>
+	</xs:simpleType>
+	<xs:simpleType name="referenzBewertungsentscheid">
+		<xs:restriction base="text1"/>
+	</xs:simpleType>
+	<xs:simpleType name="referenzSchutzfristenFormular">
+		<xs:restriction base="text1"/>
+	</xs:simpleType>
+	<xs:simpleType name="schutzfristenkategorieAblieferung">
+		<xs:restriction base="text1"/>
+	</xs:simpleType>
+	<xs:simpleType name="schutzfristAblieferung">
+		<xs:restriction base="text1">
+			<xs:pattern value="[0-9]*"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ablieferungsteile">
+		<xs:restriction base="text3"/>
+	</xs:simpleType>
+	<xs:simpleType name="bemerkungAblieferung">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+</xs:schema>

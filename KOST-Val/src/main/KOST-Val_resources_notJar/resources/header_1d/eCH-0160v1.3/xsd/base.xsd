@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:complexType name="comparable" abstract="true"/>
+	<xs:complexType name="historischerZeitpunkt">
+		<xs:sequence>
+			<xs:element name="ca" type="ca" default="false" minOccurs="0"/>
+			<xs:element name="datum" type="datumTypA"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="historischerZeitraum">
+		<xs:sequence>
+			<xs:element name="von" type="historischerZeitpunkt"/>
+			<xs:element name="bis" type="historischerZeitpunkt"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="ca">
+		<xs:annotation>
+			<xs:documentation/>
+		</xs:annotation>
+		<xs:restriction base="xs:boolean"/>
+	</xs:simpleType>
+	<xs:simpleType name="keineAngabe">
+		<xs:annotation>
+			<xs:documentation/>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="keine Angabe"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="datumTypA">
+		<xs:union memberTypes="xs:date xs:gYear keineAngabe"/>
+	</xs:simpleType>
+	<xs:simpleType name="zeitpunkt">
+		<xs:union memberTypes="datumTypB"/>
+	</xs:simpleType>
+	<xs:complexType name="zeitraum">
+		<xs:sequence>
+			<xs:element name="von" type="datumTypB"/>
+			<xs:element name="bis" type="datumTypB"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="datumTypB">
+		<xs:union memberTypes="xs:date xs:dateTime"/>
+	</xs:simpleType>
+	<xs:simpleType name="notizDatum">
+		<xs:restriction base="datumTypB"/>
+	</xs:simpleType>
+	<xs:simpleType name="notizErfasser">
+		<xs:restriction base="text1"/>
+	</xs:simpleType>
+	<xs:simpleType name="notizBeschreibung">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+	<xs:simpleType name="text1">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="100"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="text2">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="200"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="text3">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="1000"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="text4">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+</xs:schema>

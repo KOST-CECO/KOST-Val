@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="base.xsd"/>
+	<xs:simpleType name="titelDokument">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+	<xs:simpleType name="idDokument">
+		<xs:restriction base="xs:ID">
+			<xs:minLength value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="autor">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+	<xs:simpleType name="erscheinungsformDokument">
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="digital"/>
+			<xs:enumeration value="nicht digital"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="dokumenttyp">
+		<xs:restriction base="text3"/>
+	</xs:simpleType>
+	<xs:simpleType name="anwendung">
+		<xs:restriction base="text2"/>
+	</xs:simpleType>
+	<xs:simpleType name="klassifizierungskategorieDokument">
+		<xs:restriction base="text2"/>
+	</xs:simpleType>
+	<xs:simpleType name="datenschutzDokument">
+		<xs:restriction base="xs:boolean"/>
+	</xs:simpleType>
+	<xs:simpleType name="oeffentlichkeitsstatusDokument">
+		<xs:restriction base="text2"/>
+	</xs:simpleType>
+	<xs:simpleType name="oeffentlichkeitsstatusBegruendungDokument">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+	<xs:simpleType name="sonstigeBestimmungenDokument">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+	<xs:simpleType name="bemerkungDokument">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+</xs:schema>

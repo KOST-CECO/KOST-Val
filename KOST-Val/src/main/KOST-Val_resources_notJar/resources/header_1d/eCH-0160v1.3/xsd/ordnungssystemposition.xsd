@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="base.xsd"/>
+	<xs:simpleType name="nummer">
+		<xs:restriction base="text1"/>
+	</xs:simpleType>
+	<xs:simpleType name="titelOrdnungssystemposition">
+		<xs:restriction base="text2"/>
+	</xs:simpleType>
+	<xs:simpleType name="idOrdnungssystemposition">
+		<xs:restriction base="xs:ID"/>
+	</xs:simpleType>
+	<xs:simpleType name="federfuehrendeOrganisationseinheitOrdnungssystemposition">
+		<xs:restriction base="text2"/>
+	</xs:simpleType>
+	<xs:simpleType name="schutzfristenkategorieOrdnungssystemposition">
+		<xs:restriction base="text1"/>
+	</xs:simpleType>
+	<xs:simpleType name="schutzfristOrdnungssystemposition">
+		<xs:restriction base="text1">
+			<xs:pattern value="[0-9]*"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="schutzfristenBegruendungOrdnungssystemposition">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+	<xs:simpleType name="klassifizierungskategorieOrdnungssystemposition">
+		<xs:restriction base="text2"/>
+	</xs:simpleType>
+	<xs:simpleType name="datenschutzOrdnungssystemposition">
+		<xs:restriction base="xs:boolean"/>
+	</xs:simpleType>
+	<xs:simpleType name="oeffentlichkeitsstatusOrdnungssystemposition">
+		<xs:restriction base="text2"/>
+	</xs:simpleType>
+	<xs:simpleType name="oeffentlichkeitsstatusBegruendungOrdnungssystemposition">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+	<xs:simpleType name="sonstigeBestimmungenOrdnungssystemposition">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+</xs:schema>

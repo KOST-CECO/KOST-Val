@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<paket xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://bar.admin.ch/arelda/v4" xsi:schemaLocation="http://bar.admin.ch/arelda/v4 xsd/arelda.xsd" xsi:type="paketSIP" schemaVersion="5.1">
+	<paketTyp>SIP</paketTyp>
+	<inhaltsverzeichnis>
+		<ordner>
+			<name>header</name>
+			<originalName>header</originalName>
+			<ordner>
+				<name>xsd</name>
+				<originalName>xsd</originalName>
+				<datei id="_BAZ5gcEWEeGjN725uNwvBQ">
+					<name>ablieferung.xsd</name>
+					<originalName>ablieferung.xsd</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>ca09882b4e76d8bd6f32309930b871a5</pruefsumme>
+				</datei>
+				<datei id="_BAjqgMEWEeGjN725uNwvBQ">
+					<name>archivischeNotiz.xsd</name>
+					<originalName>archivischeNotiz.xsd</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>1d0da3d379c62bd401683827b7fbec01</pruefsumme>
+				</datei>
+				<datei id="_BA2lcMEWEeGjN725uNwvBQ">
+					<name>archivischerVorgang.xsd</name>
+					<originalName>archivischerVorgang.xsd</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>373b18f7e9c7b3e252dcd71893c4d44d</pruefsumme>
+				</datei>
+				<datei id="_BBAWcMEWEeGjN725uNwvBQ">
+					<name>arelda.xsd</name>
+					<originalName>arelda.xsd</originalName>
+					<pruefalgorithmus>SHA-256</pruefalgorithmus>
+					<pruefsumme>7d2517d1467fa680e633fefdf851193451730b23cac6656f1ce94c949dc2d50d</pruefsumme>
+				</datei>
+				<datei id="_BBJgYMEWEeGjN725uNwvBQ">
+					<name>base.xsd</name>
+					<originalName>base.xsd</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>e73ed3c454f9205774ff4990cc9b1841</pruefsumme>
+				</datei>
+				<datei id="_BBTRYMEWEeGjN725uNwvBQ">
+					<name>datei.xsd</name>
+					<originalName>datei.xsd</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>ce4c42c75af6d25086c9419f85a86ba2</pruefsumme>
+				</datei>
+				<datei id="_BBdCYMEWEeGjN725uNwvBQ">
+					<name>dokument.xsd</name>
+					<originalName>dokument.xsd</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>25167dd5558d8b019f1bf045d2d2a9b3</pruefsumme>
+				</datei>
+				<datei id="_BBmMUMEWEeGjN725uNwvBQ">
+					<name>dossier.xsd</name>
+					<originalName>dossier.xsd</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>a0a3b7bc29a29d83a6daa4dd343a1f00</pruefsumme>
+				</datei>
+				<datei id="_BBv9UMEWEeGjN725uNwvBQ">
+					<name>ordner.xsd</name>
+					<originalName>ordner.xsd</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>98daa8d20761b8c67fd9fd534911ebac</pruefsumme>
+				</datei>
+				<datei id="_BB5HQMEWEeGjN725uNwvBQ">
+					<name>ordnungssystem.xsd</name>
+					<originalName>ordnungssystem.xsd</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>563440387cf7ad30d805cca94f4854bb</pruefsumme>
+				</datei>
+				<datei id="_BCC4QMEWEeGjN725uNwvBQ">
+					<name>ordnungssystemposition.xsd</name>
+					<originalName>ordnungssystemposition.xsd</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>628ba9bbb2d23ae06694749b6c60f4c2</pruefsumme>
+				</datei>
+				<datei id="_BCC4QcEWEeGjN725uNwvBQ">
+					<name>paket.xsd</name>
+					<originalName>paket.xsd</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>e66ece5a93b6ae66c6b498615754f557</pruefsumme>
+				</datei>
+				<datei id="_BCMpQMEWEeGjN725uNwvBQ">
+					<name>provenienz.xsd</name>
+					<originalName>provenienz.xsd</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>bcfc25ea321dad88744e7522985f1a7b</pruefsumme>
+				</datei>
+				<datei id="_BCVzMMEWEeGjN725uNwvBQ">
+					<name>zusatzDaten.xsd</name>
+					<originalName>zusatzDaten.xsd</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>0651e99f32da1eb2f2efb0b6c5b1c2ca</pruefsumme>
+				</datei>
+			</ordner>
+		</ordner>
+		<ordner>
+			<name>content</name>
+			<ordner>
+				<name>DOS_01</name>
+				<datei id="DAT0">
+					<name>Auftragsuebersicht.pdf</name>
+					<originalName>Auftragsuebersicht.pdf</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>ea205477f15961fa22553b94c4152fd5</pruefsumme>
+				</datei>
+				<datei id="DAT1">
+					<name>Auftragsuebersicht.tiff</name>
+					<originalName>Auftragsuebersicht.tiff</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>96735499dc13488418baf02c75cf58e8</pruefsumme>
+				</datei>
+				<datei id="DAT2">
+					<name>Customers.csv</name>
+					<originalName>Customers.csv</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>d9c897c8098cc1f463a2f77973f296d3</pruefsumme>
+				</datei>
+				<datei id="DAT3">
+					<name>NW_Standard.siard</name>
+					<originalName>NW_Standard.siard</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>b2339508a7bd21eeb5f081b8388aca3f</pruefsumme>
+				</datei>
+				<datei id="DAT4">
+					<name>ReadMe.txt</name>
+					<originalName>ReadMe.txt</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>1de381a512b512c0edb22a89a9e01566</pruefsumme>
+				</datei>
+				<datei id="DAT5">
+					<name>WAVE-Testdatei.wav</name>
+					<originalName>WAVE-Testdatei.wav</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>5b96bb22211f0db96723ec293f95246d</pruefsumme>
+				</datei>
+			</ordner>
+			<ordner>
+				<name>DOS_02</name>
+				<datei id="DAT21">
+					<name>gpl2.pdf</name>
+					<originalName>gpl2.pdf</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>d226e66f7211d484bbacca6624e82af3</pruefsumme>
+				</datei>
+				<datei id="DAT22">
+					<name>Licence.txt</name>
+					<originalName>Licence.txt</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>d2e82915fd7dd842e9a0d90ed72d6c1a</pruefsumme>
+				</datei>
+			</ordner>
+			<ordner>
+				<name>DOS_03</name>
+				<originalName>Digitalisierung</originalName>
+				<datei id="DAT301">
+					<name>00000004.jp2</name>
+					<originalName>00000004.jp2</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>cf37a1bf0705d40d3521b1566d5fb989</pruefsumme>
+				</datei>
+				<datei id="DAT302">
+					<name>00000006.jp2</name>
+					<originalName>00000006.jp2</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>9e42a5efe61b9a114f92d42bea2d506f</pruefsumme>
+				</datei>
+				<datei id="DAT303">
+					<name>Lieferschein_a.jp2</name>
+					<originalName>00000007.jp2</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>e258330ee44665dde60389c6e3afff2c</pruefsumme>
+				</datei>
+				<datei id="DAT304">
+					<name>Lieferschein_b.jp2</name>
+					<originalName>00000008.jp2</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>abbe3528e4f86a8160b15e4906c9df14</pruefsumme>
+				</datei>
+				<datei id="DAT305">
+					<name>00000010.jp2</name>
+					<originalName>00000010.jp2</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>975f79b08be1f18047f91ecf9267eb22</pruefsumme>
+				</datei>
+				<datei id="DAT306">
+					<name>00000012.jp2</name>
+					<originalName>00000012.jp2</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>b294c82defda9f1f65cca09c9b1cbd4e</pruefsumme>
+				</datei>
+				<datei id="DAT307">
+					<name>00000014.jp2</name>
+					<originalName>00000014.jp2</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>2631dbb08ab1ee047503fca51a53291e</pruefsumme>
+				</datei>
+				<datei id="DAT308">
+					<name>00000016.jp2</name>
+					<originalName>00000016.jp2</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>3c8fe47592f85fc73486795aee42e136</pruefsumme>
+				</datei>
+				<datei id="DAT309">
+					<name>00000018.jp2</name>
+					<originalName>00000018.jp2</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>517ea9aea67ab37f5dcf12746a36fb89</pruefsumme>
+				</datei>
+				<datei id="DAT310">
+					<name>00000004_PREMIS.xml</name>
+					<originalName>00000004_PREMIS.xml</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>820b1a3853768fd0fc3ac49ec1e3ae31</pruefsumme>
+				</datei>
+				<datei id="DAT311">
+					<name>00000006_PREMIS.xml</name>
+					<originalName>00000006_PREMIS.xml</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>d0b9af4f35d7bf105c68d7a4dac8bffa</pruefsumme>
+				</datei>
+				<datei id="DAT312">
+					<name>Lieferschein_a_PREMIS.xml</name>
+					<originalName>00000007_PREMIS.xml</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>e2660e2c808f86cd22de24b3c1fb5a8a</pruefsumme>
+				</datei>
+				<datei id="DAT313">
+					<name>Lieferschein_b_PREMIS.xml</name>
+					<originalName>00000008_PREMIS.xml</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>6230c14362ea962db50a1547ae708d1a</pruefsumme>
+				</datei>
+				<datei id="DAT314">
+					<name>00000010_PREMIS.xml</name>
+					<originalName>00000010_PREMIS.xml</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>03ba2008c34c72f4998e804e08679f11</pruefsumme>
+				</datei>
+				<datei id="DAT315">
+					<name>00000012_PREMIS.xml</name>
+					<originalName>00000012_PREMIS.xml</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>1f264cfcbf40aa4123f0db5a7fb1bce7</pruefsumme>
+				</datei>
+				<datei id="DAT316">
+					<name>00000014_PREMIS.xml</name>
+					<originalName>00000014_PREMIS.xml</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>d5f87afd87e69ac44d589a69e08ff3c8</pruefsumme>
+				</datei>
+				<datei id="DAT317">
+					<name>00000016_PREMIS.xml</name>
+					<originalName>00000016_PREMIS.xml</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>3265556e87be71748f04afcc46d641a9</pruefsumme>
+				</datei>
+				<datei id="DAT318">
+					<name>00000018_PREMIS.xml</name>
+					<originalName>00000018_PREMIS.xml</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>83c773b20512ce7c21f7323e90659545</pruefsumme>
+				</datei>
+				<datei id="DAT319">
+					<name>Prozess_Digitalisierung_PREMIS.xml</name>
+					<originalName>Prozess_Digitalisierung_PREMIS.xml</originalName>
+					<pruefalgorithmus>MD5</pruefalgorithmus>
+					<pruefsumme>b16b79d6d1bf8701f699fda39b5ef9f3</pruefsumme>
+				</datei>
+			</ordner>
+		</ordner>
+	</inhaltsverzeichnis>
+	<ablieferung xsi:type="ablieferungFilesSIP">
+		<ablieferungstyp>FILES</ablieferungstyp>
+		<ablieferndeStelle>KOST-CECO</ablieferndeStelle>
+		<entstehungszeitraum>
+			<von>
+				<datum>2004</datum>
+			</von>
+			<bis>
+				<datum>2021</datum>
+			</bis>
+		</entstehungszeitraum>
+		<ablieferungsnummer>2009/1</ablieferungsnummer>
+		<provenienz>
+			<aktenbildnerName>KOST-CECO</aktenbildnerName>
+			<systemName>Test</systemName>
+			<existenzzeitraum>
+				<von>
+					<datum>1966</datum>
+				</von>
+				<bis>
+					<datum>keine Angabe</datum>
+				</bis>
+			</existenzzeitraum>
+			<bemerkung>Das ist ein frei erfundenes TEST-SIP</bemerkung>
+			<registratur/>
+		</provenienz>
+		<ordnungssystem>
+			<anwendungszeitraum>
+				<von>
+					<datum>2000</datum>
+				</von>
+				<bis>
+					<datum>keine Angabe</datum>
+				</bis>
+			</anwendungszeitraum>
+			<mitbenutzung>keine Mitbenutzung bekannt</mitbenutzung>
+			<bemerkung/>
+			<name>KOST-CECO: System Test</name>
+			<ordnungssystemposition id="IdO-0">
+				<nummer>0</nummer>
+				<titel>Allgemeines</titel>
+			</ordnungssystemposition>
+			<ordnungssystemposition id="IdO-1">
+				<nummer>1</nummer>
+				<titel>Aufgabengebiet</titel>
+				<dossier id="IdD-1">
+					<titel>Allgemeines zum Test</titel>
+					<erscheinungsform>digital</erscheinungsform>
+					<entstehungszeitraum>
+						<von>
+							<datum>2006</datum>
+						</von>
+						<bis>
+							<datum>2008</datum>
+						</bis>
+					</entstehungszeitraum>
+					<aktenzeichen>1</aktenzeichen>
+					<dateiRef>DAT0</dateiRef>
+					<dateiRef>DAT1</dateiRef>
+					<dateiRef>DAT2</dateiRef>
+					<dateiRef>DAT3</dateiRef>
+					<dateiRef>DAT4</dateiRef>
+					<dateiRef>DAT5</dateiRef>
+				</dossier>
+				<dossier id="IdD-2">
+					<titel>Lizenz</titel>
+					<erscheinungsform>digital</erscheinungsform>
+					<entstehungszeitraum>
+						<von>
+							<datum>2006</datum>
+						</von>
+						<bis>
+							<datum>2008</datum>
+						</bis>
+					</entstehungszeitraum>
+					<aktenzeichen>1</aktenzeichen>
+					<dateiRef version="2">DAT21</dateiRef>
+					<dateiRef repraesentation="DAT21">DAT22</dateiRef>
+				</dossier>
+				<dossier id="IdD-3">
+					<titel>Digitalisierung</titel>
+					<erscheinungsform>digital</erscheinungsform>
+					<entstehungszeitraum>
+						<von>
+							<datum>2020</datum>
+						</von>
+						<bis>
+							<datum>2021</datum>
+						</bis>
+					</entstehungszeitraum>
+					<aktenzeichen>2</aktenzeichen>
+					<dossier id="IdD-4">
+						<titel>Beispielsammlung diverser Rueckseiten</titel>
+						<entstehungszeitraum>
+							<von>
+								<datum>2020</datum>
+							</von>
+							<bis>
+								<datum>2021</datum>
+							</bis>
+						</entstehungszeitraum>
+						<mappe id="IdM-1">
+							<titel>rosamappe</titel>
+							<dateiRef>DAT305</dateiRef>
+							<dateiRef>DAT306</dateiRef>
+							<dateiRef>DAT307</dateiRef>
+							<dateiRef>DAT308</dateiRef>
+							<dateiRef information="DAT305">DAT314</dateiRef>
+							<dateiRef information="DAT306">DAT315</dateiRef>
+							<dateiRef information="DAT307">DAT316</dateiRef>
+							<dateiRef information="DAT308">DAT317</dateiRef>
+							<mappe id="IdM-1.1">
+								<titel>Sub-rosamappe</titel>
+								<dateiRef>DAT309</dateiRef>
+								<dateiRef information="DAT309">DAT318</dateiRef>
+							</mappe>
+						</mappe>
+						<dateiRef>DAT301</dateiRef>
+						<dateiRef>DAT302</dateiRef>
+						<dateiRef information="DAT301">DAT310</dateiRef>
+						<dateiRef information="DAT302">DAT311</dateiRef>
+					</dossier>
+					<dossier id="IdD-5">
+						<titel>Lieferschein</titel>
+						<entstehungszeitraum>
+							<von>
+								<datum>2020</datum>
+							</von>
+							<bis>
+								<datum>2021</datum>
+							</bis>
+						</entstehungszeitraum>
+						<dokument id="IdDok-1">
+							<titel>Lieferschein Glockenaepfel</titel>
+							<erscheinungsform>digital</erscheinungsform>
+							<dateiRef reihung="Seite1">DAT303</dateiRef>
+							<dateiRef reihung="Seite2">DAT304</dateiRef>
+							<dateiRef information="DAT303">DAT312</dateiRef>
+							<dateiRef information="DAT304">DAT313</dateiRef>
+						</dokument>
+					</dossier>
+					<dateiRef information="IdD-3">DAT319</dateiRef>
+				</dossier>
+			</ordnungssystemposition>
+		</ordnungssystem>
+	</ablieferung>
+</paket>

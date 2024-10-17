@@ -449,6 +449,7 @@ public interface MessageConstants
 	String	ERROR_XML_AD_NOOSP							= "val.error.xml.ad.noosp";
 	String	ERROR_XML_AD_UADEP							= "val.error.xml.ad.uadep";
 	String	ERROR_XML_AD_AVAN_WARNING					= "val.error.xml.ad.avan.warning";
+	String	ERROR_XML_AD_VERSION						= "val.error.xml.ad.version";
 
 	// Modul 1e Meldungen
 	String	ERROR_XML_AE_NOMETADATAFOUND				= "val.error.xml.ae.nometadatafound";

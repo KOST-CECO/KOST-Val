@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="base.xsd"/>
+	<xs:simpleType name="aktenzeichen">
+		<xs:restriction base="text2"/>
+	</xs:simpleType>
+	<xs:simpleType name="zusatzmerkmal">
+		<xs:restriction base="text2"/>
+	</xs:simpleType>
+	<xs:simpleType name="titelDossier">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+	<xs:simpleType name="inhalt">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+	<xs:simpleType name="formInhalt">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+	<xs:simpleType name="umfang">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+	<xs:simpleType name="idDossier">
+		<xs:restriction base="xs:ID">
+			<xs:minLength value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="erscheinungsformDossier">
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="keine Angabe"/>
+			<xs:enumeration value="digital"/>
+			<xs:enumeration value="nicht digital"/>
+			<xs:enumeration value="gemischt"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="federfuehrendeOrganisationseinheitDossier">
+		<xs:restriction base="text2"/>
+	</xs:simpleType>
+	<xs:simpleType name="entstehungszeitraumAnmerkung">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+	<xs:simpleType name="schutzfristenkategorieDossier">
+		<xs:restriction base="text1"/>
+	</xs:simpleType>
+	<xs:simpleType name="schutzfristDossier">
+		<xs:restriction base="text1">
+			<xs:pattern value="[0-9]*"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="schutzfristenBegruendungDossier">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+	<xs:simpleType name="klassifizierungskategorieDossier">
+		<xs:restriction base="text2"/>
+	</xs:simpleType>
+	<xs:simpleType name="datenschutzDossier">
+		<xs:restriction base="xs:boolean"/>
+	</xs:simpleType>
+	<xs:simpleType name="oeffentlichkeitsstatusDossier">
+		<xs:restriction base="text2"/>
+	</xs:simpleType>
+	<xs:simpleType name="oeffentlichkeitsstatusBegruendungDossier">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+	<xs:simpleType name="sonstigeBestimmungenDossier">
+<xs:restriction base="text4"/>	</xs:simpleType>
+	<xs:simpleType name="vorgang">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+	<xs:simpleType name="bemerkungDossier">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+	<xs:simpleType name="titelVorgang">
+		<xs:restriction base="text3"/>
+	</xs:simpleType>
+	<xs:simpleType name="arbeitsanweisungVorgang">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+	<xs:simpleType name="federfuehrungVorgang">
+		<xs:restriction base="text3"/>
+	</xs:simpleType>
+	<xs:simpleType name="verweisVorgang">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+	<xs:simpleType name="bemerkungVorgang">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+	<xs:simpleType name="vorschreibungAktivitaet">
+		<xs:restriction base="text3"/>
+	</xs:simpleType>
+	<xs:simpleType name="anweisungAktivitaet">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+	<xs:simpleType name="bearbeiterAktivitaet">
+		<xs:restriction base="text3"/>
+	</xs:simpleType>
+	<xs:simpleType name="abschlussdatumAktivitaet">
+		<xs:union memberTypes="datumTypB"/>
+	</xs:simpleType>
+	<xs:simpleType name="verweisAktivitaet">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+	<xs:simpleType name="bemerkungAktivitaet">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+	<xs:simpleType name="titelMappe">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+	<xs:simpleType name="idMappe">
+		<xs:restriction base="xs:ID">
+			<xs:minLength value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="bemerkungMappe">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+	<xs:simpleType name="orderVorgang">
+		<xs:annotation>
+			<xs:documentation>DEPRECATED! Has been replaced by reihungElemente.</xs:documentation>
+		</xs:annotation>
+		<xs:union memberTypes="xs:integer xs:string xs:date"/>
+	</xs:simpleType>
+	<xs:simpleType name="orderAktivitaet">
+		<xs:annotation>
+			<xs:documentation>DEPRECATED! Has been replaced by reihungElemente.</xs:documentation>
+		</xs:annotation>
+		<xs:union memberTypes="xs:integer xs:string xs:date"/>
+	</xs:simpleType>
+</xs:schema>

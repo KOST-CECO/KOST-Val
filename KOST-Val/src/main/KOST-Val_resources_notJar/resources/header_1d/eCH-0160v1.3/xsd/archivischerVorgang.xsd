@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="base.xsd"/>
+	<xs:simpleType name="vorgangstyp">
+		<xs:restriction base="text1"/>
+	</xs:simpleType>
+	<xs:simpleType name="beschreibung">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+	<xs:simpleType name="bearbeiter">
+		<xs:restriction base="text2"/>
+	</xs:simpleType>
+	<xs:simpleType name="referenzUebernahmedossier">
+		<xs:restriction base="text1"/>
+	</xs:simpleType>
+</xs:schema>

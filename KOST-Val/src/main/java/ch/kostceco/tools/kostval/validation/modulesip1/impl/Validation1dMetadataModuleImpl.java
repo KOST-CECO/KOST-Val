@@ -191,6 +191,10 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 					+ File.separator + "header_1d" + File.separator
 					+ "eCH-0160v1.2" + File.separator + "xsd" + File.separator
 					+ "arelda.xsd" );
+			File xsd13 = new File( dirOfJarPath + File.separator + "resources"
+					+ File.separator + "header_1d" + File.separator
+					+ "eCH-0160v1.3" + File.separator + "xsd" + File.separator
+					+ "arelda.xsd" );
 			File xml10 = new File( dirOfJarPath + File.separator + "resources"
 					+ File.separator + "header_1d" + File.separator
 					+ "eCH-0160v1.0" + File.separator + "metadata.xml" );
@@ -200,6 +204,9 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 			File xml12 = new File( dirOfJarPath + File.separator + "resources"
 					+ File.separator + "header_1d" + File.separator
 					+ "eCH-0160v1.2" + File.separator + "metadata.xml" );
+			File xml13 = new File( dirOfJarPath + File.separator + "resources"
+					+ File.separator + "header_1d" + File.separator
+					+ "eCH-0160v1.3" + File.separator + "metadata.xml" );
 
 			/*
 			 * System.out .println( dirOfJarPath + " " + xsd10.getAbsolutePath()
@@ -226,9 +233,26 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 				Thread.sleep( 10000 );
 			}
 			if ( (xmlToValidate.exists() && xsdToValidateEch160.exists()) ) {
-				/*
-				 * eCH-0160_v1.1 enthält in arelda.xsd neu "vorgangAktivitaet"
-				 */
+				boolean sip10 = false;
+				boolean sip11 = false;
+				boolean sip12 = false;
+				boolean sip13 = false;
+				String sip10St = configMap.get( "ech0160v10" );
+				if ( sip10St.contains( "1.0" ) ) {
+					sip10 = true;
+				}
+				String sip11St = configMap.get( "ech0160v11" );
+				if ( sip11St.contains( "1.1" ) ) {
+					sip11 = true;
+				}
+				String sip12St = configMap.get( "ech0160v12" );
+				if ( sip12St.contains( "1.2" ) ) {
+					sip12 = true;
+				}
+				String sip13St = configMap.get( "ech0160v13" );
+				if ( sip13St.contains( "1.3" ) ) {
+					sip13 = true;
+				}
 				try {
 					Scanner scanner = new Scanner( xmlToValidate );
 
@@ -238,25 +262,92 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 						String lineXml = scanner.nextLine();
 						if ( lineXml.contains( "schemaVersion=" ) ) {
 							// richtige Zeile
-							if ( lineXml.contains( "schemaVersion=\"5.0\"" ) ) {
+							if ( lineXml.contains( "schemaVersion=\"5.1\"" ) ) {
+								// es ist eine eCH-0160 v1.3
+								if ( !sip13 ) {
+									// v1.3 NICHT erlaubt
+									Logtxt.logtxt( logFile,
+											getTextResourceService().getText(
+													locale,
+													MESSAGE_XML_MODUL_Ad_SIP )
+													+ getTextResourceService()
+															.getText( locale,
+																	ERROR_XML_AD_VERSION,
+																	"eCH-0160 v1.3" ) ); //
+									scanner.close();
+									return false;
+								} else {
+									// v1.3 erlaubt
+									xmlIntern = xml13;
+									xsdIntern = xsd13;
+									sipVer = "ECH160_1.3.txt";
+									break;
+								}
+							} else if ( lineXml
+									.contains( "schemaVersion=\"5.0\"" ) ) {
 								// es ist eine eCH-0160 v1.2
-								xmlIntern = xml12;
-								xsdIntern = xsd12;
-								sipVer = "ECH160_1.2.txt";
-								break;
+								if ( !sip12 ) {
+									// v1.2 NICHT erlaubt
+									Logtxt.logtxt( logFile,
+											getTextResourceService().getText(
+													locale,
+													MESSAGE_XML_MODUL_Ad_SIP )
+													+ getTextResourceService()
+															.getText( locale,
+																	ERROR_XML_AD_VERSION,
+																	"eCH-0160 v1.2" ) ); //
+									scanner.close();
+									return false;
+								} else {
+									// v1.2 erlaubt
+									xmlIntern = xml12;
+									xsdIntern = xsd12;
+									sipVer = "ECH160_1.2.txt";
+									break;
+								}
 							} else if ( lineXml
 									.contains( "schemaVersion=\"4.1\"" ) ) {
 								// es ist eine eCH-0160 v1.1
-								xmlIntern = xml11;
-								xsdIntern = xsd11;
-								sipVer = "ECH160_1.1.txt";
-								break;
+								if ( !sip11 ) {
+									// v1.1 NICHT erlaubt
+									Logtxt.logtxt( logFile,
+											getTextResourceService().getText(
+													locale,
+													MESSAGE_XML_MODUL_Ad_SIP )
+													+ getTextResourceService()
+															.getText( locale,
+																	ERROR_XML_AD_VERSION,
+																	"eCH-0160 v1.1" ) ); //
+									scanner.close();
+									return false;
+								} else {
+									// v1.1 erlaubt
+									xmlIntern = xml11;
+									xsdIntern = xsd11;
+									sipVer = "ECH160_1.1.txt";
+									break;
+								}
 							} else {
 								// dann validieren wir nach eCH-0160 v1.0
-								xmlIntern = xml10;
-								xsdIntern = xsd10;
-								sipVer = "ECH160_1.0.txt";
-								break;
+								if ( !sip10 ) {
+									// v1.0 NICHT erlaubt
+									Logtxt.logtxt( logFile,
+											getTextResourceService().getText(
+													locale,
+													MESSAGE_XML_MODUL_Ad_SIP )
+													+ getTextResourceService()
+															.getText( locale,
+																	ERROR_XML_AD_VERSION,
+																	"eCH-0160 v1.0" ) ); //
+									scanner.close();
+									return false;
+								} else {
+									// v1.0 erlaubt
+									xmlIntern = xml10;
+									xsdIntern = xsd10;
+									sipVer = "ECH160_1.0.txt";
+									break;
+								}
 							}
 						}
 					}
@@ -269,11 +360,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 					sipVersionFile = new File(
 							directoryOfLogfile.getAbsolutePath()
 									+ File.separator + sipVer );
-					try {
-						sipVersionFile.createNewFile();
-					} catch ( IOException e ) {
-						e.printStackTrace();
-					}
+					sipVersionFile.createNewFile();
 
 				} catch ( FileNotFoundException e ) {
 
@@ -283,6 +370,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 									+ getTextResourceService().getText( locale,
 											ERROR_XML_UNKNOWN,
 											"FileNotFoundException" ) );
+					return false;
 				} catch ( Exception e ) {
 
 					Logtxt.logtxt( logFile,

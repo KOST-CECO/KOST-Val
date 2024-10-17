@@ -49,21 +49,24 @@ public class ConfigControllerSip
 {
 
 	@FXML
-	private Button	buttonConfigApply, buttonLength, buttonName;
-	
-	@FXML
-	private CheckBox	checkWarningOldDok;
+	private Button		buttonConfigApply, buttonLength, buttonName;
 
-	private File	configFile	= new File( System.getenv( "USERPROFILE" )
+	@FXML
+	private CheckBox	checkWarningOldDok, checkV10, checkV11, checkV12,
+			checkV13;
+
+	private File		configFile	= new File( System.getenv( "USERPROFILE" )
 			+ File.separator + ".kost-val_2x" + File.separator + "configuration"
 			+ File.separator + "kostval.conf.xml" );
 
-	private String	dirOfJarPath, stringName, stringLength;
+	private String		dirOfJarPath, stringName, stringLength,
+			minOne = "Mindestens eine Variante muss erlaubt sein!";
 
-	private Locale	locale		= Locale.getDefault();
+	private Locale		locale		= Locale.getDefault();
 
 	@FXML
-	private Label	labelVal, labelMessage, labelConfig, labelLength, labelName;
+	private Label		labelVal, labelMessage, labelConfig, labelLength,
+			labelName, labelVersion;
 
 	@FXML
 	void initialize()
@@ -76,7 +79,7 @@ public class ConfigControllerSip
 		String javaVersion = System.getProperty( "java.version" );
 		String javafxVersion = System.getProperty( "javafx.version" );
 		labelConfig.setText(
-				"Copyright © KOST/CECO          KOST-Val v2.2.1.0          JavaFX "
+				"Copyright © KOST/CECO          KOST-Val v2.2.1.1          JavaFX "
 						+ javafxVersion + "   &   Java-" + java6432 + " "
 						+ javaVersion + "." );
 
@@ -104,32 +107,44 @@ public class ConfigControllerSip
 				labelVal.setText( "Validierungseinstellung: SIP" );
 				labelLength.setText( "Pfadlänge" );
 				labelName.setText( "SIP Name" );
-				checkWarningOldDok.setText( "Nur Warnung bei alten Dokumenten (Entstehungszeitraum)" );
+				labelVersion.setText( "Akzeptierte Versionen" );
+				checkWarningOldDok.setText(
+						"Nur Warnung bei alten Dokumenten (Entstehungszeitraum)" );
 				buttonConfigApply.setText( "anwenden" );
 				locale = new Locale( "de" );
+				minOne = "Mindestens eine Variante muss erlaubt sein!";
 			} else if ( Util.stringInFileLine( "kostval-conf-FR.xsl",
 					configFile ) ) {
 				labelVal.setText( "Paramètre de validation: SIP" );
 				labelLength.setText( "Longueur du chemin" );
 				labelName.setText( "Nom SIP" );
-				checkWarningOldDok.setText( "Avertissement uniquement pour les anciens documents (Entstehungszeitraum)" );
+				labelVersion.setText( "Versions acceptées" );
+				checkWarningOldDok.setText(
+						"Avertissement uniquement pour les anciens documents (Entstehungszeitraum)" );
 				buttonConfigApply.setText( "appliquer" );
 				locale = new Locale( "fr" );
+				minOne = "Au moins une variante doit etre autorisee !";
 			} else if ( Util.stringInFileLine( "kostval-conf-IT.xsl",
 					configFile ) ) {
 				labelVal.setText( "Parametro di convalida: SIP" );
 				labelLength.setText( "Lunghezza percorso" );
 				labelName.setText( "Nome SIP" );
-				checkWarningOldDok.setText( "Avviso solo per i vecchi documenti (Entstehungszeitraum)" );
+				labelVersion.setText( "Versioni accettate" );
+				checkWarningOldDok.setText(
+						"Avviso solo per i vecchi documenti (Entstehungszeitraum)" );
 				buttonConfigApply.setText( "Applica" );
 				locale = new Locale( "it" );
+				minOne = "Almeno una variante deve essere consentita!";
 			} else {
 				labelVal.setText( "Validation setting: SIP" );
 				labelLength.setText( "Path length" );
 				labelName.setText( "SIP name" );
-				checkWarningOldDok.setText( "Only warning for old documents (Entstehungszeitraum)" );
+				labelVersion.setText( "Accepted versions" );
+				checkWarningOldDok.setText(
+						"Only warning for old documents (Entstehungszeitraum)" );
 				buttonConfigApply.setText( "apply" );
 				locale = new Locale( "en" );
+				minOne = "At least one variant must be allowed!";
 			}
 		} catch ( Exception e ) {
 			e.printStackTrace();
@@ -151,17 +166,38 @@ public class ConfigControllerSip
 					.item( 0 ).getTextContent();
 			buttonLength.setText( allowedlengthofpaths );
 			buttonName.setText( allowedsipname );
-			
 
 			byte[] encoded;
 			encoded = Files
 					.readAllBytes( Paths.get( configFile.getAbsolutePath() ) );
 			String config = new String( encoded, StandardCharsets.UTF_8 );
+			// <ech0160v10>1.0 </ech0160v10><!-- leer = nicht akzeptiert / 1.0 =
+			// akzeptiert und validieren -->
+			checkV10.setSelected( true );
+			String nov10 = "<ech0160v10></ech0160v10>";
+			if ( config.contains( nov10 ) ) {
+				checkV10.setSelected( false );
+			}
+			checkV11.setSelected( true );
+			String nov11 = "<ech0160v11></ech0160v11>";
+			if ( config.contains( nov11 ) ) {
+				checkV11.setSelected( false );
+			}
+			checkV12.setSelected( true );
+			String nov12 = "<ech0160v12></ech0160v12>";
+			if ( config.contains( nov12 ) ) {
+				checkV12.setSelected( false );
+			}
+			checkV13.setSelected( true );
+			String nov13 = "<ech0160v13></ech0160v13>";
+			if ( config.contains( nov13 ) ) {
+				checkV13.setSelected( false );
+			}
+			checkWarningOldDok.setSelected( true );
 			String noWarningOldDok = "<warningolddok>no</warningolddok>";
 			if ( config.contains( noWarningOldDok ) ) {
 				checkWarningOldDok.setSelected( false );
 			}
-
 
 		} catch ( IOException | ParserConfigurationException
 				| SAXException e1 ) {
@@ -206,7 +242,7 @@ public class ConfigControllerSip
 		if ( locale.toString().startsWith( "fr" ) ) {
 			headerDeFrItEn = "Entrez le nombre maximum de caractères autorisés dans la longueur du chemin [179]:";
 		} else if ( locale.toString().startsWith( "it" ) ) {
-				headerDeFrItEn = "Inserire il numero massimo di caratteri consentiti nella lunghezza del percorso [179]:";
+			headerDeFrItEn = "Inserire il numero massimo di caratteri consentiti nella lunghezza del percorso [179]:";
 		} else if ( locale.toString().startsWith( "en" ) ) {
 			headerDeFrItEn = "Enter the allowed maximum number of characters in path lengths [179]:";
 		}
@@ -293,7 +329,107 @@ public class ConfigControllerSip
 	}
 
 	/*
-	 * checkWarningOldDok schaltet diese Warnung anstelle Fehler in der Konfiguration ein oder aus
+	 * checkV1x schaltet diese Version ein (&#x2713;) oder aus (&#x2717;)
+	 */
+	@FXML
+	void changeV10( ActionEvent event )
+	{
+		labelMessage.setText( "" );
+		String yes = "<ech0160v10>1.0 </ech0160v10>";
+		String no = "<ech0160v10></ech0160v10>";
+		try {
+			if ( checkV10.isSelected() ) {
+				Util.oldnewstring( no, yes, configFile );
+			} else {
+				// abwaehlen nur moeglich wenn noch eines selected
+				if ( !checkV11.isSelected() && !checkV12.isSelected()
+						&& !checkV13.isSelected() ) {
+					labelMessage.setText( minOne );
+					checkV10.setSelected( true );
+				} else {
+					Util.oldnewstring( yes, no, configFile );
+				}
+			}
+		} catch ( IOException e ) {
+			e.printStackTrace();
+		}
+	}
+
+	@FXML
+	void changeV11( ActionEvent event )
+	{
+		labelMessage.setText( "" );
+		String yes = "<ech0160v11>1.1 </ech0160v11>";
+		String no = "<ech0160v11></ech0160v11>";
+		try {
+			if ( checkV11.isSelected() ) {
+				Util.oldnewstring( no, yes, configFile );
+			} else {
+				// abwaehlen nur moeglich wenn noch eines selected
+				if ( !checkV10.isSelected() && !checkV12.isSelected()
+						&& !checkV13.isSelected() ) {
+					labelMessage.setText( minOne );
+					checkV11.setSelected( true );
+				} else {
+					Util.oldnewstring( yes, no, configFile );
+				}
+			}
+		} catch ( IOException e ) {
+			e.printStackTrace();
+		}
+	}
+
+	@FXML
+	void changeV12( ActionEvent event )
+	{
+		labelMessage.setText( "" );
+		String yes = "<ech0160v12>1.2 </ech0160v12>";
+		String no = "<ech0160v12></ech0160v12>";
+		try {
+			if ( checkV12.isSelected() ) {
+				Util.oldnewstring( no, yes, configFile );
+			} else {
+				// abwaehlen nur moeglich wenn noch eines selected
+				if ( !checkV10.isSelected() && !checkV11.isSelected()
+						&& !checkV13.isSelected() ) {
+					labelMessage.setText( minOne );
+					checkV12.setSelected( true );
+				} else {
+					Util.oldnewstring( yes, no, configFile );
+				}
+			}
+		} catch ( IOException e ) {
+			e.printStackTrace();
+		}
+	}
+
+	@FXML
+	void changeV13( ActionEvent event )
+	{
+		labelMessage.setText( "" );
+		String yes = "<ech0160v13>1.3 </ech0160v13>";
+		String no = "<ech0160v1></ech0160v1>";
+		try {
+			if ( checkV13.isSelected() ) {
+				Util.oldnewstring( no, yes, configFile );
+			} else {
+				// abwaehlen nur moeglich wenn noch eines selected
+				if ( !checkV10.isSelected() && !checkV11.isSelected()
+						&& !checkV12.isSelected() ) {
+					labelMessage.setText( minOne );
+					checkV13.setSelected( true );
+				} else {
+					Util.oldnewstring( yes, no, configFile );
+				}
+			}
+		} catch ( IOException e ) {
+			e.printStackTrace();
+		}
+	}
+
+	/*
+	 * checkWarningOldDok schaltet diese Warnung anstelle Fehler in der
+	 * Konfiguration ein oder aus
 	 */
 	@FXML
 	void changeWarningOldDok( ActionEvent event )

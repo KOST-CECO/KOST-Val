@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:template match="/">
-		<!-- kostval.conf.xml_v2.2.1.0 -->
+		<!-- kostval.conf.xml_v2.2.1.1 -->
 		<html>
 			<head>
 				<style>
@@ -355,6 +355,12 @@
 						<td>Spécifications pour la structure du nom SIP [SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\w{3}] :</td>
 						<td>
 							<xsl:value-of select="configuration/sip/allowedsipname" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>Versions eCH-0160 SIP autorisées [1.0, 1.1, 1.2, 1.3]:</td>
+						<td>
+							<xsl:value-of select="configuration/sip/sipversion" />
 						</td>
 					</tr>
 					<tr class="captioninfom">

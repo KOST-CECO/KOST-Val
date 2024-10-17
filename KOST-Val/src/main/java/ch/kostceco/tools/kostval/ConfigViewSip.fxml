@@ -55,7 +55,12 @@
             <Button fx:id="buttonName" alignment="TOP_LEFT" maxHeight="26.0" minHeight="26.0" mnemonicParsing="false" onAction="#changeName" prefHeight="26.0" style="-fx-background-color: WhiteSmoke; -fx-border-color: WhiteSmoke;" text="aendern" GridPane.columnIndex="1" GridPane.columnSpan="4" GridPane.rowIndex="3" />
             <Label fx:id="labelName" text="SIP Name" GridPane.rowIndex="3" />
             <Label fx:id="labelLength" text="Pfadlänge" GridPane.rowIndex="2" />
-            <CheckBox fx:id="checkWarningOldDok" mnemonicParsing="false" onAction="#changeWarningOldDok" selected="true" text="Nur Warnung bei alten Dokumenten (Entstehungszeitraum)" GridPane.columnSpan="3" GridPane.rowIndex="4" />
+            <CheckBox fx:id="checkWarningOldDok" mnemonicParsing="false" onAction="#changeWarningOldDok" selected="true" text="Nur Warnung bei alten Dokumenten (Entstehungszeitraum)" GridPane.columnSpan="3" GridPane.rowIndex="5" />
+            <Label fx:id="labelVersion" text="Akzeptierte Versionen" GridPane.rowIndex="4" />
+            <CheckBox fx:id="checkV10" mnemonicParsing="false" onAction="#changeV10" selected="true" text="eCH-0160 v1.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <CheckBox fx:id="checkV11" mnemonicParsing="false" onAction="#changeV11" selected="true" text="eCH-0160 v1.1" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <CheckBox fx:id="checkV12" mnemonicParsing="false" onAction="#changeV12" selected="true" text="eCH-0160 v1.2" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+            <CheckBox fx:id="checkV13" mnemonicParsing="false" onAction="#changeV13" selected="true" text="eCH-0160 v1.3" GridPane.columnIndex="4" GridPane.rowIndex="4" />
 			</children>
 			<padding>
 				<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
