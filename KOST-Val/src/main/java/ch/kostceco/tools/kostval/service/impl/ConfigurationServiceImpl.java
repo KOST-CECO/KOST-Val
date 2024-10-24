@@ -817,6 +817,16 @@ public class ConfigurationServiceImpl implements ConfigurationService
 					.getTextContent().replace( " ", "" );
 			configMap.put( "siard22", siard22 );
 
+			// <lobExtension>Error </lobExtension> <!--Warning / Error -->
+			String lobExtension = doc.getElementsByTagName( "lobExtension" ).item( 0 )
+					.getTextContent().replace( " ", "" );
+			configMap.put( "lobExtension", lobExtension );
+
+			// <lobAzepted>Check </lobAzepted> <!--"" / Check -->
+			String lobAzepted = doc.getElementsByTagName( "lobAzepted" ).item( 0 )
+					.getTextContent().replace( " ", "" );
+			configMap.put( "lobAzepted", lobAzepted );
+			
 			// Gibt an ob csv akzeptiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
 			String azCsv = "<csvvalidation>(&#x2713;)</csvvalidation>";

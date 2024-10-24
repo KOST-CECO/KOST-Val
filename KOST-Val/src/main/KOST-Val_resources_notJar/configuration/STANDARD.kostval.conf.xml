@@ -133,6 +133,8 @@
 			<siard21>2.1 </siard21><!--2.1 / / no -->
 			<siard22>2.2 </siard22><!--2.2 / / no -->
 		</siardversion>
+		<lobExtension>Error </lobExtension> <!--Warning / Error -->
+		<lobAzepted>Check </lobAzepted> <!--"" / Check -->
 	</siard>
 	<csv>
 		<csvvalidation>(&#x2713;)</csvvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->

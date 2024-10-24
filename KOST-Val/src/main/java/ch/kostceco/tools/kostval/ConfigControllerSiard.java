@@ -37,7 +37,8 @@ public class ConfigControllerSiard
 {
 
 	@FXML
-	private CheckBox	checkSiard10, checkSiard21, checkSiard22;
+	private CheckBox	checkSiard10, checkSiard21, checkSiard22,
+			checkLobExtension, checkLobAzepted;
 
 	@FXML
 	private Button		buttonConfigApply;
@@ -50,7 +51,8 @@ public class ConfigControllerSiard
 			minOne = "Mindestens eine Variante muss erlaubt sein!";
 
 	@FXML
-	private Label		labelVersion, labelVal, labelMessage, labelConfig;
+	private Label		labelVersion, labelVal, labelMessage, labelConfig,
+			labelLob;
 
 	@FXML
 	void initialize()
@@ -89,23 +91,43 @@ public class ConfigControllerSiard
 		try {
 			if ( Util.stringInFileLine( "kostval-conf-DE.xsl", configFile ) ) {
 				labelVersion.setText( "Versionen" );
+				labelLob.setText( "LOB-Dateien" );
+				checkLobExtension
+						.setText( "Bemängeln von nicht exakten Dateiendungen" );
+				checkLobAzepted.setText(
+						"Bemängeln von nicht akzeptierent Dateiformaten" );
 				labelVal.setText( "Validierungseinstellung: SIARD" );
 				buttonConfigApply.setText( "anwenden" );
 				minOne = "Mindestens eine Variante muss erlaubt sein!";
 			} else if ( Util.stringInFileLine( "kostval-conf-FR.xsl",
 					configFile ) ) {
 				labelVersion.setText( "Versions" );
+				labelLob.setText( "Fichiers LOB" );
+				checkLobExtension.setText(
+						"Réclamer des extensions de fichiers non exactes" );
+				checkLobAzepted.setText(
+						"Remarques sur les formats de fichiers non acceptés" );
 				labelVal.setText( "Paramètre de validation: SIARD" );
 				buttonConfigApply.setText( "appliquer" );
 				minOne = "Au moins une variante doit etre autorisee !";
 			} else if ( Util.stringInFileLine( "kostval-conf-IT.xsl",
 					configFile ) ) {
 				labelVersion.setText( "Versioni" );
+				labelLob.setText( "File LOB" );
+				checkLobExtension
+						.setText( "Claim for incorrect file extensions" );
+				checkLobAzepted
+						.setText( "Remarks on non-accepted file formats" );
 				labelVal.setText( "Parametro di convalida: SIARD" );
 				buttonConfigApply.setText( "Applica" );
 				minOne = "Almeno una variante deve essere consentita!";
 			} else {
 				labelVersion.setText( "Versions" );
+				labelLob.setText( "LOB files" );
+				checkLobExtension
+						.setText( "Richiesta di estensioni file errate" );
+				checkLobAzepted.setText(
+						"Osservazioni sui formati di file non accettati" );
 				labelVal.setText( "Validation setting: SIARD" );
 				buttonConfigApply.setText( "apply" );
 				minOne = "At least one variant must be allowed!";
@@ -124,6 +146,8 @@ public class ConfigControllerSiard
 			String noSiard10 = "<siard10></siard10>";
 			String noSiard21 = "<siard21></siard21>";
 			String noSiard22 = "<siard22></siard22>";
+			String noLobExtension = "<lobExtension>Warning </lobExtension>";
+			String noLobAzepted = "<lobAzepted></lobAzepted>";
 
 			if ( config.contains( noSiard ) ) {
 				checkSiard10.setDisable( true );
@@ -138,6 +162,12 @@ public class ConfigControllerSiard
 			}
 			if ( config.contains( noSiard22 ) ) {
 				checkSiard22.setSelected( false );
+			}
+			if ( config.contains( noLobExtension ) ) {
+				checkLobExtension.setSelected( false );
+			}
+			if ( config.contains( noLobAzepted ) ) {
+				checkLobAzepted.setSelected( false );
 			}
 		} catch ( IOException e1 ) {
 			e1.printStackTrace();
@@ -241,6 +271,48 @@ public class ConfigControllerSiard
 				} else {
 					Util.oldnewstring( yes, no, configFile );
 				}
+			}
+		} catch ( IOException e ) {
+			e.printStackTrace();
+		}
+	}
+
+	/*
+	 * checkLobExtension schaltet dieser Mangel in der Konfiguration ein oder
+	 * aus
+	 */
+	@FXML
+	void changeLobExtension( ActionEvent event )
+	{
+		labelMessage.setText( "" );
+		String yes = "<lobExtension>Error </lobExtension>";
+		String no = "<lobExtension>Warning </lobExtension>";
+		try {
+			if ( checkLobExtension.isSelected() ) {
+				Util.oldnewstring( no, yes, configFile );
+			} else {
+				Util.oldnewstring( yes, no, configFile );
+			}
+		} catch ( IOException e ) {
+			e.printStackTrace();
+		}
+	}
+
+	/*
+	 * checkLobAzepted aendert die Kontrolle ob akzeptiert oder nicht in der
+	 * Konfiguration ein oder aus
+	 */
+	@FXML
+	void changeLobAzepted( ActionEvent event )
+	{
+		labelMessage.setText( "" );
+		String yes = "<lobAzepted>Check </lobAzepted>";
+		String no = "<lobAzepted></lobAzepted>";
+		try {
+			if ( checkLobExtension.isSelected() ) {
+				Util.oldnewstring( no, yes, configFile );
+			} else {
+				Util.oldnewstring( yes, no, configFile );
 			}
 		} catch ( IOException e ) {
 			e.printStackTrace();

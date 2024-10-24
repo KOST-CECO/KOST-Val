@@ -316,6 +316,24 @@
 							<xsl:value-of select="configuration/siard/siardversion" />
 						</td>
 					</tr>
+					<tr class="captioninfom">
+						<td>Claim for incorrect file extensions [Error]:</td>
+						<td>
+							<xsl:value-of select="configuration/siard/lobExtension" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>Remarks on non-accepted file formats [Azepted]:</td>
+						<td>
+							<xsl:value-of select="configuration/siard/lobAzepted" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>Validation of accepted file formats [Validate]:</td>
+						<td>
+							<xsl:value-of select="configuration/siard/lobValidation" />
+						</td>
+					</tr>
 
 					<tr class="captioninfo">
 						<td>CSV: Acceptance [(&#x2713;)]</td>

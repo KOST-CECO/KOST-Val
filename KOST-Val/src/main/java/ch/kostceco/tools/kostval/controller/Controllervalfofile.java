@@ -98,6 +98,7 @@ public class Controllervalfofile implements MessageConstants
 		String xlsxValidation = configMap.get( "xlsxValidation" );
 		String odsValidation = configMap.get( "odsValidation" );
 		String otherformats = configMap.get( "otherformats" );
+		// TODO: Neue Formate auch in SIARD Modul M nachtragen
 
 		String configHash = configMap.get( "hash" );
 		String sizeWarning = configMap.get( "sizeWarning" );
@@ -164,8 +165,9 @@ public class Controllervalfofile implements MessageConstants
 					}
 				}
 
-				String valDateiXml = "<ValFile> -> " + valDatei.getAbsolutePath()
-						+ "</ValFile>" + sizeWarningTxt;
+				String valDateiXml = "<ValFile> -> "
+						+ valDatei.getAbsolutePath() + "</ValFile>"
+						+ sizeWarningTxt;
 
 				/*
 				 * Ergebnis ist die Datei z.B. PDFA oder SIARD wenn einwandfrei

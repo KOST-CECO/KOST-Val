@@ -77,6 +77,7 @@ public interface MessageConstants
 	String	MESSAGE_XML_MODUL_H_SIARD					= "val.message.xml.modul.h.siard";
 	String	MESSAGE_XML_MODUL_I_SIARD					= "val.message.xml.modul.i.siard";
 	String	MESSAGE_XML_MODUL_J_SIARD					= "val.message.xml.modul.j.siard";
+	String	MESSAGE_XML_MODUL_M_SIARD					= "val.message.xml.modul.m.siard";
 	String	MESSAGE_XML_MODUL_W_SIARD					= "val.message.xml.modul.w.siard";
 
 	String	MESSAGE_XML_MODUL_A_PDFA					= "val.message.xml.modul.a.pdfa";
@@ -251,6 +252,12 @@ public interface MessageConstants
 
 	// Modul J Meldungen
 	String	MESSAGE_XML_J_INVALID_ENTRY					= "val.message.xml.j.invalid.entry";
+
+	// Modul M Meldungen
+	String	MESSAGE_XML_M_AZ_INCORRECTFILE				= "val.message.xml.m.az.incorrectfile";
+	String	MESSAGE_XML_M_NOTAZ							= "val.message.xml.m.notaz";
+	String	MESSAGE_XML_M_AZ							= "val.message.xml.m.az";
+	String	MESSAGE_XML_M_UNKNOWN						= "val.message.xml.m.unknown";
 
 	// Modul W Meldungen
 	String	MESSAGE_XML_W_WARNING_INITVALUE				= "val.message.xml.w.warning.initvalue";

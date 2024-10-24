@@ -116,6 +116,11 @@
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 	</bean>
+	<bean id="validationMlobModule"
+		class="ch.kostceco.tools.kostval.validation.modulesiard.impl.ValidationMlobModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+	</bean>
 	<bean id="validationWwarningModule"
 		class="ch.kostceco.tools.kostval.validation.modulesiard.impl.ValidationWwarningModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
@@ -324,6 +329,7 @@
 		<property name="validationHcontentModule" ref="validationHcontentModule" />
 		<property name="validationIrecognitionModule" ref="validationIrecognitionModule" />
 		<property name="validationJsurplusFilesModule" ref="validationJsurplusFilesModule" />
+		<property name="validationMlobModule" ref="validationMlobModule" />
 		<property name="validationWwarningModule" ref="validationWwarningModule" />
 	</bean>
 

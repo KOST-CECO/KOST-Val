@@ -51,6 +51,9 @@
             <CheckBox fx:id="checkSiard10" mnemonicParsing="false" onAction="#changeSiard10" selected="true" text="SIARD-1.0 (eCH-0165 v1)" GridPane.rowIndex="3" />
             <CheckBox fx:id="checkSiard21" mnemonicParsing="false" onAction="#changeSiard21" selected="true" text="SIARD-2.1" GridPane.rowIndex="4" />
             <CheckBox fx:id="checkSiard22" mnemonicParsing="false" onAction="#changeSiard22" selected="true" text="SIARD-2.2" GridPane.rowIndex="5" />
+            <Label fx:id="labelLob" text="LOB-Dateien" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <CheckBox fx:id="checkLobExtension" mnemonicParsing="false" onAction="#changeLobExtension" selected="true" text="Bemängeln von nicht exakten Dateiendungen" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+            <CheckBox fx:id="checkLobAzepted" mnemonicParsing="false" onAction="#changeLobAzepted" selected="true" text="Bemängeln von nicht akzeptierent Dateiformaten" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4" />
 			</children>
 			<padding>
 				<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

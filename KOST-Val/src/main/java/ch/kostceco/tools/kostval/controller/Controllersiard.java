@@ -32,6 +32,7 @@ import ch.kostceco.tools.kostval.exception.modulesiard.ValidationGtableException
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationHcontentException;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationIrecognitionException;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationJsurplusFilesException;
+import ch.kostceco.tools.kostval.exception.modulesiard.ValidationMlobException;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationWwarningException;
 import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
@@ -46,6 +47,7 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationGtableModule;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationHcontentModule;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationIrecognitionModule;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationJsurplusFilesModule;
+import ch.kostceco.tools.kostval.validation.modulesiard.ValidationMlobModule;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationWwarningModule;
 
 /**
@@ -75,6 +77,7 @@ public class Controllersiard implements MessageConstants
 	private ValidationHcontentModule			validationHcontentModule;
 	private ValidationIrecognitionModule		validationIrecognitionModule;
 	private ValidationJsurplusFilesModule		validationJsurplusFilesModule;
+	private ValidationMlobModule		validationMlobModule;
 	private ValidationWwarningModule			validationWwarningModule;
 
 	public ValidationAzipModule getValidationAzipModule()
@@ -195,6 +198,17 @@ public class Controllersiard implements MessageConstants
 	 * validationLconstraintModule) { this.validationLconstraintModule =
 	 * validationLconstraintModule; }
 	 */
+
+	public ValidationMlobModule getValidationMlobModule()
+	{
+		return validationMlobModule;
+	}
+
+	public void setValidationMlobModule(
+			ValidationMlobModule validationMlobModule )
+	{
+		this.validationMlobModule = validationMlobModule;
+	}
 
 	public ValidationWwarningModule getValidationWwarningModule()
 	{
@@ -561,6 +575,43 @@ public class Controllersiard implements MessageConstants
 			Logtxt.logtxt( logFile,
 					getTextResourceService().getText( locale,
 							MESSAGE_XML_MODUL_J_SIARD )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
+			return false;
+		}
+
+		// Validation Step M (LOB)
+		try {
+			if ( this.getValidationMlobModule().validate( valDatei,
+					directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath ) ) {
+				this.getValidationMlobModule().getMessageService()
+						.print();
+			} else {
+				this.getValidationMlobModule().getMessageService()
+						.print();
+				if ( min ) {
+					return false;
+				} else {
+					valid = false;
+				}
+			}
+		} catch ( ValidationMlobException e ) {
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_M_SIARD )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
+			this.getValidationMlobModule().getMessageService().print();
+			if ( min ) {
+				return false;
+			} else {
+				valid = false;
+			}
+		} catch ( Exception e ) {
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_M_SIARD )
 							+ getTextResourceService().getText( locale,
 									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;

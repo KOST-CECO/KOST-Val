@@ -316,6 +316,18 @@
 							<xsl:value-of select="configuration/siard/siardversion" />
 						</td>
 					</tr>
+					<tr class="captioninfom">
+						<td>Bemängeln von nicht exakten Dateiendungen [Error]:</td>
+						<td>
+							<xsl:value-of select="configuration/siard/lobExtension" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>Bemängeln von nicht akzeptierent Dateiformaten [Azepted]:</td>
+						<td>
+							<xsl:value-of select="configuration/siard/lobAzepted" />
+						</td>
+					</tr>
 
 					<tr class="captioninfo">
 						<td>CSV: Akzeptanz [(&#x2713;)]</td>
