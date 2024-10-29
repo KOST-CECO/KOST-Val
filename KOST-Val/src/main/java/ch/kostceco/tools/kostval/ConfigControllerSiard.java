@@ -92,6 +92,7 @@ public class ConfigControllerSiard
 			if ( Util.stringInFileLine( "kostval-conf-DE.xsl", configFile ) ) {
 				labelVersion.setText( "Versionen" );
 				labelLob.setText( "LOB-Dateien" );
+				checkSiard10.setText( "SIARD-1.0 (eCH-0165 v1) [veraltet]" );
 				checkLobExtension
 						.setText( "Bemängeln von nicht exakten Dateiendungen" );
 				checkLobAzepted.setText(
@@ -103,6 +104,7 @@ public class ConfigControllerSiard
 					configFile ) ) {
 				labelVersion.setText( "Versions" );
 				labelLob.setText( "Fichiers LOB" );
+				checkSiard10.setText( "SIARD-1.0 (eCH-0165 v1) [obsolète]" );
 				checkLobExtension.setText(
 						"Réclamer des extensions de fichiers non exactes" );
 				checkLobAzepted.setText(
@@ -114,6 +116,7 @@ public class ConfigControllerSiard
 					configFile ) ) {
 				labelVersion.setText( "Versioni" );
 				labelLob.setText( "File LOB" );
+				checkSiard10.setText( "SIARD-1.0 (eCH-0165 v1) [obsolete]" );
 				checkLobExtension
 						.setText( "Claim for incorrect file extensions" );
 				checkLobAzepted
@@ -124,6 +127,7 @@ public class ConfigControllerSiard
 			} else {
 				labelVersion.setText( "Versions" );
 				labelLob.setText( "LOB files" );
+				checkSiard10.setText( "SIARD-1.0 (eCH-0165 v1) [obsoleto]" );
 				checkLobExtension
 						.setText( "Richiesta di estensioni file errate" );
 				checkLobAzepted.setText(

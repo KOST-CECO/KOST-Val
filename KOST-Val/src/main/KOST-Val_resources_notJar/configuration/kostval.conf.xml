@@ -129,7 +129,7 @@
 	<siard>
 		<siardvalidation>&#x2713;</siardvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
 		<siardversion>
-			<siard10>1.0 </siard10><!--1.0 / / no -->
+			<siard10></siard10><!--1.0 / / no -->
 			<siard21>2.1 </siard21><!--2.1 / / no -->
 			<siard22>2.2 </siard22><!--2.2 / / no -->
 		</siardversion>

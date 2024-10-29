@@ -482,6 +482,7 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 																	MESSAGE_XML_H_INVALID_XML,
 																	tableXmlShortString,
 																	tableXsdShortString ) );
+									resultExec=resultExec.replace( "ERROR: "," - ERROR: ");
 									Logtxt.logtxt( logFile,
 											getTextResourceService().getText(
 													locale,

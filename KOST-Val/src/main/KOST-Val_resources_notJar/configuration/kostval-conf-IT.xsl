@@ -311,7 +311,7 @@
 						</td>
 					</tr>
 					<tr class="captioninfom">
-						<td>Versioni SIARD ammesse [1.0, 2.1, 2.2]:</td>
+						<td>Versioni SIARD ammesse [2.1, 2.2]:</td>
 						<td>
 							<xsl:value-of select="configuration/siard/siardversion" />
 						</td>
