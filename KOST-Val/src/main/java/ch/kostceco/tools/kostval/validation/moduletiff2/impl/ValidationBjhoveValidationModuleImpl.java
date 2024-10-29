@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 
 import ch.kostceco.tools.kosttools.fileservice.Jhove;
+import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationBjhoveValidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationBjhoveValidationModule;
@@ -119,6 +120,14 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 			int ignorcounter = 0;
 			while ( (line = in.readLine()) != null ) {
 				/*
+				 * Neu gib Jhove je nach Standardsprache die Fehlermeldung auch
+				 * auf Deutsch oder Franzoesisch aus. Dadurch muessen jedoch
+				 * Sonderzeichen normalisiert werden.
+				 */
+				line = Util.umlauteCo( line );
+				System.out.println( "JHOVE: "+line );
+
+				/*
 				 * die Status-Zeile enthaelt diese Moeglichkeiten: Valider
 				 * Status: "Well-Formed and valid" Invalider Status:
 				 * "Not well-formed" oder "Well-Formed, but not valid"
@@ -192,7 +201,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 													+ getTextResourceService()
 															.getText( locale,
 																	MESSAGE_XML_SERVICEMESSAGE,
-																	"- Jhove",
+																	"- Jhove99",
 																	line ) );
 									lines.add( line );
 								} else if ( counter == 11 ) {
@@ -214,6 +223,13 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 							}
 						}
 					}
+				} else if ( line.contains( "InfoMessage" ) ) {
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_B_TIFF )
+									+ getTextResourceService().getText( locale,
+											MESSAGE_XML_SERVICEMESSAGE_INFO,
+											"- Jhove", line ) );
 				}
 			}
 			if ( (statuscounter == 0) && (ignorcounter == 0)

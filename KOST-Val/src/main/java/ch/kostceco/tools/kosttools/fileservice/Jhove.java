@@ -80,8 +80,8 @@ public class Jhove
 			// Jhove direkt ansprechen via dispatch
 			try {
 				String NAME = new String( "Jhove" );
-				String RELEASE = new String( "1.9.4" ); // vom Modul
-				int[] DATE = new int[] { 2023, 03, 16 }; // vom Modul yyyy, mm,
+				String RELEASE = new String( "1.9.5" ); // vom Modul
+				int[] DATE = new int[] { 2024, 8, 22 }; // vom Modul yyyy, mm,
 															// dd
 				String USAGE = new String( "no usage" );
 				String RIGHTS = new String( "LGPL v2.1" );

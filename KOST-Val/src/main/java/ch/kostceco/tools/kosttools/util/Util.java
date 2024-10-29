@@ -546,14 +546,28 @@ public class Util
 	}
 
 	/** Umlaute normalisieren */
-	public static String umlaute( String oldstring )
+	public static String umlauteCo( String oldstring )
 	{
-		String newstring = oldstring.replaceAll( "�", "ue" );
-		newstring = newstring.replaceAll( "�", "oe" );
-		newstring = newstring.replaceAll( "�", "ae" );
-		newstring = newstring.replaceAll( "�", "Ue" );
-		newstring = newstring.replaceAll( "�", "Oe" );
-		newstring = newstring.replaceAll( "�", "Ae" );
+		String newstring = oldstring.replaceAll( "ü", "ue" );
+		newstring = newstring.replaceAll( "ö", "oe" );
+		newstring = newstring.replaceAll( "ä", "ae" );
+		newstring = newstring.replaceAll( "Ü", "Ue" );
+		newstring = newstring.replaceAll( "Ö", "Oe" );
+		newstring = newstring.replaceAll( "Ä", "Ae" );
+		newstring = oldstring.replaceAll( "é", "e" );
+		newstring = newstring.replaceAll( "è", "e" );
+		newstring = newstring.replaceAll( "à", "a" );
+		newstring = newstring.replaceAll( "ê", "e" );
+		newstring = newstring.replaceAll( "ç", "c" );
+		newstring = oldstring.replaceAll( "'", "`" );
+		
+		newstring = oldstring.replaceAll( "Ã¼", "ue" );
+		newstring = newstring.replaceAll( "Ã¶", "oe" );
+		newstring = newstring.replaceAll( "Ã¤", "ae" );
+		newstring = oldstring.replaceAll( "Ã©", "e" );
+		newstring = newstring.replaceAll( "Ã¨", "e" );
+		newstring = newstring.replaceAll( "Ãª", "e" );
+		newstring = newstring.replaceAll( "Ã§", "c" );
 		return newstring;
 	}
 

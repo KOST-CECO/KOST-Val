@@ -24,5 +24,8 @@
 	<classpathentry kind="lib" path="KOST-Val/lib/zip64file-1.0.jar" sourcepath="KOST-Val/external-sources/Zip64File-sources.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/VALA-6.27.2.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/pdfbox-app-3.0.2.jar"/>
+	<classpathentry kind="lib" path="KOST-Val/lib/greenfield-apps-1.27.59.jar"/>
+	<classpathentry kind="lib" path="KOST-Val/lib/jhove-apps-1.32.0.jar"/>
+	<classpathentry kind="lib" path="KOST-Val/lib/tiff-hul-1.9.5.jar"/>
 	<classpathentry kind="output" path="KOST-Val/target/classes"/>
 </classpath>

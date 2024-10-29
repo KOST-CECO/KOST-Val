@@ -177,7 +177,8 @@ public interface MessageConstants
 	String	ERROR_XML_SERVICEFAILED						= "val.error.xml.servicefailed";
 	String	MESSAGE_XML_SERVICEINVALID					= "val.message.xml.serviceinvalid";
 	String	MESSAGE_XML_SERVICEMESSAGE					= "val.message.xml.servicemessage";
-
+	String	MESSAGE_XML_SERVICEMESSAGE_INFO				= "val.message.xml.servicemessage.info";
+	
 	String	MESSAGE_WARNING_XML_SIZE					= "val.warning.xml.size";
 
 	// *************TIFF-Meldungen*************************************************************************

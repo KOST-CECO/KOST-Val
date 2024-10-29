@@ -125,9 +125,9 @@ public class GuiController
 	 * 
 	 * 5) xsl der Logdatei
 	 * 
-	 * 6) Start-Bild (make_exe) TODO
+	 * 6) Start-Bild (make_exe)
 	 * 
-	 * 7) launch_KOST-Val_exe.xml --> VersionInfo TODO
+	 * 7) launch_KOST-Val_exe.xml --> VersionInfo
 	 */
 
 	/*
