@@ -546,7 +546,7 @@ public class Util
 	}
 
 	/** Umlaute normalisieren */
-	public static String umlauteCo( String oldstring )
+	public static String umlaute( String oldstring )
 	{
 		String newstring = oldstring.replaceAll( "ü", "ue" );
 		newstring = newstring.replaceAll( "ö", "oe" );
@@ -568,6 +568,8 @@ public class Util
 		newstring = newstring.replaceAll( "Ã¨", "e" );
 		newstring = newstring.replaceAll( "Ãª", "e" );
 		newstring = newstring.replaceAll( "Ã§", "c" );
+		
+		newstring = oldstring.replaceAll( "ￃﾼ", "ue" );
 		return newstring;
 	}
 

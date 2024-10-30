@@ -20,18 +20,19 @@ package ch.kostceco.tools.kostval.validation.moduletiff2.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
 import ch.kostceco.tools.kosttools.fileservice.Jhove;
-import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationBjhoveValidationException;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationBjhoveValidationModule;
-import ch.kostceco.tools.kostval.logging.Logtxt;
 
 /**
  * Validierungsschritt B (Jhove-Validierung) Ist die TIFF-Datei gemaess Jhove
@@ -109,24 +110,21 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 
 		// Report auswerten
 		try {
-			BufferedReader in = new BufferedReader(
-					new FileReader( jhoveLog ) );
+			FileInputStream fis = new FileInputStream( jhoveLog );
+			InputStreamReader isr = new InputStreamReader( fis,
+					StandardCharsets.UTF_8 );
+			BufferedReader in = new BufferedReader( isr );
+
 			String line;
-			Set<String> lines = new LinkedHashSet<String>( 100000 ); // evtl
-																		// vergroessern
+			Set<String> lines = new LinkedHashSet<String>( 100000 );
+			Set<String> linesInfo = new LinkedHashSet<String>( 100000 );
+			// evtl vergroessern
 			int counter = 0;
+			int counterInfo = 0;
 			String status = "";
 			int statuscounter = 0;
 			int ignorcounter = 0;
 			while ( (line = in.readLine()) != null ) {
-				/*
-				 * Neu gib Jhove je nach Standardsprache die Fehlermeldung auch
-				 * auf Deutsch oder Franzoesisch aus. Dadurch muessen jedoch
-				 * Sonderzeichen normalisiert werden.
-				 */
-				line = Util.umlauteCo( line );
-				System.out.println( "JHOVE: "+line );
-
 				/*
 				 * die Status-Zeile enthaelt diese Moeglichkeiten: Valider
 				 * Status: "Well-Formed and valid" Invalider Status:
@@ -201,7 +199,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 													+ getTextResourceService()
 															.getText( locale,
 																	MESSAGE_XML_SERVICEMESSAGE,
-																	"- Jhove99",
+																	"- Jhove",
 																	line ) );
 									lines.add( line );
 								} else if ( counter == 11 ) {
@@ -224,12 +222,42 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 						}
 					}
 				} else if ( line.contains( "InfoMessage" ) ) {
-					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale,
-									MESSAGE_XML_MODUL_B_TIFF )
-									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_SERVICEMESSAGE_INFO,
-											"- Jhove", line ) );
+					/*
+					 * Linie mit der Warnung auch mitausgeben, falls diese neu
+					 * ist.
+					 */
+
+					if ( linesInfo.contains( line ) ) {
+						// Diese Linie = Fehlermelung wurde bereits
+						// ausgegeben
+					} else {
+						if ( min ) {
+						} else {
+							// neue Warnung
+							counterInfo = counterInfo + 1;
+							// max 10 Meldungen im Modul B
+							if ( counterInfo < 11 ) {
+								Logtxt.logtxt( logFile, getTextResourceService()
+										.getText( locale,
+												MESSAGE_XML_MODUL_B_TIFF )
+										+ getTextResourceService().getText(
+												locale,
+												MESSAGE_XML_SERVICEMESSAGE_INFO,
+												"- Jhove", line ) );
+								linesInfo.add( line );
+							} else if ( counterInfo == 11 ) {
+								Logtxt.logtxt( logFile, getTextResourceService()
+										.getText( locale,
+												MESSAGE_XML_MODUL_B_TIFF )
+										+ getTextResourceService().getText(
+												locale,
+												MESSAGE_XML_SERVICEMESSAGE,
+												"- Jhove",
+												" InfoMessage: . . ." ) );
+								linesInfo.add( line );
+							}
+						}
+					}
 				}
 			}
 			if ( (statuscounter == 0) && (ignorcounter == 0)

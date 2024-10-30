@@ -81,12 +81,11 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl
 		} else {
 			String tiles = configMap.get( "AllowedTiles" );
 
-			Integer jhoveio = 0;
-			String oldErrorLine1 = "";
-			String oldErrorLine2 = "";
-			String oldErrorLine3 = "";
-			String oldErrorLine4 = "";
-			String oldErrorLine5 = "";
+			/*
+			 * String oldErrorLine1 = ""; String oldErrorLine2 = ""; String
+			 * oldErrorLine3 = ""; String oldErrorLine4 = ""; String
+			 * oldErrorLine5 = "";
+			 */
 
 			if ( tiles.equalsIgnoreCase( "yes" ) ) {
 				// Valider Status (Kacheln sind erlaubt)
@@ -101,65 +100,26 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl
 						 * oder TileOffsets-Zeile gibt Auskunft ueber die
 						 * Aufteilungsart
 						 * 
-						 * TODO: im neuen jhove hat es nur noch ein Offset ->
-						 * Kacheln koennen so nicht mehr erkannt werden
+						 * TileWidth: TileLength: TileOffsets: TileByteCounts:
 						 */
-						if ( (line.contains( " Offset:" )) ) {
-							jhoveio = 1;
-						}
-						if ( (!line.contains( "RepresentationInformation" )
-								&& line.contains( "Tile" ))
-								|| (!line
-										.contains( "RepresentationInformation" )
-										&& line.contains( "tile" )) ) {
-							// TODO: Funktioniert noch nicht, Jhove muss
-							// noch was betreffend Tiles ausgeben
-							// Invalider Status (Kacheln sind nicht erlaubt)
+						if ( line.contains( "TileOffsets:" )
+								|| line.contains( "TileWidth:" )
+								|| line.contains( "TileLength:" )
+								|| line.contains( "TileByteCounts:" ) ) {
 							isValid = false;
 							if ( min ) {
 								in.close();
 								return false;
 							} else {
-								if ( !line.equals( oldErrorLine1 )
-										&& !line.equals( oldErrorLine2 )
-										&& !line.equals( oldErrorLine3 )
-										&& !line.equals( oldErrorLine4 )
-										&& !line.equals( oldErrorLine5 ) ) {
-									// neuer Fehler
-									Logtxt.logtxt( logFile,
-											getTextResourceService().getText(
-													locale,
-													MESSAGE_XML_MODUL_G_TIFF )
-													+ getTextResourceService()
-															.getText( locale,
-																	MESSAGE_XML_G_INVALID ) );
-									if ( oldErrorLine1.equals( "" ) ) {
-										oldErrorLine1 = line;
-									} else if ( oldErrorLine2.equals( "" ) ) {
-										oldErrorLine2 = line;
-									} else if ( oldErrorLine3.equals( "" ) ) {
-										oldErrorLine3 = line;
-									} else if ( oldErrorLine4.equals( "" ) ) {
-										oldErrorLine4 = line;
-									} else if ( oldErrorLine5.equals( "" ) ) {
-										oldErrorLine5 = line;
-									}
-								}
+								Logtxt.logtxt( logFile, getTextResourceService()
+										.getText( locale,
+												MESSAGE_XML_MODUL_G_TIFF )
+										+ getTextResourceService().getText(
+												locale,
+												MESSAGE_XML_G_INVALID ) );
+								in.close();
+								return false;
 							}
-						}
-					}
-					if ( jhoveio == 0 ) {
-						// Invalider Status
-						isValid = false;
-						if ( min ) {
-							in.close();
-							return false;
-						} else {
-
-							Logtxt.logtxt( logFile, getTextResourceService()
-									.getText( locale, MESSAGE_XML_MODUL_G_TIFF )
-									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_CG_JHOVENIO, "G" ) );
 						}
 					}
 					in.close();

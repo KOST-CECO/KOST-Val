@@ -146,6 +146,7 @@ public class GuiController
 	@FXML
 	private ScrollPane			scroll;
 
+	@SuppressWarnings("resource")
 	@FXML
 	void initialize()
 	{
