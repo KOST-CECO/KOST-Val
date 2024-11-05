@@ -18,6 +18,7 @@
 
 package ch.kostceco.tools.kostval;
 
+import java.awt.Desktop;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -194,9 +195,15 @@ public class GuiController
 
 		// Sprache definieren
 		locale = Locale.getDefault();
+		// neue static constructors
+		// Locale.of(language);
+		
+		// deprecated constructors
+		// Locale.of(language);
+		
 		try {
 			if ( locale.toString().startsWith( "fr" ) ) {
-				locale = new Locale( "fr" );
+				locale = Locale.of( "fr" );
 				arg2 = locale.toString();
 				lang.setValue( "Français" );
 				buttonFormat.setText( "Format uniquement" );
@@ -222,7 +229,7 @@ public class GuiController
 							"kostval-conf-FR.xsl", configFile );
 				}
 			} else if ( locale.toString().startsWith( "it" ) ) {
-				locale = new Locale( "it" );
+				locale = Locale.of( "it" );
 				arg2 = locale.toString();
 				lang.setValue( "Italiano" );
 				buttonFormat.setText( "Solo formati" );
@@ -248,7 +255,7 @@ public class GuiController
 							"kostval-conf-IT.xsl", configFile );
 				}
 			} else if ( locale.toString().startsWith( "en" ) ) {
-				locale = new Locale( "en" );
+				locale = Locale.of( "en" );
 				arg2 = locale.toString();
 				lang.setValue( "English" );
 				buttonFormat.setText( "Format only" );
@@ -274,7 +281,7 @@ public class GuiController
 							"kostval-conf-EN.xsl", configFile );
 				}
 			} else {
-				locale = new Locale( "de" );
+				locale = Locale.of( "de" );
 				arg2 = locale.toString();
 				lang.setValue( "Deutsch" );
 				buttonFormat.setText( "Nur Formate" );
@@ -466,8 +473,8 @@ public class GuiController
 					+ File.separator + "Anwendungshandbuch.pdf";
 			File dirDoc = new File( "doc" );
 			File[] docArray = dirDoc.listFiles();
-			if ( docArray != null ) { // Erforderliche Berechtigungen etc. sind
-										// vorhanden
+			if ( docArray != null ) { 
+			    // Erforderliche Berechtigungen etc. sind vorhanden
 				for ( int i = 0; i < docArray.length; i++ ) {
 					if ( docArray[i].isDirectory() ) {
 						// System.out.print( " (Ordner)\n" );
@@ -490,9 +497,13 @@ public class GuiController
 					}
 				}
 			}
-			Runtime.getRuntime()
-					.exec( "rundll32 url.dll,FileProtocolHandler " + docPath );
-		} catch ( IOException eManual ) {
+			Desktop desktop = Desktop.getDesktop();
+			if (desktop != null && desktop.isSupported(Desktop.Action.OPEN)) {
+			    desktop.open(new File(docPath));
+			} else {
+			   // System.err.println("No PDF-viewer");
+			}
+		    } catch (IOException eManual) {
 			eManual.printStackTrace();
 		}
 		buttonPrint.setDisable( true );
@@ -1801,7 +1812,7 @@ public class GuiController
 					Util.oldnewstring( "kostval-conf-EN.xsl",
 							"kostval-conf-DE.xsl", configFile );
 				}
-				locale = new Locale( "de" );
+				locale = Locale.of( "de" );
 			} else if ( selLang.equals( "English" ) ) {
 				buttonFormat.setText( "Format only" );
 				buttonSip.setText( "SIP incl. Format" );
@@ -1825,7 +1836,7 @@ public class GuiController
 					Util.oldnewstring( "kostval-conf-IT.xsl",
 							"kostval-conf-EN.xsl", configFile );
 				}
-				locale = new Locale( "en" );
+				locale = Locale.of( "en" );
 			} else if ( selLang.equals( "Italiano" ) ) {
 				buttonFormat.setText( "Solo formati" );
 				buttonSip.setText( "SIP incl. formati" );
@@ -1849,7 +1860,7 @@ public class GuiController
 					Util.oldnewstring( "kostval-conf-EN.xsl",
 							"kostval-conf-IT.xsl", configFile );
 				}
-				locale = new Locale( "it" );
+				locale = Locale.of( "it" );
 			} else {
 				buttonFormat.setText( "Format uniquement" );
 				buttonSip.setText( "SIP incl. formats" );
@@ -1873,7 +1884,7 @@ public class GuiController
 					Util.oldnewstring( "kostval-conf-EN.xsl",
 							"kostval-conf-FR.xsl", configFile );
 				}
-				locale = new Locale( "fr" );
+				locale = Locale.of( "fr" );
 			}
 		} catch ( IOException e1 ) {
 			e1.printStackTrace();

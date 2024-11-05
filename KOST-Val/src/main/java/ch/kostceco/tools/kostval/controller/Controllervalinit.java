@@ -67,13 +67,13 @@ public class Controllervalinit implements MessageConstants
 			return valInit;
 		}
 		if ( args[2].equalsIgnoreCase( "--de" ) ) {
-			locale = new Locale( "de" );
+			locale = Locale.of( "de" );
 		} else if ( args[2].equalsIgnoreCase( "--fr" ) ) {
-			locale = new Locale( "fr" );
+			locale = Locale.of( "fr" );
 		} else if ( args[2].equalsIgnoreCase( "--it" ) ) {
-			locale = new Locale( "it" );
+			locale = Locale.of( "it" );
 		} else if ( args[2].equalsIgnoreCase( "--en" ) ) {
-			locale = new Locale( "en" );
+			locale = Locale.of( "en" );
 		} else {
 			System.out.println( getTextResourceService().getText( locale,
 					ERROR_PARAMETER_USAGE ) );

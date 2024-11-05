@@ -26,7 +26,9 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -453,8 +455,15 @@ public class Util
 			throws IOException
 	{
 		try {
-			BufferedReader reader = new BufferedReader(
-					new FileReader( file ) );
+			FileInputStream fis = new FileInputStream( file );
+			InputStreamReader isr = new InputStreamReader( fis,
+					StandardCharsets.ISO_8859_1 );
+//					StandardCharsets.UTF_8 );
+			BufferedReader reader = new BufferedReader( isr );
+
+			
+/*			BufferedReader reader = new BufferedReader(
+					new FileReader( file ) );*/
 			String line = "", oldtext = "";
 			StringBuilder sb = new StringBuilder();
 			while ( (line = reader.readLine()) != null ) {
@@ -496,6 +505,8 @@ public class Util
 			newtext = newtext.replace( "\r\n</Message>", "</Message>" );
 			newtext = newtext.replace( "\r\n\r\n", "\r\n" );
 			newtext = newtext.replace( "\r\n\r\n", "\r\n" );
+			
+			newtext=Util.umlaute(newtext);
 			newtext = newtext.replace( (char) 0, (char) 32 );
 			FileWriter writer = new FileWriter( file );
 			writer.write( newtext );
@@ -554,22 +565,22 @@ public class Util
 		newstring = newstring.replaceAll( "Ü", "Ue" );
 		newstring = newstring.replaceAll( "Ö", "Oe" );
 		newstring = newstring.replaceAll( "Ä", "Ae" );
-		newstring = oldstring.replaceAll( "é", "e" );
+		newstring = newstring.replaceAll( "é", "e" );
 		newstring = newstring.replaceAll( "è", "e" );
 		newstring = newstring.replaceAll( "à", "a" );
 		newstring = newstring.replaceAll( "ê", "e" );
 		newstring = newstring.replaceAll( "ç", "c" );
-		newstring = oldstring.replaceAll( "'", "`" );
+		newstring = newstring.replaceAll( "'", "`" );
 		
-		newstring = oldstring.replaceAll( "Ã¼", "ue" );
+		newstring = newstring.replaceAll( "Ã¼", "ue" );
 		newstring = newstring.replaceAll( "Ã¶", "oe" );
 		newstring = newstring.replaceAll( "Ã¤", "ae" );
-		newstring = oldstring.replaceAll( "Ã©", "e" );
+		newstring = newstring.replaceAll( "Ã©", "e" );
 		newstring = newstring.replaceAll( "Ã¨", "e" );
 		newstring = newstring.replaceAll( "Ãª", "e" );
 		newstring = newstring.replaceAll( "Ã§", "c" );
 		
-		newstring = oldstring.replaceAll( "ￃﾼ", "ue" );
+		newstring = newstring.replaceAll( "ￃﾼ", "ue" );
 		return newstring;
 	}
 

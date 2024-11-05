@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Set;
 
 import ch.kostceco.tools.kosttools.fileservice.Jhove;
+import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationBjhoveValidationException;
 import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
@@ -125,6 +126,8 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 			int statuscounter = 0;
 			int ignorcounter = 0;
 			while ( (line = in.readLine()) != null ) {
+			    	line = Util.umlaute(line);
+			    	
 				/*
 				 * die Status-Zeile enthaelt diese Moeglichkeiten: Valider
 				 * Status: "Well-Formed and valid" Invalider Status:

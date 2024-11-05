@@ -221,7 +221,7 @@ public class ConfigController
 		// Sprache anhand configFile (HauptGui) setzten
 		try {
 			if ( Util.stringInFileLine( "kostval-conf-DE.xsl", configFile ) ) {
-				locale = new Locale( "de" );
+				locale = Locale.of( "de" );
 				buttonConfigApply.setText( "Anwenden" );
 				buttonConfigApplyStandard.setText( "Standard anwenden" );
 				buttonConfigCancel.setText( "Verwerfen" );
@@ -244,7 +244,7 @@ public class ConfigController
 				stringPuid = "weitere akzeptierte Dateiformate...";
 			} else if ( Util.stringInFileLine( "kostval-conf-FR.xsl",
 					configFile ) ) {
-				locale = new Locale( "fr" );
+				locale = Locale.of( "fr" );
 				buttonConfigApply.setText( "Appliquer" );
 				buttonConfigApplyStandard.setText( "Appliquer le standard" );
 				buttonConfigCancel.setText( "Annuler" );
@@ -268,7 +268,7 @@ public class ConfigController
 				stringPuid = "autres formats de fichiers acceptés...";
 			} else if ( Util.stringInFileLine( "kostval-conf-IT.xsl",
 					configFile ) ) {
-				locale = new Locale( "it" );
+				locale = Locale.of( "it" );
 				buttonConfigApply.setText( "Applica" );
 				buttonConfigApplyStandard.setText( "Applica predefinito" );
 				buttonConfigCancel.setText( "Annulla" );
@@ -291,7 +291,7 @@ public class ConfigController
 				minOne = "Almeno una variante deve essere consentita!";
 				stringPuid = "altri formati di file accettati...";
 			} else {
-				locale = new Locale( "en" );
+				locale = Locale.of( "en" );
 				buttonConfigApply.setText( "Apply" );
 				buttonConfigApplyStandard.setText( "Apply Standard" );
 				buttonConfigCancel.setText( "Cancel" );

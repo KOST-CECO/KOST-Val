@@ -111,7 +111,7 @@ public class ConfigControllerSip
 				checkWarningOldDok.setText(
 						"Nur Warnung bei alten Dokumenten (Entstehungszeitraum)" );
 				buttonConfigApply.setText( "anwenden" );
-				locale = new Locale( "de" );
+				locale = Locale.of( "de" );
 				minOne = "Mindestens eine Variante muss erlaubt sein!";
 			} else if ( Util.stringInFileLine( "kostval-conf-FR.xsl",
 					configFile ) ) {
@@ -122,7 +122,7 @@ public class ConfigControllerSip
 				checkWarningOldDok.setText(
 						"Avertissement uniquement pour les anciens documents (Entstehungszeitraum)" );
 				buttonConfigApply.setText( "appliquer" );
-				locale = new Locale( "fr" );
+				locale = Locale.of( "fr" );
 				minOne = "Au moins une variante doit etre autorisee !";
 			} else if ( Util.stringInFileLine( "kostval-conf-IT.xsl",
 					configFile ) ) {
@@ -133,7 +133,7 @@ public class ConfigControllerSip
 				checkWarningOldDok.setText(
 						"Avviso solo per i vecchi documenti (Entstehungszeitraum)" );
 				buttonConfigApply.setText( "Applica" );
-				locale = new Locale( "it" );
+				locale = Locale.of( "it" );
 				minOne = "Almeno una variante deve essere consentita!";
 			} else {
 				labelVal.setText( "Validation setting: SIP" );
@@ -143,7 +143,7 @@ public class ConfigControllerSip
 				checkWarningOldDok.setText(
 						"Only warning for old documents (Entstehungszeitraum)" );
 				buttonConfigApply.setText( "apply" );
-				locale = new Locale( "en" );
+				locale = Locale.of( "en" );
 				minOne = "At least one variant must be allowed!";
 			}
 		} catch ( Exception e ) {

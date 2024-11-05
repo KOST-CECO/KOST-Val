@@ -101,7 +101,7 @@ public class ConfigControllerOther
 		// Sprache anhand configFile (HauptGui) setzten
 		try {
 			if ( Util.stringInFileLine( "kostval-conf-DE.xsl", configFile ) ) {
-				locale = new Locale( "de" );
+				locale = Locale.of( "de" );
 				labelOther.setText( "Einstellungen weitere Formate" );
 				buttonConfigApply.setText( "anwenden" );
 				labelText.setText( "Text" );
@@ -115,7 +115,7 @@ public class ConfigControllerOther
 				labelOther2.setText( "Weitere" );
 			} else if ( Util.stringInFileLine( "kostval-conf-FR.xsl",
 					configFile ) ) {
-				locale = new Locale( "fr" );
+				locale = Locale.of( "fr" );
 				labelOther.setText( "Paramètres d'autres formats" );
 				buttonConfigApply.setText( "appliquer" );
 				labelText.setText( "Texte" );
@@ -129,7 +129,7 @@ public class ConfigControllerOther
 				labelOther2.setText( "Autres" );
 			} else if ( Util.stringInFileLine( "kostval-conf-IT.xsl",
 					configFile ) ) {
-				locale = new Locale( "it" );
+				locale = Locale.of( "it" );
 				labelOther.setText( "Impostazioni di altri formati" );
 				buttonConfigApply.setText( "Applica" );
 				labelText.setText( "Testo" );
@@ -142,7 +142,7 @@ public class ConfigControllerOther
 				labelMail.setText( "Mail" );
 				labelOther2.setText( "Altri" );
 			} else {
-				locale = new Locale( "en" );
+				locale = Locale.of( "en" );
 				labelOther.setText( "Settings other formats" );
 				buttonConfigApply.setText( "apply" );
 				labelText.setText( "Text" );
