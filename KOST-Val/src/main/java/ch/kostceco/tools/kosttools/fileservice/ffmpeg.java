@@ -22,67 +22,54 @@ import ch.kostceco.tools.kosttools.runtime.Cmd;
 
 /** @author Rc Claire Roethlisberger, KOST-CECO */
 
-public class ffmpeg
-{
-	private static String	exeDir		= ".." + File.separator + "ffmpeg"
-			+ File.separator + "bin";
-	private static String	ffmpegExe	= exeDir + File.separator
-			+ "ffmpeg.exe";
-	private static String	ffplayExe	= exeDir + File.separator
-			+ "ffplay.exe";
-	private static String	ffprobeExe	= exeDir + File.separator
-			+ "ffprobe.exe";
+public class ffmpeg {
+	private static String exeDir = ".." + File.separator + "ffmpeg" + File.separator + "bin";
+	private static String ffmpegExe = exeDir + File.separator + "ffmpeg.exe";
+	private static String ffplayExe = exeDir + File.separator + "ffplay.exe";
+	private static String ffprobeExe = exeDir + File.separator + "ffprobe.exe";
 
 	/**
-	 * fuehrt eine Analyse mit ffprobe via cmd durch und speichert das Ergebnis
-	 * in ein File (Output). Gibt zurueck ob Output existiert oder nicht
+	 * fuehrt eine Analyse mit ffprobe via cmd durch und speichert das Ergebnis in
+	 * ein File (Output). Gibt zurueck ob Output existiert oder nicht
 	 * 
 	 * ffprobe -show_format -show_streams -loglevel quiet videofile
 	 * 
-	 * @param fileToProbe
-	 *            Die zu analysierende Datei
-	 * @param output
-	 *            Ausgabe des Resultates
-	 * @param workDir
-	 *            Temporaeres Verzeichnis
-	 * @param dirOfJarPath
-	 *            String mit dem Pfad von wo das Programm gestartet wurde
+	 * @param fileToProbe  Die zu analysierende Datei
+	 * @param output       Ausgabe des Resultates
+	 * @param workDir      Temporaeres Verzeichnis
+	 * @param dirOfJarPath String mit dem Pfad von wo das Programm gestartet wurde
 	 * @return String ob Report existiert oder nicht ggf Exception
 	 */
-	public static String execFfprobe( File fileToProbe, File output,
-			File workDir, String dirOfJarPath ) throws InterruptedException
-	{
+	public static String execFfprobe(File fileToProbe, File output, File workDir, String dirOfJarPath)
+			throws InterruptedException {
 		boolean out = true;
-		File fffprobeExe = new File(
-				dirOfJarPath + File.separator + ffprobeExe );
+		File fffprobeExe = new File(dirOfJarPath + File.separator + ffprobeExe);
 		// falls das File von einem vorhergehenden Durchlauf bereits existiert,
 		// loeschen wir es
-		if ( output.exists() ) {
+		if (output.exists()) {
 			output.delete();
 		}
 
 		/*
-		 * Doppelleerschlag im Pfad oder im Namen einer Datei bereitet Probleme
-		 * (leerer Report) Video-Datei wird bei Doppelleerschlag in
-		 * temp-Verzeichnis kopiert
+		 * Doppelleerschlag im Pfad oder im Namen einer Datei bereitet Probleme (leerer
+		 * Report) Video-Datei wird bei Doppelleerschlag in temp-Verzeichnis kopiert
 		 */
 
 		// ffprobe -show_format -show_streams -loglevel quiet -o outputfile
 		// videofile
 		String command = "\"\"" + fffprobeExe.getAbsolutePath() + "\" "
-				+ "-show_format -show_streams -loglevel quiet -o \""
-				+ output.getAbsolutePath() + "\" \""
+				+ "-show_format -show_streams -loglevel quiet -o \"" + output.getAbsolutePath() + "\" \""
 				+ fileToProbe.getAbsolutePath() + "\"\"";
 
 		// System.out.println( "command: " + command );
 
-		String resultExec = Cmd.execToStringSplit( command, out, workDir );
+		String resultExec = Cmd.execToStringSplit(command, out, workDir);
 		// System.out.println( "resultExec: " + resultExec );
 
 		// ffprobe gibt keine Info raus, die replaced oder ignoriert werden muss
 
-		if ( resultExec.equals( "OK" ) ) {
-			if ( output.exists() ) {
+		if (resultExec.equals("OK")) {
+			if (output.exists()) {
 				// alles io bleibt bei OK
 			} else {
 				// Datei nicht angelegt...
@@ -93,52 +80,45 @@ public class ffmpeg
 	}
 
 	/**
-	 * fuehrt eine Analyse mit ffmpeg via cmd durch und speichert das Ergebnis
-	 * in ein File (Output). Gibt zurueck ob Output existiert oder nicht
+	 * fuehrt eine Analyse mit ffmpeg via cmd durch und speichert das Ergebnis in
+	 * ein File (Output). Gibt zurueck ob Output existiert oder nicht
 	 * 
 	 * ffmpeg.exe -v error "fileToFfmpeg" -f null - 2> output
 	 * 
-	 * @param fileToFfmpeg
-	 *            Die zu analysierende Datei
-	 * @param output
-	 *            Ausgabe des Resultates
-	 * @param workDir
-	 *            Temporaeres Verzeichnis
-	 * @param dirOfJarPath
-	 *            String mit dem Pfad von wo das Programm gestartet wurde
+	 * @param fileToFfmpeg Die zu analysierende Datei
+	 * @param output       Ausgabe des Resultates
+	 * @param workDir      Temporaeres Verzeichnis
+	 * @param dirOfJarPath String mit dem Pfad von wo das Programm gestartet wurde
 	 * @return String ob Report existiert oder nicht ggf Exception
 	 */
-	public static String execFfmpeg( File fileToFfmpeg, File output,
-			File workDir, String dirOfJarPath ) throws InterruptedException
-	{
+	public static String execFfmpeg(File fileToFfmpeg, File output, File workDir, String dirOfJarPath)
+			throws InterruptedException {
 		boolean out = true;
-		File fffmpegExe = new File( dirOfJarPath + File.separator + ffmpegExe );
+		File fffmpegExe = new File(dirOfJarPath + File.separator + ffmpegExe);
 		// falls das File von einem vorhergehenden Durchlauf bereits existiert,
 		// loeschen wir es
-		if ( output.exists() ) {
+		if (output.exists()) {
 			output.delete();
 		}
 
 		/*
-		 * Doppelleerschlag im Pfad oder im Namen einer Datei bereitet Probleme
-		 * (leerer Report) Video-Datei wird bei Doppelleerschlag in
-		 * temp-Verzeichnis kopiert
+		 * Doppelleerschlag im Pfad oder im Namen einer Datei bereitet Probleme (leerer
+		 * Report) Video-Datei wird bei Doppelleerschlag in temp-Verzeichnis kopiert
 		 */
 
 		// ffmpeg.exe -v error -i "fileToFfmpeg" -f null - 2> output
-		String command = "\"\"" + fffmpegExe.getAbsolutePath() + "\" "
-				+ "-v error -i \"" + fileToFfmpeg.getAbsolutePath()
-				+ "\" -f null - 2> \"" + output.getAbsolutePath() + "\"\"";
+		String command = "\"\"" + fffmpegExe.getAbsolutePath() + "\" " + "-v error -i \""
+				+ fileToFfmpeg.getAbsolutePath() + "\" -f null - 2> \"" + output.getAbsolutePath() + "\"\"";
 
 		// System.out.println( "command: " + command );
 
-		String resultExec = Cmd.execToString( command, out, workDir );
+		String resultExec = Cmd.execToString(command, out, workDir);
 		// System.out.println( "resultExec: " + resultExec );
 
 		// ffprobe gibt keine Info raus, die replaced oder ignoriert werden muss
 
-		if ( resultExec.equals( "OK" ) ) {
-			if ( output.exists() ) {
+		if (resultExec.equals("OK")) {
+			if (output.exists()) {
 				// alles io bleibt bei OK
 			} else {
 				// Datei nicht angelegt...
@@ -152,23 +132,20 @@ public class ffmpeg
 	 * fuehrt eine Kontrolle aller benoetigten Dateien von ffmpeg/ffplay/ffprobe
 	 * durch und gibt das Ergebnis als String zurueck
 	 * 
-	 * @param dirOfJarPath
-	 *            String mit dem Pfad von wo das Programm gestartet wurde
+	 * @param dirOfJarPath String mit dem Pfad von wo das Programm gestartet wurde
 	 * @return String mit Kontrollergebnis
 	 */
-	public static String checkFfmpegPlayProbe( String dirOfJarPath )
-	{
+	public static String checkFfmpegPlayProbe(String dirOfJarPath) {
 		String result = "";
 		boolean checkFiles = true;
 		// Pfad zum Programm existiert die Dateien?
 
-		File fffmpegExe = new File( dirOfJarPath + File.separator + ffmpegExe );
-		File fffplayExe = new File( dirOfJarPath + File.separator + ffplayExe );
-		File fffprobeExe = new File(
-				dirOfJarPath + File.separator + ffprobeExe );
+		File fffmpegExe = new File(dirOfJarPath + File.separator + ffmpegExe);
+		File fffplayExe = new File(dirOfJarPath + File.separator + ffplayExe);
+		File fffprobeExe = new File(dirOfJarPath + File.separator + ffprobeExe);
 
-		if ( !fffmpegExe.exists() ) {
-			if ( checkFiles ) {
+		if (!fffmpegExe.exists()) {
+			if (checkFiles) {
 				// erste fehlende Datei
 				result = " " + exeDir + ": " + ffmpegExe;
 				checkFiles = false;
@@ -177,8 +154,8 @@ public class ffmpeg
 				checkFiles = false;
 			}
 		}
-		if ( !fffplayExe.exists() ) {
-			if ( checkFiles ) {
+		if (!fffplayExe.exists()) {
+			if (checkFiles) {
 				// erste fehlende Datei
 				result = " " + exeDir + ": " + ffplayExe;
 				checkFiles = false;
@@ -187,8 +164,8 @@ public class ffmpeg
 				checkFiles = false;
 			}
 		}
-		if ( !fffprobeExe.exists() ) {
-			if ( checkFiles ) {
+		if (!fffprobeExe.exists()) {
+			if (checkFiles) {
 				// erste fehlende Datei
 				result = " " + exeDir + ": " + ffprobeExe;
 				checkFiles = false;
@@ -198,7 +175,7 @@ public class ffmpeg
 			}
 		}
 
-		if ( checkFiles ) {
+		if (checkFiles) {
 			result = "OK";
 		}
 		return result;

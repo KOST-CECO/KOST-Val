@@ -25,31 +25,26 @@ import org.apache.pdfbox.text.PDFTextStripper;
 
 /** @author Rc Claire Roethlisberger, KOST-CECO */
 
-public class pdfbox
-{
+public class pdfbox {
 
 	/**
-	 * Extrahiert den Text einer PDF-Datei und gibt das Ergebnis als String
-	 * zurueck
+	 * Extrahiert den Text einer PDF-Datei und gibt das Ergebnis als String zurueck
 	 * 
-	 * @param pdfFile
-	 *            PDF-Datei, welche ausgelesen werden soll
+	 * @param pdfFile PDF-Datei, welche ausgelesen werden soll
 	 * @return String mit Text aus dem PDF
 	 */
-	public static String getTextPdfbox( File pdfFile )
-			throws InterruptedException
-	{
+	public static String getTextPdfbox(File pdfFile) throws InterruptedException {
 		String resultExec = "NoTextInPdf";
 
 		try {
 			File file = pdfFile;
-			PDDocument pdDoc = Loader.loadPDF( file );
+			PDDocument pdDoc = Loader.loadPDF(file);
 			PDFTextStripper pdfStripper = new PDFTextStripper();
-			resultExec = pdfStripper.getText( pdDoc );
-			resultExec = resultExec.replaceAll( "\n", "__" );
+			resultExec = pdfStripper.getText(pdDoc);
+			resultExec = resultExec.replaceAll("\n", "__");
 
 			// System.out.println( resultExec );
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 

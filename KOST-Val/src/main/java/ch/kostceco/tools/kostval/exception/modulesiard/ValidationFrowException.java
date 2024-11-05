@@ -20,20 +20,17 @@ package ch.kostceco.tools.kostval.exception.modulesiard;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-public class ValidationFrowException extends KOSTValException
-{
+public class ValidationFrowException extends KOSTValException {
 
 	/** @author ??? */
 	private static final long serialVersionUID = 5060094531057249403L; // tbd
 
-	public ValidationFrowException()
-	{
+	public ValidationFrowException() {
 		super();
 	}
 
-	public ValidationFrowException( String message )
-	{
-		super( message );
+	public ValidationFrowException(String message) {
+		super(message);
 	}
 
 }

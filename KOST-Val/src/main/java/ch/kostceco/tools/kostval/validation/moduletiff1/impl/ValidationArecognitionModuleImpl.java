@@ -34,15 +34,11 @@ import ch.kostceco.tools.kostval.validation.moduletiff1.ValidationArecognitionMo
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
-public class ValidationArecognitionModuleImpl extends ValidationModuleImpl
-		implements ValidationArecognitionModule
-{
+public class ValidationArecognitionModuleImpl extends ValidationModuleImpl implements ValidationArecognitionModule {
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws ValidationArecognitionException
-	{
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws ValidationArecognitionException {
 
 		// Die Erkennung erfolgt bereits im Vorfeld
 		return true;

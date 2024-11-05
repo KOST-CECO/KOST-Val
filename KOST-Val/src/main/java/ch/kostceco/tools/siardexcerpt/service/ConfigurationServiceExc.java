@@ -23,7 +23,6 @@ import java.util.Map;
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
-public interface ConfigurationServiceExc extends ServiceExc
-{
-	Map<String, String> configMap( Locale locale );
+public interface ConfigurationServiceExc extends ServiceExc {
+	Map<String, String> configMap(Locale locale);
 }

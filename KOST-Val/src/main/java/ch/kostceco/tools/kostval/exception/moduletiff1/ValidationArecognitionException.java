@@ -20,15 +20,13 @@ package ch.kostceco.tools.kostval.exception.moduletiff1;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-public class ValidationArecognitionException extends KOSTValException
-{
+public class ValidationArecognitionException extends KOSTValException {
 
 	/** @author Rc Claire Roethlisberger, KOST-CECO */
 	private static final long serialVersionUID = -8816841335398903517L;
 
-	public ValidationArecognitionException( String message )
-	{
-		super( message );
+	public ValidationArecognitionException(String message) {
+		super(message);
 	}
 
 }

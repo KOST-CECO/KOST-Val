@@ -25,14 +25,12 @@ import java.util.List;
 import ch.kostceco.tools.kostval.logging.Logger;
 import ch.kostceco.tools.kostval.service.MessageService;
 
-public class MessageServiceImpl implements MessageService
-{
+public class MessageServiceImpl implements MessageService {
 	/** @author Rc Claire Roethlisberger, KOST-CECO */
 
-	private static final Logger	LOGGER	= new Logger(
-			MessageServiceImpl.class );
+	private static final Logger LOGGER = new Logger(MessageServiceImpl.class);
 
-	List<String[]>				stack	= new LinkedList<String[]>();
+	List<String[]> stack = new LinkedList<String[]>();
 
 	/*
 	 * @Override public void logDebug( String message ) { this.stack.add( new
@@ -40,15 +38,13 @@ public class MessageServiceImpl implements MessageService
 	 */
 
 	@Override
-	public void logError( String message )
-	{
-		this.stack.add( new String[] { MessageService.ERROR, message } );
+	public void logError(String message) {
+		this.stack.add(new String[] { MessageService.ERROR, message });
 	}
 
 	@Override
-	public void logFatal( String message )
-	{
-		this.stack.add( new String[] { MessageService.FATAL, message } );
+	public void logFatal(String message) {
+		this.stack.add(new String[] { MessageService.FATAL, message });
 	}
 
 	/*
@@ -57,37 +53,34 @@ public class MessageServiceImpl implements MessageService
 	 */
 
 	@Override
-	public void logWarning( String message )
-	{
-		this.stack.add( new String[] { MessageService.WARN, message } );
+	public void logWarning(String message) {
+		this.stack.add(new String[] { MessageService.WARN, message });
 	}
 
 	@Override
-	public void clear()
-	{
-		this.stack.removeAll( stack );
+	public void clear() {
+		this.stack.removeAll(stack);
 	}
 
 	@Override
-	public void print()
-	{
+	public void print() {
 		Iterator<String[]> it = this.stack.iterator();
-		while ( it.hasNext() ) {
+		while (it.hasNext()) {
 			String[] message = (String[]) it.next();
-			if ( message[0].equals( MessageService.DEBUG ) ) {
+			if (message[0].equals(MessageService.DEBUG)) {
 				// LOGGER.logDebug( message[1] );
 			}
-			if ( message[0].equals( MessageService.ERROR ) ) {
-				LOGGER.logError( message[1] );
+			if (message[0].equals(MessageService.ERROR)) {
+				LOGGER.logError(message[1]);
 			}
-			if ( message[0].equals( MessageService.FATAL ) ) {
-				LOGGER.logFatal( message[1] );
+			if (message[0].equals(MessageService.FATAL)) {
+				LOGGER.logFatal(message[1]);
 			}
-			if ( message[0].equals( MessageService.INFO ) ) {
+			if (message[0].equals(MessageService.INFO)) {
 				// LOGGER.logInfo( message[1] );
 			}
-			if ( message[0].equals( MessageService.WARN ) ) {
-				LOGGER.logWarning( message[1] );
+			if (message[0].equals(MessageService.WARN)) {
+				LOGGER.logWarning(message[1]);
 			}
 		}
 

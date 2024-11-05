@@ -43,82 +43,69 @@ import ch.enterag.utils.zip.Zip64File;
  *         welche groesser als 4 G sein koennen.
  */
 
-public class Zip64Archiver
-{
+public class Zip64Archiver {
 
 	static byte[] buffer = new byte[8192];
 
 	// Process only directories under dir
-	private static void visitAllDirs( File dir, Zip64File zip64File,
-			File originalDir )
-			throws FileNotFoundException, ZipException, IOException
-	{
-		if ( dir.isDirectory() ) {
+	private static void visitAllDirs(File dir, Zip64File zip64File, File originalDir)
+			throws FileNotFoundException, ZipException, IOException {
+		if (dir.isDirectory()) {
 			String sDirToCreate = dir.getAbsolutePath();
 
-			sDirToCreate = sDirToCreate.replace( originalDir.getAbsolutePath(),
-					"" );
-			if ( sDirToCreate.startsWith( "/" )
-					|| sDirToCreate.startsWith( "\\" ) ) {
-				sDirToCreate = sDirToCreate.substring( 1 );
+			sDirToCreate = sDirToCreate.replace(originalDir.getAbsolutePath(), "");
+			if (sDirToCreate.startsWith("/") || sDirToCreate.startsWith("\\")) {
+				sDirToCreate = sDirToCreate.substring(1);
 			}
-			if ( !sDirToCreate.endsWith( "/" ) && sDirToCreate.length() > 0 ) {
+			if (!sDirToCreate.endsWith("/") && sDirToCreate.length() > 0) {
 				sDirToCreate = sDirToCreate + "/";
 			}
-			sDirToCreate = sDirToCreate.replaceAll( "\\\\", "/" );
+			sDirToCreate = sDirToCreate.replaceAll("\\\\", "/");
 
-			if ( sDirToCreate.length() > 0 ) {
+			if (sDirToCreate.length() > 0) {
 
 				buffer = new byte[0];
-				Date dateModified = new Date( dir.lastModified() );
-				EntryOutputStream eos = zip64File.openEntryOutputStream(
-						sDirToCreate, FileEntry.iMETHOD_STORED, dateModified );
-				eos.write( buffer, 0, buffer.length );
+				Date dateModified = new Date(dir.lastModified());
+				EntryOutputStream eos = zip64File.openEntryOutputStream(sDirToCreate, FileEntry.iMETHOD_STORED,
+						dateModified);
+				eos.write(buffer, 0, buffer.length);
 				eos.close();
 
 			}
 
 			String[] children = dir.list();
-			for ( int i = 0; i < children.length; i++ ) {
-				visitAllDirs( new File( dir, children[i] ), zip64File,
-						originalDir );
+			for (int i = 0; i < children.length; i++) {
+				visitAllDirs(new File(dir, children[i]), zip64File, originalDir);
 			}
 		}
 	}
 
 	// Process only files under dir
-	private static void visitAllFiles( File dir, Zip64File zip64File,
-			File originalDir )
-			throws FileNotFoundException, ZipException, IOException
-	{
-		if ( dir.isDirectory() ) {
+	private static void visitAllFiles(File dir, Zip64File zip64File, File originalDir)
+			throws FileNotFoundException, ZipException, IOException {
+		if (dir.isDirectory()) {
 			String[] children = dir.list();
-			for ( int i = 0; i < children.length; i++ ) {
-				visitAllFiles( new File( dir, children[i] ), zip64File,
-						originalDir );
+			for (int i = 0; i < children.length; i++) {
+				visitAllFiles(new File(dir, children[i]), zip64File, originalDir);
 			}
 		} else {
 
 			String sFileToCreate = dir.getAbsolutePath();
 
-			sFileToCreate = sFileToCreate
-					.replace( originalDir.getAbsolutePath(), "" );
-			if ( sFileToCreate.startsWith( "/" )
-					|| sFileToCreate.startsWith( "\\" ) ) {
-				sFileToCreate = sFileToCreate.substring( 1 );
+			sFileToCreate = sFileToCreate.replace(originalDir.getAbsolutePath(), "");
+			if (sFileToCreate.startsWith("/") || sFileToCreate.startsWith("\\")) {
+				sFileToCreate = sFileToCreate.substring(1);
 			}
-			sFileToCreate = sFileToCreate.replaceAll( "\\\\", "/" );
+			sFileToCreate = sFileToCreate.replaceAll("\\\\", "/");
 
-			if ( sFileToCreate.length() > 0 ) {
+			if (sFileToCreate.length() > 0) {
 				buffer = new byte[8192];
-				Date dateModified = new Date( dir.lastModified() );
-				FileInputStream fis = new FileInputStream( dir );
-				EntryOutputStream eos = zip64File.openEntryOutputStream(
-						sFileToCreate, FileEntry.iMETHOD_DEFLATED,
-						dateModified );
-				for ( int iRead = fis.read( buffer ); iRead >= 0; iRead = fis
-						.read( buffer ) ) {
-					eos.write( buffer, 0, iRead );
+				Date dateModified = new Date(dir.lastModified());
+				FileInputStream fis = new FileInputStream(dir);
+				EntryOutputStream eos = zip64File.openEntryOutputStream(sFileToCreate, FileEntry.iMETHOD_DEFLATED,
+						dateModified);
+				for (int iRead = fis.read(buffer); iRead >= 0; iRead = fis.read(buffer)) {
+					eos.write(buffer, 0, iRead);
 				}
 				fis.close();
 				eos.close();
@@ -128,14 +115,12 @@ public class Zip64Archiver
 		}
 	}
 
-	public static void archivate( File inputDir, File outpFile )
-			throws FileNotFoundException, ZipException, IOException
-	{
-		Zip64File zip64File = new Zip64File( outpFile );
+	public static void archivate(File inputDir, File outpFile) throws FileNotFoundException, ZipException, IOException {
+		Zip64File zip64File = new Zip64File(outpFile);
 		// create all necessary folders first
-		Zip64Archiver.visitAllDirs( inputDir, zip64File, inputDir );
+		Zip64Archiver.visitAllDirs(inputDir, zip64File, inputDir);
 		// then create the file entries
-		Zip64Archiver.visitAllFiles( inputDir, zip64File, inputDir );
+		Zip64Archiver.visitAllFiles(inputDir, zip64File, inputDir);
 
 		zip64File.close();
 	}
@@ -143,42 +128,38 @@ public class Zip64Archiver
 	/**
 	 * Unzip it
 	 * 
-	 * @param zipFile
-	 *            path to input zip file
-	 * @param output
-	 *            path to zip file output folder
+	 * @param zipFile path to input zip file
+	 * @param output  path to zip file output folder
 	 */
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static void unzip( String inputZip, String destinationDirectory )
-			throws IOException
-	{
+	public static void unzip(String inputZip, String destinationDirectory) throws IOException {
 		int BUFFER = 2048;
 		List zipFiles = new ArrayList();
-		File sourceZipFile = new File( inputZip );
-		File unzipDestinationDirectory = new File( destinationDirectory );
+		File sourceZipFile = new File(inputZip);
+		File unzipDestinationDirectory = new File(destinationDirectory);
 		unzipDestinationDirectory.mkdir();
 
 		ZipFile zipFile;
 		// Open Zip file for reading
-		zipFile = new ZipFile( sourceZipFile, ZipFile.OPEN_READ );
+		zipFile = new ZipFile(sourceZipFile, ZipFile.OPEN_READ);
 
 		// Create an enumeration of the entries in the zip file
 		Enumeration zipFileEntries = zipFile.entries();
 
 		// Process each entry
-		while ( zipFileEntries.hasMoreElements() ) {
+		while (zipFileEntries.hasMoreElements()) {
 			// grab a zip file entry
 			ZipEntry entry = (ZipEntry) zipFileEntries.nextElement();
 
 			String currentEntry = entry.getName();
 
-			File destFile = new File( unzipDestinationDirectory, currentEntry );
+			File destFile = new File(unzipDestinationDirectory, currentEntry);
 			// destFile = new File(unzipDestinationDirectory,
 			// destFile.getName());
 
-			if ( currentEntry.endsWith( ".zip" ) ) {
-				zipFiles.add( destFile.getAbsolutePath() );
+			if (currentEntry.endsWith(".zip")) {
+				zipFiles.add(destFile.getAbsolutePath());
 			}
 
 			// grab file's parent directory structure
@@ -189,89 +170,79 @@ public class Zip64Archiver
 
 			try {
 				// extract file if not a directory
-				if ( !entry.isDirectory() ) {
-					BufferedInputStream is = new BufferedInputStream(
-							zipFile.getInputStream( entry ) );
+				if (!entry.isDirectory()) {
+					BufferedInputStream is = new BufferedInputStream(zipFile.getInputStream(entry));
 					int currentByte;
 					// establish buffer for writing file
 					byte data[] = new byte[BUFFER];
 
 					// write the current file to disk
-					FileOutputStream fos = new FileOutputStream( destFile );
-					BufferedOutputStream dest = new BufferedOutputStream( fos,
-							BUFFER );
+					FileOutputStream fos = new FileOutputStream(destFile);
+					BufferedOutputStream dest = new BufferedOutputStream(fos, BUFFER);
 
 					// read and write until last byte is encountered
-					while ( (currentByte = is.read( data, 0, BUFFER )) != -1 ) {
-						dest.write( data, 0, currentByte );
+					while ((currentByte = is.read(data, 0, BUFFER)) != -1) {
+						dest.write(data, 0, currentByte);
 					}
 					dest.flush();
 					dest.close();
 					is.close();
 				}
-			} catch ( IOException ioe ) {
+			} catch (IOException ioe) {
 				ioe.printStackTrace();
 			}
 		}
 		zipFile.close();
 
-		for ( Iterator iter = zipFiles.iterator(); iter.hasNext(); ) {
+		for (Iterator iter = zipFiles.iterator(); iter.hasNext();) {
 			String zipName = (String) iter.next();
-			unzip( zipName, destinationDirectory + File.separatorChar
-					+ zipName.substring( 0, zipName.lastIndexOf( ".zip" ) ) );
+			unzip(zipName,
+					destinationDirectory + File.separatorChar + zipName.substring(0, zipName.lastIndexOf(".zip")));
 		}
 	}
 
 	/**
 	 * Unzip it (zip64)
 	 * 
-	 * @param zipFile
-	 *            input zip file
-	 * @param output
-	 *            zip file output folder
+	 * @param zipFile input zip file
+	 * @param output  zip file output folder
 	 */
-	public static void unzip64( File inputFile, File outDir )
-			throws FileNotFoundException, ZipException, IOException
-	{
-		Zip64File zipfile = new Zip64File( inputFile );
+	public static void unzip64(File inputFile, File outDir) throws FileNotFoundException, ZipException, IOException {
+		Zip64File zipfile = new Zip64File(inputFile);
 
 		List<FileEntry> fileEntryList = zipfile.getListFileEntries();
-		for ( FileEntry fileEntry : fileEntryList ) {
+		for (FileEntry fileEntry : fileEntryList) {
 
-			if ( !fileEntry.isDirectory() ) {
+			if (!fileEntry.isDirectory()) {
 
 				byte[] buffer = new byte[8192];
 
 				// Write the file to the original position in the fs.
-				EntryInputStream eis = zipfile
-						.openEntryInputStream( fileEntry.getName() );
+				EntryInputStream eis = zipfile.openEntryInputStream(fileEntry.getName());
 
-				File newFile = new File( outDir, fileEntry.getName() );
+				File newFile = new File(outDir, fileEntry.getName());
 				File parent = newFile.getParentFile();
-				if ( !parent.exists() ) {
+				if (!parent.exists()) {
 					parent.mkdirs();
 				}
 
-				FileOutputStream fos = new FileOutputStream( newFile );
-				for ( int iRead = eis.read( buffer ); iRead >= 0; iRead = eis
-						.read( buffer ) ) {
-					fos.write( buffer, 0, iRead );
+				FileOutputStream fos = new FileOutputStream(newFile);
+				for (int iRead = eis.read(buffer); iRead >= 0; iRead = eis.read(buffer)) {
+					fos.write(buffer, 0, iRead);
 				}
 				fos.close();
 				eis.close();
 			} else {
 				/*
-				 * Scheibe den Ordner wenn noch nicht vorhanden an den richtigen
-				 * Ort respektive in den richtigen Ordner der ggf angelegt
-				 * werden muss. Dies muss gemacht werden, damit auch leere
-				 * Ordner geschrieben werden.
+				 * Scheibe den Ordner wenn noch nicht vorhanden an den richtigen Ort respektive
+				 * in den richtigen Ordner der ggf angelegt werden muss. Dies muss gemacht
+				 * werden, damit auch leere Ordner geschrieben werden.
 				 */
-				EntryInputStream eis = zipfile
-						.openEntryInputStream( fileEntry.getName() );
-				File newFolder = new File( outDir, fileEntry.getName() );
-				if ( !newFolder.exists() ) {
+				EntryInputStream eis = zipfile.openEntryInputStream(fileEntry.getName());
+				File newFolder = new File(outDir, fileEntry.getName());
+				if (!newFolder.exists()) {
 					File parent = newFolder.getParentFile();
-					if ( !parent.exists() ) {
+					if (!parent.exists()) {
 						parent.mkdirs();
 					}
 					newFolder.mkdirs();

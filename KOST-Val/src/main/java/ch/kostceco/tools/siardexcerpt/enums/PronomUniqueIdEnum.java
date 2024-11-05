@@ -21,14 +21,12 @@ public enum PronomUniqueIdEnum implements BaseEnumItemEnum {
 
 	private final long id;
 
-	PronomUniqueIdEnum( long id )
-	{
+	PronomUniqueIdEnum(long id) {
 		this.id = id;
 	}
 
 	@Override
-	public Long getId()
-	{
+	public Long getId() {
 		return id;
 	}
 

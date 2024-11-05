@@ -32,12 +32,9 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
  * Inkonsistenzen auflisten. ( //dokument[@id] => //datei[@id] ).
  */
 
-public interface Validation2dGeverFileIntegrityModule extends ValidationModule
-{
+public interface Validation2dGeverFileIntegrityModule extends ValidationModule {
 
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath )
-			throws Validation2dGeverFileIntegrityException;
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws Validation2dGeverFileIntegrityException;
 
 }

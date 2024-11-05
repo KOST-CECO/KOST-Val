@@ -33,125 +33,92 @@ import ch.kostceco.tools.kostval.validation.modulemkv.ValidationBHvalidationMkvM
 /**
  * kostval -->
  * 
- * Der Controller ruft die beoetigten Module zur Erkennung und spaeter zur Validierung der MKV-Datei in
- * der beoetigten Reihenfolge auf.
+ * Der Controller ruft die beoetigten Module zur Erkennung und spaeter zur
+ * Validierung der MKV-Datei in der beoetigten Reihenfolge auf.
  * 
  * Die Validierungs-Module werden mittels Spring-Dependency-Injection
  * eingebunden.
  */
 
-public class Controllermkv implements MessageConstants
-{
+public class Controllermkv implements MessageConstants {
 
-	private TextResourceService				textResourceService;
+	private TextResourceService textResourceService;
 
-	private ValidationAvalidationMkvModule	validationAvalidationMkvModule;
-	private ValidationBHvalidationMkvModule	validationBHvalidationMkvModule;
+	private ValidationAvalidationMkvModule validationAvalidationMkvModule;
+	private ValidationBHvalidationMkvModule validationBHvalidationMkvModule;
 
-	public ValidationAvalidationMkvModule getValidationAvalidationMkvModule()
-	{
+	public ValidationAvalidationMkvModule getValidationAvalidationMkvModule() {
 		return validationAvalidationMkvModule;
 	}
 
-	public void setValidationAvalidationMkvModule(
-			ValidationAvalidationMkvModule validationAvalidationMkvModule )
-	{
+	public void setValidationAvalidationMkvModule(ValidationAvalidationMkvModule validationAvalidationMkvModule) {
 		this.validationAvalidationMkvModule = validationAvalidationMkvModule;
 	}
 
-	public ValidationBHvalidationMkvModule getValidationBHvalidationMkvModule()
-	{
+	public ValidationBHvalidationMkvModule getValidationBHvalidationMkvModule() {
 		return validationBHvalidationMkvModule;
 	}
 
-	public void setValidationBHvalidationMkvModule(
-			ValidationBHvalidationMkvModule validationBHvalidationMkvModule )
-	{
+	public void setValidationBHvalidationMkvModule(ValidationBHvalidationMkvModule validationBHvalidationMkvModule) {
 		this.validationBHvalidationMkvModule = validationBHvalidationMkvModule;
 	}
 
-	public TextResourceService getTextResourceService()
-	{
+	public TextResourceService getTextResourceService() {
 		return textResourceService;
 	}
 
-	public void setTextResourceService(
-			TextResourceService textResourceService )
-	{
+	public void setTextResourceService(TextResourceService textResourceService) {
 		this.textResourceService = textResourceService;
 	}
 
-	public boolean executeMandatory( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath )
-	{
+	public boolean executeMandatory(File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale, File logFile, String dirOfJarPath) {
 		boolean valid = true;
 
 		// Validation A
 		try {
-			if ( this.getValidationAvalidationMkvModule().validate( valDatei,
-					directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath ) ) {
-				this.getValidationAvalidationMkvModule().getMessageService()
-						.print();
+			if (this.getValidationAvalidationMkvModule().validate(valDatei, directoryOfLogfile, configMap, locale,
+					logFile, dirOfJarPath)) {
+				this.getValidationAvalidationMkvModule().getMessageService().print();
 			} else {
-				this.getValidationAvalidationMkvModule().getMessageService()
-						.print();
+				this.getValidationAvalidationMkvModule().getMessageService().print();
 				return false;
 			}
-		} catch ( ValidationAmkvvalidationException e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_A_MKV )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
-			this.getValidationAvalidationMkvModule().getMessageService()
-					.print();
+		} catch (ValidationAmkvvalidationException e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_MKV)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
+			this.getValidationAvalidationMkvModule().getMessageService().print();
 			return false;
-		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_A_MKV )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
+		} catch (Exception e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_MKV)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
 			return false;
 		}
 		return valid;
 
 	}
-	public boolean executeOptional( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath )
-	{
+
+	public boolean executeOptional(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) {
 
 		boolean valid = true;
 		// Validation Step B-H
 		try {
-			if ( this.getValidationBHvalidationMkvModule().validate( valDatei,
-					directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath ) ) {
-				this.getValidationBHvalidationMkvModule().getMessageService()
-						.print();
+			if (this.getValidationBHvalidationMkvModule().validate(valDatei, directoryOfLogfile, configMap, locale,
+					logFile, dirOfJarPath)) {
+				this.getValidationBHvalidationMkvModule().getMessageService().print();
 			} else {
-				this.getValidationBHvalidationMkvModule().getMessageService()
-						.print();
-					valid = false;
+				this.getValidationBHvalidationMkvModule().getMessageService().print();
+				valid = false;
 			}
-		} catch ( ValidationBHmkvvalidationException e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_B_MKV )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
-			this.getValidationBHvalidationMkvModule().getMessageService()
-					.print();
+		} catch (ValidationBHmkvvalidationException e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_B_MKV)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
+			this.getValidationBHvalidationMkvModule().getMessageService().print();
 			return false;
-		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_B_MKV )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
+		} catch (Exception e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_B_MKV)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
 			return false;
 		}
 

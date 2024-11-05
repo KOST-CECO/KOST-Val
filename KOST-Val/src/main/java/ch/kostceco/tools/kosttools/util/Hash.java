@@ -24,100 +24,86 @@ import java.security.NoSuchAlgorithmException;
 
 /** @author Rc Claire Roethlisberger, KOST-CECO */
 
-public class Hash
-{
+public class Hash {
 	private static String hash;
 
 	/**
 	 * fuehrt die gewuenschte Hashwert-Berechnung durch und gibt diesen aus
 	 * 
-	 * @param fileFolder
-	 *            Datei oder Ordner fue die Berechnung
+	 * @param fileFolder Datei oder Ordner fue die Berechnung
 	 * @return String hashwert
 	 */
-	public static String getMd5( File fileFolder ) throws InterruptedException
-	{
+	public static String getMd5(File fileFolder) throws InterruptedException {
 		hash = "";
 		// Start MD5 Berechnung
 		String algo = "MD5";
 
-		hash = Hash.getHash( fileFolder, algo );
+		hash = Hash.getHash(fileFolder, algo);
 		return hash;
 	}
 
-	public static String getSha1( File fileFolder ) throws InterruptedException
-	{
+	public static String getSha1(File fileFolder) throws InterruptedException {
 		hash = "";
 		// Start SHA-1 Berechnung
 		String algo = "SHA-1";
 
-		hash = Hash.getHash( fileFolder, algo );
+		hash = Hash.getHash(fileFolder, algo);
 		return hash;
 	}
 
-	public static String getSha256( File fileFolder )
-			throws InterruptedException
-	{
+	public static String getSha256(File fileFolder) throws InterruptedException {
 		hash = "";
 		// Start SHA-256 Berechnung
 		String algo = "SHA-256";
 
-		hash = Hash.getHash( fileFolder, algo );
+		hash = Hash.getHash(fileFolder, algo);
 		return hash;
 	}
 
-	public static String getSha512( File fileFolder )
-			throws InterruptedException
-	{
+	public static String getSha512(File fileFolder) throws InterruptedException {
 		hash = "";
 		// Start SHA-512 Berechnung
 		String algo = "SHA-512";
 
-		hash = Hash.getHash( fileFolder, algo );
+		hash = Hash.getHash(fileFolder, algo);
 		return hash;
 	}
 
-	public static String getHash( File fileFolder, String algo )
-			throws InterruptedException
-	{
+	public static String getHash(File fileFolder, String algo) throws InterruptedException {
 		hash = "";
 		// Start Hash Berechnung
 		String output = algo;
-		if ( fileFolder.exists() ) {
-			if ( algo.equals( "MD5" ) || algo.equals( "SHA-1" )
-					|| algo.equals( "SHA-256" ) || algo.equals( "SHA-512" ) )
+		if (fileFolder.exists()) {
+			if (algo.equals("MD5") || algo.equals("SHA-1") || algo.equals("SHA-256") || algo.equals("SHA-512"))
 				// Andere wurden nicht getestet
 				try {
 					String filepath = fileFolder.getAbsolutePath();
 					MessageDigest messageDigest;
-					messageDigest = MessageDigest.getInstance( algo );
+					messageDigest = MessageDigest.getInstance(algo);
 
-					FileInputStream fileInput = new FileInputStream( filepath );
+					FileInputStream fileInput = new FileInputStream(filepath);
 					byte[] dataBytes = new byte[1024];
 					int bytesRead = 0;
-					while ( (bytesRead = fileInput.read( dataBytes )) != -1 ) {
-						messageDigest.update( dataBytes, 0, bytesRead );
+					while ((bytesRead = fileInput.read(dataBytes)) != -1) {
+						messageDigest.update(dataBytes, 0, bytesRead);
 					}
 					byte[] digestBytes = messageDigest.digest();
-					StringBuffer sb = new StringBuffer( "" );
+					StringBuffer sb = new StringBuffer("");
 
-					for ( int i = 0; i < digestBytes.length; i++ ) {
-						sb.append( Integer
-								.toString( (digestBytes[i] & 0xff) + 0x100, 16 )
-								.substring( 1 ) );
+					for (int i = 0; i < digestBytes.length; i++) {
+						sb.append(Integer.toString((digestBytes[i] & 0xff) + 0x100, 16).substring(1));
 					}
 					output = sb.toString();
-					while ( output.length() < 32 ) {
+					while (output.length() < 32) {
 						output = "0" + output;
 					}
 
 					fileInput.close();
-				} catch ( NoSuchAlgorithmException | IOException e1 ) {
+				} catch (NoSuchAlgorithmException | IOException e1) {
 					e1.printStackTrace();
 				}
 		} else {
-			System.out.println(
-					"Only MD5, SHA-1, SHA-256 & SHA-521. Not " + algo );
+			System.out.println("Only MD5, SHA-1, SHA-256 & SHA-521. Not " + algo);
 		}
 		hash = output;
 		return hash;

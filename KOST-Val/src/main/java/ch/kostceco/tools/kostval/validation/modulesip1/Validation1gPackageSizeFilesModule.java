@@ -31,11 +31,9 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
  * ist oder mehr als 5000 Dateien direkt im Ordner sind. *
  */
 
-public interface Validation1gPackageSizeFilesModule extends ValidationModule
-{
+public interface Validation1gPackageSizeFilesModule extends ValidationModule {
 
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws Validation1gPackageSizeFilesException;
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws Validation1gPackageSizeFilesException;
 
 }

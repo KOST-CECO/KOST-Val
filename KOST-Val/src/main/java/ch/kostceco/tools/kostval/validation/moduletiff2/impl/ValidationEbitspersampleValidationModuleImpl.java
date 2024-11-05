@@ -36,73 +36,65 @@ import ch.kostceco.tools.kostval.logging.Logtxt;
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
 
-public class ValidationEbitspersampleValidationModuleImpl extends
-		ValidationModuleImpl implements ValidationEbitspersampleValidationModule
-{
+public class ValidationEbitspersampleValidationModuleImpl extends ValidationModuleImpl
+		implements ValidationEbitspersampleValidationModule {
 
-	public static String	NEWLINE	= System.getProperty( "line.separator" );
+	public static String NEWLINE = System.getProperty("line.separator");
 
-	private boolean			min		= false;
+	private boolean min = false;
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath )
-			throws ValidationEbitspersampleValidationException
-	{
-		String onWork = configMap.get( "ShowProgressOnWork" );
-		if ( onWork.equals( "nomin" ) ) {
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws ValidationEbitspersampleValidationException {
+		String onWork = configMap.get("ShowProgressOnWork");
+		if (onWork.equals("nomin")) {
 			min = true;
 		}
 
 		boolean isValid = true;
 
 		/*
-		 * TODO: jhoveReport auswerten! Auf Exiftool wird verzichtet. Exiftool
-		 * verwendet Perl, welche seit einiger Zeit hohe nicht geloese
-		 * Sicherheitsrisiken birgt. zudem koennen die Metadaten vermehrt
-		 * komplett durch jhove ausgelesen werden. Jhove hat bereits einen der
-		 * Probleme, welche das teilweise die Ausgabe der Metadaten verhindert
-		 * behoben.
+		 * TODO: jhoveReport auswerten! Auf Exiftool wird verzichtet. Exiftool verwendet
+		 * Perl, welche seit einiger Zeit hohe nicht geloese Sicherheitsrisiken birgt.
+		 * zudem koennen die Metadaten vermehrt komplett durch jhove ausgelesen werden.
+		 * Jhove hat bereits einen der Probleme, welche das teilweise die Ausgabe der
+		 * Metadaten verhindert behoben.
 		 */
-		File jhoveReport = new File( directoryOfLogfile,
-				valDatei.getName() + ".jhove-log.txt" );
+		File jhoveReport = new File(directoryOfLogfile, valDatei.getName() + ".jhove-log.txt");
 
-		if ( !jhoveReport.exists() ) {
+		if (!jhoveReport.exists()) {
 			isValid = false;
-			if ( min ) {
+			if (min) {
 				return false;
 			} else {
-				Logtxt.logtxt( logFile, getTextResourceService()
-						.getText( locale, MESSAGE_XML_MODUL_B_TIFF )
-						+ getTextResourceService().getText( locale,
-								ERROR_XML_UNKNOWN, "No Jhove report." ) );
+				Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_B_TIFF)
+						+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, "No Jhove report."));
 				return false;
 			}
 		} else {
-			String bps1 = configMap.get( "AllowedBitspersample1" );
-			String bps2 = configMap.get( "AllowedBitspersample2" );
-			String bps4 = configMap.get( "AllowedBitspersample4" );
-			String bps8 = configMap.get( "AllowedBitspersample8" );
-			String bps16 = configMap.get( "AllowedBitspersample16" );
-			String bps32 = configMap.get( "AllowedBitspersample32" );
+			String bps1 = configMap.get("AllowedBitspersample1");
+			String bps2 = configMap.get("AllowedBitspersample2");
+			String bps4 = configMap.get("AllowedBitspersample4");
+			String bps8 = configMap.get("AllowedBitspersample8");
+			String bps16 = configMap.get("AllowedBitspersample16");
+			String bps32 = configMap.get("AllowedBitspersample32");
 
-			if ( bps1.equals( "" ) ) {
+			if (bps1.equals("")) {
 				bps1 = "DieseBitspersampleIstNichtErlaubt";
 			}
-			if ( bps2.equals( "" ) ) {
+			if (bps2.equals("")) {
 				bps2 = "DieseBitspersampleIstNichtErlaubt";
 			}
-			if ( bps4.equals( "" ) ) {
+			if (bps4.equals("")) {
 				bps4 = "DieseBitspersampleIstNichtErlaubt";
 			}
-			if ( bps8.equals( "" ) ) {
+			if (bps8.equals("")) {
 				bps8 = "DieseBitspersampleIstNichtErlaubt";
 			}
-			if ( bps16.equals( "" ) ) {
+			if (bps16.equals("")) {
 				bps16 = "DieseBitspersampleIstNichtErlaubt";
 			}
-			if ( bps32.equals( "" ) ) {
+			if (bps32.equals("")) {
 				bps32 = "DieseBitspersampleIstNichtErlaubt";
 			}
 
@@ -115,92 +107,62 @@ public class ValidationEbitspersampleValidationModuleImpl extends
 
 			Boolean tiffLine = false;
 			try {
-				BufferedReader in = new BufferedReader(
-						new FileReader( jhoveReport ) );
+				BufferedReader in = new BufferedReader(new FileReader(jhoveReport));
 				String line;
-				while ( (line = in.readLine()) != null ) {
+				while ((line = in.readLine()) != null) {
 					/*
-					 * zu analysierende TIFF-IFD-Zeile die BitsPerSample-Zeile
-					 * enthaaelt einer dieser Freitexte der BitsPerSampleart max
-					 * ist 1, 2, 4, 8, 16, 32 erlaubt
+					 * zu analysierende TIFF-IFD-Zeile die BitsPerSample-Zeile enthaaelt einer
+					 * dieser Freitexte der BitsPerSampleart max ist 1, 2, 4, 8, 16, 32 erlaubt
 					 * 
-					 * Varianten: BitsPerSample: 8 BitsPerSample: 8 8 8
-					 * BitsPerSample: 8, 8, 8 evtl noch mehr
+					 * Varianten: BitsPerSample: 8 BitsPerSample: 8 8 8 BitsPerSample: 8, 8, 8 evtl
+					 * noch mehr
 					 */
 
-					if ( line.contains( " Type: TIFF" ) ) {
+					if (line.contains(" Type: TIFF")) {
 						tiffLine = true;
-					} else if ( line.contains( " Type: " ) ) {
+					} else if (line.contains(" Type: ")) {
 						tiffLine = false;
 					}
 
-					if ( line.contains( " BitsPerSample: " ) && tiffLine ) {
+					if (line.contains(" BitsPerSample: ") && tiffLine) {
 						jhoveio = 1;
-						if ( ((line.contains( "BitsPerSample: 1 " )
-								|| (line.contains( "BitsPerSample: 1," ))
-								|| (line.endsWith( "BitsPerSample: 1" )))
-								&& bps1.contains( "1" ))
-								|| ((line.contains( "BitsPerSample: 2 " )
-										|| (line.contains(
-												"BitsPerSample: 2," ))
-										|| (line.endsWith(
-												"BitsPerSample: 2" )))
-										&& bps2.contains( "2" ))
-								|| ((line.contains( "BitsPerSample: 4 " )
-										|| (line.contains(
-												"BitsPerSample: 4," ))
-										|| (line.endsWith(
-												"BitsPerSample: 4" )))
-										&& bps4.contains( "4" ))
-								|| ((line.contains( "BitsPerSample: 8 " )
-										|| (line.contains(
-												"BitsPerSample: 8," ))
-										|| (line.endsWith(
-												"BitsPerSample: 8" )))
-										&& bps8.contains( "8" ))
-								|| ((line.contains( "BitsPerSample: 16 " )
-										|| (line.contains(
-												"BitsPerSample: 16," ))
-										|| (line.endsWith(
-												"BitsPerSample: 16" )))
-										&& bps16.contains( "16" ))
-								|| ((line.contains( "BitsPerSample: 32 " )
-										|| (line.contains(
-												"BitsPerSample: 32," ))
-										|| (line.endsWith(
-												"BitsPerSample: 32" )))
-										&& bps32.contains( "32" )) ) {
+						if (((line.contains("BitsPerSample: 1 ") || (line.contains("BitsPerSample: 1,"))
+								|| (line.endsWith("BitsPerSample: 1"))) && bps1.contains("1"))
+								|| ((line.contains("BitsPerSample: 2 ") || (line.contains("BitsPerSample: 2,"))
+										|| (line.endsWith("BitsPerSample: 2"))) && bps2.contains("2"))
+								|| ((line.contains("BitsPerSample: 4 ") || (line.contains("BitsPerSample: 4,"))
+										|| (line.endsWith("BitsPerSample: 4"))) && bps4.contains("4"))
+								|| ((line.contains("BitsPerSample: 8 ") || (line.contains("BitsPerSample: 8,"))
+										|| (line.endsWith("BitsPerSample: 8"))) && bps8.contains("8"))
+								|| ((line.contains("BitsPerSample: 16 ") || (line.contains("BitsPerSample: 16,"))
+										|| (line.endsWith("BitsPerSample: 16"))) && bps16.contains("16"))
+								|| ((line.contains("BitsPerSample: 32 ") || (line.contains("BitsPerSample: 32,"))
+										|| (line.endsWith("BitsPerSample: 32"))) && bps32.contains("32"))) {
 							// Valid
 						} else {
 							// Invalider Status
 							isValid = false;
-							if ( min ) {
+							if (min) {
 								in.close();
 								return false;
 							} else {
-								if ( !line.equals( oldErrorLine1 )
-										&& !line.equals( oldErrorLine2 )
-										&& !line.equals( oldErrorLine3 )
-										&& !line.equals( oldErrorLine4 )
-										&& !line.equals( oldErrorLine5 ) ) {
+								if (!line.equals(oldErrorLine1) && !line.equals(oldErrorLine2)
+										&& !line.equals(oldErrorLine3) && !line.equals(oldErrorLine4)
+										&& !line.equals(oldErrorLine5)) {
 									// neuer Fehler
-									Logtxt.logtxt( logFile,
-											getTextResourceService().getText(
-													locale,
-													MESSAGE_XML_MODUL_E_TIFF )
-													+ getTextResourceService()
-															.getText( locale,
-																	MESSAGE_XML_CG_INVALID,
-																	line ) );
-									if ( oldErrorLine1.equals( "" ) ) {
+									Logtxt.logtxt(logFile,
+											getTextResourceService().getText(locale, MESSAGE_XML_MODUL_E_TIFF)
+													+ getTextResourceService().getText(locale, MESSAGE_XML_CG_INVALID,
+															line));
+									if (oldErrorLine1.equals("")) {
 										oldErrorLine1 = line;
-									} else if ( oldErrorLine2.equals( "" ) ) {
+									} else if (oldErrorLine2.equals("")) {
 										oldErrorLine2 = line;
-									} else if ( oldErrorLine3.equals( "" ) ) {
+									} else if (oldErrorLine3.equals("")) {
 										oldErrorLine3 = line;
-									} else if ( oldErrorLine4.equals( "" ) ) {
+									} else if (oldErrorLine4.equals("")) {
 										oldErrorLine4 = line;
-									} else if ( oldErrorLine5.equals( "" ) ) {
+									} else if (oldErrorLine5.equals("")) {
 										oldErrorLine5 = line;
 									}
 								}
@@ -208,29 +170,25 @@ public class ValidationEbitspersampleValidationModuleImpl extends
 						}
 					}
 				}
-				if ( jhoveio == 0 ) {
+				if (jhoveio == 0) {
 					// default = 1
-					if ( bps1.contains( "1" ) ) {
+					if (bps1.contains("1")) {
 						// Valid
 					} else {
 						line = "Default BitsPerSample 1";
 
-						Logtxt.logtxt( logFile, getTextResourceService()
-								.getText( locale, MESSAGE_XML_MODUL_E_TIFF )
-								+ getTextResourceService().getText( locale,
-										MESSAGE_XML_CG_INVALID, line ) );
+						Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_E_TIFF)
+								+ getTextResourceService().getText(locale, MESSAGE_XML_CG_INVALID, line));
 					}
 				}
 				in.close();
-			} catch ( Exception e ) {
-				if ( min ) {
+			} catch (Exception e) {
+				if (min) {
 					return false;
 				} else {
 
-					Logtxt.logtxt( logFile, getTextResourceService()
-							.getText( locale, MESSAGE_XML_MODUL_E_TIFF )
-							+ getTextResourceService().getText( locale,
-									MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
+					Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_E_TIFF)
+							+ getTextResourceService().getText(locale, MESSAGE_XML_CG_CANNOTFINDETREPORT));
 					return false;
 				}
 			}

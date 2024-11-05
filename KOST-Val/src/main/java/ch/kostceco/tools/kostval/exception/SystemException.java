@@ -20,29 +20,24 @@ package ch.kostceco.tools.kostval.exception;
 
 /** @author Rc Claire Roethlisberger, KOST-CECO */
 
-public class SystemException extends Exception
-{
+public class SystemException extends Exception {
 
 	private static final long serialVersionUID = -5675144395744241578L;
 
-	public SystemException()
-	{
+	public SystemException() {
 		super();
 	}
 
-	public SystemException( String message, Throwable cause )
-	{
-		super( message, cause );
+	public SystemException(String message, Throwable cause) {
+		super(message, cause);
 	}
 
-	public SystemException( String message )
-	{
-		super( message );
+	public SystemException(String message) {
+		super(message);
 	}
 
-	public SystemException( Throwable cause )
-	{
-		super( cause );
+	public SystemException(Throwable cause) {
+		super(cause);
 	}
 
 }

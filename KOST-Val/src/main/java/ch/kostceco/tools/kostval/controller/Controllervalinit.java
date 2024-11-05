@@ -35,86 +35,72 @@ import ch.kostceco.tools.kostval.service.TextResourceService;
  * eingebunden.
  */
 
-public class Controllervalinit implements MessageConstants
-{
+public class Controllervalinit implements MessageConstants {
 
 	private static TextResourceService textResourceService;
 
-	public static TextResourceService getTextResourceService()
-	{
+	public static TextResourceService getTextResourceService() {
 		return textResourceService;
 	}
 
 	@SuppressWarnings("static-access")
-	public void setTextResourceService(
-			TextResourceService textResourceService )
-	{
+	public void setTextResourceService(TextResourceService textResourceService) {
 		this.textResourceService = textResourceService;
 	}
 
 	// TODO
-	public boolean valInit( String[] args, Map<String, String> configMap )
-			throws IOException
-	{
+	public boolean valInit(String[] args, Map<String, String> configMap) throws IOException {
 		boolean valInit = true;
 		Locale locale = Locale.getDefault();
 
 		// Ist die Anzahl Parameter (4) korrekt?
-		if ( args.length != 4 ) {
-			System.out.println( getTextResourceService().getText( locale,
-					ERROR_PARAMETER_USAGE ) );
+		if (args.length != 4) {
+			System.out.println(getTextResourceService().getText(locale, ERROR_PARAMETER_USAGE));
 			valInit = false;
 			return valInit;
 		}
-		if ( args[2].equalsIgnoreCase( "--de" ) ) {
-			locale = Locale.of( "de" );
-		} else if ( args[2].equalsIgnoreCase( "--fr" ) ) {
-			locale = Locale.of( "fr" );
-		} else if ( args[2].equalsIgnoreCase( "--it" ) ) {
-			locale = Locale.of( "it" );
-		} else if ( args[2].equalsIgnoreCase( "--en" ) ) {
-			locale = Locale.of( "en" );
+		if (args[2].equalsIgnoreCase("--de")) {
+			locale = Locale.of("de");
+		} else if (args[2].equalsIgnoreCase("--fr")) {
+			locale = Locale.of("fr");
+		} else if (args[2].equalsIgnoreCase("--it")) {
+			locale = Locale.of("it");
+		} else if (args[2].equalsIgnoreCase("--en")) {
+			locale = Locale.of("en");
 		} else {
-			System.out.println( getTextResourceService().getText( locale,
-					ERROR_PARAMETER_USAGE ) );
+			System.out.println(getTextResourceService().getText(locale, ERROR_PARAMETER_USAGE));
 			valInit = false;
 			return valInit;
 		}
-		if ( !args[0].equalsIgnoreCase( "--format" )
-				&& !args[0].equalsIgnoreCase( "--sip" )
-				&& !args[0].equalsIgnoreCase( "--onlysip" ) ) {
-			System.out.println( getTextResourceService().getText( locale,
-					ERROR_PARAMETER_USAGE ) );
+		if (!args[0].equalsIgnoreCase("--format") && !args[0].equalsIgnoreCase("--sip")
+				&& !args[0].equalsIgnoreCase("--onlysip")) {
+			System.out.println(getTextResourceService().getText(locale, ERROR_PARAMETER_USAGE));
 			valInit = false;
 			return valInit;
 		}
-		File init0File = new File( args[1] );
-		if ( !init0File.exists() ) {
-			System.out.println( getTextResourceService().getText( locale,
-					ERROR_VALFILE_FILENOTEXISTING ) );
+		File init0File = new File(args[1]);
+		if (!init0File.exists()) {
+			System.out.println(getTextResourceService().getText(locale, ERROR_VALFILE_FILENOTEXISTING));
 			valInit = false;
 			return valInit;
 		}
-		if ( !args[3].equalsIgnoreCase( "--xml" )
-				&& !args[3].equalsIgnoreCase( "--min" )
-				&& !args[3].equalsIgnoreCase( "--max" ) ) {
-			System.out.println( getTextResourceService().getText( locale,
-					ERROR_PARAMETER_USAGE ) );
+		if (!args[3].equalsIgnoreCase("--xml") && !args[3].equalsIgnoreCase("--min")
+				&& !args[3].equalsIgnoreCase("--max")) {
+			System.out.println(getTextResourceService().getText(locale, ERROR_PARAMETER_USAGE));
 			valInit = false;
 			return valInit;
 		} else {
 			/*
-			 * Angabe ob dargestellt werden soll, dass KOST-Val noch laeuft
-			 * --xml (=no) zaehler anzeigen --max (=yes) auch "Windrad" --min
-			 * (=nomin) zaehler anzeigen
+			 * Angabe ob dargestellt werden soll, dass KOST-Val noch laeuft --xml (=no)
+			 * zaehler anzeigen --max (=yes) auch "Windrad" --min (=nomin) zaehler anzeigen
 			 */
 			String showprogressonwork = "no";
-			if ( args[3].equalsIgnoreCase( "--max" ) ) {
+			if (args[3].equalsIgnoreCase("--max")) {
 				showprogressonwork = "yes";
-			} else if ( args[3].equalsIgnoreCase( "--min" ) ) {
+			} else if (args[3].equalsIgnoreCase("--min")) {
 				showprogressonwork = "nomin";
 			}
-			configMap.put( "ShowProgressOnWork", showprogressonwork );
+			configMap.put("ShowProgressOnWork", showprogressonwork);
 		}
 
 		return valInit;

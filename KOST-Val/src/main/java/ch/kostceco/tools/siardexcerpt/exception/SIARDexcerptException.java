@@ -21,19 +21,16 @@ package ch.kostceco.tools.siardexcerpt.exception;
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
 
-public class SIARDexcerptException extends Exception
-{
+public class SIARDexcerptException extends Exception {
 
 	private static final long serialVersionUID = -8666753675661449719L;
 
-	public SIARDexcerptException()
-	{
+	public SIARDexcerptException() {
 		super();
 	}
 
-	public SIARDexcerptException( String message )
-	{
-		super( message );
+	public SIARDexcerptException(String message) {
+		super(message);
 	}
 
 }

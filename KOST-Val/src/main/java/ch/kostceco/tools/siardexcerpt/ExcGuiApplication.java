@@ -25,57 +25,49 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-public class ExcGuiApplication extends Application
-{
+public class ExcGuiApplication extends Application {
 
 	@Override
-	public void start( Stage stage ) throws Exception
-	{
+	public void start(Stage stage) throws Exception {
 		try {
 			// festhalten von wo die Applikation (exe) gestartet wurde
 			String dirOfJarPath = "";
 
 			/*
-			 * dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist
-			 * ein generelles TODO in allen Modulen. Zuerst immer dirOfJarPath
-			 * ermitteln und dann alle Pfade mit dirOfJarPath + File.separator +
-			 * erweitern.
+			 * dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein
+			 * generelles TODO in allen Modulen. Zuerst immer dirOfJarPath ermitteln und
+			 * dann alle Pfade mit dirOfJarPath + File.separator + erweitern.
 			 */
-			String path = new File( "" ).getAbsolutePath();
+			String path = new File("").getAbsolutePath();
 			String locationOfJarPath = path;
 			dirOfJarPath = locationOfJarPath;
-			if ( locationOfJarPath.endsWith( ".jar" )
-					|| locationOfJarPath.endsWith( ".exe" )
-					|| locationOfJarPath.endsWith( "." ) ) {
-				File file = new File( locationOfJarPath );
+			if (locationOfJarPath.endsWith(".jar") || locationOfJarPath.endsWith(".exe")
+					|| locationOfJarPath.endsWith(".")) {
+				File file = new File(locationOfJarPath);
 				dirOfJarPath = file.getParent();
 			}
 
 			// Read file fxml and draw interface.
 			Parent root;
-			root = FXMLLoader
-					.load( getClass().getResource( "ExcGuiView.fxml" ) );
-			Scene scene = new Scene( root );
-			scene.getStylesheets().add( getClass()
-					.getResource( "application.css" ).toExternalForm() );
-			stage.setTitle( "SIARDexcerpt" );
-			Image toolIcon = new Image( "file:" + dirOfJarPath + File.separator
-					+ "doc" + File.separator + "excicon.png" );
-			stage.getIcons().add( toolIcon );
-			stage.setScene( scene );
+			root = FXMLLoader.load(getClass().getResource("ExcGuiView.fxml"));
+			Scene scene = new Scene(root);
+			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			stage.setTitle("SIARDexcerpt");
+			Image toolIcon = new Image(
+					"file:" + dirOfJarPath + File.separator + "doc" + File.separator + "excicon.png");
+			stage.getIcons().add(toolIcon);
+			stage.setScene(scene);
 			stage.show();
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	/**
-	 * @param args
-	 *            the command line arguments
+	 * @param args the command line arguments
 	 */
-	public static void main( String[] args )
-	{
-		launch( args );
+	public static void main(String[] args) {
+		launch(args);
 	}
 
 }

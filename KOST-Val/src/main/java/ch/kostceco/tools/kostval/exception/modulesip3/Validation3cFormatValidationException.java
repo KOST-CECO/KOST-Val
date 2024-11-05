@@ -20,20 +20,17 @@ package ch.kostceco.tools.kostval.exception.modulesip3;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-public class Validation3cFormatValidationException extends KOSTValException
-{
+public class Validation3cFormatValidationException extends KOSTValException {
 
 	/** @author razm Daniel Ludin, Bedag AG @version 0.2.0 */
 	private static final long serialVersionUID = -2554852466330221247L;
 
-	public Validation3cFormatValidationException()
-	{
+	public Validation3cFormatValidationException() {
 		super();
 	}
 
-	public Validation3cFormatValidationException( String message )
-	{
-		super( message );
+	public Validation3cFormatValidationException(String message) {
+		super(message);
 	}
 
 }

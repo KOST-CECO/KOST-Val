@@ -29,24 +29,21 @@ import java.io.PrintWriter;
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
-public class Logtxt
-{
+public class Logtxt {
 
-	public static void logtxt( File logFile, String error )
-	{
+	public static void logtxt(File logFile, String error) {
 
 		try {
-			if ( !logFile.exists() ) {
+			if (!logFile.exists()) {
 				logFile.getParentFile().mkdirs();
 				logFile.createNewFile();
 			}
 
-			PrintWriter out = new PrintWriter(
-					new BufferedWriter( new FileWriter( logFile, true ) ) );
-			out.println( error );
+			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(logFile, true)));
+			out.println(error);
 			out.close();
-		} catch ( IOException e ) {
-			System.out.println( "Logtxt: " + e );
+		} catch (IOException e) {
+			System.out.println("Logtxt: " + e);
 		}
 	}
 

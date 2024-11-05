@@ -31,75 +31,56 @@ import ch.kostceco.tools.kostval.validation.modulemp4.ValidationAvalidationMp4Mo
 /**
  * kostval -->
  * 
- * Der Controller ruft die beoetigten Module zur Erkennung und spaeter zur Validierung der MP4-Datei in
- * der beoetigten Reihenfolge auf.
+ * Der Controller ruft die beoetigten Module zur Erkennung und spaeter zur
+ * Validierung der MP4-Datei in der beoetigten Reihenfolge auf.
  * 
  * Die Validierungs-Module werden mittels Spring-Dependency-Injection
  * eingebunden.
  */
 
-public class Controllermp4 implements MessageConstants
-{
+public class Controllermp4 implements MessageConstants {
 
-	private TextResourceService				textResourceService;
+	private TextResourceService textResourceService;
 
-	private ValidationAvalidationMp4Module	validationAvalidationMp4Module;
+	private ValidationAvalidationMp4Module validationAvalidationMp4Module;
 
-	public ValidationAvalidationMp4Module getValidationAvalidationMp4Module()
-	{
+	public ValidationAvalidationMp4Module getValidationAvalidationMp4Module() {
 		return validationAvalidationMp4Module;
 	}
 
-	public void setValidationAvalidationMp4Module(
-			ValidationAvalidationMp4Module validationAvalidationMp4Module )
-	{
+	public void setValidationAvalidationMp4Module(ValidationAvalidationMp4Module validationAvalidationMp4Module) {
 		this.validationAvalidationMp4Module = validationAvalidationMp4Module;
 	}
 
-	public TextResourceService getTextResourceService()
-	{
+	public TextResourceService getTextResourceService() {
 		return textResourceService;
 	}
 
-	public void setTextResourceService(
-			TextResourceService textResourceService )
-	{
+	public void setTextResourceService(TextResourceService textResourceService) {
 		this.textResourceService = textResourceService;
 	}
 
-	public boolean executeMandatory( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath )
-	{
+	public boolean executeMandatory(File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale, File logFile, String dirOfJarPath) {
 		boolean valid = true;
 
 		// Validation A
 		try {
-			if ( this.getValidationAvalidationMp4Module().validate( valDatei,
-					directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath ) ) {
-				this.getValidationAvalidationMp4Module().getMessageService()
-						.print();
+			if (this.getValidationAvalidationMp4Module().validate(valDatei, directoryOfLogfile, configMap, locale,
+					logFile, dirOfJarPath)) {
+				this.getValidationAvalidationMp4Module().getMessageService().print();
 			} else {
-				this.getValidationAvalidationMp4Module().getMessageService()
-						.print();
+				this.getValidationAvalidationMp4Module().getMessageService().print();
 				return false;
 			}
-		} catch ( ValidationAmp4validationException e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_A_MP4)
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
-			this.getValidationAvalidationMp4Module().getMessageService()
-					.print();
+		} catch (ValidationAmp4validationException e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_MP4)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
+			this.getValidationAvalidationMp4Module().getMessageService().print();
 			return false;
-		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_A_MP4 )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
+		} catch (Exception e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_MP4)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
 			return false;
 		}
 		return valid;

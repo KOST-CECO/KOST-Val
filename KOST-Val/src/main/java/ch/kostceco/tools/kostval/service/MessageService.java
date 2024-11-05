@@ -23,24 +23,23 @@ package ch.kostceco.tools.kostval.service;
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
-public interface MessageService extends Service
-{
+public interface MessageService extends Service {
 
-	final static String	ERROR	= "0";
-	final static String	FATAL	= "1";
-	final static String	INFO	= "2";
-	final static String	WARN	= "3";
-	final static String	DEBUG	= "4";
+	final static String ERROR = "0";
+	final static String FATAL = "1";
+	final static String INFO = "2";
+	final static String WARN = "3";
+	final static String DEBUG = "4";
 
 	// void logInfo( String message );
 
 	// void logDebug( String message );
 
-	void logWarning( String message );
+	void logWarning(String message);
 
-	void logError( String message );
+	void logError(String message);
 
-	void logFatal( String message );
+	void logFatal(String message);
 
 	void clear();
 

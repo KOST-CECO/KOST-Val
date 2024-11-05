@@ -20,20 +20,17 @@ package ch.kostceco.tools.kostval.exception.moduletiff2;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-public class ValidationGtilesValidationException extends KOSTValException
-{
+public class ValidationGtilesValidationException extends KOSTValException {
 
 	/** @author Rc Claire Roethlisberger, KOST-CECO */
 	private static final long serialVersionUID = -2554852466330221247L;
 
-	public ValidationGtilesValidationException()
-	{
+	public ValidationGtilesValidationException() {
 		super();
 	}
 
-	public ValidationGtilesValidationException( String message )
-	{
-		super( message );
+	public ValidationGtilesValidationException(String message) {
+		super(message);
 	}
 
 }

@@ -33,11 +33,9 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
  * @author Ec Christian Eugster
  */
 
-public interface ValidationHcontentModule extends ValidationModule
-{
+public interface ValidationHcontentModule extends ValidationModule {
 
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws ValidationHcontentException;
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws ValidationHcontentException;
 
 }

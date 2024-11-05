@@ -30,11 +30,9 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
  * datei nodes den subnode name holen und diesen mit der Struktur vergleichen
  */
 
-public interface Validation2aFileIntegrityModule extends ValidationModule
-{
+public interface Validation2aFileIntegrityModule extends ValidationModule {
 
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws Validation2aFileIntegrityException;
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws Validation2aFileIntegrityException;
 
 }

@@ -20,16 +20,14 @@ package ch.kostceco.tools.kostval.exception.modulepng;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-public class ValidationApngvalidationException extends KOSTValException
-{
+public class ValidationApngvalidationException extends KOSTValException {
 
 	/** @author Rc Claire Roethlisberger, KOST-CECO */
 
 	private static final long serialVersionUID = -8816841335398903517L;
 
-	public ValidationApngvalidationException( String message )
-	{
-		super( message );
+	public ValidationApngvalidationException(String message) {
+		super(message);
 	}
 
 }

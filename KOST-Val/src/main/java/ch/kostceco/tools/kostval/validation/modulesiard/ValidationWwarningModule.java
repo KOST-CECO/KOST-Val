@@ -39,14 +39,11 @@ import ch.kostceco.tools.kostval.validation.bean.ValidationContext;
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
 
-public interface ValidationWwarningModule extends ValidationModule
-{
+public interface ValidationWwarningModule extends ValidationModule {
 
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws ValidationWwarningException;
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws ValidationWwarningException;
 
-	public boolean prepareValidation( ValidationContext validationContext )
-			throws IOException, JDOMException, Exception;
+	public boolean prepareValidation(ValidationContext validationContext) throws IOException, JDOMException, Exception;
 
 }

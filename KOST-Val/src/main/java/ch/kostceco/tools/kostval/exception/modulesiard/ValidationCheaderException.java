@@ -20,15 +20,13 @@ package ch.kostceco.tools.kostval.exception.modulesiard;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-public class ValidationCheaderException extends KOSTValException
-{
+public class ValidationCheaderException extends KOSTValException {
 
 	/** @author Rc Claire Roethlisberger, KOST-CECO */
 	private static final long serialVersionUID = 6749701283008757910L; // tbd
 
-	public ValidationCheaderException( String message )
-	{
-		super( message );
+	public ValidationCheaderException(String message) {
+		super(message);
 	}
 
 }

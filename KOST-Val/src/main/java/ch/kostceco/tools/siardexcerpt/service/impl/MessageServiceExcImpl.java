@@ -22,14 +22,12 @@ import java.util.List;
 import ch.kostceco.tools.kostval.logging.Logger;
 import ch.kostceco.tools.siardexcerpt.service.MessageServiceExc;
 
-public class MessageServiceExcImpl implements MessageServiceExc
-{
+public class MessageServiceExcImpl implements MessageServiceExc {
 	/** @author Rc Claire Roethlisberger, KOST-CECO */
 
-	private static final Logger	LOGGER	= new Logger(
-			MessageServiceExcImpl.class );
+	private static final Logger LOGGER = new Logger(MessageServiceExcImpl.class);
 
-	List<String[]>				stack	= new LinkedList<String[]>();
+	List<String[]> stack = new LinkedList<String[]>();
 
 	/*
 	 * @Override public void logDebug( String message ) { this.stack.add( new
@@ -37,15 +35,13 @@ public class MessageServiceExcImpl implements MessageServiceExc
 	 */
 
 	@Override
-	public void logError( String message )
-	{
-		this.stack.add( new String[] { MessageServiceExc.ERROR, message } );
+	public void logError(String message) {
+		this.stack.add(new String[] { MessageServiceExc.ERROR, message });
 	}
 
 	@Override
-	public void logFatal( String message )
-	{
-		this.stack.add( new String[] { MessageServiceExc.FATAL, message } );
+	public void logFatal(String message) {
+		this.stack.add(new String[] { MessageServiceExc.FATAL, message });
 	}
 
 	/*
@@ -54,37 +50,34 @@ public class MessageServiceExcImpl implements MessageServiceExc
 	 */
 
 	@Override
-	public void logWarning( String message )
-	{
-		this.stack.add( new String[] { MessageServiceExc.WARN, message } );
+	public void logWarning(String message) {
+		this.stack.add(new String[] { MessageServiceExc.WARN, message });
 	}
 
 	@Override
-	public void clear()
-	{
-		this.stack.removeAll( stack );
+	public void clear() {
+		this.stack.removeAll(stack);
 	}
 
 	@Override
-	public void print()
-	{
+	public void print() {
 		Iterator<String[]> it = this.stack.iterator();
-		while ( it.hasNext() ) {
+		while (it.hasNext()) {
 			String[] message = (String[]) it.next();
-			if ( message[0].equals( MessageServiceExc.DEBUG ) ) {
+			if (message[0].equals(MessageServiceExc.DEBUG)) {
 				// LOGGER.logDebug( message[1] );
 			}
-			if ( message[0].equals( MessageServiceExc.ERROR ) ) {
-				LOGGER.logError( message[1] );
+			if (message[0].equals(MessageServiceExc.ERROR)) {
+				LOGGER.logError(message[1]);
 			}
-			if ( message[0].equals( MessageServiceExc.FATAL ) ) {
-				LOGGER.logFatal( message[1] );
+			if (message[0].equals(MessageServiceExc.FATAL)) {
+				LOGGER.logFatal(message[1]);
 			}
-			if ( message[0].equals( MessageServiceExc.INFO ) ) {
+			if (message[0].equals(MessageServiceExc.INFO)) {
 				// LOGGER.logInfo( message[1] );
 			}
-			if ( message[0].equals( MessageServiceExc.WARN ) ) {
-				LOGGER.logWarning( message[1] );
+			if (message[0].equals(MessageServiceExc.WARN)) {
+				LOGGER.logWarning(message[1]);
 			}
 		}
 

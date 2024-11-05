@@ -20,20 +20,17 @@ package ch.kostceco.tools.kostval.exception.modulesip1;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-public class Validation1bFolderStructureException extends KOSTValException
-{
+public class Validation1bFolderStructureException extends KOSTValException {
 
 	/** @author razm Daniel Ludin, Bedag AG @version 0.2.0 */
 	private static final long serialVersionUID = -5743334009406087977L;
 
-	public Validation1bFolderStructureException()
-	{
+	public Validation1bFolderStructureException() {
 		super();
 	}
 
-	public Validation1bFolderStructureException( String message )
-	{
-		super( message );
+	public Validation1bFolderStructureException(String message) {
+		super(message);
 	}
 
 }

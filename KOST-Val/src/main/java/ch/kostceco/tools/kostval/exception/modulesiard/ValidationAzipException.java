@@ -20,15 +20,13 @@ package ch.kostceco.tools.kostval.exception.modulesiard;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-public class ValidationAzipException extends KOSTValException
-{
+public class ValidationAzipException extends KOSTValException {
 
 	/** @author Rc Claire Roethlisberger, KOST-CECO */
 	private static final long serialVersionUID = -8816841335398903517L;
 
-	public ValidationAzipException( String message )
-	{
-		super( message );
+	public ValidationAzipException(String message) {
+		super(message);
 	}
 
 }

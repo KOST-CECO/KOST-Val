@@ -33,11 +33,9 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
  * @author Sp Peter Schneider, Staatsarchiv Aargau
  */
 
-public interface ValidationGtableModule extends ValidationModule
-{
+public interface ValidationGtableModule extends ValidationModule {
 
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws ValidationGtableException;
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws ValidationGtableException;
 
 }

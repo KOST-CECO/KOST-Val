@@ -42,26 +42,23 @@ import ch.kostceco.tools.kostval.logging.Logtxt;
  */
 
 public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl
-		implements ValidationBprimaryStructureModule
-{
+		implements ValidationBprimaryStructureModule {
 
 	private boolean min = false;
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws ValidationBprimaryStructureException
-	{
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws ValidationBprimaryStructureException {
 		boolean showOnWork = false;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
-		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
-		if ( onWorkConfig.equals( "yes" ) ) {
+		String onWorkConfig = configMap.get("ShowProgressOnWork");
+		if (onWorkConfig.equals("yes")) {
 			// Ausgabe Modul Ersichtlich das KOST-Val arbeitet
 			showOnWork = true;
-			System.out.print( "B    " );
-			System.out.print( "\b\b\b\b\b" );
-		} else if ( onWorkConfig.equals( "nomin" ) ) {
+			System.out.print("B    ");
+			System.out.print("\b\b\b\b\b");
+		} else if (onWorkConfig.equals("nomin")) {
 			min = true;
 		}
 
@@ -69,64 +66,59 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl
 		Integer bExistsContentFolder = 0;
 
 		String toplevelDir = valDatei.getName();
-		int lastDotIdx = toplevelDir.lastIndexOf( "." );
-		toplevelDir = toplevelDir.substring( 0, lastDotIdx );
+		int lastDotIdx = toplevelDir.lastIndexOf(".");
+		toplevelDir = toplevelDir.substring(0, lastDotIdx);
 
 		try {
-			ZipFile zipfile = new ZipFile( valDatei.getAbsolutePath() );
+			ZipFile zipfile = new ZipFile(valDatei.getAbsolutePath());
 			Enumeration<? extends ZipEntry> entries = zipfile.entries();
-			while ( entries.hasMoreElements() ) {
+			while (entries.hasMoreElements()) {
 				ZipEntry entry = entries.nextElement();
 				/*
-				 * nur valid wenn es mit header oder content anfaengt dies
-				 * schliesst auch [Name].siard/[Name]/header und
-				 * [Name].siard/[Name]/content mit ein
+				 * nur valid wenn es mit header oder content anfaengt dies schliesst auch
+				 * [Name].siard/[Name]/header und [Name].siard/[Name]/content mit ein
 				 */
 				String name = entry.getName();
 				// System.out.println( "Entry: " + name );
-				if ( name.startsWith( "content/" ) ) {
+				if (name.startsWith("content/")) {
 					// erlaubter Inhalt content/...
 					bExistsContentFolder = 1;
 				} else {
-					if ( name.startsWith( "header/" ) ) {
+					if (name.startsWith("header/")) {
 						// erlaubter Inhalt header/...
 						bExistsHeaderFolder = 1;
 					} else {
 						// keines der beiden validen Moeglichkeiten -> Fehler
 						zipfile.close();
-						if ( min ) {
+						if (min) {
 							return false;
 						} else {
 
-							Logtxt.logtxt( logFile, getTextResourceService()
-									.getText( locale,
-											MESSAGE_XML_MODUL_B_SIARD )
-									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_B_NOTALLOWEDFILE,
-											name ) );
+							Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_B_SIARD)
+									+ getTextResourceService().getText(locale, MESSAGE_XML_B_NOTALLOWEDFILE, name));
 							// SIARD enthaelt ein File, das sich nicht dort
 							// befinden duerfte: {0}
 							return false;
 						}
 					}
 				}
-				if ( showOnWork ) {
-					if ( onWork == 410 ) {
+				if (showOnWork) {
+					if (onWork == 410) {
 						onWork = 2;
-						System.out.print( "B-   " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 110 ) {
+						System.out.print("B-   ");
+						System.out.print("\b\b\b\b\b");
+					} else if (onWork == 110) {
 						onWork = onWork + 1;
-						System.out.print( "B\\   " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 210 ) {
+						System.out.print("B\\   ");
+						System.out.print("\b\b\b\b\b");
+					} else if (onWork == 210) {
 						onWork = onWork + 1;
-						System.out.print( "B|   " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 310 ) {
+						System.out.print("B|   ");
+						System.out.print("\b\b\b\b\b");
+					} else if (onWork == 310) {
 						onWork = onWork + 1;
-						System.out.print( "B/   " );
-						System.out.print( "\b\b\b\b\b" );
+						System.out.print("B/   ");
+						System.out.print("\b\b\b\b\b");
 					} else {
 						onWork = onWork + 1;
 					}
@@ -134,44 +126,35 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl
 			}
 			zipfile.close();
 			zipfile = null;
-			if ( bExistsContentFolder == 0 ) {
-				if ( min ) {
+			if (bExistsContentFolder == 0) {
+				if (min) {
 					return false;
 				} else {
 
-					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale,
-									MESSAGE_XML_MODUL_B_SIARD )
-									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_B_CONTENT ) );
+					Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_B_SIARD)
+							+ getTextResourceService().getText(locale, MESSAGE_XML_B_CONTENT));
 					// SIARD enthaelt kein content-Ordner
 					return false;
 				}
 			}
-			if ( bExistsHeaderFolder == 0 ) {
-				if ( min ) {
+			if (bExistsHeaderFolder == 0) {
+				if (min) {
 					return false;
 				} else {
 
-					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale,
-									MESSAGE_XML_MODUL_B_SIARD )
-									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_B_HEADER ) );
+					Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_B_SIARD)
+							+ getTextResourceService().getText(locale, MESSAGE_XML_B_HEADER));
 					// SIARD enthaelt kein header-Ordner
 					return false;
 				}
 			}
-		} catch ( Exception e ) {
-			if ( min ) {
+		} catch (Exception e) {
+			if (min) {
 				return false;
 			} else {
 
-				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale,
-								MESSAGE_XML_MODUL_B_SIARD )
-								+ getTextResourceService().getText( locale,
-										ERROR_XML_UNKNOWN, e.getMessage() ) );
+				Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_B_SIARD)
+						+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
 				return false;
 			}
 		}

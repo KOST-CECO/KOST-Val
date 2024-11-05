@@ -20,16 +20,14 @@ package ch.kostceco.tools.kostval.exception.modulewave;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-public class ValidationAwavevalidationException extends KOSTValException
-{
+public class ValidationAwavevalidationException extends KOSTValException {
 
 	/** @author Rc Claire Roethlisberger, KOST-CECO */
 
 	private static final long serialVersionUID = -8816841335398903517L;
 
-	public ValidationAwavevalidationException( String message )
-	{
-		super( message );
+	public ValidationAwavevalidationException(String message) {
+		super(message);
 	}
 
 }

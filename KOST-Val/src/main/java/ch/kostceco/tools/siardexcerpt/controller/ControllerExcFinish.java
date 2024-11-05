@@ -41,31 +41,24 @@ import ch.kostceco.tools.kosttools.util.Util;
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
 
-public class ControllerExcFinish implements MessageConstants
-{
+public class ControllerExcFinish implements MessageConstants {
 
-	private TextResourceServiceExc	textResourceServiceExc;
-	private ConfigurationServiceExc	configurationServiceExc;
+	private TextResourceServiceExc textResourceServiceExc;
+	private ConfigurationServiceExc configurationServiceExc;
 
-	public TextResourceServiceExc getTextResourceServiceExc()
-	{
+	public TextResourceServiceExc getTextResourceServiceExc() {
 		return textResourceServiceExc;
 	}
 
-	public void setTextResourceServiceExc(
-			TextResourceServiceExc textResourceServiceExc )
-	{
+	public void setTextResourceServiceExc(TextResourceServiceExc textResourceServiceExc) {
 		this.textResourceServiceExc = textResourceServiceExc;
 	}
 
-	public ConfigurationServiceExc getConfigurationServiceExc()
-	{
+	public ConfigurationServiceExc getConfigurationServiceExc() {
 		return configurationServiceExc;
 	}
 
-	public void setConfigurationServiceExc(
-			ConfigurationServiceExc configurationServiceExc )
-	{
+	public void setConfigurationServiceExc(ConfigurationServiceExc configurationServiceExc) {
 		this.configurationServiceExc = configurationServiceExc;
 	}
 
@@ -82,97 +75,91 @@ public class ControllerExcFinish implements MessageConstants
 	 * @throws IOException
 	 */
 
-	public static boolean mainFinish( String[] args ) throws IOException
-	{
+	public static boolean mainFinish(String[] args) throws IOException {
 		boolean finish = true;
 		@SuppressWarnings("resource")
-		ApplicationContext context = new ClassPathXmlApplicationContext(
-				"classpath:config/applicationContext.xml" );
+		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:config/applicationContext.xml");
 
 		/**
 		 * SIARDexcerpt: Aufbau des Tools
 		 * 
-		 * 1) init: Config Kopieren und ggf SIARD-Datei ins Workverzeichnis
-		 * entpacken, config bei Bedarf ausfuellen
+		 * 1) init: Config Kopieren und ggf SIARD-Datei ins Workverzeichnis entpacken,
+		 * config bei Bedarf ausfuellen
 		 * 
-		 * 2) search: gemaess config die Tabelle mit Suchtext befragen und
-		 * Ausgabe des Resultates
+		 * 2) search: gemaess config die Tabelle mit Suchtext befragen und Ausgabe des
+		 * Resultates
 		 * 
-		 * 3) extract: mit den Keys anhand der config einen Records herausziehen
-		 * und anzeigen
+		 * 3) extract: mit den Keys anhand der config einen Records herausziehen und
+		 * anzeigen
 		 * 
 		 * 4) finish: Config-Kopie sowie Workverzeichnis loeschen
 		 */
 
 		/*
-		 * TODO: siehe Bemerkung im applicationContext-services.xml bezueglich
-		 * Injection in der Superklasse aller Impl-Klassen ValidationModuleImpl
+		 * TODO: siehe Bemerkung im applicationContext-services.xml bezueglich Injection
+		 * in der Superklasse aller Impl-Klassen ValidationModuleImpl
 		 * validationModuleImpl = (ValidationModuleImpl)
 		 * context.getBean("validationmoduleimpl");
 		 */
-		ControllerExcFinish controllerExcFinish = (ControllerExcFinish) context
-				.getBean( "controllerExcFinish" );
+		ControllerExcFinish controllerExcFinish = (ControllerExcFinish) context.getBean("controllerExcFinish");
 
 		Locale locale = Locale.getDefault();
 
-		if ( args[2].equalsIgnoreCase( "--de" ) ) {
-			locale = new Locale( "de" );
-		} else if ( args[2].equalsIgnoreCase( "--fr" ) ) {
-			locale = new Locale( "fr" );
-		} else if ( args[2].equalsIgnoreCase( "--en" ) ) {
-			locale = new Locale( "en" );
+		if (args[2].equalsIgnoreCase("--de")) {
+			locale = new Locale("de");
+		} else if (args[2].equalsIgnoreCase("--fr")) {
+			locale = new Locale("fr");
+		} else if (args[2].equalsIgnoreCase("--en")) {
+			locale = new Locale("en");
 		} else {
 			// ungueltige Eingabe Fehler wird ignoriert und default oder de wird
 			// angenommen
-			if ( locale.toString().startsWith( "fr" ) ) {
-				locale = new Locale( "fr" );
-			} else if ( locale.toString().startsWith( "en" ) ) {
-				locale = new Locale( "en" );
+			if (locale.toString().startsWith("fr")) {
+				locale = new Locale("fr");
+			} else if (locale.toString().startsWith("en")) {
+				locale = new Locale("en");
 			} else {
-				locale = new Locale( "de" );
+				locale = new Locale("de");
 			}
 		}
 
 		// Ist die Anzahl Parameter (mind 4) korrekt?
-		if ( args.length < 4 ) {
-			System.out.println( controllerExcFinish.getTextResourceServiceExc()
-					.getText( locale, EXC_ERROR_PARAMETER_USAGE ) );
+		if (args.length < 4) {
+			System.out.println(
+					controllerExcFinish.getTextResourceServiceExc().getText(locale, EXC_ERROR_PARAMETER_USAGE));
 			return false;
 		}
 
 		/*
-		 * arg 1 gibt den Pfad zur configdatei an. Da dieser in
-		 * ConfigurationServiceImpl hartcodiert ist, wird diese nach
+		 * arg 1 gibt den Pfad zur configdatei an. Da dieser in ConfigurationServiceImpl
+		 * hartcodiert ist, wird diese nach
 		 * ".siardexcerpt/configuration/SIARDexcerpt.conf.xml" kopiert.
 		 */
-		String userSIARDexcerpt = System.getenv( "USERPROFILE" )
-				+ File.separator + ".siardexcerpt";
-		File userSIARDexcerptFile = new File( userSIARDexcerpt );
-		if ( !userSIARDexcerptFile.exists() ) {
+		String userSIARDexcerpt = System.getenv("USERPROFILE") + File.separator + ".siardexcerpt";
+		File userSIARDexcerptFile = new File(userSIARDexcerpt);
+		if (!userSIARDexcerptFile.exists()) {
 			userSIARDexcerptFile.mkdirs();
 		}
 		String config = userSIARDexcerpt + File.separator + "configuration";
-		File config1 = new File( config );
-		if ( !config1.exists() ) {
+		File config1 = new File(config);
+		if (!config1.exists()) {
 			config1.mkdirs();
 		}
 
-		File configFileHard = new File(
-				config + File.separator + "SIARDexcerpt.conf.xml" );
+		File configFileHard = new File(config + File.separator + "SIARDexcerpt.conf.xml");
 
-		String pathToWorkDir = System.getenv( "USERPROFILE" ) + File.separator
-				+ ".siardexcerpt" + File.separator + "temp_SIARDexcerpt";
-		File tmpDir = new File( pathToWorkDir );
+		String pathToWorkDir = System.getenv("USERPROFILE") + File.separator + ".siardexcerpt" + File.separator
+				+ "temp_SIARDexcerpt";
+		File tmpDir = new File(pathToWorkDir);
 
 		// die Anwendung muss mindestens unter Java 8 laufen
-		String javaRuntimeVersion = System.getProperty( "java.vm.version" );
-		if ( javaRuntimeVersion.compareTo( "1.8.0" ) < 0 ) {
-			System.out.println( controllerExcFinish.getTextResourceServiceExc()
-					.getText( locale, EXC_ERROR_WRONG_JRE ) );
+		String javaRuntimeVersion = System.getProperty("java.vm.version");
+		if (javaRuntimeVersion.compareTo("1.8.0") < 0) {
+			System.out.println(controllerExcFinish.getTextResourceServiceExc().getText(locale, EXC_ERROR_WRONG_JRE));
 			return false;
 		}
 
-		System.out.println( "" );
+		System.out.println("");
 
 		/**
 		 * 4) finish: Config-Kopie sowie Workverzeichnis loeschen
@@ -180,15 +167,15 @@ public class ControllerExcFinish implements MessageConstants
 		 * TODO: Erledigt
 		 */
 
-		System.out.println( "SIARDexcerpt: finish" );
+		System.out.println("SIARDexcerpt: finish");
 
 		// Loeschen des Arbeitsverzeichnisses und confiFileHard, falls eines
 		// angelegt wurde
-		if ( tmpDir.exists() ) {
-			Util.deleteDir( tmpDir );
+		if (tmpDir.exists()) {
+			Util.deleteDir(tmpDir);
 		}
-		if ( configFileHard.exists() ) {
-			Util.deleteDir( configFileHard );
+		if (configFileHard.exists()) {
+			Util.deleteDir(configFileHard);
 		}
 		finish = true;
 		// End finish
@@ -196,15 +183,14 @@ public class ControllerExcFinish implements MessageConstants
 
 	}
 
-	public static void ElementToStream( Element element, OutputStream out )
-	{
+	public static void ElementToStream(Element element, OutputStream out) {
 		try {
-			DOMSource source = new DOMSource( element );
-			StreamResult result = new StreamResult( out );
+			DOMSource source = new DOMSource(element);
+			StreamResult result = new StreamResult(out);
 			TransformerFactory transFactory = TransformerFactory.newInstance();
 			Transformer transformer = transFactory.newTransformer();
-			transformer.transform( source, result );
-		} catch ( Exception ex ) {
+			transformer.transform(source, result);
+		} catch (Exception ex) {
 		}
 	}
 

@@ -45,11 +45,9 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
 
-public interface ValidationAvalidationAiModule extends ValidationModule
-{
+public interface ValidationAvalidationAiModule extends ValidationModule {
 
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws ValidationApdfavalidationException;
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws ValidationApdfavalidationException;
 
 }

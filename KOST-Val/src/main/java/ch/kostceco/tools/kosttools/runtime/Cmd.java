@@ -26,163 +26,163 @@ import java.io.InputStreamReader;
 
 public class Cmd {
 
-    /**
-     * fuehrt eine cmd durch und gibt den Text der Konsole als String zurueck
-     * 
-     * @param command String des Command, wie er in der Konsole eingegeben wird
-     * @param out     bei true wird der OUTPUT auch in den String geschrieben. Bei
-     *                False nur ERROR.
-     * @param workDir Temporaeres Verzeichnis
-     * @return String mit der Konsolenausgabe von ERROR und ggf OUTPUT
-     */
-    public static String execToString(String command, boolean out, File workDir) throws InterruptedException {
-	/*
-	 * command = "\"\"" + exeFile.getAbsolutePath() + "\"" +
-	 * " --noout --stream --nowarning --schema " + "\"" + xsdFile.getAbsolutePath()
-	 * + "\"" + " " + "\"" + xmlFile.getAbsolutePath() + "\"\"";
+	/**
+	 * fuehrt eine cmd durch und gibt den Text der Konsole als String zurueck
+	 * 
+	 * @param command String des Command, wie er in der Konsole eingegeben wird
+	 * @param out     bei true wird der OUTPUT auch in den String geschrieben. Bei
+	 *                False nur ERROR.
+	 * @param workDir Temporaeres Verzeichnis
+	 * @return String mit der Konsolenausgabe von ERROR und ggf OUTPUT
 	 */
+	public static String execToString(String command, boolean out, File workDir) throws InterruptedException {
+		/*
+		 * command = "\"\"" + exeFile.getAbsolutePath() + "\"" +
+		 * " --noout --stream --nowarning --schema " + "\"" + xsdFile.getAbsolutePath()
+		 * + "\"" + " " + "\"" + xmlFile.getAbsolutePath() + "\"\"";
+		 */
 
-	// System.out.println( "executing command: " + command );
-	Process p = null;
-	try {
-	    String[] cmdarray = new String[] { "cmd /c " + command };
-	    p = Runtime.getRuntime().exec(cmdarray, null, workDir);
-	    // p = Runtime.getRuntime().exec("cmd /c " + command, null,
-	    // workDir);
-	    // sed funktioniert nicht mit .split(" ")
+		// System.out.println( "executing command: " + command );
+		Process p = null;
+		try {
+			String[] cmdarray = new String[] { "cmd /c " + command };
+			p = Runtime.getRuntime().exec(cmdarray, null, workDir);
+			// p = Runtime.getRuntime().exec("cmd /c " + command, null,
+			// workDir);
+			// sed funktioniert nicht mit .split(" ")
 
-	    /*
-	     * @deprecated This method is error-prone and should not be used, the
-	     * corresponding method {@link #exec(String[])} or {@link ProcessBuilder} should
-	     * be used instead. The command string is broken into tokens using only
-	     * whitespace characters. For an argument with an embedded space, such as a
-	     * filename, this can cause problems as the token does not include the full
-	     * filename.
-	     * 
-	     * Solution
-	     * 
-	     * Deprecate the three methods and recommend using the corresponding
-	     * Runtime.exec(String[] cmdarray), Runtime.exec(String[] cmdarray, String[]
-	     * envp), Runtime.exec(String[] cmdarray, String[] envp, File dir) methods or
-	     * java.lang.ProcessBuilder.
-	     */
+			/*
+			 * @deprecated This method is error-prone and should not be used, the
+			 * corresponding method {@link #exec(String[])} or {@link ProcessBuilder} should
+			 * be used instead. The command string is broken into tokens using only
+			 * whitespace characters. For an argument with an embedded space, such as a
+			 * filename, this can cause problems as the token does not include the full
+			 * filename.
+			 * 
+			 * Solution
+			 * 
+			 * Deprecate the three methods and recommend using the corresponding
+			 * Runtime.exec(String[] cmdarray), Runtime.exec(String[] cmdarray, String[]
+			 * envp), Runtime.exec(String[] cmdarray, String[] envp, File dir) methods or
+			 * java.lang.ProcessBuilder.
+			 */
 
-	    // @Deprecated(since="18") =>Process exec(String command)
+			// @Deprecated(since="18") =>Process exec(String command)
 
-	} catch (IOException ex) {
-	    System.out.println("IOException exec P: " + ex);
-	}
-	String line = "";
-	String lineE = "";
-	String lineReturn = line;
-	try {
-	    if (out) {
-		// System.out.println( "OUTPUT" );
-		InputStream stream = p.getInputStream();
-		BufferedReader in = new BufferedReader(new InputStreamReader(stream));
-		while ((line = in.readLine()) != null) {
-		    System.out.println(line);
-		    if (lineReturn.equals("")) {
-			lineReturn = line;
-		    } else {
-			if (lineReturn.contains(line)) {
-			    // Fehler bereits festgehalten (dublikat)
-			} else {
-			    lineReturn = lineReturn + "</Message><Message>" + line;
+		} catch (IOException ex) {
+			System.out.println("IOException exec P: " + ex);
+		}
+		String line = "";
+		String lineE = "";
+		String lineReturn = line;
+		try {
+			if (out) {
+				// System.out.println( "OUTPUT" );
+				InputStream stream = p.getInputStream();
+				BufferedReader in = new BufferedReader(new InputStreamReader(stream));
+				while ((line = in.readLine()) != null) {
+					System.out.println(line);
+					if (lineReturn.equals("")) {
+						lineReturn = line;
+					} else {
+						if (lineReturn.contains(line)) {
+							// Fehler bereits festgehalten (dublikat)
+						} else {
+							lineReturn = lineReturn + "</Message><Message>" + line;
+						}
+					}
+				}
+				in.close();
 			}
-		    }
-		}
-		in.close();
-	    }
-	    // System.out.println( "ERROR-OUTPUT" );
-	    InputStream streamE = p.getErrorStream();
-	    BufferedReader inE = new BufferedReader(new InputStreamReader(streamE));
-	    while ((lineE = inE.readLine()) != null) {
-		// System.out.println(lineE);
-		if (lineReturn.equals("")) {
-		    lineReturn = "ERROR: " + lineE;
-		} else {
-		    if (lineReturn.contains(lineE)) {
-			// Fehler bereits festgehalten (dublikat)
-		    } else {
-			lineReturn = lineReturn + "</Message><Message>ERROR: " + lineE;
-		    }
-		}
-	    }
-	    inE.close();
-	} catch (IOException ex) {
-	    System.out.println("IOException exec Out Err: " + ex);
-	}
-	if (lineReturn.equals("")) {
-	    lineReturn = "OK";
-	}
-	// System.out.println("return String exec: "+lineReturn);
-	return lineReturn;
-    }
-
-    public static String execToStringSplit(String command, boolean out, File workDir) throws InterruptedException {
-	/*
-	 * command = "\"\"" + exeFile.getAbsolutePath() + "\"" +
-	 * " --noout --stream --nowarning --schema " + "\"" + xsdFile.getAbsolutePath()
-	 * + "\"" + " " + "\"" + xmlFile.getAbsolutePath() + "\"\"";
-	 */
-
-	// System.out.println( "executing command: " + command );
-	Process p = null;
-	try {
-	    p = Runtime.getRuntime().exec(("cmd /c " + command).split(" "), null, workDir);
-	    // .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag
-	    // vorhanden ist!
-
-	} catch (IOException ex) {
-	    System.out.println("IOException exec P: " + ex);
-	}
-	String line = "";
-	String lineE = "";
-	String lineReturn = line;
-	try {
-	    if (out) {
-		// System.out.println( "OUTPUT" );
-		InputStream stream = p.getInputStream();
-		BufferedReader in = new BufferedReader(new InputStreamReader(stream));
-		while ((line = in.readLine()) != null) {
-		    // System.out.println(line);
-		    if (lineReturn.equals("")) {
-			lineReturn = line;
-		    } else {
-			if (lineReturn.contains(line)) {
-			    // Fehler bereits festgehalten (dublikat)
-			} else {
-			    lineReturn = lineReturn + "</Message><Message>" + line;
+			// System.out.println( "ERROR-OUTPUT" );
+			InputStream streamE = p.getErrorStream();
+			BufferedReader inE = new BufferedReader(new InputStreamReader(streamE));
+			while ((lineE = inE.readLine()) != null) {
+				// System.out.println(lineE);
+				if (lineReturn.equals("")) {
+					lineReturn = "ERROR: " + lineE;
+				} else {
+					if (lineReturn.contains(lineE)) {
+						// Fehler bereits festgehalten (dublikat)
+					} else {
+						lineReturn = lineReturn + "</Message><Message>ERROR: " + lineE;
+					}
+				}
 			}
-		    }
+			inE.close();
+		} catch (IOException ex) {
+			System.out.println("IOException exec Out Err: " + ex);
 		}
-		in.close();
-	    }
-	    // System.out.println( "ERROR-OUTPUT" );
-	    InputStream streamE = p.getErrorStream();
-	    BufferedReader inE = new BufferedReader(new InputStreamReader(streamE));
-	    while ((lineE = inE.readLine()) != null) {
-		// System.out.println(lineE);
 		if (lineReturn.equals("")) {
-		    lineReturn = "ERROR: " + lineE;
-		} else {
-		    if (lineReturn.contains(lineE)) {
-			// Fehler bereits festgehalten (dublikat)
-		    } else {
-			lineReturn = lineReturn + "</Message><Message>ERROR: " + lineE;
-		    }
+			lineReturn = "OK";
 		}
-	    }
-	    inE.close();
-	} catch (IOException ex) {
-	    System.out.println("IOException exec Out Err: " + ex);
+		// System.out.println("return String exec: "+lineReturn);
+		return lineReturn;
 	}
-	if (lineReturn.equals("")) {
-	    lineReturn = "OK";
+
+	public static String execToStringSplit(String command, boolean out, File workDir) throws InterruptedException {
+		/*
+		 * command = "\"\"" + exeFile.getAbsolutePath() + "\"" +
+		 * " --noout --stream --nowarning --schema " + "\"" + xsdFile.getAbsolutePath()
+		 * + "\"" + " " + "\"" + xmlFile.getAbsolutePath() + "\"\"";
+		 */
+
+		// System.out.println( "executing command: " + command );
+		Process p = null;
+		try {
+			p = Runtime.getRuntime().exec(("cmd /c " + command).split(" "), null, workDir);
+			// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag
+			// vorhanden ist!
+
+		} catch (IOException ex) {
+			System.out.println("IOException exec P: " + ex);
+		}
+		String line = "";
+		String lineE = "";
+		String lineReturn = line;
+		try {
+			if (out) {
+				// System.out.println( "OUTPUT" );
+				InputStream stream = p.getInputStream();
+				BufferedReader in = new BufferedReader(new InputStreamReader(stream));
+				while ((line = in.readLine()) != null) {
+					// System.out.println(line);
+					if (lineReturn.equals("")) {
+						lineReturn = line;
+					} else {
+						if (lineReturn.contains(line)) {
+							// Fehler bereits festgehalten (dublikat)
+						} else {
+							lineReturn = lineReturn + "</Message><Message>" + line;
+						}
+					}
+				}
+				in.close();
+			}
+			// System.out.println( "ERROR-OUTPUT" );
+			InputStream streamE = p.getErrorStream();
+			BufferedReader inE = new BufferedReader(new InputStreamReader(streamE));
+			while ((lineE = inE.readLine()) != null) {
+				// System.out.println(lineE);
+				if (lineReturn.equals("")) {
+					lineReturn = "ERROR: " + lineE;
+				} else {
+					if (lineReturn.contains(lineE)) {
+						// Fehler bereits festgehalten (dublikat)
+					} else {
+						lineReturn = lineReturn + "</Message><Message>ERROR: " + lineE;
+					}
+				}
+			}
+			inE.close();
+		} catch (IOException ex) {
+			System.out.println("IOException exec Out Err: " + ex);
+		}
+		if (lineReturn.equals("")) {
+			lineReturn = "OK";
+		}
+		// System.out.println("return String exec: "+lineReturn);
+		return lineReturn;
 	}
-	// System.out.println("return String exec: "+lineReturn);
-	return lineReturn;
-    }
 
 }

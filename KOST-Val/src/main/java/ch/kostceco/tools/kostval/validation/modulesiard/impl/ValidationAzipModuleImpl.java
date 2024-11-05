@@ -46,54 +46,49 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationAzipModule;
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
 
-public class ValidationAzipModuleImpl extends ValidationModuleImpl
-		implements ValidationAzipModule
-{
+public class ValidationAzipModuleImpl extends ValidationModuleImpl implements ValidationAzipModule {
 
 	private boolean min = false;
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws ValidationAzipException
-	{
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws ValidationAzipException {
 		// Informationen zur Darstellung "onWork" holen
-		String onWork = configMap.get( "ShowProgressOnWork" );
-		if ( onWork.equals( "yes" ) ) {
+		String onWork = configMap.get("ShowProgressOnWork");
+		if (onWork.equals("yes")) {
 			// Ausgabe Modul Ersichtlich das KOST-Val arbeitet
-			System.out.print( "A    " );
-			System.out.print( "\b\b\b\b\b" );
-		} else if ( onWork.equals( "nomin" ) ) {
+			System.out.print("A    ");
+			System.out.print("\b\b\b\b\b");
+		} else if (onWork.equals("nomin")) {
 			min = true;
 		}
 
 		boolean validC = false;
 		/*
-		 * boolean store = false; boolean def = false; boolean defX = false;
-		 * boolean defN = false;
+		 * boolean store = false; boolean def = false; boolean defX = false; boolean
+		 * defN = false;
 		 */
 
 		// Die byte 8 und 9 müssen 00 00 STORE / 08 00 DEFLATE sein
 
 		/*
-		 * Dies ergibt jedoch nur ein Indix darauf, wie die Dateien gezipt sind.
-		 * Dies weil in einem Zip unterschiedliche Komprimierungen verwendet
-		 * werden können und die erste Kopmprimierung nicht das ganze Zip
-		 * abbildet.
+		 * Dies ergibt jedoch nur ein Indix darauf, wie die Dateien gezipt sind. Dies
+		 * weil in einem Zip unterschiedliche Komprimierungen verwendet werden können
+		 * und die erste Kopmprimierung nicht das ganze Zip abbildet.
 		 */
 		FileReader fr89 = null;
 		BufferedReader read = null;
 		try {
-			fr89 = new FileReader( valDatei );
-			read = new BufferedReader( fr89 );
+			fr89 = new FileReader(valDatei);
+			read = new BufferedReader(fr89);
 
 			// Hex 00 in Char umwandeln
 			String str00 = "00";
-			int i00 = Integer.parseInt( str00, 16 );
+			int i00 = Integer.parseInt(str00, 16);
 			char c00 = (char) i00;
 			// Hex 08 in Char umwandeln
 			String str08 = "08";
-			int i08 = Integer.parseInt( str08, 16 );
+			int i08 = Integer.parseInt(str08, 16);
 			char c08 = (char) i08;
 
 			// auslesen der 8-9 Zeichen der Datei
@@ -103,12 +98,12 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl
 			char[] buffer = new char[9];
 			char c8 = 0;
 			char c9 = 0;
-			length = read.read( buffer );
-			for ( i = 8; i != length; i++ ) {
-				if ( i == 8 ) {
+			length = read.read(buffer);
+			for (i = 8; i != length; i++) {
+				if (i == 8) {
 					c8 = buffer[i];
 				}
-				if ( i == 9 ) {
+				if (i == 9) {
 					c9 = buffer[i];
 				}
 			}
@@ -118,50 +113,48 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl
 			char[] charArray2 = new char[] { c00, c00 }; // store
 			char[] charArray3 = new char[] { c08, c00 }; // def
 
-			String hex8 = String.format( "%04x", (int) c8 );
-			int dec8 = Integer.parseInt( hex8, 16 );
+			String hex8 = String.format("%04x", (int) c8);
+			int dec8 = Integer.parseInt(hex8, 16);
 
-			if ( Arrays.equals( charArray1, charArray3 ) ) {
+			if (Arrays.equals(charArray1, charArray3)) {
 				// def: DEFLATED -> validC = true seit Addendum 1 durch ist
 				validC = true;
-			} else if ( Arrays.equals( charArray1, charArray2 ) ) {
+			} else if (Arrays.equals(charArray1, charArray2)) {
 				// hoechstwahrscheinlich ein unkomprimiertes ZIP
 				validC = true;
 			} else {
 				validC = false;
 			}
 
-			if ( validC ) {
+			if (validC) {
 				// Versuche das ZIP file zu oeffnen
 				// Zuerst mit Java.util.zip und dann Zip64_1.0
 				try {
 					Integer compressed = 1000;
-					ZipFile zf = new ZipFile( valDatei.getAbsolutePath() );
+					ZipFile zf = new ZipFile(valDatei.getAbsolutePath());
 					Enumeration<? extends ZipEntry> entries = zf.entries();
-					while ( entries.hasMoreElements() ) {
+					while (entries.hasMoreElements()) {
 						ZipEntry zEntry = entries.nextElement();
 						compressed = zEntry.getMethod();
 						// Compression method for uncompressed entries = STORED
 						// = 0
 						// Compression method for deflate compression = 8
-						if ( compressed == 8 ) {
+						if (compressed == 8) {
 							// def: DEFLATE
-						} else if ( compressed == 0 ) {
+						} else if (compressed == 0) {
 							// store element
 						} else {
 							// weder store noch def
 							read.close();
-							if ( min ) {
+							if (min) {
 								zf.close();
 								return false;
 							} else {
 
-								Logtxt.logtxt( logFile, getTextResourceService()
-										.getText( locale,
-												MESSAGE_XML_MODUL_A_SIARD )
-										+ getTextResourceService().getText(
-												locale, ERROR_XML_A_DEFLATED,
-												compressed ) );
+								Logtxt.logtxt(logFile,
+										getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_SIARD)
+												+ getTextResourceService().getText(locale, ERROR_XML_A_DEFLATED,
+														compressed));
 								zf.close();
 								return false;
 							}
@@ -171,20 +164,17 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl
 					zf.close();
 					// set to null
 					zf = null;
-				} catch ( Exception e ) {
+				} catch (Exception e) {
 					read.close();
 					// set to null
 					read = null;
 					fr89.close();
-					if ( min ) {
+					if (min) {
 						return false;
 					} else {
 
-						Logtxt.logtxt( logFile, getTextResourceService()
-								.getText( locale, MESSAGE_XML_MODUL_A_SIARD )
-								+ getTextResourceService().getText( locale,
-										ERROR_XML_A_INCORRECTZIP,
-										e.getMessage() ) );
+						Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_SIARD)
+								+ getTextResourceService().getText(locale, ERROR_XML_A_INCORRECTZIP, e.getMessage()));
 						return false;
 					}
 				}
@@ -192,18 +182,18 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl
 				Zip64File zfe = null;
 				try {
 					Integer compressed = 0;
-					zfe = new Zip64File( valDatei );
+					zfe = new Zip64File(valDatei);
 					// auslesen der Komprimierungsmethode aus allen FileEntries
 					// der zip(64)-Datei
 					List<FileEntry> fileEntryList = zfe.getListFileEntries();
-					for ( FileEntry fileEntry : fileEntryList ) {
+					for (FileEntry fileEntry : fileEntryList) {
 						compressed = fileEntry.getMethod();
 						// Compression method for uncompressed entries = STORED
 						// = 0
 						// Compression method for deflate compression = 8
-						if ( compressed == 8 ) {
+						if (compressed == 8) {
 							// def: DEFLATE
-						} else if ( compressed == 0 ) {
+						} else if (compressed == 0) {
 							// store element
 						} else {
 							// weder store noch def
@@ -211,16 +201,14 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl
 							// set to null
 							read = null;
 							fr89.close();
-							if ( min ) {
+							if (min) {
 								return false;
 							} else {
 
-								Logtxt.logtxt( logFile, getTextResourceService()
-										.getText( locale,
-												MESSAGE_XML_MODUL_A_SIARD )
-										+ getTextResourceService().getText(
-												locale, ERROR_XML_A_DEFLATED,
-												compressed ) );
+								Logtxt.logtxt(logFile,
+										getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_SIARD)
+												+ getTextResourceService().getText(locale, ERROR_XML_A_DEFLATED,
+														compressed));
 								return false;
 							}
 						}
@@ -229,20 +217,17 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl
 					zfe.close();
 					// set to null
 					zfe = null;
-				} catch ( Exception ee ) {
+				} catch (Exception ee) {
 					read.close();
 					// set to null
 					read = null;
 					fr89.close();
-					if ( min ) {
+					if (min) {
 						return false;
 					} else {
 
-						Logtxt.logtxt( logFile, getTextResourceService()
-								.getText( locale, MESSAGE_XML_MODUL_A_SIARD )
-								+ getTextResourceService().getText( locale,
-										ERROR_XML_A_INCORRECTZIP,
-										ee.getMessage() ) );
+						Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_SIARD)
+								+ getTextResourceService().getText(locale, ERROR_XML_A_INCORRECTZIP, ee.getMessage()));
 						return false;
 					}
 				}
@@ -252,30 +237,24 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl
 				// set to null
 				read = null;
 				fr89.close();
-				if ( min ) {
+				if (min) {
 					return false;
 				} else {
 
-					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale,
-									MESSAGE_XML_MODUL_A_SIARD )
-									+ getTextResourceService().getText( locale,
-											ERROR_XML_A_DEFLATED, dec8 ) );
+					Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_SIARD)
+							+ getTextResourceService().getText(locale, ERROR_XML_A_DEFLATED, dec8));
 					return false;
 				}
 			}
 			read.close();
 			fr89.close();
-		} catch ( Exception e ) {
-			if ( min ) {
+		} catch (Exception e) {
+			if (min) {
 				return false;
 			} else {
 
-				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale,
-								MESSAGE_XML_MODUL_A_SIARD )
-								+ getTextResourceService().getText( locale,
-										ERROR_XML_UNKNOWN, e.getMessage() ) );
+				Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_SIARD)
+						+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
 				return false;
 			}
 		}

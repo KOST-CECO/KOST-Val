@@ -38,68 +38,49 @@ import ch.kostceco.tools.kostval.validation.modulemp3.ValidationAvalidationMp3Mo
  * eingebunden.
  */
 
-public class Controllermp3 implements MessageConstants
-{
+public class Controllermp3 implements MessageConstants {
 
-	private TextResourceService				textResourceService;
+	private TextResourceService textResourceService;
 
-	private ValidationAvalidationMp3Module	validationAvalidationMp3Module;
+	private ValidationAvalidationMp3Module validationAvalidationMp3Module;
 
-	public ValidationAvalidationMp3Module getValidationAvalidationMp3Module()
-	{
+	public ValidationAvalidationMp3Module getValidationAvalidationMp3Module() {
 		return validationAvalidationMp3Module;
 	}
 
-	public void setValidationAvalidationMp3Module(
-			ValidationAvalidationMp3Module validationAvalidationMp3Module )
-	{
+	public void setValidationAvalidationMp3Module(ValidationAvalidationMp3Module validationAvalidationMp3Module) {
 		this.validationAvalidationMp3Module = validationAvalidationMp3Module;
 	}
 
-	public TextResourceService getTextResourceService()
-	{
+	public TextResourceService getTextResourceService() {
 		return textResourceService;
 	}
 
-	public void setTextResourceService(
-			TextResourceService textResourceService )
-	{
+	public void setTextResourceService(TextResourceService textResourceService) {
 		this.textResourceService = textResourceService;
 	}
 
-	public boolean executeMandatory( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath )
-	{
+	public boolean executeMandatory(File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale, File logFile, String dirOfJarPath) {
 		boolean valid = true;
 
 		// Validation A
 		try {
-			if ( this.getValidationAvalidationMp3Module().validate( valDatei,
-					directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath ) ) {
-				this.getValidationAvalidationMp3Module().getMessageService()
-						.print();
+			if (this.getValidationAvalidationMp3Module().validate(valDatei, directoryOfLogfile, configMap, locale,
+					logFile, dirOfJarPath)) {
+				this.getValidationAvalidationMp3Module().getMessageService().print();
 			} else {
-				this.getValidationAvalidationMp3Module().getMessageService()
-						.print();
+				this.getValidationAvalidationMp3Module().getMessageService().print();
 				return false;
 			}
-		} catch ( ValidationAmp3validationException e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_A_MP3 )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
-			this.getValidationAvalidationMp3Module().getMessageService()
-					.print();
+		} catch (ValidationAmp3validationException e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_MP3)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
+			this.getValidationAvalidationMp3Module().getMessageService().print();
 			return false;
-		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_A_MP3 )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
+		} catch (Exception e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_MP3)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
 			return false;
 		}
 		return valid;

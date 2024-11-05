@@ -28,137 +28,124 @@ import edu.harvard.hul.ois.jhove.module.TiffModule;
 
 /** @author Rc Claire Roethlisberger, KOST-CECO */
 
-public class Jhove
-{
+public class Jhove {
 
-	public static String valTiff( File tiffFile, File tiffReport,
-			String pathToWorkDir )
-	{
+	public static String valTiff(File tiffFile, File tiffReport, String pathToWorkDir) {
 		String status = " ??? ";
 		try {
 			String toplevelDir = tiffFile.getName();
-			int lastDotIdx = toplevelDir.lastIndexOf( "." );
-			toplevelDir = toplevelDir.substring( 0, lastDotIdx );
+			int lastDotIdx = toplevelDir.lastIndexOf(".");
+			toplevelDir = toplevelDir.substring(0, lastDotIdx);
 
 			// Vorbereitungen: tiffFile an die JHove Applikation uebergeben
 
 			/*
-			 * dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist
-			 * eine generelle Aufgabe in allen Modulen. Zuerst immer
-			 * dirOfJarPath ermitteln und dann alle Pfade mit dirOfJarPath +
-			 * File.separator + erweitern.
+			 * dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist eine
+			 * generelle Aufgabe in allen Modulen. Zuerst immer dirOfJarPath ermitteln und
+			 * dann alle Pfade mit dirOfJarPath + File.separator + erweitern.
 			 */
-			File pathJarFile20 = new File( ClassLoader.getSystemClassLoader()
-					.getResource( "." ).getPath() );
+			File pathJarFile20 = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath());
 			/*
-			 * wennn im Pfad ein Leerschlag ist, muss er noch normalisiert
-			 * werden
+			 * wennn im Pfad ein Leerschlag ist, muss er noch normalisiert werden
 			 */
 			String dirOfJarPath = pathJarFile20.getAbsolutePath();
-			dirOfJarPath = dirOfJarPath.replaceAll( "%20", " " );
-			pathJarFile20 = new File( dirOfJarPath );
+			dirOfJarPath = dirOfJarPath.replaceAll("%20", " ");
+			pathJarFile20 = new File(dirOfJarPath);
 
 			/*
 			 * Jhove schreibt ins Work-Verzeichnis, damit danach eine Kopie ins
-			 * Log-Verzeichnis abgelegt werden kann, welche auch geloescht
-			 * werden kann.
+			 * Log-Verzeichnis abgelegt werden kann, welche auch geloescht werden kann.
 			 */
-			String pathToJhoveOutput = System.getProperty( "java.io.tmpdir" );
-			File jhoveReportJTmp = new File( pathToJhoveOutput,
-					tiffFile.getName() + ".jhove-log.txt" );
-			if ( jhoveReportJTmp.exists() ) {
-				Util.deleteFile( jhoveReportJTmp );
+			String pathToJhoveOutput = System.getProperty("java.io.tmpdir");
+			File jhoveReportJTmp = new File(pathToJhoveOutput, tiffFile.getName() + ".jhove-log.txt");
+			if (jhoveReportJTmp.exists()) {
+				Util.deleteFile(jhoveReportJTmp);
 			}
-			File jhoveDir = new File( pathToJhoveOutput );
-			if ( !jhoveDir.exists() ) {
+			File jhoveDir = new File(pathToJhoveOutput);
+			if (!jhoveDir.exists()) {
 				jhoveDir.mkdir();
 			}
 
-			String pathToJhoveConfig = dirOfJarPath + File.separator
-					+ "configuration" + File.separator + "jhove.conf";
+			String pathToJhoveConfig = dirOfJarPath + File.separator + "configuration" + File.separator + "jhove.conf";
 
 			// Jhove direkt ansprechen via dispatch
 			try {
-				String NAME = new String( "Jhove" );
-				String RELEASE = new String( "1.9.5" ); // vom Modul
+				String NAME = new String("Jhove");
+				String RELEASE = new String("1.9.5"); // vom Modul
 				int[] DATE = new int[] { 2024, 8, 22 }; // vom Modul yyyy, mm,
-															// dd
-				String USAGE = new String( "no usage" );
-				String RIGHTS = new String( "LGPL v2.1" );
-				App app = new App( NAME, RELEASE, DATE, USAGE, RIGHTS );
+				// dd
+				String USAGE = new String("no usage");
+				String RIGHTS = new String("LGPL v2.1");
+				App app = new App(NAME, RELEASE, DATE, USAGE, RIGHTS);
 				JhoveBase je = new JhoveBase();
-				OutputHandler handler = je.getHandler( "TXT" );
+				OutputHandler handler = je.getHandler("TXT");
 
 				// check all modules => null oder new TiffModule ();
 				Module module = new TiffModule();
-				module.init( "" );
-				module.setDefaultParams( new ArrayList<String>() );
+				module.init("");
+				module.setDefaultParams(new ArrayList<String>());
 
 				String logLevel = null;
 				// null = SEVERE, WARNING, INFO, FINE, FINEST
 				// Ausgabe in Konsole --> kein Einfluss auf Report
-				je.setLogLevel( logLevel );
+				je.setLogLevel(logLevel);
 				String saxClass = null;
 				String configFile = pathToJhoveConfig;
-				je.init( configFile, saxClass );
+				je.init(configFile, saxClass);
 
-				je.setEncoding( "utf-8" );
-				je.setTempDirectory( pathToWorkDir + "/jhove" );
-				je.setBufferSize( 4096 );
-				je.setChecksumFlag( false );
-				je.setShowRawFlag( false );
-				je.setSignatureFlag( false );
+				je.setEncoding("utf-8");
+				je.setTempDirectory(pathToWorkDir + "/jhove");
+				je.setBufferSize(4096);
+				je.setChecksumFlag(false);
+				je.setShowRawFlag(false);
+				je.setSignatureFlag(false);
 				try {
 					Util.switchOffConsole();
 					String outputFile = jhoveReportJTmp.getAbsolutePath();
 					String[] dirFileOrUri = { tiffFile.getAbsolutePath() };
-					je.dispatch( app, module, null, handler, outputFile,
-							dirFileOrUri );
+					je.dispatch(app, module, null, handler, outputFile, dirFileOrUri);
 					/*
-					 * TODO: beim Ausfuehren von je.dispatch gibt es in seltenen
-					 * Faellen einen Fehler:
+					 * TODO: beim Ausfuehren von je.dispatch gibt es in seltenen Faellen einen
+					 * Fehler:
 					 * 
-					 * [Fatal Error] :174:20: Content is not allowed in trailing
-					 * section.
+					 * [Fatal Error] :174:20: Content is not allowed in trailing section.
 					 * 
-					 * Der Log wird aber korrekt erstellt und der Error kann
-					 * auch nicht unterdrueckt werden
+					 * Der Log wird aber korrekt erstellt und der Error kann auch nicht unterdrueckt
+					 * werden
 					 */
 					Util.switchOnConsole();
-				} catch ( Exception e ) {
-					if ( status.equals( " ??? " ) ) {
+				} catch (Exception e) {
+					if (status.equals(" ??? ")) {
 						status = "Jhove dispatch exception: " + e.getMessage();
 					} else {
-						status = status + " Jhove dispatch exception: "
-								+ e.getMessage();
+						status = status + " Jhove dispatch exception: " + e.getMessage();
 					}
 				}
 
 				// umkopieren, damit es geloescht werden kann
 				File afile = jhoveReportJTmp;
 				File bfile = tiffReport;
-				Util.copyFile( afile, bfile );
+				Util.copyFile(afile, bfile);
 
-			} catch ( Exception e ) {
-				if ( status.equals( " ??? " ) ) {
+			} catch (Exception e) {
+				if (status.equals(" ??? ")) {
 					status = "Jhove exception: " + e.getMessage();
 				} else {
 					status = status + " Jhove exception: " + e.getMessage();
 				}
 			}
-		} catch ( Exception e ) {
+		} catch (Exception e) {
 			Util.switchOnConsole();
-			if ( status.equals( " ??? " ) ) {
+			if (status.equals(" ??? ")) {
 				status = "Exception fileservice valTiff: " + e.getMessage();
 			} else {
-				status = status + " Exception fileservice valTiff: "
-						+ e.getMessage();
+				status = status + " Exception fileservice valTiff: " + e.getMessage();
 			}
 			return status;
 		} finally {
 			Util.switchOnConsole();
 		}
-		if ( status.equals( " ??? " ) ) {
+		if (status.equals(" ??? ")) {
 			status = "OK";
 		}
 		return status;

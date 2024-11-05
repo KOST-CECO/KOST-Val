@@ -22,106 +22,86 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /** @author Rc Claire Roethlisberger, KOST-CECO */
-public class Logger
-{
+public class Logger {
 
 	/** Apache Commons Log. */
 	private Log log;
 
 	/**
-	 * Instanzierung eines benannten Loggers. Der Name des Loggers entspricht
-	 * dem Namen der uebergebenen Klasse. Sinn: Beim Einsatz der Apache Log4j
-	 * API koennen ueber das Konfig File Package oder Klassenfilter gesetzt
-	 * werden.
+	 * Instanzierung eines benannten Loggers. Der Name des Loggers entspricht dem
+	 * Namen der uebergebenen Klasse. Sinn: Beim Einsatz der Apache Log4j API
+	 * koennen ueber das Konfig File Package oder Klassenfilter gesetzt werden.
 	 * 
-	 * @param clazz
-	 *            Class for which a log name will be derived.
+	 * @param clazz Class for which a log name will be derived.
 	 */
-	public Logger( Class<?> clazz )
-	{
+	public Logger(Class<?> clazz) {
 
 		// Log Instanz ueber Factory holen.
-		this.log = LogFactory.getLog( clazz );
+		this.log = LogFactory.getLog(clazz);
 	}
 
 	/**
 	 * Logt einen Fehler der die Stabilitaet des Programms beeinflusst.
 	 * 
-	 * @param message
-	 *            Fehlermeldung.
+	 * @param message Fehlermeldung.
 	 */
-	public void logFatal( String message )
-	{
-		this.log.fatal( message );
+	public void logFatal(String message) {
+		this.log.fatal(message);
 
 	}
 
 	/**
 	 * Logt einen Fehler der die Stabilitaet des Programms beeinflusst.
 	 * 
-	 * @param message
-	 *            Fehlermeldung.
-	 * @param t
-	 *            Ursache des Fehlers.
+	 * @param message Fehlermeldung.
+	 * @param t       Ursache des Fehlers.
 	 */
-	public void logFatal( String message, Throwable t )
-	{
-		this.log.fatal( message, t );
+	public void logFatal(String message, Throwable t) {
+		this.log.fatal(message, t);
 	}
 
 	/**
 	 * Logt einen Fehler, der nicht automatisch behoben werden kann.
 	 * 
-	 * @param message
-	 *            Fehlermeldung.
+	 * @param message Fehlermeldung.
 	 */
-	public void logError( String message )
-	{
-		this.log.error( message );
+	public void logError(String message) {
+		this.log.error(message);
 	}
 
 	/**
 	 * Logt einen Fehler, der nicht automatisch behoben werden kann.
 	 * 
-	 * @param message
-	 *            Fehlermeldung.
-	 * @param t
-	 *            Ursache des Fehlers.
+	 * @param message Fehlermeldung.
+	 * @param t       Ursache des Fehlers.
 	 */
-	public void logError( String message, Throwable t )
-	{
-		this.log.error( message, t );
+	public void logError(String message, Throwable t) {
+		this.log.error(message, t);
 	}
 
 	/**
 	 * Logt einen Fehler, der behoben oder uebergangen werden konnte.
 	 * 
-	 * @param message
-	 *            Meldung.
+	 * @param message Meldung.
 	 */
-	public void logWarning( String message )
-	{
-		this.log.warn( message );
+	public void logWarning(String message) {
+		this.log.warn(message);
 	}
 
 	/**
 	 * Logt einen Fehler, der behoben oder uebergangen werden konnte.
 	 * 
-	 * @param message
-	 *            Meldung.
-	 * @param t
-	 *            Ursache des Warnung.
+	 * @param message Meldung.
+	 * @param t       Ursache des Warnung.
 	 */
-	public void logWarning( String message, Throwable t )
-	{
-		this.log.warn( message, t );
+	public void logWarning(String message, Throwable t) {
+		this.log.warn(message, t);
 	}
 
 	/**
 	 * Logt eine Information zum Programmablauf.
 	 * 
-	 * @param message
-	 *            Meldung.
+	 * @param message Meldung.
 	 */
 	/*
 	 * public void logInfo( String message ) { // this.log.info( message );
@@ -160,8 +140,7 @@ public class Logger
 	 * 
 	 * @return true, falls aktiv, ansonsten false.
 	 */
-	public boolean isFatalEnabled()
-	{
+	public boolean isFatalEnabled() {
 		return this.log.isFatalEnabled();
 	}
 
@@ -170,8 +149,7 @@ public class Logger
 	 * 
 	 * @return true, falls aktiv, ansonsten false.
 	 */
-	public boolean isErrorEnabled()
-	{
+	public boolean isErrorEnabled() {
 		return this.log.isErrorEnabled();
 	}
 
@@ -180,8 +158,7 @@ public class Logger
 	 * 
 	 * @return true, falls aktiv, ansonsten false.
 	 */
-	public boolean isWarnEnabled()
-	{
+	public boolean isWarnEnabled() {
 		return this.log.isWarnEnabled();
 	}
 
@@ -191,18 +168,17 @@ public class Logger
 	 * @return true, falls aktiv, ansonsten false.
 	 */
 	/*
-	 * public boolean isInfoEnabled() { // return this.log.isInfoEnabled();
-	 * return true; }
+	 * public boolean isInfoEnabled() { // return this.log.isInfoEnabled(); return
+	 * true; }
 	 * 
 	 * /** Ist Logging auf Level Debug aktiv?
 	 * 
 	 * @return true, falls aktiv, ansonsten false.
 	 */
 	/*
-	 * public boolean isDebugEnabled() { // return this.log.isDebugEnabled();
-	 * return true; } /** Ist Logging auf Level Debug wird nicht mehr angeboten,
-	 * da es als einziges noch log4j benoetigte und es sicherheitsprobleme gibt
-	 * respektive gab
+	 * public boolean isDebugEnabled() { // return this.log.isDebugEnabled(); return
+	 * true; } /** Ist Logging auf Level Debug wird nicht mehr angeboten, da es als
+	 * einziges noch log4j benoetigte und es sicherheitsprobleme gibt respektive gab
 	 */
 
 }

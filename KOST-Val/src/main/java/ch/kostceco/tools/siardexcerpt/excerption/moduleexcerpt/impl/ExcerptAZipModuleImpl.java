@@ -32,23 +32,19 @@ import ch.kostceco.tools.siardexcerpt.excerption.moduleexcerpt.ExcerptAZipModule
 import ch.kostceco.tools.kosttools.util.Util;
 
 /** SIARD-Datei entpacken */
-public class ExcerptAZipModuleImpl extends ValidationModuleImpl
-		implements ExcerptAZipModule
-{
+public class ExcerptAZipModuleImpl extends ValidationModuleImpl implements ExcerptAZipModule {
 
-	public static String NEWLINE = System.getProperty( "line.separator" );
+	public static String NEWLINE = System.getProperty("line.separator");
 
 	@Override
-	public boolean validate( File siardDatei, File siardDateiNew,
-			String noString, Map<String, String> configMap, Locale locale )
-			throws ExcerptAZipException
-	{
+	public boolean validate(File siardDatei, File siardDateiNew, String noString, Map<String, String> configMap,
+			Locale locale) throws ExcerptAZipException {
 
 		boolean result = true;
 
 		String toplevelDir = siardDatei.getName();
-		int lastDotIdx = toplevelDir.lastIndexOf( "." );
-		toplevelDir = toplevelDir.substring( 0, lastDotIdx );
+		int lastDotIdx = toplevelDir.lastIndexOf(".");
+		toplevelDir = toplevelDir.substring(0, lastDotIdx);
 
 		try {
 			/*
@@ -58,42 +54,41 @@ public class ExcerptAZipModuleImpl extends ValidationModuleImpl
 			 * name="configurationService" ref="configurationService" />
 			 */
 			// Arbeitsverzeichnis zum Entpacken des Archivs erstellen
-			if ( siardDateiNew.exists() ) {
-				Util.deleteDir( siardDateiNew );
+			if (siardDateiNew.exists()) {
+				Util.deleteDir(siardDateiNew);
 			}
-			if ( !siardDateiNew.exists() ) {
+			if (!siardDateiNew.exists()) {
 				siardDateiNew.mkdir();
 			}
 
 			int BUFFER = 2048;
-			ZipFile zipfile = new ZipFile( siardDatei.getAbsolutePath() );
+			ZipFile zipfile = new ZipFile(siardDatei.getAbsolutePath());
 			Enumeration<? extends ZipEntry> entries = zipfile.entries();
 
 			// jeden entry durchgechen
-			while ( entries.hasMoreElements() ) {
+			while (entries.hasMoreElements()) {
 				ZipEntry entry = (ZipEntry) entries.nextElement();
 				String entryName = entry.getName();
-				File destFile = new File( siardDateiNew, entryName );
+				File destFile = new File(siardDateiNew, entryName);
 				// System.out.println( entryName + " - " +
 				// destFile.getAbsolutePath() );
 
 				// erstelle den Ueberordner
 				File destinationParent = destFile.getParentFile();
 				destinationParent.mkdirs();
-				if ( !entry.isDirectory() ) {
-					InputStream stream = zipfile.getInputStream( entry );
-					BufferedInputStream is = new BufferedInputStream( stream );
+				if (!entry.isDirectory()) {
+					InputStream stream = zipfile.getInputStream(entry);
+					BufferedInputStream is = new BufferedInputStream(stream);
 					int currentByte;
 
 					// erstellung Buffer zum schreiben der Dateien
 					byte data[] = new byte[BUFFER];
 
 					// schreibe die aktuelle Datei an den geuenschten Ort
-					FileOutputStream fos = new FileOutputStream( destFile );
-					BufferedOutputStream dest = new BufferedOutputStream( fos,
-							BUFFER );
-					while ( (currentByte = is.read( data, 0, BUFFER )) != -1 ) {
-						dest.write( data, 0, currentByte );
+					FileOutputStream fos = new FileOutputStream(destFile);
+					BufferedOutputStream dest = new BufferedOutputStream(fos, BUFFER);
+					while ((currentByte = is.read(data, 0, BUFFER)) != -1) {
+						dest.write(data, 0, currentByte);
 					}
 					dest.flush();
 					dest.close();
@@ -104,11 +99,9 @@ public class ExcerptAZipModuleImpl extends ValidationModuleImpl
 				}
 			}
 			zipfile.close();
-		} catch ( Exception e ) {
-			System.out.println( getTextResourceServiceExc().getText( locale,
-					EXC_MESSAGE_XML_MODUL_A ) );
-			System.out.println( getTextResourceServiceExc().getText( locale,
-					EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
+		} catch (Exception e) {
+			System.out.println(getTextResourceServiceExc().getText(locale, EXC_MESSAGE_XML_MODUL_A));
+			System.out.println(getTextResourceServiceExc().getText(locale, EXC_ERROR_XML_UNKNOWN, e.getMessage()));
 			return false;
 		}
 		return result;

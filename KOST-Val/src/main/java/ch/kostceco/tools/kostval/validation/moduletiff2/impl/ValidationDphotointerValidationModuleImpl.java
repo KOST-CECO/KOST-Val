@@ -36,81 +36,73 @@ import ch.kostceco.tools.kostval.logging.Logtxt;
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
 
-public class ValidationDphotointerValidationModuleImpl extends
-		ValidationModuleImpl implements ValidationDphotointerValidationModule
-{
+public class ValidationDphotointerValidationModuleImpl extends ValidationModuleImpl
+		implements ValidationDphotointerValidationModule {
 
-	public static String	NEWLINE	= System.getProperty( "line.separator" );
+	public static String NEWLINE = System.getProperty("line.separator");
 
-	private boolean			min		= false;
+	private boolean min = false;
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath )
-			throws ValidationDphotointerValidationException
-	{
-		String onWork = configMap.get( "ShowProgressOnWork" );
-		if ( onWork.equals( "nomin" ) ) {
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws ValidationDphotointerValidationException {
+		String onWork = configMap.get("ShowProgressOnWork");
+		if (onWork.equals("nomin")) {
 			min = true;
 		}
 
 		boolean isValid = true;
 
 		/*
-		 * TODO: jhoveReport auswerten! Auf Exiftool wird verzichtet. Exiftool
-		 * verwendet Perl, welche seit einiger Zeit hohe nicht geloese
-		 * Sicherheitsrisiken birgt. zudem koennen die Metadaten vermehrt
-		 * komplett durch jhove ausgelesen werden. Jhove hat bereits einen der
-		 * Probleme, welche das teilweise die Ausgabe der Metadaten verhindert
-		 * behoben.
+		 * TODO: jhoveReport auswerten! Auf Exiftool wird verzichtet. Exiftool verwendet
+		 * Perl, welche seit einiger Zeit hohe nicht geloese Sicherheitsrisiken birgt.
+		 * zudem koennen die Metadaten vermehrt komplett durch jhove ausgelesen werden.
+		 * Jhove hat bereits einen der Probleme, welche das teilweise die Ausgabe der
+		 * Metadaten verhindert behoben.
 		 */
-		File jhoveReport = new File( directoryOfLogfile,
-				valDatei.getName() + ".jhove-log.txt" );
+		File jhoveReport = new File(directoryOfLogfile, valDatei.getName() + ".jhove-log.txt");
 
-		if ( !jhoveReport.exists() ) {
+		if (!jhoveReport.exists()) {
 			isValid = false;
-			if ( min ) {
+			if (min) {
 				return false;
 			} else {
-				Logtxt.logtxt( logFile, getTextResourceService()
-						.getText( locale, MESSAGE_XML_MODUL_B_TIFF )
-						+ getTextResourceService().getText( locale,
-								ERROR_XML_UNKNOWN, "No Jhove report." ) );
+				Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_B_TIFF)
+						+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, "No Jhove report."));
 				return false;
 			}
 		} else {
-			String pi0 = configMap.get( "AllowedPhotointer0" );
-			String pi1 = configMap.get( "AllowedPhotointer1" );
-			String pi2 = configMap.get( "AllowedPhotointer2" );
-			String pi3 = configMap.get( "AllowedPhotointer3" );
-			String pi4 = configMap.get( "AllowedPhotointer4" );
-			String pi5 = configMap.get( "AllowedPhotointer5" );
-			String pi6 = configMap.get( "AllowedPhotointer6" );
-			String pi8 = configMap.get( "AllowedPhotointer8" );
+			String pi0 = configMap.get("AllowedPhotointer0");
+			String pi1 = configMap.get("AllowedPhotointer1");
+			String pi2 = configMap.get("AllowedPhotointer2");
+			String pi3 = configMap.get("AllowedPhotointer3");
+			String pi4 = configMap.get("AllowedPhotointer4");
+			String pi5 = configMap.get("AllowedPhotointer5");
+			String pi6 = configMap.get("AllowedPhotointer6");
+			String pi8 = configMap.get("AllowedPhotointer8");
 
-			if ( pi0.equals( "" ) ) {
+			if (pi0.equals("")) {
 				pi0 = "DiesePhotointerIstNichtErlaubt";
 			}
-			if ( pi1.equals( "" ) ) {
+			if (pi1.equals("")) {
 				pi1 = "DiesePhotointerIstNichtErlaubt";
 			}
-			if ( pi2.equals( "" ) ) {
+			if (pi2.equals("")) {
 				pi2 = "DiesePhotointerIstNichtErlaubt";
 			}
-			if ( pi3.equals( "" ) ) {
+			if (pi3.equals("")) {
 				pi3 = "DiesePhotointerIstNichtErlaubt";
 			}
-			if ( pi4.equals( "" ) ) {
+			if (pi4.equals("")) {
 				pi4 = "DiesePhotointerIstNichtErlaubt";
 			}
-			if ( pi5.equals( "" ) ) {
+			if (pi5.equals("")) {
 				pi5 = "DiesePhotointerIstNichtErlaubt";
 			}
-			if ( pi6.equals( "" ) ) {
+			if (pi6.equals("")) {
 				pi6 = "DiesePhotointerIstNichtErlaubt";
 			}
-			if ( pi8.equals( "" ) ) {
+			if (pi8.equals("")) {
 				pi8 = "DiesePhotointerIstNichtErlaubt";
 			}
 
@@ -123,60 +115,49 @@ public class ValidationDphotointerValidationModuleImpl extends
 
 			Boolean tiffLine = false;
 			try {
-				BufferedReader in = new BufferedReader(
-						new FileReader( jhoveReport ) );
+				BufferedReader in = new BufferedReader(new FileReader(jhoveReport));
 				String line;
-				while ( (line = in.readLine()) != null ) {
+				while ((line = in.readLine()) != null) {
 					// die ColorSpace-Zeile enthält einer dieser
 					// Freitexte der Farbraumart
 
-					if ( line.contains( " Type: TIFF" ) ) {
+					if (line.contains(" Type: TIFF")) {
 						tiffLine = true;
-					} else if ( line.contains( " Type: " ) ) {
+					} else if (line.contains(" Type: ")) {
 						tiffLine = false;
 					}
 
-					if ( line.contains( " ColorSpace: " ) && tiffLine ) {
+					if (line.contains(" ColorSpace: ") && tiffLine) {
 						jhoveio = 1;
-						if ( line.contains( " ColorSpace: " + pi0 )
-								|| line.contains( " ColorSpace: " + pi1 )
-								|| line.contains( " ColorSpace: " + pi2 )
-								|| line.contains( " ColorSpace: " + pi3 )
-								|| line.contains( " ColorSpace: " + pi4 )
-								|| line.contains( " ColorSpace: " + pi5 )
-								|| line.contains( " ColorSpace: " + pi6 )
-								|| line.contains( " ColorSpace: " + pi8 ) ) {
+						if (line.contains(" ColorSpace: " + pi0) || line.contains(" ColorSpace: " + pi1)
+								|| line.contains(" ColorSpace: " + pi2) || line.contains(" ColorSpace: " + pi3)
+								|| line.contains(" ColorSpace: " + pi4) || line.contains(" ColorSpace: " + pi5)
+								|| line.contains(" ColorSpace: " + pi6) || line.contains(" ColorSpace: " + pi8)) {
 							// Valider Status
 						} else {
 							// Invalider Status
 							isValid = false;
-							if ( min ) {
+							if (min) {
 								in.close();
 								return false;
 							} else {
-								if ( !line.equals( oldErrorLine1 )
-										&& !line.equals( oldErrorLine2 )
-										&& !line.equals( oldErrorLine3 )
-										&& !line.equals( oldErrorLine4 )
-										&& !line.equals( oldErrorLine5 ) ) {
+								if (!line.equals(oldErrorLine1) && !line.equals(oldErrorLine2)
+										&& !line.equals(oldErrorLine3) && !line.equals(oldErrorLine4)
+										&& !line.equals(oldErrorLine5)) {
 									// neuer Fehler
-									Logtxt.logtxt( logFile,
-											getTextResourceService().getText(
-													locale,
-													MESSAGE_XML_MODUL_D_TIFF )
-													+ getTextResourceService()
-															.getText( locale,
-																	MESSAGE_XML_CG_INVALID,
-																	line ) );
-									if ( oldErrorLine1.equals( "" ) ) {
+									Logtxt.logtxt(logFile,
+											getTextResourceService().getText(locale, MESSAGE_XML_MODUL_D_TIFF)
+													+ getTextResourceService().getText(locale, MESSAGE_XML_CG_INVALID,
+															line));
+									if (oldErrorLine1.equals("")) {
 										oldErrorLine1 = line;
-									} else if ( oldErrorLine2.equals( "" ) ) {
+									} else if (oldErrorLine2.equals("")) {
 										oldErrorLine2 = line;
-									} else if ( oldErrorLine3.equals( "" ) ) {
+									} else if (oldErrorLine3.equals("")) {
 										oldErrorLine3 = line;
-									} else if ( oldErrorLine4.equals( "" ) ) {
+									} else if (oldErrorLine4.equals("")) {
 										oldErrorLine4 = line;
-									} else if ( oldErrorLine5.equals( "" ) ) {
+									} else if (oldErrorLine5.equals("")) {
 										oldErrorLine5 = line;
 									}
 								}
@@ -184,28 +165,24 @@ public class ValidationDphotointerValidationModuleImpl extends
 						}
 					}
 				}
-				if ( jhoveio == 0 ) {
+				if (jhoveio == 0) {
 					// Invalider Status
 					isValid = false;
-					if ( min ) {
+					if (min) {
 						in.close();
 						return false;
 					} else {
-						Logtxt.logtxt( logFile, getTextResourceService()
-								.getText( locale, MESSAGE_XML_MODUL_D_TIFF )
-								+ getTextResourceService().getText( locale,
-										MESSAGE_XML_CG_JHOVENIO, "D" ) );
+						Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_D_TIFF)
+								+ getTextResourceService().getText(locale, MESSAGE_XML_CG_JHOVENIO, "D"));
 					}
 				}
 				in.close();
-			} catch ( Exception e ) {
-				if ( min ) {
+			} catch (Exception e) {
+				if (min) {
 					return false;
 				} else {
-					Logtxt.logtxt( logFile, getTextResourceService()
-							.getText( locale, MESSAGE_XML_MODUL_D_TIFF )
-							+ getTextResourceService().getText( locale,
-									MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
+					Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_D_TIFF)
+							+ getTextResourceService().getText(locale, MESSAGE_XML_CG_CANNOTFINDETREPORT));
 					return false;
 				}
 			}

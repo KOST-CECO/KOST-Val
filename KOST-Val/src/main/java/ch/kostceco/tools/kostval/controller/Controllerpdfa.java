@@ -39,80 +39,60 @@ import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationAinitialisation
  * eingebunden.
  */
 
-public class Controllerpdfa implements MessageConstants
-{
+public class Controllerpdfa implements MessageConstants {
 
-	private boolean							min	= false;
+	private boolean min = false;
 
-	private TextResourceService				textResourceService;
+	private TextResourceService textResourceService;
 
-	private ValidationAvalidationAiModule	validationAvalidationAiModule;
-	private ValidationAinitialisationModule	validationAinitialisationModule;
+	private ValidationAvalidationAiModule validationAvalidationAiModule;
+	private ValidationAinitialisationModule validationAinitialisationModule;
 
-	public ValidationAvalidationAiModule getValidationAvalidationAiModule()
-	{
+	public ValidationAvalidationAiModule getValidationAvalidationAiModule() {
 		return validationAvalidationAiModule;
 	}
 
-	public void setValidationAvalidationAiModule(
-			ValidationAvalidationAiModule validationAvalidationAiModule )
-	{
+	public void setValidationAvalidationAiModule(ValidationAvalidationAiModule validationAvalidationAiModule) {
 		this.validationAvalidationAiModule = validationAvalidationAiModule;
 	}
 
-	public ValidationAinitialisationModule getValidationAinitialisationModule()
-	{
+	public ValidationAinitialisationModule getValidationAinitialisationModule() {
 		return validationAinitialisationModule;
 	}
 
-	public void setValidationAinitialisationModule(
-			ValidationAinitialisationModule validationAinitialisationModule )
-	{
+	public void setValidationAinitialisationModule(ValidationAinitialisationModule validationAinitialisationModule) {
 		this.validationAinitialisationModule = validationAinitialisationModule;
 	}
 
-	public TextResourceService getTextResourceService()
-	{
+	public TextResourceService getTextResourceService() {
 		return textResourceService;
 	}
 
-	public void setTextResourceService(
-			TextResourceService textResourceService )
-	{
+	public void setTextResourceService(TextResourceService textResourceService) {
 		this.textResourceService = textResourceService;
 	}
 
-	public boolean executeMandatory( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath )
-	{
+	public boolean executeMandatory(File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale, File logFile, String dirOfJarPath) {
 		boolean valid = true;
 
 		// Initialisation PDF-Tools
 		try {
-			if ( this.getValidationAinitialisationModule().validate( valDatei,
-					directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath ) ) {
-				this.getValidationAinitialisationModule().getMessageService()
-						.print();
+			if (this.getValidationAinitialisationModule().validate(valDatei, directoryOfLogfile, configMap, locale,
+					logFile, dirOfJarPath)) {
+				this.getValidationAinitialisationModule().getMessageService().print();
 			} else {
-				this.getValidationAinitialisationModule().getMessageService()
-						.print();
+				this.getValidationAinitialisationModule().getMessageService().print();
 				return false;
 			}
-		} catch ( ValidationApdfavalidationException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_MODUL_A_PDFA )
-					+ getTextResourceService().getText( locale,
-							ERROR_XML_UNKNOWN, e.getMessage() + " init1" ) );
-			this.getValidationAinitialisationModule().getMessageService()
-					.print();
+		} catch (ValidationApdfavalidationException e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage() + " init1"));
+			this.getValidationAinitialisationModule().getMessageService().print();
 			return false;
-		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_MODUL_A_PDFA )
-					+ getTextResourceService().getText( locale,
-							ERROR_XML_UNKNOWN, e.getMessage() + " init2" ) );
+		} catch (Exception e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage() + " init2"));
 			return false;
 		}
 
@@ -120,12 +100,10 @@ public class Controllerpdfa implements MessageConstants
 
 	}
 
-	public boolean executeOptional( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath )
-	{
-		String onWork = configMap.get( "ShowProgressOnWork" );
-		if ( onWork.equals( "nomin" ) ) {
+	public boolean executeOptional(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) {
+		String onWork = configMap.get("ShowProgressOnWork");
+		if (onWork.equals("nomin")) {
 			min = true;
 		}
 
@@ -133,37 +111,30 @@ public class Controllerpdfa implements MessageConstants
 
 		// Validation A - I
 		try {
-			if ( this.getValidationAvalidationAiModule().validate( valDatei,
-					directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath ) ) {
-				this.getValidationAvalidationAiModule().getMessageService()
-						.print();
+			if (this.getValidationAvalidationAiModule().validate(valDatei, directoryOfLogfile, configMap, locale,
+					logFile, dirOfJarPath)) {
+				this.getValidationAvalidationAiModule().getMessageService().print();
 			} else {
-				this.getValidationAvalidationAiModule().getMessageService()
-						.print();
-				if ( min ) {
+				this.getValidationAvalidationAiModule().getMessageService().print();
+				if (min) {
 					return false;
 				} else {
 					valid = false;
 				}
 			}
-		} catch ( ValidationApdfavalidationException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_MODUL_A_PDFA )
-					+ getTextResourceService().getText( locale,
-							ERROR_XML_UNKNOWN, e.getMessage() + " A-I_1" ) );
+		} catch (ValidationApdfavalidationException e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage() + " A-I_1"));
 			this.getValidationAvalidationAiModule().getMessageService().print();
-			if ( min ) {
+			if (min) {
 				return false;
 			} else {
 				valid = false;
 			}
-		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_MODUL_A_PDFA )
-					+ getTextResourceService().getText( locale,
-							ERROR_XML_UNKNOWN, e.getMessage() + " A-I_2" ) );
-			if ( min ) {
+		} catch (Exception e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage() + " A-I_2"));
+			if (min) {
 				return false;
 			} else {
 				valid = false;

@@ -17,8 +17,7 @@ package ch.kostceco.tools.siardexcerpt.service;
 
 import ch.kostceco.tools.siardexcerpt.logging.MessageConstants;
 
-public interface ServiceExc extends MessageConstants
-{
+public interface ServiceExc extends MessageConstants {
 
 	// Marker Interface
 

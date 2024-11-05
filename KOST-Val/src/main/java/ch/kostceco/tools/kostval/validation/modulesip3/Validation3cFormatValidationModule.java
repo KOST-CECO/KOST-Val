@@ -36,11 +36,9 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
  * @author razm Daniel Ludin, Bedag AG @version 0.2.0
  */
 
-public interface Validation3cFormatValidationModule extends ValidationModule
-{
+public interface Validation3cFormatValidationModule extends ValidationModule {
 
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws Validation3cFormatValidationException;
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws Validation3cFormatValidationException;
 
 }

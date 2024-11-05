@@ -20,20 +20,17 @@ package ch.kostceco.tools.kostval.exception.modulesip1;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-public class Validation1gPackageSizeFilesException extends KOSTValException
-{
+public class Validation1gPackageSizeFilesException extends KOSTValException {
 
 	/** @author razm Daniel Ludin, Bedag AG @version 0.2.0 */
 	private static final long serialVersionUID = -4703263788956302793L;
 
-	public Validation1gPackageSizeFilesException()
-	{
+	public Validation1gPackageSizeFilesException() {
 		super();
 	}
 
-	public Validation1gPackageSizeFilesException( String message )
-	{
-		super( message );
+	public Validation1gPackageSizeFilesException(String message) {
+		super(message);
 	}
 
 }

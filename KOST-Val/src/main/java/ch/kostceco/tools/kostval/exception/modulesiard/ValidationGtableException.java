@@ -20,20 +20,17 @@ package ch.kostceco.tools.kostval.exception.modulesiard;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-public class ValidationGtableException extends KOSTValException
-{
+public class ValidationGtableException extends KOSTValException {
 
 	/** @author ??? */
 	private static final long serialVersionUID = 5060094531057249403L; // tbd
 
-	public ValidationGtableException()
-	{
+	public ValidationGtableException() {
 		super();
 	}
 
-	public ValidationGtableException( String message )
-	{
-		super( message );
+	public ValidationGtableException(String message) {
+		super(message);
 	}
 
 }

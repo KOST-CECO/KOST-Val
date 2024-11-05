@@ -22,58 +22,47 @@ import ch.kostceco.tools.kosttools.runtime.Cmd;
 
 /** @author Rc Claire Roethlisberger, KOST-CECO */
 
-public class Grep
-{
-	private static String	exeDir		= "resources" + File.separator + "grep";
-	private static String	grepExe		= exeDir + File.separator + "grep.exe";
-	private static String	msys10dll	= exeDir + File.separator
-			+ "msys-1.0.dll";
+public class Grep {
+	private static String exeDir = "resources" + File.separator + "grep";
+	private static String grepExe = exeDir + File.separator + "grep.exe";
+	private static String msys10dll = exeDir + File.separator + "msys-1.0.dll";
 
 	/**
-	 * fuehrt eine Suche mit Grep via cmd durch und speichert das Ergebnis in
-	 * ein File (Output). Gibt zurueck ob Output existiert oder nicht
+	 * fuehrt eine Suche mit Grep via cmd durch und speichert das Ergebnis in ein
+	 * File (Output). Gibt zurueck ob Output existiert oder nicht
 	 * 
-	 * @param insensitiveOption
-	 *            Option betreffend Gross- und Kleinschreibung
-	 * @param searchString
-	 *            gesuchter Text
-	 * @param fileToGrep
-	 *            Datei in welcher gesucht werden soll
-	 * @param output
-	 *            Ausgabe des Resultates
-	 * @param workDir
-	 *            Temporaeres Verzeichnis
-	 * @param dirOfJarPath
-	 *            String mit dem Pfad von wo das Programm gestartet wurde
+	 * @param insensitiveOption Option betreffend Gross- und Kleinschreibung
+	 * @param searchString      gesuchter Text
+	 * @param fileToGrep        Datei in welcher gesucht werden soll
+	 * @param output            Ausgabe des Resultates
+	 * @param workDir           Temporaeres Verzeichnis
+	 * @param dirOfJarPath      String mit dem Pfad von wo das Programm gestartet
+	 *                          wurde
 	 * @return String ob Report existiert oder nicht ggf Exception
 	 */
-	public static String execGrep( String insensitiveOption,
-			String searchString, File fileToGrep, File output, File workDir,
-			String dirOfJarPath ) throws InterruptedException
-	{
+	public static String execGrep(String insensitiveOption, String searchString, File fileToGrep, File output,
+			File workDir, String dirOfJarPath) throws InterruptedException {
 		boolean out = true;
-		File fgrepExe = new File( dirOfJarPath + File.separator + grepExe );
+		File fgrepExe = new File(dirOfJarPath + File.separator + grepExe);
 		// falls das File von einem vorhergehenden Durchlauf bereits existiert,
 		// loeschen wir es
-		if ( output.exists() ) {
+		if (output.exists()) {
 			output.delete();
 		}
 
 		// grep -E "REGEX-Suchbegriff" table13.xml >> output.txt
-		String command = "\"\"" + fgrepExe.getAbsolutePath() + "\" -E"
-				+ insensitiveOption + " \"" + searchString + "\" \""
-				+ fileToGrep.getAbsolutePath() + "\" >> \""
-				+ output.getAbsolutePath() + "\"\"";
+		String command = "\"\"" + fgrepExe.getAbsolutePath() + "\" -E" + insensitiveOption + " \"" + searchString
+				+ "\" \"" + fileToGrep.getAbsolutePath() + "\" >> \"" + output.getAbsolutePath() + "\"\"";
 
 		// System.out.println( "command: " + command );
 
-		String resultExec = Cmd.execToStringSplit( command, out, workDir );
+		String resultExec = Cmd.execToStringSplit(command, out, workDir);
 		// System.out.println( "resultExec: " + resultExec );
 
 		// Grep gibt keine Info raus, die replaced oder ignoriert werden muss
 
-		if ( resultExec.equals( "OK" ) ) {
-			if ( output.exists() ) {
+		if (resultExec.equals("OK")) {
+			if (output.exists()) {
 				// alles io bleibt bei OK
 			} else {
 				// Datei nicht angelegt...
@@ -84,24 +73,22 @@ public class Grep
 	}
 
 	/**
-	 * fuehrt eine Kontrolle aller benoetigten Dateien von Exiftool durch und
-	 * gibt das Ergebnis als String zurueck
+	 * fuehrt eine Kontrolle aller benoetigten Dateien von Exiftool durch und gibt
+	 * das Ergebnis als String zurueck
 	 * 
-	 * @param dirOfJarPath
-	 *            String mit dem Pfad von wo das Programm gestartet wurde
+	 * @param dirOfJarPath String mit dem Pfad von wo das Programm gestartet wurde
 	 * @return String mit Kontrollergebnis
 	 */
-	public static String checkGrep( String dirOfJarPath )
-	{
+	public static String checkGrep(String dirOfJarPath) {
 		String result = "";
 		boolean checkFiles = true;
 		// Pfad zum Programm existiert die Dateien?
 
-		File fgrepExe = new File( dirOfJarPath + File.separator + grepExe );
-		File fmsys10dll = new File( dirOfJarPath + File.separator + msys10dll );
+		File fgrepExe = new File(dirOfJarPath + File.separator + grepExe);
+		File fmsys10dll = new File(dirOfJarPath + File.separator + msys10dll);
 
-		if ( !fgrepExe.exists() ) {
-			if ( checkFiles ) {
+		if (!fgrepExe.exists()) {
+			if (checkFiles) {
 				// erste fehlende Datei
 				result = " " + exeDir + ": " + grepExe;
 				checkFiles = false;
@@ -110,8 +97,8 @@ public class Grep
 				checkFiles = false;
 			}
 		}
-		if ( !fmsys10dll.exists() ) {
-			if ( checkFiles ) {
+		if (!fmsys10dll.exists()) {
+			if (checkFiles) {
 				// erste fehlende Datei
 				result = " " + exeDir + ": " + msys10dll;
 				checkFiles = false;
@@ -121,7 +108,7 @@ public class Grep
 			}
 		}
 
-		if ( checkFiles ) {
+		if (checkFiles) {
 			result = "OK";
 		}
 		return result;

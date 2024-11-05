@@ -20,16 +20,14 @@ package ch.kostceco.tools.kostval.exception.modulejp2;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-public class ValidationAjp2validationException extends KOSTValException
-{
+public class ValidationAjp2validationException extends KOSTValException {
 
 	/** @author Rc Claire Roethlisberger, KOST-CECO */
 
 	private static final long serialVersionUID = -8816841335398903517L;
 
-	public ValidationAjp2validationException( String message )
-	{
-		super( message );
+	public ValidationAjp2validationException(String message) {
+		super(message);
 	}
 
 }

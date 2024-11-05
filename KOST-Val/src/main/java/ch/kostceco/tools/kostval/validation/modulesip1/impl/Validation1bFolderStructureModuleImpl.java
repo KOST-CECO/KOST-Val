@@ -32,73 +32,55 @@ import ch.kostceco.tools.kostval.logging.Logtxt;
  * /header/xsd /content
  */
 public class Validation1bFolderStructureModuleImpl extends ValidationModuleImpl
-		implements Validation1bFolderStructureModule
-{
+		implements Validation1bFolderStructureModule {
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws Validation1bFolderStructureException
-	{
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws Validation1bFolderStructureException {
 		// Informationen zur Darstellung "onWork" holen
-		String onWork = configMap.get( "ShowProgressOnWork" );
+		String onWork = configMap.get("ShowProgressOnWork");
 		/*
 		 * Nicht vergessen in
 		 * "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property
 		 * name="configurationService" ref="configurationService" />
 		 */
-		if ( onWork.equals( "yes" ) ) {
+		if (onWork.equals("yes")) {
 			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
-			System.out.print( "1B   " );
-			System.out.print( "\b\b\b\b\b" );
+			System.out.print("1B   ");
+			System.out.print("\b\b\b\b\b");
 		}
 
 		boolean isValid = true;
-		File content = new File(
-				valDatei.getAbsolutePath() + File.separator + "content" );
-		File header = new File(
-				valDatei.getAbsolutePath() + File.separator + "header" );
-		File xsd = new File( valDatei.getAbsolutePath() + File.separator
-				+ "header" + File.separator + "xsd" );
-		File metadata = new File( valDatei.getAbsolutePath() + File.separator
-				+ "header" + File.separator + "metadata.xml" );
+		File content = new File(valDatei.getAbsolutePath() + File.separator + "content");
+		File header = new File(valDatei.getAbsolutePath() + File.separator + "header");
+		File xsd = new File(valDatei.getAbsolutePath() + File.separator + "header" + File.separator + "xsd");
+		File metadata = new File(
+				valDatei.getAbsolutePath() + File.separator + "header" + File.separator + "metadata.xml");
 
-		if ( !content.exists() ) {
+		if (!content.exists()) {
 			isValid = false;
 
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_Ab_SIP )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_AB_CONTENT ) );
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ab_SIP)
+					+ getTextResourceService().getText(locale, ERROR_XML_AB_CONTENT));
 		}
-		if ( !header.exists() ) {
+		if (!header.exists()) {
 			isValid = false;
 
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_Ab_SIP )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_AB_HEADER ) );
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ab_SIP)
+					+ getTextResourceService().getText(locale, ERROR_XML_AB_HEADER));
 		} else {
-			if ( !xsd.exists() ) {
+			if (!xsd.exists()) {
 				isValid = false;
 
-				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale,
-								MESSAGE_XML_MODUL_Ab_SIP )
-								+ getTextResourceService().getText( locale,
-										ERROR_XML_AB_XSD ) );
+				Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ab_SIP)
+						+ getTextResourceService().getText(locale, ERROR_XML_AB_XSD));
 			}
-			if ( !metadata.exists() ) {
+			if (!metadata.exists()) {
 				isValid = false;
 
-				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale,
-								MESSAGE_XML_MODUL_Ab_SIP )
-								+ getTextResourceService().getText( locale,
-										ERROR_XML_AB_METADATA ) );
+				Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ab_SIP)
+						+ getTextResourceService().getText(locale, ERROR_XML_AB_METADATA));
 			}
 		}
 		return isValid;

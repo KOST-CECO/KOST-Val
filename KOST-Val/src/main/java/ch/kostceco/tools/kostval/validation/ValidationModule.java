@@ -33,12 +33,10 @@ import ch.kostceco.tools.kostval.service.Service;
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
 
-public interface ValidationModule extends Service
-{
+public interface ValidationModule extends Service {
 
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws KOSTValException;
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws KOSTValException;
 
 	public MessageService getMessageService();
 }

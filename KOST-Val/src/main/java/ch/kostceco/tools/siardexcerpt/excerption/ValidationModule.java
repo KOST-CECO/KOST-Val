@@ -30,12 +30,10 @@ import ch.kostceco.tools.siardexcerpt.service.ServiceExc;
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
 
-public interface ValidationModule extends ServiceExc
-{
+public interface ValidationModule extends ServiceExc {
 
-	public boolean validate( File siardDatei, File outFile,
-			String excerptString, Map<String, String> configMap, Locale locale )
-			throws SIARDexcerptException;
+	public boolean validate(File siardDatei, File outFile, String excerptString, Map<String, String> configMap,
+			Locale locale) throws SIARDexcerptException;
 
 	public MessageServiceExc getMessageServiceExc();
 

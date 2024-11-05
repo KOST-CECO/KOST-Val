@@ -45,31 +45,24 @@ import ch.kostceco.tools.siardexcerpt.service.TextResourceServiceExc;
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
 
-public class ControllerExcSearch implements MessageConstants
-{
+public class ControllerExcSearch implements MessageConstants {
 
-	private TextResourceServiceExc	textResourceServiceExc;
-	private ConfigurationServiceExc	configurationServiceExc;
+	private TextResourceServiceExc textResourceServiceExc;
+	private ConfigurationServiceExc configurationServiceExc;
 
-	public TextResourceServiceExc getTextResourceServiceExc()
-	{
+	public TextResourceServiceExc getTextResourceServiceExc() {
 		return textResourceServiceExc;
 	}
 
-	public void setTextResourceServiceExc(
-			TextResourceServiceExc textResourceServiceExc )
-	{
+	public void setTextResourceServiceExc(TextResourceServiceExc textResourceServiceExc) {
 		this.textResourceServiceExc = textResourceServiceExc;
 	}
 
-	public ConfigurationServiceExc getConfigurationServiceExc()
-	{
+	public ConfigurationServiceExc getConfigurationServiceExc() {
 		return configurationServiceExc;
 	}
 
-	public void setConfigurationServiceExc(
-			ConfigurationServiceExc configurationServiceExc )
-	{
+	public void setConfigurationServiceExc(ConfigurationServiceExc configurationServiceExc) {
 		this.configurationServiceExc = configurationServiceExc;
 	}
 
@@ -86,109 +79,103 @@ public class ControllerExcSearch implements MessageConstants
 	 * @throws IOException
 	 */
 
-	public static boolean mainSearch( String[] args ) throws IOException
-	{
+	public static boolean mainSearch(String[] args) throws IOException {
 		boolean search = false;
 		@SuppressWarnings("resource")
-		ApplicationContext context = new ClassPathXmlApplicationContext(
-				"classpath:config/applicationContext.xml" );
+		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:config/applicationContext.xml");
 
 		/**
 		 * SIARDexcerpt: Aufbau des Tools
 		 * 
-		 * 1) init: Config Kopieren und ggf SIARD-Datei ins Workverzeichnis
-		 * entpacken, config bei Bedarf ausfuellen
+		 * 1) init: Config Kopieren und ggf SIARD-Datei ins Workverzeichnis entpacken,
+		 * config bei Bedarf ausfuellen
 		 * 
-		 * 2) search: gemaess config die Tabelle mit Suchtext befragen und
-		 * Ausgabe des Resultates
+		 * 2) search: gemaess config die Tabelle mit Suchtext befragen und Ausgabe des
+		 * Resultates
 		 * 
-		 * 3) extract: mit den Keys anhand der config einen Records herausziehen
-		 * und anzeigen
+		 * 3) extract: mit den Keys anhand der config einen Records herausziehen und
+		 * anzeigen
 		 * 
 		 * 4) finish: Config-Kopie sowie Workverzeichnis loeschen
 		 */
 
 		/*
-		 * TODO: siehe Bemerkung im applicationContext-services.xml bezueglich
-		 * Injection in der Superklasse aller Impl-Klassen ValidationModuleImpl
+		 * TODO: siehe Bemerkung im applicationContext-services.xml bezueglich Injection
+		 * in der Superklasse aller Impl-Klassen ValidationModuleImpl
 		 * validationModuleImpl = (ValidationModuleImpl)
 		 * context.getBean("validationmoduleimpl");
 		 */
-		ControllerExcSearch controllerExcSearch = (ControllerExcSearch) context
-				.getBean( "controllerExcSearch" );
+		ControllerExcSearch controllerExcSearch = (ControllerExcSearch) context.getBean("controllerExcSearch");
 
 		Locale locale = Locale.getDefault();
 
-		if ( args[2].equalsIgnoreCase( "--de" ) ) {
-			locale = new Locale( "de" );
-		} else if ( args[2].equalsIgnoreCase( "--fr" ) ) {
-			locale = new Locale( "fr" );
-		} else if ( args[2].equalsIgnoreCase( "--en" ) ) {
-			locale = new Locale( "en" );
+		if (args[2].equalsIgnoreCase("--de")) {
+			locale = new Locale("de");
+		} else if (args[2].equalsIgnoreCase("--fr")) {
+			locale = new Locale("fr");
+		} else if (args[2].equalsIgnoreCase("--en")) {
+			locale = new Locale("en");
 		} else {
 			// ungueltige Eingabe Fehler wird ignoriert und default oder de wird
 			// angenommen
-			if ( locale.toString().startsWith( "fr" ) ) {
-				locale = new Locale( "fr" );
-			} else if ( locale.toString().startsWith( "en" ) ) {
-				locale = new Locale( "en" );
+			if (locale.toString().startsWith("fr")) {
+				locale = new Locale("fr");
+			} else if (locale.toString().startsWith("en")) {
+				locale = new Locale("en");
 			} else {
-				locale = new Locale( "de" );
+				locale = new Locale("de");
 			}
 		}
 
 		// Ist die Anzahl Parameter (mind 4) korrekt?
-		if ( args.length == 4 ) {
-			System.out.println( controllerExcSearch.getTextResourceServiceExc()
-					.getText( locale, EXC_ERROR_PARAMETER_USAGE ) );
+		if (args.length == 4) {
+			System.out.println(
+					controllerExcSearch.getTextResourceServiceExc().getText(locale, EXC_ERROR_PARAMETER_USAGE));
 			return false;
 		}
 
-		File siardDatei = new File( args[0] );
+		File siardDatei = new File(args[0]);
 		// Map<String, String> configMap =
 		// siardexcerpt.getConfigurationService().configMap();
 
 		/*
-		 * arg 1 gibt den Pfad zur configdatei an. Da dieser in
-		 * ConfigurationServiceImpl hartcodiert ist, wird diese nach
+		 * arg 1 gibt den Pfad zur configdatei an. Da dieser in ConfigurationServiceImpl
+		 * hartcodiert ist, wird diese nach
 		 * ".siardexcerpt/configuration/SIARDexcerpt.conf.xml" kopiert.
 		 */
-		String userSIARDexcerpt = System.getenv( "USERPROFILE" )
-				+ File.separator + ".siardexcerpt";
-		File userSIARDexcerptFile = new File( userSIARDexcerpt );
-		if ( !userSIARDexcerptFile.exists() ) {
+		String userSIARDexcerpt = System.getenv("USERPROFILE") + File.separator + ".siardexcerpt";
+		File userSIARDexcerptFile = new File(userSIARDexcerpt);
+		if (!userSIARDexcerptFile.exists()) {
 			userSIARDexcerptFile.mkdirs();
 		}
 		String config = userSIARDexcerpt + File.separator + "configuration";
-		File config1 = new File( config );
-		if ( !config1.exists() ) {
+		File config1 = new File(config);
+		if (!config1.exists()) {
 			config1.mkdirs();
 		}
 
-		File configFileHard = new File(
-				config + File.separator + "SIARDexcerpt.conf.xml" );
+		File configFileHard = new File(config + File.separator + "SIARDexcerpt.conf.xml");
 
-		String pathToOutput = System.getenv( "USERPROFILE" ) + File.separator
-				+ ".siardexcerpt" + File.separator + "Output";
-		File directoryOfOutput = new File( pathToOutput );
+		String pathToOutput = System.getenv("USERPROFILE") + File.separator + ".siardexcerpt" + File.separator
+				+ "Output";
+		File directoryOfOutput = new File(pathToOutput);
 
-		String pathToWorkDir = System.getenv( "USERPROFILE" ) + File.separator
-				+ ".siardexcerpt" + File.separator + "temp_SIARDexcerpt";
-		File tmpDir = new File( pathToWorkDir );
+		String pathToWorkDir = System.getenv("USERPROFILE") + File.separator + ".siardexcerpt" + File.separator
+				+ "temp_SIARDexcerpt";
+		File tmpDir = new File(pathToWorkDir);
 
 		// die Anwendung muss mindestens unter Java 8 laufen
-		String javaRuntimeVersion = System.getProperty( "java.vm.version" );
-		if ( javaRuntimeVersion.compareTo( "1.8.0" ) < 0 ) {
-			System.out.println( controllerExcSearch.getTextResourceServiceExc()
-					.getText( locale, EXC_ERROR_WRONG_JRE ) );
+		String javaRuntimeVersion = System.getProperty("java.vm.version");
+		if (javaRuntimeVersion.compareTo("1.8.0") < 0) {
+			System.out.println(controllerExcSearch.getTextResourceServiceExc().getText(locale, EXC_ERROR_WRONG_JRE));
 			return false;
 		}
 
-		System.out.println( "" );
+		System.out.println("");
 
 		/**
-		 * 2) search: gemaess config die Tabelle mit Suchtext befragen und
-		 * Ausgabe des Resultates
+		 * 2) search: gemaess config die Tabelle mit Suchtext befragen und Ausgabe des
+		 * Resultates
 		 * 
 		 * a) Ist die Anzahl Parameter (mind 4) korrekt? arg4 = Suchtext
 		 * 
@@ -201,49 +188,45 @@ public class ControllerExcSearch implements MessageConstants
 		 * d1) grep
 		 * 
 		 * d2) TODO: die 12 searchCells definieren: auslesen der Vorgaben oder
-		 * automatisch erstellen (1. pk dann [TODO: trefferspalten dann bB
-		 * anhand column.name (name, id, ort, town) dann bB] auffuellen mit den
-		 * ersten Spalten bis 12 existieren).
+		 * automatisch erstellen (1. pk dann [TODO: trefferspalten dann bB anhand
+		 * column.name (name, id, ort, town) dann bB] auffuellen mit den ersten Spalten
+		 * bis 12 existieren).
 		 * 
 		 * d3) grep auf die 12 searchCells kuerzen
 		 * 
 		 * e) Suchergebnis speichern und anzeigen (via GUI)
 		 */
 
-		System.out.println( "SIARDexcerpt: search" );
+		System.out.println("SIARDexcerpt: search");
 
-		Map<String, String> configMap = controllerExcSearch
-				.getConfigurationServiceExc().configMap( locale );
+		Map<String, String> configMap = controllerExcSearch.getConfigurationServiceExc().configMap(locale);
 
-		if ( pathToWorkDir.startsWith( "Configuration-Error:" ) ) {
-			System.out.println( pathToWorkDir );
+		if (pathToWorkDir.startsWith("Configuration-Error:")) {
+			System.out.println(pathToWorkDir);
 			return false;
 		}
 
-		tmpDir = new File( pathToWorkDir );
+		tmpDir = new File(pathToWorkDir);
 
-		directoryOfOutput = new File( pathToOutput );
+		directoryOfOutput = new File(pathToOutput);
 
-		if ( !directoryOfOutput.exists() ) {
+		if (!directoryOfOutput.exists()) {
 			directoryOfOutput.mkdir();
 		}
 
 		/** a) Ist die Anzahl Parameter (mind 5) korrekt? arg4 = Suchtext */
 		// System.out.println( " a) Ist die Anzahl Parameter (mind 5) korrekt?
 		// arg4 = Suchtext " );
-		if ( args.length < 5 ) {
-			System.out.println( controllerExcSearch.getTextResourceServiceExc()
-					.getText( locale, EXC_ERROR_PARAMETER_USAGE ) );
+		if (args.length < 5) {
+			System.out.println(
+					controllerExcSearch.getTextResourceServiceExc().getText(locale, EXC_ERROR_PARAMETER_USAGE));
 			return false;
 		}
 
-		if ( !siardDatei.isDirectory() ) {
-			File siardDateiNew = new File( tmpDir.getAbsolutePath()
-					+ File.separator + siardDatei.getName() );
-			if ( !siardDateiNew.exists() ) {
-				System.out.println(
-						controllerExcSearch.getTextResourceServiceExc()
-								.getText( locale, EXC_ERROR_NOINIT ) );
+		if (!siardDatei.isDirectory()) {
+			File siardDateiNew = new File(tmpDir.getAbsolutePath() + File.separator + siardDatei.getName());
+			if (!siardDateiNew.exists()) {
+				System.out.println(controllerExcSearch.getTextResourceServiceExc().getText(locale, EXC_ERROR_NOINIT));
 				return false;
 			} else {
 				siardDatei = siardDateiNew;
@@ -251,15 +234,15 @@ public class ControllerExcSearch implements MessageConstants
 		}
 
 		/** b) Suchtext einlesen */
-		String searchString = new String( args[4] );
+		String searchString = new String(args[4]);
 		// System.out.println( " b) Suchtext '" + searchString + "' einlesen "
 		// );
 
 		/*
-		 * Der SearchString kann nur die Wildcard (* oder .) enthalten. Da grep
-		 * es aber nicht unterstuetzt durch row ersetzten
+		 * Der SearchString kann nur die Wildcard (* oder .) enthalten. Da grep es aber
+		 * nicht unterstuetzt durch row ersetzten
 		 */
-		if ( searchString.equals( "*" ) || searchString.equals( "." ) ) {
+		if (searchString.equals("*") || searchString.equals(".")) {
 			searchString = "row";
 		}
 
@@ -268,105 +251,89 @@ public class ControllerExcSearch implements MessageConstants
 		// Output kopieren " );
 		// Zeitstempel der Datenextraktion
 		java.util.Date nowStartS = new java.util.Date();
-		java.text.SimpleDateFormat sdfStartS = new java.text.SimpleDateFormat(
-				"dd.MM.yyyy HH:mm:ss" );
-		String ausgabeStartS = sdfStartS.format( nowStartS );
+		java.text.SimpleDateFormat sdfStartS = new java.text.SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+		String ausgabeStartS = sdfStartS.format(nowStartS);
 
 		/*
-		 * Der SearchString kann zeichen enthalten, welche nicht im Dateinamen
-		 * vorkommen duerfen. Entsprechend werden diese normalisiert
+		 * Der SearchString kann zeichen enthalten, welche nicht im Dateinamen vorkommen
+		 * duerfen. Entsprechend werden diese normalisiert
 		 */
-		String searchStringFilename = searchString.replaceAll( "/", "_" );
-		searchStringFilename = searchStringFilename.replaceAll( ">", "_" );
-		searchStringFilename = searchStringFilename.replaceAll( "<", "_" );
-		searchStringFilename = searchStringFilename.replace( "*", "_" );
-		searchStringFilename = searchStringFilename.replace( ".*", "_" );
-		searchStringFilename = searchStringFilename.replaceAll( "___", "_" );
-		searchStringFilename = searchStringFilename.replaceAll( "__", "_" );
+		String searchStringFilename = searchString.replaceAll("/", "_");
+		searchStringFilename = searchStringFilename.replaceAll(">", "_");
+		searchStringFilename = searchStringFilename.replaceAll("<", "_");
+		searchStringFilename = searchStringFilename.replace("*", "_");
+		searchStringFilename = searchStringFilename.replace(".*", "_");
+		searchStringFilename = searchStringFilename.replaceAll("___", "_");
+		searchStringFilename = searchStringFilename.replaceAll("__", "_");
 
-		String outDateiNameS = siardDatei.getName() + "_" + searchStringFilename
-				+ "_SIARDsearch.xml";
-		outDateiNameS = outDateiNameS.replaceAll( "__", "_" );
+		String outDateiNameS = siardDatei.getName() + "_" + searchStringFilename + "_SIARDsearch.xml";
+		outDateiNameS = outDateiNameS.replaceAll("__", "_");
 
 		// Informationen zum Archiv holen
-		String archiveS = configMap.get( "Archive" );
-		if ( archiveS.startsWith( "Configuration-Error:" ) ) {
-			System.out.println( archiveS );
+		String archiveS = configMap.get("Archive");
+		if (archiveS.startsWith("Configuration-Error:")) {
+			System.out.println(archiveS);
 			return false;
 		}
 
 		// Konfiguration des Outputs, ein File Logger wird zusaetzlich erstellt
-		LogConfigurator logConfiguratorS = (LogConfigurator) context
-				.getBean( "logconfiguratorExc" );
-		String outFileNameS = logConfiguratorS.configure(
-				directoryOfOutput.getAbsolutePath(), outDateiNameS );
-		File outFileSearch = new File( outFileNameS );
+		LogConfigurator logConfiguratorS = (LogConfigurator) context.getBean("logconfiguratorExc");
+		String outFileNameS = logConfiguratorS.configure(directoryOfOutput.getAbsolutePath(), outDateiNameS);
+		File outFileSearch = new File(outFileNameS);
 		// Ab hier kann ins Output geschrieben werden...
 
 		// Informationen zum XSL holen
-		String pathToXSLS = configMap.get( "PathToXSLsearch" );
-		if ( pathToXSLS.startsWith( "Configuration-Error:" ) ) {
-			System.out.println( pathToXSLS );
+		String pathToXSLS = configMap.get("PathToXSLsearch");
+		if (pathToXSLS.startsWith("Configuration-Error:")) {
+			System.out.println(pathToXSLS);
 			return false;
 		}
 
-		File xslOrigS = new File( pathToXSLS );
-		File xslCopyS = new File( directoryOfOutput.getAbsolutePath()
-				+ File.separator + xslOrigS.getName() );
-		if ( !xslCopyS.exists() ) {
-			Util.copyFile( xslOrigS, xslCopyS );
+		File xslOrigS = new File(pathToXSLS);
+		File xslCopyS = new File(directoryOfOutput.getAbsolutePath() + File.separator + xslOrigS.getName());
+		if (!xslCopyS.exists()) {
+			Util.copyFile(xslOrigS, xslCopyS);
 		}
 
-		Logtxt.logtxt( outFileSearch,
-				controllerExcSearch.getTextResourceServiceExc().getText( locale,
-						EXC_MESSAGE_XML_HEADER, xslCopyS.getName() ) );
-		Logtxt.logtxt( outFileSearch,
-				controllerExcSearch.getTextResourceServiceExc().getText( locale,
-						EXC_MESSAGE_XML_START, ausgabeStartS ) );
-		Logtxt.logtxt( outFileSearch,
-				controllerExcSearch.getTextResourceServiceExc().getText( locale,
-						EXC_MESSAGE_XML_TEXT, archiveS, "Archive" ) );
-		Logtxt.logtxt( outFileSearch,
-				controllerExcSearch.getTextResourceServiceExc().getText( locale,
-						EXC_MESSAGE_XML_INFO ) );
+		Logtxt.logtxt(outFileSearch, controllerExcSearch.getTextResourceServiceExc().getText(locale,
+				EXC_MESSAGE_XML_HEADER, xslCopyS.getName()));
+		Logtxt.logtxt(outFileSearch,
+				controllerExcSearch.getTextResourceServiceExc().getText(locale, EXC_MESSAGE_XML_START, ausgabeStartS));
+		Logtxt.logtxt(outFileSearch, controllerExcSearch.getTextResourceServiceExc().getText(locale,
+				EXC_MESSAGE_XML_TEXT, archiveS, "Archive"));
+		Logtxt.logtxt(outFileSearch,
+				controllerExcSearch.getTextResourceServiceExc().getText(locale, EXC_MESSAGE_XML_INFO));
 
 		/** d) search: dies ist in einem eigenen Modul realisiert */
 		// System.out.println( " d) search: dies ist in einem eigenen Modul
 		// realisiert " );
-		Controllerexcerpt controllerexcerptS = (Controllerexcerpt) context
-				.getBean( "controllerexcerpt" );
+		Controllerexcerpt controllerexcerptS = (Controllerexcerpt) context.getBean("controllerexcerpt");
 
-		search = controllerexcerptS.executeB( siardDatei, outFileSearch,
-				searchString, configMap, locale );
+		search = controllerexcerptS.executeB(siardDatei, outFileSearch, searchString, configMap, locale);
 
 		/** e) Ausgabe und exitcode */
 		// System.out.println( " e) Ausgabe und exitcode " );
-		if ( !search ) {
+		if (!search) {
 			// Suche konnte nicht erfolgen
-			Logtxt.logtxt( outFileSearch,
-					controllerExcSearch.getTextResourceServiceExc()
-							.getText( locale, EXC_MESSAGE_XML_MODUL_B ) );
-			Logtxt.logtxt( outFileSearch,
-					controllerExcSearch.getTextResourceServiceExc().getText(
-							locale, EXC_ERROR_XML_B_CANNOTSEARCHRECORD ) );
-			Logtxt.logtxt( outFileSearch,
-					controllerExcSearch.getTextResourceServiceExc()
-							.getText( locale, EXC_MESSAGE_XML_LOGEND ) );
-			System.out.println( controllerExcSearch.getTextResourceServiceExc()
-					.getText( locale, EXC_MESSAGE_B_SEARCH_NOK ) );
+			Logtxt.logtxt(outFileSearch,
+					controllerExcSearch.getTextResourceServiceExc().getText(locale, EXC_MESSAGE_XML_MODUL_B));
+			Logtxt.logtxt(outFileSearch, controllerExcSearch.getTextResourceServiceExc().getText(locale,
+					EXC_ERROR_XML_B_CANNOTSEARCHRECORD));
+			Logtxt.logtxt(outFileSearch,
+					controllerExcSearch.getTextResourceServiceExc().getText(locale, EXC_MESSAGE_XML_LOGEND));
+			System.out
+					.println(controllerExcSearch.getTextResourceServiceExc().getText(locale, EXC_MESSAGE_B_SEARCH_NOK));
 			// Loeschen der temporaeren Suchergebnisse
-			File outFileSearchTmp = new File(
-					outFileSearch.getAbsolutePath() + ".tmp" );
-			if ( outFileSearchTmp.exists() ) {
-				Util.deleteFile( outFileSearchTmp );
+			File outFileSearchTmp = new File(outFileSearch.getAbsolutePath() + ".tmp");
+			if (outFileSearchTmp.exists()) {
+				Util.deleteFile(outFileSearchTmp);
 			}
-			String noResult = controllerExcSearch.getTextResourceServiceExc()
-					.getText( locale, EXC_MESSAGE_B_SEARCH_NOK );
-			if ( outFileSearchTmp.exists() ) {
-				Util.replaceAllChar( outFileSearchTmp, noResult );
+			String noResult = controllerExcSearch.getTextResourceServiceExc().getText(locale, EXC_MESSAGE_B_SEARCH_NOK);
+			if (outFileSearchTmp.exists()) {
+				Util.replaceAllChar(outFileSearchTmp, noResult);
 			}
-			if ( outFileSearch.exists() ) {
-				Util.replaceAllChar( outFileSearch, noResult );
+			if (outFileSearch.exists()) {
+				Util.replaceAllChar(outFileSearch, noResult);
 			}
 
 			// Loeschen des Arbeitsverzeichnisses und configFileHard erfolgt
@@ -378,32 +345,29 @@ public class ControllerExcSearch implements MessageConstants
 			// Suche konnte durchgefuehrt werden
 
 			// Die Konfiguration hereinkopieren
-			Scanner scanner = new Scanner( configFileHard );
+			Scanner scanner = new Scanner(configFileHard);
 			String contentAll = "";
 			String content = "";
-			contentAll = scanner.useDelimiter( "\\Z" ).next();
+			contentAll = scanner.useDelimiter("\\Z").next();
 			scanner.close();
 			content = contentAll;
 			/*
-			 * im contentAll ist jetzt der Gesamtstring, dieser soll
-			 * anschliessend nur noch aus <configuration> .* </configuration>
-			 * bestehen. alles vor <configuration> loeschen
+			 * im contentAll ist jetzt der Gesamtstring, dieser soll anschliessend nur noch
+			 * aus <configuration> .* </configuration> bestehen. alles vor <configuration>
+			 * loeschen
 			 */
 
 			// <?xml version="1.0" encoding="UTF-8"?>
 			String deletString = "<\\?xml version=\"1\\.0\" encoding=\"UTF-8\"\\?>";
-			content = content.replaceAll( deletString, "" );
+			content = content.replaceAll(deletString, "");
 			deletString = ".*<configuration>";
-			content = content.replaceAll( deletString, "<configuration>" );
+			content = content.replaceAll(deletString, "<configuration>");
 
-			Logtxt.logtxt( outFileSearch,
-					controllerExcSearch.getTextResourceServiceExc().getText(
-							locale, EXC_MESSAGE_XML_ELEMENT_CONTENT,
-							content ) );
+			Logtxt.logtxt(outFileSearch, controllerExcSearch.getTextResourceServiceExc().getText(locale,
+					EXC_MESSAGE_XML_ELEMENT_CONTENT, content));
 
-			Logtxt.logtxt( outFileSearch,
-					controllerExcSearch.getTextResourceServiceExc()
-							.getText( locale, EXC_MESSAGE_XML_LOGEND ) );
+			Logtxt.logtxt(outFileSearch,
+					controllerExcSearch.getTextResourceServiceExc().getText(locale, EXC_MESSAGE_XML_LOGEND));
 
 			contentAll = "";
 			content = "";
@@ -412,8 +376,8 @@ public class ControllerExcSearch implements MessageConstants
 			// erst bei schritt 4 finish
 
 			// Record konnte extrahiert werden
-			System.out.println( controllerExcSearch.getTextResourceServiceExc()
-					.getText( locale, EXC_MESSAGE_B_SEARCH_OK, outFileNameS ) );
+			System.out.println(controllerExcSearch.getTextResourceServiceExc().getText(locale, EXC_MESSAGE_B_SEARCH_OK,
+					outFileNameS));
 			// search = true;
 			return search;
 
@@ -423,15 +387,14 @@ public class ControllerExcSearch implements MessageConstants
 
 	}
 
-	public static void ElementToStream( Element element, OutputStream out )
-	{
+	public static void ElementToStream(Element element, OutputStream out) {
 		try {
-			DOMSource source = new DOMSource( element );
-			StreamResult result = new StreamResult( out );
+			DOMSource source = new DOMSource(element);
+			StreamResult result = new StreamResult(out);
 			TransformerFactory transFactory = TransformerFactory.newInstance();
 			Transformer transformer = transFactory.newTransformer();
-			transformer.transform( source, result );
-		} catch ( Exception ex ) {
+			transformer.transform(source, result);
+		} catch (Exception ex) {
 		}
 	}
 

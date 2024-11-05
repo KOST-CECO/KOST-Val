@@ -33,119 +33,99 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
-public class ConfigControllerSiard
-{
+public class ConfigControllerSiard {
 
 	@FXML
-	private CheckBox	checkSiard10, checkSiard21, checkSiard22,
-			checkLobExtension, checkLobAzepted;
+	private CheckBox checkSiard10, checkSiard21, checkSiard22, checkLobExtension, checkLobAzepted;
 
 	@FXML
-	private Button		buttonConfigApply;
+	private Button buttonConfigApply;
 
-	private File		configFile	= new File( System.getenv( "USERPROFILE" )
-			+ File.separator + ".kost-val_2x" + File.separator + "configuration"
-			+ File.separator + "kostval.conf.xml" );
+	private File configFile = new File(System.getenv("USERPROFILE") + File.separator + ".kost-val_2x" + File.separator
+			+ "configuration" + File.separator + "kostval.conf.xml");
 
-	private String		dirOfJarPath, config,
-			minOne = "Mindestens eine Variante muss erlaubt sein!";
+	private String dirOfJarPath, config, minOne = "Mindestens eine Variante muss erlaubt sein!";
 
 	@FXML
-	private Label		labelVersion, labelVal, labelMessage, labelConfig,
-			labelLob;
+	private Label labelVersion, labelVal, labelMessage, labelConfig, labelLob;
 
 	@FXML
-	void initialize()
-	{
+	void initialize() {
 
 		// TODO --> initialize (wird einmalig am Anfang ausgefuehrt)
 
 		// Copyright und Versionen ausgeben
-		String java6432 = System.getProperty( "sun.arch.data.model" );
-		String javaVersion = System.getProperty( "java.version" );
-		String javafxVersion = System.getProperty( "javafx.version" );
-		labelConfig.setText(
-				"Copyright © KOST/CECO          KOST-Val v2.2.1.1          JavaFX "
-						+ javafxVersion + "   &   Java-" + java6432 + " "
-						+ javaVersion + "." );
+		String java6432 = System.getProperty("sun.arch.data.model");
+		String javaVersion = System.getProperty("java.version");
+		String javafxVersion = System.getProperty("javafx.version");
+		labelConfig.setText("Copyright © KOST/CECO          KOST-Val v2.2.1.1          JavaFX " + javafxVersion
+				+ "   &   Java-" + java6432 + " " + javaVersion + ".");
 
 		// festhalten von wo die Applikation (exe) gestartet wurde
 		dirOfJarPath = "";
 		try {
 			/*
-			 * dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist
-			 * eine generelle Aufgabe in allen Modulen. Zuerst immer
-			 * dirOfJarPath ermitteln und dann alle Pfade mit dirOfJarPath +
-			 * File.separator + erweitern.
+			 * dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist eine
+			 * generelle Aufgabe in allen Modulen. Zuerst immer dirOfJarPath ermitteln und
+			 * dann alle Pfade mit dirOfJarPath + File.separator + erweitern.
 			 */
-			String path = new File( "" ).getAbsolutePath();
+			String path = new File("").getAbsolutePath();
 			dirOfJarPath = path;
-			setLibraryPath( dirOfJarPath );
-		} catch ( Exception e1 ) {
+			setLibraryPath(dirOfJarPath);
+		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
 
-		labelMessage.setText( "" );
+		labelMessage.setText("");
 
 		// Sprache anhand configFile (HauptGui) setzten
 		try {
-			if ( Util.stringInFileLine( "kostval-conf-DE.xsl", configFile ) ) {
-				labelVersion.setText( "Versionen" );
-				labelLob.setText( "LOB-Dateien" );
-				checkSiard10.setText( "SIARD-1.0 (eCH-0165 v1) [veraltet]" );
-				checkLobExtension
-						.setText( "Bemängeln von nicht exakten Dateiendungen" );
-				checkLobAzepted.setText(
-						"Bemängeln von nicht akzeptierent Dateiformaten" );
-				labelVal.setText( "Validierungseinstellung: SIARD" );
-				buttonConfigApply.setText( "anwenden" );
+			if (Util.stringInFileLine("kostval-conf-DE.xsl", configFile)) {
+				labelVersion.setText("Versionen");
+				labelLob.setText("LOB-Dateien");
+				checkSiard10.setText("SIARD-1.0 (eCH-0165 v1) [veraltet]");
+				checkLobExtension.setText("Bemängeln von nicht exakten Dateiendungen");
+				checkLobAzepted.setText("Bemängeln von nicht akzeptierent Dateiformaten");
+				labelVal.setText("Validierungseinstellung: SIARD");
+				buttonConfigApply.setText("anwenden");
 				minOne = "Mindestens eine Variante muss erlaubt sein!";
-			} else if ( Util.stringInFileLine( "kostval-conf-FR.xsl",
-					configFile ) ) {
-				labelVersion.setText( "Versions" );
-				labelLob.setText( "Fichiers LOB" );
-				checkSiard10.setText( "SIARD-1.0 (eCH-0165 v1) [obsolète]" );
-				checkLobExtension.setText(
-						"Réclamer des extensions de fichiers non exactes" );
-				checkLobAzepted.setText(
-						"Remarques sur les formats de fichiers non acceptés" );
-				labelVal.setText( "Paramètre de validation: SIARD" );
-				buttonConfigApply.setText( "appliquer" );
+			} else if (Util.stringInFileLine("kostval-conf-FR.xsl", configFile)) {
+				labelVersion.setText("Versions");
+				labelLob.setText("Fichiers LOB");
+				checkSiard10.setText("SIARD-1.0 (eCH-0165 v1) [obsolète]");
+				checkLobExtension.setText("Réclamer des extensions de fichiers non exactes");
+				checkLobAzepted.setText("Remarques sur les formats de fichiers non acceptés");
+				labelVal.setText("Paramètre de validation: SIARD");
+				buttonConfigApply.setText("appliquer");
 				minOne = "Au moins une variante doit etre autorisee !";
-			} else if ( Util.stringInFileLine( "kostval-conf-IT.xsl",
-					configFile ) ) {
-				labelVersion.setText( "Versioni" );
-				labelLob.setText( "File LOB" );
-				checkSiard10.setText( "SIARD-1.0 (eCH-0165 v1) [obsolete]" );
-				checkLobExtension
-						.setText( "Claim for incorrect file extensions" );
-				checkLobAzepted
-						.setText( "Remarks on non-accepted file formats" );
-				labelVal.setText( "Parametro di convalida: SIARD" );
-				buttonConfigApply.setText( "Applica" );
+			} else if (Util.stringInFileLine("kostval-conf-IT.xsl", configFile)) {
+				labelVersion.setText("Versioni");
+				labelLob.setText("File LOB");
+				checkSiard10.setText("SIARD-1.0 (eCH-0165 v1) [obsolete]");
+				checkLobExtension.setText("Claim for incorrect file extensions");
+				checkLobAzepted.setText("Remarks on non-accepted file formats");
+				labelVal.setText("Parametro di convalida: SIARD");
+				buttonConfigApply.setText("Applica");
 				minOne = "Almeno una variante deve essere consentita!";
 			} else {
-				labelVersion.setText( "Versions" );
-				labelLob.setText( "LOB files" );
-				checkSiard10.setText( "SIARD-1.0 (eCH-0165 v1) [obsoleto]" );
-				checkLobExtension
-						.setText( "Richiesta di estensioni file errate" );
-				checkLobAzepted.setText(
-						"Osservazioni sui formati di file non accettati" );
-				labelVal.setText( "Validation setting: SIARD" );
-				buttonConfigApply.setText( "apply" );
+				labelVersion.setText("Versions");
+				labelLob.setText("LOB files");
+				checkSiard10.setText("SIARD-1.0 (eCH-0165 v1) [obsoleto]");
+				checkLobExtension.setText("Richiesta di estensioni file errate");
+				checkLobAzepted.setText("Osservazioni sui formati di file non accettati");
+				labelVal.setText("Validation setting: SIARD");
+				buttonConfigApply.setText("apply");
 				minOne = "At least one variant must be allowed!";
 			}
-		} catch ( Exception e ) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		// Werte aus Konfiguration lesen und Check-Box entsprechend setzten
 		try {
 			byte[] encoded;
-			encoded = Files
-					.readAllBytes( Paths.get( configFile.getAbsolutePath() ) );
-			config = new String( encoded, StandardCharsets.UTF_8 );
+			encoded = Files.readAllBytes(Paths.get(configFile.getAbsolutePath()));
+			config = new String(encoded, StandardCharsets.UTF_8);
 			String noSiard = "<siardvalidation>no</siardvalidation>";
 			String noSiard10 = "<siard10></siard10>";
 			String noSiard21 = "<siard21></siard21>";
@@ -153,47 +133,44 @@ public class ConfigControllerSiard
 			String noLobExtension = "<lobExtension>Warning </lobExtension>";
 			String noLobAzepted = "<lobAzepted></lobAzepted>";
 
-			if ( config.contains( noSiard ) ) {
-				checkSiard10.setDisable( true );
-				checkSiard21.setDisable( true );
-				checkSiard22.setDisable( true );
+			if (config.contains(noSiard)) {
+				checkSiard10.setDisable(true);
+				checkSiard21.setDisable(true);
+				checkSiard22.setDisable(true);
 			}
-			if ( config.contains( noSiard10 ) ) {
-				checkSiard10.setSelected( false );
+			if (config.contains(noSiard10)) {
+				checkSiard10.setSelected(false);
 			}
-			if ( config.contains( noSiard21 ) ) {
-				checkSiard21.setSelected( false );
+			if (config.contains(noSiard21)) {
+				checkSiard21.setSelected(false);
 			}
-			if ( config.contains( noSiard22 ) ) {
-				checkSiard22.setSelected( false );
+			if (config.contains(noSiard22)) {
+				checkSiard22.setSelected(false);
 			}
-			if ( config.contains( noLobExtension ) ) {
-				checkLobExtension.setSelected( false );
+			if (config.contains(noLobExtension)) {
+				checkLobExtension.setSelected(false);
 			}
-			if ( config.contains( noLobAzepted ) ) {
-				checkLobAzepted.setSelected( false );
+			if (config.contains(noLobAzepted)) {
+				checkLobAzepted.setSelected(false);
 			}
-		} catch ( IOException e1 ) {
+		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 	}
 
-	public static void setLibraryPath( String path ) throws Exception
-	{
-		System.setProperty( "java.library.path", path );
+	public static void setLibraryPath(String path) throws Exception {
+		System.setProperty("java.library.path", path);
 		// set sys_paths to null so that java.library.path will be reevalueted
 		// next time it is needed
-		final Field sysPathsField = ClassLoader.class
-				.getDeclaredField( "sys_paths" );
-		sysPathsField.setAccessible( true );
-		sysPathsField.set( null, null );
+		final Field sysPathsField = ClassLoader.class.getDeclaredField("sys_paths");
+		sysPathsField.setAccessible(true);
+		sysPathsField.set(null, null);
 	}
 
 	/* TODO --> Button ================= */
 
 	@FXML
-	void configApply( ActionEvent e )
-	{
+	void configApply(ActionEvent e) {
 		// engine.loadContent( "Apply" );
 		((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
 	}
@@ -204,25 +181,23 @@ public class ConfigControllerSiard
 	 * checkSiard10 schaltet diese Validierung in der Konfiguration ein oder aus
 	 */
 	@FXML
-	void changeSiard10( ActionEvent event )
-	{
-		labelMessage.setText( "" );
+	void changeSiard10(ActionEvent event) {
+		labelMessage.setText("");
 		String yes = "<siard10>1.0 </siard10>";
 		String no = "<siard10></siard10>";
 		try {
-			if ( checkSiard10.isSelected() ) {
-				Util.oldnewstring( no, yes, configFile );
+			if (checkSiard10.isSelected()) {
+				Util.oldnewstring(no, yes, configFile);
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkSiard21.isSelected()
-						&& !checkSiard22.isSelected() ) {
-					labelMessage.setText( minOne );
-					checkSiard10.setSelected( true );
+				if (!checkSiard21.isSelected() && !checkSiard22.isSelected()) {
+					labelMessage.setText(minOne);
+					checkSiard10.setSelected(true);
 				} else {
-					Util.oldnewstring( yes, no, configFile );
+					Util.oldnewstring(yes, no, configFile);
 				}
 			}
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -231,25 +206,23 @@ public class ConfigControllerSiard
 	 * checkSiard21 schaltet diese Validierung in der Konfiguration ein oder aus
 	 */
 	@FXML
-	void changeSiard21( ActionEvent event )
-	{
-		labelMessage.setText( "" );
+	void changeSiard21(ActionEvent event) {
+		labelMessage.setText("");
 		String yes = "<siard21>2.1 </siard21>";
 		String no = "<siard21></siard21>";
 		try {
-			if ( checkSiard21.isSelected() ) {
-				Util.oldnewstring( no, yes, configFile );
+			if (checkSiard21.isSelected()) {
+				Util.oldnewstring(no, yes, configFile);
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkSiard10.isSelected()
-						&& !checkSiard22.isSelected() ) {
-					labelMessage.setText( minOne );
-					checkSiard21.setSelected( true );
+				if (!checkSiard10.isSelected() && !checkSiard22.isSelected()) {
+					labelMessage.setText(minOne);
+					checkSiard21.setSelected(true);
 				} else {
-					Util.oldnewstring( yes, no, configFile );
+					Util.oldnewstring(yes, no, configFile);
 				}
 			}
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -258,46 +231,42 @@ public class ConfigControllerSiard
 	 * checkSiard22 schaltet diese Validierung in der Konfiguration ein oder aus
 	 */
 	@FXML
-	void changeSiard22( ActionEvent event )
-	{
-		labelMessage.setText( "" );
+	void changeSiard22(ActionEvent event) {
+		labelMessage.setText("");
 		String yes = "<siard22>2.2 </siard22>";
 		String no = "<siard22></siard22>";
 		try {
-			if ( checkSiard22.isSelected() ) {
-				Util.oldnewstring( no, yes, configFile );
+			if (checkSiard22.isSelected()) {
+				Util.oldnewstring(no, yes, configFile);
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkSiard10.isSelected()
-						&& !checkSiard21.isSelected() ) {
-					labelMessage.setText( minOne );
-					checkSiard22.setSelected( true );
+				if (!checkSiard10.isSelected() && !checkSiard21.isSelected()) {
+					labelMessage.setText(minOne);
+					checkSiard22.setSelected(true);
 				} else {
-					Util.oldnewstring( yes, no, configFile );
+					Util.oldnewstring(yes, no, configFile);
 				}
 			}
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	/*
-	 * checkLobExtension schaltet dieser Mangel in der Konfiguration ein oder
-	 * aus
+	 * checkLobExtension schaltet dieser Mangel in der Konfiguration ein oder aus
 	 */
 	@FXML
-	void changeLobExtension( ActionEvent event )
-	{
-		labelMessage.setText( "" );
+	void changeLobExtension(ActionEvent event) {
+		labelMessage.setText("");
 		String yes = "<lobExtension>Error </lobExtension>";
 		String no = "<lobExtension>Warning </lobExtension>";
 		try {
-			if ( checkLobExtension.isSelected() ) {
-				Util.oldnewstring( no, yes, configFile );
+			if (checkLobExtension.isSelected()) {
+				Util.oldnewstring(no, yes, configFile);
 			} else {
-				Util.oldnewstring( yes, no, configFile );
+				Util.oldnewstring(yes, no, configFile);
 			}
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -307,18 +276,17 @@ public class ConfigControllerSiard
 	 * Konfiguration ein oder aus
 	 */
 	@FXML
-	void changeLobAzepted( ActionEvent event )
-	{
-		labelMessage.setText( "" );
+	void changeLobAzepted(ActionEvent event) {
+		labelMessage.setText("");
 		String yes = "<lobAzepted>Check </lobAzepted>";
 		String no = "<lobAzepted></lobAzepted>";
 		try {
-			if ( checkLobExtension.isSelected() ) {
-				Util.oldnewstring( no, yes, configFile );
+			if (checkLobExtension.isSelected()) {
+				Util.oldnewstring(no, yes, configFile);
 			} else {
-				Util.oldnewstring( yes, no, configFile );
+				Util.oldnewstring(yes, no, configFile);
 			}
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}

@@ -51,48 +51,43 @@ import ch.kostceco.tools.kostval.logging.Logtxt;
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
 
-public class ValidationWwarningModuleImpl extends ValidationModuleImpl
-		implements ValidationWwarningModule
+public class ValidationWwarningModuleImpl extends ValidationModuleImpl implements ValidationWwarningModule
 
 {
 
 	private boolean min = false;
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws ValidationWwarningException
-	{
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws ValidationWwarningException {
 		// Informationen zur Darstellung "onWork" holen
-		String onWork = configMap.get( "ShowProgressOnWork" );
+		String onWork = configMap.get("ShowProgressOnWork");
 		/*
 		 * Nicht vergessen in
 		 * "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property
 		 * name="configurationService" ref="configurationService" />
 		 */
-		if ( onWork.equals( "yes" ) ) {
+		if (onWork.equals("yes")) {
 			// Ausgabe Modul Ersichtlich das KOST-Val arbeitet
-			System.out.print( "W    " );
-			System.out.print( "\b\b\b\b\b" );
-		} else if ( onWork.equals( "nomin" ) ) {
+			System.out.print("W    ");
+			System.out.print("\b\b\b\b\b");
+		} else if (onWork.equals("nomin")) {
 			min = true;
-		} else if ( onWork.equals( "nomin" ) ) {
+		} else if (onWork.equals("nomin")) {
 			min = true;
 		}
 
 		try {
 
-			String pathToWorkDir = configMap.get( "PathToWorkDir" );
+			String pathToWorkDir = configMap.get("PathToWorkDir");
 			pathToWorkDir = pathToWorkDir + File.separator + "SIARD";
-			File metadataXml = new File(
-					new StringBuilder( pathToWorkDir ).append( File.separator )
-							.append( "header" ).append( File.separator )
-							.append( "metadata.xml" ).toString() );
+			File metadataXml = new File(new StringBuilder(pathToWorkDir).append(File.separator).append("header")
+					.append(File.separator).append("metadata.xml").toString());
 
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			Document doc = db.parse( new FileInputStream( metadataXml ) );
+			Document doc = db.parse(new FileInputStream(metadataXml));
 			doc.getDocumentElement().normalize();
 
 			// Lesen der Werte von dataOwner und dataOriginTimespan sowie dbname
@@ -101,85 +96,73 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl
 			Element elementDataOriginTimespan = null;
 			Element elementDbName = null;
 
-			elementDataOwner = (Element) xpath.evaluate(
-					"/siardArchive/dataOwner", doc, XPathConstants.NODE );
+			elementDataOwner = (Element) xpath.evaluate("/siardArchive/dataOwner", doc, XPathConstants.NODE);
 
-			elementDataOriginTimespan = (Element) xpath.evaluate(
-					"/siardArchive/dataOriginTimespan", doc,
-					XPathConstants.NODE );
+			elementDataOriginTimespan = (Element) xpath.evaluate("/siardArchive/dataOriginTimespan", doc,
+					XPathConstants.NODE);
 
-			elementDbName = (Element) xpath.evaluate( "/siardArchive/dbname",
-					doc, XPathConstants.NODE );
+			elementDbName = (Element) xpath.evaluate("/siardArchive/dbname", doc, XPathConstants.NODE);
 
-			if ( elementDataOwner != null ) {
+			if (elementDataOwner != null) {
 				String dataOwnerValue = elementDataOwner.getTextContent();
-				if ( dataOwnerValue.equals( "(...)" )
-						|| dataOwnerValue.equals( "unspecified" ) ) {
+				if (dataOwnerValue.equals("(...)") || dataOwnerValue.equals("unspecified")) {
 					/*
-					 * Der Initialwert wurde nicht veraendert respektive
-					 * ausgefuellt, entsprechend wird eine Warnung ausgegeben
+					 * Der Initialwert wurde nicht veraendert respektive ausgefuellt, entsprechend
+					 * wird eine Warnung ausgegeben
 					 */
-					if ( min ) {
+					if (min) {
 					} else {
 
-						Logtxt.logtxt( logFile, getTextResourceService()
-								.getText( locale, MESSAGE_XML_MODUL_W_SIARD )
-								+ getTextResourceService().getText( locale,
-										MESSAGE_XML_W_WARNING_INITVALUE,
-										"dataOwner", dataOwnerValue ) );
+						Logtxt.logtxt(logFile,
+								getTextResourceService().getText(locale, MESSAGE_XML_MODUL_W_SIARD)
+										+ getTextResourceService().getText(locale, MESSAGE_XML_W_WARNING_INITVALUE,
+												"dataOwner", dataOwnerValue));
 					}
 				}
 			}
 
-			if ( elementDataOriginTimespan != null ) {
-				String dataOriginTimespanValue = elementDataOriginTimespan
-						.getTextContent();
-				if ( dataOriginTimespanValue.equals( "(...)" ) ) {
+			if (elementDataOriginTimespan != null) {
+				String dataOriginTimespanValue = elementDataOriginTimespan.getTextContent();
+				if (dataOriginTimespanValue.equals("(...)")) {
 					/*
-					 * Der Initialwert wurde nicht veraendert respektive
-					 * ausgefuellt, entsprechend wird eine Warnung ausgegeben
+					 * Der Initialwert wurde nicht veraendert respektive ausgefuellt, entsprechend
+					 * wird eine Warnung ausgegeben
 					 */
-					if ( min ) {
+					if (min) {
 					} else {
 
-						Logtxt.logtxt( logFile, getTextResourceService()
-								.getText( locale, MESSAGE_XML_MODUL_W_SIARD )
-								+ getTextResourceService().getText( locale,
-										MESSAGE_XML_W_WARNING_INITVALUE,
-										"dataOriginTimespan",
-										dataOriginTimespanValue ) );
+						Logtxt.logtxt(logFile,
+								getTextResourceService().getText(locale, MESSAGE_XML_MODUL_W_SIARD)
+										+ getTextResourceService().getText(locale, MESSAGE_XML_W_WARNING_INITVALUE,
+												"dataOriginTimespan", dataOriginTimespanValue));
 					}
 				}
 			}
 
-			if ( elementDbName != null ) {
+			if (elementDbName != null) {
 				String dataDbNameValue = elementDbName.getTextContent();
-				if ( dataDbNameValue.equals( "(...)" ) ) {
+				if (dataDbNameValue.equals("(...)")) {
 					/*
-					 * Der Initialwert wurde nicht veraendert respektive
-					 * ausgefuellt, entsprechend wird eine Warnung ausgegeben
+					 * Der Initialwert wurde nicht veraendert respektive ausgefuellt, entsprechend
+					 * wird eine Warnung ausgegeben
 					 */
-					if ( min ) {
+					if (min) {
 					} else {
 
-						Logtxt.logtxt( logFile, getTextResourceService()
-								.getText( locale, MESSAGE_XML_MODUL_W_SIARD )
-								+ getTextResourceService().getText( locale,
-										MESSAGE_XML_W_WARNING_INITVALUE,
-										"dbname", dataDbNameValue ) );
+						Logtxt.logtxt(logFile,
+								getTextResourceService().getText(locale, MESSAGE_XML_MODUL_W_SIARD)
+										+ getTextResourceService().getText(locale, MESSAGE_XML_W_WARNING_INITVALUE,
+												"dbname", dataDbNameValue));
 					}
 				}
 			}
 
-		} catch ( Exception e ) {
-			if ( min ) {
+		} catch (Exception e) {
+			if (min) {
 			} else {
 
-				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale,
-								MESSAGE_XML_MODUL_W_SIARD )
-								+ getTextResourceService().getText( locale,
-										ERROR_XML_UNKNOWN, e.getMessage() ) );
+				Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_W_SIARD)
+						+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
 			}
 			return true;
 		}
@@ -188,9 +171,7 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl
 	}
 
 	@Override
-	public boolean prepareValidation( ValidationContext validationContext )
-			throws IOException, JDOMException, Exception
-	{
+	public boolean prepareValidation(ValidationContext validationContext) throws IOException, JDOMException, Exception {
 		// TODO Auto-generated method stub
 		return false;
 	}

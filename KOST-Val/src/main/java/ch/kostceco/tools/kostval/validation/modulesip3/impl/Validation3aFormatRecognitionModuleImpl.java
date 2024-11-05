@@ -31,186 +31,183 @@ import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip3.Validation3aFormatRecognitionModule;
 
-public class Validation3aFormatRecognitionModuleImpl extends
-		ValidationModuleImpl implements Validation3aFormatRecognitionModule
-{
+public class Validation3aFormatRecognitionModuleImpl extends ValidationModuleImpl
+		implements Validation3aFormatRecognitionModule {
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws Validation3aFormatRecognitionException
-	{
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws Validation3aFormatRecognitionException {
 
 		boolean showOnWork = false;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
-		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
+		String onWorkConfig = configMap.get("ShowProgressOnWork");
 		/*
 		 * Nicht vergessen in
 		 * "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property
 		 * name="configurationService" ref="configurationService" />
 		 */
-		if ( onWorkConfig.equals( "yes" ) ) {
+		if (onWorkConfig.equals("yes")) {
 			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
 			showOnWork = true;
-			System.out.print( "3A   " );
-			System.out.print( "\b\b\b\b\b" );
+			System.out.print("3A   ");
+			System.out.print("\b\b\b\b\b");
 		}
 
 		boolean valid = true;
 
 		// TODO ermitteln welche Formate validiert werden koennen
 		// respektive eingeschaltet sind
-		String pdfaValidation = configMap.get( "pdfaValidation" );
-		String txtValidation = configMap.get( "txtValidation" );
-		String pdfValidation = configMap.get( "pdfValidation" );
-		String jp2Validation = configMap.get( "jp2Validation" );
-		String jpegValidation = configMap.get( "jpegValidation" );
-		String tiffValidation = configMap.get( "tiffValidation" );
-		String pngValidation = configMap.get( "pngValidation" );
-		String flacValidation = configMap.get( "flacValidation" );
-		String waveValidation = configMap.get( "waveValidation" );
-		String mp3Validation = configMap.get( "mp3Validation" );
-		String mkvValidation = configMap.get( "mkvValidation" );
-		String mp4Validation = configMap.get( "mp4Validation" );
-		String xmlValidation = configMap.get( "xmlValidation" );
-		String jsonValidation = configMap.get( "jsonValidation" );
-		String siardValidation = configMap.get( "siardValidation" );
-		String csvValidation = configMap.get( "csvValidation" );
-		String xlsxValidation = configMap.get( "xlsxValidation" );
-		String odsValidation = configMap.get( "odsValidation" );
-		String otherformats = configMap.get( "otherformats" );
+		String pdfaValidation = configMap.get("pdfaValidation");
+		String txtValidation = configMap.get("txtValidation");
+		String pdfValidation = configMap.get("pdfValidation");
+		String jp2Validation = configMap.get("jp2Validation");
+		String jpegValidation = configMap.get("jpegValidation");
+		String tiffValidation = configMap.get("tiffValidation");
+		String pngValidation = configMap.get("pngValidation");
+		String flacValidation = configMap.get("flacValidation");
+		String waveValidation = configMap.get("waveValidation");
+		String mp3Validation = configMap.get("mp3Validation");
+		String mkvValidation = configMap.get("mkvValidation");
+		String mp4Validation = configMap.get("mp4Validation");
+		String xmlValidation = configMap.get("xmlValidation");
+		String jsonValidation = configMap.get("jsonValidation");
+		String siardValidation = configMap.get("siardValidation");
+		String csvValidation = configMap.get("csvValidation");
+		String xlsxValidation = configMap.get("xlsxValidation");
+		String odsValidation = configMap.get("odsValidation");
+		String otherformats = configMap.get("otherformats");
 
 		String formatValOn = "";
-		if ( !pdfaValidation.equals( "no" ) ) {
-			if ( formatValOn.equals( "" ) ) {
+		if (!pdfaValidation.equals("no")) {
+			if (formatValOn.equals("")) {
 				formatValOn = " PDF/A ";
 			} else {
 				formatValOn = formatValOn + " PDF/A ";
 			}
 		}
-		if ( !txtValidation.equals( "no" ) ) {
-			if ( formatValOn.equals( "" ) ) {
+		if (!txtValidation.equals("no")) {
+			if (formatValOn.equals("")) {
 				formatValOn = " TXT  ";
 			} else {
 				formatValOn = formatValOn + " TXT  ";
 			}
 		}
-		if ( !pdfValidation.equals( "no" ) ) {
-			if ( formatValOn.equals( "" ) ) {
+		if (!pdfValidation.equals("no")) {
+			if (formatValOn.equals("")) {
 				formatValOn = " PDF  ";
 			} else {
 				formatValOn = formatValOn + " PDF  ";
 			}
 		}
-		if ( !jp2Validation.equals( "no" ) ) {
-			if ( formatValOn.equals( "" ) ) {
+		if (!jp2Validation.equals("no")) {
+			if (formatValOn.equals("")) {
 				formatValOn = " JP2  ";
 			} else {
 				formatValOn = formatValOn + " JP2  ";
 			}
 		}
-		if ( !jpegValidation.equals( "no" ) ) {
-			if ( formatValOn.equals( "" ) ) {
+		if (!jpegValidation.equals("no")) {
+			if (formatValOn.equals("")) {
 				formatValOn = " JPEG  ";
 			} else {
 				formatValOn = formatValOn + " JPEG  ";
 			}
 		}
-		if ( !tiffValidation.equals( "no" ) ) {
-			if ( formatValOn.equals( "" ) ) {
+		if (!tiffValidation.equals("no")) {
+			if (formatValOn.equals("")) {
 				formatValOn = " TIFF  ";
 			} else {
 				formatValOn = formatValOn + " TIFF  ";
 			}
 		}
-		if ( !pngValidation.equals( "no" ) ) {
-			if ( formatValOn.equals( "" ) ) {
+		if (!pngValidation.equals("no")) {
+			if (formatValOn.equals("")) {
 				formatValOn = " PNG ";
 			} else {
 				formatValOn = formatValOn + " PNG ";
 			}
 		}
-		if ( !flacValidation.equals( "no" ) ) {
-			if ( formatValOn.equals( "" ) ) {
+		if (!flacValidation.equals("no")) {
+			if (formatValOn.equals("")) {
 				formatValOn = " FLAC ";
 			} else {
 				formatValOn = formatValOn + " FLAC ";
 			}
 		}
-		if ( !waveValidation.equals( "no" ) ) {
-			if ( formatValOn.equals( "" ) ) {
+		if (!waveValidation.equals("no")) {
+			if (formatValOn.equals("")) {
 				formatValOn = " WAVE ";
 			} else {
 				formatValOn = formatValOn + " WAVE ";
 			}
 		}
-		if ( !mp3Validation.equals( "no" ) ) {
-			if ( formatValOn.equals( "" ) ) {
+		if (!mp3Validation.equals("no")) {
+			if (formatValOn.equals("")) {
 				formatValOn = " MP3 ";
 			} else {
 				formatValOn = formatValOn + " MP3 ";
 			}
 		}
-		if ( !mkvValidation.equals( "no" ) ) {
-			if ( formatValOn.equals( "" ) ) {
+		if (!mkvValidation.equals("no")) {
+			if (formatValOn.equals("")) {
 				formatValOn = " MKV ";
 			} else {
 				formatValOn = formatValOn + " MKV ";
 			}
 		}
-		if ( !mp4Validation.equals( "no" ) ) {
-			if ( formatValOn.equals( "" ) ) {
+		if (!mp4Validation.equals("no")) {
+			if (formatValOn.equals("")) {
 				formatValOn = " MP4 ";
 			} else {
 				formatValOn = formatValOn + " MP4 ";
 			}
 		}
-		if ( !xmlValidation.equals( "no" ) ) {
-			if ( formatValOn.equals( "" ) ) {
+		if (!xmlValidation.equals("no")) {
+			if (formatValOn.equals("")) {
 				formatValOn = " XML ";
 			} else {
 				formatValOn = formatValOn + " XML ";
 			}
 		}
-		if ( !jsonValidation.equals( "no" ) ) {
-			if ( formatValOn.equals( "" ) ) {
+		if (!jsonValidation.equals("no")) {
+			if (formatValOn.equals("")) {
 				formatValOn = " JSON ";
 			} else {
 				formatValOn = formatValOn + " JSON ";
 			}
 		}
-		if ( !siardValidation.equals( "no" ) ) {
-			if ( formatValOn.equals( "" ) ) {
+		if (!siardValidation.equals("no")) {
+			if (formatValOn.equals("")) {
 				formatValOn = " SIARD ";
 			} else {
 				formatValOn = formatValOn + " SIARD ";
 			}
 		}
-		if ( !csvValidation.equals( "no" ) ) {
-			if ( formatValOn.equals( "" ) ) {
+		if (!csvValidation.equals("no")) {
+			if (formatValOn.equals("")) {
 				formatValOn = " CSV ";
 			} else {
 				formatValOn = formatValOn + " CSV ";
 			}
 		}
-		if ( !xlsxValidation.equals( "no" ) ) {
-			if ( formatValOn.equals( "" ) ) {
+		if (!xlsxValidation.equals("no")) {
+			if (formatValOn.equals("")) {
 				formatValOn = " XLSX ";
 			} else {
 				formatValOn = formatValOn + " XLSX ";
 			}
 		}
-		if ( !odsValidation.equals( "no" ) ) {
-			if ( formatValOn.equals( "" ) ) {
+		if (!odsValidation.equals("no")) {
+			if (formatValOn.equals("")) {
 				formatValOn = " ODS  ";
 			} else {
 				formatValOn = formatValOn + " ODS  ";
 			}
 		}
-		if ( !otherformats.equals( "" ) ) {
-			if ( formatValOn.equals( "" ) ) {
+		if (!otherformats.equals("")) {
+			if (formatValOn.equals("")) {
 				formatValOn = " " + otherformats + " ";
 			} else {
 				formatValOn = formatValOn + " " + otherformats + " ";
@@ -218,114 +215,101 @@ public class Validation3aFormatRecognitionModuleImpl extends
 		}
 
 		// TODO 3a und 3b
-		Map<String, File> fileMap = Util.getFileMap( valDatei, true );
+		Map<String, File> fileMap = Util.getFileMap(valDatei, true);
 		Set<String> fileMapKeys = fileMap.keySet();
 		String error3a = "";
 		String error3b = "";
-		for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator
-				.hasNext(); ) {
+		for (Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext();) {
 			String entryName = iterator.next();
-			File newFile = fileMap.get( entryName );
+			File newFile = fileMap.get(entryName);
 
-			if ( !newFile.isDirectory() ) {
+			if (!newFile.isDirectory()) {
 				String recFormat = "new";
 				try {
-					recFormat = Recognition.formatRec( newFile );
-				} catch ( InterruptedException e ) {
+					recFormat = Recognition.formatRec(newFile);
+				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 
 				/*
-				 * Ergebnis ist die Datei z.B. PDFA oder SIARD wenn einwandfrei
-				 * erkannt ansonsten wird _ext angehängt, wenn die Dateiendung
-				 * nicht stimmt z.B. JPEG_ext wenn eine .tiff-Datei als JPEG
-				 * erkannt wird.
+				 * Ergebnis ist die Datei z.B. PDFA oder SIARD wenn einwandfrei erkannt
+				 * ansonsten wird _ext angehängt, wenn die Dateiendung nicht stimmt z.B.
+				 * JPEG_ext wenn eine .tiff-Datei als JPEG erkannt wird.
 				 * 
-				 * Wenn nichts erkannt wird UNKNOWN_DATEIENDUNG ausgegeben z.B.
-				 * UNKNOWN_CDR
+				 * Wenn nichts erkannt wird UNKNOWN_DATEIENDUNG ausgegeben z.B. UNKNOWN_CDR
 				 */
 
-				if ( recFormat.contains( "UNKNOWN_" ) ) {
-					recFormat = recFormat.replace( "UNKNOWN_", "" );
+				if (recFormat.contains("UNKNOWN_")) {
+					recFormat = recFormat.replace("UNKNOWN_", "");
 				}
 				String formatValOnCtr = formatValOn;
-				if ( formatValOnCtr.contains( "PDF/A" ) ) {
-					formatValOnCtr = formatValOnCtr.replace( "PDF/A", "PDFA" );
+				if (formatValOnCtr.contains("PDF/A")) {
+					formatValOnCtr = formatValOnCtr.replace("PDF/A", "PDFA");
 				}
-				if ( formatValOnCtr.contains( "," ) ) {
-					formatValOnCtr = formatValOnCtr.replace( ",", " " );
+				if (formatValOnCtr.contains(",")) {
+					formatValOnCtr = formatValOnCtr.replace(",", " ");
 				}
-				if ( formatValOnCtr.contains( "\n" ) ) {
-					formatValOnCtr = formatValOnCtr.replace( "\n", " " );
+				if (formatValOnCtr.contains("\n")) {
+					formatValOnCtr = formatValOnCtr.replace("\n", " ");
 				}
-				if ( formatValOnCtr.contains( "\t" ) ) {
-					formatValOnCtr = formatValOnCtr.replace( "\t", " " );
+				if (formatValOnCtr.contains("\t")) {
+					formatValOnCtr = formatValOnCtr.replace("\t", " ");
 				}
 
 				String recFormatSpace = " " + recFormat + " ";
 
 				// " "recFormat" " muss in formatValOn enthalten sein
 
-				if ( !formatValOnCtr.contains( recFormatSpace ) ) {
-					if ( error3a.equals( "" ) ) {
+				if (!formatValOnCtr.contains(recFormatSpace)) {
+					if (error3a.equals("")) {
 						error3a = recFormat;
-					} else if ( !error3a.contains( recFormat ) ) {
+					} else if (!error3a.contains(recFormat)) {
 						error3a = error3a + ", " + recFormat;
 					}
 
-					String contentPath = newFile.getAbsolutePath()
-							.replace( valDatei.getAbsolutePath() + "/", "" );
-					contentPath = newFile.getAbsolutePath()
-							.replace( valDatei.getAbsolutePath() + "\\", "" );
-					if ( error3b.equals( "" ) ) {
-						error3b = getTextResourceService().getText( locale,
-								MESSAGE_XML_MODUL_Cb_SIP )
-								+ getTextResourceService().getText( locale,
-										MESSAGE_XML_SERVICEMESSAGE, contentPath,
-										" (" + recFormat + ")" );
+					String contentPath = newFile.getAbsolutePath().replace(valDatei.getAbsolutePath() + "/", "");
+					contentPath = newFile.getAbsolutePath().replace(valDatei.getAbsolutePath() + "\\", "");
+					if (error3b.equals("")) {
+						error3b = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Cb_SIP)
+								+ getTextResourceService().getText(locale, MESSAGE_XML_SERVICEMESSAGE, contentPath,
+										" (" + recFormat + ")");
 					} else {
-						error3b = error3b + " "
-								+ getTextResourceService().getText( locale,
-										MESSAGE_XML_MODUL_Cb_SIP )
-								+ getTextResourceService().getText( locale,
-										MESSAGE_XML_SERVICEMESSAGE, contentPath,
-										" (" + recFormat + ")" );
+						error3b = error3b + " " + getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Cb_SIP)
+								+ getTextResourceService().getText(locale, MESSAGE_XML_SERVICEMESSAGE, contentPath,
+										" (" + recFormat + ")");
 					}
 					valid = false;
 				}
 			}
-			if ( showOnWork ) {
-				if ( onWork == 410 ) {
+			if (showOnWork) {
+				if (onWork == 410) {
 					onWork = 2;
-					System.out.print( "3A-  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 110 ) {
+					System.out.print("3A-  ");
+					System.out.print("\b\b\b\b\b");
+				} else if (onWork == 110) {
 					onWork = onWork + 1;
-					System.out.print( "3A\\  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 210 ) {
+					System.out.print("3A\\  ");
+					System.out.print("\b\b\b\b\b");
+				} else if (onWork == 210) {
 					onWork = onWork + 1;
-					System.out.print( "3A|  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 310 ) {
+					System.out.print("3A|  ");
+					System.out.print("\b\b\b\b\b");
+				} else if (onWork == 310) {
 					onWork = onWork + 1;
-					System.out.print( "3A/  " );
-					System.out.print( "\b\b\b\b\b" );
+					System.out.print("3A/  ");
+					System.out.print("\b\b\b\b\b");
 				} else {
 					onWork = onWork + 1;
 				}
 			}
 		}
-		if ( !valid ) {
+		if (!valid) {
 			// TODO Fehlermeldungen ausgeben
 			// Fehlermedung 3a ausgeben
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_Ca_SIP )
-							+ getTextResourceService().getText( locale,
-									MESSAGE_XML_CA_FILES, error3a ) );
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP)
+					+ getTextResourceService().getText(locale, MESSAGE_XML_CA_FILES, error3a));
 			// Fehlermedung 3b ausgeben
-			Logtxt.logtxt( logFile, error3b );
+			Logtxt.logtxt(logFile, error3b);
 		}
 		return valid;
 	}

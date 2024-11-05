@@ -20,20 +20,17 @@ package ch.kostceco.tools.kostval.exception.modulesiard;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-public class ValidationKchecksumException extends KOSTValException
-{
+public class ValidationKchecksumException extends KOSTValException {
 
 	/** @author ??? */
 	private static final long serialVersionUID = 5060094531057249403L; // tbd
 
-	public ValidationKchecksumException()
-	{
+	public ValidationKchecksumException() {
 		super();
 	}
 
-	public ValidationKchecksumException( String message )
-	{
-		super( message );
+	public ValidationKchecksumException(String message) {
+		super(message);
 	}
 
 }

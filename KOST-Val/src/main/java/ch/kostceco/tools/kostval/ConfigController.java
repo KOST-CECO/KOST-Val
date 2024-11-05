@@ -53,118 +53,98 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class ConfigController
-{
+public class ConfigController {
 
-	private File				configFileBackup	= new File(
-			System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x"
-					+ File.separator + "configuration" + File.separator
-					+ "BACKUP.kostval.conf.xml" );
+	private File configFileBackup = new File(System.getenv("USERPROFILE") + File.separator + ".kost-val_2x"
+			+ File.separator + "configuration" + File.separator + "BACKUP.kostval.conf.xml");
 
-	private File				configFileStandard	= new File(
-			System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x"
-					+ File.separator + "configuration" + File.separator
-					+ "STANDARD.kostval.conf.xml" );
+	private File configFileStandard = new File(System.getenv("USERPROFILE") + File.separator + ".kost-val_2x"
+			+ File.separator + "configuration" + File.separator + "STANDARD.kostval.conf.xml");
 
-	private File				configFile			= new File(
-			System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x"
-					+ File.separator + "configuration" + File.separator
-					+ "kostval.conf.xml" );
+	private File configFile = new File(System.getenv("USERPROFILE") + File.separator + ".kost-val_2x" + File.separator
+			+ "configuration" + File.separator + "kostval.conf.xml");
 
-	private String				dirOfJarPath, inputString, workString, config,
-			stringPuid, minOne = "Mindestens eine Variante muss erlaubt sein!";
+	private String dirOfJarPath, inputString, workString, config, stringPuid,
+			minOne = "Mindestens eine Variante muss erlaubt sein!";
 
-	private Locale				locale				= Locale.getDefault();
+	private Locale locale = Locale.getDefault();
 
 	@FXML
-	private Button				buttonConfigApply, buttonConfigApplyStandard,
-			buttonConfigCancel;
+	private Button buttonConfigApply, buttonConfigApplyStandard, buttonConfigCancel;
 
 	@FXML
-	private Label				labelText, labelPdfa, labelTxt, labelPdf;
+	private Label labelText, labelPdfa, labelTxt, labelPdf;
 
 	@FXML
-	private Button				buttonPdfa, buttonPdfaVal, buttonTxt, buttonPdf;
+	private Button buttonPdfa, buttonPdfaVal, buttonTxt, buttonPdf;
 
 	@FXML
-	private Label				labelImage, labelJpeg2000, labelJpeg, labelTiff,
-			labelPng;
+	private Label labelImage, labelJpeg2000, labelJpeg, labelTiff, labelPng;
 
 	@FXML
-	private Button				buttonJpeg2000, buttonJpeg, buttonTiff,
-			buttonTiffVal, buttonPng;
+	private Button buttonJpeg2000, buttonJpeg, buttonTiff, buttonTiffVal, buttonPng;
 
 	@FXML
-	private Label				labelAudio, labelFlac, labelWave, labelMp3;
+	private Label labelAudio, labelFlac, labelWave, labelMp3;
 
 	@FXML
-	private Button				buttonFlac, buttonWave, buttonMp3;
+	private Button buttonFlac, buttonWave, buttonMp3;
 
 	@FXML
-	private Label				labelVideo, labelMkv, labelMp4;
+	private Label labelVideo, labelMkv, labelMp4;
 
 	@FXML
-	private Button				buttonMkv, buttonMkvVal, buttonMp4,
-			buttonMp4Val;
+	private Button buttonMkv, buttonMkvVal, buttonMp4, buttonMp4Val;
 
 	@FXML
-	private Label				labelData, labelXml, labelJson, labelSiard,
-			labelCsv, labelXlsx, labelOds;
+	private Label labelData, labelXml, labelJson, labelSiard, labelCsv, labelXlsx, labelOds;
 
 	@FXML
-	private Button				buttonXml, buttonJson, buttonSiard,
-			buttonSiardVal, buttonCsv, buttonXlsx, buttonOds;
+	private Button buttonXml, buttonJson, buttonSiard, buttonSiardVal, buttonCsv, buttonXlsx, buttonOds;
 
 	@FXML
-	private Label				labelSip, labelEch0160;
+	private Label labelSip, labelEch0160;
 
 	@FXML
-	private Button				buttonSip0160, buttonSipVal;
+	private Button buttonSip0160, buttonSipVal;
 
 	@FXML
-	private Label				labelOther, labelSignatur, labelDv, labelEgovDV,
-			labelWarning, labelSize, labelWork, labelInput, labelHint,
-			labelHint1, labelConfig;
+	private Label labelOther, labelSignatur, labelDv, labelEgovDV, labelWarning, labelSize, labelWork, labelInput,
+			labelHint, labelHint1, labelConfig;
 
 	@FXML
-	private Button				buttonDv, buttonDvVal, buttonPuid, buttonWork,
-			buttonInput;
+	private Button buttonDv, buttonDvVal, buttonPuid, buttonWork, buttonInput;
 
-	ObservableList<String>		hashAlgoList		= FXCollections
-			.observableArrayList( "MD5", "SHA-1", "SHA-256", "SHA-512", "" );
+	ObservableList<String> hashAlgoList = FXCollections.observableArrayList("MD5", "SHA-1", "SHA-256", "SHA-512", "");
 	@FXML
-	private ChoiceBox<String>	hashAlgo;
+	private ChoiceBox<String> hashAlgo;
 
-	ObservableList<String>		sizeWarningList		= FXCollections
-			.observableArrayList( "", "0.5KB", "1KB", "5KB" );
+	ObservableList<String> sizeWarningList = FXCollections.observableArrayList("", "0.5KB", "1KB", "5KB");
 
 	@FXML
-	private ChoiceBox<String>	sizeWarning;
+	private ChoiceBox<String> sizeWarning;
 
 	@FXML
-	private WebView				wbv;
+	private WebView wbv;
 
-	private WebEngine			engine;
+	private WebEngine engine;
 
 	@FXML
-	void initialize()
-	{
+	void initialize() {
 
 		// TODO --> initialize (wird einmalig am Anfang ausgefuehrt)
 
 		// Copyright und Versionen ausgeben
-		String java6432 = System.getProperty( "sun.arch.data.model" );
-		String javaVersion = System.getProperty( "java.version" );
-		String javafxVersion = System.getProperty( "javafx.version" );
-		labelConfig.setText(
-				"Copyright © KOST/CECO          KOST-Val v2.2.1.1          JavaFX "
-						+ javafxVersion + "   &   Java-" + java6432 + " "
-						+ javaVersion + "." );
+		String java6432 = System.getProperty("sun.arch.data.model");
+		String javaVersion = System.getProperty("java.version");
+		String javafxVersion = System.getProperty("javafx.version");
+		labelConfig.setText("Copyright © KOST/CECO          KOST-Val v2.2.1.1          JavaFX " + javafxVersion
+				+ "   &   Java-" + java6432 + " " + javaVersion + ".");
 
 		// Original Config Kopieren
 		try {
-			Util.copyFile( configFile, configFileBackup );
-		} catch ( IOException e2 ) {
+			Util.copyFile(configFile, configFileBackup);
+		} catch (IOException e2) {
 			e2.printStackTrace();
 		}
 
@@ -172,150 +152,136 @@ public class ConfigController
 		dirOfJarPath = "";
 		try {
 			/*
-			 * dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist
-			 * eine generelle Aufgabe in allen Modulen. Zuerst immer
-			 * dirOfJarPath ermitteln und dann alle Pfade mit dirOfJarPath +
-			 * File.separator + erweitern.
+			 * dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist eine
+			 * generelle Aufgabe in allen Modulen. Zuerst immer dirOfJarPath ermitteln und
+			 * dann alle Pfade mit dirOfJarPath + File.separator + erweitern.
 			 */
-			String path = new File( "" ).getAbsolutePath();
+			String path = new File("").getAbsolutePath();
 			dirOfJarPath = path;
-			setLibraryPath( dirOfJarPath );
-		} catch ( Exception e1 ) {
+			setLibraryPath(dirOfJarPath);
+		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
 
-		hashAlgo.getItems().addAll( hashAlgoList );
-		sizeWarning.getItems().addAll( sizeWarningList );
+		hashAlgo.getItems().addAll(hashAlgoList);
+		sizeWarning.getItems().addAll(sizeWarningList);
 		try {
 			Document docH = null;
-			BufferedInputStream bisH = new BufferedInputStream(
-					new FileInputStream( configFile ) );
+			BufferedInputStream bisH = new BufferedInputStream(new FileInputStream(configFile));
 			DocumentBuilderFactory dbfH = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dbH = dbfH.newDocumentBuilder();
-			docH = dbH.parse( bisH );
+			docH = dbH.parse(bisH);
 			docH.normalize();
 			String hashAlgoInit = "";
-			hashAlgoInit = docH.getElementsByTagName( "hash" ).item( 0 )
-					.getTextContent();
+			hashAlgoInit = docH.getElementsByTagName("hash").item(0).getTextContent();
 			bisH.close();
 			docH = null;
-			hashAlgo.setValue( hashAlgoInit );
+			hashAlgo.setValue(hashAlgoInit);
 			Document docS = null;
-			BufferedInputStream bisS = new BufferedInputStream(
-					new FileInputStream( configFile ) );
+			BufferedInputStream bisS = new BufferedInputStream(new FileInputStream(configFile));
 			DocumentBuilderFactory dbfS = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dbS = dbfS.newDocumentBuilder();
-			docS = dbS.parse( bisS );
+			docS = dbS.parse(bisS);
 			docS.normalize();
 			String sizeWarningInit = "";
-			sizeWarningInit = docS.getElementsByTagName( "sizeWarning" )
-					.item( 0 ).getTextContent();
+			sizeWarningInit = docS.getElementsByTagName("sizeWarning").item(0).getTextContent();
 			bisS.close();
 			docS = null;
-			sizeWarning.setValue( sizeWarningInit );
-		} catch ( IOException | ParserConfigurationException
-				| SAXException e1 ) {
+			sizeWarning.setValue(sizeWarningInit);
+		} catch (IOException | ParserConfigurationException | SAXException e1) {
 			e1.printStackTrace();
 		}
 
 		// Sprache anhand configFile (HauptGui) setzten
 		try {
-			if ( Util.stringInFileLine( "kostval-conf-DE.xsl", configFile ) ) {
-				locale = Locale.of( "de" );
-				buttonConfigApply.setText( "Anwenden" );
-				buttonConfigApplyStandard.setText( "Standard anwenden" );
-				buttonConfigCancel.setText( "Verwerfen" );
-				labelText.setText( "Text" );
-				labelImage.setText( "Bild" );
-				labelAudio.setText( "Audio" );
-				labelVideo.setText( "Video" );
-				labelData.setText( "Daten" );
-				labelSip.setText( "SIP" );
-				labelOther.setText( "Sonstige" );
+			if (Util.stringInFileLine("kostval-conf-DE.xsl", configFile)) {
+				locale = Locale.of("de");
+				buttonConfigApply.setText("Anwenden");
+				buttonConfigApplyStandard.setText("Standard anwenden");
+				buttonConfigCancel.setText("Verwerfen");
+				labelText.setText("Text");
+				labelImage.setText("Bild");
+				labelAudio.setText("Audio");
+				labelVideo.setText("Video");
+				labelData.setText("Daten");
+				labelSip.setText("SIP");
+				labelOther.setText("Sonstige");
 				labelEgovDV.setText("Prüfung von el. Signaturen in PDF/A- und PDF-Dateien (Lizenz erforderlich)");
-				labelWarning.setText( "Dateigrösse" );
-				labelSize.setText(
-						"Warnung ausgeben, wenn die Datei kleiner als die ausgewählte Dateigrösse ist" );
-				buttonWork.setText( "Arbeitsverzeichnis" );
-				buttonInput.setText( "Inputverzeichnis" );
-				labelHint1.setText( "Hinweis:" );
-				labelHint.setText( "öffnet die jeweilige Detailkonfiguration" );
+				labelWarning.setText("Dateigrösse");
+				labelSize.setText("Warnung ausgeben, wenn die Datei kleiner als die ausgewählte Dateigrösse ist");
+				buttonWork.setText("Arbeitsverzeichnis");
+				buttonInput.setText("Inputverzeichnis");
+				labelHint1.setText("Hinweis:");
+				labelHint.setText("öffnet die jeweilige Detailkonfiguration");
 				minOne = "Mindestens eine Variante muss erlaubt sein!";
 				stringPuid = "weitere akzeptierte Dateiformate...";
-			} else if ( Util.stringInFileLine( "kostval-conf-FR.xsl",
-					configFile ) ) {
-				locale = Locale.of( "fr" );
-				buttonConfigApply.setText( "Appliquer" );
-				buttonConfigApplyStandard.setText( "Appliquer le standard" );
-				buttonConfigCancel.setText( "Annuler" );
-				labelText.setText( "Texte" );
-				labelImage.setText( "Image" );
-				labelAudio.setText( "Audio" );
-				labelVideo.setText( "Vidéo" );
-				labelData.setText( "Données" );
-				labelSip.setText( "SIP" );
-				labelOther.setText( "Autres" );
+			} else if (Util.stringInFileLine("kostval-conf-FR.xsl", configFile)) {
+				locale = Locale.of("fr");
+				buttonConfigApply.setText("Appliquer");
+				buttonConfigApplyStandard.setText("Appliquer le standard");
+				buttonConfigCancel.setText("Annuler");
+				labelText.setText("Texte");
+				labelImage.setText("Image");
+				labelAudio.setText("Audio");
+				labelVideo.setText("Vidéo");
+				labelData.setText("Données");
+				labelSip.setText("SIP");
+				labelOther.setText("Autres");
 				labelEgovDV.setText("Vérification des signatures él. dans PDF/A et PDF (licence requise)");
-				labelWarning.setText( "Taille" );
+				labelWarning.setText("Taille");
 				labelSize.setText(
-						"Afficher un avertissement si le fichier est plus petit que la taille de fichier sélectionnée" );
-				buttonWork.setText( "Répertoire de travail" );
-				buttonInput.setText( "Répertoire d'entrée" );
-				labelHint1.setText( "Remarque :" );
-				labelHint.setText(
-						"ouvre la configuration détaillée correspondante" );
+						"Afficher un avertissement si le fichier est plus petit que la taille de fichier sélectionnée");
+				buttonWork.setText("Répertoire de travail");
+				buttonInput.setText("Répertoire d'entrée");
+				labelHint1.setText("Remarque :");
+				labelHint.setText("ouvre la configuration détaillée correspondante");
 				minOne = "Au moins une variante doit etre autorisee !";
 				stringPuid = "autres formats de fichiers acceptés...";
-			} else if ( Util.stringInFileLine( "kostval-conf-IT.xsl",
-					configFile ) ) {
-				locale = Locale.of( "it" );
-				buttonConfigApply.setText( "Applica" );
-				buttonConfigApplyStandard.setText( "Applica predefinito" );
-				buttonConfigCancel.setText( "Annulla" );
-				labelText.setText( "Testo" );
-				labelImage.setText( "Immagine" );
-				labelAudio.setText( "Audio" );
-				labelVideo.setText( "Video" );
-				labelData.setText( "Dati" );
-				labelSip.setText( "SIP" );
-				labelOther.setText( "Altro" );
+			} else if (Util.stringInFileLine("kostval-conf-IT.xsl", configFile)) {
+				locale = Locale.of("it");
+				buttonConfigApply.setText("Applica");
+				buttonConfigApplyStandard.setText("Applica predefinito");
+				buttonConfigCancel.setText("Annulla");
+				labelText.setText("Testo");
+				labelImage.setText("Immagine");
+				labelAudio.setText("Audio");
+				labelVideo.setText("Video");
+				labelData.setText("Dati");
+				labelSip.setText("SIP");
+				labelOther.setText("Altro");
 				labelEgovDV.setText("Verifica delle firme el. nei file PDF/A e PDF (licenza necessaria)");
-				labelWarning.setText( "Dimensione" );
-				labelSize.setText(
-						"Visualizza l'avviso se il file è più piccolo della dimensione selezionata" );
-				buttonWork.setText( "Directory di lavoro" );
-				buttonInput.setText( "Directory di input" );
-				labelHint1.setText( "Nota:" );
-				labelHint.setText(
-						"apre la configurazione dettagliata corrispondente" );
+				labelWarning.setText("Dimensione");
+				labelSize.setText("Visualizza l'avviso se il file è più piccolo della dimensione selezionata");
+				buttonWork.setText("Directory di lavoro");
+				buttonInput.setText("Directory di input");
+				labelHint1.setText("Nota:");
+				labelHint.setText("apre la configurazione dettagliata corrispondente");
 				minOne = "Almeno una variante deve essere consentita!";
 				stringPuid = "altri formati di file accettati...";
 			} else {
-				locale = Locale.of( "en" );
-				buttonConfigApply.setText( "Apply" );
-				buttonConfigApplyStandard.setText( "Apply Standard" );
-				buttonConfigCancel.setText( "Cancel" );
-				labelText.setText( "Text" );
-				labelImage.setText( "Image" );
-				labelAudio.setText( "Audio" );
-				labelVideo.setText( "Video" );
-				labelData.setText( "Data" );
-				labelSip.setText( "SIP" );
-				labelOther.setText( "Other" );
+				locale = Locale.of("en");
+				buttonConfigApply.setText("Apply");
+				buttonConfigApplyStandard.setText("Apply Standard");
+				buttonConfigCancel.setText("Cancel");
+				labelText.setText("Text");
+				labelImage.setText("Image");
+				labelAudio.setText("Audio");
+				labelVideo.setText("Video");
+				labelData.setText("Data");
+				labelSip.setText("SIP");
+				labelOther.setText("Other");
 				labelEgovDV.setText("Verification of el. signatures in PDF/A and PDF files (license required)");
-				labelWarning.setText( "File size" );
-				labelSize.setText(
-						"Display warning if the file is smaller than the selected file size" );
-				buttonWork.setText( "Working directory" );
-				buttonInput.setText( "Input directory" );
-				labelHint1.setText( "Note:" );
-				labelHint.setText(
-						"opens the respective detailed configuration" );
+				labelWarning.setText("File size");
+				labelSize.setText("Display warning if the file is smaller than the selected file size");
+				buttonWork.setText("Working directory");
+				buttonInput.setText("Input directory");
+				labelHint1.setText("Note:");
+				labelHint.setText("opens the respective detailed configuration");
 				minOne = "At least one variant must be allowed!";
 				stringPuid = "other accepted file formats...";
 			}
-			buttonPuid.setText( stringPuid );
-		} catch ( Exception e ) {
+			buttonPuid.setText(stringPuid);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -324,9 +290,8 @@ public class ConfigController
 		// checkSiard;
 		try {
 			byte[] encoded;
-			encoded = Files
-					.readAllBytes( Paths.get( configFile.getAbsolutePath() ) );
-			config = new String( encoded, StandardCharsets.UTF_8 );
+			encoded = Files.readAllBytes(Paths.get(configFile.getAbsolutePath()));
+			config = new String(encoded, StandardCharsets.UTF_8);
 			String noPdfa = "<pdfavalidation>&#x2717;</pdfavalidation>";
 			String yesPdfa = "<pdfavalidation>&#x2713;</pdfavalidation>";
 			String noTxt = "<txtvalidation>&#x2717;</txtvalidation>";
@@ -368,351 +333,287 @@ public class ConfigController
 			String noDv = "<egovdvvalidation>&#x2717;</egovdvvalidation>";
 			String yesDv = "<egovdvvalidation>&#x2713;</egovdvvalidation>";
 
-			if ( config.contains( noPdfa ) ) {
-				buttonPdfaVal.setDisable( true );
-				buttonPdfa.setText( "✗" );
-				buttonPdfa.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-			} else if ( config.contains( yesPdfa ) ) {
-				buttonPdfaVal.setDisable( false );
-				buttonPdfa.setText( "✓" );
-				buttonPdfa.setStyle(
-						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
+			if (config.contains(noPdfa)) {
+				buttonPdfaVal.setDisable(true);
+				buttonPdfa.setText("✗");
+				buttonPdfa.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+			} else if (config.contains(yesPdfa)) {
+				buttonPdfaVal.setDisable(false);
+				buttonPdfa.setText("✓");
+				buttonPdfa.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
 			} else {
-				buttonPdfaVal.setDisable( true );
-				buttonPdfa.setText( "(✓)" );
-				buttonPdfa.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
+				buttonPdfaVal.setDisable(true);
+				buttonPdfa.setText("(✓)");
+				buttonPdfa.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
 			}
 
-			if ( config.contains( noTxt ) ) {
-				buttonTxt.setText( "✗" );
-				buttonTxt.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+			if (config.contains(noTxt)) {
+				buttonTxt.setText("✗");
+				buttonTxt.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
 			} else {
-				buttonTxt.setText( "(✓)" );
-				buttonTxt.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
+				buttonTxt.setText("(✓)");
+				buttonTxt.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
 			}
-			if ( config.contains( noPdf ) ) {
-				buttonPdf.setText( "✗" );
-				buttonPdf.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+			if (config.contains(noPdf)) {
+				buttonPdf.setText("✗");
+				buttonPdf.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
 			} else {
-				buttonPdf.setText( "(✓)" );
-				buttonPdf.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
+				buttonPdf.setText("(✓)");
+				buttonPdf.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
 			}
 
-			if ( config.contains( noJpeg2000 ) ) {
-				buttonJpeg2000.setText( "✗" );
-				buttonJpeg2000.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-			} else if ( config.contains( yesJpeg2000 ) ) {
-				buttonJpeg2000.setText( "✓" );
-				buttonJpeg2000.setStyle(
-						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
+			if (config.contains(noJpeg2000)) {
+				buttonJpeg2000.setText("✗");
+				buttonJpeg2000.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+			} else if (config.contains(yesJpeg2000)) {
+				buttonJpeg2000.setText("✓");
+				buttonJpeg2000.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
 			} else {
-				buttonJpeg2000.setText( "(✓)" );
-				buttonJpeg2000.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
+				buttonJpeg2000.setText("(✓)");
+				buttonJpeg2000.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
 			}
 
-			if ( config.contains( noJpeg ) ) {
-				buttonJpeg.setText( "✗" );
-				buttonJpeg.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-			} else if ( config.contains( yesJpeg ) ) {
-				buttonJpeg.setText( "✓" );
-				buttonJpeg.setStyle(
-						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
+			if (config.contains(noJpeg)) {
+				buttonJpeg.setText("✗");
+				buttonJpeg.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+			} else if (config.contains(yesJpeg)) {
+				buttonJpeg.setText("✓");
+				buttonJpeg.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
 			} else {
-				buttonJpeg.setText( "(✓)" );
-				buttonJpeg.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
+				buttonJpeg.setText("(✓)");
+				buttonJpeg.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
 			}
-			if ( config.contains( noTiff ) ) {
-				buttonTiffVal.setDisable( true );
-				buttonTiff.setText( "✗" );
-				buttonTiff.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-			} else if ( config.contains( yesTiff ) ) {
-				buttonTiffVal.setDisable( false );
-				buttonTiff.setText( "✓" );
-				buttonTiff.setStyle(
-						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
+			if (config.contains(noTiff)) {
+				buttonTiffVal.setDisable(true);
+				buttonTiff.setText("✗");
+				buttonTiff.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+			} else if (config.contains(yesTiff)) {
+				buttonTiffVal.setDisable(false);
+				buttonTiff.setText("✓");
+				buttonTiff.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
 			} else {
-				buttonTiffVal.setDisable( true );
-				buttonTiff.setText( "(✓)" );
-				buttonTiff.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
+				buttonTiffVal.setDisable(true);
+				buttonTiff.setText("(✓)");
+				buttonTiff.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
 			}
-			if ( config.contains( noPng ) ) {
-				buttonPng.setText( "✗" );
-				buttonPng.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-			} else if ( config.contains( yesPng ) ) {
-				buttonPng.setText( "✓" );
-				buttonPng.setStyle(
-						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
+			if (config.contains(noPng)) {
+				buttonPng.setText("✗");
+				buttonPng.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+			} else if (config.contains(yesPng)) {
+				buttonPng.setText("✓");
+				buttonPng.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
 			} else {
-				buttonPng.setText( "(✓)" );
-				buttonPng.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
+				buttonPng.setText("(✓)");
+				buttonPng.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
 			}
 
-			if ( config.contains( noFlac ) ) {
-				buttonFlac.setText( "✗" );
-				buttonFlac.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-			} else if ( config.contains( yesFlac ) ) {
-				buttonFlac.setText( "✓" );
-				buttonFlac.setStyle(
-						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
+			if (config.contains(noFlac)) {
+				buttonFlac.setText("✗");
+				buttonFlac.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+			} else if (config.contains(yesFlac)) {
+				buttonFlac.setText("✓");
+				buttonFlac.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
 			} else {
-				buttonFlac.setText( "(✓)" );
-				buttonFlac.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
+				buttonFlac.setText("(✓)");
+				buttonFlac.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
 			}
-			if ( config.contains( noWave ) ) {
-				buttonWave.setText( "✗" );
-				buttonWave.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-			} else if ( config.contains( yesWave ) ) {
-				buttonWave.setText( "✓" );
-				buttonWave.setStyle(
-						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
+			if (config.contains(noWave)) {
+				buttonWave.setText("✗");
+				buttonWave.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+			} else if (config.contains(yesWave)) {
+				buttonWave.setText("✓");
+				buttonWave.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
 			} else {
-				buttonWave.setText( "(✓)" );
-				buttonWave.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
+				buttonWave.setText("(✓)");
+				buttonWave.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
 			}
-			if ( config.contains( noMp3 ) ) {
-				buttonMp3.setText( "✗" );
-				buttonMp3.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-			} else if ( config.contains( yesMp3 ) ) {
-				buttonMp3.setText( "✓" );
-				buttonMp3.setStyle(
-						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
+			if (config.contains(noMp3)) {
+				buttonMp3.setText("✗");
+				buttonMp3.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+			} else if (config.contains(yesMp3)) {
+				buttonMp3.setText("✓");
+				buttonMp3.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
 			} else {
-				buttonMp3.setText( "(✓)" );
-				buttonMp3.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
+				buttonMp3.setText("(✓)");
+				buttonMp3.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
 			}
 
-			if ( config.contains( noMkv ) ) {
-				buttonMkvVal.setDisable( true );
-				buttonMkv.setText( "✗" );
-				buttonMkv.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-			} else if ( config.contains( yesMkv ) ) {
-				buttonMkvVal.setDisable( false );
-				buttonMkv.setText( "✓" );
-				buttonMkv.setStyle(
-						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
+			if (config.contains(noMkv)) {
+				buttonMkvVal.setDisable(true);
+				buttonMkv.setText("✗");
+				buttonMkv.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+			} else if (config.contains(yesMkv)) {
+				buttonMkvVal.setDisable(false);
+				buttonMkv.setText("✓");
+				buttonMkv.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
 			} else {
-				buttonMkvVal.setDisable( true );
-				buttonMkv.setText( "(✓)" );
-				buttonMkv.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
+				buttonMkvVal.setDisable(true);
+				buttonMkv.setText("(✓)");
+				buttonMkv.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
 			}
-			if ( config.contains( noMp4 ) ) {
-				buttonMp4Val.setDisable( true );
-				buttonMp4.setText( "✗" );
-				buttonMp4.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-			} else if ( config.contains( yesMp4 ) ) {
-				buttonMp4Val.setDisable( false );
-				buttonMp4.setText( "✓" );
-				buttonMp4.setStyle(
-						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
+			if (config.contains(noMp4)) {
+				buttonMp4Val.setDisable(true);
+				buttonMp4.setText("✗");
+				buttonMp4.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+			} else if (config.contains(yesMp4)) {
+				buttonMp4Val.setDisable(false);
+				buttonMp4.setText("✓");
+				buttonMp4.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
 			} else {
-				buttonMp4Val.setDisable( true );
-				buttonMp4.setText( "(✓)" );
-				buttonMp4.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
+				buttonMp4Val.setDisable(true);
+				buttonMp4.setText("(✓)");
+				buttonMp4.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
 			}
 
-			if ( config.contains( noXml ) ) {
-				buttonXml.setText( "✗" );
-				buttonXml.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-			} else if ( config.contains( yesXml ) ) {
-				buttonXml.setText( "✓" );
-				buttonXml.setStyle(
-						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
+			if (config.contains(noXml)) {
+				buttonXml.setText("✗");
+				buttonXml.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+			} else if (config.contains(yesXml)) {
+				buttonXml.setText("✓");
+				buttonXml.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
 			} else {
-				buttonXml.setText( "(✓)" );
-				buttonXml.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
+				buttonXml.setText("(✓)");
+				buttonXml.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
 			}
-			if ( config.contains( noJson ) ) {
-				buttonJson.setText( "✗" );
-				buttonJson.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+			if (config.contains(noJson)) {
+				buttonJson.setText("✗");
+				buttonJson.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
 			} else {
-				buttonJson.setText( "(✓)" );
-				buttonJson.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
+				buttonJson.setText("(✓)");
+				buttonJson.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
 			}
-			if ( config.contains( noSiard ) ) {
-				buttonSiardVal.setDisable( true );
-				buttonSiard.setText( "✗" );
-				buttonSiard.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-			} else if ( config.contains( yesSiard ) ) {
-				buttonSiardVal.setDisable( false );
-				buttonSiard.setText( "✓" );
-				buttonSiard.setStyle(
-						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
+			if (config.contains(noSiard)) {
+				buttonSiardVal.setDisable(true);
+				buttonSiard.setText("✗");
+				buttonSiard.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+			} else if (config.contains(yesSiard)) {
+				buttonSiardVal.setDisable(false);
+				buttonSiard.setText("✓");
+				buttonSiard.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
 			} else {
-				buttonSiardVal.setDisable( true );
-				buttonSiard.setText( "(✓)" );
-				buttonSiard.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
+				buttonSiardVal.setDisable(true);
+				buttonSiard.setText("(✓)");
+				buttonSiard.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
 			}
-			if ( config.contains( noCsv ) ) {
-				buttonCsv.setText( "✗" );
-				buttonCsv.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+			if (config.contains(noCsv)) {
+				buttonCsv.setText("✗");
+				buttonCsv.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
 			} else {
-				buttonCsv.setText( "(✓)" );
-				buttonCsv.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
+				buttonCsv.setText("(✓)");
+				buttonCsv.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
 			}
-			if ( config.contains( noXlsx ) ) {
-				buttonXlsx.setText( "✗" );
-				buttonXlsx.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+			if (config.contains(noXlsx)) {
+				buttonXlsx.setText("✗");
+				buttonXlsx.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
 			} else {
-				buttonXlsx.setText( "(✓)" );
-				buttonXlsx.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
+				buttonXlsx.setText("(✓)");
+				buttonXlsx.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
 			}
-			if ( config.contains( noOds ) ) {
-				buttonOds.setText( "✗" );
-				buttonOds.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+			if (config.contains(noOds)) {
+				buttonOds.setText("✗");
+				buttonOds.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
 			} else {
-				buttonOds.setText( "(✓)" );
-				buttonOds.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
+				buttonOds.setText("(✓)");
+				buttonOds.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
 			}
 
-			if ( config.contains( noSip0160 ) ) {
-				buttonSipVal.setDisable( true );
-				buttonSip0160.setText( "✗" );
-				buttonSip0160.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-			} else if ( config.contains( yesSip0160 ) ) {
-				buttonSipVal.setDisable( false );
-				buttonSip0160.setText( "✓" );
-				buttonSip0160.setStyle(
-						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
+			if (config.contains(noSip0160)) {
+				buttonSipVal.setDisable(true);
+				buttonSip0160.setText("✗");
+				buttonSip0160.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+			} else if (config.contains(yesSip0160)) {
+				buttonSipVal.setDisable(false);
+				buttonSip0160.setText("✓");
+				buttonSip0160.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
 			} else {
-				buttonSipVal.setDisable( true );
-				buttonSip0160.setText( "(✓)" );
-				buttonSip0160.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
+				buttonSipVal.setDisable(true);
+				buttonSip0160.setText("(✓)");
+				buttonSip0160.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
 			}
 
-			if ( config.contains( noDv ) ) {
-				buttonDvVal.setDisable( true );
-				buttonDv.setText( "✗" );
-				buttonDv.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-			} else if ( config.contains( yesDv ) ) {
-				buttonDvVal.setDisable( false );
-				buttonDv.setText( "✓" );
-				buttonDv.setStyle(
-						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
+			if (config.contains(noDv)) {
+				buttonDvVal.setDisable(true);
+				buttonDv.setText("✗");
+				buttonDv.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+			} else if (config.contains(yesDv)) {
+				buttonDvVal.setDisable(false);
+				buttonDv.setText("✓");
+				buttonDv.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
 			} else {
-				buttonDvVal.setDisable( false );
-				buttonDv.setText( "✓" );
-				buttonDv.setStyle(
-						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
+				buttonDvVal.setDisable(false);
+				buttonDv.setText("✓");
+				buttonDv.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
 			}
 
 			Document doc = null;
-			BufferedInputStream bis = new BufferedInputStream(
-					new FileInputStream( configFile ) );
+			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(configFile));
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			doc = db.parse( bis );
+			doc = db.parse(bis);
 			doc.normalize();
 			/*
 			 * stringPuid = doc.getElementsByTagName( "otherformats" ).item( 0 )
 			 * .getTextContent();
 			 */
-			buttonPuid.setText( stringPuid );
-			workString = doc.getElementsByTagName( "pathtoworkdir" ).item( 0 )
-					.getTextContent();
-			labelWork.setText( workString );
-			inputString = doc.getElementsByTagName( "standardinputdir" )
-					.item( 0 ).getTextContent();
-			labelInput.setText( inputString );
+			buttonPuid.setText(stringPuid);
+			workString = doc.getElementsByTagName("pathtoworkdir").item(0).getTextContent();
+			labelWork.setText(workString);
+			inputString = doc.getElementsByTagName("standardinputdir").item(0).getTextContent();
+			labelInput.setText(inputString);
 
-		} catch ( IOException | SAXException
-				| ParserConfigurationException e1 ) {
+		} catch (IOException | SAXException | ParserConfigurationException e1) {
 			e1.printStackTrace();
 		}
 
 		engine = wbv.getEngine();
-		engine.load( "file:///" + configFile.getAbsolutePath() );
+		engine.load("file:///" + configFile.getAbsolutePath());
 	}
 
-	protected void updateEngine( String message )
-	{
-		engine.loadContent( message );
+	protected void updateEngine(String message) {
+		engine.loadContent(message);
 	}
 
-	public static void setLibraryPath( String path ) throws Exception
-	{
-		System.setProperty( "java.library.path", path );
+	public static void setLibraryPath(String path) throws Exception {
+		System.setProperty("java.library.path", path);
 		// set sys_paths to null so that java.library.path will be reevalueted
 		// next time it is needed
-		final Field sysPathsField = ClassLoader.class
-				.getDeclaredField( "sys_paths" );
-		sysPathsField.setAccessible( true );
-		sysPathsField.set( null, null );
+		final Field sysPathsField = ClassLoader.class.getDeclaredField("sys_paths");
+		sysPathsField.setAccessible(true);
+		sysPathsField.set(null, null);
 	}
 
 	/* TODO --> Button Exit ================= */
 
 	@FXML
-	void configApply( ActionEvent e )
-	{
-		engine.loadContent( "Apply" );
-		Util.deleteFile( configFileBackup );
+	void configApply(ActionEvent e) {
+		engine.loadContent("Apply");
+		Util.deleteFile(configFileBackup);
 		((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
 	}
 
 	@FXML
-	void configApplyStandard( ActionEvent e )
-	{
-		engine.loadContent( "Apply Standard" );
+	void configApplyStandard(ActionEvent e) {
+		engine.loadContent("Apply Standard");
 		configFile.delete();
-		Util.deleteFile( configFileBackup );
+		Util.deleteFile(configFileBackup);
 		try {
-			Util.copyFile( configFileStandard, configFile );
-		} catch ( IOException e1 ) {
+			Util.copyFile(configFileStandard, configFile);
+		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 		((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
 	}
 
 	@FXML
-	void configCancel( ActionEvent e )
-	{
+	void configCancel(ActionEvent e) {
 		configFile.delete();
-		engine.loadContent( "Cancel" );
+		engine.loadContent("Cancel");
 		try {
-			Util.copyFile( configFileBackup, configFile );
-		} catch ( IOException e1 ) {
+			Util.copyFile(configFileBackup, configFile);
+		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		Util.deleteFile( configFileBackup );
+		Util.deleteFile(configFileBackup);
 		((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
 	}
 
@@ -720,160 +621,133 @@ public class ConfigController
 
 	/* changePdfa schaltet zwischen x (v) V herum */
 	@FXML
-	void changePdfa( ActionEvent event )
-	{
+	void changePdfa(ActionEvent event) {
 		String yes = "<pdfavalidation>&#x2713;</pdfavalidation>";
 		String az = "<pdfavalidation>(&#x2713;)</pdfavalidation>";
 		String no = "<pdfavalidation>&#x2717;</pdfavalidation>";
 		try {
 			String optButton = buttonPdfa.getText();
-			if ( optButton.equals( "✗" ) ) {
-				Util.oldnewstring( no, az, configFile );
-				buttonPdfa.setText( "(✓)" );
-				buttonPdfa.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} else if ( optButton.equals( "(✓)" ) ) {
-				buttonPdfaVal.setDisable( false );
-				Util.oldnewstring( az, yes, configFile );
-				buttonPdfa.setText( "✓" );
-				buttonPdfa.setStyle(
-						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
+			if (optButton.equals("✗")) {
+				Util.oldnewstring(no, az, configFile);
+				buttonPdfa.setText("(✓)");
+				buttonPdfa.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
+			} else if (optButton.equals("(✓)")) {
+				buttonPdfaVal.setDisable(false);
+				Util.oldnewstring(az, yes, configFile);
+				buttonPdfa.setText("✓");
+				buttonPdfa.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected / (v) / V ist
-				if ( buttonJpeg2000.getText().equals( "✗" )
-						&& buttonJpeg.getText().equals( "✗" )
-						&& buttonTiff.getText().equals( "✗" )
-						&& buttonPng.getText().equals( "✗" )
-						&& buttonFlac.getText().equals( "✗" )
-						&& buttonWave.getText().equals( "✗" )
-						&& buttonMp3.getText().equals( "✗" )
-						&& buttonMkv.getText().equals( "✗" )
-						&& buttonMp4.getText().equals( "✗" )
-						&& buttonXml.getText().equals( "✗" )
-						&& buttonSiard.getText().equals( "✗" )
-						&& buttonSip0160.getText().equals( "✗" ) ) {
-					engine.loadContent(
-							"<html><h2>" + minOne + "</h2></html>" );
+				if (buttonJpeg2000.getText().equals("✗") && buttonJpeg.getText().equals("✗")
+						&& buttonTiff.getText().equals("✗") && buttonPng.getText().equals("✗")
+						&& buttonFlac.getText().equals("✗") && buttonWave.getText().equals("✗")
+						&& buttonMp3.getText().equals("✗") && buttonMkv.getText().equals("✗")
+						&& buttonMp4.getText().equals("✗") && buttonXml.getText().equals("✗")
+						&& buttonSiard.getText().equals("✗") && buttonSip0160.getText().equals("✗")) {
+					engine.loadContent("<html><h2>" + minOne + "</h2></html>");
 				} else {
-					buttonPdfaVal.setDisable( true );
-					Util.oldnewstring( yes, no, configFile );
-					buttonPdfa.setText( "✗" );
-					buttonPdfa.setStyle(
-							"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-					engine.load( "file:///" + configFile.getAbsolutePath() );
+					buttonPdfaVal.setDisable(true);
+					Util.oldnewstring(yes, no, configFile);
+					buttonPdfa.setText("✗");
+					buttonPdfa.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+					engine.load("file:///" + configFile.getAbsolutePath());
 				}
 			}
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	// Mit changePdfaVal wird die Pdfa-Haupteinstellung umgestellt
 	@FXML
-	void changePdfaVal( ActionEvent eventPdfa )
-	{
+	void changePdfaVal(ActionEvent eventPdfa) {
 		try {
 			StackPane pdfaLayout = new StackPane();
 
-			pdfaLayout = FXMLLoader
-					.load( getClass().getResource( "ConfigViewPdfa.fxml" ) );
-			Scene pdfaScene = new Scene( pdfaLayout );
-			pdfaScene.getStylesheets().add( getClass()
-					.getResource( "application.css" ).toExternalForm() );
+			pdfaLayout = FXMLLoader.load(getClass().getResource("ConfigViewPdfa.fxml"));
+			Scene pdfaScene = new Scene(pdfaLayout);
+			pdfaScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
 			// New window (Stage)
 			Stage pdfaStage = new Stage();
 
-			pdfaStage.setTitle( "KOST-Val   -   Configuration   -   PDF/A" );
-			Image kostvalIcon = new Image( "file:" + dirOfJarPath
-					+ File.separator + "doc" + File.separator + "valicon.png" );
+			pdfaStage.setTitle("KOST-Val   -   Configuration   -   PDF/A");
+			Image kostvalIcon = new Image(
+					"file:" + dirOfJarPath + File.separator + "doc" + File.separator + "valicon.png");
 			// Image kostvalIcon = new Image( "file:valicon.png" );
-			pdfaStage.initModality( Modality.APPLICATION_MODAL );
-			pdfaStage.getIcons().add( kostvalIcon );
-			pdfaStage.setScene( pdfaScene );
-			pdfaStage.setOnCloseRequest( event -> {
+			pdfaStage.initModality(Modality.APPLICATION_MODAL);
+			pdfaStage.getIcons().add(kostvalIcon);
+			pdfaStage.setScene(pdfaScene);
+			pdfaStage.setOnCloseRequest(event -> {
 				// hier engeben was beim schliessen gemacht werden soll
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} );
+				engine.load("file:///" + configFile.getAbsolutePath());
+			});
 			pdfaStage.show();
-			pdfaStage.setOnHiding( event -> {
+			pdfaStage.setOnHiding(event -> {
 				// hier engeben was beim schliessen gemacht werden soll
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} );
-		} catch ( IOException e1 ) {
+				engine.load("file:///" + configFile.getAbsolutePath());
+			});
+		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 	}
 
 	/* changeTxt schaltet zwischen x (v) herum */
 	@FXML
-	void changeTxt( ActionEvent event )
-	{
+	void changeTxt(ActionEvent event) {
 		String az = "<txtvalidation>(&#x2713;)</txtvalidation>";
 		String no = "<txtvalidation>&#x2717;</txtvalidation>";
 		try {
 			String optButton = buttonTxt.getText();
-			if ( optButton.equals( "✗" ) ) {
-				Util.oldnewstring( no, az, configFile );
-				buttonTxt.setText( "(✓)" );
-				buttonTxt.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
+			if (optButton.equals("✗")) {
+				Util.oldnewstring(no, az, configFile);
+				buttonTxt.setText("(✓)");
+				buttonTxt.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected / (v) / V ist
-				if ( buttonPdfa.getText().equals( "✗" )
-						&& buttonJpeg2000.getText().equals( "✗" )
-						&& buttonJpeg.getText().equals( "✗" )
-						&& buttonTiff.getText().equals( "✗" )
-						&& buttonPng.getText().equals( "✗" )
-						&& buttonFlac.getText().equals( "✗" )
-						&& buttonWave.getText().equals( "✗" )
-						&& buttonMp3.getText().equals( "✗" )
-						&& buttonMkv.getText().equals( "✗" )
-						&& buttonMp4.getText().equals( "✗" )
-						&& buttonXml.getText().equals( "✗" )
-						&& buttonSiard.getText().equals( "✗" )
-						&& buttonSip0160.getText().equals( "✗" ) ) {
-					engine.loadContent(
-							"<html><h2>" + minOne + "</h2></html>" );
+				if (buttonPdfa.getText().equals("✗") && buttonJpeg2000.getText().equals("✗")
+						&& buttonJpeg.getText().equals("✗") && buttonTiff.getText().equals("✗")
+						&& buttonPng.getText().equals("✗") && buttonFlac.getText().equals("✗")
+						&& buttonWave.getText().equals("✗") && buttonMp3.getText().equals("✗")
+						&& buttonMkv.getText().equals("✗") && buttonMp4.getText().equals("✗")
+						&& buttonXml.getText().equals("✗") && buttonSiard.getText().equals("✗")
+						&& buttonSip0160.getText().equals("✗")) {
+					engine.loadContent("<html><h2>" + minOne + "</h2></html>");
 				} else {
-					Util.oldnewstring( az, no, configFile );
-					buttonTxt.setText( "✗" );
-					buttonTxt.setStyle(
-							"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-					engine.load( "file:///" + configFile.getAbsolutePath() );
+					Util.oldnewstring(az, no, configFile);
+					buttonTxt.setText("✗");
+					buttonTxt.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+					engine.load("file:///" + configFile.getAbsolutePath());
 				}
 			}
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	/* changePdf schaltet zwischen x (v) herum */
 	@FXML
-	void changePdf( ActionEvent event )
-	{
+	void changePdf(ActionEvent event) {
 		String az = "<pdfvalidation>(&#x2713;)</pdfvalidation>";
 		String no = "<pdfvalidation>&#x2717;</pdfvalidation>";
 		try {
 			String optButton = buttonPdf.getText();
-			if ( optButton.equals( "✗" ) ) {
-				Util.oldnewstring( no, az, configFile );
-				buttonPdf.setText( "(✓)" );
-				buttonPdf.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
+			if (optButton.equals("✗")) {
+				Util.oldnewstring(no, az, configFile);
+				buttonPdf.setText("(✓)");
+				buttonPdf.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
 			} else {
-				Util.oldnewstring( az, no, configFile );
-				buttonPdf.setText( "✗" );
-				buttonPdf.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
+				Util.oldnewstring(az, no, configFile);
+				buttonPdf.setText("✗");
+				buttonPdf.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
 				// TODO Check etwas angewaehlt
 			}
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -882,240 +756,193 @@ public class ConfigController
 
 	/* changeJpeg2000 schaltet zwischen x (v) V herum */
 	@FXML
-	void changeJpeg2000( ActionEvent event )
-	{
+	void changeJpeg2000(ActionEvent event) {
 		String yes = "<jp2validation>&#x2713;</jp2validation>";
 		String az = "<jp2validation>(&#x2713;)</jp2validation>";
 		String no = "<jp2validation>&#x2717;</jp2validation>";
 		try {
 			String optButton = buttonJpeg2000.getText();
-			if ( optButton.equals( "✗" ) ) {
-				Util.oldnewstring( no, az, configFile );
-				buttonJpeg2000.setText( "(✓)" );
-				buttonJpeg2000.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} else if ( optButton.equals( "(✓)" ) ) {
-				Util.oldnewstring( az, yes, configFile );
-				buttonJpeg2000.setText( "✓" );
-				buttonJpeg2000.setStyle(
-						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
+			if (optButton.equals("✗")) {
+				Util.oldnewstring(no, az, configFile);
+				buttonJpeg2000.setText("(✓)");
+				buttonJpeg2000.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
+			} else if (optButton.equals("(✓)")) {
+				Util.oldnewstring(az, yes, configFile);
+				buttonJpeg2000.setText("✓");
+				buttonJpeg2000.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected / (v) / V ist
-				if ( buttonPdfa.getText().equals( "✗" )
-						&& buttonJpeg.getText().equals( "✗" )
-						&& buttonTiff.getText().equals( "✗" )
-						&& buttonPng.getText().equals( "✗" )
-						&& buttonFlac.getText().equals( "✗" )
-						&& buttonWave.getText().equals( "✗" )
-						&& buttonMp3.getText().equals( "✗" )
-						&& buttonMkv.getText().equals( "✗" )
-						&& buttonMp4.getText().equals( "✗" )
-						&& buttonXml.getText().equals( "✗" )
-						&& buttonSiard.getText().equals( "✗" )
-						&& buttonSip0160.getText().equals( "✗" ) ) {
-					engine.loadContent(
-							"<html><h2>" + minOne + "</h2></html>" );
+				if (buttonPdfa.getText().equals("✗") && buttonJpeg.getText().equals("✗")
+						&& buttonTiff.getText().equals("✗") && buttonPng.getText().equals("✗")
+						&& buttonFlac.getText().equals("✗") && buttonWave.getText().equals("✗")
+						&& buttonMp3.getText().equals("✗") && buttonMkv.getText().equals("✗")
+						&& buttonMp4.getText().equals("✗") && buttonXml.getText().equals("✗")
+						&& buttonSiard.getText().equals("✗") && buttonSip0160.getText().equals("✗")) {
+					engine.loadContent("<html><h2>" + minOne + "</h2></html>");
 				} else {
-					Util.oldnewstring( yes, no, configFile );
-					buttonJpeg2000.setText( "✗" );
-					buttonJpeg2000.setStyle(
-							"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-					engine.load( "file:///" + configFile.getAbsolutePath() );
+					Util.oldnewstring(yes, no, configFile);
+					buttonJpeg2000.setText("✗");
+					buttonJpeg2000.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+					engine.load("file:///" + configFile.getAbsolutePath());
 				}
 			}
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	/* changeJpeg schaltet zwischen x (v) V herum */
 	@FXML
-	void changeJpeg( ActionEvent event )
-	{
+	void changeJpeg(ActionEvent event) {
 		String yes = "<jpegvalidation>&#x2713;</jpegvalidation>";
 		String az = "<jpegvalidation>(&#x2713;)</jpegvalidation>";
 		String no = "<jpegvalidation>&#x2717;</jpegvalidation>";
 		try {
 			String optButton = buttonJpeg.getText();
-			if ( optButton.equals( "✗" ) ) {
-				Util.oldnewstring( no, az, configFile );
-				buttonJpeg.setText( "(✓)" );
-				buttonJpeg.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} else if ( optButton.equals( "(✓)" ) ) {
-				Util.oldnewstring( az, yes, configFile );
-				buttonJpeg.setText( "✓" );
-				buttonJpeg.setStyle(
-						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
+			if (optButton.equals("✗")) {
+				Util.oldnewstring(no, az, configFile);
+				buttonJpeg.setText("(✓)");
+				buttonJpeg.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
+			} else if (optButton.equals("(✓)")) {
+				Util.oldnewstring(az, yes, configFile);
+				buttonJpeg.setText("✓");
+				buttonJpeg.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected / (v) / V ist
-				if ( buttonPdfa.getText().equals( "✗" )
-						&& buttonJpeg2000.getText().equals( "✗" )
-						&& buttonTiff.getText().equals( "✗" )
-						&& buttonPng.getText().equals( "✗" )
-						&& buttonFlac.getText().equals( "✗" )
-						&& buttonWave.getText().equals( "✗" )
-						&& buttonMp3.getText().equals( "✗" )
-						&& buttonMkv.getText().equals( "✗" )
-						&& buttonMp4.getText().equals( "✗" )
-						&& buttonXml.getText().equals( "✗" )
-						&& buttonSiard.getText().equals( "✗" )
-						&& buttonSip0160.getText().equals( "✗" ) ) {
-					engine.loadContent(
-							"<html><h2>" + minOne + "</h2></html>" );
+				if (buttonPdfa.getText().equals("✗") && buttonJpeg2000.getText().equals("✗")
+						&& buttonTiff.getText().equals("✗") && buttonPng.getText().equals("✗")
+						&& buttonFlac.getText().equals("✗") && buttonWave.getText().equals("✗")
+						&& buttonMp3.getText().equals("✗") && buttonMkv.getText().equals("✗")
+						&& buttonMp4.getText().equals("✗") && buttonXml.getText().equals("✗")
+						&& buttonSiard.getText().equals("✗") && buttonSip0160.getText().equals("✗")) {
+					engine.loadContent("<html><h2>" + minOne + "</h2></html>");
 				} else {
-					Util.oldnewstring( yes, no, configFile );
-					buttonJpeg.setText( "✗" );
-					buttonJpeg.setStyle(
-							"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-					engine.load( "file:///" + configFile.getAbsolutePath() );
+					Util.oldnewstring(yes, no, configFile);
+					buttonJpeg.setText("✗");
+					buttonJpeg.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+					engine.load("file:///" + configFile.getAbsolutePath());
 				}
 			}
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	/* changeTiff schaltet zwischen x (v) V herum */
 	@FXML
-	void changeTiff( ActionEvent event )
-	{
+	void changeTiff(ActionEvent event) {
 		String yes = "<tiffvalidation>&#x2713;</tiffvalidation>";
 		String az = "<tiffvalidation>(&#x2713;)</tiffvalidation>";
 		String no = "<tiffvalidation>&#x2717;</tiffvalidation>";
 		try {
 			String optButton = buttonTiff.getText();
-			if ( optButton.equals( "✗" ) ) {
-				buttonTiffVal.setDisable( true );
-				Util.oldnewstring( no, az, configFile );
-				buttonTiff.setText( "(✓)" );
-				buttonTiff.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} else if ( optButton.equals( "(✓)" ) ) {
-				buttonTiffVal.setDisable( false );
-				Util.oldnewstring( az, yes, configFile );
-				buttonTiff.setText( "✓" );
-				buttonTiff.setStyle(
-						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
+			if (optButton.equals("✗")) {
+				buttonTiffVal.setDisable(true);
+				Util.oldnewstring(no, az, configFile);
+				buttonTiff.setText("(✓)");
+				buttonTiff.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
+			} else if (optButton.equals("(✓)")) {
+				buttonTiffVal.setDisable(false);
+				Util.oldnewstring(az, yes, configFile);
+				buttonTiff.setText("✓");
+				buttonTiff.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected / (v) / V ist
-				if ( buttonPdfa.getText().equals( "✗" )
-						&& buttonJpeg2000.getText().equals( "✗" )
-						&& buttonJpeg.getText().equals( "✗" )
-						&& buttonPng.getText().equals( "✗" )
-						&& buttonFlac.getText().equals( "✗" )
-						&& buttonWave.getText().equals( "✗" )
-						&& buttonMp3.getText().equals( "✗" )
-						&& buttonMkv.getText().equals( "✗" )
-						&& buttonMp4.getText().equals( "✗" )
-						&& buttonXml.getText().equals( "✗" )
-						&& buttonSiard.getText().equals( "✗" )
-						&& buttonSip0160.getText().equals( "✗" ) ) {
-					engine.loadContent(
-							"<html><h2>" + minOne + "</h2></html>" );
+				if (buttonPdfa.getText().equals("✗") && buttonJpeg2000.getText().equals("✗")
+						&& buttonJpeg.getText().equals("✗") && buttonPng.getText().equals("✗")
+						&& buttonFlac.getText().equals("✗") && buttonWave.getText().equals("✗")
+						&& buttonMp3.getText().equals("✗") && buttonMkv.getText().equals("✗")
+						&& buttonMp4.getText().equals("✗") && buttonXml.getText().equals("✗")
+						&& buttonSiard.getText().equals("✗") && buttonSip0160.getText().equals("✗")) {
+					engine.loadContent("<html><h2>" + minOne + "</h2></html>");
 				} else {
-					buttonTiffVal.setDisable( true );
-					Util.oldnewstring( yes, no, configFile );
-					buttonTiff.setText( "✗" );
-					buttonTiff.setStyle(
-							"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-					engine.load( "file:///" + configFile.getAbsolutePath() );
+					buttonTiffVal.setDisable(true);
+					Util.oldnewstring(yes, no, configFile);
+					buttonTiff.setText("✗");
+					buttonTiff.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+					engine.load("file:///" + configFile.getAbsolutePath());
 				}
 			}
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	// Mit changeTiffVal wird die TIFF-Haupteinstellung umgestellt
 	@FXML
-	void changeTiffVal( ActionEvent eventTiff )
-	{
+	void changeTiffVal(ActionEvent eventTiff) {
 		try {
 			StackPane tiffLayout = new StackPane();
 
-			tiffLayout = FXMLLoader
-					.load( getClass().getResource( "ConfigViewTiff.fxml" ) );
-			Scene tiffScene = new Scene( tiffLayout );
-			tiffScene.getStylesheets().add( getClass()
-					.getResource( "application.css" ).toExternalForm() );
+			tiffLayout = FXMLLoader.load(getClass().getResource("ConfigViewTiff.fxml"));
+			Scene tiffScene = new Scene(tiffLayout);
+			tiffScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
 			// New window (Stage)
 			Stage tiffStage = new Stage();
 
-			tiffStage.setTitle( "KOST-Val   -   Configuration   -   TIFF" );
-			Image kostvalIcon = new Image( "file:" + dirOfJarPath
-					+ File.separator + "doc" + File.separator + "valicon.png" );
+			tiffStage.setTitle("KOST-Val   -   Configuration   -   TIFF");
+			Image kostvalIcon = new Image(
+					"file:" + dirOfJarPath + File.separator + "doc" + File.separator + "valicon.png");
 			// Image kostvalIcon = new Image( "file:valicon.png" );
-			tiffStage.initModality( Modality.APPLICATION_MODAL );
-			tiffStage.getIcons().add( kostvalIcon );
-			tiffStage.setScene( tiffScene );
-			tiffStage.setOnCloseRequest( event -> {
+			tiffStage.initModality(Modality.APPLICATION_MODAL);
+			tiffStage.getIcons().add(kostvalIcon);
+			tiffStage.setScene(tiffScene);
+			tiffStage.setOnCloseRequest(event -> {
 				// hier engeben was beim schliessen gemacht werden soll
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} );
+				engine.load("file:///" + configFile.getAbsolutePath());
+			});
 			tiffStage.show();
-			tiffStage.setOnHiding( event -> {
+			tiffStage.setOnHiding(event -> {
 				// hier engeben was beim schliessen gemacht werden soll
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} );
-		} catch ( IOException e1 ) {
+				engine.load("file:///" + configFile.getAbsolutePath());
+			});
+		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 	}
 
 	/* changePng schaltet zwischen x (v) V herum */
 	@FXML
-	void changePng( ActionEvent event )
-	{
+	void changePng(ActionEvent event) {
 		String yes = "<pngvalidation>&#x2713;</pngvalidation>";
 		String az = "<pngvalidation>(&#x2713;)</pngvalidation>";
 		String no = "<pngvalidation>&#x2717;</pngvalidation>";
 		try {
 			String optButton = buttonPng.getText();
-			if ( optButton.equals( "✗" ) ) {
-				Util.oldnewstring( no, az, configFile );
-				buttonPng.setText( "(✓)" );
-				buttonPng.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} else if ( optButton.equals( "(✓)" ) ) {
-				Util.oldnewstring( az, yes, configFile );
-				buttonPng.setText( "✓" );
-				buttonPng.setStyle(
-						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
+			if (optButton.equals("✗")) {
+				Util.oldnewstring(no, az, configFile);
+				buttonPng.setText("(✓)");
+				buttonPng.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
+			} else if (optButton.equals("(✓)")) {
+				Util.oldnewstring(az, yes, configFile);
+				buttonPng.setText("✓");
+				buttonPng.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected / (v) / V ist
-				if ( buttonPdfa.getText().equals( "✗" )
-						&& buttonJpeg2000.getText().equals( "✗" )
-						&& buttonJpeg.getText().equals( "✗" )
-						&& buttonTiff.getText().equals( "✗" )
-						&& buttonFlac.getText().equals( "✗" )
-						&& buttonWave.getText().equals( "✗" )
-						&& buttonMp3.getText().equals( "✗" )
-						&& buttonMkv.getText().equals( "✗" )
-						&& buttonMp4.getText().equals( "✗" )
-						&& buttonXml.getText().equals( "✗" )
-						&& buttonSiard.getText().equals( "✗" )
-						&& buttonSip0160.getText().equals( "✗" ) ) {
-					engine.loadContent(
-							"<html><h2>" + minOne + "</h2></html>" );
+				if (buttonPdfa.getText().equals("✗") && buttonJpeg2000.getText().equals("✗")
+						&& buttonJpeg.getText().equals("✗") && buttonTiff.getText().equals("✗")
+						&& buttonFlac.getText().equals("✗") && buttonWave.getText().equals("✗")
+						&& buttonMp3.getText().equals("✗") && buttonMkv.getText().equals("✗")
+						&& buttonMp4.getText().equals("✗") && buttonXml.getText().equals("✗")
+						&& buttonSiard.getText().equals("✗") && buttonSip0160.getText().equals("✗")) {
+					engine.loadContent("<html><h2>" + minOne + "</h2></html>");
 				} else {
-					Util.oldnewstring( yes, no, configFile );
-					buttonPng.setText( "✗" );
-					buttonPng.setStyle(
-							"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-					engine.load( "file:///" + configFile.getAbsolutePath() );
+					Util.oldnewstring(yes, no, configFile);
+					buttonPng.setText("✗");
+					buttonPng.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+					engine.load("file:///" + configFile.getAbsolutePath());
 				}
 			}
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -1124,150 +951,117 @@ public class ConfigController
 
 	/* changeFlac schaltet zwischen x (v) V herum */
 	@FXML
-	void changeFlac( ActionEvent event )
-	{
+	void changeFlac(ActionEvent event) {
 		String yes = "<flacvalidation>&#x2713;</flacvalidation>";
 		String az = "<flacvalidation>(&#x2713;)</flacvalidation>";
 		String no = "<flacvalidation>&#x2717;</flacvalidation>";
 		try {
 			String optButton = buttonFlac.getText();
-			if ( optButton.equals( "✗" ) ) {
-				Util.oldnewstring( no, az, configFile );
-				buttonFlac.setText( "(✓)" );
-				buttonFlac.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} else if ( optButton.equals( "(✓)" ) ) {
-				Util.oldnewstring( az, yes, configFile );
-				buttonFlac.setText( "✓" );
-				buttonFlac.setStyle(
-						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
+			if (optButton.equals("✗")) {
+				Util.oldnewstring(no, az, configFile);
+				buttonFlac.setText("(✓)");
+				buttonFlac.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
+			} else if (optButton.equals("(✓)")) {
+				Util.oldnewstring(az, yes, configFile);
+				buttonFlac.setText("✓");
+				buttonFlac.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected / (v) / V ist
-				if ( buttonPdfa.getText().equals( "✗" )
-						&& buttonJpeg2000.getText().equals( "✗" )
-						&& buttonJpeg.getText().equals( "✗" )
-						&& buttonTiff.getText().equals( "✗" )
-						&& buttonPng.getText().equals( "✗" )
-						&& buttonWave.getText().equals( "✗" )
-						&& buttonMp3.getText().equals( "✗" )
-						&& buttonMkv.getText().equals( "✗" )
-						&& buttonMp4.getText().equals( "✗" )
-						&& buttonXml.getText().equals( "✗" )
-						&& buttonSiard.getText().equals( "✗" )
-						&& buttonSip0160.getText().equals( "✗" ) ) {
-					engine.loadContent(
-							"<html><h2>" + minOne + "</h2></html>" );
+				if (buttonPdfa.getText().equals("✗") && buttonJpeg2000.getText().equals("✗")
+						&& buttonJpeg.getText().equals("✗") && buttonTiff.getText().equals("✗")
+						&& buttonPng.getText().equals("✗") && buttonWave.getText().equals("✗")
+						&& buttonMp3.getText().equals("✗") && buttonMkv.getText().equals("✗")
+						&& buttonMp4.getText().equals("✗") && buttonXml.getText().equals("✗")
+						&& buttonSiard.getText().equals("✗") && buttonSip0160.getText().equals("✗")) {
+					engine.loadContent("<html><h2>" + minOne + "</h2></html>");
 				} else {
-					Util.oldnewstring( yes, no, configFile );
-					buttonFlac.setText( "✗" );
-					buttonFlac.setStyle(
-							"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-					engine.load( "file:///" + configFile.getAbsolutePath() );
+					Util.oldnewstring(yes, no, configFile);
+					buttonFlac.setText("✗");
+					buttonFlac.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+					engine.load("file:///" + configFile.getAbsolutePath());
 				}
 			}
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	/* changeWave schaltet zwischen x (v) V herum */
 	@FXML
-	void changeWave( ActionEvent event )
-	{
+	void changeWave(ActionEvent event) {
 		String yes = "<wavevalidation>&#x2713;</wavevalidation>";
 		String az = "<wavevalidation>(&#x2713;)</wavevalidation>";
 		String no = "<wavevalidation>&#x2717;</wavevalidation>";
 		try {
 			String optButton = buttonWave.getText();
-			if ( optButton.equals( "✗" ) ) {
-				Util.oldnewstring( no, az, configFile );
-				buttonWave.setText( "(✓)" );
-				buttonWave.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} else if ( optButton.equals( "(✓)" ) ) {
-				Util.oldnewstring( az, yes, configFile );
-				buttonWave.setText( "✓" );
-				buttonWave.setStyle(
-						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
+			if (optButton.equals("✗")) {
+				Util.oldnewstring(no, az, configFile);
+				buttonWave.setText("(✓)");
+				buttonWave.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
+			} else if (optButton.equals("(✓)")) {
+				Util.oldnewstring(az, yes, configFile);
+				buttonWave.setText("✓");
+				buttonWave.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected / (v) / V ist
-				if ( buttonPdfa.getText().equals( "✗" )
-						&& buttonJpeg2000.getText().equals( "✗" )
-						&& buttonJpeg.getText().equals( "✗" )
-						&& buttonTiff.getText().equals( "✗" )
-						&& buttonPng.getText().equals( "✗" )
-						&& buttonFlac.getText().equals( "✗" )
-						&& buttonMp3.getText().equals( "✗" )
-						&& buttonMkv.getText().equals( "✗" )
-						&& buttonMp4.getText().equals( "✗" )
-						&& buttonXml.getText().equals( "✗" )
-						&& buttonSiard.getText().equals( "✗" )
-						&& buttonSip0160.getText().equals( "✗" ) ) {
-					engine.loadContent(
-							"<html><h2>" + minOne + "</h2></html>" );
+				if (buttonPdfa.getText().equals("✗") && buttonJpeg2000.getText().equals("✗")
+						&& buttonJpeg.getText().equals("✗") && buttonTiff.getText().equals("✗")
+						&& buttonPng.getText().equals("✗") && buttonFlac.getText().equals("✗")
+						&& buttonMp3.getText().equals("✗") && buttonMkv.getText().equals("✗")
+						&& buttonMp4.getText().equals("✗") && buttonXml.getText().equals("✗")
+						&& buttonSiard.getText().equals("✗") && buttonSip0160.getText().equals("✗")) {
+					engine.loadContent("<html><h2>" + minOne + "</h2></html>");
 				} else {
-					Util.oldnewstring( yes, no, configFile );
-					buttonWave.setText( "✗" );
-					buttonWave.setStyle(
-							"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-					engine.load( "file:///" + configFile.getAbsolutePath() );
+					Util.oldnewstring(yes, no, configFile);
+					buttonWave.setText("✗");
+					buttonWave.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+					engine.load("file:///" + configFile.getAbsolutePath());
 				}
 			}
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	/* changeMp3 schaltet zwischen x (v) V herum */
 	@FXML
-	void changeMp3( ActionEvent event )
-	{
+	void changeMp3(ActionEvent event) {
 		String yes = "<mp3validation>&#x2713;</mp3validation>";
 		String az = "<mp3validation>(&#x2713;)</mp3validation>";
 		String no = "<mp3validation>&#x2717;</mp3validation>";
 		try {
 			String optButton = buttonMp3.getText();
-			if ( optButton.equals( "✗" ) ) {
-				Util.oldnewstring( no, az, configFile );
-				buttonMp3.setText( "(✓)" );
-				buttonMp3.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} else if ( optButton.equals( "(✓)" ) ) {
-				Util.oldnewstring( az, yes, configFile );
-				buttonMp3.setText( "✓" );
-				buttonMp3.setStyle(
-						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
+			if (optButton.equals("✗")) {
+				Util.oldnewstring(no, az, configFile);
+				buttonMp3.setText("(✓)");
+				buttonMp3.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
+			} else if (optButton.equals("(✓)")) {
+				Util.oldnewstring(az, yes, configFile);
+				buttonMp3.setText("✓");
+				buttonMp3.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected / (v) / V ist
-				if ( buttonPdfa.getText().equals( "✗" )
-						&& buttonJpeg2000.getText().equals( "✗" )
-						&& buttonJpeg.getText().equals( "✗" )
-						&& buttonTiff.getText().equals( "✗" )
-						&& buttonPng.getText().equals( "✗" )
-						&& buttonFlac.getText().equals( "✗" )
-						&& buttonWave.getText().equals( "✗" )
-						&& buttonMkv.getText().equals( "✗" )
-						&& buttonMp4.getText().equals( "✗" )
-						&& buttonXml.getText().equals( "✗" )
-						&& buttonSiard.getText().equals( "✗" )
-						&& buttonSip0160.getText().equals( "✗" ) ) {
-					engine.loadContent(
-							"<html><h2>" + minOne + "</h2></html>" );
+				if (buttonPdfa.getText().equals("✗") && buttonJpeg2000.getText().equals("✗")
+						&& buttonJpeg.getText().equals("✗") && buttonTiff.getText().equals("✗")
+						&& buttonPng.getText().equals("✗") && buttonFlac.getText().equals("✗")
+						&& buttonWave.getText().equals("✗") && buttonMkv.getText().equals("✗")
+						&& buttonMp4.getText().equals("✗") && buttonXml.getText().equals("✗")
+						&& buttonSiard.getText().equals("✗") && buttonSip0160.getText().equals("✗")) {
+					engine.loadContent("<html><h2>" + minOne + "</h2></html>");
 				} else {
-					Util.oldnewstring( yes, no, configFile );
-					buttonMp3.setText( "✗" );
-					buttonMp3.setStyle(
-							"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-					engine.load( "file:///" + configFile.getAbsolutePath() );
+					Util.oldnewstring(yes, no, configFile);
+					buttonMp3.setText("✗");
+					buttonMp3.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+					engine.load("file:///" + configFile.getAbsolutePath());
 				}
 			}
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -1276,180 +1070,152 @@ public class ConfigController
 
 	/* changeMkv schaltet zwischen x (v) V herum */
 	@FXML
-	void changeMkv( ActionEvent event )
-	{
+	void changeMkv(ActionEvent event) {
 		String yes = "<mkvvalidation>&#x2713;</mkvvalidation>";
 		String az = "<mkvvalidation>(&#x2713;)</mkvvalidation>";
 		String no = "<mkvvalidation>&#x2717;</mkvvalidation>";
 		try {
 			String optButton = buttonMkv.getText();
-			if ( optButton.equals( "✗" ) ) {
-				buttonMkvVal.setDisable( true );
-				Util.oldnewstring( no, az, configFile );
-				buttonMkv.setText( "(✓)" );
-				buttonMkv.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} else if ( optButton.equals( "(✓)" ) ) {
-				buttonMkvVal.setDisable( false );
-				Util.oldnewstring( az, yes, configFile );
-				buttonMkv.setText( "✓" );
-				buttonMkv.setStyle(
-						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
+			if (optButton.equals("✗")) {
+				buttonMkvVal.setDisable(true);
+				Util.oldnewstring(no, az, configFile);
+				buttonMkv.setText("(✓)");
+				buttonMkv.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
+			} else if (optButton.equals("(✓)")) {
+				buttonMkvVal.setDisable(false);
+				Util.oldnewstring(az, yes, configFile);
+				buttonMkv.setText("✓");
+				buttonMkv.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected / (v) / V ist
-				if ( buttonPdfa.getText().equals( "✗" )
-						&& buttonJpeg2000.getText().equals( "✗" )
-						&& buttonJpeg.getText().equals( "✗" )
-						&& buttonTiff.getText().equals( "✗" )
-						&& buttonPng.getText().equals( "✗" )
-						&& buttonFlac.getText().equals( "✗" )
-						&& buttonWave.getText().equals( "✗" )
-						&& buttonMp3.getText().equals( "✗" )
-						&& buttonMp4.getText().equals( "✗" )
-						&& buttonXml.getText().equals( "✗" )
-						&& buttonSiard.getText().equals( "✗" )
-						&& buttonSip0160.getText().equals( "✗" ) ) {
-					engine.loadContent(
-							"<html><h2>" + minOne + "</h2></html>" );
+				if (buttonPdfa.getText().equals("✗") && buttonJpeg2000.getText().equals("✗")
+						&& buttonJpeg.getText().equals("✗") && buttonTiff.getText().equals("✗")
+						&& buttonPng.getText().equals("✗") && buttonFlac.getText().equals("✗")
+						&& buttonWave.getText().equals("✗") && buttonMp3.getText().equals("✗")
+						&& buttonMp4.getText().equals("✗") && buttonXml.getText().equals("✗")
+						&& buttonSiard.getText().equals("✗") && buttonSip0160.getText().equals("✗")) {
+					engine.loadContent("<html><h2>" + minOne + "</h2></html>");
 				} else {
-					buttonMkvVal.setDisable( true );
-					Util.oldnewstring( yes, no, configFile );
-					buttonMkv.setText( "✗" );
-					buttonMkv.setStyle(
-							"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-					engine.load( "file:///" + configFile.getAbsolutePath() );
+					buttonMkvVal.setDisable(true);
+					Util.oldnewstring(yes, no, configFile);
+					buttonMkv.setText("✗");
+					buttonMkv.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+					engine.load("file:///" + configFile.getAbsolutePath());
 				}
 			}
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	// Mit changeMkvVal wird die MKV-Haupteinstellung umgestellt
 	@FXML
-	void changeMkvVal( ActionEvent eventMkv )
-	{
+	void changeMkvVal(ActionEvent eventMkv) {
 		try {
 			StackPane mkvLayout = new StackPane();
 
-			mkvLayout = FXMLLoader
-					.load( getClass().getResource( "ConfigViewMkv.fxml" ) );
-			Scene mkvScene = new Scene( mkvLayout );
-			mkvScene.getStylesheets().add( getClass()
-					.getResource( "application.css" ).toExternalForm() );
+			mkvLayout = FXMLLoader.load(getClass().getResource("ConfigViewMkv.fxml"));
+			Scene mkvScene = new Scene(mkvLayout);
+			mkvScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
 			// New window (Stage)
 			Stage mkvStage = new Stage();
 
-			mkvStage.setTitle( "KOST-Val   -   Configuration   -   MKV" );
-			Image kostvalIcon = new Image( "file:" + dirOfJarPath
-					+ File.separator + "doc" + File.separator + "valicon.png" );
+			mkvStage.setTitle("KOST-Val   -   Configuration   -   MKV");
+			Image kostvalIcon = new Image(
+					"file:" + dirOfJarPath + File.separator + "doc" + File.separator + "valicon.png");
 			// Image kostvalIcon = new Image( "file:valicon.png" );
-			mkvStage.initModality( Modality.APPLICATION_MODAL );
-			mkvStage.getIcons().add( kostvalIcon );
-			mkvStage.setScene( mkvScene );
-			mkvStage.setOnCloseRequest( event -> {
+			mkvStage.initModality(Modality.APPLICATION_MODAL);
+			mkvStage.getIcons().add(kostvalIcon);
+			mkvStage.setScene(mkvScene);
+			mkvStage.setOnCloseRequest(event -> {
 				// hier engeben was beim schliessen gemacht werden soll
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} );
+				engine.load("file:///" + configFile.getAbsolutePath());
+			});
 			mkvStage.show();
-			mkvStage.setOnHiding( event -> {
+			mkvStage.setOnHiding(event -> {
 				// hier engeben was beim schliessen gemacht werden soll
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} );
-		} catch ( IOException e1 ) {
+				engine.load("file:///" + configFile.getAbsolutePath());
+			});
+		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 	}
 
 	/* changeMp4 schaltet zwischen x (v) V herum */
 	@FXML
-	void changeMp4( ActionEvent event )
-	{
+	void changeMp4(ActionEvent event) {
 		String yes = "<mp4validation>&#x2713;</mp4validation>";
 		String az = "<mp4validation>(&#x2713;)</mp4validation>";
 		String no = "<mp4validation>&#x2717;</mp4validation>";
 		try {
 			String optButton = buttonMp4.getText();
-			if ( optButton.equals( "✗" ) ) {
-				buttonMp4Val.setDisable( true );
-				Util.oldnewstring( no, az, configFile );
-				buttonMp4.setText( "(✓)" );
-				buttonMp4.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} else if ( optButton.equals( "(✓)" ) ) {
-				buttonMp4Val.setDisable( false );
-				Util.oldnewstring( az, yes, configFile );
-				buttonMp4.setText( "✓" );
-				buttonMp4.setStyle(
-						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
+			if (optButton.equals("✗")) {
+				buttonMp4Val.setDisable(true);
+				Util.oldnewstring(no, az, configFile);
+				buttonMp4.setText("(✓)");
+				buttonMp4.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
+			} else if (optButton.equals("(✓)")) {
+				buttonMp4Val.setDisable(false);
+				Util.oldnewstring(az, yes, configFile);
+				buttonMp4.setText("✓");
+				buttonMp4.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected / (v) / V ist
-				if ( buttonPdfa.getText().equals( "✗" )
-						&& buttonJpeg2000.getText().equals( "✗" )
-						&& buttonJpeg.getText().equals( "✗" )
-						&& buttonTiff.getText().equals( "✗" )
-						&& buttonPng.getText().equals( "✗" )
-						&& buttonFlac.getText().equals( "✗" )
-						&& buttonWave.getText().equals( "✗" )
-						&& buttonMp3.getText().equals( "✗" )
-						&& buttonMkv.getText().equals( "✗" )
-						&& buttonXml.getText().equals( "✗" )
-						&& buttonSiard.getText().equals( "✗" )
-						&& buttonSip0160.getText().equals( "✗" ) ) {
-					engine.loadContent(
-							"<html><h2>" + minOne + "</h2></html>" );
+				if (buttonPdfa.getText().equals("✗") && buttonJpeg2000.getText().equals("✗")
+						&& buttonJpeg.getText().equals("✗") && buttonTiff.getText().equals("✗")
+						&& buttonPng.getText().equals("✗") && buttonFlac.getText().equals("✗")
+						&& buttonWave.getText().equals("✗") && buttonMp3.getText().equals("✗")
+						&& buttonMkv.getText().equals("✗") && buttonXml.getText().equals("✗")
+						&& buttonSiard.getText().equals("✗") && buttonSip0160.getText().equals("✗")) {
+					engine.loadContent("<html><h2>" + minOne + "</h2></html>");
 				} else {
-					buttonMp4Val.setDisable( true );
-					Util.oldnewstring( yes, no, configFile );
-					buttonMp4.setText( "✗" );
-					buttonMp4.setStyle(
-							"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-					engine.load( "file:///" + configFile.getAbsolutePath() );
+					buttonMp4Val.setDisable(true);
+					Util.oldnewstring(yes, no, configFile);
+					buttonMp4.setText("✗");
+					buttonMp4.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+					engine.load("file:///" + configFile.getAbsolutePath());
 				}
 			}
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	// Mit changeMp4Val wird die MP4-Haupteinstellung umgestellt
 	@FXML
-	void changeMp4Val( ActionEvent eventMp4 )
-	{
+	void changeMp4Val(ActionEvent eventMp4) {
 		try {
 			StackPane mp4Layout = new StackPane();
 
-			mp4Layout = FXMLLoader
-					.load( getClass().getResource( "ConfigViewMp4.fxml" ) );
-			Scene mp4Scene = new Scene( mp4Layout );
-			mp4Scene.getStylesheets().add( getClass()
-					.getResource( "application.css" ).toExternalForm() );
+			mp4Layout = FXMLLoader.load(getClass().getResource("ConfigViewMp4.fxml"));
+			Scene mp4Scene = new Scene(mp4Layout);
+			mp4Scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
 			// New window (Stage)
 			Stage mp4Stage = new Stage();
 
-			mp4Stage.setTitle( "KOST-Val   -   Configuration   -   MP4" );
-			Image kostvalIcon = new Image( "file:" + dirOfJarPath
-					+ File.separator + "doc" + File.separator + "valicon.png" );
+			mp4Stage.setTitle("KOST-Val   -   Configuration   -   MP4");
+			Image kostvalIcon = new Image(
+					"file:" + dirOfJarPath + File.separator + "doc" + File.separator + "valicon.png");
 			// Image kostvalIcon = new Image( "file:valicon.png" );
-			mp4Stage.initModality( Modality.APPLICATION_MODAL );
-			mp4Stage.getIcons().add( kostvalIcon );
-			mp4Stage.setScene( mp4Scene );
-			mp4Stage.setOnCloseRequest( event -> {
+			mp4Stage.initModality(Modality.APPLICATION_MODAL);
+			mp4Stage.getIcons().add(kostvalIcon);
+			mp4Stage.setScene(mp4Scene);
+			mp4Stage.setOnCloseRequest(event -> {
 				// hier engeben was beim schliessen gemacht werden soll
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} );
+				engine.load("file:///" + configFile.getAbsolutePath());
+			});
 			mp4Stage.show();
-			mp4Stage.setOnHiding( event -> {
+			mp4Stage.setOnHiding(event -> {
 				// hier engeben was beim schliessen gemacht werden soll
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} );
-		} catch ( IOException e1 ) {
+				engine.load("file:///" + configFile.getAbsolutePath());
+			});
+		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 	}
@@ -1458,247 +1224,210 @@ public class ConfigController
 
 	/* changeXml schaltet zwischen x (v) V herum */
 	@FXML
-	void changeXml( ActionEvent event )
-	{
+	void changeXml(ActionEvent event) {
 		String yes = "<xmlvalidation>&#x2713;</xmlvalidation>";
 		String az = "<xmlvalidation>(&#x2713;)</xmlvalidation>";
 		String no = "<xmlvalidation>&#x2717;</xmlvalidation>";
 		try {
 			String optButton = buttonXml.getText();
-			if ( optButton.equals( "✗" ) ) {
-				Util.oldnewstring( no, az, configFile );
-				buttonXml.setText( "(✓)" );
-				buttonXml.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} else if ( optButton.equals( "(✓)" ) ) {
-				Util.oldnewstring( az, yes, configFile );
-				buttonXml.setText( "✓" );
-				buttonXml.setStyle(
-						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
+			if (optButton.equals("✗")) {
+				Util.oldnewstring(no, az, configFile);
+				buttonXml.setText("(✓)");
+				buttonXml.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
+			} else if (optButton.equals("(✓)")) {
+				Util.oldnewstring(az, yes, configFile);
+				buttonXml.setText("✓");
+				buttonXml.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected / (v) / V ist
-				if ( buttonPdfa.getText().equals( "✗" )
-						&& buttonJpeg2000.getText().equals( "✗" )
-						&& buttonJpeg.getText().equals( "✗" )
-						&& buttonTiff.getText().equals( "✗" )
-						&& buttonPng.getText().equals( "✗" )
-						&& buttonFlac.getText().equals( "✗" )
-						&& buttonWave.getText().equals( "✗" )
-						&& buttonMp3.getText().equals( "✗" )
-						&& buttonMkv.getText().equals( "✗" )
-						&& buttonMp4.getText().equals( "✗" )
-						&& buttonSiard.getText().equals( "✗" )
-						&& buttonSip0160.getText().equals( "✗" ) ) {
-					engine.loadContent(
-							"<html><h2>" + minOne + "</h2></html>" );
+				if (buttonPdfa.getText().equals("✗") && buttonJpeg2000.getText().equals("✗")
+						&& buttonJpeg.getText().equals("✗") && buttonTiff.getText().equals("✗")
+						&& buttonPng.getText().equals("✗") && buttonFlac.getText().equals("✗")
+						&& buttonWave.getText().equals("✗") && buttonMp3.getText().equals("✗")
+						&& buttonMkv.getText().equals("✗") && buttonMp4.getText().equals("✗")
+						&& buttonSiard.getText().equals("✗") && buttonSip0160.getText().equals("✗")) {
+					engine.loadContent("<html><h2>" + minOne + "</h2></html>");
 				} else {
-					Util.oldnewstring( yes, no, configFile );
-					buttonXml.setText( "✗" );
-					buttonXml.setStyle(
-							"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-					engine.load( "file:///" + configFile.getAbsolutePath() );
+					Util.oldnewstring(yes, no, configFile);
+					buttonXml.setText("✗");
+					buttonXml.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+					engine.load("file:///" + configFile.getAbsolutePath());
 				}
 			}
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	/* changeSiard schaltet zwischen x (v) V herum */
 	@FXML
-	void changeSiard( ActionEvent event )
-	{
+	void changeSiard(ActionEvent event) {
 		String yes = "<siardvalidation>&#x2713;</siardvalidation>";
 		String az = "<siardvalidation>(&#x2713;)</siardvalidation>";
 		String no = "<siardvalidation>&#x2717;</siardvalidation>";
 		try {
 			String optButton = buttonSiard.getText();
-			if ( optButton.equals( "✗" ) ) {
-				Util.oldnewstring( no, az, configFile );
-				buttonSiard.setText( "(✓)" );
-				buttonSiard.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} else if ( optButton.equals( "(✓)" ) ) {
-				buttonSiardVal.setDisable( false );
-				Util.oldnewstring( az, yes, configFile );
-				buttonSiard.setText( "✓" );
-				buttonSiard.setStyle(
-						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
+			if (optButton.equals("✗")) {
+				Util.oldnewstring(no, az, configFile);
+				buttonSiard.setText("(✓)");
+				buttonSiard.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
+			} else if (optButton.equals("(✓)")) {
+				buttonSiardVal.setDisable(false);
+				Util.oldnewstring(az, yes, configFile);
+				buttonSiard.setText("✓");
+				buttonSiard.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected / (v) / V ist
-				if ( buttonPdfa.getText().equals( "✗" )
-						&& buttonJpeg2000.getText().equals( "✗" )
-						&& buttonJpeg.getText().equals( "✗" )
-						&& buttonTiff.getText().equals( "✗" )
-						&& buttonPng.getText().equals( "✗" )
-						&& buttonFlac.getText().equals( "✗" )
-						&& buttonWave.getText().equals( "✗" )
-						&& buttonMp3.getText().equals( "✗" )
-						&& buttonMkv.getText().equals( "✗" )
-						&& buttonMp4.getText().equals( "✗" )
-						&& buttonXml.getText().equals( "✗" )
-						&& buttonSip0160.getText().equals( "✗" ) ) {
-					engine.loadContent(
-							"<html><h2>" + minOne + "</h2></html>" );
+				if (buttonPdfa.getText().equals("✗") && buttonJpeg2000.getText().equals("✗")
+						&& buttonJpeg.getText().equals("✗") && buttonTiff.getText().equals("✗")
+						&& buttonPng.getText().equals("✗") && buttonFlac.getText().equals("✗")
+						&& buttonWave.getText().equals("✗") && buttonMp3.getText().equals("✗")
+						&& buttonMkv.getText().equals("✗") && buttonMp4.getText().equals("✗")
+						&& buttonXml.getText().equals("✗") && buttonSip0160.getText().equals("✗")) {
+					engine.loadContent("<html><h2>" + minOne + "</h2></html>");
 				} else {
-					buttonSiardVal.setDisable( true );
-					Util.oldnewstring( yes, no, configFile );
-					buttonSiard.setText( "✗" );
-					buttonSiard.setStyle(
-							"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-					engine.load( "file:///" + configFile.getAbsolutePath() );
+					buttonSiardVal.setDisable(true);
+					Util.oldnewstring(yes, no, configFile);
+					buttonSiard.setText("✗");
+					buttonSiard.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+					engine.load("file:///" + configFile.getAbsolutePath());
 				}
 			}
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	/* changeJson schaltet zwischen x (v) herum */
 	@FXML
-	void changeJson( ActionEvent event )
-	{
+	void changeJson(ActionEvent event) {
 		String az = "<jsonvalidation>(&#x2713;)</jsonvalidation>";
 		String no = "<jsonvalidation>&#x2717;</jsonvalidation>";
 		try {
 			String optButton = buttonJson.getText();
-			if ( optButton.equals( "✗" ) ) {
-				Util.oldnewstring( no, az, configFile );
-				buttonJson.setText( "(✓)" );
-				buttonJson.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
+			if (optButton.equals("✗")) {
+				Util.oldnewstring(no, az, configFile);
+				buttonJson.setText("(✓)");
+				buttonJson.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
 			} else {
-				Util.oldnewstring( az, no, configFile );
-				buttonJson.setText( "✗" );
-				buttonJson.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
+				Util.oldnewstring(az, no, configFile);
+				buttonJson.setText("✗");
+				buttonJson.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
 				// TODO Check etwas angewaehlt
 			}
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	/* Mit changeSiardVal wird die Pdfa-Haupteinstellung umgestellt */
 	@FXML
-	void changeSiardVal( ActionEvent eventSiard )
-	{
+	void changeSiardVal(ActionEvent eventSiard) {
 		try {
 			StackPane siardLayout = new StackPane();
 
-			siardLayout = FXMLLoader
-					.load( getClass().getResource( "ConfigViewSiard.fxml" ) );
-			Scene siardScene = new Scene( siardLayout );
-			siardScene.getStylesheets().add( getClass()
-					.getResource( "application.css" ).toExternalForm() );
+			siardLayout = FXMLLoader.load(getClass().getResource("ConfigViewSiard.fxml"));
+			Scene siardScene = new Scene(siardLayout);
+			siardScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
 			// New window (Stage)
 			Stage siardStage = new Stage();
 
-			siardStage.setTitle( "KOST-Val   -   Configuration   -   SIARD" );
-			Image kostvalIcon = new Image( "file:" + dirOfJarPath
-					+ File.separator + "doc" + File.separator + "valicon.png" );
+			siardStage.setTitle("KOST-Val   -   Configuration   -   SIARD");
+			Image kostvalIcon = new Image(
+					"file:" + dirOfJarPath + File.separator + "doc" + File.separator + "valicon.png");
 			// Image kostvalIcon = new Image( "file:valicon.png" );
-			siardStage.initModality( Modality.APPLICATION_MODAL );
-			siardStage.getIcons().add( kostvalIcon );
-			siardStage.setScene( siardScene );
-			siardStage.setOnCloseRequest( event -> {
+			siardStage.initModality(Modality.APPLICATION_MODAL);
+			siardStage.getIcons().add(kostvalIcon);
+			siardStage.setScene(siardScene);
+			siardStage.setOnCloseRequest(event -> {
 				// hier engeben was beim schliessen gemacht werden soll
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} );
+				engine.load("file:///" + configFile.getAbsolutePath());
+			});
 			siardStage.show();
-			siardStage.setOnHiding( event -> {
+			siardStage.setOnHiding(event -> {
 				// hier engeben was beim schliessen gemacht werden soll
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} );
-		} catch ( IOException e1 ) {
+				engine.load("file:///" + configFile.getAbsolutePath());
+			});
+		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 	}
 
 	/* changeCsv schaltet zwischen x (v) herum */
 	@FXML
-	void changeCsv( ActionEvent event )
-	{
+	void changeCsv(ActionEvent event) {
 		String az = "<csvvalidation>(&#x2713;)</csvvalidation>";
 		String no = "<csvvalidation>&#x2717;</csvvalidation>";
 		try {
 			String optButton = buttonCsv.getText();
-			if ( optButton.equals( "✗" ) ) {
-				Util.oldnewstring( no, az, configFile );
-				buttonCsv.setText( "(✓)" );
-				buttonCsv.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
+			if (optButton.equals("✗")) {
+				Util.oldnewstring(no, az, configFile);
+				buttonCsv.setText("(✓)");
+				buttonCsv.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
 			} else {
-				Util.oldnewstring( az, no, configFile );
-				buttonCsv.setText( "✗" );
-				buttonCsv.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
+				Util.oldnewstring(az, no, configFile);
+				buttonCsv.setText("✗");
+				buttonCsv.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
 				// TODO Check etwas angewaehlt
 			}
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	/* changeXlsx schaltet zwischen x (v) herum */
 	@FXML
-	void changeXlsx( ActionEvent event )
-	{
+	void changeXlsx(ActionEvent event) {
 		String az = "<xlsxvalidation>(&#x2713;)</xlsxvalidation>";
 		String no = "<xlsxvalidation>&#x2717;</xlsxvalidation>";
 		try {
 			String optButton = buttonXlsx.getText();
-			if ( optButton.equals( "✗" ) ) {
-				Util.oldnewstring( no, az, configFile );
-				buttonXlsx.setText( "(✓)" );
-				buttonXlsx.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
+			if (optButton.equals("✗")) {
+				Util.oldnewstring(no, az, configFile);
+				buttonXlsx.setText("(✓)");
+				buttonXlsx.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
 			} else {
-				Util.oldnewstring( az, no, configFile );
-				buttonXlsx.setText( "✗" );
-				buttonXlsx.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
+				Util.oldnewstring(az, no, configFile);
+				buttonXlsx.setText("✗");
+				buttonXlsx.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
 				// TODO Check etwas angewaehlt
 			}
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	/* changeOds schaltet zwischen x (v) herum */
 	@FXML
-	void changeOds( ActionEvent event )
-	{
+	void changeOds(ActionEvent event) {
 		String az = "<odsvalidation>(&#x2713;)</odsvalidation>";
 		String no = "<odsvalidation>&#x2717;</odsvalidation>";
 		try {
 			String optButton = buttonOds.getText();
-			if ( optButton.equals( "✗" ) ) {
-				Util.oldnewstring( no, az, configFile );
-				buttonOds.setText( "(✓)" );
-				buttonOds.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
+			if (optButton.equals("✗")) {
+				Util.oldnewstring(no, az, configFile);
+				buttonOds.setText("(✓)");
+				buttonOds.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
 			} else {
-				Util.oldnewstring( az, no, configFile );
-				buttonOds.setText( "✗" );
-				buttonOds.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
+				Util.oldnewstring(az, no, configFile);
+				buttonOds.setText("✗");
+				buttonOds.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
 				// TODO Check etwas angewaehlt
 			}
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -1707,89 +1436,75 @@ public class ConfigController
 
 	/* changeSip0160 schaltet zwischen x V herum */
 	@FXML
-	void changeSip0160( ActionEvent event )
-	{
+	void changeSip0160(ActionEvent event) {
 		String yes = "<ech0160validation>&#x2713;</ech0160validation>";
 		String az = "<ech0160validation>(&#x2713;)</ech0160validation>";
 		String no = "<ech0160validation>&#x2717;</ech0160validation>";
 		try {
 			String optButton = buttonSip0160.getText();
-			if ( optButton.equals( "✗" ) ) {
-				Util.oldnewstring( no, az, configFile );
-				buttonSip0160.setText( "(✓)" );
-				buttonSip0160.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} else if ( optButton.equals( "(✓)" ) ) {
-				buttonSipVal.setDisable( false );
-				Util.oldnewstring( az, yes, configFile );
-				buttonSip0160.setText( "✓" );
-				buttonSip0160.setStyle(
-						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
+			if (optButton.equals("✗")) {
+				Util.oldnewstring(no, az, configFile);
+				buttonSip0160.setText("(✓)");
+				buttonSip0160.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
+			} else if (optButton.equals("(✓)")) {
+				buttonSipVal.setDisable(false);
+				Util.oldnewstring(az, yes, configFile);
+				buttonSip0160.setText("✓");
+				buttonSip0160.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected / (v) / V ist
-				if ( buttonPdfa.getText().equals( "✗" )
-						&& buttonJpeg2000.getText().equals( "✗" )
-						&& buttonJpeg.getText().equals( "✗" )
-						&& buttonTiff.getText().equals( "✗" )
-						&& buttonPng.getText().equals( "✗" )
-						&& buttonFlac.getText().equals( "✗" )
-						&& buttonWave.getText().equals( "✗" )
-						&& buttonMp3.getText().equals( "✗" )
-						&& buttonMkv.getText().equals( "✗" )
-						&& buttonMp4.getText().equals( "✗" )
-						&& buttonXml.getText().equals( "✗" )
-						&& buttonSiard.getText().equals( "✗" ) ) {
-					engine.loadContent(
-							"<html><h2>" + minOne + "</h2></html>" );
+				if (buttonPdfa.getText().equals("✗") && buttonJpeg2000.getText().equals("✗")
+						&& buttonJpeg.getText().equals("✗") && buttonTiff.getText().equals("✗")
+						&& buttonPng.getText().equals("✗") && buttonFlac.getText().equals("✗")
+						&& buttonWave.getText().equals("✗") && buttonMp3.getText().equals("✗")
+						&& buttonMkv.getText().equals("✗") && buttonMp4.getText().equals("✗")
+						&& buttonXml.getText().equals("✗") && buttonSiard.getText().equals("✗")) {
+					engine.loadContent("<html><h2>" + minOne + "</h2></html>");
 				} else {
-					buttonSipVal.setDisable( true );
-					Util.oldnewstring( yes, no, configFile );
-					buttonSip0160.setText( "✗" );
-					buttonSip0160.setStyle(
-							"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-					engine.load( "file:///" + configFile.getAbsolutePath() );
+					buttonSipVal.setDisable(true);
+					Util.oldnewstring(yes, no, configFile);
+					buttonSip0160.setText("✗");
+					buttonSip0160.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+					engine.load("file:///" + configFile.getAbsolutePath());
 				}
 			}
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	// Mit changeSipVal wird die SIP-Haupteinstellung umgestellt
 	@FXML
-	void changeSipVal( ActionEvent eventSip )
-	{
+	void changeSipVal(ActionEvent eventSip) {
 		try {
 			StackPane sipLayout = new StackPane();
 
-			sipLayout = FXMLLoader
-					.load( getClass().getResource( "ConfigViewSip.fxml" ) );
-			Scene sipScene = new Scene( sipLayout );
-			sipScene.getStylesheets().add( getClass()
-					.getResource( "application.css" ).toExternalForm() );
+			sipLayout = FXMLLoader.load(getClass().getResource("ConfigViewSip.fxml"));
+			Scene sipScene = new Scene(sipLayout);
+			sipScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
 			// New window (Stage)
 			Stage sipStage = new Stage();
 
-			sipStage.setTitle( "KOST-Val   -   Configuration   -   SIP" );
-			Image kostvalIcon = new Image( "file:" + dirOfJarPath
-					+ File.separator + "doc" + File.separator + "valicon.png" );
+			sipStage.setTitle("KOST-Val   -   Configuration   -   SIP");
+			Image kostvalIcon = new Image(
+					"file:" + dirOfJarPath + File.separator + "doc" + File.separator + "valicon.png");
 			// Image kostvalIcon = new Image( "file:valicon.png" );
-			sipStage.initModality( Modality.APPLICATION_MODAL );
-			sipStage.getIcons().add( kostvalIcon );
-			sipStage.setScene( sipScene );
-			sipStage.setOnCloseRequest( event -> {
+			sipStage.initModality(Modality.APPLICATION_MODAL);
+			sipStage.getIcons().add(kostvalIcon);
+			sipStage.setScene(sipScene);
+			sipStage.setOnCloseRequest(event -> {
 				// hier engeben was beim schliessen gemacht werden soll
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} );
+				engine.load("file:///" + configFile.getAbsolutePath());
+			});
 			sipStage.show();
-			sipStage.setOnHiding( event -> {
+			sipStage.setOnHiding(event -> {
 				// hier engeben was beim schliessen gemacht werden soll
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} );
-		} catch ( IOException e1 ) {
+				engine.load("file:///" + configFile.getAbsolutePath());
+			});
+		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 	}
@@ -1798,40 +1513,36 @@ public class ConfigController
 
 	// Mit changePuid werden zusaetzliche Formate angezeigt
 	@FXML
-	void changePuid( ActionEvent eventPdfa )
-	{
+	void changePuid(ActionEvent eventPdfa) {
 		try {
 			StackPane otherLayout = new StackPane();
 
-			otherLayout = FXMLLoader
-					.load( getClass().getResource( "ConfigViewOther.fxml" ) );
-			Scene otherScene = new Scene( otherLayout );
-			otherScene.getStylesheets().add( getClass()
-					.getResource( "application.css" ).toExternalForm() );
+			otherLayout = FXMLLoader.load(getClass().getResource("ConfigViewOther.fxml"));
+			Scene otherScene = new Scene(otherLayout);
+			otherScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
 			// New window (Stage)
 			Stage otherStage = new Stage();
 
-			otherStage.setTitle(
-					"KOST-Val   -   Configuration   -   Other Formats" );
-			Image kostvalIcon = new Image( "file:" + dirOfJarPath
-					+ File.separator + "doc" + File.separator + "valicon.png" );
+			otherStage.setTitle("KOST-Val   -   Configuration   -   Other Formats");
+			Image kostvalIcon = new Image(
+					"file:" + dirOfJarPath + File.separator + "doc" + File.separator + "valicon.png");
 			// Image kostvalIcon = new Image( "file:valicon.png" );
-			otherStage.initModality( Modality.APPLICATION_MODAL );
-			otherStage.getIcons().add( kostvalIcon );
-			otherStage.setScene( otherScene );
-			otherStage.setOnCloseRequest( event -> {
+			otherStage.initModality(Modality.APPLICATION_MODAL);
+			otherStage.getIcons().add(kostvalIcon);
+			otherStage.setScene(otherScene);
+			otherStage.setOnCloseRequest(event -> {
 				// hier engeben was beim schliessen gemacht werden soll
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-				buttonPuid.setText( stringPuid );
-			} );
+				engine.load("file:///" + configFile.getAbsolutePath());
+				buttonPuid.setText(stringPuid);
+			});
 			otherStage.show();
-			otherStage.setOnHiding( event -> {
+			otherStage.setOnHiding(event -> {
 				// hier engeben was beim schliessen gemacht werden soll
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-				buttonPuid.setText( stringPuid );
-			} );
-		} catch ( IOException e1 ) {
+				engine.load("file:///" + configFile.getAbsolutePath());
+				buttonPuid.setText(stringPuid);
+			});
+		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 	}
@@ -1845,184 +1556,163 @@ public class ConfigController
 	 * // Set title & header text String puidIntInit = stringPuid;
 	 * 
 	 * dialog.setTitle( "KOST-Val - Configuration" ); String headerDeFrItEn =
-	 * "Auflistung der weiteren akzeptierten Dateiformate [WARC HTML DWG]:"; if
-	 * ( locale.toString().startsWith( "fr" ) ) { headerDeFrItEn =
-	 * "Liste des autres formats de fichiers acceptés [WARC HTML DWG] :"; } else
-	 * if ( locale.toString().startsWith( "it" ) ) { headerDeFrItEn =
-	 * "Elenco degli altri formati di file accettati [WARC HTML DWG]:"; } else
-	 * if ( locale.toString().startsWith( "en" ) ) { headerDeFrItEn =
+	 * "Auflistung der weiteren akzeptierten Dateiformate [WARC HTML DWG]:"; if (
+	 * locale.toString().startsWith( "fr" ) ) { headerDeFrItEn =
+	 * "Liste des autres formats de fichiers acceptés [WARC HTML DWG] :"; } else if
+	 * ( locale.toString().startsWith( "it" ) ) { headerDeFrItEn =
+	 * "Elenco degli altri formati di file accettati [WARC HTML DWG]:"; } else if (
+	 * locale.toString().startsWith( "en" ) ) { headerDeFrItEn =
 	 * "List of other accepted file formats [WARC HTML DWG]:"; }
 	 * dialog.setHeaderText( headerDeFrItEn ); dialog.setContentText( "" );
 	 * 
 	 * // Show the dialog and capture the result. Optional<String> result =
 	 * dialog.showAndWait();
 	 * 
-	 * // If the "Okay" button was clicked, the result will contain our String
-	 * // in the get() method String stringPuidNew = ""; if ( result.isPresent()
-	 * ) { try { stringPuidNew = result.get(); stringPuid = stringPuidNew;
-	 * buttonPuid.setText( stringPuid ); String allowedformats =
-	 * "<otherformats>" + puidIntInit + "</otherformats>"; String
-	 * allowedformatsNew = "<otherformats>" + stringPuidNew + "</otherformats>";
-	 * Util.oldnewstring( allowedformats, allowedformatsNew, configFile );
-	 * engine.load( "file:///" + configFile.getAbsolutePath() ); } catch (
-	 * NumberFormatException | IOException eInt ) { String message =
-	 * eInt.getMessage(); engine.loadContent( message ); } } else { // Keine
-	 * Aktion } }
+	 * // If the "Okay" button was clicked, the result will contain our String // in
+	 * the get() method String stringPuidNew = ""; if ( result.isPresent() ) { try {
+	 * stringPuidNew = result.get(); stringPuid = stringPuidNew; buttonPuid.setText(
+	 * stringPuid ); String allowedformats = "<otherformats>" + puidIntInit +
+	 * "</otherformats>"; String allowedformatsNew = "<otherformats>" +
+	 * stringPuidNew + "</otherformats>"; Util.oldnewstring( allowedformats,
+	 * allowedformatsNew, configFile ); engine.load( "file:///" +
+	 * configFile.getAbsolutePath() ); } catch ( NumberFormatException | IOException
+	 * eInt ) { String message = eInt.getMessage(); engine.loadContent( message ); }
+	 * } else { // Keine Aktion } }
 	 */
 	/* Wenn chooseWork betaetigt wird, kann ein Ordner ausgewaehlt werden */
 	@FXML
-	void chooseWork( ActionEvent e )
-	{
+	void chooseWork(ActionEvent e) {
 		try {
 			Document doc = null;
-			BufferedInputStream bis = new BufferedInputStream(
-					new FileInputStream( configFile ) );
+			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(configFile));
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			doc = db.parse( bis );
+			doc = db.parse(bis);
 			doc.normalize();
 			String workInit = "";
-			if ( !config.contains( "<pathtoworkdir></pathtoworkdir>" ) ) {
-				workInit = doc.getElementsByTagName( "pathtoworkdir" ).item( 0 )
-						.getTextContent();
+			if (!config.contains("<pathtoworkdir></pathtoworkdir>")) {
+				workInit = doc.getElementsByTagName("pathtoworkdir").item(0).getTextContent();
 			}
 			bis.close();
 			doc = null;
-			String pathtoworkdir = "<pathtoworkdir>" + workInit
-					+ "</pathtoworkdir>";
+			String pathtoworkdir = "<pathtoworkdir>" + workInit + "</pathtoworkdir>";
 			DirectoryChooser folderChooser = new DirectoryChooser();
-			if ( locale.toString().startsWith( "fr" ) ) {
-				folderChooser.setTitle( "Choisissez le dossier" );
-			} else if ( locale.toString().startsWith( "it" ) ) {
-				folderChooser.setTitle( "Selezionare la directory" );
-			} else if ( locale.toString().startsWith( "en" ) ) {
-				folderChooser.setTitle( "Choose the folder" );
+			if (locale.toString().startsWith("fr")) {
+				folderChooser.setTitle("Choisissez le dossier");
+			} else if (locale.toString().startsWith("it")) {
+				folderChooser.setTitle("Selezionare la directory");
+			} else if (locale.toString().startsWith("en")) {
+				folderChooser.setTitle("Choose the folder");
 			} else {
-				folderChooser.setTitle( "Wählen Sie den Ordner" );
+				folderChooser.setTitle("Wählen Sie den Ordner");
 			}
-			File workFolder = folderChooser.showDialog( new Stage() );
-			if ( workFolder != null ) {
-				labelWork.setText( workFolder.getAbsolutePath() );
-				String pathtoworkdirNew = "<pathtoworkdir>"
-						+ workFolder.getAbsolutePath() + "</pathtoworkdir>";
-				Util.oldnewstring( pathtoworkdir, pathtoworkdirNew,
-						configFile );
+			File workFolder = folderChooser.showDialog(new Stage());
+			if (workFolder != null) {
+				labelWork.setText(workFolder.getAbsolutePath());
+				String pathtoworkdirNew = "<pathtoworkdir>" + workFolder.getAbsolutePath() + "</pathtoworkdir>";
+				Util.oldnewstring(pathtoworkdir, pathtoworkdirNew, configFile);
 			}
-			engine.load( "file:///" + configFile.getAbsolutePath() );
-		} catch ( IOException | ParserConfigurationException
-				| SAXException e1 ) {
+			engine.load("file:///" + configFile.getAbsolutePath());
+		} catch (IOException | ParserConfigurationException | SAXException e1) {
 			e1.printStackTrace();
 		}
 	}
 
 	/* Wenn chooseInput betaetigt wird, kann ein Ordner ausgewaehlt werden */
 	@FXML
-	void chooseInput( ActionEvent e )
-	{
+	void chooseInput(ActionEvent e) {
 		try {
 			Document doc = null;
-			BufferedInputStream bis = new BufferedInputStream(
-					new FileInputStream( configFile ) );
+			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(configFile));
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			doc = db.parse( bis );
+			doc = db.parse(bis);
 			doc.normalize();
 			String inputInit = "";
-			if ( !config.contains( "<standardinputdir></standardinputdir>" ) ) {
-				inputInit = doc.getElementsByTagName( "standardinputdir" )
-						.item( 0 ).getTextContent();
+			if (!config.contains("<standardinputdir></standardinputdir>")) {
+				inputInit = doc.getElementsByTagName("standardinputdir").item(0).getTextContent();
 			}
 			bis.close();
 			doc = null;
-			String standardinputdir = "<standardinputdir>" + inputInit
-					+ "</standardinputdir>";
+			String standardinputdir = "<standardinputdir>" + inputInit + "</standardinputdir>";
 			DirectoryChooser folderChooser = new DirectoryChooser();
-			if ( locale.toString().startsWith( "fr" ) ) {
-				folderChooser.setTitle( "Choisissez le dossier" );
-			} else if ( locale.toString().startsWith( "it" ) ) {
-				folderChooser.setTitle( "Selezionare la directory" );
-			} else if ( locale.toString().startsWith( "en" ) ) {
-				folderChooser.setTitle( "Choose the folder" );
+			if (locale.toString().startsWith("fr")) {
+				folderChooser.setTitle("Choisissez le dossier");
+			} else if (locale.toString().startsWith("it")) {
+				folderChooser.setTitle("Selezionare la directory");
+			} else if (locale.toString().startsWith("en")) {
+				folderChooser.setTitle("Choose the folder");
 			} else {
-				folderChooser.setTitle( "Wählen Sie den Ordner" );
+				folderChooser.setTitle("Wählen Sie den Ordner");
 			}
-			File inputFolder = folderChooser.showDialog( new Stage() );
-			if ( inputFolder != null ) {
-				labelInput.setText( inputFolder.getAbsolutePath() );
-				String standardinputdirNew = "<standardinputdir>"
-						+ inputFolder.getAbsolutePath() + "</standardinputdir>";
-				Util.oldnewstring( standardinputdir, standardinputdirNew,
-						configFile );
+			File inputFolder = folderChooser.showDialog(new Stage());
+			if (inputFolder != null) {
+				labelInput.setText(inputFolder.getAbsolutePath());
+				String standardinputdirNew = "<standardinputdir>" + inputFolder.getAbsolutePath()
+						+ "</standardinputdir>";
+				Util.oldnewstring(standardinputdir, standardinputdirNew, configFile);
 			}
-			engine.load( "file:///" + configFile.getAbsolutePath() );
-		} catch ( IOException | ParserConfigurationException
-				| SAXException e1 ) {
+			engine.load("file:///" + configFile.getAbsolutePath());
+		} catch (IOException | ParserConfigurationException | SAXException e1) {
 			e1.printStackTrace();
 		}
 	}
 
 	/* changeDv schaltet zwischen x V herum */
 	@FXML
-	void changeDv( ActionEvent event )
-	{
+	void changeDv(ActionEvent event) {
 		String yes = "<egovdvvalidation>&#x2713;</egovdvvalidation>";
 		String no = "<egovdvvalidation>&#x2717;</egovdvvalidation>";
 		try {
 			String optButton = buttonDv.getText();
-			if ( optButton.equals( "✗" ) ) {
-				buttonDvVal.setDisable( false );
-				Util.oldnewstring( no, yes, configFile );
-				buttonDv.setText( "✓" );
-				buttonDv.setStyle(
-						"-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
+			if (optButton.equals("✗")) {
+				buttonDvVal.setDisable(false);
+				Util.oldnewstring(no, yes, configFile);
+				buttonDv.setText("✓");
+				buttonDv.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
 			} else {
-				buttonDvVal.setDisable( true );
-				Util.oldnewstring( yes, no, configFile );
-				buttonDv.setText( "✗" );
-				buttonDv.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
+				buttonDvVal.setDisable(true);
+				Util.oldnewstring(yes, no, configFile);
+				buttonDv.setText("✗");
+				buttonDv.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+				engine.load("file:///" + configFile.getAbsolutePath());
 			}
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	// Mit changeDvVal wird die Signatur-Haupteinstellung umgestellt
 	@FXML
-	void changeDvVal( ActionEvent eventpdfa )
-	{
+	void changeDvVal(ActionEvent eventpdfa) {
 		try {
 			StackPane dvLayout = new StackPane();
 
-			dvLayout = FXMLLoader
-					.load( getClass().getResource( "ConfigViewDv.fxml" ) );
-			Scene dvScene = new Scene( dvLayout );
-			dvScene.getStylesheets().add( getClass()
-					.getResource( "application.css" ).toExternalForm() );
+			dvLayout = FXMLLoader.load(getClass().getResource("ConfigViewDv.fxml"));
+			Scene dvScene = new Scene(dvLayout);
+			dvScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
 			// New window (Stage)
 			Stage dvStage = new Stage();
 
-			dvStage.setTitle(
-					"KOST-Val   -   Configuration   -    eGov diskret Signaturvalidator " );
-			Image kostvalIcon = new Image( "file:" + dirOfJarPath
-					+ File.separator + "doc" + File.separator + "valicon.png" );
+			dvStage.setTitle("KOST-Val   -   Configuration   -    eGov diskret Signaturvalidator ");
+			Image kostvalIcon = new Image(
+					"file:" + dirOfJarPath + File.separator + "doc" + File.separator + "valicon.png");
 			// Image kostvalIcon = new Image( "file:valicon.png" );
-			dvStage.initModality( Modality.APPLICATION_MODAL );
-			dvStage.getIcons().add( kostvalIcon );
-			dvStage.setScene( dvScene );
-			dvStage.setOnCloseRequest( event -> {
+			dvStage.initModality(Modality.APPLICATION_MODAL);
+			dvStage.getIcons().add(kostvalIcon);
+			dvStage.setScene(dvScene);
+			dvStage.setOnCloseRequest(event -> {
 				// hier engeben was beim schliessen gemacht werden soll
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} );
+				engine.load("file:///" + configFile.getAbsolutePath());
+			});
 			dvStage.show();
-			dvStage.setOnHiding( event -> {
+			dvStage.setOnHiding(event -> {
 				// hier engeben was beim schliessen gemacht werden soll
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} );
-		} catch ( IOException e1 ) {
+				engine.load("file:///" + configFile.getAbsolutePath());
+			});
+		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 	}
@@ -2031,39 +1721,34 @@ public class ConfigController
 
 	// Mit changeHashAlgo wird die Hash-Auswahl umgestellt
 	@FXML
-	void changeHashAlgo( ActionEvent event )
-	{
+	void changeHashAlgo(ActionEvent event) {
 		try {
 			Document doc = null;
-			BufferedInputStream bis = new BufferedInputStream(
-					new FileInputStream( configFile ) );
+			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(configFile));
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			doc = db.parse( bis );
+			doc = db.parse(bis);
 			doc.normalize();
 			String hashAlgoInit = "";
-			hashAlgoInit = doc.getElementsByTagName( "hash" ).item( 0 )
-					.getTextContent();
+			hashAlgoInit = doc.getElementsByTagName("hash").item(0).getTextContent();
 			bis.close();
 			doc = null;
 			String hashAlgoOld = "<hash>" + hashAlgoInit + "</hash>";
 			String selHashType = hashAlgo.getValue();
 			String hashAlgoNew = "<hash></hash>";
-			if ( selHashType.equals( "MD5" ) || selHashType.equals( "SHA-1" )
-					|| selHashType.equals( "SHA-256" )
-					|| selHashType.equals( "SHA-512" ) ) {
+			if (selHashType.equals("MD5") || selHashType.equals("SHA-1") || selHashType.equals("SHA-256")
+					|| selHashType.equals("SHA-512")) {
 				hashAlgoNew = "<hash>" + selHashType + "</hash>";
-				hashAlgo.setValue( selHashType );
+				hashAlgo.setValue(selHashType);
 			} else {
 				hashAlgoNew = "<hash></hash>";
-				hashAlgo.setValue( "" );
+				hashAlgo.setValue("");
 			}
-			Util.oldnewstring( hashAlgoOld, hashAlgoNew, configFile );
+			Util.oldnewstring(hashAlgoOld, hashAlgoNew, configFile);
 
 			engine = wbv.getEngine();
-			engine.load( "file:///" + configFile.getAbsolutePath() );
-		} catch ( IOException | ParserConfigurationException
-				| SAXException e1 ) {
+			engine.load("file:///" + configFile.getAbsolutePath());
+		} catch (IOException | ParserConfigurationException | SAXException e1) {
 			e1.printStackTrace();
 		}
 	}
@@ -2071,43 +1756,35 @@ public class ConfigController
 	// Mit changeSizeWarning wird die Warnung kleiner Dateien umgestellt
 
 	@FXML
-	void changeSizeWarning( ActionEvent event )
-	{
+	void changeSizeWarning(ActionEvent event) {
 		try {
 			Document doc = null;
-			BufferedInputStream bis = new BufferedInputStream(
-					new FileInputStream( configFile ) );
+			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(configFile));
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			doc = db.parse( bis );
+			doc = db.parse(bis);
 			doc.normalize();
 			String sizeWarningInit = "";
-			sizeWarningInit = doc.getElementsByTagName( "sizeWarning" )
-					.item( 0 ).getTextContent();
+			sizeWarningInit = doc.getElementsByTagName("sizeWarning").item(0).getTextContent();
 			bis.close();
 			doc = null;
-			String sizeWarningOld = "<sizeWarning>" + sizeWarningInit
-					+ "</sizeWarning>";
+			String sizeWarningOld = "<sizeWarning>" + sizeWarningInit + "</sizeWarning>";
 			String selSizeWarning = sizeWarning.getValue();
 			String sizeWarningNew = sizeWarningOld;
-			if ( selSizeWarning.equals( "0.5KB" ) ) {
-				sizeWarningNew = "<sizeWarning>" + selSizeWarning
-						+ "</sizeWarning>";
-			} else if ( selSizeWarning.equals( "1KB" ) ) {
-				sizeWarningNew = "<sizeWarning>" + selSizeWarning
-						+ "</sizeWarning>";
-			} else if ( selSizeWarning.equals( "5KB" ) ) {
-				sizeWarningNew = "<sizeWarning>" + selSizeWarning
-						+ "</sizeWarning>";
+			if (selSizeWarning.equals("0.5KB")) {
+				sizeWarningNew = "<sizeWarning>" + selSizeWarning + "</sizeWarning>";
+			} else if (selSizeWarning.equals("1KB")) {
+				sizeWarningNew = "<sizeWarning>" + selSizeWarning + "</sizeWarning>";
+			} else if (selSizeWarning.equals("5KB")) {
+				sizeWarningNew = "<sizeWarning>" + selSizeWarning + "</sizeWarning>";
 			} else {
 				sizeWarningNew = "<sizeWarning></sizeWarning>";
 			}
-			Util.oldnewstring( sizeWarningOld, sizeWarningNew, configFile );
+			Util.oldnewstring(sizeWarningOld, sizeWarningNew, configFile);
 
 			engine = wbv.getEngine();
-			engine.load( "file:///" + configFile.getAbsolutePath() );
-		} catch ( IOException | ParserConfigurationException
-				| SAXException e1 ) {
+			engine.load("file:///" + configFile.getAbsolutePath());
+		} catch (IOException | ParserConfigurationException | SAXException e1) {
 			e1.printStackTrace();
 		}
 	}

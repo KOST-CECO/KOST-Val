@@ -23,28 +23,25 @@ import java.io.InputStreamReader;
 
 /** @author Rc Claire Roethlisberger, KOST-CECO */
 
-public class StreamGobbler extends Thread
-{
-	InputStream	is;
+public class StreamGobbler extends Thread {
+	InputStream is;
 
-	String		type;
+	String type;
 
-	public StreamGobbler( InputStream is, String type )
-	{
+	public StreamGobbler(InputStream is, String type) {
 		this.is = is;
 		this.type = type;
 	}
 
 	@Override
-	public void run()
-	{
+	public void run() {
 		try {
-			InputStreamReader isr = new InputStreamReader( is );
-			BufferedReader br = new BufferedReader( isr );
+			InputStreamReader isr = new InputStreamReader(is);
+			BufferedReader br = new BufferedReader(isr);
 			String line = null;
-			while ( (line = br.readLine()) != null )
-				System.out.println( type + " > " + line );
-		} catch ( IOException ioe ) {
+			while ((line = br.readLine()) != null)
+				System.out.println(type + " > " + line);
+		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
 	}

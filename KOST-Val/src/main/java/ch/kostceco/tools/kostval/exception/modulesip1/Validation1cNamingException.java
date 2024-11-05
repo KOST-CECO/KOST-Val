@@ -20,20 +20,17 @@ package ch.kostceco.tools.kostval.exception.modulesip1;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-public class Validation1cNamingException extends KOSTValException
-{
+public class Validation1cNamingException extends KOSTValException {
 
 	/** @author razm Daniel Ludin, Bedag AG @version 0.2.0 */
 	private static final long serialVersionUID = -1222566139624342954L;
 
-	public Validation1cNamingException()
-	{
+	public Validation1cNamingException() {
 		super();
 	}
 
-	public Validation1cNamingException( String message )
-	{
-		super( message );
+	public Validation1cNamingException(String message) {
+		super(message);
 	}
 
 }

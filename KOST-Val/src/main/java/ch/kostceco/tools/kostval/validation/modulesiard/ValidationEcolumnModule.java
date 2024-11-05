@@ -37,12 +37,10 @@ import ch.kostceco.tools.kostval.validation.bean.ValidationContext;
  * @author Do Olivier Debenath
  */
 
-public interface ValidationEcolumnModule extends ValidationModule
-{
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws ValidationEcolumnException;
+public interface ValidationEcolumnModule extends ValidationModule {
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws ValidationEcolumnException;
 
-	public boolean prepareValidation( ValidationContext validationContext,
-			File logFile ) throws IOException, JDOMException, Exception;
+	public boolean prepareValidation(ValidationContext validationContext, File logFile)
+			throws IOException, JDOMException, Exception;
 }

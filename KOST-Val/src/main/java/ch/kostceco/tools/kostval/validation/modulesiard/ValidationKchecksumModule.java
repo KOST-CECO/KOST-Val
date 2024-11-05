@@ -33,11 +33,9 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
  * @author ???
  */
 
-public interface ValidationKchecksumModule extends ValidationModule
-{
+public interface ValidationKchecksumModule extends ValidationModule {
 
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws ValidationKchecksumException;
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws ValidationKchecksumException;
 
 }

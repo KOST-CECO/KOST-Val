@@ -22,57 +22,46 @@ import ch.kostceco.tools.kosttools.runtime.Cmd;
 
 /** @author Rc Claire Roethlisberger, KOST-CECO */
 
-public class Mkvalidator
-{
-	private static String	exeDir			= "resources" + File.separator
-			+ "mkvalidator-0.6.0-win64";
-	private static String	mkvalidatorExe	= exeDir + File.separator
-			+ "mkvalidator.exe";
+public class Mkvalidator {
+	private static String exeDir = "resources" + File.separator + "mkvalidator-0.6.0-win64";
+	private static String mkvalidatorExe = exeDir + File.separator + "mkvalidator.exe";
 
 	/**
 	 * fuehrt eine Validierung mit mkvalidator via cmd durch und speichert das
-	 * Ergebnis in ein File (Report). Gibt zurueck ob Report existiert oder
-	 * nicht
+	 * Ergebnis in ein File (Report). Gibt zurueck ob Report existiert oder nicht
 	 * 
-	 * @param mkvFile
-	 *            MKV-Datei, welche validiert werden soll
-	 * @param report
-	 *            Datei fuer den Report
-	 * @param workDir
-	 *            Temporaeres Verzeichnis
-	 * @param dirOfJarPath
-	 *            String mit dem Pfad von wo das Programm gestartet wurde
+	 * @param mkvFile      MKV-Datei, welche validiert werden soll
+	 * @param report       Datei fuer den Report
+	 * @param workDir      Temporaeres Verzeichnis
+	 * @param dirOfJarPath String mit dem Pfad von wo das Programm gestartet wurde
 	 * @return String ob Report existiert oder nicht ggf Exception
 	 */
-	public static String execMkvalidator( File mkvFile, File report,
-			File workDir, String dirOfJarPath ) throws InterruptedException
-	{
+	public static String execMkvalidator(File mkvFile, File report, File workDir, String dirOfJarPath)
+			throws InterruptedException {
 		boolean out = true;
-		File fmkvalidatorExe = new File(
-				dirOfJarPath + File.separator + mkvalidatorExe );
+		File fmkvalidatorExe = new File(dirOfJarPath + File.separator + mkvalidatorExe);
 		// falls das File von einem vorhergehenden Durchlauf bereits existiert,
 		// loeschen wir es
-		if ( report.exists() ) {
+		if (report.exists()) {
 			report.delete();
 		}
 
 		// mkvalidator-Befehl: PathTo_mkvalidator.exe --details --no-warn
 		// mkvFile 2> report
-		String command = "\"\"" + fmkvalidatorExe.getAbsolutePath()
-				+ "\" --details --no-warn \"" + mkvFile.getAbsolutePath()
-				+ "\" 2>\"" + report.getAbsolutePath() + "\"\"";
+		String command = "\"\"" + fmkvalidatorExe.getAbsolutePath() + "\" --details --no-warn \""
+				+ mkvFile.getAbsolutePath() + "\" 2>\"" + report.getAbsolutePath() + "\"\"";
 
 		// System.out.println( "command: " + command );
 
-		String resultExec = Cmd.execToString( command, out, workDir );
+		String resultExec = Cmd.execToString(command, out, workDir);
 
 		// mkvvalidator gibt keine Info raus, die replaced oder ignoriert werden
 		// muss
 
 		// System.out.println( "resultExec: " + resultExec );
 
-		if ( resultExec.equals( "OK" ) ) {
-			if ( report.exists() ) {
+		if (resultExec.equals("OK")) {
+			if (report.exists()) {
 				// alles io bleibt bei OK
 			} else {
 				// Datei nicht angelegt...
@@ -86,21 +75,18 @@ public class Mkvalidator
 	 * fuehrt eine Kontrolle aller benoetigten Dateien von mkvalidator durch und
 	 * gibt das Ergebnis als String zurueck
 	 * 
-	 * @param dirOfJarPath
-	 *            String mit dem Pfad von wo das Programm gestartet wurde
+	 * @param dirOfJarPath String mit dem Pfad von wo das Programm gestartet wurde
 	 * @return String mit Kontrollergebnis
 	 */
-	public static String checkMkvalidator( String dirOfJarPath )
-	{
+	public static String checkMkvalidator(String dirOfJarPath) {
 		String result = "";
 		boolean checkFiles = true;
 		// Pfad zum Programm existiert die Dateien?
 
-		File fmkvalidatorExe = new File(
-				dirOfJarPath + File.separator + mkvalidatorExe );
+		File fmkvalidatorExe = new File(dirOfJarPath + File.separator + mkvalidatorExe);
 
-		if ( !fmkvalidatorExe.exists() ) {
-			if ( checkFiles ) {
+		if (!fmkvalidatorExe.exists()) {
+			if (checkFiles) {
 				// erste fehlende Datei
 				result = " " + exeDir + ": " + mkvalidatorExe;
 				checkFiles = false;
@@ -110,7 +96,7 @@ public class Mkvalidator
 			}
 		}
 
-		if ( checkFiles ) {
+		if (checkFiles) {
 			result = "OK";
 		}
 		return result;

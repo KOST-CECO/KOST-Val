@@ -28,57 +28,49 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-public class GuiApplication extends Application
-{
+public class GuiApplication extends Application {
 
 	@Override
-	public void start( Stage stage ) throws Exception
-	{
+	public void start(Stage stage) throws Exception {
 		try {
 			// festhalten von wo die Applikation (exe) gestartet wurde
 			String dirOfJarPath = "";
 
 			/*
-			 * dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist
-			 * eine generelle Aufgabe in allen Modulen. Zuerst immer
-			 * dirOfJarPath ermitteln und dann alle Pfade mit dirOfJarPath +
-			 * File.separator + erweitern.
+			 * dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist eine
+			 * generelle Aufgabe in allen Modulen. Zuerst immer dirOfJarPath ermitteln und
+			 * dann alle Pfade mit dirOfJarPath + File.separator + erweitern.
 			 */
-			File pathJarFile20 = new File( ClassLoader.getSystemClassLoader()
-					.getResource( "." ).getPath() );
+			File pathJarFile20 = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath());
 			/*
-			 * wennn im Pfad ein Leerschlag ist, muss er noch normalisiert
-			 * werden
+			 * wennn im Pfad ein Leerschlag ist, muss er noch normalisiert werden
 			 */
 			dirOfJarPath = pathJarFile20.getAbsolutePath();
-			dirOfJarPath = dirOfJarPath.replaceAll( "%20", " " );
-			pathJarFile20 = new File( dirOfJarPath );
+			dirOfJarPath = dirOfJarPath.replaceAll("%20", " ");
+			pathJarFile20 = new File(dirOfJarPath);
 
 			// Read file fxml and draw interface.
 			Parent root;
-			root = FXMLLoader.load( getClass().getResource( "GuiView.fxml" ) );
-			Scene scene = new Scene( root );
-			scene.getStylesheets().add( getClass()
-					.getResource( "application.css" ).toExternalForm() );
-			stage.setTitle( "KOST-Val" );
-			Image kostvalIcon = new Image( "file:" + dirOfJarPath
-					+ File.separator + "doc" + File.separator + "valicon.png" );
+			root = FXMLLoader.load(getClass().getResource("GuiView.fxml"));
+			Scene scene = new Scene(root);
+			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			stage.setTitle("KOST-Val");
+			Image kostvalIcon = new Image(
+					"file:" + dirOfJarPath + File.separator + "doc" + File.separator + "valicon.png");
 			// Image kostvalIcon = new Image( "file:valicon.png" );
-			stage.getIcons().add( kostvalIcon );
-			stage.setScene( scene );
+			stage.getIcons().add(kostvalIcon);
+			stage.setScene(scene);
 			stage.show();
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	/**
-	 * @param args
-	 *            the command line arguments
+	 * @param args the command line arguments
 	 */
-	public static void main( String[] args )
-	{
-		launch( args );
+	public static void main(String[] args) {
+		launch(args);
 	}
 
 }

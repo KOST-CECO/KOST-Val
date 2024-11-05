@@ -22,58 +22,45 @@ import ch.kostceco.tools.kosttools.runtime.Cmd;
 
 /** @author Rc Claire Roethlisberger, KOST-CECO */
 
-public class flac
-{
-	private static String	exeDir					= "resources"
-			+ File.separator + "flac" + File.separator + "Win64";
-	private static String	resourcesFlacExe		= exeDir + File.separator
-			+ "flac.exe";
-	private static String	resourcesLibFlacPpDll	= exeDir + File.separator
-			+ "libFLAC++.dll";
-	private static String	resourcesLibFlacDll		= exeDir + File.separator
-			+ "libFLAC.dll";
-	private static String	resourcesMetaFlacExe	= exeDir + File.separator
-			+ "metaflac.exe";
+public class flac {
+	private static String exeDir = "resources" + File.separator + "flac" + File.separator + "Win64";
+	private static String resourcesFlacExe = exeDir + File.separator + "flac.exe";
+	private static String resourcesLibFlacPpDll = exeDir + File.separator + "libFLAC++.dll";
+	private static String resourcesLibFlacDll = exeDir + File.separator + "libFLAC.dll";
+	private static String resourcesMetaFlacExe = exeDir + File.separator + "metaflac.exe";
 
 	/**
-	 * fuehrt eine Validierung mit flac via cmd durch und speichert das Ergebnis
-	 * in ein File (Report). Gibt zurueck ob Report existiert oder nicht
+	 * fuehrt eine Validierung mit flac via cmd durch und speichert das Ergebnis in
+	 * ein File (Report). Gibt zurueck ob Report existiert oder nicht
 	 * 
-	 * @param flacFile
-	 *            FLAC-Datei, welche getestet werden soll
-	 * @param report
-	 *            Datei fuer den Report
-	 * @param workDir
-	 *            Temporaeres Verzeichnis
-	 * @param dirOfJarPath
-	 *            String mit dem Pfad von wo das Programm gestartet wurde
+	 * @param flacFile     FLAC-Datei, welche getestet werden soll
+	 * @param report       Datei fuer den Report
+	 * @param workDir      Temporaeres Verzeichnis
+	 * @param dirOfJarPath String mit dem Pfad von wo das Programm gestartet wurde
 	 * @return String ob Report existiert oder nicht ggf Exception
 	 */
-	public static String execFlac( File flacFile, File report, File workDir,
-			String dirOfJarPath ) throws InterruptedException
-	{
+	public static String execFlac(File flacFile, File report, File workDir, String dirOfJarPath)
+			throws InterruptedException {
 		boolean out = false;
-		File exeFile = new File(
-				dirOfJarPath + File.separator + resourcesFlacExe );
+		File exeFile = new File(dirOfJarPath + File.separator + resourcesFlacExe);
 		// falls das File von einem vorhergehenden Durchlauf bereits existiert,
 		// loeschen wir es
-		if ( report.exists() ) {
+		if (report.exists()) {
 			report.delete();
 		}
 
 		// flac-Befehl: pathToFlacExe -t flacFile 2> report
-		String command = "\"\"" + exeFile.getAbsolutePath() + "\" -t \""
-				+ flacFile.getAbsolutePath() + "\" 2> \""
+		String command = "\"\"" + exeFile.getAbsolutePath() + "\" -t \"" + flacFile.getAbsolutePath() + "\" 2> \""
 				+ report.getAbsolutePath() + "\"\"";
 
-		String resultExec = Cmd.execToStringSplit( command, out, workDir );
+		String resultExec = Cmd.execToStringSplit(command, out, workDir);
 
 		// System.out.println( "resultExec: " + resultExec );
 
 		// Flac gibt keine Info raus, die replaced werden muss
 
-		if ( resultExec.equals( "OK" ) ) {
-			if ( report.exists() ) {
+		if (resultExec.equals("OK")) {
+			if (report.exists()) {
 				// alles io bleibt bei OK
 			} else {
 				// Datei nicht angelegt...
@@ -84,31 +71,27 @@ public class flac
 	}
 
 	/**
-	 * fuehrt eine Kontrolle aller benoetigten Dateien von flac durch und gibt
-	 * das Ergebnis als boolean zurueck
+	 * fuehrt eine Kontrolle aller benoetigten Dateien von flac durch und gibt das
+	 * Ergebnis als boolean zurueck
 	 * 
-	 * @param dirOfJarPath
-	 *            String mit dem Pfad von wo das Programm gestartet wurde
+	 * @param dirOfJarPath String mit dem Pfad von wo das Programm gestartet wurde
 	 * @return Boolean mit Kontrollergebnis
 	 */
-	public static String checkFlac( String dirOfJarPath )
-	{
+	public static String checkFlac(String dirOfJarPath) {
 		String result = "";
 		boolean checkFiles = true;
 		// Pfad zum Programm existiert die Dateien?
 
 		String flacExe = dirOfJarPath + File.separator + resourcesFlacExe;
-		String libFlacPpDll = dirOfJarPath + File.separator
-				+ resourcesLibFlacPpDll;
+		String libFlacPpDll = dirOfJarPath + File.separator + resourcesLibFlacPpDll;
 		String libFlacDll = dirOfJarPath + File.separator + resourcesLibFlacDll;
-		String metaFlacExe = dirOfJarPath + File.separator
-				+ resourcesMetaFlacExe;
-		File fflacExe = new File( flacExe );
-		File flibFlacPpDll = new File( libFlacPpDll );
-		File flibFlacDll = new File( libFlacDll );
-		File fmetaFlacExe = new File( metaFlacExe );
-		if ( !fflacExe.exists() ) {
-			if ( checkFiles ) {
+		String metaFlacExe = dirOfJarPath + File.separator + resourcesMetaFlacExe;
+		File fflacExe = new File(flacExe);
+		File flibFlacPpDll = new File(libFlacPpDll);
+		File flibFlacDll = new File(libFlacDll);
+		File fmetaFlacExe = new File(metaFlacExe);
+		if (!fflacExe.exists()) {
+			if (checkFiles) {
 				// erste fehlende Datei
 				result = " " + exeDir + ": " + flacExe;
 				checkFiles = false;
@@ -117,8 +100,8 @@ public class flac
 				checkFiles = false;
 			}
 		}
-		if ( !flibFlacPpDll.exists() ) {
-			if ( checkFiles ) {
+		if (!flibFlacPpDll.exists()) {
+			if (checkFiles) {
 				// erste fehlende Datei
 				result = " " + exeDir + ": " + libFlacPpDll;
 				checkFiles = false;
@@ -127,8 +110,8 @@ public class flac
 				checkFiles = false;
 			}
 		}
-		if ( !flibFlacDll.exists() ) {
-			if ( checkFiles ) {
+		if (!flibFlacDll.exists()) {
+			if (checkFiles) {
 				// erste fehlende Datei
 				result = " " + exeDir + ": " + libFlacDll;
 				checkFiles = false;
@@ -137,8 +120,8 @@ public class flac
 				checkFiles = false;
 			}
 		}
-		if ( !fmetaFlacExe.exists() ) {
-			if ( checkFiles ) {
+		if (!fmetaFlacExe.exists()) {
+			if (checkFiles) {
 				// erste fehlende Datei
 				result = " " + exeDir + ": " + metaFlacExe;
 				checkFiles = false;
@@ -147,7 +130,7 @@ public class flac
 				checkFiles = false;
 			}
 		}
-		if ( checkFiles ) {
+		if (checkFiles) {
 			result = "OK";
 		}
 		return result;

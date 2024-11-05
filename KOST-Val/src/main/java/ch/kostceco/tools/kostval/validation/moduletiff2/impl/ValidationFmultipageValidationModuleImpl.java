@@ -36,119 +36,105 @@ import ch.kostceco.tools.kostval.logging.Logtxt;
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
 
-public class ValidationFmultipageValidationModuleImpl extends
-		ValidationModuleImpl implements ValidationFmultipageValidationModule
-{
+public class ValidationFmultipageValidationModuleImpl extends ValidationModuleImpl
+		implements ValidationFmultipageValidationModule {
 
-	public static String	NEWLINE	= System.getProperty( "line.separator" );
+	public static String NEWLINE = System.getProperty("line.separator");
 
-	private boolean			min		= false;
+	private boolean min = false;
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws ValidationFmultipageValidationException
-	{
-		String onWork = configMap.get( "ShowProgressOnWork" );
-		if ( onWork.equals( "nomin" ) ) {
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws ValidationFmultipageValidationException {
+		String onWork = configMap.get("ShowProgressOnWork");
+		if (onWork.equals("nomin")) {
 			min = true;
 		}
 
 		boolean isValid = true;
 
 		/*
-		 * TODO: jhoveReport auswerten! Auf Exiftool wird verzichtet. Exiftool
-		 * verwendet Perl, welche seit einiger Zeit hohe nicht geloese
-		 * Sicherheitsrisiken birgt. zudem koennen die Metadaten vermehrt
-		 * komplett durch jhove ausgelesen werden. Jhove hat bereits einen der
-		 * Probleme, welche das teilweise die Ausgabe der Metadaten verhindert
-		 * behoben.
+		 * TODO: jhoveReport auswerten! Auf Exiftool wird verzichtet. Exiftool verwendet
+		 * Perl, welche seit einiger Zeit hohe nicht geloese Sicherheitsrisiken birgt.
+		 * zudem koennen die Metadaten vermehrt komplett durch jhove ausgelesen werden.
+		 * Jhove hat bereits einen der Probleme, welche das teilweise die Ausgabe der
+		 * Metadaten verhindert behoben.
 		 */
-		File jhoveReport = new File( directoryOfLogfile,
-				valDatei.getName() + ".jhove-log.txt" );
+		File jhoveReport = new File(directoryOfLogfile, valDatei.getName() + ".jhove-log.txt");
 
-		if ( !jhoveReport.exists() ) {
+		if (!jhoveReport.exists()) {
 			isValid = false;
-			if ( min ) {
+			if (min) {
 				return false;
 			} else {
-				Logtxt.logtxt( logFile, getTextResourceService()
-						.getText( locale, MESSAGE_XML_MODUL_B_TIFF )
-						+ getTextResourceService().getText( locale,
-								ERROR_XML_UNKNOWN, "No Jhove report." ) );
+				Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_B_TIFF)
+						+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, "No Jhove report."));
 				return false;
 			}
 		} else {
-			String mp = configMap.get( "AllowedMultipage" );
+			String mp = configMap.get("AllowedMultipage");
 			// 0=Singelpage / 1=Multipage
 
 			Integer jhoveio = 0;
 			Integer ifdCount = 0;
 			String ifdMsg;
-			if ( mp.equalsIgnoreCase( "yes" ) ) {
+			if (mp.equalsIgnoreCase("yes")) {
 				// Valider Status (Multipage erlaubt)
 			} else {
 				try {
-					BufferedReader in = new BufferedReader(
-							new FileReader( jhoveReport ) );
+					BufferedReader in = new BufferedReader(new FileReader(jhoveReport));
 					String line;
-					while ( (line = in.readLine()) != null ) {
+					while ((line = in.readLine()) != null) {
 
 						// Anzahl "IFD:" zaehlen
 
-						if ( line.contains( " Type: TIFF" ) ) {
+						if (line.contains(" Type: TIFF")) {
 							jhoveio = 1;
 							ifdCount = ifdCount + 1;
 							// Diese IFD zaehelen, da TIFF
-						} else if ( line.contains( " Type: " ) ) {
+						} else if (line.contains(" Type: ")) {
 							// Diese IFD NICHT zaehelen, da keine TIFF sondern
 							// z.B. Exif
 						}
 
 						/*
-						 * if ( line.contains( " IFD: " )&& tiffLine ) { jhoveio
-						 * = 1; ifdCount = ifdCount + 1; }
+						 * if ( line.contains( " IFD: " )&& tiffLine ) { jhoveio = 1; ifdCount =
+						 * ifdCount + 1; }
 						 */
 					}
-					if ( jhoveio == 0 ) {
+					if (jhoveio == 0) {
 						// Invalider Status
 						isValid = false;
-						if ( min ) {
+						if (min) {
 							in.close();
 							return false;
 						} else {
 
-							Logtxt.logtxt( logFile, getTextResourceService()
-									.getText( locale, MESSAGE_XML_MODUL_F_TIFF )
-									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_CG_JHOVENIO, "F" ) );
+							Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_F_TIFF)
+									+ getTextResourceService().getText(locale, MESSAGE_XML_CG_JHOVENIO, "F"));
 						}
 					}
-					if ( ifdCount == 1 ) {
+					if (ifdCount == 1) {
 						// Valider Status (nur eine Seite)
 					} else {
 						// Invalider Status
 						ifdMsg = ("Multipage (" + ifdCount + " TIFFs)");
 						isValid = false;
-						if ( min ) {
+						if (min) {
 							in.close();
 							return false;
 						} else {
-							Logtxt.logtxt( logFile, getTextResourceService()
-									.getText( locale, MESSAGE_XML_MODUL_F_TIFF )
-									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_CG_INVALID, ifdMsg ) );
+							Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_F_TIFF)
+									+ getTextResourceService().getText(locale, MESSAGE_XML_CG_INVALID, ifdMsg));
 						}
 					}
 					in.close();
-				} catch ( Exception e ) {
-					if ( min ) {
+				} catch (Exception e) {
+					if (min) {
 						return false;
 					} else {
-						Logtxt.logtxt( logFile, getTextResourceService()
-								.getText( locale, MESSAGE_XML_MODUL_F_TIFF )
-								+ getTextResourceService().getText( locale,
-										MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
+						Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_F_TIFF)
+								+ getTextResourceService().getText(locale, MESSAGE_XML_CG_CANNOTFINDETREPORT));
 						return false;
 					}
 				}

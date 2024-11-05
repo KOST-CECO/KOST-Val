@@ -20,8 +20,7 @@ package ch.kostceco.tools.kostval.service;
 
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 
-public interface Service extends MessageConstants
-{
+public interface Service extends MessageConstants {
 
 	// Marker Interface
 

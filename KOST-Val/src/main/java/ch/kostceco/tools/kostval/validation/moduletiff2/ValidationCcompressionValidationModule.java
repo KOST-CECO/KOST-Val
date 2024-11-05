@@ -32,12 +32,9 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
 
-public interface ValidationCcompressionValidationModule extends ValidationModule
-{
+public interface ValidationCcompressionValidationModule extends ValidationModule {
 
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath )
-			throws ValidationCcompressionValidationException;
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws ValidationCcompressionValidationException;
 
 }

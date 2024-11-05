@@ -33,11 +33,9 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
  * @author Ec Christian Eugster
  */
 
-public interface ValidationJsurplusFilesModule extends ValidationModule
-{
+public interface ValidationJsurplusFilesModule extends ValidationModule {
 
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws ValidationJsurplusFilesException;
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws ValidationJsurplusFilesException;
 
 }

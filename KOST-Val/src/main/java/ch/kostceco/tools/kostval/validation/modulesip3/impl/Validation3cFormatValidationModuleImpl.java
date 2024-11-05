@@ -29,33 +29,30 @@ import ch.kostceco.tools.kostval.validation.modulesip3.Validation3cFormatValidat
 import ch.kostceco.tools.kostval.logging.Logtxt;
 
 public class Validation3cFormatValidationModuleImpl extends ValidationModuleImpl
-		implements Validation3cFormatValidationModule
-{
+		implements Validation3cFormatValidationModule {
 
-	public static String NEWLINE = System.getProperty( "line.separator" );
+	public static String NEWLINE = System.getProperty("line.separator");
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws Validation3cFormatValidationException
-	{
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws Validation3cFormatValidationException {
 		// Informationen zur Darstellung "onWork" holen
-		String onWork = configMap.get( "ShowProgressOnWork" );
+		String onWork = configMap.get("ShowProgressOnWork");
 		/*
 		 * Nicht vergessen in
 		 * "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property
 		 * name="configurationService" ref="configurationService" />
 		 */
-		if ( onWork.equals( "yes" ) ) {
+		if (onWork.equals("yes")) {
 			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
-			System.out.print( "3C   " );
-			System.out.print( "\b\b\b\b\b" );
+			System.out.print("3C   ");
+			System.out.print("\b\b\b\b\b");
 		}
 
 		boolean isValid = true;
 		// Informationen zum Arbeitsverzeichnis holen
-		String pathToWorkDir = configMap.get( "PathToWorkDir" );
+		String pathToWorkDir = configMap.get("PathToWorkDir");
 		/*
 		 * Nicht vergessen in
 		 * "src/main/resources/config/applicationContext-services.xml" beim
@@ -68,23 +65,18 @@ public class Validation3cFormatValidationModuleImpl extends ValidationModuleImpl
 		String fileName3cIo = "3c_Valide.txt";
 		String fileName3cNio = "3c_Invalide.txt";
 
-		File outputFile3cIo = new File(
-				pathToWorkDir + File.separator + fileName3cIo );
-		File outputFile3cNio = new File(
-				pathToWorkDir + File.separator + fileName3cNio );
-		if ( outputFile3cIo.exists() ) {
+		File outputFile3cIo = new File(pathToWorkDir + File.separator + fileName3cIo);
+		File outputFile3cNio = new File(pathToWorkDir + File.separator + fileName3cNio);
+		if (outputFile3cIo.exists()) {
 			// 3c valid
-			Util.deleteDir( outputFile3cIo );
+			Util.deleteDir(outputFile3cIo);
 			isValid = true;
 		} else {
-			Util.deleteDir( outputFile3cNio );
+			Util.deleteDir(outputFile3cNio);
 			isValid = false;
 
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_Cc_SIP )
-							+ getTextResourceService().getText( locale,
-									MESSAGE_XML_SERVICEMESSAGE, "3c", "" ) );
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Cc_SIP)
+					+ getTextResourceService().getText(locale, MESSAGE_XML_SERVICEMESSAGE, "3c", ""));
 		}
 		return isValid;
 

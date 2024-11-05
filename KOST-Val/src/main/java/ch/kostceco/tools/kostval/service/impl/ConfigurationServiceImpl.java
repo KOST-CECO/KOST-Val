@@ -41,52 +41,41 @@ import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.service.TextResourceService;
 
-public class ConfigurationServiceImpl implements ConfigurationService
-{
+public class ConfigurationServiceImpl implements ConfigurationService {
 
-	Map<String, String>			configMap	= null;
+	Map<String, String> configMap = null;
 	// TODO Hier alle Werte definieren, bei getConfig fuellen und dann nur noch
 	// Wert gleichsetzen
-	private TextResourceService	textResourceService;
+	private TextResourceService textResourceService;
 
-	public TextResourceService getTextResourceService()
-	{
+	public TextResourceService getTextResourceService() {
 		return textResourceService;
 	}
 
-	public void setTextResourceService(
-			TextResourceService textResourceService )
-	{
+	public void setTextResourceService(TextResourceService textResourceService) {
 		this.textResourceService = textResourceService;
 	}
 
-	public Map<String, String> configMap( Locale locale, String logtype,
-			File valDatei, String dirOfJarPath )
-	{
-		File logFile = new File( "LOGS.kost-val.log.xml" );
-		String pathToKostValDir = System.getenv( "USERPROFILE" )
-				+ File.separator + ".kost-val_2x";
-		String pathToKostValDirAlt = dirOfJarPath + File.separator
-				+ ".kost-val_2x";
-		File fileToKostValDir = new File( pathToKostValDir );
-		if ( !fileToKostValDir.exists() ) {
+	public Map<String, String> configMap(Locale locale, String logtype, File valDatei, String dirOfJarPath) {
+		File logFile = new File("LOGS.kost-val.log.xml");
+		String pathToKostValDir = System.getenv("USERPROFILE") + File.separator + ".kost-val_2x";
+		String pathToKostValDirAlt = dirOfJarPath + File.separator + ".kost-val_2x";
+		File fileToKostValDir = new File(pathToKostValDir);
+		if (!fileToKostValDir.exists()) {
 			pathToKostValDir = pathToKostValDirAlt;
-			fileToKostValDir = new File( pathToKostValDir );
+			fileToKostValDir = new File(pathToKostValDir);
 		}
 
 		try {
-			File directoryOfConfigfile = new File(
-					pathToKostValDir + File.separator + "configuration" );
-			File configFile = new File( directoryOfConfigfile + File.separator
-					+ "kostval.conf.xml" );
+			File directoryOfConfigfile = new File(pathToKostValDir + File.separator + "configuration");
+			File configFile = new File(directoryOfConfigfile + File.separator + "kostval.conf.xml");
 
 			Document doc = null;
 
-			BufferedInputStream bis = new BufferedInputStream(
-					new FileInputStream( configFile ) );
+			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(configFile));
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			doc = db.parse( bis );
+			doc = db.parse(bis);
 			doc.normalize();
 
 			Map<String, String> configMap = new HashMap<String, String>();
@@ -96,82 +85,72 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			// Gibt den Pfad des Arbeitsverzeichnisses zurueck. wenn leer
 			// USERPROFILE/.kost-val_2x/temp_KOST-Val
 			Boolean work = false;
-			String pathtoworkdir = doc.getElementsByTagName( "pathtoworkdir" )
-					.item( 0 ).getTextContent();
-			if ( !pathtoworkdir.isEmpty() ) {
-				File dir = new File( pathtoworkdir );
-				if ( !dir.exists() ) {
+			String pathtoworkdir = doc.getElementsByTagName("pathtoworkdir").item(0).getTextContent();
+			if (!pathtoworkdir.isEmpty()) {
+				File dir = new File(pathtoworkdir);
+				if (!dir.exists()) {
 					dir.mkdirs();
 				}
-				pathtoworkdir = dir.getAbsolutePath() + File.separator
-						+ "temp_KOST-Val";
-				if ( dir.canWrite() ) {
+				pathtoworkdir = dir.getAbsolutePath() + File.separator + "temp_KOST-Val";
+				if (dir.canWrite()) {
 					work = true;
-					File tmpDir = new File( pathtoworkdir );
+					File tmpDir = new File(pathtoworkdir);
 					tmpDir.mkdirs();
 				}
 			}
-			if ( !work ) {
-				pathtoworkdir = pathToKostValDir + File.separator
-						+ "temp_KOST-Val";
-				File dir = new File( pathtoworkdir );
-				if ( !dir.exists() ) {
+			if (!work) {
+				pathtoworkdir = pathToKostValDir + File.separator + "temp_KOST-Val";
+				File dir = new File(pathtoworkdir);
+				if (!dir.exists()) {
 					dir.mkdirs();
 				}
 			}
-			configMap.put( "PathToWorkDir", pathtoworkdir );
+			configMap.put("PathToWorkDir", pathtoworkdir);
 
 			// Gibt den Pfad des Standardinputs zurueck. wenn leer bleibt leer =
 			// "Dieser PC"
 			Boolean input = false;
-			String standardinputdir = doc
-					.getElementsByTagName( "standardinputdir" ).item( 0 )
-					.getTextContent();
-			if ( !standardinputdir.isEmpty() ) {
-				File dir = new File( standardinputdir );
-				if ( dir.exists() ) {
+			String standardinputdir = doc.getElementsByTagName("standardinputdir").item(0).getTextContent();
+			if (!standardinputdir.isEmpty()) {
+				File dir = new File(standardinputdir);
+				if (dir.exists()) {
 					input = true;
 				}
 			}
-			if ( !input ) {
+			if (!input) {
 				standardinputdir = "";
 			}
-			configMap.put( "StandardInputDir", standardinputdir );
+			configMap.put("StandardInputDir", standardinputdir);
 
 			// Gibt den Pfad des Logverzeichnisses zurueck. =
 			// USERPROFILE/.kost-val_2x/logs
-			String logs = System.getenv( "USERPROFILE" ) + File.separator
-					+ ".kost-val_2x" + File.separator + "logs";
-			File dir1 = new File( logs );
-			if ( !dir1.exists() ) {
+			String logs = System.getenv("USERPROFILE") + File.separator + ".kost-val_2x" + File.separator + "logs";
+			File dir1 = new File(logs);
+			if (!dir1.exists()) {
 				dir1.mkdirs();
 			}
-			configMap.put( "PathToLogfile", logs );
-			logFile = new File( logs + File.separator + valDatei.getName()
-					+ ".kost-val.log.xml" );
+			configMap.put("PathToLogfile", logs);
+			logFile = new File(logs + File.separator + valDatei.getName() + ".kost-val.log.xml");
 
 			/*
-			 * Angabe ob dargestellt werden soll, dass KOST-Val noch laeuft
-			 * --xml (=no) zaehler anzeigen --max (=yes) auch "Windrad" --min
-			 * (=nomin) zaehler anzeigen
+			 * Angabe ob dargestellt werden soll, dass KOST-Val noch laeuft --xml (=no)
+			 * zaehler anzeigen --max (=yes) auch "Windrad" --min (=nomin) zaehler anzeigen
 			 */
 			String showprogressonwork = "no";
-			if ( logtype.equalsIgnoreCase( "--max" ) ) {
+			if (logtype.equalsIgnoreCase("--max")) {
 				showprogressonwork = "yes";
-			} else if ( logtype.equalsIgnoreCase( "--min" ) ) {
+			} else if (logtype.equalsIgnoreCase("--min")) {
 				showprogressonwork = "nomin";
 			}
-			configMap.put( "ShowProgressOnWork", showprogressonwork );
+			configMap.put("ShowProgressOnWork", showprogressonwork);
 
 			// Gibt an welche Fehler ignoriert werden sollen
-			String ignore = doc.getElementsByTagName( "ignore" ).item( 0 )
-					.getTextContent();
-			configMap.put( "ignore", ignore );
+			String ignore = doc.getElementsByTagName("ignore").item(0).getTextContent();
+			configMap.put("ignore", ignore);
 
 			byte[] encoded;
-			encoded = Files
-					.readAllBytes( Paths.get( configFile.getAbsolutePath() ) );
-			String config = new String( encoded, StandardCharsets.UTF_8 );
+			encoded = Files.readAllBytes(Paths.get(configFile.getAbsolutePath()));
+			String config = new String(encoded, StandardCharsets.UTF_8);
 
 			// TODO Text
 
@@ -181,112 +160,100 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String azPdfa = "<pdfavalidation>(&#x2713;)</pdfavalidation>";
 			// String noPdfa = "<pdfavalidation>&#x2717;</pdfavalidation>";
 			String pdfavalidation = "no";
-			if ( config.contains( yesPdfa ) ) {
+			if (config.contains(yesPdfa)) {
 				pdfavalidation = "yes";
-			} else if ( config.contains( azPdfa ) ) {
+			} else if (config.contains(azPdfa)) {
 				pdfavalidation = "az";
 			} else {
 				pdfavalidation = "no";
 			}
-			configMap.put( "pdfaValidation", pdfavalidation );
+			configMap.put("pdfaValidation", pdfavalidation);
 
 			// Gibt an ob pdfa mit PDF Tools validiert werden soll
-			String pdftools = doc.getElementsByTagName( "pdftools" ).item( 0 )
-					.getTextContent();
-			configMap.put( "pdftools", pdftools );
+			String pdftools = doc.getElementsByTagName("pdftools").item(0).getTextContent();
+			configMap.put("pdftools", pdftools);
 
 			// Gibt an ob pdfa mit PDF Tools im detail validiert werden soll
-			String detail = doc.getElementsByTagName( "detail" ).item( 0 )
-					.getTextContent();
-			configMap.put( "detail", detail );
+			String detail = doc.getElementsByTagName("detail").item(0).getTextContent();
+			configMap.put("detail", detail);
 
 			// Gibt an ob pdfa mit callas validiert werden soll
-			String callas = doc.getElementsByTagName( "callas" ).item( 0 )
-					.getTextContent();
-			configMap.put( "callas", callas );
+			String callas = doc.getElementsByTagName("callas").item(0).getTextContent();
+			configMap.put("callas", callas);
 
 			// N-Eintrag: Soll seitens callas ein Fehler (E) oder eine Warnung
 			// (W) ausgegeben werden
-			String nentry = doc.getElementsByTagName( "nentry" ).item( 0 )
-					.getTextContent();
-			configMap.put( "nentry", nentry );
+			String nentry = doc.getElementsByTagName("nentry").item(0).getTextContent();
+			configMap.put("nentry", nentry);
 
 			// Gibt an welche Konformitaeten erlaubt sind
 			String pdfa1a = "no";
-			if ( doc.getElementsByTagName( "pdfa1a" ).item( 0 ) != null ) {
-				pdfa1a = doc.getElementsByTagName( "pdfa1a" ).item( 0 )
-						.getTextContent().replace( " ", "" );
+			if (doc.getElementsByTagName("pdfa1a").item(0) != null) {
+				pdfa1a = doc.getElementsByTagName("pdfa1a").item(0).getTextContent().replace(" ", "");
 			}
-			configMap.put( "pdfa1a", pdfa1a );
+			configMap.put("pdfa1a", pdfa1a);
 
 			String pdfa1b = "no";
-			if ( doc.getElementsByTagName( "pdfa1b" ).item( 0 ) != null ) {
-				pdfa1b = doc.getElementsByTagName( "pdfa1b" ).item( 0 )
-						.getTextContent().replace( " ", "" );
+			if (doc.getElementsByTagName("pdfa1b").item(0) != null) {
+				pdfa1b = doc.getElementsByTagName("pdfa1b").item(0).getTextContent().replace(" ", "");
 			}
-			configMap.put( "pdfa1b", pdfa1b );
+			configMap.put("pdfa1b", pdfa1b);
 
 			String pdfa2a = "no";
-			if ( doc.getElementsByTagName( "pdfa2a" ).item( 0 ) != null ) {
-				pdfa2a = doc.getElementsByTagName( "pdfa2a" ).item( 0 )
-						.getTextContent().replace( " ", "" );
+			if (doc.getElementsByTagName("pdfa2a").item(0) != null) {
+				pdfa2a = doc.getElementsByTagName("pdfa2a").item(0).getTextContent().replace(" ", "");
 			}
-			configMap.put( "pdfa2a", pdfa2a );
+			configMap.put("pdfa2a", pdfa2a);
 
 			String pdfa2b = "no";
-			if ( doc.getElementsByTagName( "pdfa2b" ).item( 0 ) != null ) {
-				pdfa2b = doc.getElementsByTagName( "pdfa2b" ).item( 0 )
-						.getTextContent().replace( " ", "" );
+			if (doc.getElementsByTagName("pdfa2b").item(0) != null) {
+				pdfa2b = doc.getElementsByTagName("pdfa2b").item(0).getTextContent().replace(" ", "");
 			}
-			configMap.put( "pdfa2b", pdfa2b );
+			configMap.put("pdfa2b", pdfa2b);
 
 			String pdfa2u = "no";
-			if ( doc.getElementsByTagName( "pdfa2u" ).item( 0 ) != null ) {
-				pdfa2u = doc.getElementsByTagName( "pdfa2u" ).item( 0 )
-						.getTextContent().replace( " ", "" );
+			if (doc.getElementsByTagName("pdfa2u").item(0) != null) {
+				pdfa2u = doc.getElementsByTagName("pdfa2u").item(0).getTextContent().replace(" ", "");
 			}
-			configMap.put( "pdfa2u", pdfa2u );
+			configMap.put("pdfa2u", pdfa2u);
 
 			// Gibt an ob die Schriften in pdfa validiert werden soll
-			String pdfafont = doc.getElementsByTagName( "pdfafont" ).item( 0 )
-					.getTextContent();
-			configMap.put( "pdfafont", pdfafont );
+			String pdfafont = doc.getElementsByTagName("pdfafont").item(0).getTextContent();
+			configMap.put("pdfafont", pdfafont);
 
 			/*
-			 * checkWarning3to2 validiert wenn eingeschaltet PDF/A-3 nach
-			 * PDF/A-2 und ignoriert den Fehler betreffend der Version und gibt
-			 * stattdessten eine Warnung aus.
+			 * checkWarning3to2 validiert wenn eingeschaltet PDF/A-3 nach PDF/A-2 und
+			 * ignoriert den Fehler betreffend der Version und gibt stattdessten eine
+			 * Warnung aus.
 			 */
-			String warning3to2 = doc.getElementsByTagName( "warning3to2" )
-					.item( 0 ).getTextContent();
-			configMap.put( "warning3to2", warning3to2 );
+			String warning3to2 = doc.getElementsByTagName("warning3to2").item(0).getTextContent();
+			configMap.put("warning3to2", warning3to2);
 
 			// Gibt an ob JBIG2 erlaubt ist oder nicht
-			String jbig2allowed = doc.getElementsByTagName( "jbig2allowed" )
-					.item( 0 ).getTextContent();
-			configMap.put( "jbig2allowed", jbig2allowed );
+			String jbig2allowed = doc.getElementsByTagName("jbig2allowed").item(0).getTextContent();
+			configMap.put("jbig2allowed", jbig2allowed);
 
 			// Gibt an ob txt akzeptiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
 			String azTxt = "<txtvalidation>(&#x2713;)</txtvalidation>";
 			String txtvalidation = "no";
-			if ( config.contains( azTxt ) ) {
+			if (config.contains(azTxt)) {
 				txtvalidation = "az";
 			} else {
 				txtvalidation = "no";
 			}
-			configMap.put( "txtValidation", txtvalidation );
+			configMap.put("txtValidation", txtvalidation);
 
 			// Gibt an ob pdf akzeptiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
 			String azPdf = "<pdfvalidation>(&#x2713;)</pdfvalidation>";
 			String pdfvalidation = "no";
-			if ( config.contains( azPdf ) ) {
+			if (config.contains(azPdf)) {
 				pdfvalidation = "az";
 			} else {
 				pdfvalidation = "no";
 			}
-			configMap.put( "pdfValidation", pdfvalidation );
+			configMap.put("pdfValidation", pdfvalidation);
 
 			// TODO Bild
 
@@ -295,272 +262,215 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String yesJp2 = "<jp2validation>&#x2713;</jp2validation>";
 			String azJp2 = "<jp2validation>(&#x2713;)</jp2validation>";
 			String jp2validation = "no";
-			if ( config.contains( yesJp2 ) ) {
+			if (config.contains(yesJp2)) {
 				jp2validation = "yes";
-			} else if ( config.contains( azJp2 ) ) {
+			} else if (config.contains(azJp2)) {
 				jp2validation = "az";
 			} else {
 				jp2validation = "no";
 			}
-			configMap.put( "jp2Validation", jp2validation );
+			configMap.put("jp2Validation", jp2validation);
 
 			// Gibt an ob jpeg validiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
 			String yesJpeg = "<jpegvalidation>&#x2713;</jpegvalidation>";
 			String azJpeg = "<jpegvalidation>(&#x2713;)</jpegvalidation>";
 			String jpegvalidation = "no";
-			if ( config.contains( yesJpeg ) ) {
+			if (config.contains(yesJpeg)) {
 				jpegvalidation = "yes";
-			} else if ( config.contains( azJpeg ) ) {
+			} else if (config.contains(azJpeg)) {
 				jpegvalidation = "az";
 			} else {
 				jpegvalidation = "no";
 			}
-			configMap.put( "jpegValidation", jpegvalidation );
+			configMap.put("jpegValidation", jpegvalidation);
 
 			// Gibt an ob png validiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
 			String yesPng = "<pngvalidation>&#x2713;</pngvalidation>";
 			String azPng = "<pngvalidation>(&#x2713;)</pngvalidation>";
 			String pngvalidation = "no";
-			if ( config.contains( yesPng ) ) {
+			if (config.contains(yesPng)) {
 				pngvalidation = "yes";
-			} else if ( config.contains( azPng ) ) {
+			} else if (config.contains(azPng)) {
 				pngvalidation = "az";
 			} else {
 				pngvalidation = "no";
 			}
-			configMap.put( "pngValidation", pngvalidation );
+			configMap.put("pngValidation", pngvalidation);
 
 			// Gibt an ob tiff validiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
 			String yesTiff = "<tiffvalidation>&#x2713;</tiffvalidation>";
 			String azTiff = "<tiffvalidation>(&#x2713;)</tiffvalidation>";
 			String tiffvalidation = "no";
-			if ( config.contains( yesTiff ) ) {
+			if (config.contains(yesTiff)) {
 				tiffvalidation = "yes";
-			} else if ( config.contains( azTiff ) ) {
+			} else if (config.contains(azTiff)) {
 				tiffvalidation = "az";
 			} else {
 				tiffvalidation = "no";
 			}
-			configMap.put( "tiffValidation", tiffvalidation );
+			configMap.put("tiffValidation", tiffvalidation);
 
 			// Gibt die Komprimierung aus, welche im TIFF vorkommen duerfen.
 			String allowedcompression1 = "0";
-			if ( doc.getElementsByTagName( "allowedcompression1" )
-					.item( 0 ) != null ) {
-				allowedcompression1 = doc
-						.getElementsByTagName( "allowedcompression1" ).item( 0 )
-						.getTextContent().replace( " ", "" );
+			if (doc.getElementsByTagName("allowedcompression1").item(0) != null) {
+				allowedcompression1 = doc.getElementsByTagName("allowedcompression1").item(0).getTextContent()
+						.replace(" ", "");
 			}
 			String allowedcompression2 = "0";
-			if ( doc.getElementsByTagName( "allowedcompression2" )
-					.item( 0 ) != null ) {
-				allowedcompression2 = doc
-						.getElementsByTagName( "allowedcompression2" ).item( 0 )
-						.getTextContent().replace( " ", "" );
-				allowedcompression2 = allowedcompression2.replace( "CCITT1D",
-						"CCITT 1D" );
+			if (doc.getElementsByTagName("allowedcompression2").item(0) != null) {
+				allowedcompression2 = doc.getElementsByTagName("allowedcompression2").item(0).getTextContent()
+						.replace(" ", "");
+				allowedcompression2 = allowedcompression2.replace("CCITT1D", "CCITT 1D");
 			}
 			String allowedcompression3 = "0";
-			if ( doc.getElementsByTagName( "allowedcompression3" )
-					.item( 0 ) != null ) {
-				allowedcompression3 = doc
-						.getElementsByTagName( "allowedcompression3" ).item( 0 )
-						.getTextContent().replace( " ", "" );
-				allowedcompression3 = allowedcompression3
-						.replace( "CCITTGroup3", "CCITT Group 3" );
+			if (doc.getElementsByTagName("allowedcompression3").item(0) != null) {
+				allowedcompression3 = doc.getElementsByTagName("allowedcompression3").item(0).getTextContent()
+						.replace(" ", "");
+				allowedcompression3 = allowedcompression3.replace("CCITTGroup3", "CCITT Group 3");
 			}
 			String allowedcompression4 = "0";
-			if ( doc.getElementsByTagName( "allowedcompression4" )
-					.item( 0 ) != null ) {
-				allowedcompression4 = doc
-						.getElementsByTagName( "allowedcompression4" ).item( 0 )
-						.getTextContent().replace( " ", "" );
-				allowedcompression4 = allowedcompression4
-						.replace( "CCITTGroup4", "CCITT Group 4" );
+			if (doc.getElementsByTagName("allowedcompression4").item(0) != null) {
+				allowedcompression4 = doc.getElementsByTagName("allowedcompression4").item(0).getTextContent()
+						.replace(" ", "");
+				allowedcompression4 = allowedcompression4.replace("CCITTGroup4", "CCITT Group 4");
 			}
 			String allowedcompression5 = "0";
-			if ( doc.getElementsByTagName( "allowedcompression5" )
-					.item( 0 ) != null ) {
-				allowedcompression5 = doc
-						.getElementsByTagName( "allowedcompression5" ).item( 0 )
-						.getTextContent().replace( " ", "" );
+			if (doc.getElementsByTagName("allowedcompression5").item(0) != null) {
+				allowedcompression5 = doc.getElementsByTagName("allowedcompression5").item(0).getTextContent()
+						.replace(" ", "");
 			}
 			String allowedcompression7 = "0";
-			if ( doc.getElementsByTagName( "allowedcompression7" )
-					.item( 0 ) != null ) {
-				allowedcompression7 = doc
-						.getElementsByTagName( "allowedcompression7" ).item( 0 )
-						.getTextContent().replace( " ", "" );
-				allowedcompression7 = allowedcompression7.replace( "ISOJPEG",
-						"ISO JPEG" );
+			if (doc.getElementsByTagName("allowedcompression7").item(0) != null) {
+				allowedcompression7 = doc.getElementsByTagName("allowedcompression7").item(0).getTextContent()
+						.replace(" ", "");
+				allowedcompression7 = allowedcompression7.replace("ISOJPEG", "ISO JPEG");
 			}
 			String allowedcompression8 = "0";
-			if ( doc.getElementsByTagName( "allowedcompression8" )
-					.item( 0 ) != null ) {
-				allowedcompression8 = doc
-						.getElementsByTagName( "allowedcompression8" ).item( 0 )
-						.getTextContent().replace( " ", "" );
+			if (doc.getElementsByTagName("allowedcompression8").item(0) != null) {
+				allowedcompression8 = doc.getElementsByTagName("allowedcompression8").item(0).getTextContent()
+						.replace(" ", "");
 			}
 			String allowedcompression32773 = "0";
-			if ( doc.getElementsByTagName( "allowedcompression32773" )
-					.item( 0 ) != null ) {
-				allowedcompression32773 = doc
-						.getElementsByTagName( "allowedcompression32773" )
-						.item( 0 ).getTextContent().replace( " ", "" );
+			if (doc.getElementsByTagName("allowedcompression32773").item(0) != null) {
+				allowedcompression32773 = doc.getElementsByTagName("allowedcompression32773").item(0).getTextContent()
+						.replace(" ", "");
 			}
-			configMap.put( "AllowedCompression1", allowedcompression1 );
-			configMap.put( "AllowedCompression2", allowedcompression2 );
-			configMap.put( "AllowedCompression3", allowedcompression3 );
-			configMap.put( "AllowedCompression4", allowedcompression4 );
-			configMap.put( "AllowedCompression5", allowedcompression5 );
-			configMap.put( "AllowedCompression7", allowedcompression7 );
-			configMap.put( "AllowedCompression8", allowedcompression8 );
-			configMap.put( "AllowedCompression32773", allowedcompression32773 );
+			configMap.put("AllowedCompression1", allowedcompression1);
+			configMap.put("AllowedCompression2", allowedcompression2);
+			configMap.put("AllowedCompression3", allowedcompression3);
+			configMap.put("AllowedCompression4", allowedcompression4);
+			configMap.put("AllowedCompression5", allowedcompression5);
+			configMap.put("AllowedCompression7", allowedcompression7);
+			configMap.put("AllowedCompression8", allowedcompression8);
+			configMap.put("AllowedCompression32773", allowedcompression32773);
 
 			// Gibt die Farbraum aus, welche im TIFF vorkommen duerfen.
 			String allowedphotointer0 = "0";
-			if ( doc.getElementsByTagName( "allowedphotointer0" )
-					.item( 0 ) != null ) {
-				allowedphotointer0 = doc
-						.getElementsByTagName( "allowedphotointer0" ).item( 0 )
-						.getTextContent().replace( " ", "" );
-				allowedphotointer0 = allowedphotointer0.replace( "whiteiszero",
-						"white is zero" );
+			if (doc.getElementsByTagName("allowedphotointer0").item(0) != null) {
+				allowedphotointer0 = doc.getElementsByTagName("allowedphotointer0").item(0).getTextContent()
+						.replace(" ", "");
+				allowedphotointer0 = allowedphotointer0.replace("whiteiszero", "white is zero");
 			}
 			String allowedphotointer1 = "0";
-			if ( doc.getElementsByTagName( "allowedphotointer1" )
-					.item( 0 ) != null ) {
-				allowedphotointer1 = doc
-						.getElementsByTagName( "allowedphotointer1" ).item( 0 )
-						.getTextContent().replace( " ", "" );
-				allowedphotointer1 = allowedphotointer1.replace( "blackiszero",
-						"black is zero" );
+			if (doc.getElementsByTagName("allowedphotointer1").item(0) != null) {
+				allowedphotointer1 = doc.getElementsByTagName("allowedphotointer1").item(0).getTextContent()
+						.replace(" ", "");
+				allowedphotointer1 = allowedphotointer1.replace("blackiszero", "black is zero");
 			}
 			String allowedphotointer2 = "0";
-			if ( doc.getElementsByTagName( "allowedphotointer2" )
-					.item( 0 ) != null ) {
-				allowedphotointer2 = doc
-						.getElementsByTagName( "allowedphotointer2" ).item( 0 )
-						.getTextContent().replace( " ", "" );
+			if (doc.getElementsByTagName("allowedphotointer2").item(0) != null) {
+				allowedphotointer2 = doc.getElementsByTagName("allowedphotointer2").item(0).getTextContent()
+						.replace(" ", "");
 			}
 			String allowedphotointer3 = "0";
-			if ( doc.getElementsByTagName( "allowedphotointer3" )
-					.item( 0 ) != null ) {
-				allowedphotointer3 = doc
-						.getElementsByTagName( "allowedphotointer3" ).item( 0 )
-						.getTextContent().replace( " ", "" );
-				allowedphotointer3 = allowedphotointer3.replace( "palettecolor",
-						"palette color" );
+			if (doc.getElementsByTagName("allowedphotointer3").item(0) != null) {
+				allowedphotointer3 = doc.getElementsByTagName("allowedphotointer3").item(0).getTextContent()
+						.replace(" ", "");
+				allowedphotointer3 = allowedphotointer3.replace("palettecolor", "palette color");
 			}
 			String allowedphotointer4 = "0";
-			if ( doc.getElementsByTagName( "allowedphotointer4" )
-					.item( 0 ) != null ) {
-				allowedphotointer4 = doc
-						.getElementsByTagName( "allowedphotointer4" ).item( 0 )
-						.getTextContent().replace( " ", "" );
-				allowedphotointer4 = allowedphotointer4
-						.replace( "transparencymask", "transparency mask" );
+			if (doc.getElementsByTagName("allowedphotointer4").item(0) != null) {
+				allowedphotointer4 = doc.getElementsByTagName("allowedphotointer4").item(0).getTextContent()
+						.replace(" ", "");
+				allowedphotointer4 = allowedphotointer4.replace("transparencymask", "transparency mask");
 			}
 			String allowedphotointer5 = "0";
-			if ( doc.getElementsByTagName( "allowedphotointer5" )
-					.item( 0 ) != null ) {
-				allowedphotointer5 = doc
-						.getElementsByTagName( "allowedphotointer5" ).item( 0 )
-						.getTextContent().replace( " ", "" );
+			if (doc.getElementsByTagName("allowedphotointer5").item(0) != null) {
+				allowedphotointer5 = doc.getElementsByTagName("allowedphotointer5").item(0).getTextContent()
+						.replace(" ", "");
 			}
 			String allowedphotointer6 = "0";
-			if ( doc.getElementsByTagName( "allowedphotointer6" )
-					.item( 0 ) != null ) {
-				allowedphotointer6 = doc
-						.getElementsByTagName( "allowedphotointer6" ).item( 0 )
-						.getTextContent().replace( " ", "" );
+			if (doc.getElementsByTagName("allowedphotointer6").item(0) != null) {
+				allowedphotointer6 = doc.getElementsByTagName("allowedphotointer6").item(0).getTextContent()
+						.replace(" ", "");
 			}
 			String allowedphotointer8 = "0";
-			if ( doc.getElementsByTagName( "allowedphotointer8" )
-					.item( 0 ) != null ) {
-				allowedphotointer8 = doc
-						.getElementsByTagName( "allowedphotointer8" ).item( 0 )
-						.getTextContent().replace( " ", "" );
-				allowedphotointer8 = allowedphotointer8.replace( "CIEL*a*b*",
-						"CIE L*a*b*" );
+			if (doc.getElementsByTagName("allowedphotointer8").item(0) != null) {
+				allowedphotointer8 = doc.getElementsByTagName("allowedphotointer8").item(0).getTextContent()
+						.replace(" ", "");
+				allowedphotointer8 = allowedphotointer8.replace("CIEL*a*b*", "CIE L*a*b*");
 			}
-			configMap.put( "AllowedPhotointer0", allowedphotointer0 );
-			configMap.put( "AllowedPhotointer1", allowedphotointer1 );
-			configMap.put( "AllowedPhotointer2", allowedphotointer2 );
-			configMap.put( "AllowedPhotointer3", allowedphotointer3 );
-			configMap.put( "AllowedPhotointer4", allowedphotointer4 );
-			configMap.put( "AllowedPhotointer5", allowedphotointer5 );
-			configMap.put( "AllowedPhotointer6", allowedphotointer6 );
-			configMap.put( "AllowedPhotointer8", allowedphotointer8 );
+			configMap.put("AllowedPhotointer0", allowedphotointer0);
+			configMap.put("AllowedPhotointer1", allowedphotointer1);
+			configMap.put("AllowedPhotointer2", allowedphotointer2);
+			configMap.put("AllowedPhotointer3", allowedphotointer3);
+			configMap.put("AllowedPhotointer4", allowedphotointer4);
+			configMap.put("AllowedPhotointer5", allowedphotointer5);
+			configMap.put("AllowedPhotointer6", allowedphotointer6);
+			configMap.put("AllowedPhotointer8", allowedphotointer8);
 
 			// Gibt die BitsPerSample aus, welche im TIFF vorkommen duerfen.
 			String allowedbitspersample1 = "0";
-			if ( doc.getElementsByTagName( "allowedbitspersample1" )
-					.item( 0 ) != null ) {
-				allowedbitspersample1 = doc
-						.getElementsByTagName( "allowedbitspersample1" )
-						.item( 0 ).getTextContent().replace( " ", "" );
+			if (doc.getElementsByTagName("allowedbitspersample1").item(0) != null) {
+				allowedbitspersample1 = doc.getElementsByTagName("allowedbitspersample1").item(0).getTextContent()
+						.replace(" ", "");
 			}
 			String allowedbitspersample2 = "0";
-			if ( doc.getElementsByTagName( "allowedbitspersample2" )
-					.item( 0 ) != null ) {
-				allowedbitspersample2 = doc
-						.getElementsByTagName( "allowedbitspersample2" )
-						.item( 0 ).getTextContent().replace( " ", "" );
+			if (doc.getElementsByTagName("allowedbitspersample2").item(0) != null) {
+				allowedbitspersample2 = doc.getElementsByTagName("allowedbitspersample2").item(0).getTextContent()
+						.replace(" ", "");
 			}
 			String allowedbitspersample4 = "0";
-			if ( doc.getElementsByTagName( "allowedbitspersample4" )
-					.item( 0 ) != null ) {
-				allowedbitspersample4 = doc
-						.getElementsByTagName( "allowedbitspersample4" )
-						.item( 0 ).getTextContent().replace( " ", "" );
+			if (doc.getElementsByTagName("allowedbitspersample4").item(0) != null) {
+				allowedbitspersample4 = doc.getElementsByTagName("allowedbitspersample4").item(0).getTextContent()
+						.replace(" ", "");
 			}
 			String allowedbitspersample8 = "0";
-			if ( doc.getElementsByTagName( "allowedbitspersample8" )
-					.item( 0 ) != null ) {
-				allowedbitspersample8 = doc
-						.getElementsByTagName( "allowedbitspersample8" )
-						.item( 0 ).getTextContent().replace( " ", "" );
+			if (doc.getElementsByTagName("allowedbitspersample8").item(0) != null) {
+				allowedbitspersample8 = doc.getElementsByTagName("allowedbitspersample8").item(0).getTextContent()
+						.replace(" ", "");
 			}
 			String allowedbitspersample16 = "0";
-			if ( doc.getElementsByTagName( "allowedbitspersample16" )
-					.item( 0 ) != null ) {
-				allowedbitspersample16 = doc
-						.getElementsByTagName( "allowedbitspersample16" )
-						.item( 0 ).getTextContent().replace( " ", "" );
+			if (doc.getElementsByTagName("allowedbitspersample16").item(0) != null) {
+				allowedbitspersample16 = doc.getElementsByTagName("allowedbitspersample16").item(0).getTextContent()
+						.replace(" ", "");
 			}
 			String allowedbitspersample32 = "0";
-			if ( doc.getElementsByTagName( "allowedbitspersample32" )
-					.item( 0 ) != null ) {
-				allowedbitspersample32 = doc
-						.getElementsByTagName( "allowedbitspersample32" )
-						.item( 0 ).getTextContent().replace( " ", "" );
+			if (doc.getElementsByTagName("allowedbitspersample32").item(0) != null) {
+				allowedbitspersample32 = doc.getElementsByTagName("allowedbitspersample32").item(0).getTextContent()
+						.replace(" ", "");
 			}
-			configMap.put( "AllowedBitspersample1", allowedbitspersample1 );
-			configMap.put( "AllowedBitspersample2", allowedbitspersample2 );
-			configMap.put( "AllowedBitspersample4", allowedbitspersample4 );
-			configMap.put( "AllowedBitspersample8", allowedbitspersample8 );
-			configMap.put( "AllowedBitspersample16", allowedbitspersample16 );
-			configMap.put( "AllowedBitspersample32", allowedbitspersample32 );
+			configMap.put("AllowedBitspersample1", allowedbitspersample1);
+			configMap.put("AllowedBitspersample2", allowedbitspersample2);
+			configMap.put("AllowedBitspersample4", allowedbitspersample4);
+			configMap.put("AllowedBitspersample8", allowedbitspersample8);
+			configMap.put("AllowedBitspersample16", allowedbitspersample16);
+			configMap.put("AllowedBitspersample32", allowedbitspersample32);
 
 			// Gibt an ob Multipage im TIFF vorkommen duerfen.
-			String allowedmultipage = doc
-					.getElementsByTagName( "allowedmultipage" ).item( 0 )
-					.getTextContent();
-			configMap.put( "AllowedMultipage", allowedmultipage );
+			String allowedmultipage = doc.getElementsByTagName("allowedmultipage").item(0).getTextContent();
+			configMap.put("AllowedMultipage", allowedmultipage);
 
 			// Gibt an ob Tiles im TIFF vorkommen duerfen.
-			String allowedtiles = doc.getElementsByTagName( "allowedtiles" )
-					.item( 0 ).getTextContent();
-			configMap.put( "AllowedTiles", allowedtiles );
+			String allowedtiles = doc.getElementsByTagName("allowedtiles").item(0).getTextContent();
+			configMap.put("AllowedTiles", allowedtiles);
 
 			// Gibt an ob Giga-TIFF vorkommen duerfen.
-			String allowedsize = doc.getElementsByTagName( "allowedsize" )
-					.item( 0 ).getTextContent();
-			configMap.put( "AllowedSize", allowedsize );
+			String allowedsize = doc.getElementsByTagName("allowedsize").item(0).getTextContent();
+			configMap.put("AllowedSize", allowedsize);
 
 			// TODO Audio
 
@@ -569,42 +479,42 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String yesFlac = "<flacvalidation>&#x2713;</flacvalidation>";
 			String azFlac = "<flacvalidation>(&#x2713;)</flacvalidation>";
 			String flacvalidation = "no";
-			if ( config.contains( yesFlac ) ) {
+			if (config.contains(yesFlac)) {
 				flacvalidation = "yes";
-			} else if ( config.contains( azFlac ) ) {
+			} else if (config.contains(azFlac)) {
 				flacvalidation = "az";
 			} else {
 				flacvalidation = "no";
 			}
-			configMap.put( "flacValidation", flacvalidation );
+			configMap.put("flacValidation", flacvalidation);
 
 			// Gibt an ob wave akzeptiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
 			String yesWave = "<wavevalidation>&#x2713;</wavevalidation>";
 			String azWave = "<wavevalidation>(&#x2713;)</wavevalidation>";
 			String wavevalidation = "no";
-			if ( config.contains( yesWave ) ) {
+			if (config.contains(yesWave)) {
 				wavevalidation = "yes";
-			} else if ( config.contains( azWave ) ) {
+			} else if (config.contains(azWave)) {
 				wavevalidation = "az";
 			} else {
 				wavevalidation = "no";
 			}
-			configMap.put( "waveValidation", wavevalidation );
+			configMap.put("waveValidation", wavevalidation);
 
 			// Gibt an ob mp3 akzeptiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
 			String yesMp3 = "<mp3validation>&#x2713;</mp3validation>";
 			String azMp3 = "<mp3validation>(&#x2713;)</mp3validation>";
 			String mp3validation = "no";
-			if ( config.contains( yesMp3 ) ) {
+			if (config.contains(yesMp3)) {
 				mp3validation = "yes";
-			} else if ( config.contains( azMp3 ) ) {
+			} else if (config.contains(azMp3)) {
 				mp3validation = "az";
 			} else {
 				mp3validation = "no";
 			}
-			configMap.put( "mp3Validation", mp3validation );
+			configMap.put("mp3Validation", mp3validation);
 
 			// TODO Video
 
@@ -613,153 +523,119 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String yesMkv = "<mkvvalidation>&#x2713;</mkvvalidation>";
 			String azMkv = "<mkvvalidation>(&#x2713;)</mkvvalidation>";
 			String mkvvalidation = "no";
-			if ( config.contains( yesMkv ) ) {
+			if (config.contains(yesMkv)) {
 				mkvvalidation = "yes";
-			} else if ( config.contains( azMkv ) ) {
+			} else if (config.contains(azMkv)) {
 				mkvvalidation = "az";
 			} else {
 				mkvvalidation = "no";
 			}
-			configMap.put( "mkvValidation", mkvvalidation );
+			configMap.put("mkvValidation", mkvvalidation);
 
 			// Gibt die Videocodecs aus, welche im MKV vorkommen duerfen.
 			String allowedmkvffv1 = "0";
-			if ( doc.getElementsByTagName( "allowedmkvffv1" )
-					.item( 0 ) != null ) {
-				allowedmkvffv1 = doc.getElementsByTagName( "allowedmkvffv1" )
-						.item( 0 ).getTextContent().replace( " ", "" );
+			if (doc.getElementsByTagName("allowedmkvffv1").item(0) != null) {
+				allowedmkvffv1 = doc.getElementsByTagName("allowedmkvffv1").item(0).getTextContent().replace(" ", "");
 			}
 			String allowedmkvavc = "0";
-			if ( doc.getElementsByTagName( "allowedmkvavc" )
-					.item( 0 ) != null ) {
-				allowedmkvavc = doc.getElementsByTagName( "allowedmkvavc" )
-						.item( 0 ).getTextContent().replace( " ", "" );
+			if (doc.getElementsByTagName("allowedmkvavc").item(0) != null) {
+				allowedmkvavc = doc.getElementsByTagName("allowedmkvavc").item(0).getTextContent().replace(" ", "");
 			}
 			String allowedmkvhevc = "0";
-			if ( doc.getElementsByTagName( "allowedmkvhevc" )
-					.item( 0 ) != null ) {
-				allowedmkvhevc = doc.getElementsByTagName( "allowedmkvhevc" )
-						.item( 0 ).getTextContent().replace( " ", "" );
+			if (doc.getElementsByTagName("allowedmkvhevc").item(0) != null) {
+				allowedmkvhevc = doc.getElementsByTagName("allowedmkvhevc").item(0).getTextContent().replace(" ", "");
 			}
 			String allowedmkvav1 = "0";
-			if ( doc.getElementsByTagName( "allowedmkvav1" )
-					.item( 0 ) != null ) {
-				allowedmkvav1 = doc.getElementsByTagName( "allowedmkvav1" )
-						.item( 0 ).getTextContent().replace( " ", "" );
+			if (doc.getElementsByTagName("allowedmkvav1").item(0) != null) {
+				allowedmkvav1 = doc.getElementsByTagName("allowedmkvav1").item(0).getTextContent().replace(" ", "");
 			}
-			configMap.put( "Allowedmkvffv1", allowedmkvffv1 );
-			configMap.put( "Allowedmkvavc", allowedmkvavc );
-			configMap.put( "Allowedmkvhevc", allowedmkvhevc );
-			configMap.put( "Allowedmkvav1", allowedmkvav1 );
+			configMap.put("Allowedmkvffv1", allowedmkvffv1);
+			configMap.put("Allowedmkvavc", allowedmkvavc);
+			configMap.put("Allowedmkvhevc", allowedmkvhevc);
+			configMap.put("Allowedmkvav1", allowedmkvav1);
 
 			// Gibt die Audiocodecs aus, welche im MKV vorkommen duerfen.
 			String allowedmkvflac = "0";
-			if ( doc.getElementsByTagName( "allowedmkvflac" )
-					.item( 0 ) != null ) {
-				allowedmkvflac = doc.getElementsByTagName( "allowedmkvflac" )
-						.item( 0 ).getTextContent().replace( " ", "" );
+			if (doc.getElementsByTagName("allowedmkvflac").item(0) != null) {
+				allowedmkvflac = doc.getElementsByTagName("allowedmkvflac").item(0).getTextContent().replace(" ", "");
 			}
 			String allowedmkvmp3 = "0";
-			if ( doc.getElementsByTagName( "allowedmkvmp3" )
-					.item( 0 ) != null ) {
-				allowedmkvmp3 = doc.getElementsByTagName( "allowedmkvmp3" )
-						.item( 0 ).getTextContent().replace( " ", "" );
+			if (doc.getElementsByTagName("allowedmkvmp3").item(0) != null) {
+				allowedmkvmp3 = doc.getElementsByTagName("allowedmkvmp3").item(0).getTextContent().replace(" ", "");
 			}
 			String allowedmkvaac = "0";
-			if ( doc.getElementsByTagName( "allowedmkvaac" )
-					.item( 0 ) != null ) {
-				allowedmkvaac = doc.getElementsByTagName( "allowedmkvaac" )
-						.item( 0 ).getTextContent().replace( " ", "" );
+			if (doc.getElementsByTagName("allowedmkvaac").item(0) != null) {
+				allowedmkvaac = doc.getElementsByTagName("allowedmkvaac").item(0).getTextContent().replace(" ", "");
 			}
-			configMap.put( "Allowedmkvflac", allowedmkvflac );
-			configMap.put( "Allowedmkvmp3", allowedmkvmp3 );
-			configMap.put( "Allowedmkvaac", allowedmkvaac );
+			configMap.put("Allowedmkvflac", allowedmkvflac);
+			configMap.put("Allowedmkvmp3", allowedmkvmp3);
+			configMap.put("Allowedmkvaac", allowedmkvaac);
 
 			// Gibt an ob Videocodes fehlen duerfen.
 			String allowedmkvnovideo = "Error";
-			if ( doc.getElementsByTagName( "allowedmkvnovideo" )
-					.item( 0 ) != null ) {
-				allowedmkvnovideo = doc
-						.getElementsByTagName( "allowedmkvnovideo" ).item( 0 )
-						.getTextContent();
+			if (doc.getElementsByTagName("allowedmkvnovideo").item(0) != null) {
+				allowedmkvnovideo = doc.getElementsByTagName("allowedmkvnovideo").item(0).getTextContent();
 			}
-			configMap.put( "Allowedmkvnovideo", allowedmkvnovideo );
+			configMap.put("Allowedmkvnovideo", allowedmkvnovideo);
 
 			// Gibt an ob Audiocodes fehlen duerfen.
 			String allowedmkvnoaudio = "Error";
-			if ( doc.getElementsByTagName( "allowedmkvnoaudio" )
-					.item( 0 ) != null ) {
-				allowedmkvnoaudio = doc
-						.getElementsByTagName( "allowedmkvnoaudio" ).item( 0 )
-						.getTextContent();
+			if (doc.getElementsByTagName("allowedmkvnoaudio").item(0) != null) {
+				allowedmkvnoaudio = doc.getElementsByTagName("allowedmkvnoaudio").item(0).getTextContent();
 			}
-			configMap.put( "Allowedmkvnoaudio", allowedmkvnoaudio );
+			configMap.put("Allowedmkvnoaudio", allowedmkvnoaudio);
 
 			// Gibt an ob mp4 akzeptiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
 			String yesMp4 = "<mp4validation>&#x2713;</mp4validation>";
 			String azMp4 = "<mp4validation>(&#x2713;)</mp4validation>";
 			String mp4validation = "no";
-			if ( config.contains( yesMp4 ) ) {
+			if (config.contains(yesMp4)) {
 				mp4validation = "yes";
-			} else if ( config.contains( azMp4 ) ) {
+			} else if (config.contains(azMp4)) {
 				mp4validation = "az";
 			} else {
 				mp4validation = "no";
 			}
-			configMap.put( "mp4Validation", mp4validation );
+			configMap.put("mp4Validation", mp4validation);
 
 			// Gibt die Videocodecs aus, welche im MP4 vorkommen duerfen.
 			String allowedmp4avc = "0";
-			if ( doc.getElementsByTagName( "allowedmp4avc" )
-					.item( 0 ) != null ) {
-				allowedmp4avc = doc.getElementsByTagName( "allowedmp4avc" )
-						.item( 0 ).getTextContent().replace( " ", "" );
+			if (doc.getElementsByTagName("allowedmp4avc").item(0) != null) {
+				allowedmp4avc = doc.getElementsByTagName("allowedmp4avc").item(0).getTextContent().replace(" ", "");
 			}
 			String allowedmp4hevc = "0";
-			if ( doc.getElementsByTagName( "allowedmp4hevc" )
-					.item( 0 ) != null ) {
-				allowedmp4hevc = doc.getElementsByTagName( "allowedmp4hevc" )
-						.item( 0 ).getTextContent().replace( " ", "" );
+			if (doc.getElementsByTagName("allowedmp4hevc").item(0) != null) {
+				allowedmp4hevc = doc.getElementsByTagName("allowedmp4hevc").item(0).getTextContent().replace(" ", "");
 			}
-			configMap.put( "Allowedmp4avc", allowedmp4avc );
-			configMap.put( "Allowedmp4hevc", allowedmp4hevc );
+			configMap.put("Allowedmp4avc", allowedmp4avc);
+			configMap.put("Allowedmp4hevc", allowedmp4hevc);
 
 			// Gibt die Audiocodecs aus, welche im MP4 vorkommen duerfen.
 			String allowedmp4mp3 = "0";
-			if ( doc.getElementsByTagName( "allowedmp4mp3" )
-					.item( 0 ) != null ) {
-				allowedmp4mp3 = doc.getElementsByTagName( "allowedmp4mp3" )
-						.item( 0 ).getTextContent().replace( " ", "" );
+			if (doc.getElementsByTagName("allowedmp4mp3").item(0) != null) {
+				allowedmp4mp3 = doc.getElementsByTagName("allowedmp4mp3").item(0).getTextContent().replace(" ", "");
 			}
 			String allowedmp4aac = "0";
-			if ( doc.getElementsByTagName( "allowedmp4aac" )
-					.item( 0 ) != null ) {
-				allowedmp4aac = doc.getElementsByTagName( "allowedmp4aac" )
-						.item( 0 ).getTextContent().replace( " ", "" );
+			if (doc.getElementsByTagName("allowedmp4aac").item(0) != null) {
+				allowedmp4aac = doc.getElementsByTagName("allowedmp4aac").item(0).getTextContent().replace(" ", "");
 			}
-			configMap.put( "Allowedmp4mp3", allowedmp4mp3 );
-			configMap.put( "Allowedmp4aac", allowedmp4aac );
+			configMap.put("Allowedmp4mp3", allowedmp4mp3);
+			configMap.put("Allowedmp4aac", allowedmp4aac);
 
 			// Gibt an ob Videocodes fehlen duerfen.
 			String allowedmp4novideo = "Error";
-			if ( doc.getElementsByTagName( "allowedmp4novideo" )
-					.item( 0 ) != null ) {
-				allowedmp4novideo = doc
-						.getElementsByTagName( "allowedmp4novideo" ).item( 0 )
-						.getTextContent();
+			if (doc.getElementsByTagName("allowedmp4novideo").item(0) != null) {
+				allowedmp4novideo = doc.getElementsByTagName("allowedmp4novideo").item(0).getTextContent();
 			}
-			configMap.put( "Allowedmp4novideo", allowedmp4novideo );
+			configMap.put("Allowedmp4novideo", allowedmp4novideo);
 
 			// Gibt an ob Audiocodes fehlen duerfen.
 			String allowedmp4noaudio = "Error";
-			if ( doc.getElementsByTagName( "allowedmp4noaudio" )
-					.item( 0 ) != null ) {
-				allowedmp4noaudio = doc
-						.getElementsByTagName( "allowedmp4noaudio" ).item( 0 )
-						.getTextContent();
+			if (doc.getElementsByTagName("allowedmp4noaudio").item(0) != null) {
+				allowedmp4noaudio = doc.getElementsByTagName("allowedmp4noaudio").item(0).getTextContent();
 			}
-			configMap.put( "Allowedmp4noaudio", allowedmp4noaudio );
+			configMap.put("Allowedmp4noaudio", allowedmp4noaudio);
 
 			// TODO Daten
 
@@ -768,232 +644,222 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String yesXml = "<xmlvalidation>&#x2713;</xmlvalidation>";
 			String azXml = "<xmlvalidation>(&#x2713;)</xmlvalidation>";
 			String xmlvalidation = "no";
-			if ( config.contains( yesXml ) ) {
+			if (config.contains(yesXml)) {
 				xmlvalidation = "yes";
-			} else if ( config.contains( azXml ) ) {
+			} else if (config.contains(azXml)) {
 				xmlvalidation = "az";
 			} else {
 				xmlvalidation = "no";
 			}
-			configMap.put( "xmlValidation", xmlvalidation );
+			configMap.put("xmlValidation", xmlvalidation);
 
 			// Gibt an ob json akzeptiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
 			String azJson = "<jsonvalidation>(&#x2713;)</jsonvalidation>";
 			String jsonvalidation = "no";
-			if ( config.contains( azJson ) ) {
+			if (config.contains(azJson)) {
 				jsonvalidation = "az";
 			} else {
 				jsonvalidation = "no";
 			}
-			configMap.put( "jsonValidation", jsonvalidation );
+			configMap.put("jsonValidation", jsonvalidation);
 
 			// Gibt an ob siard validiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
 			String yesSiard = "<siardvalidation>&#x2713;</siardvalidation>";
 			String azSiard = "<siardvalidation>(&#x2713;)</siardvalidation>";
 			String siardvalidation = "no";
-			if ( config.contains( yesSiard ) ) {
+			if (config.contains(yesSiard)) {
 				siardvalidation = "yes";
-			} else if ( config.contains( azSiard ) ) {
+			} else if (config.contains(azSiard)) {
 				siardvalidation = "az";
 			} else {
 				siardvalidation = "no";
 			}
-			configMap.put( "siardValidation", siardvalidation );
+			configMap.put("siardValidation", siardvalidation);
 
 			// Gibt an ob siard 1.0 validiert werden soll
-			String siard10 = doc.getElementsByTagName( "siard10" ).item( 0 )
-					.getTextContent().replace( " ", "" );
-			configMap.put( "siard10", siard10 );
+			String siard10 = doc.getElementsByTagName("siard10").item(0).getTextContent().replace(" ", "");
+			configMap.put("siard10", siard10);
 
 			// Gibt an ob siard 2.1 validiert werden soll
-			String siard21 = doc.getElementsByTagName( "siard21" ).item( 0 )
-					.getTextContent().replace( " ", "" );
-			configMap.put( "siard21", siard21 );
+			String siard21 = doc.getElementsByTagName("siard21").item(0).getTextContent().replace(" ", "");
+			configMap.put("siard21", siard21);
 
 			// Gibt an ob siard 2.2 validiert werden soll
-			String siard22 = doc.getElementsByTagName( "siard22" ).item( 0 )
-					.getTextContent().replace( " ", "" );
-			configMap.put( "siard22", siard22 );
+			String siard22 = doc.getElementsByTagName("siard22").item(0).getTextContent().replace(" ", "");
+			configMap.put("siard22", siard22);
 
 			// <lobExtension>Error </lobExtension> <!--Warning / Error -->
-			String lobExtension = doc.getElementsByTagName( "lobExtension" ).item( 0 )
-					.getTextContent().replace( " ", "" );
-			configMap.put( "lobExtension", lobExtension );
+			String lobExtension = doc.getElementsByTagName("lobExtension").item(0).getTextContent().replace(" ", "");
+			configMap.put("lobExtension", lobExtension);
 
 			// <lobAzepted>Check </lobAzepted> <!--"" / Check -->
-			String lobAzepted = doc.getElementsByTagName( "lobAzepted" ).item( 0 )
-					.getTextContent().replace( " ", "" );
-			configMap.put( "lobAzepted", lobAzepted );
-			
+			String lobAzepted = doc.getElementsByTagName("lobAzepted").item(0).getTextContent().replace(" ", "");
+			configMap.put("lobAzepted", lobAzepted);
+
 			// Gibt an ob csv akzeptiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
 			String azCsv = "<csvvalidation>(&#x2713;)</csvvalidation>";
 			String csvvalidation = "no";
-			if ( config.contains( azCsv ) ) {
+			if (config.contains(azCsv)) {
 				csvvalidation = "az";
 			} else {
 				csvvalidation = "no";
 			}
-			configMap.put( "csvValidation", csvvalidation );
+			configMap.put("csvValidation", csvvalidation);
 
 			// Gibt an ob xlsx akzeptiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
 			String azXlsx = "<xlsxvalidation>(&#x2713;)</xlsxvalidation>";
 			String xlsxvalidation = "no";
-			if ( config.contains( azXlsx ) ) {
+			if (config.contains(azXlsx)) {
 				xlsxvalidation = "az";
 			} else {
 				xlsxvalidation = "no";
 			}
-			configMap.put( "xlsxValidation", xlsxvalidation );
+			configMap.put("xlsxValidation", xlsxvalidation);
 
 			// Gibt an ob ods akzeptiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
 			String azOds = "<odsvalidation>(&#x2713;)</odsvalidation>";
 			String odsvalidation = "no";
-			if ( config.contains( azOds ) ) {
+			if (config.contains(azOds)) {
 				odsvalidation = "az";
 			} else {
 				odsvalidation = "no";
 			}
-			configMap.put( "odsValidation", odsvalidation );
+			configMap.put("odsValidation", odsvalidation);
 
 			// otherformats
 			// Gibt eine Liste mit den PUIDs aus, welche auch akzeptiert sind.
-			String otherformats = doc.getElementsByTagName( "otherformats" )
-					.item( 0 ).getTextContent();
-			otherformats = otherformats.replace( "\";", "" );
-			otherformats = otherformats.replace( ";", "" );
-			configMap.put( "otherformats", otherformats );
+			String otherformats = doc.getElementsByTagName("otherformats").item(0).getTextContent();
+			otherformats = otherformats.replace("\";", "");
+			otherformats = otherformats.replace(";", "");
+			configMap.put("otherformats", otherformats);
 
 			// egovdv
 			// Wie soll der egovdv verwendet werden
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
 			String yesDV = "<egovdvvalidation>&#x2713;</egovdvvalidation>";
 			String dvvalidation = "no";
-			if ( config.contains( yesDV ) ) {
+			if (config.contains(yesDV)) {
 				dvvalidation = "yes";
 			} else {
 				dvvalidation = "no";
 			}
-			configMap.put( "dvvalidation", dvvalidation );
-			String Institut = doc.getElementsByTagName( "Institut" ).item( 0 )
-					.getTextContent();
-			configMap.put( "Institut", Institut );
+			configMap.put("dvvalidation", dvvalidation);
+			String Institut = doc.getElementsByTagName("Institut").item(0).getTextContent();
+			configMap.put("Institut", Institut);
 
 			String yesMixed = "<Mixed>yes</Mixed>";
 			String strMixed = "no";
-			if ( config.contains( yesMixed ) ) {
+			if (config.contains(yesMixed)) {
 				strMixed = "Mixed";
 			} else {
 				strMixed = "no";
 			}
-			configMap.put( "Mixed", strMixed );
+			configMap.put("Mixed", strMixed);
 			String yesQualified = "<Qualified>yes</Qualified>";
 			String strQualified = "no";
-			if ( config.contains( yesQualified ) ) {
+			if (config.contains(yesQualified)) {
 				strQualified = "Qualified";
 			} else {
 				strQualified = "no";
 			}
-			configMap.put( "Qualified", strQualified );
+			configMap.put("Qualified", strQualified);
 			String yesSwissGovPKI = "<SwissGovPKI>yes</SwissGovPKI>";
 			String strSwissGovPKI = "no";
-			if ( config.contains( yesSwissGovPKI ) ) {
+			if (config.contains(yesSwissGovPKI)) {
 				strSwissGovPKI = "SwissGov-PKI";
 			} else {
 				strSwissGovPKI = "no";
 			}
-			configMap.put( "SwissGovPKI", strSwissGovPKI );
+			configMap.put("SwissGovPKI", strSwissGovPKI);
 			String yesUpregfn = "<Upregfn>yes</Upregfn>";
 			String strUpregfn = "no";
-			if ( config.contains( yesUpregfn ) ) {
+			if (config.contains(yesUpregfn)) {
 				strUpregfn = "upreg-fn";
 			} else {
 				strUpregfn = "no";
 			}
-			configMap.put( "Upregfn", strUpregfn );
+			configMap.put("Upregfn", strUpregfn);
 			String yesSiegel = "<Siegel>yes</Siegel>";
 			String strSiegel = "no";
-			if ( config.contains( yesSiegel ) ) {
+			if (config.contains(yesSiegel)) {
 				strSiegel = "Siegel";
 			} else {
 				strSiegel = "no";
 			}
-			configMap.put( "Siegel", strSiegel );
+			configMap.put("Siegel", strSiegel);
 			String yesAmtsblattportal = "<Amtsblattportal>yes</Amtsblattportal>";
 			String strAmtsblattportal = "no";
-			if ( config.contains( yesAmtsblattportal ) ) {
+			if (config.contains(yesAmtsblattportal)) {
 				strAmtsblattportal = "Amtsblattportal";
 			} else {
 				strAmtsblattportal = "no";
 			}
-			configMap.put( "Amtsblattportal", strAmtsblattportal );
+			configMap.put("Amtsblattportal", strAmtsblattportal);
 			String yesEdec = "<Edec>yes</Edec>";
 			String strEdec = "no";
-			if ( config.contains( yesEdec ) ) {
+			if (config.contains(yesEdec)) {
 				strEdec = "edec";
 			} else {
 				strEdec = "no";
 			}
-			configMap.put( "Edec", strEdec );
+			configMap.put("Edec", strEdec);
 			String yesESchKG = "<ESchKG>yes</ESchKG>";
 			String strESchKG = "no";
-			if ( config.contains( yesESchKG ) ) {
+			if (config.contains(yesESchKG)) {
 				strESchKG = "eSchKG";
 			} else {
 				strESchKG = "no";
 			}
-			configMap.put( "ESchKG", strESchKG );
+			configMap.put("ESchKG", strESchKG);
 			String yesFederalLaw = "<FederalLaw>yes</FederalLaw>";
 			String strFederalLaw = "no";
-			if ( config.contains( yesFederalLaw ) ) {
+			if (config.contains(yesFederalLaw)) {
 				strFederalLaw = "FederalLaw";
 			} else {
 				strFederalLaw = "no";
 			}
-			configMap.put( "FederalLaw", strFederalLaw );
+			configMap.put("FederalLaw", strFederalLaw);
 			String yesStrafregisterauszug = "<Strafregisterauszug>yes</Strafregisterauszug>";
 			String strStrafregisterauszug = "no";
-			if ( config.contains( yesStrafregisterauszug ) ) {
+			if (config.contains(yesStrafregisterauszug)) {
 				strStrafregisterauszug = "Strafregisterauszug";
 			} else {
 				strStrafregisterauszug = "no";
 			}
-			configMap.put( "Strafregisterauszug", strStrafregisterauszug );
+			configMap.put("Strafregisterauszug", strStrafregisterauszug);
 			String yesKantonZugFinanzdirektion = "<KantonZugFinanzdirektion>yes</KantonZugFinanzdirektion>";
 			String strKantonZugFinanzdirektion = "no";
-			if ( config.contains( yesKantonZugFinanzdirektion ) ) {
+			if (config.contains(yesKantonZugFinanzdirektion)) {
 				strKantonZugFinanzdirektion = "Kanton-Zug-Finanzdirektion";
 			} else {
 				strKantonZugFinanzdirektion = "no";
 			}
-			configMap.put( "KantonZugFinanzdirektion",
-					strKantonZugFinanzdirektion );
+			configMap.put("KantonZugFinanzdirektion", strKantonZugFinanzdirektion);
 
 			// hash
 			/*
-			 * Hashwert von Dateien berechnen und ausgeben. Leer bedeutet keine
-			 * Berechnung und Ausgabe []
+			 * Hashwert von Dateien berechnen und ausgeben. Leer bedeutet keine Berechnung
+			 * und Ausgabe []
 			 * 
 			 * [] MD5, SHA-1, SHA-256, SHA-512
 			 */
-			String hash = doc.getElementsByTagName( "hash" ).item( 0 )
-					.getTextContent();
-			configMap.put( "hash", hash );
+			String hash = doc.getElementsByTagName("hash").item(0).getTextContent();
+			configMap.put("hash", hash);
 
 			// sizeWarning
 			/*
-			 * Warnung bei kleineren Dateien ausgeben. "" bedeutet keine
-			 * ueberpruefung und Warnung []
+			 * Warnung bei kleineren Dateien ausgeben. "" bedeutet keine ueberpruefung und
+			 * Warnung []
 			 * 
 			 * [] / 0.5KB / 1KB / 5KB
 			 */
-			String sizeWarning = doc.getElementsByTagName( "sizeWarning" )
-					.item( 0 ).getTextContent();
-			configMap.put( "sizeWarning", sizeWarning );
+			String sizeWarning = doc.getElementsByTagName("sizeWarning").item(0).getTextContent();
+			configMap.put("sizeWarning", sizeWarning);
 
 			// TODO SIP
 
@@ -1001,151 +867,95 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
 			String yesEch0160 = "<ech0160validation>&#x2713;</ech0160validation>";
 			String ech0160validation = "no";
-			if ( config.contains( yesEch0160 ) ) {
+			if (config.contains(yesEch0160)) {
 				ech0160validation = "yes";
 			} else {
 				ech0160validation = "no";
 			}
-			configMap.put( "ech0160validation", ech0160validation );
+			configMap.put("ech0160validation", ech0160validation);
 
 			// Gibt eine Liste mit den PUIDs aus, welche im SIP vorkommen
 			// duerfen.
 			String allowedformats = "";
-			configMap.put( "allowedformats", allowedformats );
+			configMap.put("allowedformats", allowedformats);
 
 			// Gibt die Maximal erlaubte Laenge eines Pfades in der SIP-Datei
 			// aus.
-			String allowedlengthofpaths = doc
-					.getElementsByTagName( "allowedlengthofpaths" ).item( 0 )
-					.getTextContent();
-			configMap.put( "MaximumPathLength", allowedlengthofpaths );
+			String allowedlengthofpaths = doc.getElementsByTagName("allowedlengthofpaths").item(0).getTextContent();
+			configMap.put("MaximumPathLength", allowedlengthofpaths);
 
 			// Die Einschraenkung des SIP-Namen ist konfigurierbar
-			String allowedsipname = doc.getElementsByTagName( "allowedsipname" )
-					.item( 0 ).getTextContent();
-			configMap.put( "AllowedSipName", allowedsipname );
+			String allowedsipname = doc.getElementsByTagName("allowedsipname").item(0).getTextContent();
+			configMap.put("AllowedSipName", allowedsipname);
 
 			// Gibt an ob eCH-0160 V1.0 akzeptiert und validiert wird
-			String ech0160v10 = doc.getElementsByTagName( "ech0160v10" )
-					.item( 0 ).getTextContent().replace( " ", "" );
-			configMap.put( "ech0160v10", ech0160v10 );
+			String ech0160v10 = doc.getElementsByTagName("ech0160v10").item(0).getTextContent().replace(" ", "");
+			configMap.put("ech0160v10", ech0160v10);
 
 			// Gibt an ob eCH-0160 V1.1 akzeptiert und validiert wird
-			String ech0160v11 = doc.getElementsByTagName( "ech0160v11" )
-					.item( 0 ).getTextContent().replace( " ", "" );
-			configMap.put( "ech0160v11", ech0160v11 );
+			String ech0160v11 = doc.getElementsByTagName("ech0160v11").item(0).getTextContent().replace(" ", "");
+			configMap.put("ech0160v11", ech0160v11);
 
 			// Gibt an ob eCH-0160 V1.2 akzeptiert und validiert wird
-			String ech0160v12 = doc.getElementsByTagName( "ech0160v12" )
-					.item( 0 ).getTextContent().replace( " ", "" );
-			configMap.put( "ech0160v12", ech0160v12 );
+			String ech0160v12 = doc.getElementsByTagName("ech0160v12").item(0).getTextContent().replace(" ", "");
+			configMap.put("ech0160v12", ech0160v12);
 
 			// Gibt an ob eCH-0160 V1.3 akzeptiert und validiert wird
-			String ech0160v13 = doc.getElementsByTagName( "ech0160v13" )
-					.item( 0 ).getTextContent().replace( " ", "" );
-			configMap.put( "ech0160v13", ech0160v13 );
+			String ech0160v13 = doc.getElementsByTagName("ech0160v13").item(0).getTextContent().replace(" ", "");
+			configMap.put("ech0160v13", ech0160v13);
 
 			// Gibt an ob aeltere Dokumente nur eine Warnung ergeben sollen
-			String warningolddok = doc.getElementsByTagName( "warningolddok" )
-					.item( 0 ).getTextContent();
-			configMap.put( "WarningOldDok", warningolddok );
+			String warningolddok = doc.getElementsByTagName("warningolddok").item(0).getTextContent();
+			configMap.put("WarningOldDok", warningolddok);
 
 			// System.out.println("Value is b : " + (map.get("key") == b));
 			bis.close();
 			return configMap;
 
-		} catch ( FileNotFoundException e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_Ca_SIP )
-							+ getTextResourceService().getText( locale,
-									MESSAGE_XML_CONFIGURATION_ERROR_1 ) );
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_Ca_SIP )
-							+ getTextResourceService().getText( locale,
-									MESSAGE_XML_CONFIGURATION_ERROR_2 ) );
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_Ca_SIP )
-							+ getTextResourceService().getText( locale,
-									MESSAGE_XML_CONFIGURATION_ERROR_3 ) );
+		} catch (FileNotFoundException e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP)
+					+ getTextResourceService().getText(locale, MESSAGE_XML_CONFIGURATION_ERROR_1));
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP)
+					+ getTextResourceService().getText(locale, MESSAGE_XML_CONFIGURATION_ERROR_2));
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP)
+					+ getTextResourceService().getText(locale, MESSAGE_XML_CONFIGURATION_ERROR_3));
 			String error = e.getMessage() + " (FileNotFoundException)";
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_Ca_SIP )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, error ) );
-			System.exit( 1 );
-		} catch ( ParserConfigurationException e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_Ca_SIP )
-							+ getTextResourceService().getText( locale,
-									MESSAGE_XML_CONFIGURATION_ERROR_1 ) );
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_Ca_SIP )
-							+ getTextResourceService().getText( locale,
-									MESSAGE_XML_CONFIGURATION_ERROR_2 ) );
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_Ca_SIP )
-							+ getTextResourceService().getText( locale,
-									MESSAGE_XML_CONFIGURATION_ERROR_3 ) );
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, error));
+			System.exit(1);
+		} catch (ParserConfigurationException e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP)
+					+ getTextResourceService().getText(locale, MESSAGE_XML_CONFIGURATION_ERROR_1));
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP)
+					+ getTextResourceService().getText(locale, MESSAGE_XML_CONFIGURATION_ERROR_2));
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP)
+					+ getTextResourceService().getText(locale, MESSAGE_XML_CONFIGURATION_ERROR_3));
 			String error = e.getMessage() + " (ParserConfigurationException)";
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_Ca_SIP )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, error ) );
-			System.exit( 1 );
-		} catch ( SAXException e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_Ca_SIP )
-							+ getTextResourceService().getText( locale,
-									MESSAGE_XML_CONFIGURATION_ERROR_1 ) );
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_Ca_SIP )
-							+ getTextResourceService().getText( locale,
-									MESSAGE_XML_CONFIGURATION_ERROR_2 ) );
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_Ca_SIP )
-							+ getTextResourceService().getText( locale,
-									MESSAGE_XML_CONFIGURATION_ERROR_3 ) );
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, error));
+			System.exit(1);
+		} catch (SAXException e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP)
+					+ getTextResourceService().getText(locale, MESSAGE_XML_CONFIGURATION_ERROR_1));
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP)
+					+ getTextResourceService().getText(locale, MESSAGE_XML_CONFIGURATION_ERROR_2));
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP)
+					+ getTextResourceService().getText(locale, MESSAGE_XML_CONFIGURATION_ERROR_3));
 			String error = e.getMessage() + " (SAXException)";
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_Ca_SIP )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, error ) );
-			System.exit( 1 );
-		} catch ( IOException e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_Ca_SIP )
-							+ getTextResourceService().getText( locale,
-									MESSAGE_XML_CONFIGURATION_ERROR_1 ) );
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_Ca_SIP )
-							+ getTextResourceService().getText( locale,
-									MESSAGE_XML_CONFIGURATION_ERROR_2 ) );
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_Ca_SIP )
-							+ getTextResourceService().getText( locale,
-									MESSAGE_XML_CONFIGURATION_ERROR_3 ) );
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, error));
+			System.exit(1);
+		} catch (IOException e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP)
+					+ getTextResourceService().getText(locale, MESSAGE_XML_CONFIGURATION_ERROR_1));
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP)
+					+ getTextResourceService().getText(locale, MESSAGE_XML_CONFIGURATION_ERROR_2));
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP)
+					+ getTextResourceService().getText(locale, MESSAGE_XML_CONFIGURATION_ERROR_3));
 			String error = e.getMessage() + " (IOException)";
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_Ca_SIP )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, error ) );
-			System.exit( 1 );
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, error));
+			System.exit(1);
 		}
 		return configMap;
 	}

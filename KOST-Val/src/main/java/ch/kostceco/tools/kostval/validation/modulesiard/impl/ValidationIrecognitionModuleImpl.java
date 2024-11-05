@@ -36,126 +36,106 @@ import ch.kostceco.tools.kostval.logging.Logtxt;
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
 
-public class ValidationIrecognitionModuleImpl extends ValidationModuleImpl
-		implements ValidationIrecognitionModule
-{
-	private boolean	min			= false;
+public class ValidationIrecognitionModuleImpl extends ValidationModuleImpl implements ValidationIrecognitionModule {
+	private boolean min = false;
 
-	Boolean			version10	= false;
-	Boolean			version2x	= false;
-	Boolean			version21	= false;
-	Boolean			version22	= false;
+	Boolean version10 = false;
+	Boolean version2x = false;
+	Boolean version21 = false;
+	Boolean version22 = false;
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws ValidationIrecognitionException
-	{
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws ValidationIrecognitionException {
 		// Informationen zur Darstellung "onWork" holen
-		String onWork = configMap.get( "ShowProgressOnWork" );
+		String onWork = configMap.get("ShowProgressOnWork");
 		/*
 		 * Nicht vergessen in
 		 * "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property
 		 * name="configurationService" ref="configurationService" />
 		 */
-		String pathToWorkDir = configMap.get( "PathToWorkDir" );
+		String pathToWorkDir = configMap.get("PathToWorkDir");
 		pathToWorkDir = pathToWorkDir + File.separator + "SIARD";
-		File metadataXml = new File( new StringBuilder( pathToWorkDir )
-				.append( File.separator ).append( "header" )
-				.append( File.separator ).append( "metadata.xml" ).toString() );
-		if ( onWork.equals( "yes" ) ) {
+		File metadataXml = new File(new StringBuilder(pathToWorkDir).append(File.separator).append("header")
+				.append(File.separator).append("metadata.xml").toString());
+		if (onWork.equals("yes")) {
 			// Ausgabe Modul Ersichtlich das KOST-Val arbeitet
-			System.out.print( "I    " );
-			System.out.print( "\b\b\b\b\b" );
-		} else if ( onWork.equals( "nomin" ) ) {
+			System.out.print("I    ");
+			System.out.print("\b\b\b\b\b");
+		} else if (onWork.equals("nomin")) {
 			min = true;
 		}
 
 		Boolean valid = true;
 		try {
 			/** Validierung ob die Extension .siard lautet */
-			if ( !valDatei.getAbsolutePath().toLowerCase()
-					.endsWith( ".siard" ) ) {
-				if ( min ) {
+			if (!valDatei.getAbsolutePath().toLowerCase().endsWith(".siard")) {
+				if (min) {
 					return false;
 				} else {
 
-					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale,
-									MESSAGE_XML_MODUL_I_SIARD )
-									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_I_NOTALLOWEDEXT ) );
+					Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_I_SIARD)
+							+ getTextResourceService().getText(locale, MESSAGE_XML_I_NOTALLOWEDEXT));
 					// Die SIARD-Datei wurde nicht als solche erkannt, weil sie
 					// keine .siard Extension hat.
 					valid = false;
 				}
 			}
 
-			version10 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
-					.contains(
-							"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
-			version2x = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
-					.contains(
-							"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
-			version21 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
-					.contains( "version=\"2.1\"" );
-			version22 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
-					.contains( "version=\"2.2\"" );
-			if ( version10 ) {
+			version10 = FileUtils.readFileToString(metadataXml, "ISO-8859-1")
+					.contains("http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd");
+			version2x = FileUtils.readFileToString(metadataXml, "ISO-8859-1")
+					.contains("http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd");
+			version21 = FileUtils.readFileToString(metadataXml, "ISO-8859-1").contains("version=\"2.1\"");
+			version22 = FileUtils.readFileToString(metadataXml, "ISO-8859-1").contains("version=\"2.2\"");
+			if (version10) {
 				// keine zusaetzliche kontrolle
-			} else if ( version2x ) {
+			} else if (version2x) {
 				/*
-				 * bestehendes Workverzeichnis Abbruch wenn nicht leer, da am
-				 * Schluss das Workverzeichnis geloescht wird und entsprechend
-				 * bestehende Dateien geloescht werden koennen
+				 * bestehendes Workverzeichnis Abbruch wenn nicht leer, da am Schluss das
+				 * Workverzeichnis geloescht wird und entsprechend bestehende Dateien geloescht
+				 * werden koennen
 				 */
 
-				File versionDir21 = new File( pathToWorkDir + File.separator
-						+ "header" + File.separator + "siardversion"
-						+ File.separator + "2.1" );
+				File versionDir21 = new File(pathToWorkDir + File.separator + "header" + File.separator + "siardversion"
+						+ File.separator + "2.1");
 
-				File versionDir22 = new File( pathToWorkDir + File.separator
-						+ "header" + File.separator + "siardversion"
-						+ File.separator + "2.2" );
-				if ( version21 && !versionDir21.exists() ) {
+				File versionDir22 = new File(pathToWorkDir + File.separator + "header" + File.separator + "siardversion"
+						+ File.separator + "2.2");
+				if (version21 && !versionDir21.exists()) {
 					valid = false;
-					if ( min ) {
+					if (min) {
 						return false;
 					} else {
-						Logtxt.logtxt( logFile, getTextResourceService()
-								.getText( locale, MESSAGE_XML_MODUL_I_SIARD )
-								+ getTextResourceService().getText( locale,
-										MESSAGE_XML_I_SIARDVERSION, "2.1",
-										versionDir21.getAbsolutePath() ) );
+						Logtxt.logtxt(logFile,
+								getTextResourceService().getText(locale, MESSAGE_XML_MODUL_I_SIARD)
+										+ getTextResourceService().getText(locale, MESSAGE_XML_I_SIARDVERSION, "2.1",
+												versionDir21.getAbsolutePath()));
 					}
-				} else if ( version22 && !versionDir22.exists() ) {
+				} else if (version22 && !versionDir22.exists()) {
 					valid = false;
-					if ( min ) {
+					if (min) {
 						return false;
 					} else {
-						Logtxt.logtxt( logFile, getTextResourceService()
-								.getText( locale, MESSAGE_XML_MODUL_I_SIARD )
-								+ getTextResourceService().getText( locale,
-										MESSAGE_XML_I_SIARDVERSION, "2.2",
-										versionDir22.getAbsolutePath() ) );
+						Logtxt.logtxt(logFile,
+								getTextResourceService().getText(locale, MESSAGE_XML_MODUL_I_SIARD)
+										+ getTextResourceService().getText(locale, MESSAGE_XML_I_SIARDVERSION, "2.2",
+												versionDir22.getAbsolutePath()));
 					}
 				} else {
 					valid = true;
 				}
 			}
-		} catch ( java.io.IOException ioe ) {
+		} catch (java.io.IOException ioe) {
 			valid = false;
-			if ( min ) {
+			if (min) {
 				return false;
 			} else {
 
-				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale,
-								MESSAGE_XML_MODUL_I_SIARD )
-								+ getTextResourceService().getText( locale,
-										ERROR_XML_UNKNOWN,
-										ioe.getMessage() + " (IOException)" ) );
+				Logtxt.logtxt(logFile,
+						getTextResourceService().getText(locale, MESSAGE_XML_MODUL_I_SIARD) + getTextResourceService()
+								.getText(locale, ERROR_XML_UNKNOWN, ioe.getMessage() + " (IOException)"));
 			}
 		}
 

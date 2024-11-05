@@ -26,40 +26,32 @@ import java.io.PrintWriter;
 
 import ch.kostceco.tools.kostval.service.TextResourceService;
 
-public class LogConfigurator implements MessageConstants
-{
+public class LogConfigurator implements MessageConstants {
 
 	private TextResourceService textResourceService;
 
-	public TextResourceService getTextResourceService()
-	{
+	public TextResourceService getTextResourceService() {
 		return textResourceService;
 	}
 
-	public void setTextResourceService(
-			TextResourceService textResourceService )
-	{
+	public void setTextResourceService(TextResourceService textResourceService) {
 		this.textResourceService = textResourceService;
 	}
 
-	public String configure( String directoryOfLogfile, String nameOfLogfile )
-	{
+	public String configure(String directoryOfLogfile, String nameOfLogfile) {
 
-		String logFileName = directoryOfLogfile + File.separator + nameOfLogfile
-				+ ".kost-val.log.xml";
-		File logFile = new File( logFileName );
+		String logFileName = directoryOfLogfile + File.separator + nameOfLogfile + ".kost-val.log.xml";
+		File logFile = new File(logFileName);
 
 		// MessageOnlyLayout layout = new MessageOnlyLayout();
 
 		try {
 
-			PrintWriter out = new PrintWriter(
-					new BufferedWriter( new FileWriter( logFile, true ) ) );
+			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(logFile, true)));
 			out.close();
 
-		} catch ( IOException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( ERROR_IOE,
-					e + " (LogConfig)" ) );
+		} catch (IOException e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(ERROR_IOE, e + " (LogConfig)"));
 		}
 
 		return logFileName;

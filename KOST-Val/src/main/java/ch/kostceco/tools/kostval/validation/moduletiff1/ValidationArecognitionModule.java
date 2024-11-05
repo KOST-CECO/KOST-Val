@@ -32,11 +32,9 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
 
-public interface ValidationArecognitionModule extends ValidationModule
-{
+public interface ValidationArecognitionModule extends ValidationModule {
 
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws ValidationArecognitionException;
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws ValidationArecognitionException;
 
 }

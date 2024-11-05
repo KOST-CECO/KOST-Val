@@ -38,68 +38,49 @@ import ch.kostceco.tools.kostval.validation.modulepng.ValidationAvalidationPngMo
  * eingebunden.
  */
 
-public class Controllerpng implements MessageConstants
-{
+public class Controllerpng implements MessageConstants {
 
-	private TextResourceService				textResourceService;
+	private TextResourceService textResourceService;
 
-	private ValidationAvalidationPngModule	validationAvalidationPngModule;
+	private ValidationAvalidationPngModule validationAvalidationPngModule;
 
-	public ValidationAvalidationPngModule getValidationAvalidationPngModule()
-	{
+	public ValidationAvalidationPngModule getValidationAvalidationPngModule() {
 		return validationAvalidationPngModule;
 	}
 
-	public void setValidationAvalidationPngModule(
-			ValidationAvalidationPngModule validationAvalidationPngModule )
-	{
+	public void setValidationAvalidationPngModule(ValidationAvalidationPngModule validationAvalidationPngModule) {
 		this.validationAvalidationPngModule = validationAvalidationPngModule;
 	}
 
-	public TextResourceService getTextResourceService()
-	{
+	public TextResourceService getTextResourceService() {
 		return textResourceService;
 	}
 
-	public void setTextResourceService(
-			TextResourceService textResourceService )
-	{
+	public void setTextResourceService(TextResourceService textResourceService) {
 		this.textResourceService = textResourceService;
 	}
 
-	public boolean executeMandatory( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath )
-	{
+	public boolean executeMandatory(File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale, File logFile, String dirOfJarPath) {
 		boolean valid = true;
 
 		// Validation A
 		try {
-			if ( this.getValidationAvalidationPngModule().validate( valDatei,
-					directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath ) ) {
-				this.getValidationAvalidationPngModule().getMessageService()
-						.print();
+			if (this.getValidationAvalidationPngModule().validate(valDatei, directoryOfLogfile, configMap, locale,
+					logFile, dirOfJarPath)) {
+				this.getValidationAvalidationPngModule().getMessageService().print();
 			} else {
-				this.getValidationAvalidationPngModule().getMessageService()
-						.print();
+				this.getValidationAvalidationPngModule().getMessageService().print();
 				return false;
 			}
-		} catch ( ValidationApngvalidationException e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_A_PNG )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
-			this.getValidationAvalidationPngModule().getMessageService()
-					.print();
+		} catch (ValidationApngvalidationException e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PNG)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
+			this.getValidationAvalidationPngModule().getMessageService().print();
 			return false;
-		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_A_PNG )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
+		} catch (Exception e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PNG)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
 			return false;
 		}
 		return valid;

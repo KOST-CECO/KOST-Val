@@ -20,20 +20,17 @@ package ch.kostceco.tools.kostval.exception.modulesiard;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-public class ValidationWwarningException extends KOSTValException
-{
+public class ValidationWwarningException extends KOSTValException {
 
 	/** @author ??? */
 	private static final long serialVersionUID = 5060094531057249403L; // tbd
 
-	public ValidationWwarningException()
-	{
+	public ValidationWwarningException() {
 		super();
 	}
 
-	public ValidationWwarningException( String message )
-	{
-		super( message );
+	public ValidationWwarningException(String message) {
+		super(message);
 	}
 
 }

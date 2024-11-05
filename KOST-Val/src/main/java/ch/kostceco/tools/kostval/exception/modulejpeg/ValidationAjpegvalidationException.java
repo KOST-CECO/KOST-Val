@@ -20,16 +20,14 @@ package ch.kostceco.tools.kostval.exception.modulejpeg;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-public class ValidationAjpegvalidationException extends KOSTValException
-{
+public class ValidationAjpegvalidationException extends KOSTValException {
 
 	/** @author Rc Claire Roethlisberger, KOST-CECO */
 
 	private static final long serialVersionUID = -8816841335398903517L;
 
-	public ValidationAjpegvalidationException( String message )
-	{
-		super( message );
+	public ValidationAjpegvalidationException(String message) {
+		super(message);
 	}
 
 }

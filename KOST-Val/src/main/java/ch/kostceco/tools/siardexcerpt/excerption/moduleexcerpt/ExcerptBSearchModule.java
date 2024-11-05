@@ -27,11 +27,9 @@ import ch.kostceco.tools.siardexcerpt.excerption.ValidationModule;
  * Resultates
  */
 
-public interface ExcerptBSearchModule extends ValidationModule
-{
+public interface ExcerptBSearchModule extends ValidationModule {
 
-	public boolean validate( File siardDatei, File outFile,
-			String excerptString, Map<String, String> configMap, Locale locale )
-			throws ExcerptBSearchException;
+	public boolean validate(File siardDatei, File outFile, String excerptString, Map<String, String> configMap,
+			Locale locale) throws ExcerptBSearchException;
 
 }

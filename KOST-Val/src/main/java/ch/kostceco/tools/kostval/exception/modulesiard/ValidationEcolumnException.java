@@ -20,20 +20,17 @@ package ch.kostceco.tools.kostval.exception.modulesiard;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-public class ValidationEcolumnException extends KOSTValException
-{
+public class ValidationEcolumnException extends KOSTValException {
 
 	/** @author ??? */
 	private static final long serialVersionUID = 5060094531057249403L; // tbd
 
-	public ValidationEcolumnException()
-	{
+	public ValidationEcolumnException() {
 		super();
 	}
 
-	public ValidationEcolumnException( String message )
-	{
-		super( message );
+	public ValidationEcolumnException(String message) {
+		super(message);
 	}
 
 }

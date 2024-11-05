@@ -45,101 +45,88 @@ import ch.kostceco.tools.kostval.logging.Logtxt;
  * keine Primärdateien im Verzeichnis content vorhanden, der Ablieferungstyp ist
  * jedoch FILE, ist dies ein Fehler und gibt false zurueck.
  */
-public class Validation1fPrimaryDataModuleImpl extends ValidationModuleImpl
-		implements Validation1fPrimaryDataModule
-{
+public class Validation1fPrimaryDataModuleImpl extends ValidationModuleImpl implements Validation1fPrimaryDataModule {
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile, String dirOfJarPath )
-			throws Validation1fPrimaryDataException
-	{
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws Validation1fPrimaryDataException {
 		boolean showOnWork = false;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
-		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
+		String onWorkConfig = configMap.get("ShowProgressOnWork");
 		/*
 		 * Nicht vergessen in
 		 * "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property
 		 * name="configurationService" ref="configurationService" />
 		 */
-		if ( onWorkConfig.equals( "yes" ) ) {
+		if (onWorkConfig.equals("yes")) {
 			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
 			showOnWork = true;
-			System.out.print( "1F   " );
-			System.out.print( "\b\b\b\b\b" );
+			System.out.print("1F   ");
+			System.out.print("\b\b\b\b\b");
 		}
 		boolean contentFolderEmpty = true;
 
 		try {
-			Map<String, File> fileMap = Util.getFileMap( valDatei, true );
+			Map<String, File> fileMap = Util.getFileMap(valDatei, true);
 			Set<String> fileMapKeys = fileMap.keySet();
-			for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator
-					.hasNext(); ) {
+			for (Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext();) {
 				String entryName = iterator.next();
 				// entryName: content/DOS_02/gpl2.pdf
-				if ( entryName.startsWith( "content/" ) ) {
+				if (entryName.startsWith("content/")) {
 					contentFolderEmpty = false;
 					break;
 				}
-				if ( showOnWork ) {
-					if ( onWork == 410 ) {
+				if (showOnWork) {
+					if (onWork == 410) {
 						onWork = 2;
-						System.out.print( "1F-  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 110 ) {
+						System.out.print("1F-  ");
+						System.out.print("\b\b\b\b\b");
+					} else if (onWork == 110) {
 						onWork = onWork + 1;
-						System.out.print( "1F\\  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 210 ) {
+						System.out.print("1F\\  ");
+						System.out.print("\b\b\b\b\b");
+					} else if (onWork == 210) {
 						onWork = onWork + 1;
-						System.out.print( "1F|  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 310 ) {
+						System.out.print("1F|  ");
+						System.out.print("\b\b\b\b\b");
+					} else if (onWork == 310) {
 						onWork = onWork + 1;
-						System.out.print( "1F/  " );
-						System.out.print( "\b\b\b\b\b" );
+						System.out.print("1F/  ");
+						System.out.print("\b\b\b\b\b");
 					} else {
 						onWork = onWork + 1;
 					}
 				}
 			}
-			if ( contentFolderEmpty == true ) {
+			if (contentFolderEmpty == true) {
 				// invalide falls FILES-SIP
 
-				DocumentBuilderFactory dbf = DocumentBuilderFactory
-						.newInstance();
+				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 				// dbf.setValidating(false);
 				DocumentBuilder db = dbf.newDocumentBuilder();
-				Document doc = db.parse( new FileInputStream(
-						new File( valDatei.getAbsolutePath()
-								+ "//header//metadata.xml" ) ) );
+				Document doc = db
+						.parse(new FileInputStream(new File(valDatei.getAbsolutePath() + "//header//metadata.xml")));
 				doc.getDocumentElement().normalize();
-				NodeList layerConfigList = doc
-						.getElementsByTagName( "ablieferung" );
-				Node node = layerConfigList.item( 0 );
+				NodeList layerConfigList = doc.getElementsByTagName("ablieferung");
+				Node node = layerConfigList.item(0);
 				Element e = (Element) node;
-				String name = e.getAttribute( "xsi:type" );
+				String name = e.getAttribute("xsi:type");
 
-				if ( name.equals( "ablieferungFilesSIP" ) ) {
+				if (name.equals("ablieferungFilesSIP")) {
 					// FILE-SIP
 
-					Logtxt.logtxt( logFile, getTextResourceService()
-							.getText( locale, MESSAGE_XML_MODUL_Af_SIP )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_AF_FILESIPWITHOUTPRIMARYDATA ) );
+					Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Af_SIP)
+							+ getTextResourceService().getText(locale, ERROR_XML_AF_FILESIPWITHOUTPRIMARYDATA));
 					return false;
 				}
 			}
 
-		} catch ( Exception e ) {
+		} catch (Exception e) {
 
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_Af_SIP )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Af_SIP)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
 			return false;
 		}
 		return true;

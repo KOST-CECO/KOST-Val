@@ -20,20 +20,17 @@ package ch.kostceco.tools.kostval.exception.moduletiff2;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-public class ValidationFmultipageValidationException extends KOSTValException
-{
+public class ValidationFmultipageValidationException extends KOSTValException {
 
 	/** @author Rc Claire Roethlisberger, KOST-CECO */
 	private static final long serialVersionUID = -2554852466330221247L;
 
-	public ValidationFmultipageValidationException()
-	{
+	public ValidationFmultipageValidationException() {
 		super();
 	}
 
-	public ValidationFmultipageValidationException( String message )
-	{
-		super( message );
+	public ValidationFmultipageValidationException(String message) {
+		super(message);
 	}
 
 }

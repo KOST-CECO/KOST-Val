@@ -32,11 +32,9 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
  * und vergleichen
  */
 
-public interface Validation2cChecksumModule extends ValidationModule
-{
+public interface Validation2cChecksumModule extends ValidationModule {
 
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws Validation2cChecksumException;
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws Validation2cChecksumException;
 
 }

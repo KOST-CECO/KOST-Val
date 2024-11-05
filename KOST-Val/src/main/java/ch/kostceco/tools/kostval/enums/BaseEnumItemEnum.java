@@ -18,10 +18,9 @@
 
 package ch.kostceco.tools.kostval.enums;
 
-/** Marker - Interface für EnumItem Enums. */
+/** Marker - Interface fï¿½r EnumItem Enums. */
 
-public interface BaseEnumItemEnum
-{
+public interface BaseEnumItemEnum {
 
 	Long getId();
 }

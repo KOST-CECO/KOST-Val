@@ -27,9 +27,7 @@ import java.util.Map;
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
-public interface ConfigurationService extends Service
-{
-	Map<String, String> configMap( Locale locale, String logtype, File valDatei,
-			String dirOfJarPath );
+public interface ConfigurationService extends Service {
+	Map<String, String> configMap(Locale locale, String logtype, File valDatei, String dirOfJarPath);
 
 }

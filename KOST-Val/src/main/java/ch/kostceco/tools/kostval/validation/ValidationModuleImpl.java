@@ -23,35 +23,29 @@ import ch.kostceco.tools.kostval.service.TextResourceService;
 
 /** @author Rc Claire Roethlisberger, KOST-CECO */
 
-public abstract class ValidationModuleImpl
-{
+public abstract class ValidationModuleImpl {
 
-	protected final String		UNZIPDIRECTORY	= "unzipped";
-	protected final String		METADATA		= "metadata.xml";
-	protected final String		XSD_ARELDA		= "arelda_v3.13.2.xsd";
-	protected final String		XSD_METADATA	= "metadata.xsd";
+	protected final String UNZIPDIRECTORY = "unzipped";
+	protected final String METADATA = "metadata.xml";
+	protected final String XSD_ARELDA = "arelda_v3.13.2.xsd";
+	protected final String XSD_METADATA = "metadata.xsd";
 
-	private TextResourceService	textResourceService;
-	private MessageService		messageService;
+	private TextResourceService textResourceService;
+	private MessageService messageService;
 
-	public TextResourceService getTextResourceService()
-	{
+	public TextResourceService getTextResourceService() {
 		return textResourceService;
 	}
 
-	public void setTextResourceService(
-			TextResourceService textResourceService )
-	{
+	public void setTextResourceService(TextResourceService textResourceService) {
 		this.textResourceService = textResourceService;
 	}
 
-	public void setMessageService( MessageService messageService )
-	{
+	public void setMessageService(MessageService messageService) {
 		this.messageService = messageService;
 	}
 
-	public MessageService getMessageService()
-	{
+	public MessageService getMessageService() {
 		return messageService;
 	}
 

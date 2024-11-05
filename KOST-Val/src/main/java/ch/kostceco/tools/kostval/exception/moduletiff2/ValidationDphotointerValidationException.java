@@ -20,20 +20,17 @@ package ch.kostceco.tools.kostval.exception.moduletiff2;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-public class ValidationDphotointerValidationException extends KOSTValException
-{
+public class ValidationDphotointerValidationException extends KOSTValException {
 
 	/** @author Rc Claire Roethlisberger, KOST-CECO */
 	private static final long serialVersionUID = -2554852466330221247L;
 
-	public ValidationDphotointerValidationException()
-	{
+	public ValidationDphotointerValidationException() {
 		super();
 	}
 
-	public ValidationDphotointerValidationException( String message )
-	{
-		super( message );
+	public ValidationDphotointerValidationException(String message) {
+		super(message);
 	}
 
 }

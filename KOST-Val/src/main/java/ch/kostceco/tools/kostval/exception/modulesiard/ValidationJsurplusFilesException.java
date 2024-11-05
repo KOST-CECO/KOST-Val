@@ -20,20 +20,17 @@ package ch.kostceco.tools.kostval.exception.modulesiard;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-public class ValidationJsurplusFilesException extends KOSTValException
-{
+public class ValidationJsurplusFilesException extends KOSTValException {
 
 	/** @author ??? */
 	private static final long serialVersionUID = 5060094531057249403L; // tbd
 
-	public ValidationJsurplusFilesException()
-	{
+	public ValidationJsurplusFilesException() {
 		super();
 	}
 
-	public ValidationJsurplusFilesException( String message )
-	{
-		super( message );
+	public ValidationJsurplusFilesException(String message) {
+		super(message);
 	}
 
 }

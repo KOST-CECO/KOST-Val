@@ -20,20 +20,17 @@ package ch.kostceco.tools.kostval.exception.modulesiard;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-public class ValidationBprimaryStructureException extends KOSTValException
-{
+public class ValidationBprimaryStructureException extends KOSTValException {
 
 	/** @author Rc Claire Roethlisberger, KOST-CECO */
 	private static final long serialVersionUID = -5743334009406087977L;
 
-	public ValidationBprimaryStructureException()
-	{
+	public ValidationBprimaryStructureException() {
 		super();
 	}
 
-	public ValidationBprimaryStructureException( String message )
-	{
-		super( message );
+	public ValidationBprimaryStructureException(String message) {
+		super(message);
 	}
 
 }

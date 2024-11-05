@@ -35,11 +35,9 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
  * @author Ec Christian Eugster
  */
 
-public interface ValidationDstructureModule extends ValidationModule
-{
+public interface ValidationDstructureModule extends ValidationModule {
 
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws ValidationDstructureException;
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws ValidationDstructureException;
 
 }

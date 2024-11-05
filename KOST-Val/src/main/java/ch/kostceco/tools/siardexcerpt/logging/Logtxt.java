@@ -27,44 +27,40 @@ import java.nio.charset.StandardCharsets;
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
-public class Logtxt
-{
+public class Logtxt {
 
-	public static void logtxt( File logFile, String txt )
-	{
+	public static void logtxt(File logFile, String txt) {
 		try {
-			if ( !logFile.exists() ) {
+			if (!logFile.exists()) {
 				logFile.getParentFile().mkdirs();
 				logFile.createNewFile();
 			}
 
-			PrintWriter out = new PrintWriter(
-					new BufferedWriter( new FileWriter( logFile, true ) ) );
+			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(logFile, true)));
 			/*
 			 * kann nicht direkt ausgegeben werden, es ist UTF-8
 			 * 
 			 * out.println( txt );
 			 */
-			byte[] byteTxt = txt.getBytes( StandardCharsets.UTF_8 );
-			String txtByte = new String( byteTxt );
-			out.println( txtByte );
+			byte[] byteTxt = txt.getBytes(StandardCharsets.UTF_8);
+			String txtByte = new String(byteTxt);
+			out.println(txtByte);
 
 			out.close();
-		} catch ( IOException e ) {
-			System.out.println( "Logtxt: " + e );
+		} catch (IOException e) {
+			System.out.println("Logtxt: " + e);
 		}
 
 		// oeffnet das UTF-8 logFile, welches nicht ueberschrieben wird (=true)
 		/*
 		 * try (FileOutputStream fos = new FileOutputStream( logFile, true );
-		 * OutputStreamWriter osw = new OutputStreamWriter( fos,
-		 * StandardCharsets.UTF_8 ); BufferedWriter writer = new BufferedWriter(
-		 * osw )) { // txt ist standard UTF-16 byte[] byteTxt = txt.getBytes();
-		 * // byte[] byteTxt = txt.getBytes( StandardCharsets.UTF_8 ); String
-		 * txtByte = new String( byteTxt ); // fuegt den utf8 txt hinten an und
-		 * erstellt eine neue Zeile writer.append( txt ); writer.newLine();
-		 * writer.append( txtByte ); writer.newLine(); } catch ( IOException e )
-		 * { e.printStackTrace(); }
+		 * OutputStreamWriter osw = new OutputStreamWriter( fos, StandardCharsets.UTF_8
+		 * ); BufferedWriter writer = new BufferedWriter( osw )) { // txt ist standard
+		 * UTF-16 byte[] byteTxt = txt.getBytes(); // byte[] byteTxt = txt.getBytes(
+		 * StandardCharsets.UTF_8 ); String txtByte = new String( byteTxt ); // fuegt
+		 * den utf8 txt hinten an und erstellt eine neue Zeile writer.append( txt );
+		 * writer.newLine(); writer.append( txtByte ); writer.newLine(); } catch (
+		 * IOException e ) { e.printStackTrace(); }
 		 */
 
 	}

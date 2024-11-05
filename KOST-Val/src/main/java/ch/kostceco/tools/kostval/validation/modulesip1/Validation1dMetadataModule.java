@@ -32,11 +32,9 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
  * @author razm Daniel Ludin, Bedag AG @version 0.2.0
  */
 
-public interface Validation1dMetadataModule extends ValidationModule
-{
+public interface Validation1dMetadataModule extends ValidationModule {
 
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws Validation1dMetadataException;
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws Validation1dMetadataException;
 
 }

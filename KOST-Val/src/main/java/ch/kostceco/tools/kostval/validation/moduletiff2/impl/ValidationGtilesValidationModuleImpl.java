@@ -37,100 +37,83 @@ import ch.kostceco.tools.kostval.logging.Logtxt;
  */
 
 public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl
-		implements ValidationGtilesValidationModule
-{
+		implements ValidationGtilesValidationModule {
 
-	public static String	NEWLINE	= System.getProperty( "line.separator" );
+	public static String NEWLINE = System.getProperty("line.separator");
 
-	private boolean			min		= false;
+	private boolean min = false;
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws ValidationGtilesValidationException
-	{
-		String onWork = configMap.get( "ShowProgressOnWork" );
-		if ( onWork.equals( "nomin" ) ) {
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws ValidationGtilesValidationException {
+		String onWork = configMap.get("ShowProgressOnWork");
+		if (onWork.equals("nomin")) {
 			min = true;
 		}
 
 		boolean isValid = true;
 
 		/*
-		 * TODO: jhoveReport auswerten! Auf Exiftool wird verzichtet. Exiftool
-		 * verwendet Perl, welche seit einiger Zeit hohe nicht geloese
-		 * Sicherheitsrisiken birgt. zudem koennen die Metadaten vermehrt
-		 * komplett durch jhove ausgelesen werden. Jhove hat bereits einen der
-		 * Probleme, welche das teilweise die Ausgabe der Metadaten verhindert
-		 * behoben.
+		 * TODO: jhoveReport auswerten! Auf Exiftool wird verzichtet. Exiftool verwendet
+		 * Perl, welche seit einiger Zeit hohe nicht geloese Sicherheitsrisiken birgt.
+		 * zudem koennen die Metadaten vermehrt komplett durch jhove ausgelesen werden.
+		 * Jhove hat bereits einen der Probleme, welche das teilweise die Ausgabe der
+		 * Metadaten verhindert behoben.
 		 */
-		File jhoveReport = new File( directoryOfLogfile,
-				valDatei.getName() + ".jhove-log.txt" );
+		File jhoveReport = new File(directoryOfLogfile, valDatei.getName() + ".jhove-log.txt");
 
-		if ( !jhoveReport.exists() ) {
+		if (!jhoveReport.exists()) {
 			isValid = false;
-			if ( min ) {
+			if (min) {
 				return false;
 			} else {
-				Logtxt.logtxt( logFile, getTextResourceService()
-						.getText( locale, MESSAGE_XML_MODUL_B_TIFF )
-						+ getTextResourceService().getText( locale,
-								ERROR_XML_UNKNOWN, "No Jhove report." ) );
+				Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_B_TIFF)
+						+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, "No Jhove report."));
 				return false;
 			}
 		} else {
-			String tiles = configMap.get( "AllowedTiles" );
+			String tiles = configMap.get("AllowedTiles");
 
 			/*
-			 * String oldErrorLine1 = ""; String oldErrorLine2 = ""; String
-			 * oldErrorLine3 = ""; String oldErrorLine4 = ""; String
-			 * oldErrorLine5 = "";
+			 * String oldErrorLine1 = ""; String oldErrorLine2 = ""; String oldErrorLine3 =
+			 * ""; String oldErrorLine4 = ""; String oldErrorLine5 = "";
 			 */
 
-			if ( tiles.equalsIgnoreCase( "yes" ) ) {
+			if (tiles.equalsIgnoreCase("yes")) {
 				// Valider Status (Kacheln sind erlaubt)
 			} else {
 				try {
-					BufferedReader in = new BufferedReader(
-							new FileReader( jhoveReport ) );
+					BufferedReader in = new BufferedReader(new FileReader(jhoveReport));
 					String line;
-					while ( (line = in.readLine()) != null ) {
+					while ((line = in.readLine()) != null) {
 						/*
-						 * zu analysierende TIFF-IFD-Zeile die StripOffsets-
-						 * oder TileOffsets-Zeile gibt Auskunft ueber die
-						 * Aufteilungsart
+						 * zu analysierende TIFF-IFD-Zeile die StripOffsets- oder TileOffsets-Zeile gibt
+						 * Auskunft ueber die Aufteilungsart
 						 * 
 						 * TileWidth: TileLength: TileOffsets: TileByteCounts:
 						 */
-						if ( line.contains( "TileOffsets:" )
-								|| line.contains( "TileWidth:" )
-								|| line.contains( "TileLength:" )
-								|| line.contains( "TileByteCounts:" ) ) {
+						if (line.contains("TileOffsets:") || line.contains("TileWidth:") || line.contains("TileLength:")
+								|| line.contains("TileByteCounts:")) {
 							isValid = false;
-							if ( min ) {
+							if (min) {
 								in.close();
 								return false;
 							} else {
-								Logtxt.logtxt( logFile, getTextResourceService()
-										.getText( locale,
-												MESSAGE_XML_MODUL_G_TIFF )
-										+ getTextResourceService().getText(
-												locale,
-												MESSAGE_XML_G_INVALID ) );
+								Logtxt.logtxt(logFile,
+										getTextResourceService().getText(locale, MESSAGE_XML_MODUL_G_TIFF)
+												+ getTextResourceService().getText(locale, MESSAGE_XML_G_INVALID));
 								in.close();
 								return false;
 							}
 						}
 					}
 					in.close();
-				} catch ( Exception e ) {
-					if ( min ) {
+				} catch (Exception e) {
+					if (min) {
 						return false;
 					} else {
-						Logtxt.logtxt( logFile, getTextResourceService()
-								.getText( locale, MESSAGE_XML_MODUL_G_TIFF )
-								+ getTextResourceService().getText( locale,
-										MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
+						Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_G_TIFF)
+								+ getTextResourceService().getText(locale, MESSAGE_XML_CG_CANNOTFINDETREPORT));
 						return false;
 					}
 				}

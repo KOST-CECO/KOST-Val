@@ -39,99 +39,79 @@ import ch.kostceco.tools.siardexcerpt.service.TextResourceServiceExc;
  * eingebunden.
  */
 
-public class Controllerexcerpt implements MessageConstants
-{
+public class Controllerexcerpt implements MessageConstants {
 
-	private ExcerptAZipModule		excerptAZipModule;
-	private ExcerptAConfigModule	excerptAConfigModule;
+	private ExcerptAZipModule excerptAZipModule;
+	private ExcerptAConfigModule excerptAConfigModule;
 
-	private ExcerptBSearchModule	excerptBSearchModule;
+	private ExcerptBSearchModule excerptBSearchModule;
 
-	private ExcerptCGrepModule		excerptCGrepModule;
+	private ExcerptCGrepModule excerptCGrepModule;
 
-	private TextResourceServiceExc	textResourceServiceExc;
+	private TextResourceServiceExc textResourceServiceExc;
 
-	public ExcerptAZipModule getExcerptAZipModule()
-	{
+	public ExcerptAZipModule getExcerptAZipModule() {
 		return excerptAZipModule;
 	}
 
-	public void setExcerptAZipModule( ExcerptAZipModule excerptAZipModule )
-	{
+	public void setExcerptAZipModule(ExcerptAZipModule excerptAZipModule) {
 		this.excerptAZipModule = excerptAZipModule;
 	}
 
-	public ExcerptAConfigModule getExcerptAConfigModule()
-	{
+	public ExcerptAConfigModule getExcerptAConfigModule() {
 		return excerptAConfigModule;
 	}
 
-	public void setExcerptAConfigModule(
-			ExcerptAConfigModule excerptAConfigModule )
-	{
+	public void setExcerptAConfigModule(ExcerptAConfigModule excerptAConfigModule) {
 		this.excerptAConfigModule = excerptAConfigModule;
 	}
 
-	public ExcerptBSearchModule getExcerptBSearchModule()
-	{
+	public ExcerptBSearchModule getExcerptBSearchModule() {
 		return excerptBSearchModule;
 	}
 
-	public void setExcerptBSearchModule(
-			ExcerptBSearchModule excerptBSearchModule )
-	{
+	public void setExcerptBSearchModule(ExcerptBSearchModule excerptBSearchModule) {
 		this.excerptBSearchModule = excerptBSearchModule;
 	}
 
-	public ExcerptCGrepModule getExcerptCGrepModule()
-	{
+	public ExcerptCGrepModule getExcerptCGrepModule() {
 		return excerptCGrepModule;
 	}
 
-	public void setExcerptCGrepModule( ExcerptCGrepModule excerptCGrepModule )
-	{
+	public void setExcerptCGrepModule(ExcerptCGrepModule excerptCGrepModule) {
 		this.excerptCGrepModule = excerptCGrepModule;
 	}
 
-	public TextResourceServiceExc getTextResourceServiceExc()
-	{
+	public TextResourceServiceExc getTextResourceServiceExc() {
 		return textResourceServiceExc;
 	}
 
-	public void setTextResourceServiceExc(
-			TextResourceServiceExc textResourceServiceExc )
-	{
+	public void setTextResourceServiceExc(TextResourceServiceExc textResourceServiceExc) {
 		this.textResourceServiceExc = textResourceServiceExc;
 	}
 
-	public boolean executeA( File siardDatei, File siardDateiNew,
-			String noString, Map<String, String> configMap, Locale locale )
-	{
+	public boolean executeA(File siardDatei, File siardDateiNew, String noString, Map<String, String> configMap,
+			Locale locale) {
 		boolean valid = true;
 
 		// TODO-Marker Excerpt Step A (SIARD-Datei ins Workverzeichnis
 		// extrahieren)
 
 		try {
-			if ( this.getExcerptAZipModule().validate( siardDatei,
-					siardDateiNew, noString, configMap, locale ) ) {
+			if (this.getExcerptAZipModule().validate(siardDatei, siardDateiNew, noString, configMap, locale)) {
 				this.getExcerptAZipModule().getMessageServiceExc().print();
 			} else {
 				this.getExcerptAZipModule().getMessageServiceExc().print();
 				valid = false;
 			}
-		} catch ( ExcerptAZipException e ) {
-			System.out.println( getTextResourceServiceExc().getText( locale,
-					EXC_MESSAGE_XML_MODUL_A ) );
-			System.out.println( getTextResourceServiceExc().getText( locale,
-					EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
+		} catch (ExcerptAZipException e) {
+			System.out.println(getTextResourceServiceExc().getText(locale, EXC_MESSAGE_XML_MODUL_A));
+			System.out.println(getTextResourceServiceExc().getText(locale, EXC_ERROR_XML_UNKNOWN, e.getMessage()));
 			this.getExcerptAZipModule().getMessageServiceExc().print();
 			return false;
-		} catch ( Exception e ) {
-			System.out.println( getTextResourceServiceExc().getText( locale,
-					EXC_MESSAGE_XML_MODUL_A ) );
-			System.out.println( getTextResourceServiceExc().getText( locale,
-					EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
+		} catch (Exception e) {
+			System.out.println(getTextResourceServiceExc().getText(locale, EXC_MESSAGE_XML_MODUL_A));
+			System.out.println(getTextResourceServiceExc().getText(locale, EXC_ERROR_XML_UNKNOWN, e.getMessage()));
 			return false;
 		}
 
@@ -139,33 +119,27 @@ public class Controllerexcerpt implements MessageConstants
 
 	}
 
-	public boolean executeAConfig( File siardDatei, File configFileHard,
-			String noString, Map<String, String> configMap, Locale locale )
-	{
+	public boolean executeAConfig(File siardDatei, File configFileHard, String noString, Map<String, String> configMap,
+			Locale locale) {
 		boolean valid = true;
 
 		// Excerpt Step A Config (Config Datei ausfuellen)
 
 		try {
-			if ( this.getExcerptAConfigModule().validate( siardDatei,
-					configFileHard, noString, configMap, locale ) ) {
+			if (this.getExcerptAConfigModule().validate(siardDatei, configFileHard, noString, configMap, locale)) {
 				this.getExcerptAConfigModule().getMessageServiceExc().print();
 			} else {
 				this.getExcerptAConfigModule().getMessageServiceExc().print();
 				valid = false;
 			}
-		} catch ( ExcerptAConfigException e ) {
-			System.out.println( getTextResourceServiceExc().getText( locale,
-					EXC_MESSAGE_XML_MODUL_A ) );
-			System.out.println( getTextResourceServiceExc().getText( locale,
-					EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
+		} catch (ExcerptAConfigException e) {
+			System.out.println(getTextResourceServiceExc().getText(locale, EXC_MESSAGE_XML_MODUL_A));
+			System.out.println(getTextResourceServiceExc().getText(locale, EXC_ERROR_XML_UNKNOWN, e.getMessage()));
 			this.getExcerptAConfigModule().getMessageServiceExc().print();
 			return false;
-		} catch ( Exception e ) {
-			System.out.println( getTextResourceServiceExc().getText( locale,
-					EXC_MESSAGE_XML_MODUL_A ) );
-			System.out.println( getTextResourceServiceExc().getText( locale,
-					EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
+		} catch (Exception e) {
+			System.out.println(getTextResourceServiceExc().getText(locale, EXC_MESSAGE_XML_MODUL_A));
+			System.out.println(getTextResourceServiceExc().getText(locale, EXC_ERROR_XML_UNKNOWN, e.getMessage()));
 			return false;
 		}
 
@@ -173,33 +147,25 @@ public class Controllerexcerpt implements MessageConstants
 
 	}
 
-	public boolean executeB( File siardDatei, File outFileSearch,
-			String searchString, Map<String, String> configMap, Locale locale )
-	{
+	public boolean executeB(File siardDatei, File outFileSearch, String searchString, Map<String, String> configMap,
+			Locale locale) {
 		boolean valid = true;
 		// TODO-Marker Excerpt Step B (Suche)
 		try {
-			if ( this.getExcerptBSearchModule().validate( siardDatei,
-					outFileSearch, searchString, configMap, locale ) ) {
+			if (this.getExcerptBSearchModule().validate(siardDatei, outFileSearch, searchString, configMap, locale)) {
 				this.getExcerptBSearchModule().getMessageServiceExc().print();
 			} else {
 				this.getExcerptBSearchModule().getMessageServiceExc().print();
 				valid = false;
 			}
-		} catch ( ExcerptBSearchException e ) {
-			Logtxt.logtxt( outFileSearch,
-					getTextResourceServiceExc().getText( locale,
-							EXC_MESSAGE_XML_MODUL_B )
-							+ getTextResourceServiceExc().getText( locale,
-									EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
+		} catch (ExcerptBSearchException e) {
+			Logtxt.logtxt(outFileSearch, getTextResourceServiceExc().getText(locale, EXC_MESSAGE_XML_MODUL_B)
+					+ getTextResourceServiceExc().getText(locale, EXC_ERROR_XML_UNKNOWN, e.getMessage()));
 			this.getExcerptBSearchModule().getMessageServiceExc().print();
 			return false;
-		} catch ( Exception e ) {
-			Logtxt.logtxt( outFileSearch,
-					getTextResourceServiceExc().getText( locale,
-							EXC_MESSAGE_XML_MODUL_B )
-							+ getTextResourceServiceExc().getText( locale,
-									EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
+		} catch (Exception e) {
+			Logtxt.logtxt(outFileSearch, getTextResourceServiceExc().getText(locale, EXC_MESSAGE_XML_MODUL_B)
+					+ getTextResourceServiceExc().getText(locale, EXC_ERROR_XML_UNKNOWN, e.getMessage()));
 			return false;
 		}
 
@@ -207,33 +173,25 @@ public class Controllerexcerpt implements MessageConstants
 
 	}
 
-	public boolean executeC( File siardDatei, File outFile,
-			String excerptString, Map<String, String> configMap, Locale locale )
-	{
+	public boolean executeC(File siardDatei, File outFile, String excerptString, Map<String, String> configMap,
+			Locale locale) {
 		boolean valid = true;
 		// TODO-Marker Excerpt Step C (Extraktion)
 		try {
-			if ( this.getExcerptCGrepModule().validate( siardDatei, outFile,
-					excerptString, configMap, locale ) ) {
+			if (this.getExcerptCGrepModule().validate(siardDatei, outFile, excerptString, configMap, locale)) {
 				this.getExcerptCGrepModule().getMessageServiceExc().print();
 			} else {
 				this.getExcerptCGrepModule().getMessageServiceExc().print();
 				valid = false;
 			}
-		} catch ( ExcerptCGrepException e ) {
-			Logtxt.logtxt( outFile,
-					getTextResourceServiceExc().getText( locale,
-							EXC_MESSAGE_XML_MODUL_C )
-							+ getTextResourceServiceExc().getText( locale,
-									EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
+		} catch (ExcerptCGrepException e) {
+			Logtxt.logtxt(outFile, getTextResourceServiceExc().getText(locale, EXC_MESSAGE_XML_MODUL_C)
+					+ getTextResourceServiceExc().getText(locale, EXC_ERROR_XML_UNKNOWN, e.getMessage()));
 			this.getExcerptCGrepModule().getMessageServiceExc().print();
 			return false;
-		} catch ( Exception e ) {
-			Logtxt.logtxt( outFile,
-					getTextResourceServiceExc().getText( locale,
-							EXC_MESSAGE_XML_MODUL_C )
-							+ getTextResourceServiceExc().getText( locale,
-									EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
+		} catch (Exception e) {
+			Logtxt.logtxt(outFile, getTextResourceServiceExc().getText(locale, EXC_MESSAGE_XML_MODUL_C)
+					+ getTextResourceServiceExc().getText(locale, EXC_ERROR_XML_UNKNOWN, e.getMessage()));
 			return false;
 		}
 

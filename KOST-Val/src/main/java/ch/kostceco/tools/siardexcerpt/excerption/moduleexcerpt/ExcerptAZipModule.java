@@ -24,11 +24,9 @@ import ch.kostceco.tools.siardexcerpt.excerption.ValidationModule;
 
 /** SIARD-Datei entpacken */
 
-public interface ExcerptAZipModule extends ValidationModule
-{
+public interface ExcerptAZipModule extends ValidationModule {
 
-	public boolean validate( File siardDatei, File outFile,
-			String excerptString, Map<String, String> configMap, Locale locale )
-			throws ExcerptAZipException;
+	public boolean validate(File siardDatei, File outFile, String excerptString, Map<String, String> configMap,
+			Locale locale) throws ExcerptAZipException;
 
 }

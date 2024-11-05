@@ -20,20 +20,17 @@ package ch.kostceco.tools.kostval.exception.modulesip2;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-public class Validation2dGeverFileIntegrityException extends KOSTValException
-{
+public class Validation2dGeverFileIntegrityException extends KOSTValException {
 
 	/** @author razm Daniel Ludin, Bedag AG @version 0.2.0 */
 	private static final long serialVersionUID = 9091144601301961612L;
 
-	public Validation2dGeverFileIntegrityException()
-	{
+	public Validation2dGeverFileIntegrityException() {
 		super();
 	}
 
-	public Validation2dGeverFileIntegrityException( String message )
-	{
-		super( message );
+	public Validation2dGeverFileIntegrityException(String message) {
+		super(message);
 	}
 
 }

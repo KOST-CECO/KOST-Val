@@ -33,11 +33,9 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
  * Formatangaben auflisten.
  */
 
-public interface Validation3aFormatRecognitionModule extends ValidationModule
-{
+public interface Validation3aFormatRecognitionModule extends ValidationModule {
 
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws Validation3aFormatRecognitionException;
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws Validation3aFormatRecognitionException;
 
 }

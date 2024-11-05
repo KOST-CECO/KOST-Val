@@ -20,16 +20,14 @@ package ch.kostceco.tools.kostval.exception.modulemkv;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-public class ValidationAmkvvalidationException extends KOSTValException
-{
+public class ValidationAmkvvalidationException extends KOSTValException {
 
 	/** @author Rc Claire Roethlisberger, KOST-CECO */
 
 	private static final long serialVersionUID = -8816841335398903517L;
 
-	public ValidationAmkvvalidationException( String message )
-	{
-		super( message );
+	public ValidationAmkvvalidationException(String message) {
+		super(message);
 	}
 
 }

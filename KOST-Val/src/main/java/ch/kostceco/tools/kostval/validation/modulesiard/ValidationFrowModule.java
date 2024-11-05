@@ -39,14 +39,11 @@ import ch.kostceco.tools.kostval.validation.bean.ValidationContext;
  * @author Do Olivier Debenath
  */
 
-public interface ValidationFrowModule extends ValidationModule
-{
+public interface ValidationFrowModule extends ValidationModule {
 
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws ValidationFrowException;
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws ValidationFrowException;
 
-	public boolean prepareValidation( ValidationContext validationContext )
-			throws IOException, JDOMException, Exception;
+	public boolean prepareValidation(ValidationContext validationContext) throws IOException, JDOMException, Exception;
 
 }

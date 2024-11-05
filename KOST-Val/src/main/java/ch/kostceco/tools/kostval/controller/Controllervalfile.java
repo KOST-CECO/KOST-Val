@@ -46,485 +46,411 @@ import ch.kostceco.tools.kostval.service.TextResourceService;
  * eingebunden.
  */
 
-public class Controllervalfile implements MessageConstants
-{
+public class Controllervalfile implements MessageConstants {
 
 	private static TextResourceService textResourceService;
 
-	public static TextResourceService getTextResourceService()
-	{
+	public static TextResourceService getTextResourceService() {
 		return textResourceService;
 	}
 
 	@SuppressWarnings("static-access")
-	public void setTextResourceService(
-			TextResourceService textResourceService )
-	{
+	public void setTextResourceService(TextResourceService textResourceService) {
 		this.textResourceService = textResourceService;
 	}
 
-	public boolean valFile( File valDatei, String logFileName,
-			File directoryOfLogfile, boolean verbose, String dirOfJarPath,
-			Map<String, String> configMap, ApplicationContext context,
-			Locale locale, File logFile, String hash, String valDateiXml )
-			throws IOException
-	{
+	public boolean valFile(File valDatei, String logFileName, File directoryOfLogfile, boolean verbose,
+			String dirOfJarPath, Map<String, String> configMap, ApplicationContext context, Locale locale, File logFile,
+			String hash, String valDateiXml) throws IOException {
 		String originalValName = valDatei.getAbsolutePath();
 		String originalValNameXml = valDateiXml;
 		String valDateiName = valDatei.getName();
-		String valDateiExt = "."
-				+ FilenameUtils.getExtension( valDateiName ).toLowerCase();
+		String valDateiExt = "." + FilenameUtils.getExtension(valDateiName).toLowerCase();
 		boolean valFile = false;
-		File pathTemp = new File( directoryOfLogfile, "path.tmp" );
+		File pathTemp = new File(directoryOfLogfile, "path.tmp");
 
 		/*
-		 * falls das File bereits existiert, z.B. von einem vorhergehenden
-		 * Durchlauf, loeschen wir es
+		 * falls das File bereits existiert, z.B. von einem vorhergehenden Durchlauf,
+		 * loeschen wir es
 		 */
-		if ( pathTemp.exists() ) {
+		if (pathTemp.exists()) {
 			pathTemp.delete();
 		}
-		if ( pathTemp.exists() ) {
-			List<String> oldtextList = Files.readAllLines( pathTemp.toPath(),
-					StandardCharsets.UTF_8 );
-			for ( int i = 0; i < oldtextList.size(); i++ ) {
-				String oldtext = (oldtextList.get( i ));
-				Util.oldnewstring( oldtext, "", pathTemp );
+		if (pathTemp.exists()) {
+			List<String> oldtextList = Files.readAllLines(pathTemp.toPath(), StandardCharsets.UTF_8);
+			for (int i = 0; i < oldtextList.size(); i++) {
+				String oldtext = (oldtextList.get(i));
+				Util.oldnewstring(oldtext, "", pathTemp);
 			}
 		} else {
 			pathTemp.createNewFile();
 		}
-		FileUtils.writeStringToFile( pathTemp, originalValName, "UTF-8" );
+		FileUtils.writeStringToFile(pathTemp, originalValName, "UTF-8");
 
-		if ( (valDateiExt.equals( ".jp2" )) ) {
-			Logtxt.logtxt( logFile, "<Validation>" + hash );
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_VALTYPE, " JP2" ) );
-			Logtxt.logtxt( logFile, originalValNameXml );
-			Controllerjp2 controller1 = (Controllerjp2) context
-					.getBean( "controllerjp2" );
-			boolean okMandatory = controller1.executeMandatory( valDatei,
-					directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath );
+		if ((valDateiExt.equals(".jp2"))) {
+			Logtxt.logtxt(logFile, "<Validation>" + hash);
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_VALTYPE, " JP2"));
+			Logtxt.logtxt(logFile, originalValNameXml);
+			Controllerjp2 controller1 = (Controllerjp2) context.getBean("controllerjp2");
+			boolean okMandatory = controller1.executeMandatory(valDatei, directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath);
 			valFile = okMandatory;
 
-			if ( okMandatory ) {
+			if (okMandatory) {
 				// Validierte Datei valide
-				Logtxt.logtxt( logFile, "<Valid>valid</Valid></Validation>" );
-				System.out.println( " = Valid" );
+				Logtxt.logtxt(logFile, "<Valid>valid</Valid></Validation>");
+				System.out.println(" = Valid");
 			} else {
 				// Fehler in Validierte Datei --> invalide
-				Logtxt.logtxt( logFile,
-						"<Invalid>invalid</Invalid></Validation>" );
-				System.out.println( " = Invalid" );
+				Logtxt.logtxt(logFile, "<Invalid>invalid</Invalid></Validation>");
+				System.out.println(" = Invalid");
 			}
 
 			/*
-			 * Ausgabe der Pfade zu den Jpylyzer Reports, falls welche generiert
-			 * wurden (-v) oder Jpylyzer Report loeschen
+			 * Ausgabe der Pfade zu den Jpylyzer Reports, falls welche generiert wurden (-v)
+			 * oder Jpylyzer Report loeschen
 			 */
-			File JpylyzerReport = new File( directoryOfLogfile,
-					valDatei.getName() + ".jpylyzer-log.xml" );
+			File JpylyzerReport = new File(directoryOfLogfile, valDatei.getName() + ".jpylyzer-log.xml");
 
-			if ( JpylyzerReport.exists() ) {
-				if ( verbose ) {
+			if (JpylyzerReport.exists()) {
+				if (verbose) {
 					// optionaler Parameter --> Jpylyzer-Report lassen
 				} else {
 					// kein optionaler Parameter --> Jpylyzer-Report loeschen!
-					Util.deleteFile( JpylyzerReport );
+					Util.deleteFile(JpylyzerReport);
 				}
 			}
 
-		} else if ( (valDateiExt.equals( ".jpeg" )
-				|| valDateiExt.equals( ".jpg" )
-				|| valDateiExt.equals( ".jpe" )) ) {
-			Logtxt.logtxt( logFile, "<Validation>" + hash );
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_VALTYPE, " JPEG" ) );
-			Logtxt.logtxt( logFile, originalValNameXml );
-			Controllerjpeg controller1 = (Controllerjpeg) context
-					.getBean( "controllerjpeg" );
-			boolean okMandatory = controller1.executeMandatory( valDatei,
-					directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath );
+		} else if ((valDateiExt.equals(".jpeg") || valDateiExt.equals(".jpg") || valDateiExt.equals(".jpe"))) {
+			Logtxt.logtxt(logFile, "<Validation>" + hash);
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_VALTYPE, " JPEG"));
+			Logtxt.logtxt(logFile, originalValNameXml);
+			Controllerjpeg controller1 = (Controllerjpeg) context.getBean("controllerjpeg");
+			boolean okMandatory = controller1.executeMandatory(valDatei, directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath);
 			valFile = okMandatory;
 
-			if ( okMandatory ) {
+			if (okMandatory) {
 				// Validierte Datei valide
-				Logtxt.logtxt( logFile, "<Valid>valid</Valid></Validation>" );
-				System.out.println( " = Valid" );
+				Logtxt.logtxt(logFile, "<Valid>valid</Valid></Validation>");
+				System.out.println(" = Valid");
 			} else {
 				// Fehler in Validierte Datei --> invalide
-				Logtxt.logtxt( logFile,
-						"<Invalid>invalid</Invalid></Validation>" );
-				System.out.println( " = Invalid" );
+				Logtxt.logtxt(logFile, "<Invalid>invalid</Invalid></Validation>");
+				System.out.println(" = Invalid");
 			}
 
-		} else if ( (valDateiExt.equals( ".png" )) ) {
-			Logtxt.logtxt( logFile, "<Validation>" + hash );
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_VALTYPE, " PNG" ) );
-			Logtxt.logtxt( logFile, originalValNameXml );
-			Controllerpng controller1 = (Controllerpng) context
-					.getBean( "controllerpng" );
-			boolean okMandatory = controller1.executeMandatory( valDatei,
-					directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath );
+		} else if ((valDateiExt.equals(".png"))) {
+			Logtxt.logtxt(logFile, "<Validation>" + hash);
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_VALTYPE, " PNG"));
+			Logtxt.logtxt(logFile, originalValNameXml);
+			Controllerpng controller1 = (Controllerpng) context.getBean("controllerpng");
+			boolean okMandatory = controller1.executeMandatory(valDatei, directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath);
 			valFile = okMandatory;
 
-			if ( okMandatory ) {
+			if (okMandatory) {
 				// Validierte Datei valide
-				Logtxt.logtxt( logFile, "<Valid>valid</Valid></Validation>" );
-				System.out.println( " = Valid" );
+				Logtxt.logtxt(logFile, "<Valid>valid</Valid></Validation>");
+				System.out.println(" = Valid");
 			} else {
 				// Fehler in Validierte Datei --> invalide
-				Logtxt.logtxt( logFile,
-						"<Invalid>invalid</Invalid></Validation>" );
-				System.out.println( " = Invalid" );
+				Logtxt.logtxt(logFile, "<Invalid>invalid</Invalid></Validation>");
+				System.out.println(" = Invalid");
 			}
 
-		} else if ( (valDateiExt.equals( ".xml" )
-				|| valDateiExt.equals( ".xsd" )
-				|| valDateiExt.equals( ".xsl" )) ) {
-			Logtxt.logtxt( logFile, "<Validation>" + hash );
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_VALTYPE, " XML (XSD, XSL)" ) );
-			Logtxt.logtxt( logFile, originalValNameXml );
-			Controllerxml controller1 = (Controllerxml) context
-					.getBean( "controllerxml" );
-			boolean okMandatory = controller1.executeMandatory( valDatei,
-					directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath );
+		} else if ((valDateiExt.equals(".xml") || valDateiExt.equals(".xsd") || valDateiExt.equals(".xsl"))) {
+			Logtxt.logtxt(logFile, "<Validation>" + hash);
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_VALTYPE, " XML (XSD, XSL)"));
+			Logtxt.logtxt(logFile, originalValNameXml);
+			Controllerxml controller1 = (Controllerxml) context.getBean("controllerxml");
+			boolean okMandatory = controller1.executeMandatory(valDatei, directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath);
 			valFile = okMandatory;
 
-			if ( okMandatory ) {
+			if (okMandatory) {
 				// Validierte Datei valide
-				Logtxt.logtxt( logFile, "<Valid>valid</Valid></Validation>" );
-				System.out.println( " = Valid" );
+				Logtxt.logtxt(logFile, "<Valid>valid</Valid></Validation>");
+				System.out.println(" = Valid");
 			} else {
 				// Fehler in Validierte Datei --> invalide
-				Logtxt.logtxt( logFile,
-						"<Invalid>invalid</Invalid></Validation>" );
-				System.out.println( " = Invalid" );
+				Logtxt.logtxt(logFile, "<Invalid>invalid</Invalid></Validation>");
+				System.out.println(" = Invalid");
 			}
 
-		} else if ( valDateiExt.equals( ".flac" ) ) {
-			Logtxt.logtxt( logFile, "<Validation>" + hash );
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_VALTYPE, " FLAC" ) );
-			Logtxt.logtxt( logFile, originalValNameXml );
-			Controllerflac controller1 = (Controllerflac) context
-					.getBean( "controllerflac" );
-			boolean okMandatory = controller1.executeMandatory( valDatei,
-					directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath );
+		} else if (valDateiExt.equals(".flac")) {
+			Logtxt.logtxt(logFile, "<Validation>" + hash);
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_VALTYPE, " FLAC"));
+			Logtxt.logtxt(logFile, originalValNameXml);
+			Controllerflac controller1 = (Controllerflac) context.getBean("controllerflac");
+			boolean okMandatory = controller1.executeMandatory(valDatei, directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath);
 			valFile = okMandatory;
 
-			if ( okMandatory ) {
+			if (okMandatory) {
 				// Validierte Datei valide
-				Logtxt.logtxt( logFile, "<Valid>valid</Valid></Validation>" );
-				System.out.println( " = Valid" );
+				Logtxt.logtxt(logFile, "<Valid>valid</Valid></Validation>");
+				System.out.println(" = Valid");
 			} else {
 				// Fehler in Validierte Datei --> invalide
-				Logtxt.logtxt( logFile,
-						"<Invalid>invalid</Invalid></Validation>" );
-				System.out.println( " = Invalid" );
+				Logtxt.logtxt(logFile, "<Invalid>invalid</Invalid></Validation>");
+				System.out.println(" = Invalid");
 			}
 
-		} else if ( valDateiExt.equals( ".wave" )
-				|| valDateiExt.equals( ".wav" ) ) {
-			Logtxt.logtxt( logFile, "<Validation>" + hash );
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_VALTYPE, " WAVE" ) );
-			Logtxt.logtxt( logFile, originalValNameXml );
-			Controllerwave controller1 = (Controllerwave) context
-					.getBean( "controllerwave" );
-			boolean okMandatory = controller1.executeMandatory( valDatei,
-					directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath );
+		} else if (valDateiExt.equals(".wave") || valDateiExt.equals(".wav")) {
+			Logtxt.logtxt(logFile, "<Validation>" + hash);
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_VALTYPE, " WAVE"));
+			Logtxt.logtxt(logFile, originalValNameXml);
+			Controllerwave controller1 = (Controllerwave) context.getBean("controllerwave");
+			boolean okMandatory = controller1.executeMandatory(valDatei, directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath);
 			valFile = okMandatory;
 
-			if ( okMandatory ) {
+			if (okMandatory) {
 				// Validierte Datei valide
-				Logtxt.logtxt( logFile, "<Valid>valid</Valid></Validation>" );
-				System.out.println( " = Valid" );
+				Logtxt.logtxt(logFile, "<Valid>valid</Valid></Validation>");
+				System.out.println(" = Valid");
 			} else {
 				// Fehler in Validierte Datei --> invalide
-				Logtxt.logtxt( logFile,
-						"<Invalid>invalid</Invalid></Validation>" );
-				System.out.println( " = Invalid" );
+				Logtxt.logtxt(logFile, "<Invalid>invalid</Invalid></Validation>");
+				System.out.println(" = Invalid");
 			}
 
-		} else if ( valDateiExt.equals( ".mp3" ) ) {
-			Logtxt.logtxt( logFile, "<Validation>" + hash );
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_VALTYPE, " MP3" ) );
-			Logtxt.logtxt( logFile, originalValNameXml );
-			Controllermp3 controller1 = (Controllermp3) context
-					.getBean( "controllermp3" );
-			boolean okMandatory = controller1.executeMandatory( valDatei,
-					directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath );
+		} else if (valDateiExt.equals(".mp3")) {
+			Logtxt.logtxt(logFile, "<Validation>" + hash);
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_VALTYPE, " MP3"));
+			Logtxt.logtxt(logFile, originalValNameXml);
+			Controllermp3 controller1 = (Controllermp3) context.getBean("controllermp3");
+			boolean okMandatory = controller1.executeMandatory(valDatei, directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath);
 			valFile = okMandatory;
 
-			if ( okMandatory ) {
+			if (okMandatory) {
 				// Validierte Datei valide
-				Logtxt.logtxt( logFile, "<Valid>valid</Valid></Validation>" );
-				System.out.println( " = Valid" );
+				Logtxt.logtxt(logFile, "<Valid>valid</Valid></Validation>");
+				System.out.println(" = Valid");
 			} else {
 				// Fehler in Validierte Datei --> invalide
-				Logtxt.logtxt( logFile,
-						"<Invalid>invalid</Invalid></Validation>" );
-				System.out.println( " = Invalid" );
+				Logtxt.logtxt(logFile, "<Invalid>invalid</Invalid></Validation>");
+				System.out.println(" = Invalid");
 			}
 
-		} else if ( valDateiExt.equals( ".mkv" )
-				|| valDateiExt.equals( ".webm" ) ) {
-			Logtxt.logtxt( logFile, "<Validation>" + hash );
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_VALTYPE, " MKV" ) );
-			Logtxt.logtxt( logFile, originalValNameXml );
-			Controllermkv controller1 = (Controllermkv) context
-					.getBean( "controllermkv" );
-			boolean okMandatory = controller1.executeMandatory( valDatei,
-					directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath );
+		} else if (valDateiExt.equals(".mkv") || valDateiExt.equals(".webm")) {
+			Logtxt.logtxt(logFile, "<Validation>" + hash);
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_VALTYPE, " MKV"));
+			Logtxt.logtxt(logFile, originalValNameXml);
+			Controllermkv controller1 = (Controllermkv) context.getBean("controllermkv");
+			boolean okMandatory = controller1.executeMandatory(valDatei, directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath);
 			boolean ok = false;
 
 			/*
-			 * die Validierung A ist obligatorisch, wenn sie bestanden wurden,
-			 * koennen die restlichen Validierungen, welche nicht zum Abbruch
-			 * der Applikation fuehren, ausgefuehrt werden.
+			 * die Validierung A ist obligatorisch, wenn sie bestanden wurden, koennen die
+			 * restlichen Validierungen, welche nicht zum Abbruch der Applikation fuehren,
+			 * ausgefuehrt werden.
 			 */
-			if ( okMandatory ) {
-				ok = controller1.executeOptional( valDatei, directoryOfLogfile,
-						configMap, locale, logFile, dirOfJarPath );
+			if (okMandatory) {
+				ok = controller1.executeOptional(valDatei, directoryOfLogfile, configMap, locale, logFile,
+						dirOfJarPath);
 				// Ausfuehren der optionalen Schritte
 			}
 
 			ok = (ok && okMandatory);
 			valFile = ok;
 
-			if ( ok ) {
+			if (ok) {
 				// Validierte Datei valide
-				Logtxt.logtxt( logFile, "<Valid>valid</Valid></Validation>" );
-				System.out.println( " = Valid" );
+				Logtxt.logtxt(logFile, "<Valid>valid</Valid></Validation>");
+				System.out.println(" = Valid");
 			} else {
 				// Fehler in Validierte Datei --> invalide
-				Logtxt.logtxt( logFile,
-						"<Invalid>invalid</Invalid></Validation>" );
-				System.out.println( " = Invalid" );
+				Logtxt.logtxt(logFile, "<Invalid>invalid</Invalid></Validation>");
+				System.out.println(" = Invalid");
 			}
 
-		} else if ( valDateiExt.equals( ".mp4" )
-				|| valDateiExt.equals( ".mpg4" ) || valDateiExt.equals( ".m4v" )
-				|| valDateiExt.equals( ".m4a" ) || valDateiExt.equals( ".f4v" )
-				|| valDateiExt.equals( ".f4a" ) ) {
-			Logtxt.logtxt( logFile, "<Validation>" + hash );
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_VALTYPE, " MP4" ) );
-			Logtxt.logtxt( logFile, originalValNameXml );
-			Controllermp4 controller1 = (Controllermp4) context
-					.getBean( "controllermp4" );
-			boolean okMandatory = controller1.executeMandatory( valDatei,
-					directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath );
+		} else if (valDateiExt.equals(".mp4") || valDateiExt.equals(".mpg4") || valDateiExt.equals(".m4v")
+				|| valDateiExt.equals(".m4a") || valDateiExt.equals(".f4v") || valDateiExt.equals(".f4a")) {
+			Logtxt.logtxt(logFile, "<Validation>" + hash);
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_VALTYPE, " MP4"));
+			Logtxt.logtxt(logFile, originalValNameXml);
+			Controllermp4 controller1 = (Controllermp4) context.getBean("controllermp4");
+			boolean okMandatory = controller1.executeMandatory(valDatei, directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath);
 			valFile = okMandatory;
 
-			if ( okMandatory ) {
+			if (okMandatory) {
 				// Validierte Datei valide
-				Logtxt.logtxt( logFile, "<Valid>valid</Valid></Validation>" );
-				System.out.println( " = Valid" );
+				Logtxt.logtxt(logFile, "<Valid>valid</Valid></Validation>");
+				System.out.println(" = Valid");
 			} else {
 				// Fehler in Validierte Datei --> invalide
-				Logtxt.logtxt( logFile,
-						"<Invalid>invalid</Invalid></Validation>" );
-				System.out.println( " = Invalid" );
+				Logtxt.logtxt(logFile, "<Invalid>invalid</Invalid></Validation>");
+				System.out.println(" = Invalid");
 			}
 
-		} else if ( (valDateiExt.equals( ".tiff" )
-				|| valDateiExt.equals( ".tif" )) ) {
-			Logtxt.logtxt( logFile, "<Validation>" + hash );
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_VALTYPE, " TIFF" ) );
-			Logtxt.logtxt( logFile, originalValNameXml );
-			Controllertiff controller1 = (Controllertiff) context
-					.getBean( "controllertiff" );
-			boolean okMandatory = controller1.executeMandatory( valDatei,
-					directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath );
+		} else if ((valDateiExt.equals(".tiff") || valDateiExt.equals(".tif"))) {
+			Logtxt.logtxt(logFile, "<Validation>" + hash);
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_VALTYPE, " TIFF"));
+			Logtxt.logtxt(logFile, originalValNameXml);
+			Controllertiff controller1 = (Controllertiff) context.getBean("controllertiff");
+			boolean okMandatory = controller1.executeMandatory(valDatei, directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath);
 			boolean ok = false;
 
 			/*
-			 * die Validierungen A sind obligatorisch, wenn sie bestanden
-			 * wurden, koennen die restlichen Validierungen, welche nicht zum
-			 * Abbruch der Applikation fuehren, ausgefuehrt werden.
+			 * die Validierungen A sind obligatorisch, wenn sie bestanden wurden, koennen
+			 * die restlichen Validierungen, welche nicht zum Abbruch der Applikation
+			 * fuehren, ausgefuehrt werden.
 			 */
-			if ( okMandatory ) {
-				ok = controller1.executeOptional( valDatei, directoryOfLogfile,
-						configMap, locale, logFile, dirOfJarPath );
+			if (okMandatory) {
+				ok = controller1.executeOptional(valDatei, directoryOfLogfile, configMap, locale, logFile,
+						dirOfJarPath);
 			}
 
 			ok = (ok && okMandatory);
 			valFile = ok;
 
-			if ( ok ) {
+			if (ok) {
 				// Validierte Datei valide
-				Logtxt.logtxt( logFile, "<Valid>valid</Valid></Validation>" );
-				System.out.println( " = Valid" );
+				Logtxt.logtxt(logFile, "<Valid>valid</Valid></Validation>");
+				System.out.println(" = Valid");
 			} else {
 				// Fehler in Validierte Datei --> invalide
-				Logtxt.logtxt( logFile,
-						"<Invalid>invalid</Invalid></Validation>" );
-				System.out.println( " = Invalid" );
+				Logtxt.logtxt(logFile, "<Invalid>invalid</Invalid></Validation>");
+				System.out.println(" = Invalid");
 			}
 
 			/*
-			 * Ausgabe der Pfade zu den Jhove Reports, falls welche generiert
-			 * wurden (-v) oder Jhove Report loeschen
+			 * Ausgabe der Pfade zu den Jhove Reports, falls welche generiert wurden (-v)
+			 * oder Jhove Report loeschen
 			 */
-			File jhoveReport = new File( directoryOfLogfile,
-					valDatei.getName() + ".jhove-log.txt" );
+			File jhoveReport = new File(directoryOfLogfile, valDatei.getName() + ".jhove-log.txt");
 			/*
-			 * File exifReport = new File( directoryOfLogfile,
-			 * valDatei.getName() + ".exiftool-log.txt" );
+			 * File exifReport = new File( directoryOfLogfile, valDatei.getName() +
+			 * ".exiftool-log.txt" );
 			 */
-			if ( verbose ) {
+			if (verbose) {
 				// optionaler Parameter --> Reports lassen
 			} else {
-				if ( jhoveReport.exists() ) {
+				if (jhoveReport.exists()) {
 					// kein optionaler Parameter --> Jhove-Report loeschen!
-					Util.deleteFile( jhoveReport );
+					Util.deleteFile(jhoveReport);
 				}
 				/*
-				 * if ( exifReport.exists() ) { // kein optionaler Parameter -->
-				 * Exiftool-Report loeschen! Util.deleteFile( exifReport ); }
+				 * if ( exifReport.exists() ) { // kein optionaler Parameter --> Exiftool-Report
+				 * loeschen! Util.deleteFile( exifReport ); }
 				 */ }
 
-		} else if ( (valDateiExt.equals( ".siard" )) ) {
-			Logtxt.logtxt( logFile, "<Validation>" + hash );
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_VALTYPE, " SIARD" ) );
-			Logtxt.logtxt( logFile, originalValNameXml );
-			Controllersiard controller2 = (Controllersiard) context
-					.getBean( "controllersiard" );
-			boolean okMandatory = controller2.executeMandatory( valDatei,
-					directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath );
+		} else if ((valDateiExt.equals(".siard"))) {
+			Logtxt.logtxt(logFile, "<Validation>" + hash);
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_VALTYPE, " SIARD"));
+			Logtxt.logtxt(logFile, originalValNameXml);
+			Controllersiard controller2 = (Controllersiard) context.getBean("controllersiard");
+			boolean okMandatory = controller2.executeMandatory(valDatei, directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath);
 			boolean ok = false;
 
 			/*
-			 * die Validierungen A-D sind obligatorisch, wenn sie bestanden
-			 * wurden, koennen die restlichen Validierungen, welche nicht zum
-			 * Abbruch der Applikation fuehren, ausgefuehrt werden.
+			 * die Validierungen A-D sind obligatorisch, wenn sie bestanden wurden, koennen
+			 * die restlichen Validierungen, welche nicht zum Abbruch der Applikation
+			 * fuehren, ausgefuehrt werden.
 			 */
-			if ( okMandatory ) {
-				ok = controller2.executeOptional( valDatei, directoryOfLogfile,
-						configMap, locale, logFile, dirOfJarPath );
+			if (okMandatory) {
+				ok = controller2.executeOptional(valDatei, directoryOfLogfile, configMap, locale, logFile,
+						dirOfJarPath);
 				// Ausfuehren der optionalen Schritte
 			}
 
 			ok = (ok && okMandatory);
 			valFile = ok;
 
-			if ( ok ) {
+			if (ok) {
 				// Validierte Datei valide
-				Logtxt.logtxt( logFile, "<Valid>valid</Valid></Validation>" );
-				System.out.println( " = Valid" );
+				Logtxt.logtxt(logFile, "<Valid>valid</Valid></Validation>");
+				System.out.println(" = Valid");
 			} else {
 				// Fehler in Validierte Datei --> invalide
-				Logtxt.logtxt( logFile,
-						"<Invalid>invalid</Invalid></Validation>" );
-				System.out.println( " = Invalid" );
+				Logtxt.logtxt(logFile, "<Invalid>invalid</Invalid></Validation>");
+				System.out.println(" = Invalid");
 			}
 
-		} else if ( (valDateiExt.equals( ".pdf" )
-				|| valDateiExt.equals( ".pdfa" )) ) {
-			Logtxt.logtxt( logFile, "<Validation>" + hash );
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_VALTYPE, " PDFA" ) );
-			Logtxt.logtxt( logFile, originalValNameXml );
-			Controllerpdfa controller3 = (Controllerpdfa) context
-					.getBean( "controllerpdfa" );
+		} else if ((valDateiExt.equals(".pdf") || valDateiExt.equals(".pdfa"))) {
+			Logtxt.logtxt(logFile, "<Validation>" + hash);
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_VALTYPE, " PDFA"));
+			Logtxt.logtxt(logFile, originalValNameXml);
+			Controllerpdfa controller3 = (Controllerpdfa) context.getBean("controllerpdfa");
 
-			boolean okMandatory = controller3.executeMandatory( valDatei,
-					directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath );
+			boolean okMandatory = controller3.executeMandatory(valDatei, directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath);
 			boolean ok = false;
 
 			/*
-			 * die Initialisierung ist obligatorisch, wenn sie bestanden wurden,
-			 * koennen die restlichen Validierungen, welche nicht zum Abbruch
-			 * der Applikation fuehren, ausgefuehrt werden.
+			 * die Initialisierung ist obligatorisch, wenn sie bestanden wurden, koennen die
+			 * restlichen Validierungen, welche nicht zum Abbruch der Applikation fuehren,
+			 * ausgefuehrt werden.
 			 */
 
-			if ( okMandatory ) {
-				ok = controller3.executeOptional( valDatei, directoryOfLogfile,
-						configMap, locale, logFile, dirOfJarPath );
+			if (okMandatory) {
+				ok = controller3.executeOptional(valDatei, directoryOfLogfile, configMap, locale, logFile,
+						dirOfJarPath);
 				// Ausfuehren der validierung und optionalen Bildvalidierung
 			}
 
 			ok = (ok && okMandatory);
 			valFile = ok;
 
-			if ( valFile ) {
+			if (valFile) {
 				// Validierte Datei valide
-				Logtxt.logtxt( logFile, "<Valid>valid</Valid></Validation>" );
-				System.out.println( " = Valid" );
+				Logtxt.logtxt(logFile, "<Valid>valid</Valid></Validation>");
+				System.out.println(" = Valid");
 			} else {
 				// Validierte Datei invalide
-				Logtxt.logtxt( logFile,
-						"<Invalid>invalid</Invalid></Validation>" );
-				System.out.println( " = Invalid" );
+				Logtxt.logtxt(logFile, "<Invalid>invalid</Invalid></Validation>");
+				System.out.println(" = Invalid");
 			}
 
 			PdfValidatorAPI.terminate();
 
 			/*
-			 * Ausgabe der Pfade zu den _FontValidation.xml und
-			 * _FontValidation_Error.xml Reports, falls welche generiert wurden.
-			 * Ggf loeschen
+			 * Ausgabe der Pfade zu den _FontValidation.xml und _FontValidation_Error.xml
+			 * Reports, falls welche generiert wurden. Ggf loeschen
 			 */
-			File fontValidationReport = new File( directoryOfLogfile,
-					valDatei.getName() + "_FontValidation.xml" );
+			File fontValidationReport = new File(directoryOfLogfile, valDatei.getName() + "_FontValidation.xml");
 			// Test.pdf_FontValidation.xml
-			if ( fontValidationReport.exists() ) {
-				if ( verbose ) {
+			if (fontValidationReport.exists()) {
+				if (verbose) {
 					// optionaler Parameter --> fontValidationReport lassen
 				} else {
 					// kein optionaler Parameter --> fontValidationReport
 					// loeschen!
-					Util.deleteFile( fontValidationReport );
+					Util.deleteFile(fontValidationReport);
 				}
 			}
-			File fontValidationErrorReport = new File( directoryOfLogfile,
-					valDatei.getName() + "_FontValidation_Error.xml" );
-			if ( fontValidationErrorReport.exists() ) {
+			File fontValidationErrorReport = new File(directoryOfLogfile,
+					valDatei.getName() + "_FontValidation_Error.xml");
+			if (fontValidationErrorReport.exists()) {
 				// fontValidationErrorReport loeschen!
-				Util.deleteFile( fontValidationErrorReport );
+				Util.deleteFile(fontValidationErrorReport);
 			}
-			File callasTEMPreport = new File( directoryOfLogfile,
-					"callasTEMPreport.txt" );
-			if ( callasTEMPreport.exists() ) {
+			File callasTEMPreport = new File(directoryOfLogfile, "callasTEMPreport.txt");
+			if (callasTEMPreport.exists()) {
 				// callasTEMPreport loeschen!
-				Util.deleteFile( callasTEMPreport );
+				Util.deleteFile(callasTEMPreport);
 			}
-			File internLicenseFile = new File( directoryOfLogfile
-					+ File.separator + ".useKOSTValLicense.txt" );
-			if ( internLicenseFile.exists() ) {
+			File internLicenseFile = new File(directoryOfLogfile + File.separator + ".useKOSTValLicense.txt");
+			if (internLicenseFile.exists()) {
 				// interne Lizenz verwendet. Lizenz ueberschreiben
-				Util.deleteFile( internLicenseFile );
-				PdfValidatorAPI.setLicenseKey( " " );
+				Util.deleteFile(internLicenseFile);
+				PdfValidatorAPI.setLicenseKey(" ");
 			}
 
 		} else {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					ERROR_INCORRECTFILEENDING, valDatei.getName() ) );
-			System.out.println( getTextResourceService().getText( locale,
-					ERROR_INCORRECTFILEENDING, valDatei.getName() ) );
+			Logtxt.logtxt(logFile,
+					getTextResourceService().getText(locale, ERROR_INCORRECTFILEENDING, valDatei.getName()));
+			System.out.println(getTextResourceService().getText(locale, ERROR_INCORRECTFILEENDING, valDatei.getName()));
 		}
 
-		if ( pathTemp.exists() ) {
+		if (pathTemp.exists()) {
 			// pathTemploeschen!
 			pathTemp.delete();
 		}

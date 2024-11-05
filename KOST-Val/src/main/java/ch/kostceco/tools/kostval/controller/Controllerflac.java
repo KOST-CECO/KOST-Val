@@ -38,68 +38,49 @@ import ch.kostceco.tools.kostval.validation.moduleflac.ValidationAvalidationFlac
  * eingebunden.
  */
 
-public class Controllerflac implements MessageConstants
-{
+public class Controllerflac implements MessageConstants {
 
-	private TextResourceService				textResourceService;
+	private TextResourceService textResourceService;
 
-	private ValidationAvalidationFlacModule	validationAvalidationFlacModule;
+	private ValidationAvalidationFlacModule validationAvalidationFlacModule;
 
-	public ValidationAvalidationFlacModule getValidationAvalidationFlacModule()
-	{
+	public ValidationAvalidationFlacModule getValidationAvalidationFlacModule() {
 		return validationAvalidationFlacModule;
 	}
 
-	public void setValidationAvalidationFlacModule(
-			ValidationAvalidationFlacModule validationAvalidationFlacModule )
-	{
+	public void setValidationAvalidationFlacModule(ValidationAvalidationFlacModule validationAvalidationFlacModule) {
 		this.validationAvalidationFlacModule = validationAvalidationFlacModule;
 	}
 
-	public TextResourceService getTextResourceService()
-	{
+	public TextResourceService getTextResourceService() {
 		return textResourceService;
 	}
 
-	public void setTextResourceService(
-			TextResourceService textResourceService )
-	{
+	public void setTextResourceService(TextResourceService textResourceService) {
 		this.textResourceService = textResourceService;
 	}
 
-	public boolean executeMandatory( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath )
-	{
+	public boolean executeMandatory(File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale, File logFile, String dirOfJarPath) {
 		boolean valid = true;
 
 		// Validation A
 		try {
-			if ( this.getValidationAvalidationFlacModule().validate( valDatei,
-					directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath ) ) {
-				this.getValidationAvalidationFlacModule().getMessageService()
-						.print();
+			if (this.getValidationAvalidationFlacModule().validate(valDatei, directoryOfLogfile, configMap, locale,
+					logFile, dirOfJarPath)) {
+				this.getValidationAvalidationFlacModule().getMessageService().print();
 			} else {
-				this.getValidationAvalidationFlacModule().getMessageService()
-						.print();
+				this.getValidationAvalidationFlacModule().getMessageService().print();
 				return false;
 			}
-		} catch ( ValidationAflacvalidationException e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_A_FLAC )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
-			this.getValidationAvalidationFlacModule().getMessageService()
-					.print();
+		} catch (ValidationAflacvalidationException e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_FLAC)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
+			this.getValidationAvalidationFlacModule().getMessageService().print();
 			return false;
-		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_A_FLAC )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
+		} catch (Exception e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_FLAC)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
 			return false;
 		}
 		return valid;

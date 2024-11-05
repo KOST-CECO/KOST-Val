@@ -20,16 +20,14 @@ package ch.kostceco.tools.kostval.exception.modulemp4;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-public class ValidationAmp4validationException extends KOSTValException
-{
+public class ValidationAmp4validationException extends KOSTValException {
 
 	/** @author Rc Claire Roethlisberger, KOST-CECO */
 
 	private static final long serialVersionUID = -8816841335398903517L;
 
-	public ValidationAmp4validationException( String message )
-	{
-		super( message );
+	public ValidationAmp4validationException(String message) {
+		super(message);
 	}
 
 }

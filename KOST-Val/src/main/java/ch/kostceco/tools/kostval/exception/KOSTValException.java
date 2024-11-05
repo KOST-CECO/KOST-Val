@@ -24,19 +24,16 @@ package ch.kostceco.tools.kostval.exception;
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
 
-public class KOSTValException extends Exception
-{
+public class KOSTValException extends Exception {
 
 	private static final long serialVersionUID = -8666753675661449719L;
 
-	public KOSTValException()
-	{
+	public KOSTValException() {
 		super();
 	}
 
-	public KOSTValException( String message )
-	{
-		super( message );
+	public KOSTValException(String message) {
+		super(message);
 	}
 
 }

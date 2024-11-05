@@ -17,8 +17,7 @@ package ch.kostceco.tools.siardexcerpt.enums;
 
 /** Marker - Interface fuer EnumItem Enums. */
 
-public interface BaseEnumItemEnum
-{
+public interface BaseEnumItemEnum {
 
 	Long getId();
 }

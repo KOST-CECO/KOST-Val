@@ -45,28 +45,22 @@ import ch.kostceco.tools.kostval.service.TextResourceService;
  * eingebunden.
  */
 
-public class Controllervalfolder implements MessageConstants
-{
+public class Controllervalfolder implements MessageConstants {
 
 	private static TextResourceService textResourceService;
 
-	public static TextResourceService getTextResourceService()
-	{
+	public static TextResourceService getTextResourceService() {
 		return textResourceService;
 	}
 
 	@SuppressWarnings("static-access")
-	public void setTextResourceService(
-			TextResourceService textResourceService )
-	{
+	public void setTextResourceService(TextResourceService textResourceService) {
 		this.textResourceService = textResourceService;
 	}
 
-	public boolean valFolder( File valDatei, String logFileName,
-			File directoryOfLogfile, boolean verbose, String dirOfJarPath,
-			Map<String, String> configMap, ApplicationContext context,
-			Locale locale, File logFile ) throws IOException
-	{
+	public boolean valFolder(File valDatei, String logFileName, File directoryOfLogfile, boolean verbose,
+			String dirOfJarPath, Map<String, String> configMap, ApplicationContext context, Locale locale, File logFile)
+			throws IOException {
 		// Formatvalidierung und Erkennung ueber ein Ordner
 
 		boolean valFolder = false;
@@ -75,21 +69,19 @@ public class Controllervalfolder implements MessageConstants
 		Integer countInvalid = 0;
 		Integer countNotaz = 0;
 		Integer countProgress = 0;
-		String pathToWorkDir = configMap.get( "PathToWorkDir" );
-		File tmpDir = new File( pathToWorkDir );
+		String pathToWorkDir = configMap.get("PathToWorkDir");
+		File tmpDir = new File(pathToWorkDir);
 
 		try {
-			Map<String, File> fileUnsortedMap = Util.getFileMapFile( valDatei );
-			Map<String, File> fileMap = new TreeMap<String, File>(
-					fileUnsortedMap );
+			Map<String, File> fileUnsortedMap = Util.getFileMapFile(valDatei);
+			Map<String, File> fileMap = new TreeMap<String, File>(fileUnsortedMap);
 			int numberInFileMap = fileMap.size();
 			Set<String> fileMapKeys = fileMap.keySet();
-			for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator
-					.hasNext(); ) {
+			for (Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext();) {
 
 				String entryName = iterator.next();
-				File newFile = fileMap.get( entryName );
-				if ( !newFile.isDirectory() ) {
+				File newFile = fileMap.get(entryName);
+				if (!newFile.isDirectory()) {
 					valDatei = newFile;
 
 					count = count + 1;
@@ -98,17 +90,14 @@ public class Controllervalfolder implements MessageConstants
 
 					// Kontrolle ob Datei akzeptiert ist und ob sie validiert
 					// werden soll
-					Controllervalfofile controller1 = (Controllervalfofile) context
-							.getBean( "controllervalfofile" );
-					String valFile = controller1.valFoFile( valDatei,
-							logFileName, directoryOfLogfile, verbose,
-							dirOfJarPath, configMap, context, locale, logFile,
-							countToValidated );
-					if ( valFile.equals( "countValid" ) ) {
+					Controllervalfofile controller1 = (Controllervalfofile) context.getBean("controllervalfofile");
+					String valFile = controller1.valFoFile(valDatei, logFileName, directoryOfLogfile, verbose,
+							dirOfJarPath, configMap, context, locale, logFile, countToValidated);
+					if (valFile.equals("countValid")) {
 						countValid = countValid + 1;
-					} else if ( valFile.equals( "countNotaz" ) ) {
+					} else if (valFile.equals("countNotaz")) {
 						countNotaz = countNotaz + 1;
-					} else if ( valFile.equals( "countInvalid" ) ) {
+					} else if (valFile.equals("countInvalid")) {
 						countInvalid = countInvalid + 1;
 					} else {
 						// normalerweise kein Bedarf
@@ -120,29 +109,23 @@ public class Controllervalfolder implements MessageConstants
 					countProgress = countProgress + 1;
 				}
 			}
-		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile,
-					"<Error>"
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN,
-									"Formatvalidation: " + e.getMessage() )
-							+ "</Format></KOSTValLog>" );
-			System.out.println( "Exception: " + e.getMessage() );
-		} catch ( StackOverflowError eso ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					ERROR_XML_STACKOVERFLOWMAIN ) );
-			System.out.println( "Exception: " + "StackOverflowError" );
-		} catch ( OutOfMemoryError eoom ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					ERROR_XML_OUTOFMEMORYMAIN ) );
-			System.out.println( "Exception: " + "OutOfMemoryError" );
+		} catch (Exception e) {
+			Logtxt.logtxt(logFile, "<Error>"
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, "Formatvalidation: " + e.getMessage())
+					+ "</Format></KOSTValLog>");
+			System.out.println("Exception: " + e.getMessage());
+		} catch (StackOverflowError eso) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, ERROR_XML_STACKOVERFLOWMAIN));
+			System.out.println("Exception: " + "StackOverflowError");
+		} catch (OutOfMemoryError eoom) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, ERROR_XML_OUTOFMEMORYMAIN));
+			System.out.println("Exception: " + "OutOfMemoryError");
 		}
 
-		Logtxt.logtxt( logFile, "</Format></KOSTValLog>" );
+		Logtxt.logtxt(logFile, "</Format></KOSTValLog>");
 
-		File callasNo = new File(
-				directoryOfLogfile + File.separator + "_callas_NO.txt" );
-		if ( callasNo.exists() ) {
+		File callasNo = new File(directoryOfLogfile + File.separator + "_callas_NO.txt");
+		if (callasNo.exists()) {
 			callasNo.delete();
 		}
 
@@ -150,51 +133,45 @@ public class Controllervalfolder implements MessageConstants
 		System.gc();
 
 		// logFile bereinigung (& End und ggf 3c)
-		Util.valEnd3cAmp( "", logFile );
+		Util.valEnd3cAmp("", logFile);
 
 		float countValidP = 100 / (float) count * (float) countValid;
 		float countInvalidP = 100 / (float) count * (float) countInvalid;
 		float countNotazP = 100 / (float) count * (float) countNotaz;
-		String summaryFormat = getTextResourceService().getText( locale,
-				MESSAGE_XML_SUMMARY_FORMAT, count.toString(),
-				countValid.toString(), countInvalid.toString(),
-				countNotaz.toString(), countValidP, countInvalidP,
-				countNotazP );
+		String summaryFormat = getTextResourceService().getText(locale, MESSAGE_XML_SUMMARY_FORMAT, count.toString(),
+				countValid.toString(), countInvalid.toString(), countNotaz.toString(), countValidP, countInvalidP,
+				countNotazP);
 
 		String summary = "";
-		summary = getTextResourceService().getText( locale, MESSAGE_XML_SUMMARY,
-				count.toString(), countValid.toString(),
-				countInvalid.toString(), countNotaz.toString(), countValidP,
-				countInvalidP, countNotazP );
+		summary = getTextResourceService().getText(locale, MESSAGE_XML_SUMMARY, count.toString(), countValid.toString(),
+				countInvalid.toString(), countNotaz.toString(), countValidP, countInvalidP, countNotazP);
 
 		String newFormat = "<Format>" + summary;
-		Util.oldnewstring( "<Format>", newFormat, logFile );
+		Util.oldnewstring("<Format>", newFormat, logFile);
 
-		System.out.println( getTextResourceService().getText( locale,
-				MESSAGE_FORMATVALIDATION_DONE, summaryFormat,
-				logFile.getAbsolutePath() ) );
+		System.out.println(getTextResourceService().getText(locale, MESSAGE_FORMATVALIDATION_DONE, summaryFormat,
+				logFile.getAbsolutePath()));
 
-		if ( countInvalid == 0 && countNotaz == 0 ) {
+		if (countInvalid == 0 && countNotaz == 0) {
 			// bestehendes Workverzeichnis ggf. loeschen
-			if ( tmpDir.exists() ) {
-				Util.deleteDir( tmpDir );
+			if (tmpDir.exists()) {
+				Util.deleteDir(tmpDir);
 			}
 
-			File pathTemp = new File( directoryOfLogfile, "path.tmp" );
+			File pathTemp = new File(directoryOfLogfile, "path.tmp");
 			/*
-			 * falls das File bereits existiert, z.B. von einem vorhergehenden
-			 * Durchlauf, loeschen wir es
+			 * falls das File bereits existiert, z.B. von einem vorhergehenden Durchlauf,
+			 * loeschen wir es
 			 */
-			if ( pathTemp.exists() ) {
+			if (pathTemp.exists()) {
 				pathTemp.delete();
 			}
-			if ( pathTemp.exists() ) {
+			if (pathTemp.exists()) {
 				// hat nicht funktioniert -> Inhalt leeren
-				List<String> oldtextList = Files.readAllLines(
-						pathTemp.toPath(), StandardCharsets.UTF_8 );
-				for ( int i = 0; i < oldtextList.size(); i++ ) {
-					String oldtext = (oldtextList.get( i ));
-					Util.oldnewstring( oldtext, "", pathTemp );
+				List<String> oldtextList = Files.readAllLines(pathTemp.toPath(), StandardCharsets.UTF_8);
+				for (int i = 0; i < oldtextList.size(); i++) {
+					String oldtext = (oldtextList.get(i));
+					Util.oldnewstring(oldtext, "", pathTemp);
 				}
 			}
 
@@ -203,8 +180,8 @@ public class Controllervalfolder implements MessageConstants
 			return valFolder;
 		} else {
 			// bestehendes Workverzeichnis ggf. loeschen
-			if ( tmpDir.exists() ) {
-				Util.deleteDir( tmpDir );
+			if (tmpDir.exists()) {
+				Util.deleteDir(tmpDir);
 			}
 			// Fehler in Validierten Dateien --> invalide
 			valFolder = false;

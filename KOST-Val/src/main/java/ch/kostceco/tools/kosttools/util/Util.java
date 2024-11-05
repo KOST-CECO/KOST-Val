@@ -37,104 +37,94 @@ import ch.kostceco.tools.kosttools.util.Util;
 
 /** @author Rc Claire Roethlisberger, KOST-CECO */
 
-public class Util
-{
-	static PrintStream			original;
-	static String				originalPath;
-	static Map<String, File>	fileMap	= new HashMap<String, File>();
+public class Util {
+	static PrintStream original;
+	static String originalPath;
+	static Map<String, File> fileMap = new HashMap<String, File>();
 
 	/** Schaltet die Konsolen-Ausgabe aus durch Umleitung in ein Null-Device. */
-	public static void switchOffConsole()
-	{
+	public static void switchOffConsole() {
 		// Keep a copy of the original out stream.
-		original = new PrintStream( System.out );
+		original = new PrintStream(System.out);
 
 		// replace the System.out, redirect to NUL
 		try {
-			System.setOut( new PrintStream( new FileOutputStream( "NUL:" ) ) );
-		} catch ( FileNotFoundException e ) {
+			System.setOut(new PrintStream(new FileOutputStream("NUL:")));
+		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
 
 	/** Schaltet die Konsolen-Ausgabe in ein file um. */
-	public static void switchOffConsoleToTxt( File file )
-			throws FileNotFoundException
-	{
+	public static void switchOffConsoleToTxt(File file) throws FileNotFoundException {
 		// Keep a copy of the original out stream.
-		original = new PrintStream( System.out );
+		original = new PrintStream(System.out);
 
 		// replace the System.out, redirect to file
 		try {
-			FileOutputStream fos = new FileOutputStream( file );
-			PrintStream ps = new PrintStream( fos );
-			System.setOut( ps );
+			FileOutputStream fos = new FileOutputStream(file);
+			PrintStream ps = new PrintStream(fos);
+			System.setOut(ps);
 			fos.close();
 			ps.close();
 			// set to null
 			fos = null;
 			ps = null;
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	/**
-	 * Schaltet die Konsolen-Ausgabe in ein file um und beendet den Stream,
-	 * damit dieser geloescht werden kann.
+	 * Schaltet die Konsolen-Ausgabe in ein file um und beendet den Stream, damit
+	 * dieser geloescht werden kann.
 	 */
-	public static void switchOffConsoleToTxtClose( File file )
-			throws FileNotFoundException
-	{
+	public static void switchOffConsoleToTxtClose(File file) throws FileNotFoundException {
 		// Keep a copy of the original out stream.
-		original = new PrintStream( System.out );
+		original = new PrintStream(System.out);
 
 		// replace the System.out, redirect to file
 		try {
-			FileOutputStream fos = new FileOutputStream( file );
-			PrintStream ps = new PrintStream( fos );
-			System.setOut( ps );
+			FileOutputStream fos = new FileOutputStream(file);
+			PrintStream ps = new PrintStream(fos);
+			System.setOut(ps);
 			fos.close();
 			ps.close();
 			// set to null
 			fos = null;
 			ps = null;
-		} catch ( FileNotFoundException e ) {
+		} catch (FileNotFoundException e) {
 			// e.printStackTrace();
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			// e.printStackTrace();
 		}
 	}
 
 	/** Schaltet die mit switchOffConsole ausgeschaltete Konsole wieder ein. */
-	public static void switchOnConsole()
-	{
-		System.setOut( original );
+	public static void switchOnConsole() {
+		System.setOut(original);
 	}
 
 	/**
 	 * Loescht ein Verzeichnis rekursiv.
 	 * 
-	 * @param dir
-	 *            das zu loeschende Verzeichnis
+	 * @param dir das zu loeschende Verzeichnis
 	 * @return true wenn alle Files und Verzeichnisse geloescht werden konnten
 	 */
-	public static boolean deleteDir( File dir )
-	{
-		if ( dir.exists() ) {
-			if ( dir.isDirectory() ) {
+	public static boolean deleteDir(File dir) {
+		if (dir.exists()) {
+			if (dir.isDirectory()) {
 				String[] children = dir.list();
-				for ( int i = 0; i < children.length; i++ ) {
-					boolean success = deleteFile(
-							new File( dir, children[i] ) );
-					if ( !success ) {
+				for (int i = 0; i < children.length; i++) {
+					boolean success = deleteFile(new File(dir, children[i]));
+					if (!success) {
 						// return false;
 						dir.deleteOnExit();
 					}
 				}
 			}
 			dir.delete();
-			if ( !dir.delete() ) {
+			if (!dir.delete()) {
 				dir.deleteOnExit();
 			}
 			// The directory is now empty so delete it
@@ -145,22 +135,20 @@ public class Util
 		}
 	}
 
-	public static boolean deleteFile( File file )
-	{
-		if ( file.exists() ) {
-			if ( file.isDirectory() ) {
+	public static boolean deleteFile(File file) {
+		if (file.exists()) {
+			if (file.isDirectory()) {
 				String[] children = file.list();
-				for ( int i = 0; i < children.length; i++ ) {
-					boolean success = deleteFile(
-							new File( file, children[i] ) );
-					if ( !success ) {
+				for (int i = 0; i < children.length; i++) {
+					boolean success = deleteFile(new File(file, children[i]));
+					if (!success) {
 						// return false;
 						file.deleteOnExit();
 					}
 				}
 			} else {
 				file.delete();
-				if ( !file.delete() ) {
+				if (!file.delete()) {
 					file.deleteOnExit();
 				}
 			}
@@ -172,20 +160,19 @@ public class Util
 	}
 
 	/** Kontrolliert ob text in einer Linie im File vorkommt */
-	public static boolean stringInFileLine( String text, File file )
-	{
+	public static boolean stringInFileLine(String text, File file) {
 		try {
-			Scanner scanner = new Scanner( file );
-			while ( scanner.hasNextLine() ) {
+			Scanner scanner = new Scanner(file);
+			while (scanner.hasNextLine()) {
 				String line = scanner.nextLine();
-				if ( line.contains( text ) ) {
+				if (line.contains(text)) {
 					scanner.close();
 					return true;
 				}
 			}
 			scanner.close();
 			return false;
-		} catch ( FileNotFoundException e ) {
+		} catch (FileNotFoundException e) {
 			return false;
 		}
 	}
@@ -193,27 +180,24 @@ public class Util
 	/**
 	 * Kontrolliert ob String existiert in file
 	 * 
-	 * Solche Sachen duerfen nicht in einer Schleife gemacht werden, da diese
-	 * sehr Zeitintensiv sind!
+	 * Solche Sachen duerfen nicht in einer Schleife gemacht werden, da diese sehr
+	 * Zeitintensiv sind!
 	 * 
 	 * @return true wenn String im File vorhanden @throws IOException
 	 */
-	public static boolean stringInFile( String string, File file )
-			throws IOException
-	{
+	public static boolean stringInFile(String string, File file) throws IOException {
 		boolean stringInFile = false;
 		try {
-			BufferedReader reader = new BufferedReader(
-					new FileReader( file ) );
+			BufferedReader reader = new BufferedReader(new FileReader(file));
 			String line = "";
-			while ( (line = reader.readLine()) != null ) {
-				if ( line.contains( string ) ) {
+			while ((line = reader.readLine()) != null) {
+				if (line.contains(string)) {
 					stringInFile = true;
 					break;
 				}
 			}
 			reader.close();
-		} catch ( IOException ioe ) {
+		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
 		return stringInFile;
@@ -222,138 +206,124 @@ public class Util
 	/**
 	 * Kontrolliert ob String 1-5 existiert in file
 	 * 
-	 * Solche Sachen duerfen nicht in einer Schleife gemacht werden, da diese
-	 * sehr Zeitintensiv sind!
+	 * Solche Sachen duerfen nicht in einer Schleife gemacht werden, da diese sehr
+	 * Zeitintensiv sind!
 	 * 
 	 * @return true wenn einer der Strings im File vorhanden @throws IOException
 	 */
-	public static boolean string15InFile( String string1, String string2,
-			String string3, String string4, String string5, File file )
-			throws IOException
-	{
+	public static boolean string15InFile(String string1, String string2, String string3, String string4, String string5,
+			File file) throws IOException {
 		boolean stringInFile = false;
 		try {
-			BufferedReader reader = new BufferedReader(
-					new FileReader( file ) );
+			BufferedReader reader = new BufferedReader(new FileReader(file));
 			String line = "";
-			while ( (line = reader.readLine()) != null ) {
-				if ( line.contains( string1 ) || line.contains( string2 )
-						|| line.contains( string3 ) || line.contains( string4 )
-						|| line.contains( string5 ) ) {
+			while ((line = reader.readLine()) != null) {
+				if (line.contains(string1) || line.contains(string2) || line.contains(string3) || line.contains(string4)
+						|| line.contains(string5)) {
 					stringInFile = true;
 					break;
 				}
 			}
 			reader.close();
-		} catch ( IOException ioe ) {
+		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
 		return stringInFile;
 	}
 
-	public static Map<String, File> getContent( File dir,
-			HashMap<String, File> fileMap )
-	{
+	public static Map<String, File> getContent(File dir, HashMap<String, File> fileMap) {
 		String filePath = dir.getPath();
-		String content = "temp_KOST-Val" + File.separator + "SIARD"
-				+ File.separator + "content";
-		if ( filePath.equalsIgnoreCase( content ) ) {
+		String content = "temp_KOST-Val" + File.separator + "SIARD" + File.separator + "content";
+		if (filePath.equalsIgnoreCase(content)) {
 			// kein Eintrag in die Map
 		} else {
-			fileMap.put( filePath, dir );
+			fileMap.put(filePath, dir);
 		}
-		if ( dir.isDirectory() ) {
+		if (dir.isDirectory()) {
 			String[] subNote = dir.list();
-			for ( String filename : subNote ) {
-				getContent( new File( dir, filename ), fileMap );
+			for (String filename : subNote) {
+				getContent(new File(dir, filename), fileMap);
 			}
 		}
 		return fileMap;
 	}
 
-	public static Map<String, File> getFileMap( File dir,
-			boolean nurPrimaerDateien )
-	{
+	public static Map<String, File> getFileMap(File dir, boolean nurPrimaerDateien) {
 		originalPath = dir.getAbsolutePath();
 		fileMap = new HashMap<String, File>();
-		visitAllDirsAndFiles( dir, nurPrimaerDateien );
+		visitAllDirsAndFiles(dir, nurPrimaerDateien);
 		return fileMap;
 	}
 
 	// Process all files and directories under dir
-	public static void visitAllDirsAndFiles( File dir,
-			boolean nurPrimaerDateien )
-	{
+	public static void visitAllDirsAndFiles(File dir, boolean nurPrimaerDateien) {
 
 		String filePath = dir.getAbsolutePath();
-		filePath = filePath.replace( originalPath, "" );
+		filePath = filePath.replace(originalPath, "");
 
-		if ( filePath.length() > 0 ) {
-			filePath = filePath.replaceAll( "\\\\", "/" );
-			if ( filePath.startsWith( "/" ) ) {
-				filePath = filePath.substring( 1 );
+		if (filePath.length() > 0) {
+			filePath = filePath.replaceAll("\\\\", "/");
+			if (filePath.startsWith("/")) {
+				filePath = filePath.substring(1);
 			}
-			if ( dir.isDirectory() && !filePath.endsWith( "/" ) ) {
+			if (dir.isDirectory() && !filePath.endsWith("/")) {
 				filePath += "/";
 			}
 
-			if ( nurPrimaerDateien ) {
-				if ( filePath.contains( "content/" ) && !dir.isDirectory() ) {
-					fileMap.put( filePath, dir );
+			if (nurPrimaerDateien) {
+				if (filePath.contains("content/") && !dir.isDirectory()) {
+					fileMap.put(filePath, dir);
 				}
 
 			} else {
-				fileMap.put( filePath, dir );
+				fileMap.put(filePath, dir);
 			}
 
 		}
 
-		if ( dir.isDirectory() ) {
+		if (dir.isDirectory()) {
 			String[] children = dir.list();
-			for ( int i = 0; i < children.length; i++ ) {
-				visitAllDirsAndFiles( new File( dir, children[i] ),
-						nurPrimaerDateien );
+			for (int i = 0; i < children.length; i++) {
+				visitAllDirsAndFiles(new File(dir, children[i]), nurPrimaerDateien);
 			}
 		}
 	}
 
-	public static Map<String, File> getFileMapFile( File dir )
-	{
+	public static Map<String, File> getFileMapFile(File dir) {
 		originalPath = dir.getAbsolutePath();
 		fileMap = new HashMap<String, File>();
-		visitAllDirsAndFilesStoreFiles( dir );
+		visitAllDirsAndFilesStoreFiles(dir);
 		return fileMap;
 	}
 
 	// Process all files and directories under dir aber nur Files speichern
-	public static void visitAllDirsAndFilesStoreFiles( File dir )
-	{
+	public static void visitAllDirsAndFilesStoreFiles(File dir) {
 
 		String filePath = dir.getAbsolutePath();
-		filePath = filePath.replace( originalPath, "" );
+		filePath = filePath.replace(originalPath, "");
 
-		if ( filePath.length() > 0 ) {
-			filePath = filePath.replaceAll( "\\\\", "/" );
-			if ( filePath.startsWith( "/" ) ) {
-				filePath = filePath.substring( 1 );
+		if (filePath.length() > 0) {
+			filePath = filePath.replaceAll("\\\\", "/");
+			if (filePath.startsWith("/")) {
+				filePath = filePath.substring(1);
 			}
-			if ( dir.isDirectory() && !filePath.endsWith( "/" ) ) {
+			if (dir.isDirectory() && !filePath.endsWith("/")) {
 				filePath += "/";
 			}
-			File file = new File( filePath );
+			File file = new File(filePath);
 
-			if ( file.isDirectory() ) {
+			if (file.isDirectory()) {
 				// filePath nicht in Map schreiben
 			} else {
-				fileMap.put( filePath, dir );
+				fileMap.put(filePath, dir);
 			}
 
 		}
 
-		if ( dir.isDirectory() ) {
+		if (dir.isDirectory()) {
 			String[] children = dir.list();
-			for ( int i = 0; i < children.length; i++ ) {
-				visitAllDirsAndFilesStoreFiles( new File( dir, children[i] ) );
+			for (int i = 0; i < children.length; i++) {
+				visitAllDirsAndFilesStoreFiles(new File(dir, children[i]));
 			}
 		}
 	}
@@ -361,14 +331,10 @@ public class Util
 	/**
 	 * Kopiert ein Verzeichnis.
 	 * 
-	 * @param quelle
-	 *            das zu kopierende Verzeichnis
-	 * @param ziel
-	 *            das Ziel-Verzeichnis
+	 * @param quelle das zu kopierende Verzeichnis
+	 * @param ziel   das Ziel-Verzeichnis
 	 */
-	public static void copyDir( File quelle, File ziel )
-			throws FileNotFoundException, IOException
-	{
+	public static void copyDir(File quelle, File ziel) throws FileNotFoundException, IOException {
 
 		File[] files = quelle.listFiles();
 		File newFile = null;
@@ -377,15 +343,13 @@ public class Util
 		// 2. Das systemspezifische Pfadtrennungszeichen
 		// 3. Der Name des aktuellen Ordners/der aktuellen Datei
 		ziel.mkdirs(); // erstellt alle benoetigten Ordner
-		if ( files != null ) {
-			for ( int i = 0; i < files.length; i++ ) {
-				newFile = new File( ziel.getAbsolutePath()
-						+ System.getProperty( "file.separator" )
-						+ files[i].getName() );
-				if ( files[i].isDirectory() ) {
-					copyDir( files[i], newFile );
+		if (files != null) {
+			for (int i = 0; i < files.length; i++) {
+				newFile = new File(ziel.getAbsolutePath() + System.getProperty("file.separator") + files[i].getName());
+				if (files[i].isDirectory()) {
+					copyDir(files[i], newFile);
 				} else {
-					copyFile( files[i], newFile );
+					copyFile(files[i], newFile);
 				}
 			}
 		}
@@ -394,25 +358,19 @@ public class Util
 	/**
 	 * Kopiert eine Datei.
 	 * 
-	 * @param file
-	 *            die zu kopierende Datei
-	 * @param ziel
-	 *            die Ziel-Datei
+	 * @param file die zu kopierende Datei
+	 * @param ziel die Ziel-Datei
 	 */
-	public static void copyFile( File file, File ziel )
-			throws FileNotFoundException, IOException
-	{
-		if ( ziel.exists() ) {
+	public static void copyFile(File file, File ziel) throws FileNotFoundException, IOException {
+		if (ziel.exists()) {
 			// Datei loeschen ansonsten wird Text hinzugefuegt
 			ziel.delete();
 		}
-		BufferedInputStream in = new BufferedInputStream(
-				new FileInputStream( file ) );
-		BufferedOutputStream out = new BufferedOutputStream(
-				new FileOutputStream( ziel, true ) );
+		BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
+		BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(ziel, true));
 		int bytes = 0;
-		while ( (bytes = in.read()) != -1 ) { // Datei einlesen
-			out.write( bytes ); // Datei schreiben
+		while ((bytes = in.read()) != -1) { // Datei einlesen
+			out.write(bytes); // Datei schreiben
 		}
 		in.close();
 		out.close();
@@ -426,196 +384,182 @@ public class Util
 	 * 
 	 * Statt
 	 * 
-	 * while ( (line = reader.readLine()) != null ) { oldtext += line + "\r\n";
-	 * }
+	 * while ( (line = reader.readLine()) != null ) { oldtext += line + "\r\n"; }
 	 * 
 	 * Soll
 	 * 
-	 * StringBuilder sb = new StringBuilder(); while ( (line =
-	 * reader.readLine()) != null ) { sb.append( line ); sb.append( "\r\n" ); }
-	 * oldtext= sb.toString();
+	 * StringBuilder sb = new StringBuilder(); while ( (line = reader.readLine()) !=
+	 * null ) { sb.append( line ); sb.append( "\r\n" ); } oldtext= sb.toString();
 	 * 
-	 * verwendet werden. Dies insbesondere bei grossem Text massiv schneller. Da
-	 * bei diesen Ersetzungen meist der Output gelesen wird, kann dieser
-	 * natuerlich gross sein.
+	 * verwendet werden. Dies insbesondere bei grossem Text massiv schneller. Da bei
+	 * diesen Ersetzungen meist der Output gelesen wird, kann dieser natuerlich
+	 * gross sein.
 	 */
 
 	/**
-	 * Veraendert [& mit &amp;], [ '<' mit '&lt;' ], [\n\t mit \n] sowie [ '>'
-	 * mit '&gt;' ] und ergaenzt das XML-Element "<End></End>" mit dem ergebnis
-	 * (stringEnd) sowie <Message>3c</Message></Error> mit dem ergebnis
-	 * (string3c) in dem kost-val.log.xml (file)
+	 * Veraendert [& mit &amp;], [ '<' mit '&lt;' ], [\n\t mit \n] sowie [ '>' mit
+	 * '&gt;' ] und ergaenzt das XML-Element "<End></End>" mit dem ergebnis
+	 * (stringEnd) sowie <Message>3c</Message></Error> mit dem ergebnis (string3c)
+	 * in dem kost-val.log.xml (file)
 	 * 
-	 * ! Solche Ersetzungen duerfen nicht in einer Schleife gemacht werden
-	 * sondern erst am Schluss, da diese sehr Zeitintensiv sind !!!
+	 * ! Solche Ersetzungen duerfen nicht in einer Schleife gemacht werden sondern
+	 * erst am Schluss, da diese sehr Zeitintensiv sind !!!
 	 * 
 	 * @throws IOException
 	 */
-	public static void valEnd3cAmp( String string3c, File file )
-			throws IOException
-	{
+	public static void valEnd3cAmp(String string3c, File file) throws IOException {
 		try {
-			FileInputStream fis = new FileInputStream( file );
-			InputStreamReader isr = new InputStreamReader( fis,
-					StandardCharsets.ISO_8859_1 );
+			FileInputStream fis = new FileInputStream(file);
+			InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.ISO_8859_1);
 //					StandardCharsets.UTF_8 );
-			BufferedReader reader = new BufferedReader( isr );
+			BufferedReader reader = new BufferedReader(isr);
 
-			
-/*			BufferedReader reader = new BufferedReader(
-					new FileReader( file ) );*/
+			/*
+			 * BufferedReader reader = new BufferedReader( new FileReader( file ) );
+			 */
 			String line = "", oldtext = "";
 			StringBuilder sb = new StringBuilder();
-			while ( (line = reader.readLine()) != null ) {
-				sb.append( line );
-				sb.append( "\r\n" );
+			while ((line = reader.readLine()) != null) {
+				sb.append(line);
+				sb.append("\r\n");
 			}
 			// Zeitstempel End
 			java.util.Date nowEnd = new java.util.Date();
-			java.text.SimpleDateFormat sdfEnd = new java.text.SimpleDateFormat(
-					"dd.MM.yyyy HH:mm:ss" );
-			String ausgabeEnd = sdfEnd.format( nowEnd );
+			java.text.SimpleDateFormat sdfEnd = new java.text.SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+			String ausgabeEnd = sdfEnd.format(nowEnd);
 			ausgabeEnd = "<End> - " + ausgabeEnd + "</End>";
 			String stringEnd = ausgabeEnd;
 			oldtext = sb.toString();
 			reader.close();
 			// set to null
 			reader = null;
-			String newtext = oldtext.replace( "<End></End>", stringEnd );
-			newtext = newtext.replace( "<Message>3c</Message></Error>",
-					string3c );
-			newtext = newtext.replace( "&", "&amp;" );
-			newtext = newtext.replace( "<http", "&lt;http" );
-			newtext = newtext.replace( "'<'", "'&lt;'" );
-			newtext = newtext.replace( "'>'", "'&gt;'" );
-			newtext = newtext.replace( "<<", "<" );
-			newtext = newtext.replace( "& ", "&amp; " );
-			newtext = newtext.replace( "\r\n\r\n\t", "\r\n" );
-			newtext = newtext.replace( "\r\n\t", "" );
-			newtext = newtext.replace( "\t\t", "" );
-			newtext = newtext.replace( "\r\n\t", "" );
-			newtext = newtext.replace( "\r\n\r\n", "\r\n" );
-			newtext = newtext.replace( "\r\n \r\n", "\r\n" );
-			newtext = newtext.replace( "\r\n__", "" );
-			newtext = newtext.replace( "\t", "" );
-			newtext = newtext.replace( "\r\n__", "" );
-			newtext = newtext.replace( "\r\n \r\n", "\r\n" );
-			newtext = newtext.replace( "\r\n \r\n", "\r\n" );
-			newtext = newtext.replace( "\r\n\r\n\r\n", "\r\n" );
-			newtext = newtext.replace( "\r\n</Message>", "</Message>" );
-			newtext = newtext.replace( "\r\n\r\n", "\r\n" );
-			newtext = newtext.replace( "\r\n\r\n", "\r\n" );
-			
-			newtext=Util.umlaute(newtext);
-			newtext = newtext.replace( (char) 0, (char) 32 );
-			FileWriter writer = new FileWriter( file );
-			writer.write( newtext );
+			String newtext = oldtext.replace("<End></End>", stringEnd);
+			newtext = newtext.replace("<Message>3c</Message></Error>", string3c);
+			newtext = newtext.replace("&", "&amp;");
+			newtext = newtext.replace("<http", "&lt;http");
+			newtext = newtext.replace("'<'", "'&lt;'");
+			newtext = newtext.replace("'>'", "'&gt;'");
+			newtext = newtext.replace("<<", "<");
+			newtext = newtext.replace("& ", "&amp; ");
+			newtext = newtext.replace("\r\n\r\n\t", "\r\n");
+			newtext = newtext.replace("\r\n\t", "");
+			newtext = newtext.replace("\t\t", "");
+			newtext = newtext.replace("\r\n\t", "");
+			newtext = newtext.replace("\r\n\r\n", "\r\n");
+			newtext = newtext.replace("\r\n \r\n", "\r\n");
+			newtext = newtext.replace("\r\n__", "");
+			newtext = newtext.replace("\t", "");
+			newtext = newtext.replace("\r\n__", "");
+			newtext = newtext.replace("\r\n \r\n", "\r\n");
+			newtext = newtext.replace("\r\n \r\n", "\r\n");
+			newtext = newtext.replace("\r\n\r\n\r\n", "\r\n");
+			newtext = newtext.replace("\r\n</Message>", "</Message>");
+			newtext = newtext.replace("\r\n\r\n", "\r\n");
+			newtext = newtext.replace("\r\n\r\n", "\r\n");
+
+			newtext = Util.umlaute(newtext);
+			newtext = newtext.replace((char) 0, (char) 32);
+			FileWriter writer = new FileWriter(file);
+			writer.write(newtext);
 			writer.close();
 			// set to null
 			writer = null;
-		} catch ( IOException ioe ) {
+		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
 	}
 
 	/**
-	 * Ergaenzt "Validierung: SIP" mit der Version (string) in dem
-	 * kost-val.log.xml (file)
+	 * Ergaenzt "Validierung: SIP" mit der Version (string) in dem kost-val.log.xml
+	 * (file)
 	 * 
-	 * ! Solche Ersetzungen duerfen nicht in einer Schleife gemacht werden
-	 * sondern erst am Schluss, da diese sehr Zeitintensiv sind !!!
+	 * ! Solche Ersetzungen duerfen nicht in einer Schleife gemacht werden sondern
+	 * erst am Schluss, da diese sehr Zeitintensiv sind !!!
 	 * 
 	 * @throws IOException
 	 */
-	public static void valSipversion( String string, File file )
-			throws IOException
-	{
+	public static void valSipversion(String string, File file) throws IOException {
 		try {
-			BufferedReader reader = new BufferedReader(
-					new FileReader( file ) );
+			BufferedReader reader = new BufferedReader(new FileReader(file));
 			String line = "", oldtext = "";
 			StringBuilder sb = new StringBuilder();
-			while ( (line = reader.readLine()) != null ) {
-				sb.append( line );
-				sb.append( "\r\n" );
+			while ((line = reader.readLine()) != null) {
+				sb.append(line);
+				sb.append("\r\n");
 			}
 			oldtext = sb.toString();
 			reader.close();
 			// set to null
 			reader = null;
 			string = "Validierung: SIP" + string;
-			String newtext = oldtext.replace( "Validierung: SIP", string );
-			newtext = newtext.replace( (char) 0, (char) 32 );
-			FileWriter writer = new FileWriter( file );
-			writer.write( newtext );
+			String newtext = oldtext.replace("Validierung: SIP", string);
+			newtext = newtext.replace((char) 0, (char) 32);
+			FileWriter writer = new FileWriter(file);
+			writer.write(newtext);
 			writer.close();
 			// set to null
 			writer = null;
-		} catch ( IOException ioe ) {
+		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
 	}
 
 	/** Umlaute normalisieren */
-	public static String umlaute( String oldstring )
-	{
-		String newstring = oldstring.replaceAll( "ü", "ue" );
-		newstring = newstring.replaceAll( "ö", "oe" );
-		newstring = newstring.replaceAll( "ä", "ae" );
-		newstring = newstring.replaceAll( "Ü", "Ue" );
-		newstring = newstring.replaceAll( "Ö", "Oe" );
-		newstring = newstring.replaceAll( "Ä", "Ae" );
-		newstring = newstring.replaceAll( "é", "e" );
-		newstring = newstring.replaceAll( "è", "e" );
-		newstring = newstring.replaceAll( "à", "a" );
-		newstring = newstring.replaceAll( "ê", "e" );
-		newstring = newstring.replaceAll( "ç", "c" );
-		newstring = newstring.replaceAll( "'", "`" );
-		
-		newstring = newstring.replaceAll( "Ã¼", "ue" );
-		newstring = newstring.replaceAll( "Ã¶", "oe" );
-		newstring = newstring.replaceAll( "Ã¤", "ae" );
-		newstring = newstring.replaceAll( "Ã©", "e" );
-		newstring = newstring.replaceAll( "Ã¨", "e" );
-		newstring = newstring.replaceAll( "Ãª", "e" );
-		newstring = newstring.replaceAll( "Ã§", "c" );
-		
-		newstring = newstring.replaceAll( "ￃﾼ", "ue" );
+	public static String umlaute(String oldstring) {
+		String newstring = oldstring.replaceAll("ü", "ue");
+		newstring = newstring.replaceAll("ö", "oe");
+		newstring = newstring.replaceAll("ä", "ae");
+		newstring = newstring.replaceAll("Ü", "Ue");
+		newstring = newstring.replaceAll("Ö", "Oe");
+		newstring = newstring.replaceAll("Ä", "Ae");
+		newstring = newstring.replaceAll("é", "e");
+		newstring = newstring.replaceAll("è", "e");
+		newstring = newstring.replaceAll("à", "a");
+		newstring = newstring.replaceAll("ê", "e");
+		newstring = newstring.replaceAll("ç", "c");
+		newstring = newstring.replaceAll("'", "`");
+
+		newstring = newstring.replaceAll("Ã¼", "ue");
+		newstring = newstring.replaceAll("Ã¶", "oe");
+		newstring = newstring.replaceAll("Ã¤", "ae");
+		newstring = newstring.replaceAll("Ã©", "e");
+		newstring = newstring.replaceAll("Ã¨", "e");
+		newstring = newstring.replaceAll("Ãª", "e");
+		newstring = newstring.replaceAll("Ã§", "c");
+
+		newstring = newstring.replaceAll("ￃﾼ", "ue");
 		return newstring;
 	}
 
 	/**
 	 * Veraendert ersetzt oldstring mit newstring in file
 	 * 
-	 * ! Solche Ersetzungen duerfen nicht in einer Schleife gemacht werden
-	 * sondern erst am Schluss, da diese sehr Zeitintensiv sind !!!
+	 * ! Solche Ersetzungen duerfen nicht in einer Schleife gemacht werden sondern
+	 * erst am Schluss, da diese sehr Zeitintensiv sind !!!
 	 * 
 	 * @throws IOException
 	 */
-	public static void oldnewstring( String oldstring, String newstring,
-			File file ) throws IOException
-	{
+	public static void oldnewstring(String oldstring, String newstring, File file) throws IOException {
 		try {
-			BufferedReader reader = new BufferedReader(
-					new FileReader( file ) );
+			BufferedReader reader = new BufferedReader(new FileReader(file));
 			String line = "", oldtext = "";
 			StringBuilder sb = new StringBuilder();
-			while ( (line = reader.readLine()) != null ) {
-				sb.append( line );
-				sb.append( "\r\n" );
+			while ((line = reader.readLine()) != null) {
+				sb.append(line);
+				sb.append("\r\n");
 			}
 			oldtext = sb.toString();
 			reader.close();
 			// set to null
 			reader = null;
-			String newtext = oldtext.replace( oldstring, newstring );
-			newtext = newtext.replace( (char) 0, (char) 32 );
-			FileWriter writer = new FileWriter( file );
-			writer.write( newtext );
+			String newtext = oldtext.replace(oldstring, newstring);
+			newtext = newtext.replace((char) 0, (char) 32);
+			FileWriter writer = new FileWriter(file);
+			writer.write(newtext);
 			writer.close();
 			// set to null
 			writer = null;
-		} catch ( IOException ioe ) {
+		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
 	}
@@ -625,17 +569,14 @@ public class Util
 	 * 
 	 * @throws IOException
 	 */
-	public static void replaceAllChar( File file, String newString )
-			throws IOException
-	{
+	public static void replaceAllChar(File file, String newString) throws IOException {
 		try {
-			BufferedReader reader = new BufferedReader(
-					new FileReader( file ) );
+			BufferedReader reader = new BufferedReader(new FileReader(file));
 			reader.close();
-			FileWriter writer = new FileWriter( file );
-			writer.write( newString );
+			FileWriter writer = new FileWriter(file);
+			writer.write(newString);
 			writer.close();
-		} catch ( IOException ioe ) {
+		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
 	}
@@ -643,30 +584,28 @@ public class Util
 	/**
 	 * Veraendert & mit &amp;
 	 * 
-	 * ! Solche Ersetzungen duerfen nicht in einer Schleife gemacht werden
-	 * sondern erst am Schluss, da diese sehr Zeitintensiv sind !!!
+	 * ! Solche Ersetzungen duerfen nicht in einer Schleife gemacht werden sondern
+	 * erst am Schluss, da diese sehr Zeitintensiv sind !!!
 	 * 
 	 * @throws IOException
 	 */
-	public static void amp( File file ) throws IOException
-	{
+	public static void amp(File file) throws IOException {
 		try {
-			BufferedReader reader = new BufferedReader(
-					new FileReader( file ) );
+			BufferedReader reader = new BufferedReader(new FileReader(file));
 			String line = "", oldtext = "";
 			StringBuilder sb = new StringBuilder();
-			while ( (line = reader.readLine()) != null ) {
-				sb.append( line );
-				sb.append( "\r\n" );
+			while ((line = reader.readLine()) != null) {
+				sb.append(line);
+				sb.append("\r\n");
 			}
 			oldtext = sb.toString();
 			reader.close();
-			String newtext = oldtext.replace( "&", "&amp;" );
-			newtext = newtext.replace( (char) 0, (char) 32 );
-			FileWriter writer = new FileWriter( file );
-			writer.write( newtext );
+			String newtext = oldtext.replace("&", "&amp;");
+			newtext = newtext.replace((char) 0, (char) 32);
+			FileWriter writer = new FileWriter(file);
+			writer.write(newtext);
 			writer.close();
-		} catch ( IOException ioe ) {
+		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
 	}

@@ -58,22 +58,18 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationJsurplusFilesM
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
 
-public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
-		implements ValidationJsurplusFilesModule
-{
-	private boolean		min						= false;
+public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl implements ValidationJsurplusFilesModule {
+	private boolean min = false;
 
-	Map<String, String>	filesInSiardUnsorted	= new HashMap<String, String>();
-	Map<String, String>	filesInSiard			= new HashMap<String, String>();
-	Map<String, String>	tablesInSiard			= new HashMap<String, String>();
-	Map<String, String>	tablesToRemove			= new HashMap<String, String>();
-	Map<String, String>	filesToRemove			= new HashMap<String, String>();
+	Map<String, String> filesInSiardUnsorted = new HashMap<String, String>();
+	Map<String, String> filesInSiard = new HashMap<String, String>();
+	Map<String, String> tablesInSiard = new HashMap<String, String>();
+	Map<String, String> tablesToRemove = new HashMap<String, String>();
+	Map<String, String> filesToRemove = new HashMap<String, String>();
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws ValidationJsurplusFilesException
-	{
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws ValidationJsurplusFilesException {
 		filesInSiardUnsorted.clear();
 		filesInSiard.clear();
 		tablesInSiard.clear();
@@ -82,57 +78,55 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 		boolean showOnWork = false;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
-		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
+		String onWorkConfig = configMap.get("ShowProgressOnWork");
 		/*
 		 * Nicht vergessen in
 		 * "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property
 		 * name="configurationService" ref="configurationService" />
 		 */
-		if ( onWorkConfig.equals( "yes" ) ) {
+		if (onWorkConfig.equals("yes")) {
 			// Ausgabe Modul Ersichtlich das KOST-Val arbeitet
 			showOnWork = true;
-			System.out.print( "J    " );
-			System.out.print( "\b\b\b\b\b" );
-		} else if ( onWorkConfig.equals( "nomin" ) ) {
+			System.out.print("J    ");
+			System.out.print("\b\b\b\b\b");
+		} else if (onWorkConfig.equals("nomin")) {
 			min = true;
 		}
 
 		boolean valid = true;
 		try {
-			String pathToWorkDir = configMap.get( "PathToWorkDir" );
+			String pathToWorkDir = configMap.get("PathToWorkDir");
 			pathToWorkDir = pathToWorkDir + File.separator + "SIARD";
-			String contentString = new StringBuilder( pathToWorkDir )
-					.append( File.separator ).append( "content" ).toString();
-			File content = new File( contentString );
+			String contentString = new StringBuilder(pathToWorkDir).append(File.separator).append("content").toString();
+			File content = new File(contentString);
 			HashMap<String, File> hashMap = new HashMap<String, File>();
-			Map<String, File> fileMap = Util.getContent( content, hashMap );
+			Map<String, File> fileMap = Util.getContent(content, hashMap);
 			Set<String> fileMapKeys = fileMap.keySet();
 			// alle Dateien in SIARD in die Map filesInSiard schreiben (Inhalt)
-			for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator
-					.hasNext(); ) {
+			for (Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext();) {
 				String entryName = iterator.next();
 				// System.out.println( "entryName: " + entryName );
 				// entryName: content/schema1/table7/table7.xsd
-				if ( !entryName.equalsIgnoreCase( contentString ) ) {
-					filesInSiardUnsorted.put( entryName, entryName );
-					if ( showOnWork ) {
-						if ( onWork == 410 ) {
+				if (!entryName.equalsIgnoreCase(contentString)) {
+					filesInSiardUnsorted.put(entryName, entryName);
+					if (showOnWork) {
+						if (onWork == 410) {
 							onWork = 2;
-							System.out.print( "J-   " );
-							System.out.print( "\b\b\b\b\b" );
-						} else if ( onWork == 110 ) {
+							System.out.print("J-   ");
+							System.out.print("\b\b\b\b\b");
+						} else if (onWork == 110) {
 							onWork = onWork + 1;
-							System.out.print( "J\\   " );
-							System.out.print( "\b\b\b\b\b" );
-						} else if ( onWork == 210 ) {
+							System.out.print("J\\   ");
+							System.out.print("\b\b\b\b\b");
+						} else if (onWork == 210) {
 							onWork = onWork + 1;
-							System.out.print( "J|   " );
-							System.out.print( "\b\b\b\b\b" );
-						} else if ( onWork == 310 ) {
+							System.out.print("J|   ");
+							System.out.print("\b\b\b\b\b");
+						} else if (onWork == 310) {
 							onWork = onWork + 1;
-							System.out.print( "J/   " );
-							System.out.print( "\b\b\b\b\b" );
+							System.out.print("J/   ");
+							System.out.print("\b\b\b\b\b");
 						} else {
 							onWork = onWork + 1;
 						}
@@ -140,129 +134,113 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 				}
 			}
 
-			filesInSiard = new TreeMap<String, String>( filesInSiardUnsorted );
+			filesInSiard = new TreeMap<String, String>(filesInSiardUnsorted);
 
 			// Pfad zum Programm existiert die Dateien?
-			String checkTool = Sed.checkSed( dirOfJarPath );
-			if ( !checkTool.equals( "OK" ) ) {
+			String checkTool = Sed.checkSed(dirOfJarPath);
+			if (!checkTool.equals("OK")) {
 				// mindestens eine Datei fehlt fuer die Validierung
-				if ( min ) {
+				if (min) {
 					return false;
 				} else {
 
-					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale,
-									MESSAGE_XML_MODUL_J_SIARD )
-									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_MISSING_FILE, checkTool,
-											getTextResourceService().getText(
-													locale, ABORTED ) ) );
+					Logtxt.logtxt(logFile,
+							getTextResourceService().getText(locale, MESSAGE_XML_MODUL_J_SIARD)
+									+ getTextResourceService().getText(locale, MESSAGE_XML_MISSING_FILE, checkTool,
+											getTextResourceService().getText(locale, ABORTED)));
 					return false;
 				}
 			}
 
 			try {
 				// Struktur aus metadata.xml herauslesen (path)
-				pathToWorkDir = configMap.get( "PathToWorkDir" );
+				pathToWorkDir = configMap.get("PathToWorkDir");
 				pathToWorkDir = pathToWorkDir + File.separator + "SIARD";
-				File metadataXml = new File( new StringBuilder( pathToWorkDir )
-						.append( File.separator ).append( "header" )
-						.append( File.separator ).append( "metadata.xml" )
-						.toString() );
-				InputStream fin = new FileInputStream( metadataXml );
+				File metadataXml = new File(new StringBuilder(pathToWorkDir).append(File.separator).append("header")
+						.append(File.separator).append("metadata.xml").toString());
+				InputStream fin = new FileInputStream(metadataXml);
 				SAXBuilder builder = new SAXBuilder();
-				Document document = (Document) builder.build( fin );
+				Document document = (Document) builder.build(fin);
 				fin.close();
 				// set to null
 				fin = null;
 
-				Boolean version1 = FileUtils
-						.readFileToString( metadataXml, "ISO-8859-1" ).contains(
-								"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
-				Boolean version2 = FileUtils
-						.readFileToString( metadataXml, "ISO-8859-1" ).contains(
-								"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
-				Namespace ns = Namespace.getNamespace(
-						"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
-				if ( version1 ) {
+				Boolean version1 = FileUtils.readFileToString(metadataXml, "ISO-8859-1")
+						.contains("http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd");
+				Boolean version2 = FileUtils.readFileToString(metadataXml, "ISO-8859-1")
+						.contains("http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd");
+				Namespace ns = Namespace.getNamespace("http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd");
+				if (version1) {
 					// ns = Namespace.getNamespace(
 					// "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
 				} else {
-					if ( version2 ) {
-						ns = Namespace.getNamespace(
-								"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
+					if (version2) {
+						ns = Namespace.getNamespace("http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd");
 					} else {
 						valid = false;
-						if ( min ) {
+						if (min) {
 							return false;
 						} else {
 
-							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale,
-											MESSAGE_XML_MODUL_J_SIARD )
-											+ getTextResourceService().getText(
-													locale,
-													MESSAGE_XML_D_INVALID_XMLNS,
-													metadataXml ) );
+							Logtxt.logtxt(logFile,
+									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_J_SIARD)
+											+ getTextResourceService().getText(locale, MESSAGE_XML_D_INVALID_XMLNS,
+													metadataXml));
 						}
 					}
 				}
 				// select schema elements and loop
-				List<Element> schemas = ((org.jdom2.Document) document)
-						.getRootElement().getChild( "schemas", ns )
-						.getChildren( "schema", ns );
-				for ( Element schema : schemas ) {
-					valid = validateSchema( schema, ns, pathToWorkDir,
-							configMap );
-					if ( showOnWork ) {
-						if ( onWork == 410 ) {
+				List<Element> schemas = ((org.jdom2.Document) document).getRootElement().getChild("schemas", ns)
+						.getChildren("schema", ns);
+				for (Element schema : schemas) {
+					valid = validateSchema(schema, ns, pathToWorkDir, configMap);
+					if (showOnWork) {
+						if (onWork == 410) {
 							onWork = 2;
-							System.out.print( "J-   " );
-							System.out.print( "\b\b\b\b\b" );
-						} else if ( onWork == 110 ) {
+							System.out.print("J-   ");
+							System.out.print("\b\b\b\b\b");
+						} else if (onWork == 110) {
 							onWork = onWork + 1;
-							System.out.print( "J\\   " );
-							System.out.print( "\b\b\b\b\b" );
-						} else if ( onWork == 210 ) {
+							System.out.print("J\\   ");
+							System.out.print("\b\b\b\b\b");
+						} else if (onWork == 210) {
 							onWork = onWork + 1;
-							System.out.print( "J|   " );
-							System.out.print( "\b\b\b\b\b" );
-						} else if ( onWork == 310 ) {
+							System.out.print("J|   ");
+							System.out.print("\b\b\b\b\b");
+						} else if (onWork == 310) {
 							onWork = onWork + 1;
-							System.out.print( "J/   " );
-							System.out.print( "\b\b\b\b\b" );
+							System.out.print("J/   ");
+							System.out.print("\b\b\b\b\b");
 						} else {
 							onWork = onWork + 1;
 						}
 					}
 				}
-			} catch ( java.io.IOException ioe ) {
+			} catch (java.io.IOException ioe) {
 				valid = false;
-				if ( min ) {
+				if (min) {
 					return false;
 				} else {
 
-					Logtxt.logtxt( logFile, getTextResourceService()
-							.getText( locale, MESSAGE_XML_MODUL_J_SIARD )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN,
-									ioe.getMessage() + " (IOException)" ) );
+					Logtxt.logtxt(logFile,
+							getTextResourceService().getText(locale, MESSAGE_XML_MODUL_J_SIARD)
+									+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN,
+											ioe.getMessage() + " (IOException)"));
 				}
-			} catch ( JDOMException e ) {
+			} catch (JDOMException e) {
 				valid = false;
-				if ( min ) {
+				if (min) {
 					return false;
 				} else {
 
-					Logtxt.logtxt( logFile, getTextResourceService()
-							.getText( locale, MESSAGE_XML_MODUL_J_SIARD )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN,
-									e.getMessage() + " (JDOMException)" ) );
+					Logtxt.logtxt(logFile,
+							getTextResourceService().getText(locale, MESSAGE_XML_MODUL_J_SIARD)
+									+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN,
+											e.getMessage() + " (JDOMException)"));
 				}
 			}
 
-			if ( filesInSiard.size() > 0 ) {
+			if (filesInSiard.size() > 0) {
 				try {
 					// in filesInSiard sind jetzt noch die drinnen, welche nicht
 					// in metadata.xml erwaehnt
@@ -272,30 +250,27 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 					// funktionieren!
 
 					Set<String> filesInSiardKeys = filesInSiard.keySet();
-					for ( Iterator<String> iterator = filesInSiardKeys
-							.iterator(); iterator.hasNext(); ) {
+					for (Iterator<String> iterator = filesInSiardKeys.iterator(); iterator.hasNext();) {
 						String entryName = iterator.next();
-						File entryNameFile = new File( entryName );
+						File entryNameFile = new File(entryName);
 						String entryNameParent = entryNameFile.getParent();
 						// System.out.println( "gesucht: " + entryName );
 						Set<String> tablesInSiardKeys = tablesInSiard.keySet();
-						for ( Iterator<String> iteratorTables = tablesInSiardKeys
-								.iterator(); iteratorTables.hasNext(); ) {
+						for (Iterator<String> iteratorTables = tablesInSiardKeys.iterator(); iteratorTables
+								.hasNext();) {
 							String tableName = iteratorTables.next();
-							File tableXml = new File( tableName );
+							File tableXml = new File(tableName);
 							String tableNameParent = tableXml.getParent();
 							boolean tableFile = false;
 
 							File fSearchtable = tableXml;
-							File fSearchtableTemp = new File(
-									fSearchtable.getAbsolutePath()
-											+ "_Temp.xml" );
+							File fSearchtableTemp = new File(fSearchtable.getAbsolutePath() + "_Temp.xml");
 							/*
-							 * mit Util.oldnewstring respektive replace koennen
-							 * sehr grosse files nicht bearbeitet werden!
+							 * mit Util.oldnewstring respektive replace koennen sehr grosse files nicht
+							 * bearbeitet werden!
 							 * 
-							 * Entsprechend wurde sed verwendet. die einzelnen
-							 * Aktionen werden in Serie (-e) ausgefuehrt:
+							 * Entsprechend wurde sed verwendet. die einzelnen Aktionen werden in Serie (-e)
+							 * ausgefuehrt:
 							 * 
 							 * sed -e 's/a/A/g' -e 's/b/B/g' 1.txt
 							 */
@@ -311,42 +286,31 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 							// Bringt alles auf eine Zeile
 							String options = sed + sed2 + sed3 + sed4;
 
-							File workDir = new File( pathToWorkDir );
+							File workDir = new File(pathToWorkDir);
 
-							if ( !fSearchtableTemp.exists() ) {
+							if (!fSearchtableTemp.exists()) {
 								// Sed-Befehl: pathToSedExe options fSearchtable
 								// > fSearchtableTemp
-								String resultExec = Sed.execSed( options,
-										fSearchtable, fSearchtableTemp, workDir,
-										dirOfJarPath );
-								if ( !resultExec.equals( "OK" ) ) {
+								String resultExec = Sed.execSed(options, fSearchtable, fSearchtableTemp, workDir,
+										dirOfJarPath);
+								if (!resultExec.equals("OK")) {
 									// Exception oder Report existiert nicht
-									if ( min ) {
+									if (min) {
 										return false;
 									} else {
-										if ( resultExec.equals( "NoReport" ) ) {
+										if (resultExec.equals("NoReport")) {
 											// Report existiert nicht
-											Logtxt.logtxt( logFile,
-													getTextResourceService()
-															.getText( locale,
-																	MESSAGE_XML_MODUL_J_SIARD )
-															+ getTextResourceService()
-																	.getText(
-																			locale,
-																			MESSAGE_XML_MISSING_REPORT ) );
+											Logtxt.logtxt(logFile,
+													getTextResourceService().getText(locale, MESSAGE_XML_MODUL_J_SIARD)
+															+ getTextResourceService().getText(locale,
+																	MESSAGE_XML_MISSING_REPORT));
 											return false;
 										} else {
 											// Exception
-											Logtxt.logtxt( logFile,
-													getTextResourceService()
-															.getText( locale,
-																	MESSAGE_XML_MODUL_J_SIARD )
-															+ getTextResourceService()
-																	.getText(
-																			locale,
-																			ERROR_XML_SERVICEFAILED,
-																			"sed",
-																			resultExec ) );
+											Logtxt.logtxt(logFile,
+													getTextResourceService().getText(locale, MESSAGE_XML_MODUL_J_SIARD)
+															+ getTextResourceService().getText(locale,
+																	ERROR_XML_SERVICEFAILED, "sed", resultExec));
 											return false;
 										}
 									}
@@ -359,119 +323,83 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 							}
 
 							try {
-								InputStream fis = new FileInputStream(
-										tableXml );
-								BufferedReader br = new BufferedReader(
-										new InputStreamReader( fis ) );
+								InputStream fis = new FileInputStream(tableXml);
+								BufferedReader br = new BufferedReader(new InputStreamReader(fis));
 
 								File folderTable = tableXml.getParentFile();
 								// File file = new File("/path/to/directory");
 								String lobName = "nichts";
-								String[] directories = folderTable
-										.list( new FilenameFilter() {
-											@Override
-											public boolean accept( File current,
-													String lobName )
-											{
-												return new File( current,
-														lobName ).isDirectory();
-											}
-										} );
-								lobName = Arrays.toString( directories )
-										.toString();
-								lobName = lobName.substring( 1,
-										lobName.length() - 1 );
+								String[] directories = folderTable.list(new FilenameFilter() {
+									@Override
+									public boolean accept(File current, String lobName) {
+										return new File(current, lobName).isDirectory();
+									}
+								});
+								lobName = Arrays.toString(directories).toString();
+								lobName = lobName.substring(1, lobName.length() - 1);
 								// System.out.println( "lobName: " + lobName );
 
 								// Datei Zeile fuer Zeile lesen und ermitteln ob
 								// "file=" darin enthalten ist
 
-								for ( String line = br
-										.readLine(); line != null; line = br
-												.readLine() ) {
-									if ( line.contains( " file=" ) ) {
+								for (String line = br.readLine(); line != null; line = br.readLine()) {
+									if (line.contains(" file=")) {
 										// System.out.println( "file in
 										// table.xml: " + line );
 										tableFile = true;
-										String newEntryName = entryName
-												.substring(
-														entryName.indexOf(
-																"content" ),
-														entryName.length() );
+										String newEntryName = entryName.substring(entryName.indexOf("content"),
+												entryName.length());
 										String relEntryName = newEntryName;
 										int lobLength = lobName.length() + 1;
-										int lobLengthEntryName = entryName
-												.indexOf( lobName ) + lobLength;
-										if ( lobLengthEntryName < entryName
-												.length() ) {
-											relEntryName = entryName.substring(
-													lobLengthEntryName,
-													entryName.length() );
+										int lobLengthEntryName = entryName.indexOf(lobName) + lobLength;
+										if (lobLengthEntryName < entryName.length()) {
+											relEntryName = entryName.substring(lobLengthEntryName, entryName.length());
 										}
 										// System.out.println( "lobLength: " +
 										// lobLength );
 										/*
-										 * System.out.println( "entryName: " +
-										 * entryName + " -->  newEntryName: " +
-										 * newEntryName + " -->  relEntryName: "
-										 * + relEntryName );
+										 * System.out.println( "entryName: " + entryName + " -->  newEntryName: " +
+										 * newEntryName + " -->  relEntryName: " + relEntryName );
 										 */
-										if ( line.contains( newEntryName ) ) {
+										if (line.contains(newEntryName)) {
 											// entryName ist in der Tabelle
 											// enthalten und wird spaeter aus
 											// liste geloescht
-											filesToRemove.put( entryName,
-													entryName );
-											filesToRemove.put( entryNameParent,
-													entryNameParent );
+											filesToRemove.put(entryName, entryName);
+											filesToRemove.put(entryNameParent, entryNameParent);
 											// System.out.println( "gefunden
 											// (1)" );
 											break;
 										} else {
-											newEntryName = newEntryName
-													.replace( "\\", "/" );
-											if ( line.contains(
-													newEntryName ) ) {
+											newEntryName = newEntryName.replace("\\", "/");
+											if (line.contains(newEntryName)) {
 												// entryName ist in Tabelle
 												// enthalten und wird spaeter
 												// aus liste geloescht
-												filesToRemove.put( entryName,
-														entryName );
-												filesToRemove.put(
-														entryNameParent,
-														entryNameParent );
+												filesToRemove.put(entryName, entryName);
+												filesToRemove.put(entryNameParent, entryNameParent);
 												// System.out.println( "gefunden
 												// (2)" );
 												break;
-											} else if ( line.contains(
-													relEntryName ) ) {
+											} else if (line.contains(relEntryName)) {
 												// entryName ist in der Tabelle
 												// enthalten und wird spaeter
 												// aus liste
 												// geloescht
-												filesToRemove.put( entryName,
-														entryName );
-												filesToRemove.put(
-														entryNameParent,
-														entryNameParent );
+												filesToRemove.put(entryName, entryName);
+												filesToRemove.put(entryNameParent, entryNameParent);
 												// System.out.println( "gefunden
 												// (3)" );
 												break;
 											} else {
-												relEntryName = relEntryName
-														.replace( "\\", "/" );
-												if ( line.contains(
-														relEntryName ) ) {
+												relEntryName = relEntryName.replace("\\", "/");
+												if (line.contains(relEntryName)) {
 													// entryName ist in Tabelle
 													// enthalten und wird
 													// spaeter aus liste
 													// geloescht
-													filesToRemove.put(
-															entryName,
-															entryName );
-													filesToRemove.put(
-															entryNameParent,
-															entryNameParent );
+													filesToRemove.put(entryName, entryName);
+													filesToRemove.put(entryNameParent, entryNameParent);
 													// System.out.println(
 													// "gefunden (4)" );
 													break;
@@ -488,71 +416,55 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 								br.close();
 								// set to null
 								br = null;
-							} catch ( FileNotFoundException e ) {
-								if ( min ) {
+							} catch (FileNotFoundException e) {
+								if (min) {
 									return false;
 								} else {
-									Logtxt.logtxt( logFile,
-											getTextResourceService().getText(
-													locale,
-													MESSAGE_XML_MODUL_J_SIARD )
-													+ getTextResourceService()
-															.getText( locale,
-																	ERROR_XML_UNKNOWN,
-																	"FileNotFoundException" ) );
+									Logtxt.logtxt(logFile,
+											getTextResourceService().getText(locale, MESSAGE_XML_MODUL_J_SIARD)
+													+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN,
+															"FileNotFoundException"));
 									return false;
 								}
-							} catch ( Exception e ) {
-								if ( min ) {
+							} catch (Exception e) {
+								if (min) {
 									return false;
 								} else {
-									Logtxt.logtxt( logFile,
-											getTextResourceService().getText(
-													locale,
-													MESSAGE_XML_MODUL_J_SIARD )
-													+ getTextResourceService()
-															.getText( locale,
-																	ERROR_XML_UNKNOWN,
-																	(e.getMessage()
-																			+ " 1") ) ); //
+									Logtxt.logtxt(logFile,
+											getTextResourceService().getText(locale, MESSAGE_XML_MODUL_J_SIARD)
+													+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN,
+															(e.getMessage() + " 1"))); //
 									return false;
 								}
 							} // table durch scannen
-							if ( !tableFile ) {
+							if (!tableFile) {
 								// tableName enthaelt keine file und wird aus
 								// liste geloescht
-								tablesToRemove.put( tableName, tableName );
-								tablesToRemove.put( tableNameParent,
-										tableNameParent );
+								tablesToRemove.put(tableName, tableName);
+								tablesToRemove.put(tableNameParent, tableNameParent);
 							}
 						} // tablesInSiard durchgehen
 							// tablesInSiard mit tablesToRemove bereinigen
-						Set<String> tablesToRemoveKeys = tablesToRemove
-								.keySet();
-						for ( Iterator<String> iteratorRemove = tablesToRemoveKeys
-								.iterator(); iteratorRemove.hasNext(); ) {
+						Set<String> tablesToRemoveKeys = tablesToRemove.keySet();
+						for (Iterator<String> iteratorRemove = tablesToRemoveKeys.iterator(); iteratorRemove
+								.hasNext();) {
 							String tableName = iteratorRemove.next();
-							tablesInSiard.remove( tableName );
+							tablesInSiard.remove(tableName);
 						}
 					} // filesInSiard durchgehen und mit tablesInSiard
 						// ausduennen
 						// filesInSiard mit filesToRemove bereinigen
 					Set<String> filesToRemoveKeys = filesToRemove.keySet();
-					for ( Iterator<String> iteratorRemove = filesToRemoveKeys
-							.iterator(); iteratorRemove.hasNext(); ) {
+					for (Iterator<String> iteratorRemove = filesToRemoveKeys.iterator(); iteratorRemove.hasNext();) {
 						String fileName = iteratorRemove.next();
-						filesInSiard.remove( fileName );
+						filesInSiard.remove(fileName);
 					}
-				} catch ( Exception e ) {
-					if ( min ) {
+				} catch (Exception e) {
+					if (min) {
 					} else {
 
-						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale,
-										MESSAGE_XML_MODUL_J_SIARD )
-										+ getTextResourceService().getText(
-												locale, ERROR_XML_UNKNOWN,
-												(e.getMessage() + " 2") ) );
+						Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_J_SIARD)
+								+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, (e.getMessage() + " 2")));
 						// return false;
 					}
 				}
@@ -560,9 +472,9 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 
 			// in filesInSiard sind jetzt noch die drinnen, welche nicht in
 			// table.xml erwaehnt wurden
-			if ( filesInSiard.size() > 0 ) {
+			if (filesInSiard.size() > 0) {
 				valid = false;
-				if ( min ) {
+				if (min) {
 					return false;
 				} else {
 					String noPretty = filesInSiard.keySet() + "";
@@ -571,30 +483,25 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 					 * content\schema0\newOrdnerS0,
 					 * C:\Users\X60014195\.kost-val_2x\temp_KOST-Val\SIARD\
 					 * content\schema0\newOrdnerS1,
-					 * C:\Users\X60014195\.kost-val_2x\temp_KOST-Val\SIARD\
-					 * content\schema0\table7\ newOrdner7]
+					 * C:\Users\X60014195\.kost-val_2x\temp_KOST-Val\SIARD\ content\schema0\table7\
+					 * newOrdner7]
 					 */
-					String pretty = noPretty.replace( "[",
-							"</Message><Message>" );
-					pretty = pretty.replace( "]", "" );
-					pretty = pretty.replace( ", ", "</Message><Message>" );
-					Logtxt.logtxt( logFile, getTextResourceService()
-							.getText( locale, MESSAGE_XML_MODUL_J_SIARD )
-							+ getTextResourceService().getText( locale,
-									MESSAGE_XML_J_INVALID_ENTRY, pretty ) );
+					String pretty = noPretty.replace("[", "</Message><Message>");
+					pretty = pretty.replace("]", "");
+					pretty = pretty.replace(", ", "</Message><Message>");
+					Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_J_SIARD)
+							+ getTextResourceService().getText(locale, MESSAGE_XML_J_INVALID_ENTRY, pretty));
 				}
 			} else {
 				valid = true;
 			}
 
-		} catch ( Exception e ) {
-			if ( min ) {
+		} catch (Exception e) {
+			if (min) {
 			} else {
 
-				Logtxt.logtxt( logFile, getTextResourceService()
-						.getText( locale, MESSAGE_XML_MODUL_J_SIARD )
-						+ getTextResourceService().getText( locale,
-								ERROR_XML_UNKNOWN, (e.getMessage() + " 3") ) );
+				Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_J_SIARD)
+						+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, (e.getMessage() + " 3")));
 			} // return false;
 		}
 		filesInSiardUnsorted.clear();
@@ -607,114 +514,100 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 
 	}
 
-	private boolean validateSchema( Element schema, Namespace ns,
-			String pathToWorkDir, Map<String, String> configMap )
-	{
+	private boolean validateSchema(Element schema, Namespace ns, String pathToWorkDir, Map<String, String> configMap) {
 		boolean showOnWork = true;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
-		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
+		String onWorkConfig = configMap.get("ShowProgressOnWork");
 		/*
 		 * Nicht vergessen in
 		 * "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property
 		 * name="configurationService" ref="configurationService" />
 		 */
-		if ( onWorkConfig.equals( "no" ) ) {
+		if (onWorkConfig.equals("no")) {
 			// keine Ausgabe
 			showOnWork = false;
-		} else if ( onWorkConfig.equals( "nomin" ) ) {
+		} else if (onWorkConfig.equals("nomin")) {
 			min = true;
 			// keine Ausgabe
 			showOnWork = false;
 		} else {
-			if ( onWork == 410 ) {
+			if (onWork == 410) {
 				onWork = 2;
-				System.out.print( "J-   " );
-				System.out.print( "\b\b\b\b\b" );
-			} else if ( onWork == 110 ) {
+				System.out.print("J-   ");
+				System.out.print("\b\b\b\b\b");
+			} else if (onWork == 110) {
 				onWork = onWork + 1;
-				System.out.print( "J\\   " );
-				System.out.print( "\b\b\b\b\b" );
-			} else if ( onWork == 210 ) {
+				System.out.print("J\\   ");
+				System.out.print("\b\b\b\b\b");
+			} else if (onWork == 210) {
 				onWork = onWork + 1;
-				System.out.print( "J|   " );
-				System.out.print( "\b\b\b\b\b" );
-			} else if ( onWork == 310 ) {
+				System.out.print("J|   ");
+				System.out.print("\b\b\b\b\b");
+			} else if (onWork == 310) {
 				onWork = onWork + 1;
-				System.out.print( "J/   " );
-				System.out.print( "\b\b\b\b\b" );
+				System.out.print("J/   ");
+				System.out.print("\b\b\b\b\b");
 			} else {
 				onWork = onWork + 1;
 			}
 		}
 		boolean valid = true;
-		Element schemaFolder = schema.getChild( "folder", ns );
-		File schemaPath = new File(
-				new StringBuilder( pathToWorkDir ).append( File.separator )
-						.append( "content" ).append( File.separator )
-						.append( schemaFolder.getText() ).toString() );
+		Element schemaFolder = schema.getChild("folder", ns);
+		File schemaPath = new File(new StringBuilder(pathToWorkDir).append(File.separator).append("content")
+				.append(File.separator).append(schemaFolder.getText()).toString());
 		String schemaPathString = schemaPath.toString();
-		filesInSiard.remove( schemaPathString );
+		filesInSiard.remove(schemaPathString);
 
-		if ( schemaPath.isDirectory() ) {
-			if ( schema.getChild( "tables", ns ) != null ) {
+		if (schemaPath.isDirectory()) {
+			if (schema.getChild("tables", ns) != null) {
 
-				List<Element> tables = schema.getChild( "tables", ns )
-						.getChildren( "table", ns );
-				for ( Element table : tables ) {
+				List<Element> tables = schema.getChild("tables", ns).getChildren("table", ns);
+				for (Element table : tables) {
 					String name = "";
-					Element tableFolder = table.getChild( "folder", ns );
-					File tablePath = new File(
-							new StringBuilder( schemaPath.getPath() )
-									.append( File.separator )
-									.append( tableFolder.getText() )
-									.toString() );
+					Element tableFolder = table.getChild("folder", ns);
+					File tablePath = new File(new StringBuilder(schemaPath.getPath()).append(File.separator)
+							.append(tableFolder.getText()).toString());
 					name = tablePath.toString();
-					filesInSiard.remove( name );
+					filesInSiard.remove(name);
 					// die Datei "name" aus filesInSiard entfernen
 					// System.out.println( "Remove von metadata.xml: " + name );
 
-					if ( tablePath.isDirectory() ) {
-						File tableXsd = new File(
-								new StringBuilder( tablePath.getPath() )
-										.append( File.separator ).append(
-												tableFolder.getText() + ".xsd" )
-										.toString() );
+					if (tablePath.isDirectory()) {
+						File tableXsd = new File(new StringBuilder(tablePath.getPath()).append(File.separator)
+								.append(tableFolder.getText() + ".xsd").toString());
 						name = tableXsd.toString();
 						// die Datei "name" aus filesInSiard entfernen
-						filesInSiard.remove( name );
+						filesInSiard.remove(name);
 
-						File tableXml = new File(
-								new StringBuilder( tablePath.getPath() )
-										.append( File.separator ).append(
-												tableFolder.getText() + ".xml" )
-										.toString() );
+						File tableXml = new File(new StringBuilder(tablePath.getPath()).append(File.separator)
+								.append(tableFolder.getText() + ".xml").toString());
 						name = tableXml.toString();
 						// die Datei "name" aus filesInSiard entfernen
-						filesInSiard.remove( name );
+						filesInSiard.remove(name);
 						// die Datei "name" in die Liste aller table.xml
 						// eintragen
-						tablesInSiard.put( name, name );
+						tablesInSiard.put(name, name);
 
 					}
-					if ( showOnWork ) {
-						if ( onWork == 410 ) {
+					if (showOnWork) {
+						if (onWork == 410) {
 							onWork = 2;
-							System.out.print( "J-   " );
-							System.out.print( "\b\b\b\b\b" );
-						} else if ( onWork == 110 ) {
+							System.out.print("J-   ");
+							System.out.print("\b\b\b\b\b");
+						} else if (onWork == 110) {
 							onWork = onWork + 1;
-							System.out.print( "J\\   " );
-							System.out.print( "\b\b\b\b\b" );
-						} else if ( onWork == 210 ) {
+							System.out.print("J\\   ");
+							System.out.print("\b\b\b\b\b");
+						} else if (onWork == 210) {
 							onWork = onWork + 1;
-							System.out.print( "J|   " );
-							System.out.print( "\b\b\b\b\b" );
-						} else if ( onWork == 310 ) {
+							System.out.print("J|   ");
+							System.out.print("\b\b\b\b\b");
+						} else if (onWork == 310) {
 							onWork = onWork + 1;
-							System.out.print( "J/   " );
-							System.out.print( "\b\b\b\b\b" );
+							System.out.print("J/   ");
+							System.out.print("\b\b\b\b\b");
 						} else {
 							onWork = onWork + 1;
 						}

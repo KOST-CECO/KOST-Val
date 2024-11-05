@@ -43,11 +43,9 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
 
-public interface ValidationBHvalidationMkvModule extends ValidationModule
-{
+public interface ValidationBHvalidationMkvModule extends ValidationModule {
 
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws ValidationBHmkvvalidationException;
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws ValidationBHmkvvalidationException;
 
 }

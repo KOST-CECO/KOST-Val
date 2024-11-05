@@ -31,11 +31,9 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
 
-public interface ValidationAvalidationWaveModule extends ValidationModule
-{
+public interface ValidationAvalidationWaveModule extends ValidationModule {
 
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws ValidationAwavevalidationException;
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws ValidationAwavevalidationException;
 
 }

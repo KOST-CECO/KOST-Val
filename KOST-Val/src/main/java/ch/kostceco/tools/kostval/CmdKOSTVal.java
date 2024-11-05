@@ -37,19 +37,15 @@ import ch.kostceco.tools.kostval.service.TextResourceService;
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
 
-public class CmdKOSTVal implements MessageConstants
-{
+public class CmdKOSTVal implements MessageConstants {
 
 	private TextResourceService textResourceService;
 
-	public TextResourceService getTextResourceService()
-	{
+	public TextResourceService getTextResourceService() {
 		return textResourceService;
 	}
 
-	public void setTextResourceService(
-			TextResourceService textResourceService )
-	{
+	public void setTextResourceService(TextResourceService textResourceService) {
 		this.textResourceService = textResourceService;
 	}
 
@@ -71,32 +67,30 @@ public class CmdKOSTVal implements MessageConstants
 	 * @throws IOException
 	 */
 
-	public static void main( String[] args ) throws IOException
-	{
+	public static void main(String[] args) throws IOException {
 		Util.switchOffConsole();
 		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext(
-				"classpath:config/applicationContext.xml" );
-		CmdKOSTVal cmdkostval = (CmdKOSTVal) context.getBean( "cmdkostval" );
+				"classpath:config/applicationContext.xml");
+		CmdKOSTVal cmdkostval = (CmdKOSTVal) context.getBean("cmdkostval");
 		Util.switchOnConsole();
 
 		String versionKostVal = "2.2.1.1";
-		System.out.println( "KOST-Val " + versionKostVal );
+		System.out.println("KOST-Val " + versionKostVal);
 
 		// Ist die Anzahl Parameter (mind 2) korrekt?
-		if ( args.length < 2 ) {
-			System.out.println( cmdkostval.getTextResourceService()
-					.getText( ERROR_PARAMETER_USAGE ) );
+		if (args.length < 2) {
+			System.out.println(cmdkostval.getTextResourceService().getText(ERROR_PARAMETER_USAGE));
 			context.close();
-			System.exit( 1 );
+			System.exit(1);
 		}
 
 		Locale locale = Locale.getDefault();
 		String localeSt = "de";
-		if ( locale.toString().startsWith( "fr" ) ) {
+		if (locale.toString().startsWith("fr")) {
 			localeSt = "fr";
-		} else if ( locale.toString().startsWith( "it" ) ) {
+		} else if (locale.toString().startsWith("it")) {
 			localeSt = "it";
-		} else if ( locale.toString().startsWith( "en" ) ) {
+		} else if (locale.toString().startsWith("en")) {
 			localeSt = "en";
 		} else {
 			localeSt = "de";
@@ -108,30 +102,30 @@ public class CmdKOSTVal implements MessageConstants
 		String arg3 = "";
 
 		// Standardwerte bei fehlenden Parameter eingeben
-		if ( args.length == 2 ) {
+		if (args.length == 2) {
 			arg2 = "--" + localeSt;
 			arg3 = "--xml";
 			args = new String[] { arg0, arg1, arg2, arg3 };
-		} else if ( args.length == 3 ) {
-			if ( args[2].contains( "de" ) ) {
+		} else if (args.length == 3) {
+			if (args[2].contains("de")) {
 				arg2 = "--de";
 				arg3 = "--xml";
-			} else if ( args[2].contains( "fr" ) ) {
+			} else if (args[2].contains("fr")) {
 				arg2 = "--fr";
 				arg3 = "--xml";
-			} else if ( args[2].contains( "it" ) ) {
+			} else if (args[2].contains("it")) {
 				arg2 = "--it";
 				arg3 = "--xml";
-			} else if ( args[2].contains( "en" ) ) {
+			} else if (args[2].contains("en")) {
 				arg2 = "--en";
 				arg3 = "--xml";
-			} else if ( args[2].contains( "xml" ) ) {
+			} else if (args[2].contains("xml")) {
 				arg2 = "--" + localeSt;
 				arg3 = "--xml";
-			} else if ( args[2].contains( "min" ) ) {
+			} else if (args[2].contains("min")) {
 				arg2 = "--" + localeSt;
 				arg3 = "--min";
-			} else if ( args[2].contains( "max" ) ) {
+			} else if (args[2].contains("max")) {
 				arg2 = "--" + localeSt;
 				arg3 = "--max";
 			} else {
@@ -139,10 +133,9 @@ public class CmdKOSTVal implements MessageConstants
 				arg3 = "--xml";
 			}
 			args = new String[] { arg0, arg1, arg2, arg3 };
-		} else if ( args.length == 4 ) {
-			if ( args[2].equalsIgnoreCase( "--xml" )
-					|| args[2].equalsIgnoreCase( "--min" )
-					|| args[2].equalsIgnoreCase( "--max" ) ) {
+		} else if (args.length == 4) {
+			if (args[2].equalsIgnoreCase("--xml") || args[2].equalsIgnoreCase("--min")
+					|| args[2].equalsIgnoreCase("--max")) {
 				// arg 2 und 3 vertauscht
 				arg2 = args[3];
 				arg3 = args[2];
@@ -169,84 +162,75 @@ public class CmdKOSTVal implements MessageConstants
 		Boolean booArg0 = false;
 		Boolean booArg2 = false;
 		Boolean booArg3 = false;
-		if ( args[0].equals( "--sip" ) || args[0].equals( "--format" )
-				|| args[0].equals( "--onlysip" ) ) {
+		if (args[0].equals("--sip") || args[0].equals("--format") || args[0].equals("--onlysip")) {
 			booArg0 = true;
 		}
-		if ( args[2].equals( "--de" ) || args[2].equals( "--fr" ) || args[2].equals( "--it" )
-				|| args[2].equals( "--en" ) ) {
+		if (args[2].equals("--de") || args[2].equals("--fr") || args[2].equals("--it") || args[2].equals("--en")) {
 			booArg2 = true;
 		}
-		if ( args[3].equals( "--xml" ) || args[3].equals( "--min" )
-				|| args[3].equals( "--max" ) ) {
+		if (args[3].equals("--xml") || args[3].equals("--min") || args[3].equals("--max")) {
 			booArg3 = true;
 		}
-		if ( booArg0 && booArg2 && booArg3 ) {
+		if (booArg0 && booArg2 && booArg3) {
 			booArgs = true;
 		}
 
-		if ( !booArgs ) {
-			System.out.println( cmdkostval.getTextResourceService()
-					.getText( ERROR_PARAMETER_USAGE ) );
+		if (!booArgs) {
+			System.out.println(cmdkostval.getTextResourceService().getText(ERROR_PARAMETER_USAGE));
 			context.close();
-			System.exit( 1 );
+			System.exit(1);
 		}
 
 		/*
-		 * Kontrolle der wichtigsten Eigenschaften: Log-Verzeichnis,
-		 * Arbeitsverzeichnis, Java, jhove Configuration,
-		 * Konfigurationsverzeichnis, path.tmp
+		 * Kontrolle der wichtigsten Eigenschaften: Log-Verzeichnis, Arbeitsverzeichnis,
+		 * Java, jhove Configuration, Konfigurationsverzeichnis, path.tmp
 		 */
-		ControllerInit controllerInit = (ControllerInit) context
-				.getBean( "controllerInit" );
+		ControllerInit controllerInit = (ControllerInit) context.getBean("controllerInit");
 		boolean init;
 		try {
 			/*
-			 * dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist
-			 * eine generelle Aufgabe in allen Modulen. Zuerst immer
-			 * dirOfJarPath ermitteln und dann alle Pfade mit dirOfJarPath +
-			 * File.separator + erweitern.
+			 * dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist eine
+			 * generelle Aufgabe in allen Modulen. Zuerst immer dirOfJarPath ermitteln und
+			 * dann alle Pfade mit dirOfJarPath + File.separator + erweitern.
 			 */
-			File pathJarFile20 = new File( ClassLoader.getSystemClassLoader()
-					.getResource( "." ).getPath() );
+			File pathJarFile20 = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath());
 			/*
-			 * wennn im Pfad ein Leerschlag ist, muss er noch normalisiert
-			 * werden
+			 * wennn im Pfad ein Leerschlag ist, muss er noch normalisiert werden
 			 */
 			String dirOfJarPath = pathJarFile20.getAbsolutePath();
-			dirOfJarPath = dirOfJarPath.replaceAll( "%20", " " );
-			pathJarFile20 = new File( dirOfJarPath );
-			init = controllerInit.init( locale, dirOfJarPath, versionKostVal );
-			if ( !init ) {
+			dirOfJarPath = dirOfJarPath.replaceAll("%20", " ");
+			pathJarFile20 = new File(dirOfJarPath);
+			init = controllerInit.init(locale, dirOfJarPath, versionKostVal);
+			if (!init) {
 				// Fehler: es wird abgebrochen
 				String text = "Ein Fehler ist aufgetreten. Siehe Konsole.";
-				if ( locale.toString().startsWith( "fr" ) ) {
+				if (locale.toString().startsWith("fr")) {
 					text = "Une erreur s`est produite. Voir Console.";
-				} else if ( locale.toString().startsWith( "it" ) ) {
+				} else if (locale.toString().startsWith("it")) {
 					text = "Si è verificato un errore. Vedere la console.";
-				} else if ( locale.toString().startsWith( "en" ) ) {
+				} else if (locale.toString().startsWith("en")) {
 					text = "An error has occurred. See Console.";
 				}
-				System.out.println( text );
+				System.out.println(text);
 				context.close();
-				System.exit( 1 );
+				System.exit(1);
 			}
-		} catch ( IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 		// System.out.println( "args: " + args[0] + " " + args[1] + " " +
 		// args[2] + " " + args[3] );
-		if ( KOSTVal.main( args, versionKostVal ) ) {
+		if (KOSTVal.main(args, versionKostVal)) {
 			// Valid
 			// alle Validierten Dateien valide
 			context.close();
-			System.exit( 0 );
+			System.exit(0);
 		} else {
 			// Invalid
 			// Fehler in Validierten Dateien --> invalide
 			context.close();
-			System.exit( 2 );
+			System.exit(2);
 		}
 
 	}

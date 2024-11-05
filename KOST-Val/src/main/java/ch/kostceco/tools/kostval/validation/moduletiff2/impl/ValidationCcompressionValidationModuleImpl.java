@@ -36,27 +36,23 @@ import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationCcompressionVa
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
 
-public class ValidationCcompressionValidationModuleImpl extends
-		ValidationModuleImpl implements ValidationCcompressionValidationModule
-{
+public class ValidationCcompressionValidationModuleImpl extends ValidationModuleImpl
+		implements ValidationCcompressionValidationModule {
 
-	public static String	NEWLINE	= System.getProperty( "line.separator" );
+	public static String NEWLINE = System.getProperty("line.separator");
 
-	private boolean			min		= false;
+	private boolean min = false;
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath )
-			throws ValidationCcompressionValidationException
-	{
-		String onWork = configMap.get( "ShowProgressOnWork" );
-		if ( onWork.equals( "nomin" ) ) {
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws ValidationCcompressionValidationException {
+		String onWork = configMap.get("ShowProgressOnWork");
+		if (onWork.equals("nomin")) {
 			min = true;
 		}
-		String pathToWorkDir = configMap.get( "PathToWorkDir" );
-		File workDir = new File( pathToWorkDir );
-		if ( !workDir.exists() ) {
+		String pathToWorkDir = configMap.get("PathToWorkDir");
+		File workDir = new File(pathToWorkDir);
+		if (!workDir.exists()) {
 			workDir.mkdir();
 		}
 
@@ -64,8 +60,7 @@ public class ValidationCcompressionValidationModuleImpl extends
 
 		// Informationen zum Logverzeichnis holen
 		String pathToExiftoolOutput = directoryOfLogfile.getAbsolutePath();
-		File exiftoolReport = new File( pathToExiftoolOutput,
-				valDatei.getName() + ".exiftool-log.txt" );
+		File exiftoolReport = new File(pathToExiftoolOutput, valDatei.getName() + ".exiftool-log.txt");
 		pathToExiftoolOutput = exiftoolReport.getAbsolutePath();
 
 		/*
@@ -75,37 +70,37 @@ public class ValidationCcompressionValidationModuleImpl extends
 		 * name="configurationService" ref="configurationService" />
 		 */
 
-		String com1 = configMap.get( "AllowedCompression1" );
-		String com2 = configMap.get( "AllowedCompression2" );
-		String com3 = configMap.get( "AllowedCompression3" );
-		String com4 = configMap.get( "AllowedCompression4" );
-		String com5 = configMap.get( "AllowedCompression5" );
-		String com7 = configMap.get( "AllowedCompression7" );
-		String com8 = configMap.get( "AllowedCompression8" );
-		String com32773 = configMap.get( "AllowedCompression32773" );
+		String com1 = configMap.get("AllowedCompression1");
+		String com2 = configMap.get("AllowedCompression2");
+		String com3 = configMap.get("AllowedCompression3");
+		String com4 = configMap.get("AllowedCompression4");
+		String com5 = configMap.get("AllowedCompression5");
+		String com7 = configMap.get("AllowedCompression7");
+		String com8 = configMap.get("AllowedCompression8");
+		String com32773 = configMap.get("AllowedCompression32773");
 
-		if ( com1.equals( "" ) ) {
+		if (com1.equals("")) {
 			com1 = "DieseKompressionIstNichtErlaubt";
 		}
-		if ( com2.equals( "" ) ) {
+		if (com2.equals("")) {
 			com2 = "DieseKompressionIstNichtErlaubt";
 		}
-		if ( com3.equals( "" ) ) {
+		if (com3.equals("")) {
 			com3 = "DieseKompressionIstNichtErlaubt";
 		}
-		if ( com4.equals( "" ) ) {
+		if (com4.equals("")) {
 			com4 = "DieseKompressionIstNichtErlaubt";
 		}
-		if ( com5.equals( "" ) ) {
+		if (com5.equals("")) {
 			com5 = "DieseKompressionIstNichtErlaubt";
 		}
-		if ( com7.equals( "" ) ) {
+		if (com7.equals("")) {
 			com7 = "DieseKompressionIstNichtErlaubt";
 		}
-		if ( com8.equals( "" ) ) {
+		if (com8.equals("")) {
 			com8 = "DieseKompressionIstNichtErlaubt";
 		}
-		if ( com32773.equals( "" ) ) {
+		if (com32773.equals("")) {
 			com32773 = "DieseKompressionIstNichtErlaubt";
 		}
 
@@ -117,97 +112,77 @@ public class ValidationCcompressionValidationModuleImpl extends
 		String oldErrorLine5 = "";
 
 		/*
-		 * TODO: jhoveReport auswerten! Auf Exiftool wird verzichtet. Exiftool
-		 * verwendet Perl, welche seit einiger Zeit hohe nicht geloese
-		 * Sicherheitsrisiken birgt. zudem koennen die Metadaten vermehrt
-		 * komplett durch jhove ausgelesen werden. Jhove hat bereits einen der
-		 * Probleme, welche das teilweise die Ausgabe der Metadaten verhindert
-		 * behoben.
+		 * TODO: jhoveReport auswerten! Auf Exiftool wird verzichtet. Exiftool verwendet
+		 * Perl, welche seit einiger Zeit hohe nicht geloese Sicherheitsrisiken birgt.
+		 * zudem koennen die Metadaten vermehrt komplett durch jhove ausgelesen werden.
+		 * Jhove hat bereits einen der Probleme, welche das teilweise die Ausgabe der
+		 * Metadaten verhindert behoben.
 		 */
-		File jhoveReport = new File( directoryOfLogfile,
-				valDatei.getName() + ".jhove-log.txt" );
+		File jhoveReport = new File(directoryOfLogfile, valDatei.getName() + ".jhove-log.txt");
 
 		// existiert der jhoveReport?
-		if ( !jhoveReport.exists() ) {
+		if (!jhoveReport.exists()) {
 			isValid = false;
-			if ( min ) {
+			if (min) {
 				return false;
 			} else {
-				Logtxt.logtxt( logFile, getTextResourceService()
-						.getText( locale, MESSAGE_XML_MODUL_B_TIFF )
-						+ getTextResourceService().getText( locale,
-								ERROR_XML_UNKNOWN, "No Jhove report." ) );
+				Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_B_TIFF)
+						+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, "No Jhove report."));
 				return false;
 			}
 		} else {
 			Boolean tiffLine = false;
 			try {
-				BufferedReader in = new BufferedReader(
-						new FileReader( jhoveReport ) );
+				BufferedReader in = new BufferedReader(new FileReader(jhoveReport));
 				String line;
-				while ( (line = in.readLine()) != null ) {
+				while ((line = in.readLine()) != null) {
 					/*
-					 * zu analysierende TIFF-IFD-Zeile die
-					 * CompressionScheme-Zeile enthält einer dieser Freitexte
-					 * der Komprimierungsart
+					 * zu analysierende TIFF-IFD-Zeile die CompressionScheme-Zeile enthält einer
+					 * dieser Freitexte der Komprimierungsart
 					 */
 
-					if ( line.contains( " Type: TIFF" ) ) {
+					if (line.contains(" Type: TIFF")) {
 						// System.out.println( "Line=" + line );
 						tiffLine = true;
-					} else if ( line.contains( " Type: " ) ) {
+					} else if (line.contains(" Type: ")) {
 						// System.out.println( "Line=" + line );
 						tiffLine = false;
 					}
 
-					if ( line.contains( " CompressionScheme: " ) && tiffLine ) {
+					if (line.contains(" CompressionScheme: ") && tiffLine) {
 						jhoveio = 1;
-						if ( line.contains( " CompressionScheme: " + com1 )
-								|| line.contains(
-										" CompressionScheme: " + com2 )
-								|| line.contains(
-										" CompressionScheme: " + com3 )
-								|| line.contains(
-										" CompressionScheme: " + com4 )
-								|| line.contains(
-										" CompressionScheme: " + com5 )
-								|| line.contains(
-										" CompressionScheme: " + com7 )
-								|| line.contains(
-										" CompressionScheme: " + com8 )
-								|| line.contains(
-										" CompressionScheme: " + com32773 ) ) {
+						if (line.contains(" CompressionScheme: " + com1) || line.contains(" CompressionScheme: " + com2)
+								|| line.contains(" CompressionScheme: " + com3)
+								|| line.contains(" CompressionScheme: " + com4)
+								|| line.contains(" CompressionScheme: " + com5)
+								|| line.contains(" CompressionScheme: " + com7)
+								|| line.contains(" CompressionScheme: " + com8)
+								|| line.contains(" CompressionScheme: " + com32773)) {
 							// Valider Status
 						} else {
 							// Invalider Status
 							isValid = false;
-							if ( min ) {
+							if (min) {
 								in.close();
 								return false;
 							} else {
-								if ( !line.equals( oldErrorLine1 )
-										&& !line.equals( oldErrorLine2 )
-										&& !line.equals( oldErrorLine3 )
-										&& !line.equals( oldErrorLine4 )
-										&& !line.equals( oldErrorLine5 ) ) {
+								if (!line.equals(oldErrorLine1) && !line.equals(oldErrorLine2)
+										&& !line.equals(oldErrorLine3) && !line.equals(oldErrorLine4)
+										&& !line.equals(oldErrorLine5)) {
 									// neuer Fehler
-									Logtxt.logtxt( logFile,
-											getTextResourceService().getText(
-													locale,
-													MESSAGE_XML_MODUL_C_TIFF )
-													+ getTextResourceService()
-															.getText( locale,
-																	MESSAGE_XML_CG_INVALID,
-																	line ) );
-									if ( oldErrorLine1.equals( "" ) ) {
+									Logtxt.logtxt(logFile,
+											getTextResourceService().getText(locale, MESSAGE_XML_MODUL_C_TIFF)
+													+ getTextResourceService().getText(locale, MESSAGE_XML_CG_INVALID,
+															line));
+									if (oldErrorLine1.equals("")) {
 										oldErrorLine1 = line;
-									} else if ( oldErrorLine2.equals( "" ) ) {
+									} else if (oldErrorLine2.equals("")) {
 										oldErrorLine2 = line;
-									} else if ( oldErrorLine3.equals( "" ) ) {
+									} else if (oldErrorLine3.equals("")) {
 										oldErrorLine3 = line;
-									} else if ( oldErrorLine4.equals( "" ) ) {
+									} else if (oldErrorLine4.equals("")) {
 										oldErrorLine4 = line;
-									} else if ( oldErrorLine5.equals( "" ) ) {
+									} else if (oldErrorLine5.equals("")) {
 										oldErrorLine5 = line;
 									}
 								}
@@ -215,34 +190,30 @@ public class ValidationCcompressionValidationModuleImpl extends
 						}
 					}
 				}
-				if ( jhoveio == 0 ) {
+				if (jhoveio == 0) {
 					// Invalider Status
 					isValid = false;
-					if ( min ) {
+					if (min) {
 						in.close();
 						return false;
 					} else {
 
-						Logtxt.logtxt( logFile, getTextResourceService()
-								.getText( locale, MESSAGE_XML_MODUL_C_TIFF )
-								+ getTextResourceService().getText( locale,
-										MESSAGE_XML_CG_JHOVENIO, "C" ) );
+						Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_C_TIFF)
+								+ getTextResourceService().getText(locale, MESSAGE_XML_CG_JHOVENIO, "C"));
 					}
 				}
 				in.close();
-			} catch ( Exception e ) {
-				if ( min ) {
+			} catch (Exception e) {
+				if (min) {
 					/* exiftoolReport loeschen */
-					if ( exiftoolReport.exists() ) {
+					if (exiftoolReport.exists()) {
 						exiftoolReport.delete();
 					}
 					return false;
 				} else {
 
-					Logtxt.logtxt( logFile, getTextResourceService()
-							.getText( locale, MESSAGE_XML_MODUL_C_TIFF )
-							+ getTextResourceService().getText( locale,
-									MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
+					Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_C_TIFF)
+							+ getTextResourceService().getText(locale, MESSAGE_XML_CG_CANNOTFINDETREPORT));
 					return false;
 				}
 			}

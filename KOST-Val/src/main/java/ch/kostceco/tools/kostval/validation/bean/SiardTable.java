@@ -22,83 +22,68 @@ import java.util.List;
 
 import org.jdom2.Element;
 
-public class SiardTable
-{
+public class SiardTable {
 
-	private String			tableName;
-	private Element			tableRootElement;
-	private Element			tableXSDRootElement;
-	private List<Element>	metadataXMLElements;
-	private List<Element>	tableXSDElements;
-	private List<Element>	tableXMLElements;
+	private String tableName;
+	private Element tableRootElement;
+	private Element tableXSDRootElement;
+	private List<Element> metadataXMLElements;
+	private List<Element> tableXSDElements;
+	private List<Element> tableXMLElements;
 
-	public String getTableName()
-	{
+	public String getTableName() {
 		return tableName;
 	}
 
-	public void setTableName( String tableName )
-	{
+	public void setTableName(String tableName) {
 		this.tableName = tableName;
 	}
 
-	public List<Element> getMetadataXMLElements()
-	{
+	public List<Element> getMetadataXMLElements() {
 		return metadataXMLElements;
 	}
 
-	public void setMetadataXMLElements( List<Element> metadataXMLElements )
-	{
+	public void setMetadataXMLElements(List<Element> metadataXMLElements) {
 		this.metadataXMLElements = metadataXMLElements;
 	}
 
-	public List<Element> getTableXSDElements()
-	{
+	public List<Element> getTableXSDElements() {
 		return tableXSDElements;
 	}
 
-	public void setTableXSDElements( List<Element> tableXSDElements )
-	{
+	public void setTableXSDElements(List<Element> tableXSDElements) {
 		this.tableXSDElements = tableXSDElements;
 	}
 
-	public List<Element> getTableXMLElements()
-	{
+	public List<Element> getTableXMLElements() {
 		return tableXMLElements;
 	}
 
-	public void setTableXMLElements( List<Element> tableXMLElements )
-	{
+	public void setTableXMLElements(List<Element> tableXMLElements) {
 		this.tableXMLElements = tableXMLElements;
 	}
 
 	/** @return the tableRootElement */
-	public Element getTableRootElement()
-	{
+	public Element getTableRootElement() {
 		return tableRootElement;
 	}
 
 	/**
-	 * @param tableRootElement
-	 *            the tableRootElement to set
+	 * @param tableRootElement the tableRootElement to set
 	 */
-	public void setTableRootElement( Element tableRootElement )
-	{
+	public void setTableRootElement(Element tableRootElement) {
 		this.tableRootElement = tableRootElement;
 	}
 
 	/** @return the tableXSDRootElement */
-	public Element getTableXSDRootElement()
-	{
+	public Element getTableXSDRootElement() {
 		return tableXSDRootElement;
 	}
 
 	/**
-	 * @param tableXSDRootElement
-	 *            the tableXSDRootElement to set
+	 * @param tableXSDRootElement the tableXSDRootElement to set
 	 */
-	public void setTableXSDRootElement( Element tableXSDRootElement )
-	{
+	public void setTableXSDRootElement(Element tableXSDRootElement) {
 		this.tableXSDRootElement = tableXSDRootElement;
 	}
 

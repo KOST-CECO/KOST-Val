@@ -37,44 +37,35 @@ import ch.kostceco.tools.kostval.service.TextResourceService;
  * Wird vor der Validierung einmal ausgefuehrt.
  */
 
-public class ControllerInit implements MessageConstants
-{
+public class ControllerInit implements MessageConstants {
 
-	private static TextResourceService	textResourceService;
-	private String						pathToKostValDir	= System
-			.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x";
-	private String						pathToUserWinDir	= System
-			.getenv( "USERPROFILE" );
+	private static TextResourceService textResourceService;
+	private String pathToKostValDir = System.getenv("USERPROFILE") + File.separator + ".kost-val_2x";
+	private String pathToUserWinDir = System.getenv("USERPROFILE");
 
-	public static TextResourceService getTextResourceService()
-	{
+	public static TextResourceService getTextResourceService() {
 		return textResourceService;
 	}
 
 	@SuppressWarnings("static-access")
-	public void setTextResourceService(
-			TextResourceService textResourceService )
-	{
+	public void setTextResourceService(TextResourceService textResourceService) {
 		this.textResourceService = textResourceService;
 	}
 
-	public boolean init( Locale locale, String dirOfJarPath,
-			String versionKostVal ) throws IOException
-	{
+	public boolean init(Locale locale, String dirOfJarPath, String versionKostVal) throws IOException {
 		boolean init = true;
-		File directoryOfKostValDir = new File( pathToKostValDir );
-		File directoryOfUserWinDir = new File( pathToUserWinDir );
-		String pathToKostValDirAlt = dirOfJarPath + File.separator
-				+ ".kost-val_2x";
-		
-		if ( !directoryOfKostValDir.exists() ) {
+		File directoryOfKostValDir = new File(pathToKostValDir);
+		File directoryOfUserWinDir = new File(pathToUserWinDir);
+		String pathToKostValDirAlt = dirOfJarPath + File.separator + ".kost-val_2x";
 
-			if ( directoryOfUserWinDir.exists() ) {
+		if (!directoryOfKostValDir.exists()) {
+
+			if (directoryOfUserWinDir.exists()) {
 				directoryOfKostValDir.mkdir();
 			} else {
 				pathToKostValDir = pathToKostValDirAlt;
-				directoryOfKostValDir = new File( pathToKostValDir );
-				if ( directoryOfKostValDir.exists() ) {
+				directoryOfKostValDir = new File(pathToKostValDir);
+				if (directoryOfKostValDir.exists()) {
 					directoryOfKostValDir.mkdir();
 				}
 			}
@@ -83,66 +74,61 @@ public class ControllerInit implements MessageConstants
 		// Ueberpruefung des Parameters (Log-Verzeichnis)
 		String logs = pathToKostValDir + File.separator + "logs";
 		String pathToLogfile = logs;
-		File directoryOfLogfile = new File( pathToLogfile );
-		if ( !directoryOfLogfile.exists() ) {
+		File directoryOfLogfile = new File(pathToLogfile);
+		if (!directoryOfLogfile.exists()) {
 			directoryOfLogfile.mkdir();
 		}
-		if ( !directoryOfLogfile.canWrite() ) {
-			System.out.println( getTextResourceService().getText( locale,
-					ERROR_LOGDIRECTORY_NOTWRITABLE, directoryOfLogfile ) );
+		if (!directoryOfLogfile.canWrite()) {
+			System.out.println(
+					getTextResourceService().getText(locale, ERROR_LOGDIRECTORY_NOTWRITABLE, directoryOfLogfile));
 			init = false;
 			return init;
 		}
-		if ( !directoryOfLogfile.isDirectory() ) {
-			System.out.println( getTextResourceService().getText( locale,
-					ERROR_LOGDIRECTORY_NODIRECTORY ) );
+		if (!directoryOfLogfile.isDirectory()) {
+			System.out.println(getTextResourceService().getText(locale, ERROR_LOGDIRECTORY_NODIRECTORY));
 			init = false;
 			return init;
 		}
 
 		// Enthaelt Pfad zu der zu Validierenden Datei (vorher)
-		File pathTmp = new File( logs + File.separator + "path.tmp" );
-		if ( pathTmp.exists() ) {
+		File pathTmp = new File(logs + File.separator + "path.tmp");
+		if (pathTmp.exists()) {
 			pathTmp.delete();
 		}
-		if ( pathTmp.exists() ) {
-			List<String> oldtextList = Files.readAllLines( pathTmp.toPath(),
-					StandardCharsets.UTF_8 );
-			for ( int i = 0; i < oldtextList.size(); i++ ) {
-				String oldtext = (oldtextList.get( i ));
-				Util.oldnewstring( oldtext, "", pathTmp );
+		if (pathTmp.exists()) {
+			List<String> oldtextList = Files.readAllLines(pathTmp.toPath(), StandardCharsets.UTF_8);
+			for (int i = 0; i < oldtextList.size(); i++) {
+				String oldtext = (oldtextList.get(i));
+				Util.oldnewstring(oldtext, "", pathTmp);
 			}
 		}
 
 		// Informationen zum Arbeitsverzeichnis holen
-		String pathToWorkDir = pathToKostValDir + File.separator
-				+ "temp_KOST-Val";
-		File xslOrig = new File( dirOfJarPath + File.separator + "resources"
-				+ File.separator + "kost-val.xsl" );
-		File xslCopy = new File( logs + File.separator + "kost-val.xsl" );
-		if ( !xslCopy.exists() ) {
-			Util.copyFile( xslOrig, xslCopy );
+		String pathToWorkDir = pathToKostValDir + File.separator + "temp_KOST-Val";
+		File xslOrig = new File(dirOfJarPath + File.separator + "resources" + File.separator + "kost-val.xsl");
+		File xslCopy = new File(logs + File.separator + "kost-val.xsl");
+		if (!xslCopy.exists()) {
+			Util.copyFile(xslOrig, xslCopy);
 		}
 
-		File tmpDir = new File( pathToWorkDir );
+		File tmpDir = new File(pathToWorkDir);
 
 		/*
-		 * bestehendes Workverzeichnis:loeschen wenn nicht leer, da am Schluss
-		 * das Workverzeichnis geloescht wird und entsprechend bestehende
-		 * Dateien geloescht werden koennen
+		 * bestehendes Workverzeichnis:loeschen wenn nicht leer, da am Schluss das
+		 * Workverzeichnis geloescht wird und entsprechend bestehende Dateien geloescht
+		 * werden koennen
 		 */
-		if ( tmpDir.exists() ) {
-			Util.deleteDir( tmpDir );
+		if (tmpDir.exists()) {
+			Util.deleteDir(tmpDir);
 		}
-		if ( tmpDir.exists() ) {
-			if ( tmpDir.isDirectory() ) {
+		if (tmpDir.exists()) {
+			if (tmpDir.isDirectory()) {
 				// Get list of file in the directory. When its length is not
 				// zero the folder is not empty.
 				String[] files = tmpDir.list();
-				if ( files.length > 0 ) {
-					System.out.println( getTextResourceService().getText(
-							locale, ERROR_WORKDIRECTORY_EXISTS,
-							pathToWorkDir ) );
+				if (files.length > 0) {
+					System.out.println(
+							getTextResourceService().getText(locale, ERROR_WORKDIRECTORY_EXISTS, pathToWorkDir));
 					init = false;
 					return init;
 				}
@@ -150,23 +136,21 @@ public class ControllerInit implements MessageConstants
 		}
 
 		// die Anwendung muss mindestens unter Java 8 laufen
-		String javaRuntimeVersion = System.getProperty( "java.vm.version" );
-		if ( javaRuntimeVersion.compareTo( "1.8.0" ) < 0 ) {
-			System.out.println( getTextResourceService().getText( locale,
-					ERROR_WRONG_JRE ) );
+		String javaRuntimeVersion = System.getProperty("java.vm.version");
+		if (javaRuntimeVersion.compareTo("1.8.0") < 0) {
+			System.out.println(getTextResourceService().getText(locale, ERROR_WRONG_JRE));
 			init = false;
 			return init;
 		}
 
 		// bestehendes Workverzeichnis wieder anlegen
-		if ( !tmpDir.exists() ) {
+		if (!tmpDir.exists()) {
 			tmpDir.mkdir();
 		}
 
 		// Im workverzeichnis besteht kein Schreibrecht
-		if ( !tmpDir.canWrite() ) {
-			System.out.println( getTextResourceService().getText( locale,
-					ERROR_WORKDIRECTORY_NOTWRITABLE, tmpDir ) );
+		if (!tmpDir.canWrite()) {
+			System.out.println(getTextResourceService().getText(locale, ERROR_WORKDIRECTORY_NOTWRITABLE, tmpDir));
 			init = false;
 			return init;
 		}
@@ -179,82 +163,65 @@ public class ControllerInit implements MessageConstants
 		 * wenn nicht vorhanden oder veraltete Version
 		 */
 		String version = "kostval.conf.xml_v" + versionKostVal;
-		File directoryOfConfigfile = new File(
-				pathToKostValDir + File.separator + "configuration" );
-		File directoryOfConfigfileInit = new File(
-				dirOfJarPath + File.separator + "configuration" );
-		if ( !directoryOfConfigfile.exists() ) {
+		File directoryOfConfigfile = new File(pathToKostValDir + File.separator + "configuration");
+		File directoryOfConfigfileInit = new File(dirOfJarPath + File.separator + "configuration");
+		if (!directoryOfConfigfile.exists()) {
 			directoryOfConfigfile.mkdirs();
 		}
-		File configFileInit = new File( directoryOfConfigfileInit
-				+ File.separator + "kostval.conf.xml" );
-		File configFile = new File(
-				directoryOfConfigfile + File.separator + "kostval.conf.xml" );
-		File configFileDeInit = new File( directoryOfConfigfileInit
-				+ File.separator + "kostval-conf-DE.xsl" );
-		File configFileDe = new File( directoryOfConfigfile + File.separator
-				+ "kostval-conf-DE.xsl" );
-		File configFileFrInit = new File( directoryOfConfigfileInit
-				+ File.separator + "kostval-conf-FR.xsl" );
-		File configFileFr = new File( directoryOfConfigfile + File.separator
-				+ "kostval-conf-FR.xsl" );
-		File configFileEnInit = new File( directoryOfConfigfileInit
-				+ File.separator + "kostval-conf-EN.xsl" );
-		File configFileEn = new File( directoryOfConfigfile + File.separator
-				+ "kostval-conf-EN.xsl" );
-		if ( !configFile.exists() ) {
-			Util.copyFile( configFileInit, configFile );
-			Util.copyFile( configFileDeInit, configFileDe );
-			Util.copyFile( configFileFrInit, configFileFr );
-			Util.copyFile( configFileEnInit, configFileEn );
+		File configFileInit = new File(directoryOfConfigfileInit + File.separator + "kostval.conf.xml");
+		File configFile = new File(directoryOfConfigfile + File.separator + "kostval.conf.xml");
+		File configFileDeInit = new File(directoryOfConfigfileInit + File.separator + "kostval-conf-DE.xsl");
+		File configFileDe = new File(directoryOfConfigfile + File.separator + "kostval-conf-DE.xsl");
+		File configFileFrInit = new File(directoryOfConfigfileInit + File.separator + "kostval-conf-FR.xsl");
+		File configFileFr = new File(directoryOfConfigfile + File.separator + "kostval-conf-FR.xsl");
+		File configFileEnInit = new File(directoryOfConfigfileInit + File.separator + "kostval-conf-EN.xsl");
+		File configFileEn = new File(directoryOfConfigfile + File.separator + "kostval-conf-EN.xsl");
+		if (!configFile.exists()) {
+			Util.copyFile(configFileInit, configFile);
+			Util.copyFile(configFileDeInit, configFileDe);
+			Util.copyFile(configFileFrInit, configFileFr);
+			Util.copyFile(configFileEnInit, configFileEn);
 		} else {
-			if ( !Util.stringInFileLine( version, configFile ) ) {
-				Util.copyFile( configFileInit, configFile );
-				Util.copyFile( configFileDeInit, configFileDe );
-				Util.copyFile( configFileFrInit, configFileFr );
-				Util.copyFile( configFileEnInit, configFileEn );
+			if (!Util.stringInFileLine(version, configFile)) {
+				Util.copyFile(configFileInit, configFile);
+				Util.copyFile(configFileDeInit, configFileDe);
+				Util.copyFile(configFileFrInit, configFileFr);
+				Util.copyFile(configFileEnInit, configFileEn);
 			}
 		}
-		File configFileStandard = new File( directoryOfConfigfile
-				+ File.separator + "STANDARD.kostval.conf.xml" );
-		if ( !configFileStandard.exists() ) {
-			Util.copyFile( configFileInit, configFileStandard );
+		File configFileStandard = new File(directoryOfConfigfile + File.separator + "STANDARD.kostval.conf.xml");
+		if (!configFileStandard.exists()) {
+			Util.copyFile(configFileInit, configFileStandard);
 		} else {
-			if ( !Util.stringInFileLine( version, configFileStandard ) ) {
-				Util.copyFile( configFile, configFileStandard );
+			if (!Util.stringInFileLine(version, configFileStandard)) {
+				Util.copyFile(configFile, configFileStandard);
 			}
 		}
-		File xslDeInit = new File( directoryOfConfigfileInit + File.separator
-				+ "kostval-conf-DE.xsl" );
-		File xslDe = new File( directoryOfConfigfile + File.separator
-				+ "kostval-conf-DE.xsl" );
-		if ( !xslDe.exists() ) {
-			Util.copyFile( xslDeInit, xslDe );
+		File xslDeInit = new File(directoryOfConfigfileInit + File.separator + "kostval-conf-DE.xsl");
+		File xslDe = new File(directoryOfConfigfile + File.separator + "kostval-conf-DE.xsl");
+		if (!xslDe.exists()) {
+			Util.copyFile(xslDeInit, xslDe);
 		} else {
-			if ( !Util.stringInFileLine( version, xslDe ) ) {
-				Util.copyFile( xslDeInit, xslDe );
+			if (!Util.stringInFileLine(version, xslDe)) {
+				Util.copyFile(xslDeInit, xslDe);
 			}
 		}
-		File xslEnInit = new File( directoryOfConfigfileInit + File.separator
-				+ "kostval-conf-EN.xsl" );
-		File xslEn = new File( directoryOfConfigfile + File.separator
-				+ "kostval-conf-EN.xsl" );
-		if ( !xslEn.exists() ) {
-			Util.copyFile( xslEnInit, xslEn );
+		File xslEnInit = new File(directoryOfConfigfileInit + File.separator + "kostval-conf-EN.xsl");
+		File xslEn = new File(directoryOfConfigfile + File.separator + "kostval-conf-EN.xsl");
+		if (!xslEn.exists()) {
+			Util.copyFile(xslEnInit, xslEn);
 		} else {
-			if ( !Util.stringInFileLine( version, xslEn ) ) {
-				Util.copyFile( xslEnInit, xslEn );
+			if (!Util.stringInFileLine(version, xslEn)) {
+				Util.copyFile(xslEnInit, xslEn);
 			}
 		}
-		File xslFrInit = new File( directoryOfConfigfileInit + File.separator
-				+ "kostval-conf-FR.xsl" );
-		File xslFr = new File( directoryOfConfigfile + File.separator
-				+ "kostval-conf-FR.xsl" );
-		if ( !xslFr.exists() ) {
-			Util.copyFile( xslFrInit, xslFr );
+		File xslFrInit = new File(directoryOfConfigfileInit + File.separator + "kostval-conf-FR.xsl");
+		File xslFr = new File(directoryOfConfigfile + File.separator + "kostval-conf-FR.xsl");
+		if (!xslFr.exists()) {
+			Util.copyFile(xslFrInit, xslFr);
 		} else {
-			if ( !Util.stringInFileLine( version, xslFr ) ) {
-				Util.copyFile( xslFrInit, xslFr );
+			if (!Util.stringInFileLine(version, xslFr)) {
+				Util.copyFile(xslFrInit, xslFr);
 			}
 		}
 
@@ -262,11 +229,9 @@ public class ControllerInit implements MessageConstants
 		 * Initialisierung TIFF-Modul B (JHove-Validierung) existiert
 		 * configuration\jhove.conf
 		 */
-		File fJhoveConf = new File( dirOfJarPath + File.separator
-				+ "configuration" + File.separator + "jhove.conf" );
-		if ( !fJhoveConf.exists() ) {
-			System.out.println( getTextResourceService().getText( locale,
-					ERROR_JHOVECONF_MISSING ) );
+		File fJhoveConf = new File(dirOfJarPath + File.separator + "configuration" + File.separator + "jhove.conf");
+		if (!fJhoveConf.exists()) {
+			System.out.println(getTextResourceService().getText(locale, ERROR_JHOVECONF_MISSING));
 			init = false;
 			return init;
 		}

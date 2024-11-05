@@ -20,16 +20,14 @@ package ch.kostceco.tools.kostval.exception.moduleflac;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-public class ValidationAflacvalidationException extends KOSTValException
-{
+public class ValidationAflacvalidationException extends KOSTValException {
 
 	/** @author Rc Claire Roethlisberger, KOST-CECO */
 
 	private static final long serialVersionUID = -8816841335398903517L;
 
-	public ValidationAflacvalidationException( String message )
-	{
-		super( message );
+	public ValidationAflacvalidationException(String message) {
+		super(message);
 	}
 
 }

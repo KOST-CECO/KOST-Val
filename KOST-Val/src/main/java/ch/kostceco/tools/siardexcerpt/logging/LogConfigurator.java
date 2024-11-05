@@ -23,40 +23,32 @@ import java.io.PrintWriter;
 
 import ch.kostceco.tools.siardexcerpt.service.TextResourceServiceExc;
 
-public class LogConfigurator implements MessageConstants
-{
+public class LogConfigurator implements MessageConstants {
 
 	private TextResourceServiceExc textResourceServiceExc;
 
-	public TextResourceServiceExc getTextResourceServiceExc()
-	{
+	public TextResourceServiceExc getTextResourceServiceExc() {
 		return textResourceServiceExc;
 	}
 
-	public void setTextResourceServiceExc(
-			TextResourceServiceExc textResourceServiceExc )
-	{
+	public void setTextResourceServiceExc(TextResourceServiceExc textResourceServiceExc) {
 		this.textResourceServiceExc = textResourceServiceExc;
 	}
 
-	public String configure( String directoryOfLogfile, String nameOfLogfile )
-	{
+	public String configure(String directoryOfLogfile, String nameOfLogfile) {
 
-		String logFileName = directoryOfLogfile + File.separator
-				+ nameOfLogfile;
-		File logFile = new File( logFileName );
+		String logFileName = directoryOfLogfile + File.separator + nameOfLogfile;
+		File logFile = new File(logFileName);
 
 		// MessageOnlyLayout layout = new MessageOnlyLayout();
 
 		try {
 
-			PrintWriter out = new PrintWriter(
-					new BufferedWriter( new FileWriter( logFile, true ) ) );
+			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(logFile, true)));
 			out.close();
 
-		} catch ( IOException e ) {
-			Logtxt.logtxt( logFile, getTextResourceServiceExc()
-					.getText( EXC_ERROR_IOE, e + " (LogConfig)" ) );
+		} catch (IOException e) {
+			Logtxt.logtxt(logFile, getTextResourceServiceExc().getText(EXC_ERROR_IOE, e + " (LogConfig)"));
 		}
 
 		return logFileName;

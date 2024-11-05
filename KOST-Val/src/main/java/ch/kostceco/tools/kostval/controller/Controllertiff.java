@@ -51,405 +51,298 @@ import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationHsizeValidatio
  * eingebunden.
  */
 
-public class Controllertiff implements MessageConstants
-{
+public class Controllertiff implements MessageConstants {
 
-	private boolean										min	= false;
+	private boolean min = false;
 
-	private ValidationArecognitionModule				validationArecognitionModule;
-	private ValidationBjhoveValidationModule			validationBjhoveValidationModule;
-	private ValidationCcompressionValidationModule		validationCcompressionValidationModule;
-	private ValidationDphotointerValidationModule		validationDphotointerValidationModule;
-	private ValidationEbitspersampleValidationModule	validationEbitspersampleValidationModule;
-	private ValidationFmultipageValidationModule		validationFmultipageValidationModule;
-	private ValidationGtilesValidationModule			validationGtilesValidationModule;
-	private ValidationHsizeValidationModule				validationHsizeValidationModule;
+	private ValidationArecognitionModule validationArecognitionModule;
+	private ValidationBjhoveValidationModule validationBjhoveValidationModule;
+	private ValidationCcompressionValidationModule validationCcompressionValidationModule;
+	private ValidationDphotointerValidationModule validationDphotointerValidationModule;
+	private ValidationEbitspersampleValidationModule validationEbitspersampleValidationModule;
+	private ValidationFmultipageValidationModule validationFmultipageValidationModule;
+	private ValidationGtilesValidationModule validationGtilesValidationModule;
+	private ValidationHsizeValidationModule validationHsizeValidationModule;
 
-	private TextResourceService							textResourceService;
+	private TextResourceService textResourceService;
 
-	public ValidationArecognitionModule getValidationArecognitionModule()
-	{
+	public ValidationArecognitionModule getValidationArecognitionModule() {
 		return validationArecognitionModule;
 	}
 
-	public void setValidationArecognitionModule(
-			ValidationArecognitionModule validationArecognitionModule )
-	{
+	public void setValidationArecognitionModule(ValidationArecognitionModule validationArecognitionModule) {
 		this.validationArecognitionModule = validationArecognitionModule;
 	}
 
-	public ValidationBjhoveValidationModule getValidationBjhoveValidationModule()
-	{
+	public ValidationBjhoveValidationModule getValidationBjhoveValidationModule() {
 		return validationBjhoveValidationModule;
 	}
 
-	public void setValidationBjhoveValidationModule(
-			ValidationBjhoveValidationModule validationBjhoveValidationModule )
-	{
+	public void setValidationBjhoveValidationModule(ValidationBjhoveValidationModule validationBjhoveValidationModule) {
 		this.validationBjhoveValidationModule = validationBjhoveValidationModule;
 	}
 
-	public ValidationCcompressionValidationModule getValidationCcompressionValidationModule()
-	{
+	public ValidationCcompressionValidationModule getValidationCcompressionValidationModule() {
 		return validationCcompressionValidationModule;
 	}
 
 	public void setValidationCcompressionValidationModule(
-			ValidationCcompressionValidationModule validationCcompressionValidationModule )
-	{
+			ValidationCcompressionValidationModule validationCcompressionValidationModule) {
 		this.validationCcompressionValidationModule = validationCcompressionValidationModule;
 	}
 
-	public ValidationDphotointerValidationModule getValidationDphotointerValidationModule()
-	{
+	public ValidationDphotointerValidationModule getValidationDphotointerValidationModule() {
 		return validationDphotointerValidationModule;
 	}
 
 	public void setValidationDphotointerValidationModule(
-			ValidationDphotointerValidationModule validationDphotointerValidationModule )
-	{
+			ValidationDphotointerValidationModule validationDphotointerValidationModule) {
 		this.validationDphotointerValidationModule = validationDphotointerValidationModule;
 	}
 
-	public ValidationEbitspersampleValidationModule getValidationEbitspersampleValidationModule()
-	{
+	public ValidationEbitspersampleValidationModule getValidationEbitspersampleValidationModule() {
 		return validationEbitspersampleValidationModule;
 	}
 
 	public void setValidationEbitspersampleValidationModule(
-			ValidationEbitspersampleValidationModule validationEbitspersampleValidationModule )
-	{
+			ValidationEbitspersampleValidationModule validationEbitspersampleValidationModule) {
 		this.validationEbitspersampleValidationModule = validationEbitspersampleValidationModule;
 	}
 
-	public ValidationFmultipageValidationModule getValidationFmultipageValidationModule()
-	{
+	public ValidationFmultipageValidationModule getValidationFmultipageValidationModule() {
 		return validationFmultipageValidationModule;
 	}
 
 	public void setValidationFmultipageValidationModule(
-			ValidationFmultipageValidationModule validationFmultipageValidationModule )
-	{
+			ValidationFmultipageValidationModule validationFmultipageValidationModule) {
 		this.validationFmultipageValidationModule = validationFmultipageValidationModule;
 	}
 
-	public ValidationGtilesValidationModule getValidationGtilesValidationModule()
-	{
+	public ValidationGtilesValidationModule getValidationGtilesValidationModule() {
 		return validationGtilesValidationModule;
 	}
 
-	public void setValidationGtilesValidationModule(
-			ValidationGtilesValidationModule validationGtilesValidationModule )
-	{
+	public void setValidationGtilesValidationModule(ValidationGtilesValidationModule validationGtilesValidationModule) {
 		this.validationGtilesValidationModule = validationGtilesValidationModule;
 	}
 
-	public ValidationHsizeValidationModule getValidationHsizeValidationModule()
-	{
+	public ValidationHsizeValidationModule getValidationHsizeValidationModule() {
 		return validationHsizeValidationModule;
 	}
 
-	public void setValidationHsizeValidationModule(
-			ValidationHsizeValidationModule validationHsizeValidationModule )
-	{
+	public void setValidationHsizeValidationModule(ValidationHsizeValidationModule validationHsizeValidationModule) {
 		this.validationHsizeValidationModule = validationHsizeValidationModule;
 	}
 
-	public TextResourceService getTextResourceService()
-	{
+	public TextResourceService getTextResourceService() {
 		return textResourceService;
 	}
 
-	public void setTextResourceService(
-			TextResourceService textResourceService )
-	{
+	public void setTextResourceService(TextResourceService textResourceService) {
 		this.textResourceService = textResourceService;
 	}
 
-	public boolean executeMandatory( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath )
-	{
+	public boolean executeMandatory(File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale, File logFile, String dirOfJarPath) {
 		boolean valid = true;
 		// Validation Step A
 		try {
-			if ( this.getValidationArecognitionModule().validate( valDatei,
-					directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath ) ) {
-				this.getValidationArecognitionModule().getMessageService()
-						.print();
+			if (this.getValidationArecognitionModule().validate(valDatei, directoryOfLogfile, configMap, locale,
+					logFile, dirOfJarPath)) {
+				this.getValidationArecognitionModule().getMessageService().print();
 			} else {
 				// Ein negatives Validierungsresultat in diesem Schritt fuehrt
 				// zum Abbruch der weiteren Verarbeitung
-				this.getValidationArecognitionModule().getMessageService()
-						.print();
+				this.getValidationArecognitionModule().getMessageService().print();
 				return false;
 			}
-		} catch ( ValidationArecognitionException e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_A_TIFF )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
+		} catch (ValidationArecognitionException e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_TIFF)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
 			this.getValidationArecognitionModule().getMessageService().print();
 			return false;
 
-		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_A_TIFF )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
+		} catch (Exception e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_TIFF)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
 			return false;
 		}
 		return valid;
 	}
 
-	public boolean executeOptional( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath )
-	{
-		String onWork = configMap.get( "ShowProgressOnWork" );
-		if ( onWork.equals( "nomin" ) ) {
+	public boolean executeOptional(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) {
+		String onWork = configMap.get("ShowProgressOnWork");
+		if (onWork.equals("nomin")) {
 			min = true;
 		}
 
 		boolean valid = true;
 		// Validation Step B
 		try {
-			if ( this.getValidationBjhoveValidationModule().validate( valDatei,
-					directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath ) ) {
-				this.getValidationBjhoveValidationModule().getMessageService()
-						.print();
+			if (this.getValidationBjhoveValidationModule().validate(valDatei, directoryOfLogfile, configMap, locale,
+					logFile, dirOfJarPath)) {
+				this.getValidationBjhoveValidationModule().getMessageService().print();
 			} else {
-				this.getValidationBjhoveValidationModule().getMessageService()
-						.print();
-				if ( min ) {
+				this.getValidationBjhoveValidationModule().getMessageService().print();
+				if (min) {
 					return false;
 				} else {
 					valid = false;
 				}
 			}
-		} catch ( ValidationBjhoveValidationException e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_B_TIFF )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
-			this.getValidationBjhoveValidationModule().getMessageService()
-					.print();
+		} catch (ValidationBjhoveValidationException e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_B_TIFF)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
+			this.getValidationBjhoveValidationModule().getMessageService().print();
 			return false;
-		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_B_TIFF )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
+		} catch (Exception e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_B_TIFF)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
 			return false;
 		}
 
 		// Validation Step C
 		try {
-			if ( this.getValidationCcompressionValidationModule().validate(
-					valDatei, directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath ) ) {
-				this.getValidationCcompressionValidationModule()
-						.getMessageService().print();
+			if (this.getValidationCcompressionValidationModule().validate(valDatei, directoryOfLogfile, configMap,
+					locale, logFile, dirOfJarPath)) {
+				this.getValidationCcompressionValidationModule().getMessageService().print();
 			} else {
-				this.getValidationCcompressionValidationModule()
-						.getMessageService().print();
-				if ( min ) {
+				this.getValidationCcompressionValidationModule().getMessageService().print();
+				if (min) {
 					return false;
 				} else {
 					valid = false;
 				}
 			}
-		} catch ( ValidationCcompressionValidationException e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_C_TIFF )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
-			this.getValidationCcompressionValidationModule().getMessageService()
-					.print();
+		} catch (ValidationCcompressionValidationException e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_C_TIFF)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
+			this.getValidationCcompressionValidationModule().getMessageService().print();
 			return false;
-		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_C_TIFF )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
+		} catch (Exception e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_C_TIFF)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
 			return false;
 		}
 
 		// Validation Step D
 		try {
-			if ( this.getValidationDphotointerValidationModule().validate(
-					valDatei, directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath ) ) {
-				this.getValidationDphotointerValidationModule()
-						.getMessageService().print();
+			if (this.getValidationDphotointerValidationModule().validate(valDatei, directoryOfLogfile, configMap,
+					locale, logFile, dirOfJarPath)) {
+				this.getValidationDphotointerValidationModule().getMessageService().print();
 			} else {
-				this.getValidationDphotointerValidationModule()
-						.getMessageService().print();
-				if ( min ) {
+				this.getValidationDphotointerValidationModule().getMessageService().print();
+				if (min) {
 					return false;
 				} else {
 					valid = false;
 				}
 			}
-		} catch ( ValidationDphotointerValidationException e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_D_TIFF )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
-			this.getValidationDphotointerValidationModule().getMessageService()
-					.print();
+		} catch (ValidationDphotointerValidationException e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_D_TIFF)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
+			this.getValidationDphotointerValidationModule().getMessageService().print();
 			return false;
-		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_D_TIFF )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
+		} catch (Exception e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_D_TIFF)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
 			return false;
 		}
 
 		// Validation Step E
 		try {
-			if ( this.getValidationEbitspersampleValidationModule().validate(
-					valDatei, directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath ) ) {
-				this.getValidationEbitspersampleValidationModule()
-						.getMessageService().print();
+			if (this.getValidationEbitspersampleValidationModule().validate(valDatei, directoryOfLogfile, configMap,
+					locale, logFile, dirOfJarPath)) {
+				this.getValidationEbitspersampleValidationModule().getMessageService().print();
 			} else {
-				this.getValidationEbitspersampleValidationModule()
-						.getMessageService().print();
-				if ( min ) {
+				this.getValidationEbitspersampleValidationModule().getMessageService().print();
+				if (min) {
 					return false;
 				} else {
 					valid = false;
 				}
 			}
-		} catch ( ValidationEbitspersampleValidationException e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_E_TIFF )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
-			this.getValidationEbitspersampleValidationModule()
-					.getMessageService().print();
+		} catch (ValidationEbitspersampleValidationException e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_E_TIFF)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
+			this.getValidationEbitspersampleValidationModule().getMessageService().print();
 			return false;
-		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_E_TIFF )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
+		} catch (Exception e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_E_TIFF)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
 			return false;
 		}
 
 		// Validation Step F
 		try {
-			if ( this.getValidationFmultipageValidationModule().validate(
-					valDatei, directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath ) ) {
-				this.getValidationFmultipageValidationModule()
-						.getMessageService().print();
+			if (this.getValidationFmultipageValidationModule().validate(valDatei, directoryOfLogfile, configMap, locale,
+					logFile, dirOfJarPath)) {
+				this.getValidationFmultipageValidationModule().getMessageService().print();
 			} else {
-				this.getValidationFmultipageValidationModule()
-						.getMessageService().print();
-				if ( min ) {
+				this.getValidationFmultipageValidationModule().getMessageService().print();
+				if (min) {
 					return false;
 				} else {
 					valid = false;
 				}
 			}
-		} catch ( ValidationFmultipageValidationException e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_F_TIFF )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
-			this.getValidationFmultipageValidationModule().getMessageService()
-					.print();
+		} catch (ValidationFmultipageValidationException e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_F_TIFF)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
+			this.getValidationFmultipageValidationModule().getMessageService().print();
 			return false;
-		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_F_TIFF )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
+		} catch (Exception e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_F_TIFF)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
 			return false;
 		}
 
 		// Validation Step G
 		try {
-			if ( this.getValidationGtilesValidationModule().validate( valDatei,
-					directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath ) ) {
-				this.getValidationGtilesValidationModule().getMessageService()
-						.print();
+			if (this.getValidationGtilesValidationModule().validate(valDatei, directoryOfLogfile, configMap, locale,
+					logFile, dirOfJarPath)) {
+				this.getValidationGtilesValidationModule().getMessageService().print();
 			} else {
-				this.getValidationGtilesValidationModule().getMessageService()
-						.print();
-				if ( min ) {
+				this.getValidationGtilesValidationModule().getMessageService().print();
+				if (min) {
 					return false;
 				} else {
 					valid = false;
 				}
 			}
-		} catch ( ValidationGtilesValidationException e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_G_TIFF )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
-			this.getValidationGtilesValidationModule().getMessageService()
-					.print();
+		} catch (ValidationGtilesValidationException e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_G_TIFF)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
+			this.getValidationGtilesValidationModule().getMessageService().print();
 			return false;
-		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_G_TIFF )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
+		} catch (Exception e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_G_TIFF)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
 			return false;
 		}
 
 		// Validation Step H
 		try {
-			if ( this.getValidationHsizeValidationModule().validate( valDatei,
-					directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath ) ) {
-				this.getValidationHsizeValidationModule().getMessageService()
-						.print();
+			if (this.getValidationHsizeValidationModule().validate(valDatei, directoryOfLogfile, configMap, locale,
+					logFile, dirOfJarPath)) {
+				this.getValidationHsizeValidationModule().getMessageService().print();
 			} else {
-				this.getValidationHsizeValidationModule().getMessageService()
-						.print();
-				if ( min ) {
+				this.getValidationHsizeValidationModule().getMessageService().print();
+				if (min) {
 					return false;
 				} else {
 					valid = false;
 				}
 			}
-		} catch ( ValidationHsizeValidationException e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_H_TIFF )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
-			this.getValidationHsizeValidationModule().getMessageService()
-					.print();
+		} catch (ValidationHsizeValidationException e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_H_TIFF)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
+			this.getValidationHsizeValidationModule().getMessageService().print();
 			return false;
-		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_H_TIFF )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
+		} catch (Exception e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_H_TIFF)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
 			return false;
 		}
 		return valid;

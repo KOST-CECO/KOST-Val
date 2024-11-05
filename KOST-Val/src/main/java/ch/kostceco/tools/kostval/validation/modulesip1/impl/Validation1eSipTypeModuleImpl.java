@@ -40,27 +40,23 @@ import ch.kostceco.tools.kostval.logging.Logtxt;
  * Der SIP Typ wird ermittelt: GEVER oder FILE (ermittelt aus dem metadata.xml,
  * element ablieferung)
  */
-public class Validation1eSipTypeModuleImpl extends ValidationModuleImpl
-		implements Validation1eSipTypeModule
-{
+public class Validation1eSipTypeModuleImpl extends ValidationModuleImpl implements Validation1eSipTypeModule {
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws Validation1eSipTypeException
-	{
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws Validation1eSipTypeException {
 		// Informationen zur Darstellung "onWork" holen
-		String onWork = configMap.get( "ShowProgressOnWork" );
+		String onWork = configMap.get("ShowProgressOnWork");
 		/*
 		 * Nicht vergessen in
 		 * "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property
 		 * name="configurationService" ref="configurationService" />
 		 */
-		if ( onWork.equals( "yes" ) ) {
+		if (onWork.equals("yes")) {
 			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
-			System.out.print( "1E   " );
-			System.out.print( "\b\b\b\b\b" );
+			System.out.print("1E   ");
+			System.out.print("\b\b\b\b\b");
 		}
 
 		try {
@@ -68,16 +64,15 @@ public class Validation1eSipTypeModuleImpl extends ValidationModuleImpl
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			// dbf.setValidating(false);
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			Document doc = db.parse( new FileInputStream(
-					new File( valDatei.getAbsolutePath() + File.separator
-							+ "header" + File.separator + "metadata.xml" ) ) );
+			Document doc = db.parse(new FileInputStream(new File(
+					valDatei.getAbsolutePath() + File.separator + "header" + File.separator + "metadata.xml")));
 			doc.getDocumentElement().normalize();
 
-			dbf.setFeature( "http://xml.org/sax/features/namespaces", false );
+			dbf.setFeature("http://xml.org/sax/features/namespaces", false);
 
 			/*
-			 * Aktuelle Lösung funktioniert nur wenn kein Präfix beim
-			 * Elementnamen erlaubt ist!
+			 * Aktuelle Lösung funktioniert nur wenn kein Präfix beim Elementnamen erlaubt
+			 * ist!
 			 * 
 			 * IO: ablieferung
 			 * 
@@ -86,32 +81,26 @@ public class Validation1eSipTypeModuleImpl extends ValidationModuleImpl
 			 * Wird neu in 1d kontrolliert
 			 */
 
-			NodeList layerConfigList = doc
-					.getElementsByTagName( "ablieferung" );
+			NodeList layerConfigList = doc.getElementsByTagName("ablieferung");
 
-			Node node = layerConfigList.item( 0 );
+			Node node = layerConfigList.item(0);
 			Element e = (Element) node;
-			String name = e.getAttribute( "xsi:type" );
+			String name = e.getAttribute("xsi:type");
 
-			if ( name.contains( "ablieferungGeverSIP" ) ) {
+			if (name.contains("ablieferungGeverSIP")) {
 				// GEVER-SIP
-			} else if ( name.contains( "ablieferungFilesSIP" ) ) {
+			} else if (name.contains("ablieferungFilesSIP")) {
 				// FILE-SIP
 			} else {
-				Logtxt.logtxt( logFile, getTextResourceService()
-						.getText( locale, MESSAGE_XML_MODUL_Ae_SIP )
-						+ getTextResourceService().getText( locale,
-								ERROR_XML_AE_ABLIEFERUNGSTYPUNDEFINED ) );
+				Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ae_SIP)
+						+ getTextResourceService().getText(locale, ERROR_XML_AE_ABLIEFERUNGSTYPUNDEFINED));
 				return false;
 			}
 
-		} catch ( Exception e ) {
+		} catch (Exception e) {
 
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_Ae_SIP )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ae_SIP)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
 			return false;
 		}
 

@@ -38,114 +38,99 @@ import ch.kostceco.tools.kostval.logging.Logtxt;
  */
 
 public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl
-		implements ValidationHsizeValidationModule
-{
+		implements ValidationHsizeValidationModule {
 
-	public static String	NEWLINE	= System.getProperty( "line.separator" );
+	public static String NEWLINE = System.getProperty("line.separator");
 
-	private boolean			min		= false;
+	private boolean min = false;
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile,
-			String dirOfJarPath ) throws ValidationHsizeValidationException
-	{
-		String onWork = configMap.get( "ShowProgressOnWork" );
-		if ( onWork.equals( "nomin" ) ) {
+	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
+			File logFile, String dirOfJarPath) throws ValidationHsizeValidationException {
+		String onWork = configMap.get("ShowProgressOnWork");
+		if (onWork.equals("nomin")) {
 			min = true;
 		}
 
 		boolean isValid = true;
 
 		/*
-		 * TODO: jhoveReport auswerten! Auf Exiftool wird verzichtet. Exiftool
-		 * verwendet Perl, welche seit einiger Zeit hohe nicht geloese
-		 * Sicherheitsrisiken birgt. zudem koennen die Metadaten vermehrt
-		 * komplett durch jhove ausgelesen werden. Jhove hat bereits einen der
-		 * Probleme, welche das teilweise die Ausgabe der Metadaten verhindert
-		 * behoben.
+		 * TODO: jhoveReport auswerten! Auf Exiftool wird verzichtet. Exiftool verwendet
+		 * Perl, welche seit einiger Zeit hohe nicht geloese Sicherheitsrisiken birgt.
+		 * zudem koennen die Metadaten vermehrt komplett durch jhove ausgelesen werden.
+		 * Jhove hat bereits einen der Probleme, welche das teilweise die Ausgabe der
+		 * Metadaten verhindert behoben.
 		 */
-		File jhoveReport = new File( directoryOfLogfile,
-				valDatei.getName() + ".jhove-log.txt" );
+		File jhoveReport = new File(directoryOfLogfile, valDatei.getName() + ".jhove-log.txt");
 
-		if ( !jhoveReport.exists() ) {
+		if (!jhoveReport.exists()) {
 			isValid = false;
-			if ( min ) {
+			if (min) {
 				return false;
 			} else {
-				Logtxt.logtxt( logFile, getTextResourceService()
-						.getText( locale, MESSAGE_XML_MODUL_B_TIFF )
-						+ getTextResourceService().getText( locale,
-								ERROR_XML_UNKNOWN, "No Jhove report." ) );
+				Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_B_TIFF)
+						+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, "No Jhove report."));
 				return false;
 			}
 		} else {
-			String size = configMap.get( "AllowedSize" );
+			String size = configMap.get("AllowedSize");
 
 			Integer jhoveio = 0;
 
-			if ( size.equalsIgnoreCase( "yes" ) ) {
+			if (size.equalsIgnoreCase("yes")) {
 				// Valider Status (Giga-Tiffs sind erlaubt)
 			} else {
 				// Giga-Tiffs sind nicht erlaubt -> analysieren
 				try {
-					BufferedReader in = new BufferedReader(
-							new FileReader( jhoveReport ) );
+					BufferedReader in = new BufferedReader(new FileReader(jhoveReport));
 					String line;
-					while ( (line = in.readLine()) != null ) {
-						if ( line.contains( " Size: " ) ) {
+					while ((line = in.readLine()) != null) {
+						if (line.contains(" Size: ")) {
 							jhoveio = 1;
 							Integer intSize = line.toCharArray().length;
-							if ( size.contains( "1" ) ) {
+							if (size.contains("1")) {
 								// Valider Status (Giga-Tiffs sind erlaubt)
-							} else if ( intSize > 17 ) {
+							} else if (intSize > 17) {
 								// Invalider Status (Giga-Tiffs sind nicht
 								// erlaubt und
 								// zuviele Stellen)
 								isValid = false;
-								Logtxt.logtxt( logFile, getTextResourceService()
-										.getText( locale,
-												MESSAGE_XML_MODUL_H_TIFF )
-										+ getTextResourceService().getText(
-												locale, MESSAGE_XML_CG_INVALID,
-												line ) );
+								Logtxt.logtxt(logFile,
+										getTextResourceService().getText(locale, MESSAGE_XML_MODUL_H_TIFF)
+												+ getTextResourceService().getText(locale, MESSAGE_XML_CG_INVALID,
+														line));
 							}
 						}
 					}
 
-					if ( jhoveio == 0 ) {
+					if (jhoveio == 0) {
 						// Invalider Status
 						isValid = false;
-						if ( min ) {
+						if (min) {
 							in.close();
 							return false;
 						} else {
 
-							Logtxt.logtxt( logFile, getTextResourceService()
-									.getText( locale, MESSAGE_XML_MODUL_H_TIFF )
-									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_CG_JHOVENIO, "H" ) );
+							Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_H_TIFF)
+									+ getTextResourceService().getText(locale, MESSAGE_XML_CG_JHOVENIO, "H"));
 						}
 					}
 					in.close();
 
-				} catch ( Exception e ) {
-					if ( min ) {
+				} catch (Exception e) {
+					if (min) {
 						return false;
 					} else {
-						Logtxt.logtxt( logFile, getTextResourceService()
-								.getText( locale, MESSAGE_XML_MODUL_H_TIFF )
-								+ getTextResourceService().getText( locale,
-										MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
+						Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_H_TIFF)
+								+ getTextResourceService().getText(locale, MESSAGE_XML_CG_CANNOTFINDETREPORT));
 						return false;
 					}
 				}
 			}
-			String pathToWorkDir = configMap.get( "PathToWorkDir" );
-			File newReport = new File( pathToWorkDir,
-					valDatei.getName() + ".jhove-log.txt" );
-			if ( newReport.exists() ) {
-				Util.deleteFile( newReport );
+			String pathToWorkDir = configMap.get("PathToWorkDir");
+			File newReport = new File(pathToWorkDir, valDatei.getName() + ".jhove-log.txt");
+			if (newReport.exists()) {
+				Util.deleteFile(newReport);
 			}
 			return isValid;
 		}

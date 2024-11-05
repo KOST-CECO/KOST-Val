@@ -17,19 +17,16 @@ package ch.kostceco.tools.siardexcerpt.exception.moduleexcerpt;
 
 import ch.kostceco.tools.siardexcerpt.exception.SIARDexcerptException;
 
-public class ExcerptBSearchException extends SIARDexcerptException
-{
+public class ExcerptBSearchException extends SIARDexcerptException {
 
 	private static final long serialVersionUID = -5743334009406087977L;
 
-	public ExcerptBSearchException()
-	{
+	public ExcerptBSearchException() {
 		super();
 	}
 
-	public ExcerptBSearchException( String message )
-	{
-		super( message );
+	public ExcerptBSearchException(String message) {
+		super(message);
 	}
 
 }
