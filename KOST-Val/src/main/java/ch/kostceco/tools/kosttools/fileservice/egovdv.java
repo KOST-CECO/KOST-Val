@@ -43,7 +43,7 @@ public class egovdv {
 			+ "intarsys-egov-validationclient-cli-1.0.10.jar";
 
 	/**
-	 * Listet mit egovdv via cmd die Signaturnamen in pdf auf und speichert das
+	 * TODO: Listet mit egovdv via cmd die Signaturnamen in pdf auf und speichert das
 	 * Ergebnis in ein File (Output). Gibt zurueck ob Output existiert oder nicht
 	 * 
 	 * Fuer diesen Schritt braucht es weder Internet/URL noch einen account
@@ -94,7 +94,7 @@ public class egovdv {
 	}
 
 	/**
-	 * Gibt mit egovdv via cmd die Anzahl Signaturen in pdf aus
+	 * TODO: Gibt mit egovdv via cmd die Anzahl Signaturen in pdf aus
 	 * 
 	 * 0 = keine Signatur
 	 * 
@@ -252,7 +252,7 @@ public class egovdv {
 	}
 
 	/**
-	 * Validiert mit egovdv via cmd die Signaturen in pdf und speichert das Ergebnis
+	 * TODO: Validiert mit egovdv via cmd die Signaturen in pdf und speichert das Ergebnis
 	 * in ein File (Output). Dazu wird der Mandant Mixed verwendet. Gibt zurueck ob
 	 * Output existiert oder nicht
 	 * 
@@ -318,15 +318,19 @@ public class egovdv {
 		if (account.equals("noLicense")) {
 			resultSummary = "noLicense";
 		} else {
+			String optionLanguage = "de";
+			if (locale.toString().contains("fr")) {
+				optionLanguage = "fr";
+			} else if (locale.toString().contains("it")) {
+				optionLanguage = "it";
+			} else if (locale.toString().contains("en")) {
+				optionLanguage = "en";
+			} 
+			//-l get pdf report in the given language, supported codes: de, fr, it, en.
 
 			String command = "\"\"cd " + fexeDir.getAbsolutePath() + "\" & \"" + fvalidateBat.getAbsolutePath() + "\" "
 					+ account + "-u https://egovsigval-backend.bit.admin.ch -m " + mandant + " -f \""
-					+ fileToCheck.getAbsolutePath() + "\" -l de -c -e -o \"" + output.getAbsolutePath() + "\"\"";
-
-			/*
-			 * TODO: Spaeter auch noch die anderen Sprachen locale de fr it und en werden
-			 * alle unterstuetzt
-			 */
+					+ fileToCheck.getAbsolutePath() + "\" -l "+optionLanguage+" -c -e -o \"" + output.getAbsolutePath() + "\"\"";
 
 			// validate <account> -u https://egovsigval-backend.bit.admin.ch -m
 			// Mixed -f <filename> -c -e -d -o <report>
@@ -409,7 +413,7 @@ public class egovdv {
 	}
 
 	/**
-	 * List den PDF-Report aus und gibt das Ergebnis aus.
+	 * TODO: List den PDF-Report aus und gibt das Ergebnis aus.
 	 * 
 	 * Prüfbericht für elektronische Signaturen
 	 * 
@@ -432,7 +436,7 @@ public class egovdv {
 	}
 
 	/**
-	 * Bereinigung des Ergebnisses aus dem PDF-Report
+	 * TODO: Bereinigung des Ergebnisses aus dem PDF-Report
 	 * 
 	 * @param String line, welcher bereinigt wird
 	 * @return String bereinigter String
@@ -467,6 +471,9 @@ public class egovdv {
 			e.printStackTrace();
 			System.out.println("Fehler beim auslesen der config (egovdv)");
 		}
+		
+		// Bereinigung ist nur auf de, der log wird danach in Controllervalfofile uebersetzt 
+		
 		prettyPrint = prettyPrint.replaceAll("Prüfbericht für elektronische Signaturen",
 				"Prüfbericht für elektronische Signaturen</Message><Message> - Geprüft durch: " + Institut);
 
@@ -506,10 +513,10 @@ public class egovdv {
 
 		// invalide Fehlermeldungen
 		prettyPrint = prettyPrint.replaceAll("__Zusammenfassung der Dokumentprüfung", "");
-		prettyPrint = prettyPrint.replaceAll("__Das Dokument weist mehrere elektronische Signaturen mit", "");
-		prettyPrint = prettyPrint.replaceAll("__unterschiedlichen Zertifikatsklassen auf. Mindestens eine der ", "");
-		prettyPrint = prettyPrint.replaceAll("__elektronischen Signaturen auf dem validierten Dokument", "");
-		prettyPrint = prettyPrint.replaceAll("__konnte keiner Dokumentenart \\(Mandant\\) zugeordnet werden. ", "");
+		prettyPrint = prettyPrint.replaceAll("__Das Dokument weist mehrere elektronische Signaturen mit", "</Message><Message>Das Dokument weist mehrere elektronische Signaturen mit");
+		prettyPrint = prettyPrint.replaceAll("__unterschiedlichen Zertifikatsklassen auf. Mindestens eine der ", "unterschiedlichen Zertifikatsklassen auf. Mindestens eine der ");
+		prettyPrint = prettyPrint.replaceAll("__elektronischen Signaturen auf dem validierten Dokument", "elektronischen Signaturen auf dem validierten Dokument");
+		prettyPrint = prettyPrint.replaceAll("__konnte keiner Dokumentenart \\(Mandant\\) zugeordnet werden. ", "konnte keiner Dokumentenart (Mandant) zugeordnet werden. ");
 		prettyPrint = prettyPrint.replaceAll("__Die Prüfergebnisse der einzelnen Signaturen sind im", "");
 		prettyPrint = prettyPrint.replaceAll("__Detailbericht ersichtlich.", "");
 		prettyPrint = prettyPrint.replaceAll("__Anzahl Signaturen im Dokument: 1", "");
@@ -627,6 +634,8 @@ public class egovdv {
 		prettyPrint = prettyPrint.replaceAll("__Das geprüfte Dokument trägt mehrere elektronische ", "");
 		prettyPrint = prettyPrint.replaceAll("__Signaturen mit unterschiedlichen Zertifikatsklassen, gemäss ", "");
 		prettyPrint = prettyPrint.replaceAll("__ZertES.", "");
+		
+		prettyPrint = prettyPrint.replaceAll(" \\(Details siehe A\\)", "");
 		// System.out.println( "2 " + prettyPrint );
 
 		lineOut = prettyPrint;
@@ -635,7 +644,7 @@ public class egovdv {
 	}
 
 	/**
-	 * fuehrt eine Kontrolle aller benoetigten Dateien von egovdv durch und gibt das
+	 * TODO: fuehrt eine Kontrolle aller benoetigten Dateien von egovdv durch und gibt das
 	 * Ergebnis als String zurueck
 	 * 
 	 * @param dirOfJarPath String mit dem Pfad von wo das Programm gestartet wurde
