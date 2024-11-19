@@ -169,13 +169,17 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 			}
 			configMap.put("pdfaValidation", pdfavalidation);
 
+			// Gibt an ob pdfa mit veraPDF validiert werden soll
+			String verapdf = doc.getElementsByTagName("verapdf").item(0).getTextContent();
+			configMap.put("verapdf", verapdf);
+
+			// Gibt an ob pdfa mit veraPDF im detail validiert werden soll
+			String detail = doc.getElementsByTagName("detail").item(0).getTextContent();
+			configMap.put("detail", detail);
+
 			// Gibt an ob pdfa mit PDF Tools validiert werden soll
 			String pdftools = doc.getElementsByTagName("pdftools").item(0).getTextContent();
 			configMap.put("pdftools", pdftools);
-
-			// Gibt an ob pdfa mit PDF Tools im detail validiert werden soll
-			String detail = doc.getElementsByTagName("detail").item(0).getTextContent();
-			configMap.put("detail", detail);
 
 			// Gibt an ob pdfa mit callas validiert werden soll
 			String callas = doc.getElementsByTagName("callas").item(0).getTextContent();

@@ -77,15 +77,21 @@
 						</td>
 					</tr>
 					<tr class="captioninfom">
-						<td>PDF/A validation with PDF Tools [yes]:</td>
+						<td>PDF/A validation with veraPDF [yes]:</td>
 						<td>
-							<xsl:value-of select="configuration/pdfa/pdftools" />
+							<xsl:value-of select="configuration/pdfa/verapdf" />
 						</td>
 					</tr>
 					<tr class="captioninfom">
-						<td>- PDF Tools also detailed errors in English [yes]:</td>
+						<td>- veraPDF also detailed errors in English [yes]:</td>
 						<td>
 							<xsl:value-of select="configuration/pdfa/detail" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>PDF/A validation with PDF Tools [yes]:</td>
+						<td>
+							<xsl:value-of select="configuration/pdfa/pdftools" />
 						</td>
 					</tr>
 					<tr class="captioninfom">

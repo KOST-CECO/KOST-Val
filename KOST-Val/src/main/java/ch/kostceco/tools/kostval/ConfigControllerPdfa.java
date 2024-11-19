@@ -36,7 +36,7 @@ import javafx.stage.Stage;
 public class ConfigControllerPdfa {
 
 	@FXML
-	private CheckBox checkPdfa, checkPdftools, checkCallas, checkPdfa1a, checkPdfa2a, checkFont, checkJbig2,
+	private CheckBox checkPdfa, checkPdftools, checkVerapdf, checkCallas, checkPdfa1a, checkPdfa2a, checkFont, checkJbig2,
 			checkDetail, checkNentry, checkPdfa1b, checkPdfa2b, checkFontTol, checkPdfa2u, checkWarning3to2;
 
 	@FXML
@@ -116,6 +116,7 @@ public class ConfigControllerPdfa {
 			encoded = Files.readAllBytes(Paths.get(configFile.getAbsolutePath()));
 			config = new String(encoded, StandardCharsets.UTF_8);
 			String noPdftools = "<pdftools>no</pdftools>";
+			String noVerapdf = "<verapdf>no</verapdf>";
 			String noDetail = "<detail>no</detail>";
 			String noCallas = "<callas>no</callas>";
 			String noNentry = "<nentry>W</nentry>";
@@ -132,10 +133,14 @@ public class ConfigControllerPdfa {
 			// strict-->
 			String noPdfaJbig2 = "<jbig2allowed>no</jbig2allowed>";
 
+			if (config.contains(noVerapdf)) {
+				checkVerapdf.setSelected(false);
+				checkDetail.setDisable(true);
+			}
 			if (config.contains(noPdftools)) {
 				checkPdftools.setSelected(false);
 				checkFont.setDisable(true);
-				checkDetail.setDisable(true);
+//				checkDetail.setDisable(true);
 				checkFontTol.setDisable(true);
 			}
 			if (config.contains(noDetail)) {
@@ -219,19 +224,40 @@ public class ConfigControllerPdfa {
 		try {
 			if (checkPdftools.isSelected()) {
 				Util.oldnewstring(no, yes, configFile);
-				checkDetail.setDisable(false);
+//				checkDetail.setDisable(false);
 				checkFont.setDisable(false);
 				checkFontTol.setDisable(false);
+			} else {
+					Util.oldnewstring(yes, no, configFile);
+//					checkDetail.setDisable(true);
+					checkFont.setDisable(true);
+					checkFontTol.setDisable(true);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+ 
+	/*
+	 * checkVerapdf schaltet diese Validierung in der Konfiguration ein oder aus
+	 */
+	@FXML
+	void changeVerapdf(ActionEvent event) {
+		labelMessage.setText("");
+		String yes = "<verapdf>yes</verapdf>";
+		String no = "<verapdf>no</verapdf>";
+		try {
+			if (checkVerapdf.isSelected()) {
+				Util.oldnewstring(no, yes, configFile);
+				checkDetail.setDisable(false);
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if (!checkCallas.isSelected()) {
 					labelMessage.setText(minOne);
-					checkPdftools.setSelected(true);
+					checkVerapdf.setSelected(true);
 				} else {
 					Util.oldnewstring(yes, no, configFile);
 					checkDetail.setDisable(true);
-					checkFont.setDisable(true);
-					checkFontTol.setDisable(true);
 				}
 			}
 		} catch (IOException e) {
@@ -240,7 +266,7 @@ public class ConfigControllerPdfa {
 	}
 
 	/*
-	 * checkDetail schaltet diese Details von PDF Tools in der Konfiguration ein
+	 * checkDetail schaltet diese Details von verpdf in der Konfiguration ein
 	 * oder aus
 	 */
 	@FXML
@@ -271,7 +297,7 @@ public class ConfigControllerPdfa {
 				checkNentry.setDisable(false);
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if (!checkPdftools.isSelected()) {
+				if (!checkVerapdf.isSelected()) {
 					labelMessage.setText(minOne);
 					checkCallas.setSelected(true);
 				} else {

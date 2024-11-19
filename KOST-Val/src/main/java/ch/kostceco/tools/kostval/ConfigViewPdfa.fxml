@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="860.0" prefHeight="380.0" style="-fx-background-color: silver;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.kostceco.tools.kostval.ConfigControllerPdfa">
+<StackPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="860.0" prefHeight="380.0" style="-fx-background-color: silver;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.kostceco.tools.kostval.ConfigControllerPdfa">
 	<children>
 		<GridPane minHeight="330.0">
 			<columnConstraints>
@@ -48,7 +48,7 @@
 				</Button>
 				<Label fx:id="labelConfig" alignment="CENTER" contentDisplay="CENTER" maxHeight="20.0" maxWidth="780.0" minHeight="20.0" minWidth="780.0" prefHeight="20.0" prefWidth="780.0" text="Copyright © KOST/CECO" textAlignment="CENTER" textFill="WHITESMOKE" GridPane.columnSpan="5" GridPane.halignment="CENTER" GridPane.rowIndex="12" GridPane.valignment="CENTER" />
             <Label fx:id="labelMessage" text="Meldung Validierungseinstellungen" textFill="RED" GridPane.columnSpan="5" GridPane.rowIndex="10" />
-            <CheckBox fx:id="checkPdftools" mnemonicParsing="false" onAction="#changePdftools" selected="true" text="PDF Tools" GridPane.rowIndex="3" />
+            <CheckBox fx:id="checkPdftools" mnemonicParsing="false" onAction="#changePdftools" selected="true" text="PDF Tools" GridPane.columnIndex="4" GridPane.rowIndex="3" />
             <CheckBox fx:id="checkDetail" mnemonicParsing="false" onAction="#changeDetail" selected="true" text="details" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets left="24.0" />
@@ -70,13 +70,13 @@
             <CheckBox fx:id="checkPdfa1b" mnemonicParsing="false" onAction="#changePdfa1b" selected="true" text="PDF/A-1b" GridPane.columnIndex="2" GridPane.rowIndex="4" />
             <CheckBox fx:id="checkPdfa2b" mnemonicParsing="false" onAction="#changePdfa2b" selected="true" text="PDF/A-2b" GridPane.columnIndex="2" GridPane.rowIndex="6" />
             <CheckBox fx:id="checkPdfa2u" mnemonicParsing="false" onAction="#changePdfa2u" selected="true" text="PDF/A-2u" GridPane.columnIndex="2" GridPane.rowIndex="7" />
-            <CheckBox fx:id="checkFont" mnemonicParsing="false" onAction="#changeFont" selected="true" text="Font" GridPane.rowIndex="5">
+            <CheckBox fx:id="checkFont" mnemonicParsing="false" onAction="#changeFont" selected="true" text="Font" GridPane.columnIndex="4" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets left="24.0" />
                </GridPane.margin>
             </CheckBox>
             <CheckBox fx:id="checkJbig2" mnemonicParsing="false" onAction="#changeJbig2" selected="true" text="JBIG2" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-            <CheckBox fx:id="checkFontTol" mnemonicParsing="false" onAction="#changeFontTol" selected="true" text="Tolerant" GridPane.rowIndex="6">
+            <CheckBox fx:id="checkFontTol" mnemonicParsing="false" onAction="#changeFontTol" selected="true" text="Tolerant" GridPane.columnIndex="4" GridPane.rowIndex="5">
                <GridPane.margin>
                   <Insets left="48.0" />
                </GridPane.margin>
@@ -84,15 +84,17 @@
             <Label fx:id="labelOtherPdfa" text="Sonstiges" GridPane.columnIndex="3" GridPane.rowIndex="2" />
             <Label fx:id="labelVersion" text="Versionen" GridPane.columnIndex="2" GridPane.rowIndex="2" />
             <Label text="Callas" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label text="PDF Tools" GridPane.rowIndex="2" />
+            <Label text="PDF Tools" GridPane.columnIndex="4" GridPane.rowIndex="2" />
             <Label fx:id="labelEr" text=" └" textFill="WHITESMOKE" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Label text=" └" textFill="WHITESMOKE" GridPane.rowIndex="4" />
-            <Label text=" └" textFill="WHITESMOKE" GridPane.rowIndex="5" />
-            <Label text=" └" textFill="WHITESMOKE" GridPane.rowIndex="6">
+            <Label text=" └" textFill="WHITESMOKE" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+            <Label text=" └" textFill="WHITESMOKE" GridPane.columnIndex="4" GridPane.rowIndex="5">
                <GridPane.margin>
                   <Insets left="24.0" />
                </GridPane.margin>
             </Label>
+            <Label text="veraPDF" GridPane.rowIndex="2" />
+            <CheckBox fx:id="checkVerapdf" mnemonicParsing="false" onAction="#changeVerapdf" selected="true" text="veraPDF" GridPane.rowIndex="3" />
 			</children>
 			<padding>
 				<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

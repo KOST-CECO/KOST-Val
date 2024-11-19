@@ -4,11 +4,12 @@
 <!-- TEXT -->
 	<pdfa>
 		<pdfavalidation>&#x2713;</pdfavalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
-		<!-- sind pdftools und callas beide auf no wird keine pdfa Validierung durchgefuehrt -->
-		<!-- sind pdftools und callas beide auf yes wird die duale pdfa Validierung durchgefuehrt -->
+		<!-- sind verapdf und callas beide auf no wird keine pdfa Validierung durchgefuehrt -->
+		<!-- sind verapdf und callas beide auf yes wird die duale pdfa Validierung durchgefuehrt -->
+		<verapdf>yes</verapdf><!--no wenn verapdf nicht verwendet werden soll, ansonsten yes -->
+		<!-- Detailreport: Soll seitens verapdf auch Details in Englisch (yes) oder nur Beschreibung (no) ausgegeben werden  -->
+		<detail>yes</detail><!--no verwenden wenn nur Beschreibung ansonsten yes fuer detailierte Fehlermeldung -->
 		<pdftools>yes</pdftools><!--no wenn PDF Tools nicht verwendet werden soll, ansonsten yes -->
-		<!-- Detailreport: Soll seitens pdftools auch Details in Englisch (yes) oder nur Kategorien (no) ausgegeben werden  -->
-		<detail>yes</detail><!--no verwenden wenn nur Kategorien ansonsten yes fuer detailierte Fehlermeldung -->
 		<pdfafont>tolerant</pdfafont><!--no verwenden wenn die Schriften in pdfa nicht validiert werden sollen, ansonsten tolerant oder strict-->
 		<callas>yes</callas><!--no wenn callas nicht verwendet werden soll, ansonsten yes -->
 		<!-- N-Eintrag: Soll seitens callas ein Fehler (E) oder eine Warnung (W) ausgegeben werden  -->
