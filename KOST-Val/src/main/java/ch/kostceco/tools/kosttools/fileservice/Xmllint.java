@@ -141,6 +141,11 @@ public class Xmllint {
 		boolean out = false;
 		File exeFile = new File(dirOfJarPath + File.separator + pathToxmllintExe);
 
+		/*
+		 * bei SIP bereits normalisiert, da ganzer header in work kopiert wurde und
+		 * mehrere xsd existieren
+		 */
+
 		String command = "\"\"" + exeFile.getAbsolutePath() + "\"" + " --noout --stream --nowarning --schema " + "\""
 				+ xsdFile.getAbsolutePath() + "\"" + " " + "\"" + xmlFile.getAbsolutePath() + "\"\"";
 

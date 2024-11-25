@@ -241,7 +241,7 @@ public class Recognition {
 			} else if (sb2str1.contains("3C")) {
 				// TODO B) Die moeglichen BOF kontrollieren (beginnt mit 3c)
 				if (Magic.magicXml(checkFile)) {
-					// Eine XML-Datei muss mit <?xml [3C3F786D6C] beginnen
+					// Eine XML-Datei beginnt in der Regel mit <?xml [3C3F786D6C]
 					if (Util.string15InFile("INTERLIS", "I.N.T.E.R.L.I.S.", "INTERLIS", "INTERLIS", "INTERLIS",
 							checkFile)) {
 						// C) fuer INTERLIS auf SiF weiterkontrollieren
@@ -834,6 +834,40 @@ public class Recognition {
 						// als QTM-Datei erkannt aber falsche Extension
 						return "QTM_ext";
 					}
+				}
+			} else if (Magic.magicXmlOff(checkFile)) {
+				// Eine XML-Datei beginnt in der Regel mit <?xml [3C3F786D6C]
+				// wobei einige wenige einen offset haben (z.B. XML TEI mit bis zu 3)
+				// {3}<?xml [{3}3C3F786D6C] {2}<?xml [{2}3C3F786D6C] {1}<?xml [{1}3C3F786D6C]
+				if (Util.string15InFile("INTERLIS", "I.N.T.E.R.L.I.S.", "INTERLIS", "INTERLIS", "INTERLIS",
+						checkFile)) {
+					// C) fuer INTERLIS auf SiF weiterkontrollieren
+					// Eine INTERLIS-Datei muss den String "INTERLIS" oder
+					// "I.N.T.E.R.L.I.S." im File haben
+					// INTERLIS .xtf, .xml "<?xml <.?.x.m.l." "3C3F786D6C
+					// 3C003F0078006D006C00" "INTERLIS I.N.T.E.R.L.I.S."
+					// D) passende Extension kontrollieren
+					// Eine solche INTERLIS-Datei muss die extension .xtf,
+					// .xml haben
+					if (checkFileExt.equals(".xtf") || checkFileExt.equals(".xml")) {
+						// eindeutig als INTERLIS-Datei erkannt
+						return "INTERLIS";
+					} else {
+						// als INTERLIS-Datei erkannt aber falsche Extension
+						return "INTERLIS_ext";
+					}
+				}
+				// D) passende Extension kontrollieren (keine SiF)
+				// Eine XML-Datei muss die extension .xml, .xsd, .xsl haben
+				if (checkFileExt.equals(".xml") || checkFileExt.equals(".xsd") || checkFileExt.equals(".xsl")) {
+					// eindeutig als XML-Datei erkannt
+					return "XML";
+				} else if (checkFileExt.equals(".svg")) {
+					// eindeutig als SVG-Datei erkannt
+					return "SVG";
+				} else {
+					// als XML-Datei erkannt aber falsche Extension
+					return "XML_ext";
 				}
 			} else if (Magic.magicDicom(checkFile)) {
 				// Eine Dicom-Datei (keine Dateiendung noetig) muss mit

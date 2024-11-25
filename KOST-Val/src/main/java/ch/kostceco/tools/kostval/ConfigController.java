@@ -195,7 +195,7 @@ public class ConfigController {
 		// Sprache anhand configFile (HauptGui) setzten
 		try {
 			if (Util.stringInFileLine("kostval-conf-DE.xsl", configFile)) {
-				locale = Locale.of("de");
+				locale = new Locale("de");
 				buttonConfigApply.setText("Anwenden");
 				buttonConfigApplyStandard.setText("Standard anwenden");
 				buttonConfigCancel.setText("Verwerfen");
@@ -216,7 +216,7 @@ public class ConfigController {
 				minOne = "Mindestens eine Variante muss erlaubt sein!";
 				stringPuid = "weitere akzeptierte Dateiformate...";
 			} else if (Util.stringInFileLine("kostval-conf-FR.xsl", configFile)) {
-				locale = Locale.of("fr");
+				locale = new Locale("fr");
 				buttonConfigApply.setText("Appliquer");
 				buttonConfigApplyStandard.setText("Appliquer le standard");
 				buttonConfigCancel.setText("Annuler");
@@ -238,7 +238,7 @@ public class ConfigController {
 				minOne = "Au moins une variante doit etre autorisee !";
 				stringPuid = "autres formats de fichiers acceptés...";
 			} else if (Util.stringInFileLine("kostval-conf-IT.xsl", configFile)) {
-				locale = Locale.of("it");
+				locale = new Locale("it");
 				buttonConfigApply.setText("Applica");
 				buttonConfigApplyStandard.setText("Applica predefinito");
 				buttonConfigCancel.setText("Annulla");
@@ -259,7 +259,7 @@ public class ConfigController {
 				minOne = "Almeno una variante deve essere consentita!";
 				stringPuid = "altri formati di file accettati...";
 			} else {
-				locale = Locale.of("en");
+				locale = new Locale("en");
 				buttonConfigApply.setText("Apply");
 				buttonConfigApplyStandard.setText("Apply Standard");
 				buttonConfigCancel.setText("Cancel");

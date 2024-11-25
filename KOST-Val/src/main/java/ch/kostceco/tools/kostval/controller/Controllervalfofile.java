@@ -899,7 +899,7 @@ public class Controllervalfofile implements MessageConstants {
 					// Signaturen validieren (Mixed)
 					File outMixedSig = new File(directoryOfLogfile.getAbsolutePath() + File.separator
 							+ valDatei.getName() + "_dvReport_Mixed.pdf");
-					Locale localeDe = Locale.of("de");
+					Locale localeDe = new Locale("de");
 
 					String mixedSig = egovdv.execEgovdvCheck(valDatei, outMixedSig, workDir2, dirOfJarPath, "Mixed",
 							localeDe);
@@ -1170,7 +1170,7 @@ public class Controllervalfofile implements MessageConstants {
 		returnEgovdvSum = returnEgovdvSum.replaceAll("\\R", "");
 		returnEgovdvSum = returnEgovdvSum.replace("  ", " ");
 		returnEgovdvSum = returnEgovdvSum.replace(" bis ", " - ");
-		
+
 		// TODO: log uebersetzten wenn fr, it oder en
 		if (locale.toString().contains("fr")) {
 			// fr log uebersetzten

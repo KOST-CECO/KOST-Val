@@ -920,17 +920,23 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 			boolean noCaAnmerkung = false;
 			NodeList nodeLstCa = doc.getElementsByTagName("ca");
 			for (int s = 0; s < nodeLstCa.getLength(); s++) {
-				noCaAnmerkung = true;
-				Node caNode = nodeLstCa.item(s);
-				Node caNodeVonBis = caNode.getParentNode();
-				Node caNodeEzr = caNodeVonBis.getParentNode();
-				Node caNodeEzrPar = caNodeEzr.getParentNode();
-				NodeList childNodesEzrPar = caNodeEzrPar.getChildNodes();
-				for (int y = 0; y < childNodesEzrPar.getLength(); y++) {
-					Node subNodeEzrPar = childNodesEzrPar.item(y);
-					if (subNodeEzrPar.getNodeName().equals("entstehungszeitraumAnmerkung")) {
-						noCaAnmerkung = false;
-						break;
+				if (nodeLstCa.item(s).getTextContent().equals("false")) {
+					// System.out.println("ca false");
+					// Keine Anmerkung benoetigt
+				} else {
+					// System.out.println("ca "+nodeLstCa.item(s).getTextContent());
+					noCaAnmerkung = true;
+					Node caNode = nodeLstCa.item(s);
+					Node caNodeVonBis = caNode.getParentNode();
+					Node caNodeEzr = caNodeVonBis.getParentNode();
+					Node caNodeEzrPar = caNodeEzr.getParentNode();
+					NodeList childNodesEzrPar = caNodeEzrPar.getChildNodes();
+					for (int y = 0; y < childNodesEzrPar.getLength(); y++) {
+						Node subNodeEzrPar = childNodesEzrPar.item(y);
+						if (subNodeEzrPar.getNodeName().equals("entstehungszeitraumAnmerkung")) {
+							noCaAnmerkung = false;
+							break;
+						}
 					}
 				}
 			}

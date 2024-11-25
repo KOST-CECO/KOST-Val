@@ -190,7 +190,7 @@ public class GuiController {
 
 		try {
 			if (locale.toString().startsWith("fr")) {
-				locale = Locale.of("fr");
+				locale = new Locale("fr");
 				arg2 = locale.toString();
 				lang.setValue("Français");
 				buttonFormat.setText("Format uniquement");
@@ -213,7 +213,7 @@ public class GuiController {
 					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-FR.xsl", configFile);
 				}
 			} else if (locale.toString().startsWith("it")) {
-				locale = Locale.of("it");
+				locale = new Locale("it");
 				arg2 = locale.toString();
 				lang.setValue("Italiano");
 				buttonFormat.setText("Solo formati");
@@ -236,7 +236,7 @@ public class GuiController {
 					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-IT.xsl", configFile);
 				}
 			} else if (locale.toString().startsWith("en")) {
-				locale = Locale.of("en");
+				locale = new Locale("en");
 				arg2 = locale.toString();
 				lang.setValue("English");
 				buttonFormat.setText("Format only");
@@ -259,7 +259,7 @@ public class GuiController {
 					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-EN.xsl", configFile);
 				}
 			} else {
-				locale = Locale.of("de");
+				locale = new Locale("de");
 				arg2 = locale.toString();
 				lang.setValue("Deutsch");
 				buttonFormat.setText("Nur Formate");
@@ -1649,7 +1649,7 @@ public class GuiController {
 					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-DE.xsl", configFile);
 					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-DE.xsl", configFile);
 				}
-				locale = Locale.of("de");
+				locale = new Locale("de");
 			} else if (selLang.equals("English")) {
 				buttonFormat.setText("Format only");
 				buttonSip.setText("SIP incl. Format");
@@ -1670,7 +1670,7 @@ public class GuiController {
 					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-EN.xsl", configFile);
 					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-EN.xsl", configFile);
 				}
-				locale = Locale.of("en");
+				locale = new Locale("en");
 			} else if (selLang.equals("Italiano")) {
 				buttonFormat.setText("Solo formati");
 				buttonSip.setText("SIP incl. formati");
@@ -1691,7 +1691,7 @@ public class GuiController {
 					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-IT.xsl", configFile);
 					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-IT.xsl", configFile);
 				}
-				locale = Locale.of("it");
+				locale = new Locale("it");
 			} else {
 				buttonFormat.setText("Format uniquement");
 				buttonSip.setText("SIP incl. formats");
@@ -1712,7 +1712,7 @@ public class GuiController {
 					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-FR.xsl", configFile);
 					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-FR.xsl", configFile);
 				}
-				locale = Locale.of("fr");
+				locale = new Locale("fr");
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();

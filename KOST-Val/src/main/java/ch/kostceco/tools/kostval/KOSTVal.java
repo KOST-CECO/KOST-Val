@@ -134,15 +134,15 @@ public class KOSTVal implements MessageConstants {
 		Locale locale = Locale.getDefault();
 
 		if (args[2].equalsIgnoreCase("--de")) {
-			locale = Locale.of("de");
+			locale = new Locale("de");
 		} else if (args[2].equalsIgnoreCase("--fr")) {
-			locale = Locale.of("fr");
+			locale = new Locale("fr");
 		} else if (args[2].equalsIgnoreCase("--it")) {
-			locale = Locale.of("it");
+			locale = new Locale("it");
 		} else if (args[2].equalsIgnoreCase("--en")) {
-			locale = Locale.of("en");
+			locale = new Locale("en");
 		} else {
-			locale = Locale.of("de");
+			locale = new Locale("de");
 		}
 
 		// Konfigurations Map erstellen (Zeitgewinn)

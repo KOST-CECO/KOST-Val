@@ -285,7 +285,7 @@ public class Magic {
 		boolean mn = false;
 
 		try {
-			// Eine XML Datei (.xml) muss mit 3C3F786D6C -> <?xml beginnen
+			// Eine XML Datei (.xml) beginnt in der Regel mit 3C3F786D6C -> <?xml
 			fr = new FileReader(file);
 			read = new BufferedReader(fr);
 
@@ -326,6 +326,138 @@ public class Magic {
 			}
 			if (reco) {
 				// hoechstwahrscheinlich ein XML
+				mn = true;
+			}
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		} catch (Exception e) {
+			System.out.println("Exception magic file xml: " + e.getMessage());
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		}
+		return mn;
+	}
+
+	public static boolean magicXmlOff(File file) throws IOException {
+		FileReader fr = null;
+		BufferedReader read = null;
+		boolean mn = false;
+
+		try {
+			// Eine XML Datei (.xml) beginnt in der Regel mit 3C3F786D6C -> <?xml
+			// wobei einige wenige einen offset mit bis zu 3 haben (z.B. XML TEI)
+			// {3}3C3F786D6C - {2}3C3F786D6C - {1}3C3F786D6C
+			fr = new FileReader(file);
+			read = new BufferedReader(fr);
+
+			Boolean reco = false;
+			try (FileInputStream fis = new FileInputStream(file)) {
+				int i = 0;
+				int cnt = 0;
+				StringBuilder sb = new StringBuilder();
+				String sb2str1ig = "";
+				String sb2str2ig = "";
+				String sb2str3ig = "";
+				String sb2str1 = "";
+				String sb2str2 = "";
+				String sb2str3 = "";
+				String sb2str4 = "";
+				String sb2str5 = "";
+				String sb12345o1 = "";
+				String sb12345o2 = "";
+				String sb12345o3 = "";
+				while ((i = fis.read()) != -1) {
+					// Durchgang mit Offset 3
+					sb.append(String.format("%02X ", i));
+					if (sb2str1ig == "") {
+						sb2str1ig = sb + "";
+					} else if (sb2str2ig == "") {
+						sb2str2ig = sb + "";
+					} else if (sb2str3ig == "") {
+						sb2str3ig = sb + "";
+						// Die erste 3 Zeichen ignorieren ; sb neu setzten
+						sb = new StringBuilder();
+					} else if (sb2str1 == "") {
+						sb2str1 = sb + "";
+					} else if (sb2str2 == "") {
+						sb2str2 = sb + "";
+					} else if (sb2str3 == "") {
+						sb2str3 = sb + "";
+					} else if (sb2str4 == "") {
+						sb2str4 = sb + "";
+					} else if (sb2str5 == "") {
+						sb2str5 = sb + "";
+						sb12345o3 = sb + "";
+						break;
+					}
+					cnt++;
+					if (cnt == 16) {
+						cnt = 0;
+					}
+				}
+				while ((i = fis.read()) != -1) {
+					// Durchgang mit Offset 2
+					sb.append(String.format("%02X ", i));
+					if (sb2str1ig == "") {
+						sb2str1ig = sb + "";
+					} else if (sb2str2ig == "") {
+						sb2str2ig = sb + "";
+						// Die erste 2 Zeichen ignorieren ; sb neu setzten
+						sb = new StringBuilder();
+					} else if (sb2str1 == "") {
+						sb2str1 = sb + "";
+					} else if (sb2str2 == "") {
+						sb2str2 = sb + "";
+					} else if (sb2str3 == "") {
+						sb2str3 = sb + "";
+					} else if (sb2str4 == "") {
+						sb2str4 = sb + "";
+					} else if (sb2str5 == "") {
+						sb2str5 = sb + "";
+						sb12345o2 = sb + "";
+						break;
+					}
+					cnt++;
+					if (cnt == 16) {
+						cnt = 0;
+					}
+				}
+				while ((i = fis.read()) != -1) {
+					// Durchgang mit Offset 1
+					sb.append(String.format("%02X ", i));
+					if (sb2str1ig == "") {
+						sb2str1ig = sb + "";
+						// Die erste 1 Zeichen ignorieren ; sb neu setzten
+						sb = new StringBuilder();
+					} else if (sb2str1 == "") {
+						sb2str1 = sb + "";
+					} else if (sb2str2 == "") {
+						sb2str2 = sb + "";
+					} else if (sb2str3 == "") {
+						sb2str3 = sb + "";
+					} else if (sb2str4 == "") {
+						sb2str4 = sb + "";
+					} else if (sb2str5 == "") {
+						sb2str5 = sb + "";
+						sb12345o1 = sb + "";
+						break;
+					}
+					cnt++;
+					if (cnt == 16) {
+						cnt = 0;
+					}
+				}
+				if (sb12345o1.contains("3C 3F 78 6D 6C") || sb12345o2.contains("3C 3F 78 6D 6C")
+						|| sb12345o3.contains("3C 3F 78 6D 6C")) {
+					reco = true;
+				}
+			}
+			if (reco) {
+				// hoechstwahrscheinlich ein XML mit Offset
 				mn = true;
 			}
 			read.close();

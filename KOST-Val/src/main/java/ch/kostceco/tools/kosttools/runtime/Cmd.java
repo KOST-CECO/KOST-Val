@@ -45,29 +45,8 @@ public class Cmd {
 		// System.out.println( "executing command: " + command );
 		Process p = null;
 		try {
-			String[] cmdarray = new String[] { "cmd /c " + command };
-			p = Runtime.getRuntime().exec(cmdarray, null, workDir);
-			// p = Runtime.getRuntime().exec("cmd /c " + command, null,
-			// workDir);
+			p = Runtime.getRuntime().exec("cmd /c " + command, null, workDir);
 			// sed funktioniert nicht mit .split(" ")
-
-			/*
-			 * @deprecated This method is error-prone and should not be used, the
-			 * corresponding method {@link #exec(String[])} or {@link ProcessBuilder} should
-			 * be used instead. The command string is broken into tokens using only
-			 * whitespace characters. For an argument with an embedded space, such as a
-			 * filename, this can cause problems as the token does not include the full
-			 * filename.
-			 * 
-			 * Solution
-			 * 
-			 * Deprecate the three methods and recommend using the corresponding
-			 * Runtime.exec(String[] cmdarray), Runtime.exec(String[] cmdarray, String[]
-			 * envp), Runtime.exec(String[] cmdarray, String[] envp, File dir) methods or
-			 * java.lang.ProcessBuilder.
-			 */
-
-			// @Deprecated(since="18") =>Process exec(String command)
 
 		} catch (IOException ex) {
 			System.out.println("IOException exec P: " + ex);

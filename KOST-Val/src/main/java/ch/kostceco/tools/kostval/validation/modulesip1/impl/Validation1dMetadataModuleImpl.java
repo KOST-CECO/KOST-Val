@@ -71,6 +71,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
 			File valDateiHeader = new File(valDatei.getAbsolutePath() + File.separator + "header");
 			Util.copyDir(valDateiHeader, pathToWorkDirFile);
 			File xmlCopy = new File(pathToWorkDirFile.getAbsolutePath() + File.separator + "metadata.xml");
+			Thread.sleep(100);
 			/*
 			 * Das Kopieren des ganzen headers benoetigt einige Zeit. Falls metadata.xml
 			 * (noch) nicht existiert wird pausiert.
