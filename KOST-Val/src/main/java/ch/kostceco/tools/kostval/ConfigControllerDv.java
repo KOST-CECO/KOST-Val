@@ -64,7 +64,7 @@ public class ConfigControllerDv {
 	private Label labelInstitut, labelVal, labelMessage, labelMandant, labelConfig;
 
 	ObservableList<String> sizeInstitutList = FXCollections.observableArrayList("", "Staatsarchiv Aargau",
-			"Staatsarchiv Bern", "Staatsarchiv Luzern", "Stadtarchiv Bern", "Stadtarchiv Luzern",
+			"Staatsarchiv Bern", "Staatsarchiv Luzern", "Staatsarchiv Thurgau", "Stadtarchiv Bern", "Stadtarchiv Luzern",
 			"Burgerbibliothek Bern");
 
 	@FXML

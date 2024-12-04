@@ -40,8 +40,7 @@ public class UtilTranslate {
 				"Eine konforme Datei darf keinen Namen enthalten, der laenger als 127 Byte ist.");
 		de = de.replace("A conforming file shall not contain any PostScript XObjects",
 				"Eine konforme Datei darf keine PostScript XObjects enthalten.");
-		de = de.replace(
-				"A conforming file shall not contain any real number closer to zero than +/-1.175 x 10^(-38)",
+		de = de.replace("A conforming file shall not contain any real number closer to zero than +/-1.175 x 10^(-38)",
 				"Eine konforme Datei darf keine reelle Zahl enthalten, die naeher an Null liegt als +/-1,175 x 10^(-38).");
 		de = de.replace("A conforming file shall not contain any real number outside the range of +/-3.403 x 10^38",
 				"Eine konforme Datei darf keine reelle Zahl enthalten, die ausserhalb des Bereichs von +/-3,403 x 10^38 liegt.");
@@ -82,8 +81,7 @@ public class UtilTranslate {
 		de = de.replace(
 				"A form XObject dictionary shall not contain any of the following: - the OPI key; - the Subtype2 key with a value of PS; - the PS key",
 				"Ein Formular-XObject-Verzeichnis darf keines der folgenden Elemente enthalten: - den Schluessel OPI; - den Schluessel Subtype2 mit dem Wert PS; - den Schluessel PS.");
-		de = de.replace(
-				"A form XObject dictionary shall not contain the Subtype2 key with a value of PS or the PS key",
+		de = de.replace("A form XObject dictionary shall not contain the Subtype2 key with a value of PS or the PS key",
 				"Ein Formular-XObject-Verzeichnis darf den Subtype2-Schluessel mit dem Wert PS oder den PS-Schluessel nicht enthalten.");
 		de = de.replace(
 				"A Group object with an S key with a value of Transparency shall not be included in a form XObject.",
@@ -227,8 +225,7 @@ public class UtilTranslate {
 		de = de.replace(
 				"Content streams shall not contain any operators not defined in ISO 32000-1 even if such operators are bracketed by the BX/EX compatibility operators",
 				"Content Streams duerfen keine in ISO 32000-1 nicht definierten Operatoren enthalten, selbst wenn solche Operatoren von den BX/EX-Kompatibilitaetsoperatoren eingeklammert werden.");
-		de = de.replace("dc:creator shall contain exactly one entry",
-				"dc:creator muss genau einen Eintrag enthalten.");
+		de = de.replace("dc:creator shall contain exactly one entry", "dc:creator muss genau einen Eintrag enthalten.");
 		de = de.replace(
 				"DeviceCMYK may be used only if the file has a PDF/A-1 OutputIntent that uses a CMYK colour space",
 				"DeviceCMYK darf nur verwendet werden, wenn die Datei ueber einen PDF/A-1 OutputIntent verfuegt, der einen CMYK-Farbraum verwendet.");
@@ -253,8 +250,7 @@ public class UtilTranslate {
 		de = de.replace(
 				"Embedded font programs shall define all font glyphs referenced for rendering with conforming file",
 				"Eingebettete Schriftprogramme muessen alle Schriftzeichen definieren, auf die fuer die Darstellung mit konformen Dateien verwiesen wird.");
-		de = de.replace(
-				"Embedded fonts shall define all glyphs referenced for rendering within the conforming file.",
+		de = de.replace("Embedded fonts shall define all glyphs referenced for rendering within the conforming file.",
 				"Eingebettete Schriftarten muessen alle Glyphen definieren, die fuer die Darstellung in der konformen Datei referenziert werden.");
 		de = de.replace(
 				"Every annotation (including those whose Subtype value is Widget, as used for form fields), except for the two cases listed below, shall have at least one appearance dictionary: - annotations where the value of the Rect key consists of an array where value 1 is equal to value 3 and value 2 is equal to value 4; - annotations whose Subtype value is Popup or Link",
@@ -329,8 +325,7 @@ public class UtilTranslate {
 		de = de.replace(
 				"Font names, names of colourants in Separation and DeviceN colour spaces, and structure type names, after expansion of character sequences escaped with a NUMBER SIGN (23h), if any, shall be valid UTF-8 character sequences",
 				"Schriftartnamen, Namen von Farbstoffen in Separations- und DeviceN-Farbraeumen und Strukturtypenamen muessen nach der Erweiterung von Zeichenfolgen, die mit einem NUMMERNSIGN (23h) maskiert sind, gueltige UTF-8-Zeichenfolgen sein.");
-		de = de.replace(
-				"Font programs cmap tables for all symbolic TrueType fonts shall contain exactly one encoding",
+		de = de.replace("Font programs cmap tables for all symbolic TrueType fonts shall contain exactly one encoding",
 				"Die cmap-Tabellen von Schriftprogrammen fuer alle symbolischen TrueType-Schriftarten muessen genau eine Codierung enthalten.");
 		de = de.replace(
 				"For all annotation dictionaries containing an AP key, the appearance dictionary that it defines as its value shall contain only the N key",
@@ -377,6 +372,8 @@ public class UtilTranslate {
 		de = de.replace(
 				"If a files OutputIntents array contains more than one entry, then all entries that contain a DestOutputProfile key shall have as the value of that key the same indirect object, which shall be a valid ICC profile stream",
 				"Wenn das OutputIntents-Array einer Datei mehr als einen Eintrag enthaelt, muessen alle Eintraege, die einen DestOutputProfile-Schluessel enthalten, als Wert dieses Schluessels dasselbe indirekte Objekt aufweisen, das ein gueltiger ICC-Profil-Stream sein muss.");
+		de = de.replace("If a ca key is present in an ExtGState object, its value shall be 1.0",
+				"Wenn ein ca-Schluessel in einem ExtGState-Objekt vorhanden ist, muss sein Wert 1.0 sein.");
 		de = de.replace(
 				"If an annotation dictionarys Subtype key has a value of Widget and its FT key has a value of Btn, the value of the N key shall be an appearance subdictionary",
 				"Wenn der Subtype-Schluessel eines Anmerkungswoerterbuchs den Wert Widget und der FT-Schluessel den Wert Btn aufweist, muss der Wert des N-Schluessels ein Unterwoerterbuch fuer das Erscheinungsbild sein.");
@@ -385,8 +382,7 @@ public class UtilTranslate {
 				"Wenn der Subtype-Schluessel eines Anmerkungswoerterbuchs einen anderen Wert als Widget hat oder wenn der FT-Schluessel, der mit der Widget-Anmerkung verknuepft ist, einen anderen Wert als Btn hat, muss der Wert des N-Schluessels ein Appearance-Stream sein.");
 		de = de.replace("If an Image dictionary contains the BitsPerComponent key, its value shall be 1, 2, 4 or 8",
 				"Wenn ein Bildwoerterbuch den BitsPerComponent-Schluessel enthaelt, muss sein Wert 1, 2, 4 oder 8 sein.");
-		de = de.replace(
-				"If an Image dictionary contains the BitsPerComponent key, its value shall be 1, 2, 4, 8 or 16",
+		de = de.replace("If an Image dictionary contains the BitsPerComponent key, its value shall be 1, 2, 4, 8 or 16",
 				"Wenn ein Bildwoerterbuch den BitsPerComponent-Schluessel enthaelt, muss sein Wert 1, 2, 4, 8 oder 16 sein.");
 		de = de.replace("If an Image dictionary contains the Interpolate key, its value shall be false",
 				"Wenn ein Bildwoerterbuch den Schluessel Interpolate enthaelt, muss sein Wert false sein.");
@@ -424,8 +420,7 @@ public class UtilTranslate {
 		de = de.replace(
 				"If the number of colour space specifications in the JPEG2000 data is greater than 1, there shall be exactly one colour space specification that has the value 0x01 in the APPROX field",
 				"Wenn die Anzahl der Farbraumspezifikationen in den JPEG2000-Daten groesser als 1 ist, muss es genau eine Farbraumspezifikation geben, die den Wert 0x01 im Feld APPROX hat.");
-		de = de.replace(
-				"If the value of the Encoding entry is a dictionary, it shall not contain a Differences entry",
+		de = de.replace("If the value of the Encoding entry is a dictionary, it shall not contain a Differences entry",
 				"Wenn der Wert des Eintrags Encoding ein Woerterbuch ist, darf es keinen Eintrag Differences enthalten.");
 		de = de.replace(
 				"In a cross reference subsection header the starting object number and the range shall be separated by a single SPACE character (20h)",
@@ -480,14 +475,12 @@ public class UtilTranslate {
 				"Der Hoechstwert eines CID (Zeichenidentifikator) betraegt 65.535.");
 		de = de.replace("Metadata object stream dictionaries shall not contain the Filter key",
 				"Metadaten-Objektstromwoerterbuecher duerfen den Filter-Schluessel nicht enthalten.");
-		de = de.replace(
-				"Named actions other than NextPage, PrevPage, FirstPage, and LastPage shall not be permitted",
+		de = de.replace("Named actions other than NextPage, PrevPage, FirstPage, and LastPage shall not be permitted",
 				"Andere benannte Aktionen als NextPage, PrevPage, FirstPage und LastPage sind nicht zulaessig.");
 		de = de.replace(
 				"No data can follow the last end-of-file marker except a single optional end-of-line marker as described in ISO 32000-1:2008, 7.5.5",
 				"Auf die letzte Dateiende-Markierung duerfen keine Daten folgen, mit Ausnahme einer einzelnen optionalen Zeilenende-Markierung, wie in ISO 32000-1:2008, 7.5.5 beschrieben.");
-		de = de.replace(
-				"No data shall follow the last end-of-file marker except a single optional end-of-line marker",
+		de = de.replace("No data shall follow the last end-of-file marker except a single optional end-of-line marker",
 				"Auf die letzte Dateiende-Markierung duerfen keine Daten folgen, mit Ausnahme einer einzelnen optionalen Zeilenende-Markierung.");
 		de = de.replace(
 				"No keys other than UR3 and DocMDP shall be present in a permissions dictionary (ISO 32000-1:2008, 12.8.4, Table 258)",
@@ -592,8 +585,7 @@ public class UtilTranslate {
 		de = de.replace(
 				"The following keys, if present in an ExtGState object, shall have the values shown: BM - Normal or Compatible",
 				"Die folgenden Schluessel muessen, sofern sie in einem ExtGState-Objekt vorhanden sind, die angegebenen Werte aufweisen: BM - Normal oder kompatibel.");
-		de = de.replace(
-				"The following keys, if present in an ExtGState object, shall have the values shown: CA - 1.0",
+		de = de.replace("The following keys, if present in an ExtGState object, shall have the values shown: CA - 1.0",
 				"Die folgenden Schluessel muessen, sofern sie in einem ExtGState-Objekt vorhanden sind, die angegebenen Werte aufweisen: CA - 1.0.");
 		de = de.replace(
 				"The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 19005-2, 6.2.11.7.2",
@@ -607,8 +599,7 @@ public class UtilTranslate {
 		de = de.replace(
 				"The font programs for all fonts used within a conforming file shall be embedded within that file, as defined in PDF Reference 5.8, except when the fonts are used exclusively with text rendering mode 3",
 				"Die Schriftartprogramme fuer alle in einer konformen Datei verwendeten Schriftarten muessen in diese Datei eingebettet werden, wie in der PDF-Referenz 5.8 definiert, es sei denn, die Schriftarten werden ausschliesslich mit dem Textwiedergabemodus 3 verwendet.");
-		de = de.replace(
-				"The generation number and obj keyword shall be separated by a single white-space character.",
+		de = de.replace("The generation number and obj keyword shall be separated by a single white-space character.",
 				"Die Generierungsnummer und das Schluesselwort obj muessen durch ein einzelnes Leerzeichen getrennt werden.");
 		de = de.replace("The Hide action shall not be permitted (Corrigendum 2)",
 				"Die Aktion Hide ist nicht zulaessig (Berichtigung 2).");
@@ -642,8 +633,7 @@ public class UtilTranslate {
 				"Auf die Schluesselwoerter obj und endobj muss jeweils ein EOL-Marker folgen.");
 		de = de.replace("The object number and endobj keyword shall each be preceded by an EOL marker.",
 				"Den Schluesselwoertern object number und endobj muss jeweils ein EOL-Marker vorangestellt werden.");
-		de = de.replace(
-				"The object number and generation number shall be separated by a single white-space character.",
+		de = de.replace("The object number and generation number shall be separated by a single white-space character.",
 				"Die Objektnummer und die Generierungsnummer muessen durch ein einzelnes Leerzeichen getrennt werden.");
 		de = de.replace(
 				"The only valid values of this key in PDF 1.4 are Type1C - Type 1–equivalent font program represented in the Compact Font Format (CFF) and CIDFontType0C - Type 0 CIDFont program represented in the Compact Font Format (CFF)",
@@ -680,8 +670,7 @@ public class UtilTranslate {
 		de = de.replace(
 				"The stream keyword shall be followed either by a CARRIAGE RETURN (0Dh) and LINE FEED (0Ah) character sequence or by a single LINE FEED character.",
 				"Auf das Schluesselwort stream muss entweder eine Zeichenfolge aus CARRIAGE RETURN (0Dh) und LINE FEED (0Ah) oder ein einzelnes LINE FEED-Zeichen folgen.");
-		de = de.replace(
-				"The subtype is the value of the Subtype key, if present, in the font file stream dictionary.",
+		de = de.replace("The subtype is the value of the Subtype key, if present, in the font file stream dictionary.",
 				"Der Subtyp ist der Wert des Schluessels Subtype, falls vorhanden, im Font-Datei-Stream-Verzeichnis.");
 		de = de.replace(
 				"The TransferFunction key in a halftone dictionary shall be used only as required by ISO 32000-1",
@@ -762,8 +751,7 @@ public class UtilTranslate {
 	public static String enTOfr(String en) {
 		String fr = en;
 		// TODO: fr = fr.replace("en", "fr");
-		fr = fr.replace("A circular mapping shall not exist",
-				"Il ne doit pas y avoir de correspondance circulaire.");
+		fr = fr.replace("A circular mapping shall not exist", "Il ne doit pas y avoir de correspondance circulaire.");
 		fr = fr.replace(
 				"A CMap shall not reference any other CMap except those listed in ISO 32000-1:2008, 9.7.5.2, Table 118",
 				"Une CMap ne doit pas faire reference a une autre CMap, a l`exception de celles enumerees dans la norme ISO 32000-1:2008, 9.7.5.2, tableau 118.");
@@ -779,8 +767,7 @@ public class UtilTranslate {
 				"Un fichier conforme ne doit pas contenir de nom de plus de 127 octets.");
 		fr = fr.replace("A conforming file shall not contain any PostScript XObjects",
 				"Un fichier conforme ne doit pas contenir d`objets XObjects PostScript.");
-		fr = fr.replace(
-				"A conforming file shall not contain any real number closer to zero than +/-1.175 x 10^(-38)",
+		fr = fr.replace("A conforming file shall not contain any real number closer to zero than +/-1.175 x 10^(-38)",
 				"Un fichier conforme ne doit pas contenir de nombre reel plus proche de zero que +/-1,175 x 10^(-38).");
 		fr = fr.replace("A conforming file shall not contain any real number outside the range of +/-3.403 x 10^38",
 				"Un fichier conforme ne doit pas contenir de nombre reel en dehors de l`intervalle +/-3.403 x 10^38.");
@@ -821,8 +808,7 @@ public class UtilTranslate {
 		fr = fr.replace(
 				"A form XObject dictionary shall not contain any of the following: - the OPI key; - the Subtype2 key with a value of PS; - the PS key",
 				"Le dictionnaire XObject d`un formulaire ne doit contenir aucun des elements suivants - la cle OPI ; - la cle Subtype2 avec une valeur PS ; - la cle PS.");
-		fr = fr.replace(
-				"A form XObject dictionary shall not contain the Subtype2 key with a value of PS or the PS key",
+		fr = fr.replace("A form XObject dictionary shall not contain the Subtype2 key with a value of PS or the PS key",
 				"Le dictionnaire d`un objet XObject de formulaire ne doit pas contenir la cle de sous-type 2 avec une valeur PS ou la cle PS.");
 		fr = fr.replace(
 				"A Group object with an S key with a value of Transparency shall not be included in a form XObject.",
@@ -993,8 +979,7 @@ public class UtilTranslate {
 		fr = fr.replace(
 				"Embedded font programs shall define all font glyphs referenced for rendering with conforming file",
 				"Les programmes de polices integrees doivent definir tous les glyphes de polices references pour le rendu avec un fichier conforme.");
-		fr = fr.replace(
-				"Embedded fonts shall define all glyphs referenced for rendering within the conforming file.",
+		fr = fr.replace("Embedded fonts shall define all glyphs referenced for rendering within the conforming file.",
 				"Les polices integrees doivent definir tous les glyphes references pour le rendu dans le fichier conforme.");
 		fr = fr.replace(
 				"Every annotation (including those whose Subtype value is Widget, as used for form fields), except for the two cases listed below, shall have at least one appearance dictionary: - annotations where the value of the Rect key consists of an array where value 1 is equal to value 3 and value 2 is equal to value 4; - annotations whose Subtype value is Popup or Link",
@@ -1069,8 +1054,7 @@ public class UtilTranslate {
 		fr = fr.replace(
 				"Font names, names of colourants in Separation and DeviceN colour spaces, and structure type names, after expansion of character sequences escaped with a NUMBER SIGN (23h), if any, shall be valid UTF-8 character sequences",
 				"Les noms de polices, les noms de colorants dans les espaces colorimetriques Separation et DeviceN, et les noms de types de structures, apres expansion des sequences de caracteres echappees par un SIGNE NUMeRIQUE (23h), le cas echeant, doivent etre des sequences de caracteres UTF-8 valides.");
-		fr = fr.replace(
-				"Font programs cmap tables for all symbolic TrueType fonts shall contain exactly one encoding",
+		fr = fr.replace("Font programs cmap tables for all symbolic TrueType fonts shall contain exactly one encoding",
 				"Les tables cmap des programmes de polices pour toutes les polices symboliques TrueType doivent contenir exactement un encodage.");
 		fr = fr.replace(
 				"For all annotation dictionaries containing an AP key, the appearance dictionary that it defines as its value shall contain only the N key",
@@ -1117,6 +1101,8 @@ public class UtilTranslate {
 		fr = fr.replace(
 				"If a files OutputIntents array contains more than one entry, then all entries that contain a DestOutputProfile key shall have as the value of that key the same indirect object, which shall be a valid ICC profile stream",
 				"Si le tableau OutputIntents d`un fichier contient plus d`une entree, toutes les entrees qui contiennent une cle DestOutputProfile doivent avoir comme valeur de cette cle le meme objet indirect, qui doit etre un flux de profil ICC valide.");
+		fr = fr.replace("If a ca key is present in an ExtGState object, its value shall be 1.0",
+				"Si une cle ca est presente dans un objet ExtGState, sa valeur doit etre 1.0.");
 		fr = fr.replace(
 				"If an annotation dictionarys Subtype key has a value of Widget and its FT key has a value of Btn, the value of the N key shall be an appearance subdictionary",
 				"Si la cle Subtype d`un dictionnaire d`annotations a pour valeur Widget et que sa cle FT a pour valeur Btn, la valeur de la cle N doit etre un sous-dictionnaire d`apparence.");
@@ -1125,8 +1111,7 @@ public class UtilTranslate {
 				"Si la cle de sous-type d`un dictionnaire d`annotations a une valeur autre que Widget, ou si la cle FT associee a l`annotation Widget a une valeur autre que Btn, la valeur de la cle N est un flux d`apparence.");
 		fr = fr.replace("If an Image dictionary contains the BitsPerComponent key, its value shall be 1, 2, 4 or 8",
 				"Si un dictionnaire d`images contient la cle BitsPerComponent, sa valeur doit etre 1, 2, 4 ou 8.");
-		fr = fr.replace(
-				"If an Image dictionary contains the BitsPerComponent key, its value shall be 1, 2, 4, 8 or 16",
+		fr = fr.replace("If an Image dictionary contains the BitsPerComponent key, its value shall be 1, 2, 4, 8 or 16",
 				"Si un dictionnaire d`images contient la cle BitsPerComponent, sa valeur doit etre 1, 2, 4, 8 ou 16.");
 		fr = fr.replace("If an Image dictionary contains the Interpolate key, its value shall be false",
 				"Si un dictionnaire d`images contient la cle Interpolate, sa valeur doit etre false.");
@@ -1164,8 +1149,7 @@ public class UtilTranslate {
 		fr = fr.replace(
 				"If the number of colour space specifications in the JPEG2000 data is greater than 1, there shall be exactly one colour space specification that has the value 0x01 in the APPROX field",
 				"Si le nombre de specifications d`espace couleur dans les donnees JPEG2000 est superieur a 1, il doit y avoir exactement une specification d`espace couleur ayant la valeur 0x01 dans le champ APPROX.");
-		fr = fr.replace(
-				"If the value of the Encoding entry is a dictionary, it shall not contain a Differences entry",
+		fr = fr.replace("If the value of the Encoding entry is a dictionary, it shall not contain a Differences entry",
 				"Si la valeur de l`entree Encoding est un dictionnaire, elle ne doit pas contenir d`entree Differences.");
 		fr = fr.replace(
 				"In a cross reference subsection header the starting object number and the range shall be separated by a single SPACE character (20h)",
@@ -1198,8 +1182,7 @@ public class UtilTranslate {
 				"La norme ISO 32000-1:2008, 9.7.4, tableau 117, exige que toutes les polices CIDFont de type 2 integrees dans le dictionnaire CIDFont contiennent une entree CIDToGIDMap qui doit etre une correspondance de flux entre les CID et les indices de glyphes ou le nom Identity, comme decrit dans la norme ISO 32000-1:2008, 9.7.4, tableau 117.");
 		fr = fr.replace("JPEG2000 enumerated colour space 19 (CIEJab) shall not be used",
 				"L`espace couleur enumere JPEG2000 19 (CIEJab) ne doit pas etre utilise.");
-		fr = fr.replace("Largest Integer value is 2,147,483,647.",
-				"La plus grande valeur entiere est 2 147 483 647.");
+		fr = fr.replace("Largest Integer value is 2,147,483,647.", "La plus grande valeur entiere est 2 147 483 647.");
 		fr = fr.replace(
 				"LastChar - integer - (Required except for the standard 14 fonts) The last character code defined in the fonts Widths array",
 				"LastChar - entier - (obligatoire sauf pour les polices standard 14) Le dernier code de caractere defini dans le tableau Widths de la police.");
@@ -1221,14 +1204,12 @@ public class UtilTranslate {
 				"La valeur maximale d`un CID (identifiant de caractere) est de 65 535.");
 		fr = fr.replace("Metadata object stream dictionaries shall not contain the Filter key",
 				"Les dictionnaires de flux d`objets de metadonnees ne doivent pas contenir la cle Filter.");
-		fr = fr.replace(
-				"Named actions other than NextPage, PrevPage, FirstPage, and LastPage shall not be permitted",
+		fr = fr.replace("Named actions other than NextPage, PrevPage, FirstPage, and LastPage shall not be permitted",
 				"Les actions nommees autres que NextPage, PrevPage, FirstPage et LastPage ne sont pas autorisees.");
 		fr = fr.replace(
 				"No data can follow the last end-of-file marker except a single optional end-of-line marker as described in ISO 32000-1:2008, 7.5.5",
 				"Aucune donnee ne peut suivre le dernier marqueur de fin de fichier, a l`exception d`un seul marqueur de fin de ligne facultatif tel que decrit dans la norme ISO 32000-1:2008, 7.5.5.");
-		fr = fr.replace(
-				"No data shall follow the last end-of-file marker except a single optional end-of-line marker",
+		fr = fr.replace("No data shall follow the last end-of-file marker except a single optional end-of-line marker",
 				"Aucune donnee ne doit suivre le dernier marqueur de fin de fichier, a l`exception d`un seul marqueur de fin de ligne facultatif.");
 		fr = fr.replace(
 				"No keys other than UR3 and DocMDP shall be present in a permissions dictionary (ISO 32000-1:2008, 12.8.4, Table 258)",
@@ -1333,8 +1314,7 @@ public class UtilTranslate {
 		fr = fr.replace(
 				"The following keys, if present in an ExtGState object, shall have the values shown: BM - Normal or Compatible",
 				"Les cles suivantes, si elles sont presentes dans un objet ExtGState, doivent avoir les valeurs indiquees : BM - Normal ou Compatible.");
-		fr = fr.replace(
-				"The following keys, if present in an ExtGState object, shall have the values shown: CA - 1.0",
+		fr = fr.replace("The following keys, if present in an ExtGState object, shall have the values shown: CA - 1.0",
 				"Les cles suivantes, si elles sont presentes dans un objet ExtGState, ont les valeurs indiquees : CA - 1.0.");
 		fr = fr.replace(
 				"The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 19005-2, 6.2.11.7.2",
@@ -1348,8 +1328,7 @@ public class UtilTranslate {
 		fr = fr.replace(
 				"The font programs for all fonts used within a conforming file shall be embedded within that file, as defined in PDF Reference 5.8, except when the fonts are used exclusively with text rendering mode 3",
 				"Les programmes de polices de toutes les polices utilisees dans un fichier conforme doivent etre incorpores dans ce fichier, comme defini dans PDF Reference 5.8, sauf lorsque les polices sont utilisees exclusivement avec le mode de rendu de texte 3.");
-		fr = fr.replace(
-				"The generation number and obj keyword shall be separated by a single white-space character.",
+		fr = fr.replace("The generation number and obj keyword shall be separated by a single white-space character.",
 				"Le numero de generation et le mot-cle obj doivent etre separes par un seul caractere d`espacement.");
 		fr = fr.replace("The Hide action shall not be permitted (Corrigendum 2)",
 				"L`action Hide n`est pas autorisee (Corrigendum 2).");
@@ -1383,8 +1362,7 @@ public class UtilTranslate {
 				"Les mots-cles obj et endobj doivent chacun etre suivis d`un marqueur EOL.");
 		fr = fr.replace("The object number and endobj keyword shall each be preceded by an EOL marker.",
 				"Le numero d`objet et le mot-cle endobj sont tous deux precedes d`un marqueur EOL.");
-		fr = fr.replace(
-				"The object number and generation number shall be separated by a single white-space character.",
+		fr = fr.replace("The object number and generation number shall be separated by a single white-space character.",
 				"Le numero d`objet et le numero de generation sont separes par un seul caractere d`espacement.");
 		fr = fr.replace(
 				"The only valid values of this key in PDF 1.4 are Type1C - Type 1–equivalent font program represented in the Compact Font Format (CFF) and CIDFontType0C - Type 0 CIDFont program represented in the Compact Font Format (CFF)",
@@ -1421,8 +1399,7 @@ public class UtilTranslate {
 		fr = fr.replace(
 				"The stream keyword shall be followed either by a CARRIAGE RETURN (0Dh) and LINE FEED (0Ah) character sequence or by a single LINE FEED character.",
 				"Le mot-cle stream doit etre suivi soit d`une sequence de caracteres CARRIAGE RETURN (0Dh) et LINE FEED (0Ah), soit d`un seul caractere LINE FEED.");
-		fr = fr.replace(
-				"The subtype is the value of the Subtype key, if present, in the font file stream dictionary.",
+		fr = fr.replace("The subtype is the value of the Subtype key, if present, in the font file stream dictionary.",
 				"Le sous-type est la valeur de la cle Subtype, si elle existe, dans le dictionnaire de flux du fichier de polices.");
 		fr = fr.replace(
 				"The TransferFunction key in a halftone dictionary shall be used only as required by ISO 32000-1",
@@ -1519,8 +1496,7 @@ public class UtilTranslate {
 				"Un file conforme non deve contenere nomi piu lunghi di 127 byte.");
 		it = it.replace("A conforming file shall not contain any PostScript XObjects",
 				"Un file conforme non deve contenere alcun XObject PostScript.");
-		it = it.replace(
-				"A conforming file shall not contain any real number closer to zero than +/-1.175 x 10^(-38)",
+		it = it.replace("A conforming file shall not contain any real number closer to zero than +/-1.175 x 10^(-38)",
 				"Un file conforme non deve contenere alcun numero reale piu vicino a zero di +/-1,175 x 10^(-38).");
 		it = it.replace("A conforming file shall not contain any real number outside the range of +/-3.403 x 10^38",
 				"Un file conforme non deve contenere alcun numero reale al di fuori dell`intervallo +/-3,403 x 10^38.");
@@ -1561,8 +1537,7 @@ public class UtilTranslate {
 		it = it.replace(
 				"A form XObject dictionary shall not contain any of the following: - the OPI key; - the Subtype2 key with a value of PS; - the PS key",
 				"Il dizionario XObject di un modulo non deve contenere nessuno dei seguenti elementi: - la chiave OPI; - la chiave Subtype2 con valore PS; - la chiave PS.");
-		it = it.replace(
-				"A form XObject dictionary shall not contain the Subtype2 key with a value of PS or the PS key",
+		it = it.replace("A form XObject dictionary shall not contain the Subtype2 key with a value of PS or the PS key",
 				"Il dizionario di un modulo XObject non deve contenere la chiave Subtype2 con valore PS o la chiave PS.");
 		it = it.replace(
 				"A Group object with an S key with a value of Transparency shall not be included in a form XObject.",
@@ -1732,8 +1707,7 @@ public class UtilTranslate {
 		it = it.replace(
 				"Embedded font programs shall define all font glyphs referenced for rendering with conforming file",
 				"I programmi di font incorporati devono definire tutti i glifi dei font a cui si fa riferimento per il rendering con un file conforme.");
-		it = it.replace(
-				"Embedded fonts shall define all glyphs referenced for rendering within the conforming file.",
+		it = it.replace("Embedded fonts shall define all glyphs referenced for rendering within the conforming file.",
 				"I font incorporati devono definire tutti i glifi a cui si fa riferimento per il rendering all`interno del file conforme.");
 		it = it.replace(
 				"Every annotation (including those whose Subtype value is Widget, as used for form fields), except for the two cases listed below, shall have at least one appearance dictionary: - annotations where the value of the Rect key consists of an array where value 1 is equal to value 3 and value 2 is equal to value 4; - annotations whose Subtype value is Popup or Link",
@@ -1808,8 +1782,7 @@ public class UtilTranslate {
 		it = it.replace(
 				"Font names, names of colourants in Separation and DeviceN colour spaces, and structure type names, after expansion of character sequences escaped with a NUMBER SIGN (23h), if any, shall be valid UTF-8 character sequences",
 				"I nomi dei font, i nomi dei coloranti negli spazi colore Separation e DeviceN e i nomi dei tipi di struttura, dopo l`espansione delle sequenze di caratteri evase con un SEGNO NUMERICO (23h), se presenti, devono essere sequenze di caratteri UTF-8 valide.");
-		it = it.replace(
-				"Font programs cmap tables for all symbolic TrueType fonts shall contain exactly one encoding",
+		it = it.replace("Font programs cmap tables for all symbolic TrueType fonts shall contain exactly one encoding",
 				"Le tabelle cmap dei programmi di font per tutti i font TrueType simbolici devono contenere esattamente una codifica.");
 		it = it.replace(
 				"For all annotation dictionaries containing an AP key, the appearance dictionary that it defines as its value shall contain only the N key",
@@ -1856,6 +1829,8 @@ public class UtilTranslate {
 		it = it.replace(
 				"If a files OutputIntents array contains more than one entry, then all entries that contain a DestOutputProfile key shall have as the value of that key the same indirect object, which shall be a valid ICC profile stream",
 				"Se l`array OutputIntents di un file contiene piu di una voce, tutte le voci che contengono una chiave DestOutputProfile devono avere come valore di tale chiave lo stesso oggetto indiretto, che deve essere un flusso di profilo ICC valido.");
+		it = it.replace("If a ca key is present in an ExtGState object, its value shall be 1.0",
+				"Se una chiave ca e presente in un oggetto ExtGState, il suo valore sara 1.0.");
 		it = it.replace(
 				"If an annotation dictionarys Subtype key has a value of Widget and its FT key has a value of Btn, the value of the N key shall be an appearance subdictionary",
 				"Se la chiave Subtype di un dizionario di annotazioni ha un valore di Widget e la sua chiave FT ha un valore di Btn, il valore della chiave N deve essere un sottodizionario di aspetto.");
@@ -1864,8 +1839,7 @@ public class UtilTranslate {
 				"Se la chiave Subtype di un dizionario di annotazioni ha un valore diverso da Widget o se la chiave FT associata all`annotazione Widget ha un valore diverso da Btn, il valore della chiave N sara un flusso di aspetto.");
 		it = it.replace("If an Image dictionary contains the BitsPerComponent key, its value shall be 1, 2, 4 or 8",
 				"Se un dizionario Immagine contiene la chiave BitsPerComponent, il suo valore sara 1, 2, 4 o 8.");
-		it = it.replace(
-				"If an Image dictionary contains the BitsPerComponent key, its value shall be 1, 2, 4, 8 or 16",
+		it = it.replace("If an Image dictionary contains the BitsPerComponent key, its value shall be 1, 2, 4, 8 or 16",
 				"Se il dizionario delle immagini contiene la chiave BitsPerComponent, il suo valore e 1, 2, 4, 8 o 16.");
 		it = it.replace("If an Image dictionary contains the Interpolate key, its value shall be false",
 				"Se il dizionario di un`immagine contiene la chiave Interpolate, il suo valore sara false.");
@@ -1903,8 +1877,7 @@ public class UtilTranslate {
 		it = it.replace(
 				"If the number of colour space specifications in the JPEG2000 data is greater than 1, there shall be exactly one colour space specification that has the value 0x01 in the APPROX field",
 				"Se il numero di specifiche dello spazio colore nei dati JPEG2000 e maggiore di 1, deve esserci esattamente una specifica dello spazio colore con il valore 0x01 nel campo APPROX.");
-		it = it.replace(
-				"If the value of the Encoding entry is a dictionary, it shall not contain a Differences entry",
+		it = it.replace("If the value of the Encoding entry is a dictionary, it shall not contain a Differences entry",
 				"Se il valore della voce Encoding e un dizionario, non deve contenere una voce Differences.");
 		it = it.replace(
 				"In a cross reference subsection header the starting object number and the range shall be separated by a single SPACE character (20h)",
@@ -1958,14 +1931,12 @@ public class UtilTranslate {
 				"Il valore massimo di un CID (identificatore di caratteri) e 65.535.");
 		it = it.replace("Metadata object stream dictionaries shall not contain the Filter key",
 				"I dizionari dei flussi di oggetti di metadati non devono contenere la chiave Filtro.");
-		it = it.replace(
-				"Named actions other than NextPage, PrevPage, FirstPage, and LastPage shall not be permitted",
+		it = it.replace("Named actions other than NextPage, PrevPage, FirstPage, and LastPage shall not be permitted",
 				"Non sono consentite azioni denominate diverse da NextPage, PrevPage, FirstPage e LastPage.");
 		it = it.replace(
 				"No data can follow the last end-of-file marker except a single optional end-of-line marker as described in ISO 32000-1:2008, 7.5.5",
 				"Nessun dato puo seguire l`ultimo marcatore di fine file, eccetto un singolo marcatore opzionale di fine riga come descritto in ISO 32000-1:2008, 7.5.5.");
-		it = it.replace(
-				"No data shall follow the last end-of-file marker except a single optional end-of-line marker",
+		it = it.replace("No data shall follow the last end-of-file marker except a single optional end-of-line marker",
 				"Nessun dato deve seguire l`ultimo marcatore di fine file, tranne un singolo marcatore opzionale di fine riga.");
 		it = it.replace(
 				"No keys other than UR3 and DocMDP shall be present in a permissions dictionary (ISO 32000-1:2008, 12.8.4, Table 258)",
@@ -1992,8 +1963,7 @@ public class UtilTranslate {
 				"La proprieta corr dello schema di identificazione PDF/A deve avere il prefisso dello spazio dei nomi pdfaid.");
 		it = it.replace("Property part of the PDF/A Identification Schema shall have namespace prefix pdfaid",
 				"La proprieta part dello schema di identificazione PDF/A deve avere il prefisso dello spazio dei nomi pdfaid.");
-		it = it.replace("Smallest integer value is -2,147,483,648",
-				"Il valore intero piu piccolo e -2.147.483.648.");
+		it = it.replace("Smallest integer value is -2,147,483,648", "Il valore intero piu piccolo e -2.147.483.648.");
 		it = it.replace("Standard tags shall not be remapped to a non-standard type",
 				"I tag standard non devono essere rimappati a un tipo non standard.");
 		it = it.replace(
@@ -2070,8 +2040,7 @@ public class UtilTranslate {
 		it = it.replace(
 				"The following keys, if present in an ExtGState object, shall have the values shown: BM - Normal or Compatible",
 				"Le seguenti chiavi, se presenti in un oggetto ExtGState, devono avere i valori indicati: BM - Normale o compatibile.");
-		it = it.replace(
-				"The following keys, if present in an ExtGState object, shall have the values shown: CA - 1.0",
+		it = it.replace("The following keys, if present in an ExtGState object, shall have the values shown: CA - 1.0",
 				"Le seguenti chiavi, se presenti in un oggetto ExtGState, devono avere i valori indicati: CA - 1.0.");
 		it = it.replace(
 				"The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 19005-2, 6.2.11.7.2",
@@ -2085,8 +2054,7 @@ public class UtilTranslate {
 		it = it.replace(
 				"The font programs for all fonts used within a conforming file shall be embedded within that file, as defined in PDF Reference 5.8, except when the fonts are used exclusively with text rendering mode 3",
 				"I programmi dei font per tutti i font utilizzati all`interno di un file conforme devono essere incorporati all`interno di tale file, come definito in PDF Reference 5.8, tranne quando i font sono utilizzati esclusivamente con la modalita di rendering del testo 3.");
-		it = it.replace(
-				"The generation number and obj keyword shall be separated by a single white-space character.",
+		it = it.replace("The generation number and obj keyword shall be separated by a single white-space character.",
 				"Il numero di generazione e la parola chiave obj devono essere separati da un singolo carattere di spazio bianco.");
 		it = it.replace("The Hide action shall not be permitted (Corrigendum 2)",
 				"L`azione Nascondi non e consentita (rettifica 2).");
@@ -2120,8 +2088,7 @@ public class UtilTranslate {
 				"Le parole chiave obj e endobj devono essere seguite ciascuna da un marcatore EOL.");
 		it = it.replace("The object number and endobj keyword shall each be preceded by an EOL marker.",
 				"Il numero dell`oggetto e la parola chiave endobj devono essere preceduti da un marcatore EOL.");
-		it = it.replace(
-				"The object number and generation number shall be separated by a single white-space character.",
+		it = it.replace("The object number and generation number shall be separated by a single white-space character.",
 				"Il numero dell`oggetto e il numero di generazione devono essere separati da un singolo carattere di spazio bianco.");
 		it = it.replace(
 				"The only valid values of this key in PDF 1.4 are Type1C - Type 1–equivalent font program represented in the Compact Font Format (CFF) and CIDFontType0C - Type 0 CIDFont program represented in the Compact Font Format (CFF)",
@@ -2158,8 +2125,7 @@ public class UtilTranslate {
 		it = it.replace(
 				"The stream keyword shall be followed either by a CARRIAGE RETURN (0Dh) and LINE FEED (0Ah) character sequence or by a single LINE FEED character.",
 				"La parola chiave stream deve essere seguita da una sequenza di caratteri CARRIAGE RETURN (0Dh) e LINE FEED (0Ah) o da un singolo carattere LINE FEED.");
-		it = it.replace(
-				"The subtype is the value of the Subtype key, if present, in the font file stream dictionary.",
+		it = it.replace("The subtype is the value of the Subtype key, if present, in the font file stream dictionary.",
 				"Il sottotipo e il valore della chiave Subtype, se presente, nel dizionario del flusso del file font.");
 		it = it.replace(
 				"The TransferFunction key in a halftone dictionary shall be used only as required by ISO 32000-1",
