@@ -493,22 +493,6 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					// System.out.println(" initialise VeraGreenfieldFoundryProvider ");
 					VeraGreenfieldFoundryProvider.initialise();
 
-					/*
-					 * Der Validator benoetigt wie der Prozessor ca 15 Sekunden was sehr lange ist.
-					 * 
-					 * Der Validator schreibt jedoch kein report.
-					 * 
-					 * 
-					 * System.out.println( System.currentTimeMillis()+ " - Start Valid or not");
-					 * PDFAFlavour flavour1 = PDFAFlavour.fromString(level.toLowerCase()); try
-					 * (PDFAParser parser1 = Foundries.defaultInstance().createParser(new
-					 * FileInputStream(valDatei), flavour1)) { PDFAValidator validator1 =
-					 * Foundries.defaultInstance().createValidator(flavour1, false);
-					 * ValidationResult result1 = validator1.validate(parser1); if
-					 * (result1.isCompliant()) { // File is a valid PDF/A 1b } else { // it isn't }
-					 * } System.out.println( System.currentTimeMillis()+ " - End Valid or not");
-					 */
-
 					String verapdfReport;
 
 					// Verwende Standard Config jedoch mit vorgegebenem Level
@@ -529,6 +513,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					EnumSet tasks = EnumSet.noneOf(TaskType.class);
 					tasks.add(TaskType.VALIDATE);
 					File valDateiNorm = new File(pathToWorkDirValdatei + File.separator + "veraPDF.pdf");
+					if (valDateiNorm.exists()) {
+						Util.deleteFile(valDateiNorm);
+					}
 					Util.copyFile(valDatei, valDateiNorm);
 					if (valDateiNorm.exists()) {
 						// ok
@@ -547,18 +534,20 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						List<File> files = new ArrayList<>();
 						files.add(valDateiNorm);
 
-						// Starten des processor resp. der Validierung
 						/*
-						 * Der Prozessor benoetigt ca 15 Sekunden was sehr lange ist.
+						 * INFO: Der processor gibt in seltenen Faellen eine
 						 * 
-						 * Callas welcher auch schon als langsam wahrgenommen wird benoetigt 8
-						 * Sekunden...
+						 * WARNUNG: Exception caught when validating item
 						 * 
-						 * TODO: Testen der Performance der CLI CLI-Anleitung unter
-						 * https://docs.verapdf.org/cli/validation/
+						 * org.verapdf.core.ValidationException: Caught unexpected runtime exception
+						 * during validation
+						 * 
+						 * aus, welche von meiner Seite aus nicht abgefangen werden kann (catch; Console
+						 * ausschalten / umleiten)
+						 * 
+						 * --> Hinweis auf Konsole wenn invalid aber keine Fehlermeldung im Log
 						 */
-						// System.out.println(System.currentTimeMillis() + " - Start processor");
-
+						
 						processor.process(files, ProcessorFactory.getHandler(FormatOption.XML, false, reportStream,
 								processorConfig.getValidatorConfig().isRecordPasses()));
 						// System.out.println(System.currentTimeMillis() + " - End processor");
@@ -594,16 +583,19 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						}
 					} catch (VeraPDFException e) {
 						isValidverapdf = false;
-						Logtxt.logtxt(logFile,
-								getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-										+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN,
-												"VeraPDF Exception: " + e.getMessage()));
+						verapdfA = verapdfA + getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+								+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN,
+										"</Message><Message> - VeraPDF Exception: " + e.getMessage());
 					} catch (IOException excep) {
 						isValidverapdf = false;
-						Logtxt.logtxt(logFile,
-								getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-										+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN,
-												"VeraPDF IOException: " + excep.getMessage()));
+						verapdfA = verapdfA + getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+								+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN,
+										"</Message><Message> - VeraPDF IOException: " + excep.getMessage());
+					} catch (Exception ex) {
+						isValidverapdf = false;
+						verapdfA = verapdfA + getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+								+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN,
+										"</Message><Message> - VeraPDF other Exception: " + ex.getMessage());
 					}
 					if (isValidverapdf) {
 						// valid Report loeschen
@@ -813,7 +805,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 												+ getTextResourceService().getText(locale, MESSAGE_XML_MODUL_H_PDFA)
 												+ "<Message>" + descriptionTrans + " [verapdf " + clause + "]</Message>"
 												+ errorMessage + "</Error>";
-									} else if (description.toLowerCase().contains("transparen")) {
+									} else if (description.toLowerCase().contains("transparen")
+											|| description.toLowerCase().contains(" ca key ")) {
 										verapdfE = verapdfE
 												+ getTextResourceService().getText(locale, MESSAGE_XML_MODUL_E_PDFA)
 												+ "<Message>" + descriptionTrans + " [verapdf " + clause + "]</Message>"
@@ -853,14 +846,37 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					}
 				} catch (Exception e) {
 					isValidverapdf = false;
-					Logtxt.logtxt(logFile,
-							getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-									+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN,
-											"Exception (veraPDF): " + e.getMessage()));
+					/*
+					 * Logtxt.logtxt(logFile, getTextResourceService().getText(locale,
+					 * MESSAGE_XML_MODUL_A_PDFA) + getTextResourceService().getText(locale,
+					 * ERROR_XML_UNKNOWN, "Exception (veraPDF): " + e.getMessage()));
+					 */
+					verapdfA = verapdfA + getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+							+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN,
+									"</Message><Message> - Exception (veraPDF): " + e.getMessage());
 				}
 			} else {
 				isValidverapdf = false;
 			}
+			if (verapdf) {
+				if (!isValidverapdf) {
+					// veraPDF eingeschaltet aber nicht bestanden.
+
+					/*
+					 * Kontrolle ob ein Fehler gespeichert wurde. Wenn nicht eine allg.
+					 * Fehlermeldung ausgeben.
+					 */
+					String verapdfABCDEFGHI = verapdfA + verapdfB + verapdfC + verapdfD + verapdfE + verapdfF + verapdfG
+							+ verapdfH + verapdfI;
+					if (verapdfABCDEFGHI.equals("")) {
+						// Kein Fehler gespeichert
+						verapdfA = verapdfA + getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+								+ getTextResourceService().getText(locale, ERROR_XML_SERVICEFAILED, "veraPDF",
+										"veraPDF exception could be visible in the console");
+					}
+				}
+			}
+
 			// TODO Falls gewunscht Fontvalidierung mit PDFTools
 			String fontYesNo = configMap.get("pdfafont");
 			if (pdftools && !fontYesNo.equalsIgnoreCase("no")) {

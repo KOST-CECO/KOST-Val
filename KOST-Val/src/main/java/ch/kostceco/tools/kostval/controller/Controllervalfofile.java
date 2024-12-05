@@ -1180,6 +1180,7 @@ public class Controllervalfofile implements MessageConstants {
 			returnEgovdvSum = returnEgovdvSum.replace("Datum/Zeit der Prüfung:", "Date/Heure du controle :");
 			returnEgovdvSum = returnEgovdvSum.replace("Name der signierten Datei:", "Nom du fichier signe :");
 			returnEgovdvSum = returnEgovdvSum.replace("Hash der Datei", "Empreinte du fichier");
+			returnEgovdvSum = returnEgovdvSum.replace("Pruefergebnis egovdv","Resultat du test egovdv");
 			returnEgovdvSum = returnEgovdvSum.replace("Das Dokument ist gültig signiert",
 					"Le document a ete signe valablement");
 			returnEgovdvSum = returnEgovdvSum.replace("Alle Signaturen sind LTV-fähig.",
@@ -1204,6 +1205,8 @@ public class Controllervalfofile implements MessageConstants {
 			returnEgovdvSum = returnEgovdvSum.replace("Information über den Zeitstempel",
 					"Information sur l'horodatage");
 			returnEgovdvSum = returnEgovdvSum.replace("Zertifikat ausgestellt für:", "Certificat delivre a :");
+			returnEgovdvSum = returnEgovdvSum.replace("Organisation:", "Organisation :");
+			returnEgovdvSum = returnEgovdvSum.replace("Organisationseinheit:", "Unite organisationnelle :");
 			returnEgovdvSum = returnEgovdvSum.replace("Zertifikat ausgestellt von:", "Certificat delivre par :");
 			returnEgovdvSum = returnEgovdvSum.replace("Gueltigkeit des Zertifikats:", "Validite du certificat :");
 			returnEgovdvSum = returnEgovdvSum.replace("Der Zeitstempel ist gültig", "L'horodatage est valide");
@@ -1242,6 +1245,7 @@ public class Controllervalfofile implements MessageConstants {
 			returnEgovdvSum = returnEgovdvSum.replace("Datum/Zeit der Prüfung:", "Data/ora della verifica:");
 			returnEgovdvSum = returnEgovdvSum.replace("Name der signierten Datei:", "Nome del file firmato:");
 			returnEgovdvSum = returnEgovdvSum.replace("Hash der Datei", "Hash del file");
+			returnEgovdvSum = returnEgovdvSum.replace("Pruefergebnis egovdv","Risultato del test egovdv");
 			returnEgovdvSum = returnEgovdvSum.replace("Das Dokument ist gültig signiert",
 					"Documento firmato in modo valido");
 			returnEgovdvSum = returnEgovdvSum.replace("Alle Signaturen sind LTV-fähig.",
@@ -1266,6 +1270,8 @@ public class Controllervalfofile implements MessageConstants {
 			returnEgovdvSum = returnEgovdvSum.replace("Information über den Zeitstempel",
 					"Informazioni sulla marca temporale (timestamp)");
 			returnEgovdvSum = returnEgovdvSum.replace("Zertifikat ausgestellt für:", "Certificato emesso per:");
+			returnEgovdvSum = returnEgovdvSum.replace("Organisation:", "Organizzazione:");
+			returnEgovdvSum = returnEgovdvSum.replace("Organisationseinheit:", "Unita organizzativa:");
 			returnEgovdvSum = returnEgovdvSum.replace("Zertifikat ausgestellt von:", "Certificato emesso da:");
 			returnEgovdvSum = returnEgovdvSum.replace("Gueltigkeit des Zertifikats:", "Validita del certificato:");
 			returnEgovdvSum = returnEgovdvSum.replace("Der Zeitstempel ist gültig",
@@ -1305,6 +1311,7 @@ public class Controllervalfofile implements MessageConstants {
 			returnEgovdvSum = returnEgovdvSum.replace("Datum/Zeit der Prüfung:", "Date/time of validation:");
 			returnEgovdvSum = returnEgovdvSum.replace("Name der signierten Datei:", "Name of signed file:");
 			returnEgovdvSum = returnEgovdvSum.replace("Hash der Datei", "Hash of file");
+			returnEgovdvSum = returnEgovdvSum.replace("Pruefergebnis egovdv","Test result egovdv");
 			returnEgovdvSum = returnEgovdvSum.replace("Das Dokument ist gültig signiert",
 					"The document has been validly signed");
 			returnEgovdvSum = returnEgovdvSum.replace("Alle Signaturen sind LTV-fähig.",
@@ -1329,6 +1336,8 @@ public class Controllervalfofile implements MessageConstants {
 			returnEgovdvSum = returnEgovdvSum.replace("Information über den Zeitstempel",
 					"Information about timestamp");
 			returnEgovdvSum = returnEgovdvSum.replace("Zertifikat ausgestellt für:", "Certificate issued to:");
+			returnEgovdvSum = returnEgovdvSum.replace("Organisation:", "Organization:");
+			returnEgovdvSum = returnEgovdvSum.replace("Organisationseinheit:", "Organizational unit:");
 			returnEgovdvSum = returnEgovdvSum.replace("Zertifikat ausgestellt von:", "Certificate issued from:");
 			returnEgovdvSum = returnEgovdvSum.replace("Gueltigkeit des Zertifikats:", "Validity of certificate:");
 			returnEgovdvSum = returnEgovdvSum.replace("Der Zeitstempel ist gültig", "The timestamp is valid");

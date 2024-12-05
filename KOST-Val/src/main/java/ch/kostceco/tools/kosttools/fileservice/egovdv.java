@@ -532,7 +532,7 @@ public class egovdv {
 
 		prettyPrint = prettyPrint.replaceAll("__Folgende Prüfungen wurden durchgeführt:", "");
 		prettyPrint = prettyPrint.replaceAll("__Das Dokument ist ",
-				"</Message><Message></Message><Message>Das Dokument ist ");
+				"</Message><Message></Message><Message>Pruefergebnis [egovdv]:</Message><Message>Das Dokument ist ");
 		prettyPrint = prettyPrint.replaceAll("__ Das Dokument ist ", "</Message><Message> - Das Dokument ist ");
 		prettyPrint = prettyPrint.replaceAll("__ Das Dokument weist ", "</Message><Message> - Das Dokument weist ");
 		prettyPrint = prettyPrint.replaceAll("__ Alle validierten ", "</Message><Message> - Alle validierten ");
@@ -549,7 +549,7 @@ public class egovdv {
 
 		// Bereinigung Prüfdetails
 		prettyPrint = prettyPrint.replaceAll("__Prüfdetails Signatur",
-				"</Message><Message></Message><Message>Prüfdetails Signatur");
+				"</Message><Message></Message><Message>Prüfdetails Signatur [egovdv]");
 		prettyPrint = prettyPrint.replaceAll("__Informationen zur Signatur", "");
 		prettyPrint = prettyPrint.replaceAll("__Zeitpunkt der ", "</Message><Message> - Zeitpunkt der ");
 		prettyPrint = prettyPrint.replaceAll("__Signaturalgorithmus:", "</Message><Message> - Signaturalgorithmus:");
@@ -560,15 +560,17 @@ public class egovdv {
 		prettyPrint = prettyPrint.replaceAll("__Information über das Unterzeichnerzertifikat",
 				"</Message><Message> - Information über das Unterzeichnerzertifikat");
 		prettyPrint = prettyPrint.replaceAll("__Zertifikat ausgestellt für",
-				"</Message><Message> - Zertifikat ausgestellt für");
+				"</Message><Message> - - Zertifikat ausgestellt für");
+		prettyPrint = prettyPrint.replaceAll("__Organisation: ", "</Message><Message> - - Organisation: ");
+		prettyPrint = prettyPrint.replaceAll("__Organisationseinheit", "</Message><Message> - - Organisationseinheit");
 		prettyPrint = prettyPrint.replaceAll("__Zertifikat ausgestellt",
-				"</Message><Message> - Zertifikat ausgestellt");
-		prettyPrint = prettyPrint.replaceAll("__Gültigkeit des", "</Message><Message> - Gültigkeit des");
+				"</Message><Message> - - Zertifikat ausgestellt");
+		prettyPrint = prettyPrint.replaceAll("__Gültigkeit des", "</Message><Message> - - Gültigkeit des");
 		prettyPrint = prettyPrint.replaceAll("__Der Zeitstempel ist gültig",
-				"</Message><Message> - Der Zeitstempel ist gültig");
-		prettyPrint = prettyPrint.replaceAll("__Revokationsstatus:", "</Message><Message> - Revokationsstatus:");
-		prettyPrint = prettyPrint.replaceAll("__Zertifikatsträger:", "</Message><Message> - Zertifikatsträger:");
-		prettyPrint = prettyPrint.replaceAll("__Zertifikatsklasse:", "</Message><Message> - Zertifikatsklasse:");
+				"</Message><Message> - - Der Zeitstempel ist gültig");
+		prettyPrint = prettyPrint.replaceAll("__Revokationsstatus:", "</Message><Message> - - Revokationsstatus:");
+		prettyPrint = prettyPrint.replaceAll("__Zertifikatsträger:", "</Message><Message> - - Zertifikatsträger:");
+		prettyPrint = prettyPrint.replaceAll("__Zertifikatsklasse:", "</Message><Message> - - Zertifikatsklasse:");
 		prettyPrint = prettyPrint.replaceAll("__Diese Signatur ist", "</Message><Message> - Diese Signatur ist");
 		prettyPrint = prettyPrint.replaceAll("__Informationen über die unterzeichnende staatliche Einrichtung",
 				"</Message><Message> - Informationen über die unterzeichnende staatliche Einrichtung: ");
@@ -636,6 +638,7 @@ public class egovdv {
 		prettyPrint = prettyPrint.replaceAll("__ZertES.", "");
 		
 		prettyPrint = prettyPrint.replaceAll(" \\(Details siehe A\\)", "");
+		prettyPrint = prettyPrint.replace("Grund: ","");
 		// System.out.println( "2 " + prettyPrint );
 
 		lineOut = prettyPrint;
