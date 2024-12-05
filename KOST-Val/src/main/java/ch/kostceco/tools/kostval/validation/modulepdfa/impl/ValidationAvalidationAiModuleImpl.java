@@ -20,7 +20,6 @@ package ch.kostceco.tools.kostval.validation.modulepdfa.impl;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -34,10 +33,7 @@ import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -54,21 +50,6 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 
-import org.verapdf.core.VeraPDFException;
-import org.verapdf.features.FeatureExtractorConfig;
-import org.verapdf.features.FeatureFactory;
-import org.verapdf.gf.foundry.VeraGreenfieldFoundryProvider;
-import org.verapdf.metadata.fixer.FixerFactory;
-import org.verapdf.metadata.fixer.MetadataFixerConfig;
-import org.verapdf.pdfa.flavours.PDFAFlavour;
-import org.verapdf.pdfa.validation.validators.ValidatorConfig;
-import org.verapdf.pdfa.validation.validators.ValidatorConfigBuilder;
-import org.verapdf.processor.BatchProcessor;
-import org.verapdf.processor.FormatOption;
-import org.verapdf.processor.ProcessorConfig;
-import org.verapdf.processor.ProcessorFactory;
-import org.verapdf.processor.TaskType;
-import org.verapdf.processor.plugins.PluginsCollectionConfig;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -81,6 +62,7 @@ import com.pdftools.Stream;
 import com.pdftools.pdfvalidator.PdfError;
 import com.pdftools.pdfvalidator.PdfValidatorAPI;
 
+import ch.kostceco.tools.kosttools.fileservice.verapdf;
 import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kosttools.util.UtilCallas;
 import ch.kostceco.tools.kosttools.util.UtilCharacter;
@@ -117,7 +99,6 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 	private boolean min = false;
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
 			File logFile, String dirOfJarPath) throws ValidationApdfavalidationException {
@@ -415,7 +396,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 		// String symbolWarningString = "";
 		String fontErrorIgnor = "I";
 		boolean callas = false;
-		boolean verapdf = false;
+		boolean verapdfBo = false;
 		boolean pdftools = false;
 		int callasReturnCode = 9;
 		int callasReturnCodeTest = 9;
@@ -462,16 +443,16 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 		}
 		if (verapdfConfig.contentEquals("yes")) {
 			// verapdf Validierung gewuenscht
-			verapdf = true;
+			verapdfBo = true;
 		}
 
-		if (!verapdf && !callas) {
+		if (!verapdfBo && !callas) {
 			// pdf Validierung nicht moeglich
 			configMap.put("pdfavalidation", "no");
 		}
 
 		try {
-			if (verapdf) {
+			if (verapdfBo) {
 				try {
 					/*
 					 * TODO: Erledigt Start mit veraPDF
@@ -491,112 +472,40 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					 */
 
 					// System.out.println(" initialise VeraGreenfieldFoundryProvider ");
-					VeraGreenfieldFoundryProvider.initialise();
-
-					String verapdfReport;
-
-					// Verwende Standard Config jedoch mit vorgegebenem Level
-					PDFAFlavour flavour = PDFAFlavour.fromString(level.toLowerCase());
-					ValidatorConfig validatorConfig = new ValidatorConfigBuilder().flavour(flavour).build();
-
-					// Verwende Standard features config
-					FeatureExtractorConfig featureConfig = FeatureFactory.defaultConfig();
-
-					// Verwende Standard plugins config
-					PluginsCollectionConfig pluginsConfig = PluginsCollectionConfig.defaultConfig();
-
-					// Verwende Standard fixer config
-					MetadataFixerConfig fixerConfig = FixerFactory.defaultConfig();
-
-					// Tasks configuring
-					@SuppressWarnings("rawtypes")
-					EnumSet tasks = EnumSet.noneOf(TaskType.class);
-					tasks.add(TaskType.VALIDATE);
-					File valDateiNorm = new File(pathToWorkDirValdatei + File.separator + "veraPDF.pdf");
-					if (valDateiNorm.exists()) {
-						Util.deleteFile(valDateiNorm);
-					}
-					Util.copyFile(valDatei, valDateiNorm);
-					if (valDateiNorm.exists()) {
-						// ok
-					} else {
-						Util.copyFile(valDatei, valDateiNorm);
-					}
-					// Erstellen von processor config
-					ProcessorConfig processorConfig = ProcessorFactory.fromValues(validatorConfig, featureConfig,
-							pluginsConfig, fixerConfig, tasks);
-
-					// Erstellen von processor und output stream.
-					ByteArrayOutputStream reportStream = new ByteArrayOutputStream();
-					try (BatchProcessor processor = ProcessorFactory.fileBatchProcessor(processorConfig)) {
-						// in die zu validierende Liste mit Dateien,
-						// welche validiert werden sollen, wird nur valDatei eingetragen
-						List<File> files = new ArrayList<>();
-						files.add(valDateiNorm);
-
-						/*
-						 * INFO: Der processor gibt in seltenen Faellen eine
-						 * 
-						 * WARNUNG: Exception caught when validating item
-						 * 
-						 * org.verapdf.core.ValidationException: Caught unexpected runtime exception
-						 * during validation
-						 * 
-						 * aus, welche von meiner Seite aus nicht abgefangen werden kann (catch; Console
-						 * ausschalten / umleiten)
-						 * 
-						 * --> Hinweis auf Konsole wenn invalid aber keine Fehlermeldung im Log
-						 */
-						
-						processor.process(files, ProcessorFactory.getHandler(FormatOption.XML, false, reportStream,
-								processorConfig.getValidatorConfig().isRecordPasses()));
-						// System.out.println(System.currentTimeMillis() + " - End processor");
-
-						// stream als utf8 in die Datei schreiben (true = append = hinzufuegen)
-						verapdfReport = reportStream.toString("utf-8");
-						String filename = verapdfReportFile.getAbsolutePath();
-						FileWriter fw = new FileWriter(filename, true);
-						fw.write(verapdfReport);
-						fw.close();
-
-						String veraPDFvalid = "<validationReports compliant=\"1\" ";
-						if (Util.stringInFile(valDateiNorm.getAbsolutePath(), verapdfReportFile)) {
-							// System.out.println(" verapdf wurde korrekt durchgefuehrt");
-							if (Util.stringInFile(veraPDFvalid, verapdfReportFile)) {
-								isValidverapdf = true;
-								// System.out.println(valDatei.getName() + " ist gemaess veraPDF eine valide
-								// PDF/A-" + level + " Datei!");
-							} else {
-								isValidverapdf = false;
-								// System.out.println(valDatei.getName() + " ist gemaess veraPDF eine invalide
-								// PDF/A-" + level + " Datei!");
-							}
+					
+					File workDir=new File (pathToWorkDirValdatei);
+					
+					String execVerapdfVal= verapdf.execVerapdfVal( valDatei,  workDir,  dirOfJarPath,  level,  verapdfReportFile);
+					
+					File valDateiNorm = new File(workDir.getAbsolutePath() + File.separator + "veraPDF.pdf");
+					String veraPDFvalid = "<validationReports compliant=\"1\" ";
+					if (Util.stringInFile(valDateiNorm.getAbsolutePath(), verapdfReportFile)) {
+						// System.out.println(" verapdf wurde korrekt durchgefuehrt");
+						if (Util.stringInFile(veraPDFvalid, verapdfReportFile)) {
+							isValidverapdf = true;
+							// System.out.println(valDatei.getName() + " ist gemaess veraPDF eine valide PDF/A-" + level + " Datei!");
 						} else {
 							isValidverapdf = false;
-							// System.out.println(" valDatei.getAbsolutePath() wurde nicht im Report
-							// gefunden. FEHLER");
-							// System.out.println(" - verapdfReport " + verapdfReport);
-							Logtxt.logtxt(logFile,
-									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-											+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN,
-													" (File not in Report)"));
+							// System.out.println(valDatei.getName() + " ist gemaess veraPDF eine invalide PDF/A-" + level + " Datei!");
 						}
-					} catch (VeraPDFException e) {
+					} else {
 						isValidverapdf = false;
-						verapdfA = verapdfA + getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-								+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN,
-										"</Message><Message> - VeraPDF Exception: " + e.getMessage());
-					} catch (IOException excep) {
-						isValidverapdf = false;
-						verapdfA = verapdfA + getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-								+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN,
-										"</Message><Message> - VeraPDF IOException: " + excep.getMessage());
-					} catch (Exception ex) {
-						isValidverapdf = false;
-						verapdfA = verapdfA + getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-								+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN,
-										"</Message><Message> - VeraPDF other Exception: " + ex.getMessage());
+						// System.out.println(" valDatei.getAbsolutePath() wurde nicht im Report gefunden. FEHLER");
+						Logtxt.logtxt(logFile,
+								getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+										+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN,
+												" (File not in Report)"));
 					}
+					if (execVerapdfVal.equals("valid")||execVerapdfVal.equals("invalid")) {
+						// keine Aktion erforderlich es geht ums else
+					}else {
+					// Fehlermeldung ausgeben
+					isValidverapdf = false;
+					verapdfA = verapdfA + getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+							+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN,
+									execVerapdfVal);
+				}
+					
 					if (isValidverapdf) {
 						// valid Report loeschen
 						if (verapdfReportFile.exists()) {
@@ -858,7 +767,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 			} else {
 				isValidverapdf = false;
 			}
-			if (verapdf) {
+			if (verapdfBo) {
 				if (!isValidverapdf) {
 					// veraPDF eingeschaltet aber nicht bestanden.
 
@@ -1622,7 +1531,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 							 * Testen der Installation und System anhand
 							 * 3-Heights(TM)_PDFA_Validator_API_LICENSE.pdf -> invalid
 							 */
-							if (verapdf) {
+							if (verapdfBo) {
 								callas = false;
 
 								Logtxt.logtxt(logFile,
@@ -1742,7 +1651,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 										}
 									}
 
-									if (verapdf) {
+									if (verapdfBo) {
 										callas = false;
 										Logtxt.logtxt(logFile,
 												getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
@@ -1793,7 +1702,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 										}
 									}
 
-									if (verapdf) {
+									if (verapdfBo) {
 										callas = false;
 										Logtxt.logtxt(logFile,
 												getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
@@ -1891,7 +1800,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 			}
 
 			// TODO: Erledigt: Fehler Auswertung
-			if (verapdf && callas) {
+			if (verapdfBo && callas) {
 				// Duale Validierung
 
 				// nur wenn beide invalid dann invalid
@@ -1902,7 +1811,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 				if (isValidCallas) {
 					isValid = true;
 				}
-			} else if (verapdf) {
+			} else if (verapdfBo) {
 				// nur validierung mit verapdf
 				if (isValidverapdf) {
 					isValid = true;
@@ -2504,7 +2413,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 			isValidCallas = true;
 		}
 
-		if (verapdf) {
+		if (verapdfBo) {
 			// verapdf eingeschaltet
 			if (isValidverapdf) {
 				// Validierung mit verapdf bestanden
