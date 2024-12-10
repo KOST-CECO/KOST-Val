@@ -28,6 +28,7 @@ import org.springframework.context.ApplicationContext;
 
 import ch.kostceco.tools.kosttools.fileservice.Recognition;
 import ch.kostceco.tools.kosttools.fileservice.egovdv;
+import ch.kostceco.tools.kosttools.fileservice.verapdf;
 import ch.kostceco.tools.kosttools.util.Hash;
 import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.logging.Logtxt;
@@ -895,6 +896,10 @@ public class Controllervalfofile implements MessageConstants {
 				// keine Signature
 				returnEgovdvSum = "NoSignature";
 			} else {
+				// System.out.println("Anzahl Signaturen: "+countSig);
+				String pathToWorkDirValdatei = configMap.get("PathToWorkDir");
+				File workDir = new File(pathToWorkDirValdatei);
+				File signatureTmp = new File(workDir.getAbsolutePath() + File.separator + "veraPDF_signatureTmp.xml");
 				if (dvvalidation.equals("yes")) {
 					// Signaturen validieren (Mixed)
 					File outMixedSig = new File(directoryOfLogfile.getAbsolutePath() + File.separator
@@ -906,18 +911,34 @@ public class Controllervalfofile implements MessageConstants {
 
 					if (mixedSig.contains("noLicense")) {
 						// Warnung mit Anzahl Signaturen ausgeben
+						String execVerapdfSig = verapdf.execVerapdfSig(valDatei, workDir, signatureTmp, locale);
+
 						returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
 								+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE, countSig,
-										"</Message><Message></Message><Message>"
-												+ getTextResourceService().getText(locale, ERROR_XML_A_EGOVDV_LICENSE));
+										"<Message></Message><Message>"
+												+ getTextResourceService().getText(locale, ERROR_XML_A_EGOVDV_LICENSE
+								, "</Message>"+execVerapdfSig));
+					} else if (mixedSig.contains("noConnectivity")) {
+						// Warnung mit Anzahl Signaturen ausgeben
+						// Hinweis keine Internet-Verbindung
+						String execVerapdfSig = verapdf.execVerapdfSig(valDatei, workDir, signatureTmp, locale);
+
+						returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+								+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE, countSig,
+										"<Message></Message><Message>"
+												+ getTextResourceService().getText(locale, ERROR_XML_A_EGOVDV_URL
+								, "</Message>"+execVerapdfSig));
 					} else if (mixedSig.contains("_NoReport_")) {
 						// Warnung mit Anzahl Signaturen
 						// und Egovdv-NoReport-Fehler ausgeben
+						String execVerapdfSig = verapdf.execVerapdfSig(valDatei, workDir, signatureTmp, locale);
 						returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
 								+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE_SUM1, countSig,
 										"</Message><Message></Message><Message>"
 												+ getTextResourceService().getText(locale, ERROR_XML_A_EGOVDV_NOREPORT)
-												+ "</Message><Message></Message><Message>(" + mixedSig + ") ");
+												+ "</Message>"+execVerapdfSig+"<Message></Message><Message>("
+												+ mixedSig + ") ");
+						// TODO: Hinweis Internet
 					} else {
 
 						// Analyse des Mixed-Ergebnisses
@@ -1115,8 +1136,9 @@ public class Controllervalfofile implements MessageConstants {
 							// ausgeben
 							returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
 									+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE_SUM1, countSig,
-											strAnalysePdf + "</Message><Message></Message><Message>(" + mixedSig
-													+ ") ");
+											strAnalysePdf
+													+ "</Message><Message></Message><Message>Metadaten der Signatur [verapdf]</Message><Message></Message><Message>("
+													+ mixedSig + ") ");
 
 						} else {
 							// Mixed-Signatur-Validierung NICHT bestanden
@@ -1125,12 +1147,14 @@ public class Controllervalfofile implements MessageConstants {
 
 							String strAnalysePdf = egovdv.analyseEgovdvPdf(outMixedSig);
 
-							// Warnung mit Anzahl Signaturen und Ergebnis
-							// ausgeben
+							// Warnung mit Anzahl Signaturen und Ergebnis ausgeben
+							String execVerapdfSig = verapdf.execVerapdfSig(valDatei, workDir, signatureTmp, locale);
+
 							returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
 									+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE_SUM1, countSig,
-											strAnalysePdf + "</Message><Message></Message><Message>(" + mixedSig
-													+ ") ");
+											strAnalysePdf
+													+ "</Message>"+execVerapdfSig+"<Message></Message><Message>("
+													+ mixedSig + ") ");
 
 							// PDF-Report loeschen, da er nicht bestanden wurde
 							Util.deleteFile(outMixedSig);
@@ -1153,10 +1177,11 @@ public class Controllervalfofile implements MessageConstants {
 						}
 					}
 				} else {
-					// Warnung mit Anzahl Signaturen ausgeben (keine
-					// Validierung)
+					// Warnung mit Anzahl Signaturen ausgeben (keine  Validierung)
+					String execVerapdfSig = verapdf.execVerapdfSig(valDatei, workDir, signatureTmp, locale);
+
 					returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-							+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE, countSig, " ");
+							+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE, countSig, execVerapdfSig);
 				}
 			}
 		} catch (Exception e) {
@@ -1170,6 +1195,8 @@ public class Controllervalfofile implements MessageConstants {
 		returnEgovdvSum = returnEgovdvSum.replaceAll("\\R", "");
 		returnEgovdvSum = returnEgovdvSum.replace("  ", " ");
 		returnEgovdvSum = returnEgovdvSum.replace(" bis ", " - ");
+		returnEgovdvSum = returnEgovdvSum.replace("Zeitpunkt der Unterschrift:",
+				"Zeitpunkt der Unterschrift (Anbringen Zeitstempels):");
 
 		// TODO: log uebersetzten wenn fr, it oder en
 		if (locale.toString().contains("fr")) {
@@ -1180,7 +1207,7 @@ public class Controllervalfofile implements MessageConstants {
 			returnEgovdvSum = returnEgovdvSum.replace("Datum/Zeit der Prüfung:", "Date/Heure du controle :");
 			returnEgovdvSum = returnEgovdvSum.replace("Name der signierten Datei:", "Nom du fichier signe :");
 			returnEgovdvSum = returnEgovdvSum.replace("Hash der Datei", "Empreinte du fichier");
-			returnEgovdvSum = returnEgovdvSum.replace("Pruefergebnis egovdv","Resultat du test egovdv");
+			returnEgovdvSum = returnEgovdvSum.replace("Pruefergebnis [egovdv]", "Resultat du test [egovdv] ");
 			returnEgovdvSum = returnEgovdvSum.replace("Das Dokument ist gültig signiert",
 					"Le document a ete signe valablement");
 			returnEgovdvSum = returnEgovdvSum.replace("Alle Signaturen sind LTV-fähig.",
@@ -1198,7 +1225,8 @@ public class Controllervalfofile implements MessageConstants {
 					"Alle in diesem Dokument angebrachten Zeitstempel sind gültig gemäss ZertES.",
 					"Tous les horodatages apposes sur le document sont valables selon la SCSE.");
 			returnEgovdvSum = returnEgovdvSum.replace("Prüfdetails Signatur", "Details du controle de la signature");
-			returnEgovdvSum = returnEgovdvSum.replace("Zeitpunkt der Unterschrift:", "Date et heure de la signature :");
+			returnEgovdvSum = returnEgovdvSum.replace("Zeitpunkt der Unterschrift (Anbringen Zeitstempels):",
+					"Date et heure de la signature (apposition de l'horodatage) :");
 			returnEgovdvSum = returnEgovdvSum.replace("Signaturalgorithmus:", "Algorithme de signature :");
 			returnEgovdvSum = returnEgovdvSum.replace("Die digitale Signatur ist gültig",
 					"La signature digitale est valide");
@@ -1245,7 +1273,7 @@ public class Controllervalfofile implements MessageConstants {
 			returnEgovdvSum = returnEgovdvSum.replace("Datum/Zeit der Prüfung:", "Data/ora della verifica:");
 			returnEgovdvSum = returnEgovdvSum.replace("Name der signierten Datei:", "Nome del file firmato:");
 			returnEgovdvSum = returnEgovdvSum.replace("Hash der Datei", "Hash del file");
-			returnEgovdvSum = returnEgovdvSum.replace("Pruefergebnis egovdv","Risultato del test egovdv");
+			returnEgovdvSum = returnEgovdvSum.replace("Pruefergebnis [egovdv]", "Risultato del test [egovdv]");
 			returnEgovdvSum = returnEgovdvSum.replace("Das Dokument ist gültig signiert",
 					"Documento firmato in modo valido");
 			returnEgovdvSum = returnEgovdvSum.replace("Alle Signaturen sind LTV-fähig.",
@@ -1263,8 +1291,8 @@ public class Controllervalfofile implements MessageConstants {
 					"Alle in diesem Dokument angebrachten Zeitstempel sind gültig gemäss ZertES.",
 					"Tutte le marche temporali applicate al documento sono valide secondo FiEle.");
 			returnEgovdvSum = returnEgovdvSum.replace("Prüfdetails Signatur", "Dettagli verifica firma");
-			returnEgovdvSum = returnEgovdvSum.replace("Zeitpunkt der Unterschrift:",
-					"Momento dell'apposizione della firma:");
+			returnEgovdvSum = returnEgovdvSum.replace("Zeitpunkt der Unterschrift (Anbringen Zeitstempels):",
+					"Momento dell'apposizione della firma (Applicare la marca temporale):");
 			returnEgovdvSum = returnEgovdvSum.replace("Signaturalgorithmus:", "Algoritmo della firma:");
 			returnEgovdvSum = returnEgovdvSum.replace("Die digitale Signatur ist gültig", "La firma digitale e valida");
 			returnEgovdvSum = returnEgovdvSum.replace("Information über den Zeitstempel",
@@ -1311,7 +1339,7 @@ public class Controllervalfofile implements MessageConstants {
 			returnEgovdvSum = returnEgovdvSum.replace("Datum/Zeit der Prüfung:", "Date/time of validation:");
 			returnEgovdvSum = returnEgovdvSum.replace("Name der signierten Datei:", "Name of signed file:");
 			returnEgovdvSum = returnEgovdvSum.replace("Hash der Datei", "Hash of file");
-			returnEgovdvSum = returnEgovdvSum.replace("Pruefergebnis egovdv","Test result egovdv");
+			returnEgovdvSum = returnEgovdvSum.replace("Pruefergebnis [egovdv]", "Test result [egovdv]");
 			returnEgovdvSum = returnEgovdvSum.replace("Das Dokument ist gültig signiert",
 					"The document has been validly signed");
 			returnEgovdvSum = returnEgovdvSum.replace("Alle Signaturen sind LTV-fähig.",
@@ -1329,7 +1357,8 @@ public class Controllervalfofile implements MessageConstants {
 					"Alle in diesem Dokument angebrachten Zeitstempel sind gültig gemäss ZertES.",
 					"All time stamps applied to the document are valid according to ESigA.");
 			returnEgovdvSum = returnEgovdvSum.replace("Prüfdetails Signatur", "Validation details signature");
-			returnEgovdvSum = returnEgovdvSum.replace("Zeitpunkt der Unterschrift:", "Date of signature:");
+			returnEgovdvSum = returnEgovdvSum.replace("Zeitpunkt der Unterschrift (Anbringen Zeitstempels):",
+					"Date of signature (Affixing time stamp):");
 			returnEgovdvSum = returnEgovdvSum.replace("Signaturalgorithmus:", "Signature algorithm:");
 			returnEgovdvSum = returnEgovdvSum.replace("Die digitale Signatur ist gültig",
 					"The digital signature is valid");

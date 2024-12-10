@@ -21,6 +21,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -28,6 +32,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.springframework.util.Assert;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -43,8 +48,9 @@ public class egovdv {
 			+ "intarsys-egov-validationclient-cli-1.0.10.jar";
 
 	/**
-	 * TODO: Listet mit egovdv via cmd die Signaturnamen in pdf auf und speichert das
-	 * Ergebnis in ein File (Output). Gibt zurueck ob Output existiert oder nicht
+	 * TODO: Listet mit egovdv via cmd die Signaturnamen in pdf auf und speichert
+	 * das Ergebnis in ein File (Output). Gibt zurueck ob Output existiert oder
+	 * nicht
 	 * 
 	 * Fuer diesen Schritt braucht es weder Internet/URL noch einen account
 	 * 
@@ -252,9 +258,9 @@ public class egovdv {
 	}
 
 	/**
-	 * TODO: Validiert mit egovdv via cmd die Signaturen in pdf und speichert das Ergebnis
-	 * in ein File (Output). Dazu wird der Mandant Mixed verwendet. Gibt zurueck ob
-	 * Output existiert oder nicht
+	 * TODO: Validiert mit egovdv via cmd die Signaturen in pdf und speichert das
+	 * Ergebnis in ein File (Output). Dazu wird der Mandant Mixed verwendet. Gibt
+	 * zurueck ob Output existiert oder nicht
 	 * 
 	 * Fuer diesen Schritt braucht es jetzt Internet/URL sowie einen account
 	 * 
@@ -292,7 +298,7 @@ public class egovdv {
 		File configFile = new File(directoryOfConfigfile + File.separator + "kostval.conf.xml");
 
 		Document doc = null;
-		String Institut = "Institut";
+		String institut = "Institut";
 
 		try {
 			BufferedInputStream bis;
@@ -302,21 +308,36 @@ public class egovdv {
 			doc = db.parse(bis);
 			doc.normalize();
 
-			Institut = doc.getElementsByTagName("Institut").item(0).getTextContent();
+			institut = doc.getElementsByTagName("Institut").item(0).getTextContent();
 			bis.close();
 		} catch (IOException | ParserConfigurationException | SAXException e) {
 			e.printStackTrace();
 			System.out.println("Fehler beim auslesen der config (egovdv)");
 		}
 
-		String account = egovdvIntern.egovdvInternas(Institut, directoryOfConfigfile.getAbsolutePath());
+		String account = egovdvIntern.egovdvInternas(institut, directoryOfConfigfile.getAbsolutePath());
 		// System.out.println( "" );
 		// System.out.println( "account: " + account );
 
 		String resultSummary = "_";
 
+		boolean connectivity;
+		URL url;
+		try {
+			url = new URL("https://egovsigval-backend.bit.admin.ch");
+			URLConnection conn = url.openConnection();
+			conn.connect();
+			connectivity = true;
+		} catch (Exception e) {
+			connectivity = false;
+		}
+		// System.out.println("https://egovsigval-backend.bit.admin.ch ->
+		// "+connectivity);
+
 		if (account.equals("noLicense")) {
 			resultSummary = "noLicense";
+		} else if (!connectivity) {
+			resultSummary = "noConnectivity";
 		} else {
 			String optionLanguage = "de";
 			if (locale.toString().contains("fr")) {
@@ -325,17 +346,18 @@ public class egovdv {
 				optionLanguage = "it";
 			} else if (locale.toString().contains("en")) {
 				optionLanguage = "en";
-			} 
-			//-l get pdf report in the given language, supported codes: de, fr, it, en.
+			}
+			// -l get pdf report in the given language, supported codes: de, fr, it, en.
 
 			String command = "\"\"cd " + fexeDir.getAbsolutePath() + "\" & \"" + fvalidateBat.getAbsolutePath() + "\" "
 					+ account + "-u https://egovsigval-backend.bit.admin.ch -m " + mandant + " -f \""
-					+ fileToCheck.getAbsolutePath() + "\" -l "+optionLanguage+" -c -e -o \"" + output.getAbsolutePath() + "\"\"";
+					+ fileToCheck.getAbsolutePath() + "\" -l " + optionLanguage + " -c -e -o \""
+					+ output.getAbsolutePath() + "\"\"";
 
 			// validate <account> -u https://egovsigval-backend.bit.admin.ch -m
 			// Mixed -f <filename> -c -e -d -o <report>
 
-			// System.out.println( "command: " + command );
+			// System.out.println("command: " + command);
 
 			String resultExec = Cmd.execToStringSplit(command, out, workDir);
 
@@ -405,7 +427,7 @@ public class egovdv {
 			if (!output.exists()) {
 				// Datei nicht angelegt...
 				resultSummary = resultSummary + "NoReport_";
-
+				// TODO: Hinweis Internet / Test Internet
 			}
 		}
 		// System.out.println( "resultSummary= " + resultSummary );
@@ -471,9 +493,10 @@ public class egovdv {
 			e.printStackTrace();
 			System.out.println("Fehler beim auslesen der config (egovdv)");
 		}
-		
-		// Bereinigung ist nur auf de, der log wird danach in Controllervalfofile uebersetzt 
-		
+
+		// Bereinigung ist nur auf de, der log wird danach in Controllervalfofile
+		// uebersetzt
+
 		prettyPrint = prettyPrint.replaceAll("Prüfbericht für elektronische Signaturen",
 				"Prüfbericht für elektronische Signaturen</Message><Message> - Geprüft durch: " + Institut);
 
@@ -513,10 +536,14 @@ public class egovdv {
 
 		// invalide Fehlermeldungen
 		prettyPrint = prettyPrint.replaceAll("__Zusammenfassung der Dokumentprüfung", "");
-		prettyPrint = prettyPrint.replaceAll("__Das Dokument weist mehrere elektronische Signaturen mit", "</Message><Message>Das Dokument weist mehrere elektronische Signaturen mit");
-		prettyPrint = prettyPrint.replaceAll("__unterschiedlichen Zertifikatsklassen auf. Mindestens eine der ", "unterschiedlichen Zertifikatsklassen auf. Mindestens eine der ");
-		prettyPrint = prettyPrint.replaceAll("__elektronischen Signaturen auf dem validierten Dokument", "elektronischen Signaturen auf dem validierten Dokument");
-		prettyPrint = prettyPrint.replaceAll("__konnte keiner Dokumentenart \\(Mandant\\) zugeordnet werden. ", "konnte keiner Dokumentenart (Mandant) zugeordnet werden. ");
+		prettyPrint = prettyPrint.replaceAll("__Das Dokument weist mehrere elektronische Signaturen mit",
+				"</Message><Message>Das Dokument weist mehrere elektronische Signaturen mit");
+		prettyPrint = prettyPrint.replaceAll("__unterschiedlichen Zertifikatsklassen auf. Mindestens eine der ",
+				"unterschiedlichen Zertifikatsklassen auf. Mindestens eine der ");
+		prettyPrint = prettyPrint.replaceAll("__elektronischen Signaturen auf dem validierten Dokument",
+				"elektronischen Signaturen auf dem validierten Dokument");
+		prettyPrint = prettyPrint.replaceAll("__konnte keiner Dokumentenart \\(Mandant\\) zugeordnet werden. ",
+				"konnte keiner Dokumentenart (Mandant) zugeordnet werden. ");
 		prettyPrint = prettyPrint.replaceAll("__Die Prüfergebnisse der einzelnen Signaturen sind im", "");
 		prettyPrint = prettyPrint.replaceAll("__Detailbericht ersichtlich.", "");
 		prettyPrint = prettyPrint.replaceAll("__Anzahl Signaturen im Dokument: 1", "");
@@ -636,9 +663,9 @@ public class egovdv {
 		prettyPrint = prettyPrint.replaceAll("__Das geprüfte Dokument trägt mehrere elektronische ", "");
 		prettyPrint = prettyPrint.replaceAll("__Signaturen mit unterschiedlichen Zertifikatsklassen, gemäss ", "");
 		prettyPrint = prettyPrint.replaceAll("__ZertES.", "");
-		
+
 		prettyPrint = prettyPrint.replaceAll(" \\(Details siehe A\\)", "");
-		prettyPrint = prettyPrint.replace("Grund: ","");
+		prettyPrint = prettyPrint.replace("Grund: ", "");
 		// System.out.println( "2 " + prettyPrint );
 
 		lineOut = prettyPrint;
@@ -647,8 +674,8 @@ public class egovdv {
 	}
 
 	/**
-	 * TODO: fuehrt eine Kontrolle aller benoetigten Dateien von egovdv durch und gibt das
-	 * Ergebnis als String zurueck
+	 * TODO: fuehrt eine Kontrolle aller benoetigten Dateien von egovdv durch und
+	 * gibt das Ergebnis als String zurueck
 	 * 
 	 * @param dirOfJarPath String mit dem Pfad von wo das Programm gestartet wurde
 	 * @return String mit Kontrollergebnis

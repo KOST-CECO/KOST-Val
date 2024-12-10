@@ -278,6 +278,7 @@ public interface MessageConstants {
 	String WARNING_XML_A_SIGNATURE = "val.warning.xml.a.signature";
 	String WARNING_XML_A_SIGNATURE_SUM1 = "val.warning.xml.a.signature.sum1";
 	String ERROR_XML_A_EGOVDV_LICENSE = "val.error.xml.a.egovdv.license";
+	String ERROR_XML_A_EGOVDV_URL = "val.error.xml.a.egovdv.url";
 	String ERROR_XML_A_EGOVDV_NOREPORT = "val.error.xml.a.egovdv.noreport";
 
 	String ERROR_XML_AI_0 = "val.error.xml.ai.0";
