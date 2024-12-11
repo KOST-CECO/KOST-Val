@@ -744,6 +744,7 @@ public class UtilTranslate {
 				"Widths - array - (Required except for the standard 14 fonts; indirect reference preferred) An array of (LastChar − FirstChar + 1) widths",
 				"Breiten – Array – (Erforderlich, ausser fuer die 14 Standardschriftarten; indirekte Referenz bevorzugt) Ein Array von (LastChar – FirstChar + 1) Breiten.");
 		de = de.replace("Xref streams shall not be used", "Xref-Streams darf nicht verwendet werden");
+		de=de.replace("..", ".");
 		return de;
 	}
 
@@ -1473,6 +1474,7 @@ public class UtilTranslate {
 				"Widths - array - (Required except for the standard 14 fonts; indirect reference preferred) An array of (LastChar − FirstChar + 1) widths",
 				"Widths - array - (Obligatoire sauf pour les 14 polices standard ; reference indirecte preferee) Un tableau de (LastChar - FirstChar + 1) largeurs.");
 		fr = fr.replace("Xref streams shall not be used", "Les flux Xref ne doivent pas etre utilises");
+		fr=fr.replace("..", ".");
 		return fr;
 	}
 
@@ -2200,6 +2202,7 @@ public class UtilTranslate {
 				"Widths - array - (Required except for the standard 14 fonts; indirect reference preferred) An array of (LastChar − FirstChar + 1) widths",
 				"Widths - array - (Richiesto tranne che per i font standard 14; preferibile il riferimento indiretto) Un array di (LastChar - FirstChar + 1) larghezze.");
 		it = it.replace("Xref streams shall not be used", "I flussi Xref non devono essere utilizzati");
+		it=it.replace("..", ".");
 		return it;
 	}
 

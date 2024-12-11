@@ -89,27 +89,9 @@
 						</td>
 					</tr>
 					<tr class="captioninfom">
-						<td>Validation PDF/A avec PDF Tools [yes] :</td>
-						<td>
-							<xsl:value-of select="configuration/pdfa/pdftools" />
-						</td>
-					</tr>
-					<tr class="captioninfom">
-						<td>- Validation (possibilité de recherche et d'extraction) [tolérant] :</td>
-						<td>
-							<xsl:value-of select="configuration/pdfa/pdfafont" />
-						</td>
-					</tr>
-					<tr class="captioninfom">
 						<td>Validation PDF/A avec callas [yes] :</td>
 						<td>
 							<xsl:value-of select="configuration/pdfa/callas" />
-						</td>
-					</tr>
-					<tr class="captioninfom">
-						<td>- Erreur (E) / avertissement (W) si l'entrée N ne correspond pas [W] :</td>
-						<td>
-							<xsl:value-of select="configuration/pdfa/nentry" />
 						</td>
 					</tr>
 					<tr class="captioninfom">
@@ -128,6 +110,18 @@
 						<td>Compression JBIG2 autorisée [yes] :</td>
 						<td>
 							<xsl:value-of select="configuration/pdfa/jbig2allowed" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>Validation Font avec PDF Tools [yes] :</td>
+						<td>
+							<xsl:value-of select="configuration/pdfa/pdftools" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>- Validation (possibilité de recherche et d'extraction) [tolérant] :</td>
+						<td>
+							<xsl:value-of select="configuration/pdfa/pdfafont" />
 						</td>
 					</tr>
 

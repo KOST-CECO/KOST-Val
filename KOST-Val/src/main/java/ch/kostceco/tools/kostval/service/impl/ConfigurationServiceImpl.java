@@ -177,18 +177,9 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 			String detail = doc.getElementsByTagName("detail").item(0).getTextContent();
 			configMap.put("detail", detail);
 
-			// Gibt an ob pdfa mit PDF Tools validiert werden soll
-			String pdftools = doc.getElementsByTagName("pdftools").item(0).getTextContent();
-			configMap.put("pdftools", pdftools);
-
 			// Gibt an ob pdfa mit callas validiert werden soll
 			String callas = doc.getElementsByTagName("callas").item(0).getTextContent();
 			configMap.put("callas", callas);
-
-			// N-Eintrag: Soll seitens callas ein Fehler (E) oder eine Warnung
-			// (W) ausgegeben werden
-			String nentry = doc.getElementsByTagName("nentry").item(0).getTextContent();
-			configMap.put("nentry", nentry);
 
 			// Gibt an welche Konformitaeten erlaubt sind
 			String pdfa1a = "no";

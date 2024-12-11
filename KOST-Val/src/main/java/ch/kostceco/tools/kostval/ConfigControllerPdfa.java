@@ -36,8 +36,8 @@ import javafx.stage.Stage;
 public class ConfigControllerPdfa {
 
 	@FXML
-	private CheckBox checkPdfa, checkPdftools, checkVerapdf, checkCallas, checkPdfa1a, checkPdfa2a, checkFont, checkJbig2,
-			checkDetail, checkNentry, checkPdfa1b, checkPdfa2b, checkFontTol, checkPdfa2u, checkWarning3to2;
+	private CheckBox checkPdfa, checkVerapdf, checkCallas, checkPdfa1a, checkPdfa2a, checkFont, checkJbig2, checkDetail,
+			checkPdfa1b, checkPdfa2b, checkFontTol, checkPdfa2u, checkWarning3to2;
 
 	@FXML
 	private Button buttonConfigApply;
@@ -115,11 +115,9 @@ public class ConfigControllerPdfa {
 			byte[] encoded;
 			encoded = Files.readAllBytes(Paths.get(configFile.getAbsolutePath()));
 			config = new String(encoded, StandardCharsets.UTF_8);
-			String noPdftools = "<pdftools>no</pdftools>";
 			String noVerapdf = "<verapdf>no</verapdf>";
 			String noDetail = "<detail>no</detail>";
 			String noCallas = "<callas>no</callas>";
-			String noNentry = "<nentry>W</nentry>";
 			String noPdfa1a = "<pdfa1a></pdfa1a>";
 			String noPdfa1b = "<pdfa1b></pdfa1b>";
 			String noPdfa2a = "<pdfa2a></pdfa2a>";
@@ -137,12 +135,6 @@ public class ConfigControllerPdfa {
 				checkVerapdf.setSelected(false);
 				checkDetail.setDisable(true);
 			}
-			if (config.contains(noPdftools)) {
-				checkPdftools.setSelected(false);
-				checkFont.setDisable(true);
-//				checkDetail.setDisable(true);
-				checkFontTol.setDisable(true);
-			}
 			if (config.contains(noDetail)) {
 				checkDetail.setSelected(false);
 			}
@@ -154,10 +146,6 @@ public class ConfigControllerPdfa {
 			}
 			if (config.contains(noCallas)) {
 				checkCallas.setSelected(false);
-				checkNentry.setDisable(true);
-			}
-			if (config.contains(noNentry)) {
-				checkNentry.setSelected(false);
 			}
 			if (config.contains(noPdfa1a)) {
 				checkPdfa1a.setSelected(false);
@@ -214,31 +202,6 @@ public class ConfigControllerPdfa {
 	/* TODO --> CheckBox ================= */
 
 	/*
-	 * checkPdftools schaltet diese Validierung in der Konfiguration ein oder aus
-	 */
-	@FXML
-	void changePdftools(ActionEvent event) {
-		labelMessage.setText("");
-		String yes = "<pdftools>yes</pdftools>";
-		String no = "<pdftools>no</pdftools>";
-		try {
-			if (checkPdftools.isSelected()) {
-				Util.oldnewstring(no, yes, configFile);
-//				checkDetail.setDisable(false);
-				checkFont.setDisable(false);
-				checkFontTol.setDisable(false);
-			} else {
-					Util.oldnewstring(yes, no, configFile);
-//					checkDetail.setDisable(true);
-					checkFont.setDisable(true);
-					checkFontTol.setDisable(true);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
- 
-	/*
 	 * checkVerapdf schaltet diese Validierung in der Konfiguration ein oder aus
 	 */
 	@FXML
@@ -266,8 +229,8 @@ public class ConfigControllerPdfa {
 	}
 
 	/*
-	 * checkDetail schaltet diese Details von verpdf in der Konfiguration ein
-	 * oder aus
+	 * checkDetail schaltet diese Details von verpdf in der Konfiguration ein oder
+	 * aus
 	 */
 	@FXML
 	void changeDetail(ActionEvent event) {
@@ -294,41 +257,13 @@ public class ConfigControllerPdfa {
 		try {
 			if (checkCallas.isSelected()) {
 				Util.oldnewstring(no, yes, configFile);
-				checkNentry.setDisable(false);
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if (!checkVerapdf.isSelected()) {
 					labelMessage.setText(minOne);
 					checkCallas.setSelected(true);
 				} else {
-					checkNentry.setDisable(true);
 					Util.oldnewstring(yes, no, configFile);
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/*
-	 * checkNentry schaltet diese Nentry bei Callas in der Konfiguration ein (E)
-	 * oder aus (W)
-	 */
-	@FXML
-	void changeNentry(ActionEvent event) {
-		labelMessage.setText("");
-		String yes = "<nentry>E</nentry>";
-		String no = "<nentry>W</nentry>";
-		String ignorePt = "</ignore>";
-		String nkeyPt = "The value of the key N is 4 but must be 3. [PDF Tools: 0x80410607]";
-		try {
-			if (checkNentry.isSelected()) {
-				Util.oldnewstring(no, yes, configFile);
-				Util.oldnewstring(nkeyPt, " ", configFile);
-			} else {
-				Util.oldnewstring(yes, no, configFile);
-				if (!Util.stringInFileLine(nkeyPt, configFile)) {
-					Util.oldnewstring(ignorePt, nkeyPt + ignorePt, configFile);
 				}
 			}
 		} catch (IOException e) {
@@ -498,10 +433,10 @@ public class ConfigControllerPdfa {
 	@FXML
 	void changeFont(ActionEvent event) {
 		labelMessage.setText("");
-		String yes = "<pdfafont>strict</pdfafont>";
-		String no = "<pdfafont>no</pdfafont>";
+		String yes = "<pdftools>yes</pdftools><pdfafont>strict</pdfafont>";
+		String no = "<pdftools>no</pdftools><pdfafont>no</pdfafont>";
 		if (checkFontTol.isSelected()) {
-			yes = "<pdfafont>tolerant</pdfafont>";
+			yes = "<pdftools>yes</pdftools><pdfafont>tolerant</pdfafont>";
 		}
 		try {
 			if (checkFont.isSelected()) {
@@ -520,10 +455,10 @@ public class ConfigControllerPdfa {
 	@FXML
 	void changeFontTol(ActionEvent event) {
 		labelMessage.setText("");
-		String yes = "<pdfafont>tolerant</pdfafont>";
-		String no = "<pdfafont>no</pdfafont>";
+		String yes = "<pdftools>yes</pdftools><pdfafont>tolerant</pdfafont>";
+		String no = "<pdftools>no</pdftools><pdfafont>no</pdfafont>";
 		if (checkFont.isSelected()) {
-			no = "<pdfafont>strict</pdfafont>";
+			no = "<pdftools>yes</pdftools><pdfafont>strict</pdfafont>";
 		}
 		try {
 			if (checkFontTol.isSelected()) {

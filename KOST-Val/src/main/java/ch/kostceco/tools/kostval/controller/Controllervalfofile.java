@@ -1197,6 +1197,7 @@ public class Controllervalfofile implements MessageConstants {
 		returnEgovdvSum = returnEgovdvSum.replace(" bis ", " - ");
 		returnEgovdvSum = returnEgovdvSum.replace("Zeitpunkt der Unterschrift:",
 				"Zeitpunkt der Unterschrift (Anbringen Zeitstempels):");
+		returnEgovdvSum = returnEgovdvSum.replace("Das Dokument weist mehrere elektronische Signaturen mit unterschiedlichen Zertifikatsklassen auf.",""); 
 
 		// TODO: log uebersetzten wenn fr, it oder en
 		if (locale.toString().contains("fr")) {

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?><?xml-stylesheet type="text/xsl" href="kostval-conf-FR.xsl"?>
+<?xml version="1.0" encoding="ISO-8859-1"?><?xml-stylesheet type="text/xsl" href="kostval-conf-DE.xsl"?>
 <configuration><!-- kostval.conf.xml_v2.2.1.1 -->
 <!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
 <!-- TEXT -->
@@ -9,11 +9,7 @@
 		<verapdf>yes</verapdf><!--no wenn verapdf nicht verwendet werden soll, ansonsten yes -->
 		<!-- Detailreport: Soll seitens verapdf auch Details in Englisch (yes) oder nur Beschreibung (no) ausgegeben werden  -->
 		<detail>yes</detail><!--no verwenden wenn nur Beschreibung ansonsten yes fuer detailierte Fehlermeldung -->
-		<pdftools>yes</pdftools><!--no wenn PDF Tools nicht verwendet werden soll, ansonsten yes -->
-		<pdfafont>tolerant</pdfafont><!--no verwenden wenn die Schriften in pdfa nicht validiert werden sollen, ansonsten tolerant oder strict-->
 		<callas>yes</callas><!--no wenn callas nicht verwendet werden soll, ansonsten yes -->
-		<!-- N-Eintrag: Soll seitens callas ein Fehler (E) oder eine Warnung (W) ausgegeben werden  -->
-		<nentry>W</nentry><!--W verwenden wenn Warnung ansonsten E fuer Fehler -->
 		<!--Angeben welche Conformancelevel mindestens erreicht werden muss -->
 		<!--no verwenden wenn diese Version nicht erlaubt ist -->
 		<pdfaversion>
@@ -25,6 +21,7 @@
 		</pdfaversion>
 		<warning3to2>yes</warning3to2><!-- validiert wenn eingeschaltet PDF/A-3 nach PDF/A-2 und ignoriert den Fehler betreffend der Version und gibt stattdessten eine Warnung aus. -->	
 		<jbig2allowed>yes</jbig2allowed><!--no verwenden wenn JBIG2 in pdfa nicht erlaubt werden sollen, ansonsten yes -->
+		<pdftools>yes</pdftools><pdfafont>tolerant</pdfafont><!--no verwenden wenn die Schriften in pdfa nicht validiert werden sollen, ansonsten tolerant oder strict-->
 	</pdfa>
 	<txt>
 		<txtvalidation>(&#x2713;)</txtvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->

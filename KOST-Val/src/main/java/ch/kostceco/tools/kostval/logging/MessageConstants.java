@@ -305,6 +305,7 @@ public interface MessageConstants {
 
 	String ERROR_XML_J_JBIG2 = "val.error.xml.j.jbig2";
 
+	String WARNING_XML_K_NOFONTVAL = "val.warning.xml.k.nofontval";
 	String ERROR_XML_K_OVERVIEW = "val.error.xml.k.overview";
 	String ERROR_XML_K_OVERVIEW2 = "val.error.xml.k.overview2";
 	String ERROR_XML_K_DETAIL = "val.error.xml.k.detail";

@@ -227,8 +227,7 @@
 																	</strong>
 																	<txt>  Full name: </txt>
 																	<xsl:value-of select="@fullname"/>
-																	<xsl:if test="@objectNo"> (object no <xsl:value-of select="@objectNo"/>)
-																	</xsl:if>
+																	<xsl:if test="@objectNo"> (object no <xsl:value-of select="@objectNo"/>) </xsl:if>
 																	<txt>  Type: </txt>
 																	<xsl:value-of select="@type"/>
 																	<xsl:if test="@fontfile">
