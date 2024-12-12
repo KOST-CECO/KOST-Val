@@ -31,6 +31,7 @@ import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.HashSet;
@@ -831,43 +832,120 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 				// ggf invalid
 				if (callas) {
 					// Validierung mit callas
+					// Initialisierung callas -> existiert pdfaPilot in den resources?
+					String folderCallas = "callas_pdfaPilotServer_x64_Win_13-0-380_cli";
+					/*
+					 * Update von Callas: callas_pdfaPilotServer_Win_...-Version herunterladen,
+					 * installieren, odner im Workbench umbenennen alle Dateine vom Ordner cli
+					 * ersetzen aber lizenz.txt und N-Entry.kfpx muessen die alten bleiben
+					 */
 
-					try {
-						// Initialisierung callas -> existiert pdfaPilot in den resources?
-						String folderCallas = "callas_pdfaPilotServer_x64_Win_13-0-380_cli";
+					File fpdfapilotExe = new File(dirOfJarPath + File.separator + "resources" + File.separator
+							+ folderCallas + File.separator + "pdfaPilot.exe");
+					if (!fpdfapilotExe.exists()) {
+						if (verapdfBo) {
+							callas = false;
+
+							Logtxt.logtxt(logFile,
+									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+											+ getTextResourceService().getText(locale, ERROR_XML_CALLAS_MISSING2,
+													fpdfapilotExe.getAbsolutePath()));
+							isValidCallas = false;
+						} else {
+
+							Logtxt.logtxt(logFile,
+									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+											+ getTextResourceService().getText(locale, ERROR_XML_CALLAS_MISSING,
+													fpdfapilotExe.getAbsolutePath()));
+							return false;
+						}
+					}
+					String pdfapilotExe = fpdfapilotExe.getAbsolutePath();
+					String levelCallas = level.toLowerCase();
+
+					String profile = dirOfJarPath + File.separator + "resources" + File.separator + folderCallas
+							+ File.separator + "N-Entry.kfpx";
+					String analye = "-a --noprogress --nohits --level=" + levelCallas + " --profile=\"" + profile
+							+ "\"";
+					String lang = "-l=" + getTextResourceService().getText(locale, MESSAGE_XML_LANGUAGE);
+					String reportPath = report.getAbsolutePath();
+
+					// Zeitstempel Heute
+					java.util.Date nowDate = new java.util.Date();
+					java.text.SimpleDateFormat sdfDate = new java.text.SimpleDateFormat("dd.MM.yyyy");
+					String ausgabeDate = sdfDate.format(nowDate);
+
+					File directoryOfConfigfile = new File(System.getenv("USERPROFILE") + File.separator + ".kost-val_2x"
+							+ File.separator + "configuration");
+
+					File ioCallasCheck = new File(directoryOfConfigfile + File.separator + "_ioCallasCheck.txt");
+
+					if (ioCallasCheck.exists()) {
+						// Kontrollieren ob der Check von heute ist
+						if (Util.stringInFile(ausgabeDate, ioCallasCheck)) {
+							// Callas wurde heute bereits Kontrolliert
+						} else {
+							// veralteter Test. Datei loeschen
+							Util.deleteFile(ioCallasCheck);
+						}
+					}
+
+					if (!ioCallasCheck.exists()) {
+						// Kontrolle ob callas heute korrekt funktioniert
+						String valPathTest = dirOfJarPath + File.separator + "license" + File.separator
+								+ "other_License" + File.separator + "3-Heights(TM)_PDFA_Validator_API_LICENSE.pdf";
+
 						/*
-						 * Update von Callas: callas_pdfaPilotServer_Win_...-Version herunterladen,
-						 * installieren, odner im Workbench umbenennen alle Dateine vom Ordner cli
-						 * ersetzen aber lizenz.txt und N-Entry.kfpx muessen die alten bleiben
+						 * Testen der Installation und System anhand
+						 * 3-Heights(TM)_PDFA_Validator_API_LICENSE.pdf -> invalid
 						 */
+						callasReturnCodeTest = UtilCallas.execCallas(pdfapilotExe, analye, lang, valPathTest,
+								reportPath);
 
-						File fpdfapilotExe = new File(dirOfJarPath + File.separator + "resources" + File.separator
-								+ folderCallas + File.separator + "pdfaPilot.exe");
-						if (!fpdfapilotExe.exists()) {
+						// report des Testdurchlaufes loeschen
+						if (report.exists()) {
+							report.delete();
+						}
+
+						if (callasReturnCodeTest == 0 || callasReturnCodeTest == 1 || callasReturnCodeTest == 2
+								|| callasReturnCodeTest == 3) {
 							// Keine callas Validierung moeglich
+							configMap.put("callas", "no");
 
-							/*
-							 * Testen der Installation und System anhand
-							 * 3-Heights(TM)_PDFA_Validator_API_LICENSE.pdf -> invalid
-							 */
+							// -callas_NO -Fileanlegen, damit in J nicht validiert wird
+							if (!callasNo.exists()) {
+								try {
+									callasNo.createNewFile();
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
+							}
+
 							if (verapdfBo) {
 								callas = false;
-
 								Logtxt.logtxt(logFile,
 										getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-												+ getTextResourceService().getText(locale, ERROR_XML_CALLAS_MISSING2,
+												+ getTextResourceService().getText(locale, ERROR_XML_CALLAS_FATAL2,
 														fpdfapilotExe.getAbsolutePath()));
 								isValidCallas = false;
 							} else {
-
 								Logtxt.logtxt(logFile,
 										getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-												+ getTextResourceService().getText(locale, ERROR_XML_CALLAS_MISSING,
+												+ getTextResourceService().getText(locale, ERROR_XML_CALLAS_FATAL,
 														fpdfapilotExe.getAbsolutePath()));
 								return false;
 							}
+						} else {
+// Heutige Koontrolle bestanden
+							ioCallasCheck.createNewFile();
+							FileWriter writer = new FileWriter(ioCallasCheck, true);
+							writer.write(ausgabeDate);
+							writer.close();
+							Files.setAttribute(ioCallasCheck.toPath(), "dos:hidden", true, LinkOption.NOFOLLOW_LINKS);
 						}
-						String pdfapilotExe = fpdfapilotExe.getAbsolutePath();
+					}
+
+					try {
 
 						/*
 						 * Aufbau command:
@@ -882,14 +960,6 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						 * 
 						 * 5) reportPath: Pfad zum Report
 						 */
-
-						String levelCallas = level.toLowerCase();
-
-						String profile = dirOfJarPath + File.separator + "resources" + File.separator + folderCallas
-								+ File.separator + "N-Entry.kfpx";
-						String analye = "-a --noprogress --nohits --level=" + levelCallas + " --profile=\"" + profile
-								+ "\"";
-						String lang = "-l=" + getTextResourceService().getText(locale, MESSAGE_XML_LANGUAGE);
 
 						// Callas unterstuetzt nicht Doppelleerschlag
 						String pathToWorkDirD = configMap.get("PathToWorkDir");
@@ -908,18 +978,13 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						if (!valDateiNormalisiert.exists()) {
 							valDateiNormalisiert = valDatei;
 						}
-
 						String valPath = valDateiNormalisiert.getAbsolutePath();
-						String reportPath = report.getAbsolutePath();
-
 						if (callas) {
 							if (report.exists()) {
 								report.delete();
 							}
 
-							/*
-							 * callas separat ausfuehren und Ergebnis in isValid zurueckgeben
-							 */
+							// callas separat ausfuehren und Ergebnis in isValid zurueckgeben
 							callasReturnCode = UtilCallas.execCallas(pdfapilotExe, analye, lang, valPath, reportPath);
 
 							Util.copyFile(report, reportOriginal);
@@ -943,114 +1008,19 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 								 * 
 								 * 4 PDF is not a valid PDF/A-file
 								 */
-
-								String valPathTest = dirOfJarPath + File.separator + "license" + File.separator
-										+ "other_License" + File.separator
-										+ "3-Heights(TM)_PDFA_Validator_API_LICENSE.pdf";
-
-								/*
-								 * Testen der Installation und System anhand
-								 * 3-Heights(TM)_PDFA_Validator_API_LICENSE.pdf -> invalid
-								 */
-								callasReturnCodeTest = UtilCallas.execCallas(pdfapilotExe, analye, lang, valPathTest,
-										reportPath);
-
-								// report des Testdurchlaufes loeschen
-								if (report.exists()) {
-									report.delete();
-								}
-
-								if (callasReturnCodeTest == 0 || callasReturnCodeTest == 1 || callasReturnCodeTest == 2
-										|| callasReturnCodeTest == 3) {
-									// Keine callas Validierung moeglich
-									configMap.put("callas", "no");
-
-									// -callas_NO -Fileanlegen, damit in J nicht validiert wird
-									if (!callasNo.exists()) {
-										try {
-											callasNo.createNewFile();
-										} catch (IOException e) {
-											e.printStackTrace();
-										}
-									}
-
-									if (verapdfBo) {
-										callas = false;
-										Logtxt.logtxt(logFile,
-												getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-														+ getTextResourceService().getText(locale,
-																ERROR_XML_CALLAS_FATAL2,
-																fpdfapilotExe.getAbsolutePath()));
-										isValidCallas = false;
-									} else {
-										Logtxt.logtxt(logFile,
-												getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-														+ getTextResourceService().getText(locale,
-																ERROR_XML_CALLAS_FATAL,
-																fpdfapilotExe.getAbsolutePath()));
-										return false;
-									}
-								}
 								isValidCallas = true;
 							} else if (callasReturnCode > 3) {
 								isValidCallas = false;
 							} else if (callasReturnCode == 1 || callasReturnCode == 2 || callasReturnCode == 3) {
 								// Zusatzpruefung nicht bestanden
-								String valPathTest = dirOfJarPath + File.separator + "license" + File.separator
-										+ "other_License" + File.separator
-										+ "3-Heights(TM)_PDFA_Validator_API_LICENSE.pdf";
-
-								/*
-								 * Testen der Installation und System anhand
-								 * 3-Heights(TM)_PDFA_Validator_API_LICENSE.pdf -> invalid
-								 */
-								callasReturnCodeTest = UtilCallas.execCallas(pdfapilotExe, analye, lang, valPathTest,
-										reportPath);
-
-								// report des Testdurchlaufes loeschen
-								if (report.exists()) {
-									report.delete();
-								}
-
-								if (callasReturnCodeTest == 0 || callasReturnCodeTest == 1 || callasReturnCodeTest == 2
-										|| callasReturnCodeTest == 3) {
-									// Keine callas Validierung moeglich
-
-									// -callas_NO -Fileanlegen, damit in J nicht validiert wird
-									if (!callasNo.exists()) {
-										try {
-											callasNo.createNewFile();
-										} catch (IOException e) {
-											e.printStackTrace();
-										}
-									}
-
-									if (verapdfBo) {
-										callas = false;
-										Logtxt.logtxt(logFile,
-												getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-														+ getTextResourceService().getText(locale,
-																ERROR_XML_CALLAS_FATAL2,
-																fpdfapilotExe.getAbsolutePath()));
-										isValidCallas = false;
-									} else {
-										Logtxt.logtxt(logFile,
-												getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-														+ getTextResourceService().getText(locale,
-																ERROR_XML_CALLAS_FATAL,
-																fpdfapilotExe.getAbsolutePath()));
-										return false;
-									}
-								}
+								isValidCallas = false;
 							} else {
 								isValidCallas = false;
 								callasServiceFailed = true;
 							}
-
 							if (valDateiNormalisiertDel.exists()) {
 								valDateiNormalisiertDel.delete();
 							}
-
 							// Ende callas direkt auszuloesen
 						}
 					} catch (Exception e) {
@@ -1072,7 +1042,6 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						}
 
 						// aus dem Output die Fehler holen
-						// TODO: umschreiben
 
 						try {
 
@@ -2276,6 +2245,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 				}
 			}
 
+			// TODO erledigt: Ggf Fehler und Warnungen ausgeben
 			if (!isValid) {
 				if (min) {
 					return false;
