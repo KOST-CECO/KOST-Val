@@ -531,6 +531,49 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						String lineModif = "";
 						StringBuilder sb = new StringBuilder();
 						while ((lineModif = reader.readLine()) != null) {
+							/*
+							 * <taskException type="VALIDATE" isExecuted="true" isSuccess="false"> <duration
+							 * start="1734600179497" finish="1734600180445">00:00:00.948</duration>
+							 * <exceptionMessage>Exception: Caught unexpected runtime exception during
+							 * validation caused by exception: ReferenceError: "BM" is not
+							 * defined.</exceptionMessage> </taskException>
+							 * 
+							 * unexpected runtime exception haben keine rule. Entsprechend diese noch
+							 * seperat ausgeben
+							 *
+							 * Datei Zeile fuer Zeile lesen und ermitteln ob
+							 * "<exceptionMessage>Exception: Caught unexpected runtime exception" darin
+							 * enthalten ist
+							 */
+							if (lineModif
+									.contains("<exceptionMessage>Exception: Caught unexpected runtime exception")) {
+								String lineModifRTE = lineModif.replace("<exceptionMessage>", "");
+								lineModifRTE = lineModifRTE.replace("</exceptionMessage>", "");
+
+								verapdfA = verapdfA + getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+										+ "<Message>" + lineModifRTE + " [verapdf runtime exception]</Message>"
+										+ "</Error>";
+								isValidVa = false;
+							}
+							if (lineModif.contains("<batchSummary totalJobs") && lineModif.contains("encrypted=")
+									&& !lineModif.contains("encrypted=\"0\"")) {
+								String lineModifRTE = lineModif.replace("<exceptionMessage>", "");
+								lineModifRTE = lineModifRTE.replace("</exceptionMessage>", "");
+
+								verapdfA = verapdfA + getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+										+ getTextResourceService().getText(locale, ERROR_XML_A_ENCRYPTED);
+								isValidVa = false;
+							}
+							if (lineModif.contains("<batchSummary totalJobs") && lineModif.contains("outOfMemory=")
+									&& !lineModif.contains("outOfMemory=\"0\"")) {
+								String lineModifRTE = lineModif.replace("<exceptionMessage>", "");
+								lineModifRTE = lineModifRTE.replace("</exceptionMessage>", "");
+
+								verapdfA = verapdfA + getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+										+ "<Message>Out of memory exception [verapdf OOM exception]</Message>"
+										+ "</Error>";
+								isValidVa = false;
+							}
 							if (lineModif.contains("<object>")) {
 								// line mit <object> wird nicht behalten
 							} else if (lineModif.contains("<test>")) {
@@ -663,6 +706,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 									if (detailConfig.equalsIgnoreCase("detail")
 											|| detailConfig.equalsIgnoreCase("yes")) {
 										errorMessage = subNode.getTextContent();
+										errorMessage = errorMessage.replace("<", "&lt;");
+										errorMessage = errorMessage.replace(">", "&gt;");
 										// System.out.println("errorMessage: " + errorMessage);
 										// Detailfehlermeldung in englisch ausgeben mit - vorangestellt
 										errorMessage = "<Message> - " + errorMessage + "</Message>";
@@ -833,9 +878,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 				if (callas) {
 					// Validierung mit callas
 					// Initialisierung callas -> existiert pdfaPilot in den resources?
-					String folderCallas = "callas_pdfaPilotServer_x64_Win_13-0-380_cli";
+					String folderCallas = "callas_pdfaPilotServer_x64_Win_13-2-388_cli";
 					/*
-					 * Update von Callas: callas_pdfaPilotServer_Win_...-Version herunterladen,
+					 * Update von Callas: callas_pdfaPilotServer_x64_Win_...-Version herunterladen,
 					 * installieren, odner im Workbench umbenennen alle Dateine vom Ordner cli
 					 * ersetzen aber lizenz.txt und N-Entry.kfpx muessen die alten bleiben
 					 */

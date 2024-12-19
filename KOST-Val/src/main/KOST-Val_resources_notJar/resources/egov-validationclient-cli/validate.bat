@@ -67,6 +67,7 @@ goto fail
 
 :init
 @rem Get command-line arguments, handling Windows variants
+
 if not "%OS%" == "Windows_NT" goto win9xME_args
 
 :win9xME_args
@@ -81,6 +82,7 @@ set CMD_LINE_ARGS=%*
 
 :execute
 @rem Setup the command line
+
 set CLASSPATH=%APP_HOME%\classes;%APP_HOME%\lib\*
 
 @rem Execute validate

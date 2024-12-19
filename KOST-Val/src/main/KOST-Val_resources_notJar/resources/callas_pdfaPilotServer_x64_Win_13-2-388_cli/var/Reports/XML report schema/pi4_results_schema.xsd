@@ -1,0 +1,1151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2007 rel. 3 (http://www.altova.com) by Olaf Drümmer (callas software GmbH) -->
+<!-- Schema_version: 1.09 -->
+<xs:schema xmlns="http://www.callassoftware.com/namespace/pi4" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.callassoftware.com/namespace/pi4" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:complexType name="annot">
+		<xs:all>
+			<xs:element name="rect"/>
+			<xs:element name="content" type="xs:string" default="" minOccurs="0"/>
+			<xs:element name="creationdate" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="modificationdate" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="optionalcontents" type="xs:int" minOccurs="0"/>
+			<xs:element name="optionalcontentids" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="optionalcontentid" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="action" minOccurs="0">
+				<xs:complexType>
+					<xs:attribute name="type" type="xs:token" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:all>
+		<xs:attribute name="id" type="xs:ID" use="required"/>
+		<xs:attribute name="type" type="xs:token" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="state" type="xs:string" use="optional"/>
+		<xs:attribute name="title" type="xs:string" use="optional"/>
+		<xs:attribute name="subject" type="xs:string" use="optional"/>
+		<xs:attribute name="intent" type="xs:string" use="optional"/>
+		<xs:attribute name="flags" use="optional"/>
+		<xs:attribute name="filepath" type="xs:string" use="optional"/>
+		<xs:attribute name="page" type="xs:IDREF" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="icc_profile">
+		<xs:annotation>
+			<xs:documentation>a ICC profile item in the PDF</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="color_managment_module" type="xs:string"/>
+			<xs:element name="device_class_signature" type="xs:string"/>
+			<xs:element name="colorspace_of_data" type="xs:string"/>
+			<xs:element name="profile_connection_space" type="xs:string"/>
+			<xs:element name="magic_number" type="xs:string"/>
+			<xs:element name="primary_platform" type="xs:string"/>
+			<xs:element name="device_manufacturer" type="xs:string"/>
+			<xs:element name="device_model" type="xs:string"/>
+			<xs:element name="profile_creator" type="xs:string"/>
+			<xs:element name="creation_date" type="xs:string"/>
+			<xs:element name="default_rendering_intent">
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:enumeration value="RelativeColorimetric"/>
+						<xs:enumeration value="Saturation"/>
+						<xs:enumeration value="AbsoluteColorimetric"/>
+						<xs:enumeration value="Perceptual"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="profile_illuminant">
+				<xs:complexType>
+					<xs:attribute name="illuminant_x" type="xs:float"/>
+					<xs:attribute name="illuminant_y" type="xs:float"/>
+					<xs:attribute name="illuminant_z" type="xs:float"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="copyright" type="xs:string" minOccurs="0"/>
+			<xs:element name="postscript_product_name" type="xs:string" minOccurs="0"/>
+			<xs:element name="color_information_providing_a_pcs" type="xs:string" minOccurs="0"/>
+			<xs:element name="profile_description" type="xs:string" minOccurs="0"/>
+			<xs:element name="profile_id_hash" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="iso" type="xs:string" use="optional"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="profile_version_number"/>
+	</xs:complexType>
+	<xs:complexType name="colorspace">
+		<xs:annotation>
+			<xs:documentation>a colorspace resource in the PDF</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="name" type="xs:string" minOccurs="0"/>
+			<xs:element name="icc_profile" type="icc_profile" minOccurs="0"/>
+			<xs:element name="alternate_colorspace" type="alternate_colorspace" minOccurs="0"/>
+			<xs:element name="alternate_values" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence maxOccurs="4">
+						<xs:element name="li" type="xs:float"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="alternate_colorants" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence maxOccurs="unbounded">
+						<xs:element name="colorant">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="name" type="xs:string"/>
+									<xs:element name="alternate_colorspace" type="alternate_colorspace" minOccurs="0"/>
+									<xs:element name="alternate_values">
+										<xs:complexType>
+											<xs:sequence maxOccurs="4">
+												<xs:element name="li" type="xs:float"/>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:ID" use="required"/>
+		<xs:attribute name="type" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="DeviceGray"/>
+					<xs:enumeration value="DeviceRGB"/>
+					<xs:enumeration value="DeviceCMYK"/>
+					<xs:enumeration value="ICCBased"/>
+					<xs:enumeration value="CalGray"/>
+					<xs:enumeration value="CalRGB"/>
+					<xs:enumeration value="Separation"/>
+					<xs:enumeration value="DeviceN"/>
+					<xs:enumeration value="Lab"/>
+					<xs:enumeration value="Indexed"/>
+					<xs:enumeration value="Pattern"/>
+					<xs:enumeration value="Unknown"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="channels" type="xs:int" use="required"/>
+		<xs:attribute name="base_colorspace" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="colorspaces">
+		<xs:annotation>
+			<xs:documentation>list of colorspaces in the PDF</xs:documentation>
+		</xs:annotation>
+		<xs:sequence maxOccurs="unbounded">
+			<xs:element name="colorspace">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="colorspace"/>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="condition">
+		<xs:annotation>
+			<xs:documentation>a condition</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="display_name" type="xs:string"/>
+			<xs:element name="display_comment" type="xs:string"/>
+			<xs:element name="rules">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="rule" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:simpleContent>
+									<xs:extension base="xs:string">
+										<xs:attribute name="id" type="xs:string"/>
+									</xs:extension>
+								</xs:simpleContent>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:ID" use="required"/>
+		<xs:attribute name="creator_id" type="xs:string" use="optional"/>
+		<xs:attribute name="property_key" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="conditions">
+		<xs:annotation>
+			<xs:documentation>list of conditions</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="condition" type="condition" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="doc_info">
+		<xs:annotation>
+			<xs:documentation>document information like filename, pdfversion, creator etc.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="filename" type="xs:string"/>
+			<xs:element name="path" type="xs:string"/>
+			<xs:element name="pdfversion" type="xs:string"/>
+			<xs:element name="filesize_byte" type="xs:integer"/>
+			<xs:element name="title" type="xs:string"/>
+			<xs:element name="author"/>
+			<xs:element name="creator" type="xs:string"/>
+			<xs:element name="producer" type="xs:string"/>
+			<xs:element name="created" type="xs:string"/>
+			<xs:element name="created_timezone" type="xs:string"/>
+			<xs:element name="modified" type="xs:string"/>
+			<xs:element name="modified_timezone" type="xs:string"/>
+			<xs:element name="keywords"/>
+			<xs:element name="subject"/>
+			<xs:element name="trapped" type="xs:string"/>
+			<xs:element name="pdfxversion" minOccurs="0"/>
+			<xs:element name="pdfxconformance" minOccurs="0"/>
+			<xs:element name="plates" type="xs:integer" minOccurs="0"/>
+			<xs:element name="platenames" type="platenames" minOccurs="0"/>
+			<xs:element name="catalog_info">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="version_entry" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element name="extensions" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence minOccurs="0" maxOccurs="unbounded">
+									<xs:element name="extension">
+										<xs:complexType>
+											<xs:simpleContent>
+												<xs:extension base="xs:string">
+													<xs:attribute name="baseversion" type="xs:string" use="optional"/>
+													<xs:attribute name="extensionlevel" type="xs:string" use="optional"/>
+												</xs:extension>
+											</xs:simpleContent>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="output_intents" type="output_intents_ref" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="document">
+		<xs:annotation>
+			<xs:documentation>overview of PDF document properties, also has references to 'pages' and all resources</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="doc_info" type="doc_info"/>
+			<xs:element name="xmp_doc_info" minOccurs="0">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="xmp_doc_info">
+							<xs:sequence>
+								<xs:element name="pdfa" minOccurs="0">
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="entry" maxOccurs="2">
+												<xs:complexType>
+													<xs:simpleContent>
+														<xs:extension base="xs:string">
+															<xs:attribute name="key" type="xs:string" use="required"/>
+														</xs:extension>
+													</xs:simpleContent>
+												</xs:complexType>
+											</xs:element>
+										</xs:sequence>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="pdfx" minOccurs="0">
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="entry" maxOccurs="3">
+												<xs:complexType>
+													<xs:simpleContent>
+														<xs:extension base="xs:string">
+															<xs:attribute name="key" type="xs:string" use="required"/>
+														</xs:extension>
+													</xs:simpleContent>
+												</xs:complexType>
+											</xs:element>
+										</xs:sequence>
+									</xs:complexType>
+								</xs:element>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="pages" type="pages"/>
+			<xs:element name="resources" type="resources"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="embedded_file">
+		<xs:annotation>
+			<xs:documentation>an embedded file in the PDF</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="id" type="xs:ID" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="embedded_files">
+		<xs:annotation>
+			<xs:documentation>list of embedded files in the PDF</xs:documentation>
+		</xs:annotation>
+	</xs:complexType>
+	<xs:complexType name="bookmark">
+		<xs:annotation>
+			<xs:documentation>a bookmark item in the PDF</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="id" type="xs:ID" use="required"/>
+		<xs:attribute name="open" type="xs:boolean" use="optional"/>
+		<xs:attribute name="page" type="xs:IDREF" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="bookmarks">
+		<xs:annotation>
+			<xs:documentation>list of bookmarks in the PDF</xs:documentation>
+		</xs:annotation>
+	</xs:complexType>
+	<xs:simpleType name="filter">
+		<xs:annotation>
+			<xs:documentation>a (compression) filter in PDF (in essence just a token/name object)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="ASCIIHex"/>
+			<xs:enumeration value="ASCII85"/>
+			<xs:enumeration value="RunLength"/>
+			<xs:enumeration value="Flate"/>
+			<xs:enumeration value="LZW"/>
+			<xs:enumeration value="CCITT"/>
+			<xs:enumeration value="DCT"/>
+			<xs:enumeration value="JBIG2"/>
+			<xs:enumeration value="JPX"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="fixup">
+		<xs:annotation>
+			<xs:documentation>fixup</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="display_name" type="xs:string"/>
+			<xs:element name="display_comment" type="xs:string"/>
+		</xs:sequence>
+		<xs:attribute name="fixup_id" type="xs:ID" use="required"/>
+		<xs:attribute name="creator_id" type="xs:string" use="optional"/>
+		<xs:attribute name="dict_key" type="xs:string" use="optional"/>
+		<xs:attribute name="custom_id" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="fixupresult">
+		<xs:annotation>
+			<xs:documentation>fixup</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="details" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="detail" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="fixup_id" type="xs:IDREF" use="required"/>
+		<xs:attribute name="count" type="xs:integer" use="optional"/>
+		<xs:attribute name="count_fail" type="xs:integer" use="optional"/>
+		<xs:attribute name="severity" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="fixups">
+		<xs:annotation>
+			<xs:documentation>list of fixups</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="fixup" type="fixup" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="font">
+		<xs:annotation>
+			<xs:documentation>a font resource in the PDF</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="name" type="xs:string"/>
+			<xs:element name="encoding" type="xs:string"/>
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:ID" use="required"/>
+		<xs:attribute name="type" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Type1"/>
+					<xs:enumeration value="TrueType"/>
+					<xs:enumeration value="CIDType0"/>
+					<xs:enumeration value="CIDType2"/>
+					<xs:enumeration value="MMType1"/>
+					<xs:enumeration value="Type3"/>
+					<xs:enumeration value="Type0"/>
+					<xs:enumeration value="Unknown"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="embedded" type="xs:boolean" use="required"/>
+		<xs:attribute name="subset" type="xs:boolean" use="required"/>
+		<xs:attribute name="has_unicode_cmap" type="xs:boolean" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="fonts">
+		<xs:annotation>
+			<xs:documentation>list of fonts in PDF</xs:documentation>
+		</xs:annotation>
+		<xs:sequence maxOccurs="unbounded">
+			<xs:element name="font" type="font"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="formXObject">
+		<xs:annotation>
+			<xs:documentation>a form XObject resource in the PDF</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="id" type="xs:ID" use="required"/>
+		<xs:attribute name="bounding_box_pt" type="xs:string" use="required"/>
+		<xs:attribute name="transformation_matrix" type="xs:string" use="required"/>
+		<xs:attribute name="ext_unique_id" type="xs:integer" use="optional"/>
+		<xs:attribute name="form_p_info" type="xs:boolean" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="formXObjects">
+		<xs:annotation>
+			<xs:documentation>list of form XObjects in the PDF</xs:documentation>
+		</xs:annotation>
+	</xs:complexType>
+	<xs:complexType name="formxobjstate">
+		<xs:attribute name="formxobj_id" type="xs:IDREF" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="graphicstate">
+		<xs:annotation>
+			<xs:documentation>an extended graphicstate resource in the PDF</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="id" type="xs:ID" use="required"/>
+		<xs:attribute name="stroke_adjustment" type="xs:boolean" use="optional"/>
+		<xs:attribute name="overprint_for_stroke" type="xs:boolean" use="optional"/>
+		<xs:attribute name="overprint_for_fill" type="xs:boolean" use="optional"/>
+		<xs:attribute name="overprint_mode" type="xs:int" use="optional"/>
+		<xs:attribute name="smoothness" type="xs:float" use="optional"/>
+		<xs:attribute name="alpha_is_shape" type="xs:boolean" use="optional"/>
+		<xs:attribute name="fill_constant_alpha" type="xs:float" use="optional"/>
+		<xs:attribute name="stroke_constant_alpha" type="xs:float" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="graphicstates">
+		<xs:annotation>
+			<xs:documentation>list of extended graphicstates in the PDF</xs:documentation>
+		</xs:annotation>
+	</xs:complexType>
+	<xs:complexType name="gstate">
+		<xs:attribute name="current_line_width" type="xs:double" use="optional"/>
+		<xs:attribute name="miter_limit" type="xs:float" use="optional"/>
+		<xs:attribute name="stroke_adjustment" type="xs:boolean" use="optional"/>
+		<xs:attribute name="flatness_tolerance" type="xs:float" use="optional"/>
+		<xs:attribute name="smoothness_tolerance" type="xs:float" use="optional"/>
+		<xs:attribute name="overprint_mode" type="xs:integer" use="required"/>
+		<xs:attribute name="overprint_for_stroke" type="xs:boolean" use="optional"/>
+		<xs:attribute name="overprint_for_fill" type="xs:boolean" use="optional"/>
+		<xs:attribute name="rendering_intent" type="xs:string" use="optional"/>
+		<xs:attribute name="stroke_colorspace" type="xs:IDREF"/>
+		<xs:attribute name="stroke_colorant_values" type="xs:string"/>
+		<xs:attribute name="fill_colorspace" type="xs:IDREF"/>
+		<xs:attribute name="fill_colorant_values" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="trigger">
+		<xs:sequence>
+			<xs:element name="value" type="xs:string"/>
+			<xs:element name="detail" type="xs:string"/>
+		</xs:sequence>
+		<xs:attribute name="condition_id" type="xs:string"/>
+		<xs:attribute name="pixels_above_threshold" type="xs:int"/>
+	</xs:complexType>
+	<xs:complexType name="hit">
+		<xs:annotation>
+			<xs:documentation>result, provides result specific info and reference to document overview, page</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="imagestate" type="imagestate" minOccurs="0"/>
+			<xs:element name="formxobjstate" type="formxobjstate" minOccurs="0"/>
+			<xs:element name="shadestate" type="shadestate" minOccurs="0"/>
+			<xs:element name="textstate" type="textstate" minOccurs="0"/>
+			<xs:element name="gstate" type="gstate" minOccurs="0"/>
+			<xs:element name="inkstate" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="platenames" type="platenames"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="triggers">
+				<xs:complexType>
+					<xs:sequence minOccurs="0" maxOccurs="unbounded">
+						<xs:element name="trigger" type="trigger"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="type" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="DocumentInfo"/>
+					<xs:enumeration value="PageInfo"/>
+					<xs:enumeration value="TextFill"/>
+					<xs:enumeration value="TextOutline"/>
+					<xs:enumeration value="TextOutlineFill"/>
+					<xs:enumeration value="TextInvisible"/>
+					<xs:enumeration value="InlineImage"/>
+					<xs:enumeration value="XObj"/>
+					<xs:enumeration value="Image"/>
+					<xs:enumeration value="FormXObj"/>
+					<xs:enumeration value="PostScript"/>
+					<xs:enumeration value="Shade"/>
+					<xs:enumeration value="Fill"/>
+					<xs:enumeration value="Stroke"/>
+					<xs:enumeration value="StrokeFill"/>
+					<xs:enumeration value="InvalidCmd"/>
+					<xs:enumeration value="Barcode"/>
+					<xs:enumeration value="Unknown"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="page" type="xs:IDREF" use="optional"/>
+		<xs:attribute name="llx" type="xs:float" use="optional"/>
+		<xs:attribute name="lly" type="xs:float" use="optional"/>
+		<xs:attribute name="urx" type="xs:float" use="optional"/>
+		<xs:attribute name="ury" type="xs:float" use="optional"/>
+		<xs:attribute name="rendering_intent" type="xs:string" use="optional"/>
+		<xs:attribute name="fill_colorspace" type="xs:ID" use="optional"/>
+		<xs:attribute name="fill_colorant_values" use="optional"/>
+		<xs:attribute name="stroke_colorspace" type="xs:IDREF"/>
+		<xs:attribute name="stroke_colorant_values" use="optional"/>
+		<xs:attribute name="annot_id" type="xs:string" use="optional"/>
+		<xs:attribute name="symbology" type="xs:string" use="optional"/>
+		<xs:attribute name="bar_width_reduction" type="xs:float" use="optional"/>
+		<xs:attribute name="module_width" type="xs:float" use="optional"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="hits">
+		<xs:annotation>
+			<xs:documentation>list of results for a given rule</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="hit" type="hit" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="rule_id" type="xs:IDREF" use="required"/>
+		<xs:attribute name="severity" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Warning"/>
+					<xs:enumeration value="Info"/>
+					<xs:enumeration value="Error"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="nohits">
+		<xs:annotation>
+			<xs:documentation/>
+		</xs:annotation>
+		<xs:attribute name="rule_id" type="xs:IDREF" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="image">
+		<xs:annotation>
+			<xs:documentation>an image (Image XObject) in the PDF</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="filter" type="filter"/>
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:ID" use="required"/>
+		<xs:attribute name="h_px" type="xs:int" use="required"/>
+		<xs:attribute name="v_px" type="xs:int" use="required"/>
+		<xs:attribute name="colorspace" type="xs:IDREF" use="optional"/>
+		<xs:attribute name="bits_per_color_component" type="xs:int" use="required"/>
+		<xs:attribute name="treated_as_mask" type="xs:boolean" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="images">
+		<xs:annotation>
+			<xs:documentation>list of images in the PDF</xs:documentation>
+		</xs:annotation>
+		<xs:sequence maxOccurs="unbounded">
+			<xs:element name="image" type="image"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="imagestate">
+		<xs:attribute name="image_id" type="xs:IDREF" use="optional"/>
+		<xs:attribute name="v_ppi" type="xs:float" use="required"/>
+		<xs:attribute name="h_ppi" type="xs:float" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="inspektor_information">
+		<xs:annotation>
+			<xs:documentation>some general information like username, inspektor version or operating system</xs:documentation>
+		</xs:annotation>
+	</xs:complexType>
+	<xs:complexType name="layer">
+		<xs:annotation>
+			<xs:documentation>an optional content in the PDF</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="id" type="xs:ID" use="required"/>
+		<xs:attribute name="type" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Group"/>
+					<xs:enumeration value="Membership"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="layers">
+		<xs:annotation>
+			<xs:documentation>list of optional contents in the PDF</xs:documentation>
+		</xs:annotation>
+	</xs:complexType>
+	<xs:complexType name="output_intent">
+		<xs:annotation>
+			<xs:documentation>a output intent resource in the PDF</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="registry_name" type="xs:string"/>
+			<xs:element name="output_condition"/>
+			<xs:element name="info"/>
+			<xs:element name="preflight_hash" type="xs:string" minOccurs="0"/>
+			<xs:element name="output_profilename" minOccurs="0"/>
+			<xs:element name="icc_profile" type="icc_profile" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:ID" use="required"/>
+		<xs:attribute name="output_condition_identifier" type="xs:string" use="required"/>
+		<xs:attribute name="subtype" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="output_intents">
+		<xs:annotation>
+			<xs:documentation>list of output intents in the PDF</xs:documentation>
+		</xs:annotation>
+	</xs:complexType>
+	<xs:complexType name="pattern">
+		<xs:annotation>
+			<xs:documentation>a pattern resource in the PDF</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="id" type="xs:ID" use="required"/>
+		<xs:attribute name="type" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Tiling"/>
+					<xs:enumeration value="SmoothShade"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="smoothshade_id" type="xs:IDREF" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="patterns">
+		<xs:annotation>
+			<xs:documentation>list of patterns in the PDF</xs:documentation>
+		</xs:annotation>
+	</xs:complexType>
+	<xs:complexType name="profile_info">
+		<xs:annotation>
+			<xs:documentation>the used profile</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="creator_id" type="xs:string" use="required"/>
+		<xs:attribute name="dict_key" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="page">
+		<xs:annotation>
+			<xs:documentation>overview of page properties</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="rotate" type="xs:integer" minOccurs="0"/>
+			<xs:element name="userunit" type="xs:float" minOccurs="0"/>
+			<xs:element name="plates" type="xs:integer"/>
+			<xs:element name="platenames" type="platenames"/>
+			<xs:element name="annots" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="annot" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="output_intents" type="output_intents_ref" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="pages">
+		<xs:annotation>
+			<xs:documentation>list of pages</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="page" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="page">
+							<xs:attribute name="id" type="xs:ID" use="required"/>
+							<xs:attribute name="nr" type="xs:int" use="required"/>
+							<xs:attribute name="pagelabel"/>
+							<xs:attribute name="mediabox"/>
+							<xs:attribute name="cropbox"/>
+							<xs:attribute name="trimbox"/>
+							<xs:attribute name="bleedbox"/>
+							<xs:attribute name="artbox"/>
+							<xs:attribute name="effective_mediabox"/>
+							<xs:attribute name="effective_cropbox"/>
+							<xs:attribute name="effective_trimbox"/>
+							<xs:attribute name="effective_bleedbox"/>
+							<xs:attribute name="effective_artbox"/>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="report">
+		<xs:annotation>
+			<xs:documentation>pdfInspektor4 XML report of preflight results with document overview, resources and results</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="document" type="document" minOccurs="0"/>
+				<xs:element name="profile_info" minOccurs="0">
+					<xs:complexType>
+						<xs:complexContent>
+							<xs:extension base="profile_info">
+								<xs:sequence>
+									<xs:element name="profile_name" type="xs:string"/>
+									<xs:element name="profile_comment" type="xs:string"/>
+									<xs:element name="meta_data">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="item" minOccurs="0" maxOccurs="unbounded">
+													<xs:complexType>
+														<xs:sequence>
+															<xs:element name="key" type="xs:string"/>
+															<xs:element name="value" type="xs:string"/>
+														</xs:sequence>
+													</xs:complexType>
+												</xs:element>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="conditions" type="conditions"/>
+									<xs:element name="rules" type="rules"/>
+									<xs:element name="rulesets">
+										<xs:complexType>
+											<xs:complexContent>
+												<xs:extension base="rulesets">
+													<xs:sequence>
+														<xs:element name="ruleset" minOccurs="0" maxOccurs="unbounded">
+															<xs:complexType>
+																<xs:complexContent>
+																	<xs:extension base="ruleset">
+																		<xs:sequence>
+																			<xs:element name="display_name" type="xs:string"/>
+																			<xs:element name="display_comment" type="xs:string"/>
+																			<xs:element name="rules">
+																				<xs:complexType>
+																					<xs:sequence>
+																						<xs:element name="rule" maxOccurs="unbounded">
+																							<xs:complexType>
+																								<xs:attribute name="rule_id" type="xs:IDREF" use="required"/>
+																							</xs:complexType>
+																						</xs:element>
+																					</xs:sequence>
+																				</xs:complexType>
+																			</xs:element>
+																		</xs:sequence>
+																	</xs:extension>
+																</xs:complexContent>
+															</xs:complexType>
+														</xs:element>
+													</xs:sequence>
+												</xs:extension>
+											</xs:complexContent>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="fixups" minOccurs="0">
+										<xs:complexType>
+											<xs:complexContent>
+												<xs:extension base="fixups"/>
+											</xs:complexContent>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="sequencesteps" minOccurs="0" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="sequencestep" minOccurs="0" maxOccurs="unbounded">
+													<xs:complexType>
+														<xs:sequence>
+															<xs:element name="display_name" type="xs:string"/>
+															<xs:element name="display_comment" type="xs:string"/>
+															<xs:element name="fixups" minOccurs="0">
+																<xs:complexType>
+																	<xs:complexContent>
+																		<xs:extension base="fixups"/>
+																	</xs:complexContent>
+																</xs:complexType>
+															</xs:element>
+														</xs:sequence>
+														<xs:attribute name="type" type="xs:string" use="optional"/>
+													</xs:complexType>
+												</xs:element>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:extension>
+						</xs:complexContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="results" type="results"/>
+				<xs:element name="information">
+					<xs:complexType>
+						<xs:complexContent>
+							<xs:extension base="inspektor_information">
+								<xs:sequence>
+									<xs:element name="product_name" type="xs:string"/>
+									<xs:element name="product_version" type="xs:string"/>
+									<xs:element name="date_time" type="xs:string"/>
+									<xs:element name="username" type="xs:string"/>
+									<xs:element name="computername" type="xs:string"/>
+									<xs:element name="operating_system" type="xs:string"/>
+									<xs:element name="duration"/>
+									<xs:element name="report_language"/>
+								</xs:sequence>
+							</xs:extension>
+						</xs:complexContent>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="resources">
+		<xs:annotation>
+			<xs:documentation>list iof resources, like images, fonts, etc.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="colorspaces" type="colorspaces" minOccurs="0"/>
+			<xs:element name="images" type="images" minOccurs="0"/>
+			<xs:element name="fonts" type="fonts" minOccurs="0"/>
+			<xs:element name="smooth_shades" minOccurs="0">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="smoothShades">
+							<xs:sequence maxOccurs="unbounded">
+								<xs:element name="smooth_shade" type="smoothShade"/>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="patterns" minOccurs="0">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="patterns">
+							<xs:sequence maxOccurs="unbounded">
+								<xs:element name="pattern" type="pattern"/>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="form_xobjects" minOccurs="0">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="formXObjects">
+							<xs:sequence maxOccurs="unbounded">
+								<xs:element name="form_xobject" type="formXObject"/>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="output_intents" minOccurs="0">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="output_intents">
+							<xs:sequence minOccurs="0" maxOccurs="unbounded">
+								<xs:element name="output_intent" type="output_intent"/>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="layers" minOccurs="0">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="layers">
+							<xs:sequence maxOccurs="unbounded">
+								<xs:element name="layer">
+									<xs:complexType>
+										<xs:complexContent>
+											<xs:extension base="layer">
+												<xs:sequence>
+													<xs:element name="name" type="xs:string" minOccurs="0"/>
+													<xs:element name="intents" minOccurs="0">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="intent" type="xs:string" maxOccurs="unbounded"/>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="default_state" type="xs:string" default="" minOccurs="0"/>
+													<xs:element name="GTS_ProcStepsGroup" type="xs:string" minOccurs="0"/>
+													<xs:element name="GTS_ProcStepsType" type="xs:string" minOccurs="0"/>
+												</xs:sequence>
+											</xs:extension>
+										</xs:complexContent>
+									</xs:complexType>
+								</xs:element>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="embedded_files" minOccurs="0">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="embedded_files">
+							<xs:sequence maxOccurs="unbounded">
+								<xs:element name="embedded_file">
+									<xs:complexType>
+										<xs:complexContent>
+											<xs:extension base="embedded_file">
+												<xs:sequence>
+													<xs:element name="filename" type="xs:string"/>
+												</xs:sequence>
+											</xs:extension>
+										</xs:complexContent>
+									</xs:complexType>
+								</xs:element>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="bookmarks" minOccurs="0">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="bookmarks">
+							<xs:sequence maxOccurs="unbounded">
+								<xs:element name="bookmark">
+									<xs:complexType>
+										<xs:complexContent>
+											<xs:extension base="bookmark">
+												<xs:sequence>
+													<xs:element name="title" type="xs:string"/>
+													<xs:element name="children" minOccurs="0" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:sequence maxOccurs="unbounded">
+																<xs:element name="bookmark" minOccurs="0" maxOccurs="unbounded"/>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:extension>
+										</xs:complexContent>
+									</xs:complexType>
+								</xs:element>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="results">
+		<xs:annotation>
+			<xs:documentation> results for the PDF based on rules</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="error" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="hits" type="hits" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="nohits" type="nohits" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="fixup" type="fixupresult" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="rule">
+		<xs:annotation>
+			<xs:documentation>a rule</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="display_name" type="xs:string"/>
+			<xs:element name="display_comment" type="xs:string"/>
+			<xs:element name="display_nomatch" type="xs:string"/>
+			<xs:element name="conditions">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="condition" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:simpleContent>
+									<xs:extension base="xs:string">
+										<xs:attribute name="id" type="xs:string"/>
+									</xs:extension>
+								</xs:simpleContent>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="rulesets">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ruleset" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="severity">
+										<xs:simpleType>
+											<xs:restriction base="xs:token">
+												<xs:enumeration value="Invalid"/>
+												<xs:enumeration value="Warning"/>
+												<xs:enumeration value="Info"/>
+												<xs:enumeration value="Error"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="meta_data" minOccurs="0">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="item" maxOccurs="unbounded">
+													<xs:complexType>
+														<xs:sequence>
+															<xs:element name="key" type="xs:string"/>
+															<xs:element name="value" type="xs:string"/>
+														</xs:sequence>
+													</xs:complexType>
+												</xs:element>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="variables" minOccurs="0">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="variable" maxOccurs="unbounded">
+													<xs:complexType>
+														<xs:sequence>
+															<xs:element name="key" type="xs:string"/>
+															<xs:element name="label" type="xs:string"/>
+															<xs:element name="value" type="xs:string"/>
+														</xs:sequence>
+														<xs:attribute name="usage" type="xs:string" use="optional"/>
+													</xs:complexType>
+												</xs:element>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+								<xs:attribute name="ruleset_id" type="xs:IDREF" use="required"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:ID" use="required"/>
+		<xs:attribute name="creator_id" type="xs:string" use="optional"/>
+		<xs:attribute name="dict_key" type="xs:string" use="optional"/>
+		<xs:attribute name="custom_id" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="rules">
+		<xs:annotation>
+			<xs:documentation>list of rules</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="rule" type="rule" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ruleset">
+		<xs:annotation>
+			<xs:documentation>a ruleset</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="id" type="xs:ID" use="required"/>
+		<xs:attribute name="creator_id" type="xs:string" use="optional"/>
+		<xs:attribute name="dict_key" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="rulesets">
+		<xs:annotation>
+			<xs:documentation>list of rulesets</xs:documentation>
+		</xs:annotation>
+	</xs:complexType>
+	<xs:complexType name="shadestate">
+		<xs:attribute name="smoothshade_id" type="xs:IDREF" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="smoothShade">
+		<xs:annotation>
+			<xs:documentation>a smoothShade resource in the PDF</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="id" type="xs:ID" use="required"/>
+		<xs:attribute name="type" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="Unknown"/>
+					<xs:enumeration value="Function"/>
+					<xs:enumeration value="Axial"/>
+					<xs:enumeration value="Radial"/>
+					<xs:enumeration value="FreeGouraud"/>
+					<xs:enumeration value="LatticeGouraud"/>
+					<xs:enumeration value="Coons"/>
+					<xs:enumeration value="Tensor"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="prevent_aliasing_artifacts" type="xs:boolean" use="required"/>
+		<xs:attribute name="colorspace" type="xs:IDREF" use="optional"/>
+		<xs:attribute name="bits_per_coordinate" type="xs:integer" use="optional"/>
+		<xs:attribute name="bits_per_component" type="xs:integer" use="optional"/>
+		<xs:attribute name="bits_per_flag" type="xs:integer" use="optional"/>
+		<xs:attribute name="vertices_per_row" type="xs:integer" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="smoothShades">
+		<xs:annotation>
+			<xs:documentation>list of smooth shades in the PDF</xs:documentation>
+		</xs:annotation>
+	</xs:complexType>
+	<xs:complexType name="textstate">
+		<xs:attribute name="font_id" type="xs:IDREF" use="optional"/>
+		<xs:attribute name="fill_colorspace" type="xs:IDREF"/>
+		<xs:attribute name="fill_colorant_values" type="xs:string"/>
+		<xs:attribute name="current_font_size" type="xs:float" use="optional"/>
+		<xs:attribute name="rendering_intent" type="xs:string" use="optional"/>
+		<xs:attribute name="stroke_colorspace" type="xs:IDREF"/>
+		<xs:attribute name="stroke_colorant_values" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="alternate_colorspace">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="id" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="xmp_doc_info">
+		<xs:annotation>
+			<xs:documentation>xmp document information like pdfx4 or pdfa</xs:documentation>
+		</xs:annotation>
+	</xs:complexType>
+	<xs:complexType name="platename">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="inkcov_prct" type="xs:string" use="optional"/>
+				<xs:attribute name="inkcov_cm2" type="xs:string" use="optional"/>
+				<xs:attribute name="inkcov_inch2" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="platenames">
+		<xs:sequence>
+			<xs:element name="platename" type="platename" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="inkcov_resolution_ppi" type="xs:string" use="optional"/>
+		<xs:attribute name="inkcov_pagebox" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="output_intent_ref">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="id" type="xs:IDREF" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="output_intents_ref">
+		<xs:sequence>
+			<xs:element name="output_intent" type="output_intent_ref" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

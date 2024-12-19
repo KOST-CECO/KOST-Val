@@ -456,6 +456,8 @@ public class Util {
 			newtext = newtext.replace("\r\n</Message>", "</Message>");
 			newtext = newtext.replace("\r\n\r\n", "\r\n");
 			newtext = newtext.replace("\r\n\r\n", "\r\n");
+			newtext = newtext.replace("&amp;gt;","&gt;");
+			newtext = newtext.replace("&amp;lt;","&lt;");
 
 			newtext = Util.umlaute(newtext);
 			newtext = newtext.replace((char) 0, (char) 32);

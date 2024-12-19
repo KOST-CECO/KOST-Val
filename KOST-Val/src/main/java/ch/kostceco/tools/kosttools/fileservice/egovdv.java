@@ -21,8 +21,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Locale;
@@ -32,7 +30,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.springframework.util.Assert;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -45,7 +42,7 @@ public class egovdv {
 	private static String exeDir = "resources" + File.separator + "egov-validationclient-cli";
 	private static String validateBat = exeDir + File.separator + "validate.bat";
 	private static String egovCli = exeDir + File.separator + "lib" + File.separator
-			+ "intarsys-egov-validationclient-cli-1.0.10.jar";
+			+ "intarsys-egov-validationclient-cli-1.0.11.jar";
 
 	/**
 	 * TODO: Listet mit egovdv via cmd die Signaturnamen in pdf auf und speichert

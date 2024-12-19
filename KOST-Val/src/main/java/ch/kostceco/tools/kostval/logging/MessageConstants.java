@@ -272,7 +272,7 @@ public interface MessageConstants {
 	String WARNING_XML_A_PDFTOOLS_LICENSE_1 = "val.warning.xml.a.pdftools.license.1";
 	String WARNING_XML_A_PDFTOOLS_LICENSE_2 = "val.warning.xml.a.pdftools.license.2";
 	String ERROR_XML_A_PDFTOOLS_LICENSE = "val.error.xml.a.pdftools.license";
-	String ERROR_XML_A_PDFTOOLS_ENCRYPTED = "val.error.xml.a.pdftools.encrypted";
+	String ERROR_XML_A_ENCRYPTED = "val.error.xml.a.encrypted";
 	String ERROR_XML_A_PDFTOOLS_DAMAGED = "val.error.xml.a.pdftools.damaged";
 	String WARNING_XML_A_PDFA3 = "val.warning.xml.a.pdfa3";
 	String WARNING_XML_A_SIGNATURE = "val.warning.xml.a.signature";
