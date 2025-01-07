@@ -58,7 +58,7 @@ public class ConfigControllerSiard {
 		String java6432 = System.getProperty("sun.arch.data.model");
 		String javaVersion = System.getProperty("java.version");
 		String javafxVersion = System.getProperty("javafx.version");
-		labelConfig.setText("Copyright © KOST/CECO          KOST-Val v2.2.1.1          JavaFX " + javafxVersion
+		labelConfig.setText("Copyright © KOST/CECO          KOST-Val v2.3.0.0          JavaFX " + javafxVersion
 				+ "   &   Java-" + java6432 + " " + javaVersion + ".");
 
 		// festhalten von wo die Applikation (exe) gestartet wurde

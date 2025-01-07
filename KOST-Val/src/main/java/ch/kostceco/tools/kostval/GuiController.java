@@ -25,6 +25,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.net.URL;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
@@ -106,7 +107,7 @@ public class GuiController {
 
 	private String arg0, arg1, arg2, arg3 = "--xml", dirOfJarPath, initInstructionsDe, initInstructionsFr,
 			initInstructionsIt, initInstructionsEn;
-	private String versionKostVal = "2.2.1.1";
+	private String versionKostVal = "2.3.0.0";
 	/*
 	 * TODO: versionKostVal auch hier anpassen:
 	 * 
@@ -128,8 +129,7 @@ public class GuiController {
 	 * 
 	 * val.message.xml.info = <Info>KOST-Val v{0}, Copyright (C) 2012-202x
 	 * 
-	 * sowie im Readme inkl Kontrolle der validierten Formate (Readme und Header in
-	 * den Java-Dateien
+	 * sowie im Readme 
 	 */
 
 	private Locale locale = Locale.getDefault();
@@ -332,9 +332,44 @@ public class GuiController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		String help1, help2, help3, help4, help5, egg;
+		egg = "";
+		java.util.Date nowStart = new java.util.Date();
+		java.text.SimpleDateFormat sdfDate = new java.text.SimpleDateFormat("dd.MM.yyyy");
+		String strDate = sdfDate.format(nowStart);
+		java.text.SimpleDateFormat sdfYear = new java.text.SimpleDateFormat("yyyy");
+		String strYear = sdfYear.format(nowStart);
+		if (strDate.contains(".01.")) {
+			if (strDate.contains("20.01") || strDate.contains("21.01") || strDate.contains("22.01")
+					|| strDate.contains("23.01") || strDate.contains("24.01") || strDate.contains("25.01")
+					|| strDate.contains("26.01") || strDate.contains("27.01") || strDate.contains("28.01")
+					|| strDate.contains("29.01") || strDate.contains("30.01") || strDate.contains("31.01")) {
+				egg = "";
+			} else {
+				URL urlNY = getClass().getResource("/config/NY");
+				egg = "<font size=\"50\" face=\"Script MT Bold\" color=\"green\"> <img src=\"" + urlNY
+						+ "\" height='40'> " + strYear + "</font>";
+			}
+		}
+		if (strDate.contains(".12.")) {
+			if (strDate.contains("27.12.") || strDate.contains("28.12.") || strDate.contains("29.12.")
+					|| strDate.contains("30.12.") || strDate.contains("31.12.")) {
+				egg = "";
+			} else {
+				URL urlCE = getClass().getResource("/config/CE_DE");
+				if (locale.toString().startsWith("fr")) {
+					urlCE = getClass().getResource("/config/CE_FR");
+				} else if (locale.toString().startsWith("en")) {
+					urlCE = getClass().getResource("/config/CE_EN");
+				} else if (locale.toString().startsWith("it")) {
+					urlCE = getClass().getResource("/config/CE_IT");
+				} else {
+					urlCE = getClass().getResource("/config/CE_DE");
+				}
+				egg = "<img src=\"" + urlCE + "\" height='50'>";
+			}
+		}
 
-		/* Kurzanleitung zum GUI anzeigen */
-		String help1, help2, help3, help4, help5;
 		help1 = " <h2>Brèves instructions</h2> ";
 		help2 = "<hr>";
 		help3 = "<h3>1. Précisez / sélectionnez le fichier ou le dossier à valider</h3>";
@@ -343,7 +378,7 @@ public class GuiController {
 				+ "<br/>&emsp;Formats uniquement -> validation du format de tous les formats dans le dossier entier"
 				+ "<br/>&emsp;SIP y compris les formats -> Validation SIP et validation du format de tous les formats dans le dossier de content"
 				+ "<br/>&emsp;SIP uniquement -> Validation SIP sans validation de format</h3>";
-		initInstructionsFr = "<html>" + help1 + help2 + help3 + help4 + help5 + "<br/></html>";
+		initInstructionsFr = "<html>" + help1 + help2 + help3 + help4 + help5 + egg + "<br/></html>";
 		help1 = "<h2>Brief instructions</h2>";
 		help3 = "<h3>1. Specify / select file or folder for validation</h3>";
 		help4 = "<h3>2. Adjust configuration and LogType if necessary</h3>";
@@ -351,7 +386,7 @@ public class GuiController {
 				+ "<br/>&emsp;Formats only -> format validation of all formats in the entire folder"
 				+ "<br/>&emsp;SIP incl. formats -> SIP validation and format validation of all formats in the content folder"
 				+ "<br/>&emsp;SIP only -> SIP validation without format validation;</h3>";
-		initInstructionsEn = "<html>" + help1 + help2 + help3 + help4 + help5 + "<br/></html>";
+		initInstructionsEn = "<html>" + help1 + help2 + help3 + help4 + help5 + egg + "<br/></html>";
 		help1 = "<h2>Istruzioni brevi</h2>";
 		help3 = "<h3>1. Specificare/selezionare il file o la directory per la convalida</h3>";
 		help4 = "<h3>2. Regolare la configurazione e il LogType, se necessario</h3>";
@@ -359,7 +394,7 @@ public class GuiController {
 				+ "<br/>&emsp;Solo formati -> convalida del formato di tutti i formati dell'intera cartella"
 				+ "<br/>&emsp;SIP incl. formati -> validazione SIP e validazione del formato di tutti i formati nella cartella dei content"
 				+ "<br/>&emsp;Solo SIP -> convalida SIP senza convalida del formato;</h3>";
-		initInstructionsIt = "<html>" + help1 + help2 + help3 + help4 + help5 + "<br/></html>";
+		initInstructionsIt = "<html>" + help1 + help2 + help3 + help4 + help5 + egg + "<br/></html>";
 		help1 = "<h2>Kurzanleitung</h2>";
 		help3 = "<h3>1. Datei oder Ordner zur Validierung angeben / auswählen</h3>";
 		help4 = "<h3>2. Ggf. Konfiguration und LogType anpassen</h3>";
@@ -367,7 +402,7 @@ public class GuiController {
 				+ "<br/>&emsp;Nur Formate -> Formatvalidierung aller Formate im gesamten Ordner"
 				+ "<br/>&emsp;SIP inkl. Formate -> SIP-Validierung und Formatvalidierung aller Formate im content-Ordner"
 				+ "<br/>&emsp;Nur SIP -> SIP-Validierung ohne Formatvalidierung</h3>";
-		initInstructionsDe = "<html>" + help1 + help2 + help3 + help4 + help5 + "<br/></html>";
+		initInstructionsDe = "<html>" + help1 + help2 + help3 + help4 + help5 + egg + "<br/></html>";
 		String initInstructions = initInstructionsDe;
 		if (locale.toString().startsWith("fr")) {
 			initInstructions = initInstructionsFr;

@@ -4,7 +4,7 @@ KOST-Val
 The KOST-Val application is used for validate Files and 
 Submission Information Package (SIP).
 
-KOST-Val, Copyright (C) 2012-2024 Claire Roethlisberger (KOST-CECO), 
+KOST-Val, Copyright (C) 2012-2025 Claire Roethlisberger (KOST-CECO), 
 Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau),
 Markus Hahn (coderslagoon), Daniel Ludin (BEDAG AG)
 
