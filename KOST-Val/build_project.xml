@@ -22,7 +22,7 @@
 		<pathelement location="lib/spring-expression-5.3.39.jar" />
 		<pathelement location="lib/spring-jcl-5.3.39.jar" />
 		<pathelement location="lib/tiff-hul-1.9.5.jar" />
-		<pathelement location="lib/VALA-6.27.2.1.RELEASE.jar" />
+		<pathelement location="lib/VALA-6.27.5.1.RELEASE.jar" />
 		<pathelement location="lib/xercesImpl-2.12.2.jar" />
 		<pathelement location="lib/xml-apis-2.7.1.jar" />
 		<pathelement location="lib/zip64-1.0.jar" />

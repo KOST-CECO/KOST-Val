@@ -169,17 +169,25 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 			}
 			configMap.put("pdfaValidation", pdfavalidation);
 
+			// Gibt an ob pdfa mit PDF Tools validiert werden soll
+			String pdftools = doc.getElementsByTagName("pdftools").item(0).getTextContent();
+			configMap.put("pdftools", pdftools);
+
+			// Gibt an ob pdfa mit PDF Tools im detail validiert werden soll
+			String detailpt = doc.getElementsByTagName("detailpt").item(0).getTextContent();
+			configMap.put("detailpt", detailpt);
+
+			// Gibt an ob die Schriften in pdfa validiert werden soll
+			String pdfafontpt = doc.getElementsByTagName("pdfafontpt").item(0).getTextContent();
+			configMap.put("pdfafontpt", pdfafontpt);
+
 			// Gibt an ob pdfa mit veraPDF validiert werden soll
 			String verapdf = doc.getElementsByTagName("verapdf").item(0).getTextContent();
 			configMap.put("verapdf", verapdf);
 
 			// Gibt an ob pdfa mit veraPDF im detail validiert werden soll
-			String detail = doc.getElementsByTagName("detail").item(0).getTextContent();
-			configMap.put("detail", detail);
-
-			// Gibt an ob pdfa mit callas validiert werden soll
-			String callas = doc.getElementsByTagName("callas").item(0).getTextContent();
-			configMap.put("callas", callas);
+			String detailvp = doc.getElementsByTagName("detailvp").item(0).getTextContent();
+			configMap.put("detailvp", detailvp);
 
 			// Gibt an welche Konformitaeten erlaubt sind
 			String pdfa1a = "no";
@@ -211,10 +219,6 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 				pdfa2u = doc.getElementsByTagName("pdfa2u").item(0).getTextContent().replace(" ", "");
 			}
 			configMap.put("pdfa2u", pdfa2u);
-
-			// Gibt an ob die Schriften in pdfa validiert werden soll
-			String pdfafont = doc.getElementsByTagName("pdfafont").item(0).getTextContent();
-			configMap.put("pdfafont", pdfafont);
 
 			/*
 			 * checkWarning3to2 validiert wenn eingeschaltet PDF/A-3 nach PDF/A-2 und

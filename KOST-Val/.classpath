@@ -22,7 +22,7 @@
 	<classpathentry kind="lib" path="lib/spring-expression-5.3.39.jar" sourcepath="external-sources/spring-expression-5.3.39-sources.jar"/>
 	<classpathentry kind="lib" path="lib/spring-jcl-5.3.39.jar" sourcepath="external-sources/spring-jcl-5.3.39-sources.jar"/>
 	<classpathentry kind="lib" path="lib/tiff-hul-1.9.5.jar"/>
-	<classpathentry kind="lib" path="lib/VALA-6.27.2.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/VALA-6.27.5.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl-2.12.2.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis-2.7.1.jar"/>
 	<classpathentry kind="lib" path="lib/zip64-1.0.jar" sourcepath="external-sources/zip64-sources.jar"/>

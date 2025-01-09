@@ -4,12 +4,15 @@
 <!-- TEXT -->
 	<pdfa>
 		<pdfavalidation>&#x2713;</pdfavalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
-		<!-- sind verapdf und callas beide auf no wird keine pdfa Validierung durchgefuehrt -->
-		<!-- sind verapdf und callas beide auf yes wird die duale pdfa Validierung durchgefuehrt -->
+		<!-- sind pdftools und verapdf auf no wird keine pdfa Validierung durchgefuehrt -->
+		<!-- sind pdftools und verapdf auf yes wird die duale pdfa Validierung durchgefuehrt -->
+		<pdftools>yes</pdftools><!--no wenn pdftools nicht verwendet werden soll, ansonsten yes -->
+		<!-- Detailreport: Soll seitens pdftools auch Details in Englisch (yes) oder nur Beschreibung (no) ausgegeben werden  -->
+		<detailpt>yes</detailpt><!--no verwenden wenn nur Beschreibung ansonsten yes fuer detailierte Fehlermeldung -->
+		<pdfafontpt>tolerant</pdfafontpt><!--no verwenden wenn die Schriften in pdfa nicht validiert werden sollen, ansonsten tolerant oder strict-->
 		<verapdf>yes</verapdf><!--no wenn verapdf nicht verwendet werden soll, ansonsten yes -->
 		<!-- Detailreport: Soll seitens verapdf auch Details in Englisch (yes) oder nur Beschreibung (no) ausgegeben werden  -->
-		<detail>yes</detail><!--no verwenden wenn nur Beschreibung ansonsten yes fuer detailierte Fehlermeldung -->
-		<callas>yes</callas><!--no wenn callas nicht verwendet werden soll, ansonsten yes -->
+		<detailvp>yes</detailvp><!--no verwenden wenn nur Beschreibung ansonsten yes fuer detailierte Fehlermeldung -->
 		<!--Angeben welche Conformancelevel mindestens erreicht werden muss -->
 		<!--no verwenden wenn diese Version nicht erlaubt ist -->
 		<pdfaversion>
@@ -21,7 +24,6 @@
 		</pdfaversion>
 		<warning3to2>yes</warning3to2><!-- validiert wenn eingeschaltet PDF/A-3 nach PDF/A-2 und ignoriert den Fehler betreffend der Version und gibt stattdessten eine Warnung aus. -->	
 		<jbig2allowed>yes</jbig2allowed><!--no verwenden wenn JBIG2 in pdfa nicht erlaubt werden sollen, ansonsten yes -->
-		<pdftools>yes</pdftools><pdfafont>tolerant</pdfafont><!--no verwenden wenn die Schriften in pdfa nicht validiert werden sollen, ansonsten tolerant oder strict-->
 	</pdfa>
 	<txt>
 		<txtvalidation>(&#x2713;)</txtvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
@@ -202,7 +204,6 @@
 	<standardinputdir></standardinputdir><!--wenn leer wird "Dieser PC" verwendet -->
 	<ignoreerror>
 		<!-- Zu ignorierende Fehlermeldungen. Aktuell nur details von pdftools unterstuetzt -->
-		<ignore>The document does not conform to the requested standard. [PDF Tools: 0x83410612]
-			The value of the key N is 4 but must be 3. [PDF Tools: 0x80410607]</ignore>
+		<ignore>The document does not conform to the requested standard. [PDF Tools: 0x83410612]</ignore>
 	</ignoreerror>
 </configuration>
