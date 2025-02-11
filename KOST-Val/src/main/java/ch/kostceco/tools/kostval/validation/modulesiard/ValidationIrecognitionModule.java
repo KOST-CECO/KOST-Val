@@ -27,7 +27,9 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
 
 /**
  * Validierungsschritt I (SIARD-Erkennung) Wird die SIARD-Datei als SIARD
- * erkannt? valid --> Extension = .siard
+ * erkannt? Ist diese Version auch erlaubt (Konfiguration)
+ * 
+ * valid --> Extension = .siard
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO
  */

@@ -28,7 +28,7 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
 /**
  * Validierungsschritt C (Header-Validierung) Ist der header-Ordner valid? valid
  * --> metadata.xml valid zu metadata.xsd und beides vorhanden Bemerkung -->
- * zus�tzliche Ordner oder Dateien wie z.B. metadata.xls sind im header-Ordner
+ * zusaetzliche Ordner oder Dateien wie z.B. metadata.xls sind im header-Ordner
  * erlaubt ==> Bei den Module A, B, C und D wird die Validierung abgebrochen,
  * sollte das Resulat invalid sein!
  * 

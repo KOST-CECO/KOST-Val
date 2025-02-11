@@ -208,7 +208,6 @@ public interface MessageConstants {
 	String MESSAGE_XML_C_METADATA_ERRORS = "val.message.xml.c.metadata.errors";
 	String MESSAGE_XML_C_METADATA_ORIGERRORS = "val.message.xml.c.metadata.origerrors";
 	String MESSAGE_XML_C_METADATA_NSFOUND = "val.message.xml.c.metadata.nsfound";
-	String MESSAGE_XML_C_INVALID_VERSION = "val.message.xml.c.invalid.version";
 
 	// Modul D Meldungen
 	String MESSAGE_XML_D_INVALID_FOLDER = "val.message.xml.d.invalid.folder";
@@ -249,6 +248,7 @@ public interface MessageConstants {
 	// Modul I Meldungen
 	String MESSAGE_XML_I_NOTALLOWEDEXT = "val.message.xml.i.notallowedext";
 	String MESSAGE_XML_I_SIARDVERSION = "val.message.xml.i.siardversion";
+	String MESSAGE_XML_I_INVALID_VERSION = "val.message.xml.i.invalid.version";
 
 	// Modul J Meldungen
 	String MESSAGE_XML_J_INVALID_ENTRY = "val.message.xml.j.invalid.entry";

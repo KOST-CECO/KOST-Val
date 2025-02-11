@@ -28,7 +28,7 @@ set DIRNAME=%~dp0
 if "%DIRNAME%" == "" set DIRNAME=.
 set APP_BASE_NAME=%~n0
 set APP_HOME=%DIRNAME%
-set JAVA_HOME=%DIRNAME%..\..\..\PackageHandler\PH2022\jre
+set JAVA_HOME=%DIRNAME%..\..\..\PackageHandler\PH2.8\jre
 @rem set JAVA_HOME=%DIRNAME%..\..\..\Liberica_JRE 
 @rem neuere JAVA funktiniert nicht in einem geschachtelten Java cmd
 

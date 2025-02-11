@@ -290,6 +290,19 @@ public class egovdv {
 			output.delete();
 		}
 
+		// egovdv cli hat Probleme wenn doppelleerschlag im Pfad und Namen
+		String pdfNameNormalisiert = fileToCheck.getName().replace("  ", " .");
+		File pdfFileNormalisiert = new File(workDir + File.separator + pdfNameNormalisiert);
+		try {
+			Util.copyFile(fileToCheck, pdfFileNormalisiert);
+		} catch (IOException e) {
+			// Normalisierung fehlgeschlagen es wird ohne versucht
+			pdfFileNormalisiert = fileToCheck;
+		}
+		if (!pdfFileNormalisiert.exists()) {
+			pdfFileNormalisiert = fileToCheck;
+		}
+
 		String pathToKostValDir = System.getenv("USERPROFILE") + File.separator + ".kost-val_2x";
 		File directoryOfConfigfile = new File(pathToKostValDir + File.separator + "configuration");
 		File configFile = new File(directoryOfConfigfile + File.separator + "kostval.conf.xml");
@@ -348,7 +361,7 @@ public class egovdv {
 
 			String command = "\"\"cd " + fexeDir.getAbsolutePath() + "\" & \"" + fvalidateBat.getAbsolutePath() + "\" "
 					+ account + "-u https://egovsigval-backend.bit.admin.ch -m " + mandant + " -f \""
-					+ fileToCheck.getAbsolutePath() + "\" -l " + optionLanguage + " -c -e -o \""
+					+ pdfFileNormalisiert.getAbsolutePath() + "\" -l " + optionLanguage + " -c -e -o \""
 					+ output.getAbsolutePath() + "\"\"";
 
 			// validate <account> -u https://egovsigval-backend.bit.admin.ch -m
@@ -359,10 +372,13 @@ public class egovdv {
 			String resultExec = Cmd.execToStringSplit(command, out, workDir);
 
 			// System.out.println( "resultExec: " + resultExec );
+			
+			// Normalisierte Datei wieder loeschen
+			if (pdfFileNormalisiert.exists()) {
+				pdfFileNormalisiert.delete();
+			}
 
-			// egovdv gibt zu viele Infos raus. Entsprechend hier eine kleine
-			// vorab
-			// analyse
+			// egovdv gibt zu viele Infos raus. Entsprechend hier eine kleine vorab analyse
 
 			/*
 			 * Validity of file report: VALID was the document modified after last
@@ -424,7 +440,6 @@ public class egovdv {
 			if (!output.exists()) {
 				// Datei nicht angelegt...
 				resultSummary = resultSummary + "NoReport_";
-				// TODO: Hinweis Internet / Test Internet
 			}
 		}
 		// System.out.println( "resultSummary= " + resultSummary );

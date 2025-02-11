@@ -695,9 +695,6 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 		// TODO Validierung mit PDFTools
 		boolean isValidPdfTools = false;
 		int iCategory = 999999999;
-		Boolean warning3to2done = false;
-		String pdf3warning = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-				+ getTextResourceService().getText(locale, WARNING_XML_A_PDFA3);
 
 		docPdf = new PdfValidatorAPI();
 
@@ -1043,47 +1040,86 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					String detailWarning3to2 = "The XMP property 'pdfaid:part' has the invalid value '3'. Required is '2'. [PDF Tools: 0x8341052E]";
 
 					if (errorMsgCode0x.contains("The value of the CIDSet[")) {
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[1", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[2", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[3", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[1", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[2", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[3", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[4", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[5", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[6", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[7", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[8", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[9", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[0", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[1", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[2", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[3", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[4", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[5", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[6", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[7", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[8", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[9", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[0", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[1", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[2", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[3", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[4", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[5", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[6", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[7", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[8", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[9", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[0", "The value of the CIDSet[");
-						errorMsgCode0x=errorMsgCode0x.replace("The value of the CIDSet[]", "The value of the CIDSet");					}
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[1",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[2",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[3",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[1",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[2",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[3",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[4",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[5",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[6",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[7",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[8",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[9",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[0",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[1",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[2",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[3",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[4",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[5",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[6",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[7",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[8",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[9",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[0",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[1",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[2",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[3",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[4",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[5",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[6",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[7",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[8",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[9",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[0",
+								"The value of the CIDSet[");
+						errorMsgCode0x = errorMsgCode0x.replace("The value of the CIDSet[]", "The value of the CIDSet");
+					}
 					if (warning3to2.equalsIgnoreCase("yes") && errorMsgCode0xText.contains(detailWarning3to2)) {
-						// Fehler wird ignoriert. Es wird ggf eine Warnung ausgegeben.
-						if (!warning3to2done) {
-							// Fehler wurde noch nicht ausgegeben.
-							Logtxt.logtxt(logFile, pdf3warning);
-							warning3to2done = true;
-						}
+						// Fehler wird ignoriert. Es wurde bereits eine Warnung ausgegeben.
+						/*
+						 * Bestehende Catogerie wieder entfernen
+						 * 
+						 * pdftoolsH = pdftoolsH + getTextResourceService().getText(locale,
+						 * MESSAGE_XML_MODUL_H_PDFA) + getTextResourceService().getText(locale,
+						 * ERROR_XML_AI_16, "PDF Tools: iCategory_16");
+						 */
+						pdftoolsH = pdftoolsH.replace(getTextResourceService().getText(locale, MESSAGE_XML_MODUL_H_PDFA)
+								+ getTextResourceService().getText(locale, ERROR_XML_AI_16, "PDF Tools: iCategory_16"),
+								"");
 					} else if ("The document does not conform to the requested standard. [PDF Tools: 0x83410612]"
 							.contains(errorMsgCode0xText)) {
 						// Fehler wird ignoriert. Entsprechend wird kein Detail geschrieben.

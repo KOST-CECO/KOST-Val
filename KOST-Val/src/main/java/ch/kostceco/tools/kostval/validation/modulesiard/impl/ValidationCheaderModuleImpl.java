@@ -283,40 +283,17 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 			Boolean version21 = FileUtils.readFileToString(metadataXml, "ISO-8859-1").contains("version=\"2.1\"");
 			Boolean version22 = FileUtils.readFileToString(metadataXml, "ISO-8859-1").contains("version=\"2.2\"");
 			if (version1) {
-				if (siard10) {
-					Logtxt.logtxt(logFile, "<FormatVL>-v1.0</FormatVL>");
-				} else {
-					if (min) {
-						return false;
-					} else {
-
-						Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_C_SIARD)
-								+ getTextResourceService().getText(locale, MESSAGE_XML_C_INVALID_VERSION, "1.0"));
-						return false;
-					}
-				}
+				Logtxt.logtxt(logFile, "<FormatVL>-v1.0</FormatVL>");
+				// Keine Aktion im Modul C sonder I, damit es nicht abgebrochen wird, falls die
+				// Version nicht akzeptiert wird
 			} else if (version2) {
-				if (version21 && siard21) {
+				if (version21) {
 					Logtxt.logtxt(logFile, "<FormatVL>-v2.1</FormatVL>");
-				} else if (version22 && siard22) {
+				} else if (version22) {
 					Logtxt.logtxt(logFile, "<FormatVL>-v2.2</FormatVL>");
-				} else {
-					if (min) {
-						return false;
-					} else {
-						if (!siard21 && version21) {
-							Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_C_SIARD)
-									+ getTextResourceService().getText(locale, MESSAGE_XML_C_INVALID_VERSION, "2.1"));
-						} else if (!siard22 && version22) {
-							Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_C_SIARD)
-									+ getTextResourceService().getText(locale, MESSAGE_XML_C_INVALID_VERSION, "2.2"));
-						} else {
-							Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_C_SIARD)
-									+ getTextResourceService().getText(locale, MESSAGE_XML_C_INVALID_VERSION, "2.x"));
-						}
-						return false;
-					}
 				}
+				// Keine Aktion im Modul C sonder I, damit es nicht abgebrochen wird, falls die
+				// Version nicht akzeptiert wird
 			}
 
 			if (xmlToValidate != null && xsdToValidate != null) {
