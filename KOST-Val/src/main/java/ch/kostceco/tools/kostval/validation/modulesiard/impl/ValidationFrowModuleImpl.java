@@ -107,6 +107,24 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 			// set to null
 			fin = null;
 
+			// Ein unbekannter Fehler ist aufgetreten. For input string: ""
+			// wenn <rows /> nicht ausgefuellt -> MESSAGE_XML_F_INVALID_ROWS
+			boolean emptyRows = Util.stringInFile("<rows />", metadataXml);
+			if (!emptyRows) {
+				emptyRows = Util.stringInFile("<rows/>", metadataXml);
+			}
+			if (!emptyRows) {
+				emptyRows = Util.stringInFile("<rows></rows>", metadataXml);
+			}
+			if (!emptyRows) {
+				emptyRows = Util.stringInFile("<rows> </rows>", metadataXml);
+			}
+			if (emptyRows) {
+				Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_F_SIARD)
+						+ getTextResourceService().getText(locale, MESSAGE_XML_F_INVALID_ROWS));
+				return false;
+			}
+
 			/*
 			 * read the document and for each schema and table entry verify existence in
 			 * temporary extracted structure and compare the rownumber
