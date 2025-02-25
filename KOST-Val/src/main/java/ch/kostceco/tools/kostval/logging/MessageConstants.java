@@ -233,6 +233,7 @@ public interface MessageConstants {
 	String MESSAGE_XML_F_PROPERTIES_ERROR = "val.message.xml.f.properties.error";
 	String MESSAGE_XML_F_PATH_ERROR = "val.message.xml.f.path.error";
 	String MESSAGE_XML_F_INVALID_TABLE_XML_FILES = "val.message.xml.f.invalid.table.xml.files";
+	String MESSAGE_XML_F_INVALID_ROWS = "val.message.xml.f.invalid.rows";
 
 	// Modul G Meldungen
 	String MESSAGE_XML_G_DUPLICATE_SCHEMA = "val.message.xml.g.duplicate.schema";

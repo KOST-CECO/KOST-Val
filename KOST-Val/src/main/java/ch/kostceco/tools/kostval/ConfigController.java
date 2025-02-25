@@ -100,7 +100,7 @@ public class ConfigController {
 	private Label labelData, labelXml, labelJson, labelSiard, labelCsv, labelXlsx, labelOds;
 
 	@FXML
-	private Button buttonXml, buttonJson, buttonSiard, buttonSiardVal, buttonCsv, buttonXlsx, buttonOds;
+	private Button buttonXml, buttonXmlVal, buttonJson, buttonSiard, buttonSiardVal, buttonCsv, buttonXlsx, buttonOds;
 
 	@FXML
 	private Label labelSip, labelEch0160;
@@ -466,12 +466,15 @@ public class ConfigController {
 			}
 
 			if (config.contains(noXml)) {
+				buttonXmlVal.setDisable(true);
 				buttonXml.setText("✗");
 				buttonXml.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
 			} else if (config.contains(yesXml)) {
+				buttonXmlVal.setDisable(false);
 				buttonXml.setText("✓");
 				buttonXml.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
 			} else {
+				buttonXmlVal.setDisable(true);
 				buttonXml.setText("(✓)");
 				buttonXml.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
 			}
@@ -1236,6 +1239,7 @@ public class ConfigController {
 				buttonXml.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
 				engine.load("file:///" + configFile.getAbsolutePath());
 			} else if (optButton.equals("(✓)")) {
+				buttonXmlVal.setDisable(false);
 				Util.oldnewstring(az, yes, configFile);
 				buttonXml.setText("✓");
 				buttonXml.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
@@ -1250,6 +1254,7 @@ public class ConfigController {
 						&& buttonSiard.getText().equals("✗") && buttonSip0160.getText().equals("✗")) {
 					engine.loadContent("<html><h2>" + minOne + "</h2></html>");
 				} else {
+					buttonXmlVal.setDisable(true);
 					Util.oldnewstring(yes, no, configFile);
 					buttonXml.setText("✗");
 					buttonXml.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
@@ -1258,6 +1263,40 @@ public class ConfigController {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+
+	/* Mit changeXmlVal wird die XML-Haupteinstellung umgestellt */
+	@FXML
+	void changeXmlVal(ActionEvent eventXml) {
+		try {
+			StackPane xmlLayout = new StackPane();
+
+			xmlLayout = FXMLLoader.load(getClass().getResource("ConfigViewXml.fxml"));
+			Scene xmlScene = new Scene(xmlLayout);
+			xmlScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+
+			// New window (Stage)
+			Stage xmlStage = new Stage();
+
+			xmlStage.setTitle("KOST-Val   -   Configuration   -   XML");
+			Image kostvalIcon = new Image(
+					"file:" + dirOfJarPath + File.separator + "doc" + File.separator + "valicon.png");
+			// Image kostvalIcon = new Image( "file:valicon.png" );
+			xmlStage.initModality(Modality.APPLICATION_MODAL);
+			xmlStage.getIcons().add(kostvalIcon);
+			xmlStage.setScene(xmlScene);
+			xmlStage.setOnCloseRequest(event -> {
+				// hier engeben was beim schliessen gemacht werden soll
+				engine.load("file:///" + configFile.getAbsolutePath());
+			});
+			xmlStage.show();
+			xmlStage.setOnHiding(event -> {
+				// hier engeben was beim schliessen gemacht werden soll
+				engine.load("file:///" + configFile.getAbsolutePath());
+			});
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
 	}
 

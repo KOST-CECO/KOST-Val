@@ -121,7 +121,8 @@
 	</mp4>
 <!-- DATEN -->
 	<xml>
-		<xmlvalidation>(&#x2713;)</xmlvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
+		<xmlvalidation>&#x2713;</xmlvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
+			<schema>no</schema><!--yes/ / no -->
 	</xml>
 	<json>
 		<jsonvalidation>(&#x2713;)</jsonvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->

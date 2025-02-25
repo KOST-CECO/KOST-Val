@@ -291,9 +291,15 @@
 
 					<!-- DATEN -->
 					<tr class="captioninfo">
-						<td>XML: Accettazione e convalida [(&#x2713;)]</td>
+						<td>XML: Accettazione e convalida [&#x2713;]</td>
 						<td>
 							<xsl:value-of select="configuration/xml/xmlvalidation" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>Convalida dello schema [no]:</td>
+						<td>
+							<xsl:value-of select="configuration/xml/schema" />
 						</td>
 					</tr>
 

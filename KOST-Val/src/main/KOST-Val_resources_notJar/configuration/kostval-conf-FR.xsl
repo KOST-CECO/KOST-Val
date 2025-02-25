@@ -291,9 +291,15 @@
 
 					<!-- DATEN -->
 					<tr class="captioninfo">
-						<td>XML : Acceptation et validation [(&#x2713;)]</td>
+						<td>XML : Acceptation et validation [&#x2713;]</td>
 						<td>
 							<xsl:value-of select="configuration/xml/xmlvalidation" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>Validation du schéma [no]:</td>
+						<td>
+							<xsl:value-of select="configuration/xml/schema" />
 						</td>
 					</tr>
 

@@ -493,9 +493,29 @@ public class Util {
 			reader.close();
 			// set to null
 			reader = null;
-			string = "Validierung: SIP" + string;
 			String newtext = oldtext.replace("Validierung: SIP", string);
-			newtext = newtext.replace((char) 0, (char) 32);
+			if (stringInFile("Validierung: SIP", file)) {
+				string = "Validierung: SIP" + string;
+				newtext = oldtext.replace("Validierung: SIP", string);
+				newtext = newtext.replace((char) 0, (char) 32);				
+			}
+			else if (stringInFile("Validation: SIP", file)) {
+				string = "Validation: SIP" + string;
+				newtext = oldtext.replace("Validation: SIP", string);
+				newtext = newtext.replace((char) 0, (char) 32);				
+			}
+			else if (stringInFile("Validazione:  SIP", file)) {
+				string = "Validazione:  SIP" + string;
+				newtext = oldtext.replace("Validazione:  SIP", string);
+				newtext = newtext.replace((char) 0, (char) 32);				
+			}
+			else if (stringInFile("Validation: SIP", file)) {
+				string = "Validation: SIP" + string;
+				newtext = oldtext.replace("Validation: SIP", string);
+				newtext = newtext.replace((char) 0, (char) 32);				
+			}
+			
+			
 			FileWriter writer = new FileWriter(file);
 			writer.write(newtext);
 			writer.close();

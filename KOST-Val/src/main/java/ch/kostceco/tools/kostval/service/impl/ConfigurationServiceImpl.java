@@ -652,6 +652,10 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 			}
 			configMap.put("xmlValidation", xmlvalidation);
 
+			// Gibt an ob xml Schema validiert werden soll
+			String schema = doc.getElementsByTagName("schema").item(0).getTextContent().replace(" ", "");
+			configMap.put("schema", schema);
+
 			// Gibt an ob json akzeptiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
 			String azJson = "<jsonvalidation>(&#x2713;)</jsonvalidation>";
