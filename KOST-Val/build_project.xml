@@ -15,11 +15,11 @@
 		<pathelement location="lib/jdom-2.0.6.1.jar" />
 		<pathelement location="lib/jhove-apps-1.32.0.jar" />
 		<pathelement location="lib/pdfbox-app-3.0.3.jar" />
-		<pathelement location="lib/spring-aop-5.3.39.jar" />
-		<pathelement location="lib/spring-beans-5.3.39.jar"/>
-		<pathelement location="lib/spring-context-5.3.39.jar"/>
-		<pathelement location="lib/spring-core-5.3.39.jar" />
-		<pathelement location="lib/spring-expression-5.3.39.jar" />
+		<pathelement location="lib/spring-aop-6.2.2.jar" />
+		<pathelement location="lib/spring-beans-6.2.2.jar"/>
+		<pathelement location="lib/spring-context-6.2.2.jar"/>
+		<pathelement location="lib/spring-core-6.2.2.jar" />
+		<pathelement location="lib/spring-expression-6.2.2.jar" />
 		<pathelement location="lib/spring-jcl-5.3.39.jar" />
 		<pathelement location="lib/tiff-hul-1.9.5.jar" />
 		<pathelement location="lib/VALA-6.27.5.1.RELEASE.jar" />

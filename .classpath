@@ -12,12 +12,11 @@
 	<classpathentry kind="lib" path="KOST-Val/lib/jdom-2.0.6.1.jar" sourcepath="KOST-Val/external-sources/jdom-2.0.6.1-sources.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/jhove-apps-1.32.0.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/pdfbox-app-3.0.3.jar"/>
-	<classpathentry kind="lib" path="KOST-Val/lib/spring-aop-5.3.39.jar" sourcepath="KOST-Val/external-sources/spring-aop-5.3.39-sources.jar"/>
-	<classpathentry kind="lib" path="KOST-Val/lib/spring-beans-5.3.39.jar" sourcepath="KOST-Val/external-sources/spring-beans-5.3.39-sources.jar"/>
-	<classpathentry kind="lib" path="KOST-Val/lib/spring-context-5.3.39.jar" sourcepath="KOST-Val/external-sources/spring-context-5.3.39-sources.jar"/>
-	<classpathentry kind="lib" path="KOST-Val/lib/spring-core-5.3.39.jar" sourcepath="KOST-Val/external-sources/spring-core-5.3.39-sources.jar"/>
-	<classpathentry kind="lib" path="KOST-Val/lib/spring-expression-5.3.39.jar" sourcepath="KOST-Val/external-sources/spring-expression-5.3.39-sources.jar"/>
-	<classpathentry kind="lib" path="KOST-Val/lib/spring-jcl-5.3.39.jar" sourcepath="KOST-Val/external-sources/spring-jcl-5.3.39-sources.jar"/>
+	<classpathentry kind="lib" path="KOST-Val/lib/spring-aop-6.2.2.jar"/>
+	<classpathentry kind="lib" path="KOST-Val/lib/spring-beans-6.2.2.jar"/>
+	<classpathentry kind="lib" path="KOST-Val/lib/spring-context-6.2.2.jar"/>
+	<classpathentry kind="lib" path="KOST-Val/lib/spring-core-6.2.2.jar"/>
+	<classpathentry kind="lib" path="KOST-Val/lib/spring-expression-6.2.2.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/tiff-hul-1.9.5.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/VALA-6.27.5.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/xercesImpl-2.12.2.jar"/>

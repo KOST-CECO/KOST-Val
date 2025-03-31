@@ -15,12 +15,11 @@
 	<classpathentry kind="lib" path="lib/greenfield-apps-1.27.99.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-2.0.6.1.jar" sourcepath="KOST-Val/external-sources/jdom-2.0.6.1-sources.jar"/>
 	<classpathentry kind="lib" path="lib/jhove-apps-1.32.0.jar"/>
-	<classpathentry kind="lib" path="lib/spring-aop-5.3.39.jar" sourcepath="external-sources/spring-aop-5.3.39-sources.jar"/>
-	<classpathentry kind="lib" path="lib/spring-beans-5.3.39.jar" sourcepath="external-sources/spring-beans-5.3.39-sources.jar"/>
-	<classpathentry kind="lib" path="lib/spring-context-5.3.39.jar" sourcepath="external-sources/spring-context-5.3.39-sources.jar"/>
-	<classpathentry kind="lib" path="lib/spring-core-5.3.39.jar" sourcepath="external-sources/spring-core-5.3.39-sources.jar"/>
-	<classpathentry kind="lib" path="lib/spring-expression-5.3.39.jar" sourcepath="external-sources/spring-expression-5.3.39-sources.jar"/>
-	<classpathentry kind="lib" path="lib/spring-jcl-5.3.39.jar" sourcepath="external-sources/spring-jcl-5.3.39-sources.jar"/>
+	<classpathentry kind="lib" path="lib/spring-aop-6.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/spring-beans-6.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/spring-context-6.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/spring-core-6.2.2"/>
+	<classpathentry kind="lib" path="lib/spring-expression-6.2.2.jar"/>
 	<classpathentry kind="lib" path="lib/tiff-hul-1.9.5.jar"/>
 	<classpathentry kind="lib" path="lib/VALA-6.27.5.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl-2.12.2.jar"/>

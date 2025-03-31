@@ -56,12 +56,8 @@ public class ConfigControllerTiff {
 
 		// TODO --> initialize (wird einmalig am Anfang ausgefuehrt)
 
-		// Copyright und Versionen ausgeben
-		String java6432 = System.getProperty("sun.arch.data.model");
-		String javaVersion = System.getProperty("java.version");
-		String javafxVersion = System.getProperty("javafx.version");
-		labelConfig.setText("Copyright © KOST/CECO          KOST-Val v2.3.0.0          JavaFX " + javafxVersion
-				+ "   &   Java-" + java6432 + " " + javaVersion + ".");
+		// Copyright ausgeben
+		labelConfig.setText("Copyright © KOST/CECO" );
 
 		// festhalten von wo die Applikation (exe) gestartet wurde
 		dirOfJarPath = "";

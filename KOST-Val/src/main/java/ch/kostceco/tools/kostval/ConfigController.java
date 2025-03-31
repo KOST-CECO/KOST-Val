@@ -128,18 +128,17 @@ public class ConfigController {
 	private WebView wbv;
 
 	private WebEngine engine;
+	
+	private String versionKostVal = "   (v2.3.0.1)";
+
 
 	@FXML
 	void initialize() {
 
 		// TODO --> initialize (wird einmalig am Anfang ausgefuehrt)
 
-		// Copyright und Versionen ausgeben
-		String java6432 = System.getProperty("sun.arch.data.model");
-		String javaVersion = System.getProperty("java.version");
-		String javafxVersion = System.getProperty("javafx.version");
-		labelConfig.setText("Copyright © KOST/CECO          KOST-Val v2.3.0.0          JavaFX " + javafxVersion
-				+ "   &   Java-" + java6432 + " " + javaVersion + ".");
+		// Copyright ausgeben
+		labelConfig.setText("Copyright © KOST/CECO" );
 
 		// Original Config Kopieren
 		try {
@@ -676,7 +675,7 @@ public class ConfigController {
 			// New window (Stage)
 			Stage pdfaStage = new Stage();
 
-			pdfaStage.setTitle("KOST-Val   -   Configuration   -   PDF/A");
+			pdfaStage.setTitle("KOST-Val   -   Configuration   -   PDF/A" + versionKostVal);
 			Image kostvalIcon = new Image(
 					"file:" + dirOfJarPath + File.separator + "doc" + File.separator + "valicon.png");
 			// Image kostvalIcon = new Image( "file:valicon.png" );
@@ -890,7 +889,7 @@ public class ConfigController {
 			// New window (Stage)
 			Stage tiffStage = new Stage();
 
-			tiffStage.setTitle("KOST-Val   -   Configuration   -   TIFF");
+			tiffStage.setTitle("KOST-Val   -   Configuration   -   TIFF" + versionKostVal);
 			Image kostvalIcon = new Image(
 					"file:" + dirOfJarPath + File.separator + "doc" + File.separator + "valicon.png");
 			// Image kostvalIcon = new Image( "file:valicon.png" );
@@ -1126,7 +1125,7 @@ public class ConfigController {
 			// New window (Stage)
 			Stage mkvStage = new Stage();
 
-			mkvStage.setTitle("KOST-Val   -   Configuration   -   MKV");
+			mkvStage.setTitle("KOST-Val   -   Configuration   -   MKV" + versionKostVal);
 			Image kostvalIcon = new Image(
 					"file:" + dirOfJarPath + File.separator + "doc" + File.separator + "valicon.png");
 			// Image kostvalIcon = new Image( "file:valicon.png" );
@@ -1202,7 +1201,7 @@ public class ConfigController {
 			// New window (Stage)
 			Stage mp4Stage = new Stage();
 
-			mp4Stage.setTitle("KOST-Val   -   Configuration   -   MP4");
+			mp4Stage.setTitle("KOST-Val   -   Configuration   -   MP4" + versionKostVal);
 			Image kostvalIcon = new Image(
 					"file:" + dirOfJarPath + File.separator + "doc" + File.separator + "valicon.png");
 			// Image kostvalIcon = new Image( "file:valicon.png" );
@@ -1279,7 +1278,7 @@ public class ConfigController {
 			// New window (Stage)
 			Stage xmlStage = new Stage();
 
-			xmlStage.setTitle("KOST-Val   -   Configuration   -   XML");
+			xmlStage.setTitle("KOST-Val   -   Configuration   -   XML" + versionKostVal);
 			Image kostvalIcon = new Image(
 					"file:" + dirOfJarPath + File.separator + "doc" + File.separator + "valicon.png");
 			// Image kostvalIcon = new Image( "file:valicon.png" );
@@ -1378,7 +1377,7 @@ public class ConfigController {
 			// New window (Stage)
 			Stage siardStage = new Stage();
 
-			siardStage.setTitle("KOST-Val   -   Configuration   -   SIARD");
+			siardStage.setTitle("KOST-Val   -   Configuration   -   SIARD" + versionKostVal);
 			Image kostvalIcon = new Image(
 					"file:" + dirOfJarPath + File.separator + "doc" + File.separator + "valicon.png");
 			// Image kostvalIcon = new Image( "file:valicon.png" );
@@ -1527,7 +1526,7 @@ public class ConfigController {
 			// New window (Stage)
 			Stage sipStage = new Stage();
 
-			sipStage.setTitle("KOST-Val   -   Configuration   -   SIP");
+			sipStage.setTitle("KOST-Val   -   Configuration   -   SIP" + versionKostVal);
 			Image kostvalIcon = new Image(
 					"file:" + dirOfJarPath + File.separator + "doc" + File.separator + "valicon.png");
 			// Image kostvalIcon = new Image( "file:valicon.png" );
@@ -1563,7 +1562,7 @@ public class ConfigController {
 			// New window (Stage)
 			Stage otherStage = new Stage();
 
-			otherStage.setTitle("KOST-Val   -   Configuration   -   Other Formats");
+			otherStage.setTitle("KOST-Val   -   Configuration   -   Other Formats" + versionKostVal);
 			Image kostvalIcon = new Image(
 					"file:" + dirOfJarPath + File.separator + "doc" + File.separator + "valicon.png");
 			// Image kostvalIcon = new Image( "file:valicon.png" );
@@ -1735,7 +1734,7 @@ public class ConfigController {
 			// New window (Stage)
 			Stage dvStage = new Stage();
 
-			dvStage.setTitle("KOST-Val   -   Configuration   -    eGov diskret Signaturvalidator ");
+			dvStage.setTitle("KOST-Val   -   Configuration   -    eGov diskret Signaturvalidator" + versionKostVal);
 			Image kostvalIcon = new Image(
 					"file:" + dirOfJarPath + File.separator + "doc" + File.separator + "valicon.png");
 			// Image kostvalIcon = new Image( "file:valicon.png" );
