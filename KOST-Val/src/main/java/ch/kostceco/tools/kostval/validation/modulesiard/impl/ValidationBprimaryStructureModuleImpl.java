@@ -80,11 +80,11 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl
 				 */
 				String name = entry.getName();
 				// System.out.println( "Entry: " + name );
-				if (name.startsWith("content/")) {
+				if (name.startsWith("content/") || name.startsWith("/content/")) {
 					// erlaubter Inhalt content/...
 					bExistsContentFolder = 1;
 				} else {
-					if (name.startsWith("header/")) {
+					if (name.startsWith("header/") || name.startsWith("/header/")) {
 						// erlaubter Inhalt header/...
 						bExistsHeaderFolder = 1;
 					} else {
@@ -96,8 +96,7 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl
 
 							Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_B_SIARD)
 									+ getTextResourceService().getText(locale, MESSAGE_XML_B_NOTALLOWEDFILE, name));
-							// SIARD enthaelt ein File, das sich nicht dort
-							// befinden duerfte: {0}
+							// SIARD enthaelt ein File, das sich nicht dort befinden duerfte: {0}
 							return false;
 						}
 					}

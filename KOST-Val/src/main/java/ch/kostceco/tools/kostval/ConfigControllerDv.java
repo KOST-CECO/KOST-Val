@@ -61,7 +61,7 @@ public class ConfigControllerDv {
 	private String dirOfJarPath, config, minOne = "Mindestens eine Variante muss erlaubt sein!";
 
 	@FXML
-	private Label labelInstitut, labelVal, labelMessage, labelMandant, labelConfig;
+	private Label labelInstitut, labelVal, labelMessage, labelMandant, labelConfig, labelStar, labelStar1;
 
 	ObservableList<String> sizeInstitutList = FXCollections.observableArrayList("", "Staatsarchiv Aargau",
 			"Staatsarchiv Basel-Stadt", "Staatsarchiv Bern", "Staatsarchiv Luzern", "Staatsarchiv St. Gallen",
@@ -123,24 +123,32 @@ public class ConfigControllerDv {
 				labelVal.setText("Einstellungen für eGov diskret Signaturvalidator");
 				buttonConfigApply.setText("anwenden");
 				minOne = "Mindestens eine Variante muss erlaubt sein!";
+				labelStar.setText("* Wird immer geprüft, aber nur wenn es angewählt ist, wird der Report nicht gelöscht.");
+				labelStar1.setText("° Wird nur geprüft, wenn es angewählt ist und der valide Report wird nicht gelöscht.");
 			} else if (Util.stringInFileLine("kostval-conf-FR.xsl", configFile)) {
 				labelMandant.setText("Mandant");
 				labelInstitut.setText("Institution");
 				labelVal.setText("Paramètres du validateur de signature discrète eGov");
 				buttonConfigApply.setText("appliquer");
 				minOne = "Au moins une variante doit etre autorisee !";
+				labelStar.setText("* Toujours vérifié, mais le rapport n'est pas supprimé uniquement lorsqu'il est sélectionné.");
+				labelStar1.setText("° N'est vérifié que s'il est sélectionné et le rapport valide n'est pas supprimé.");
 			} else if (Util.stringInFileLine("kostval-conf-IT.xsl", configFile)) {
 				labelMandant.setText("Cliente");
 				labelInstitut.setText("Istituzione");
 				labelVal.setText("Impostazioni per il validatore di firma discreta eGov");
 				buttonConfigApply.setText("Applica");
 				minOne = "Almeno una variante deve essere consentita!";
+				labelStar.setText("* È sempre controllato, ma solo se è selezionato, il rapporto non viene eliminato.");
+				labelStar1.setText("° Viene controllato solo se è selezionato e il rapporto valido non viene eliminato.");
 			} else {
 				labelMandant.setText("Client");
 				labelInstitut.setText("Institution");
 				labelVal.setText("Settings for eGov discrete signature validator");
 				buttonConfigApply.setText("apply");
 				minOne = "At least one variant must be allowed!";
+				labelStar.setText("* Is always checked, but only if it is selected, the report is not deleted.");
+				labelStar1.setText("° Is only checked if it is selected and the valid report is not deleted.");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -6,6 +6,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="KOST-Val/lib/badpeggy-2.0.jar" sourcepath="KOST-Val/external-sources/badpeggy-2.0-sources.jar"/>
+	<classpathentry kind="lib" path="KOST-Val/lib/commons-compress-1.27.1.jar" sourcepath="KOST-Val/external-sources/commons-compress-1.27.1-sources.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/commons-io-2.18.0.jar" sourcepath="KOST-Val/external-sources/commons-io-2.18.0-sources.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/commons-logging-1.3.4.jar" sourcepath="KOST-Val/external-sources/commons-logging-1.3.4-sources.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/greenfield-apps-1.27.99.jar"/>
@@ -20,8 +21,8 @@
 	<classpathentry kind="lib" path="KOST-Val/lib/tiff-hul-1.9.5.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/VALA-6.27.5.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/xercesImpl-2.12.2.jar"/>
-	<classpathentry kind="lib" path="KOST-Val/lib/zip64-1.0.jar" sourcepath="KOST-Val/external-sources/zip64-sources.jar"/>
-	<classpathentry kind="lib" path="KOST-Val/lib/zip64file-1.0.jar" sourcepath="KOST-Val/external-sources/Zip64File-sources.jar"/>
+	<classpathentry kind="lib" path="KOST-Val/lib/zip64-1.0.jar"/>
+	<classpathentry kind="lib" path="KOST-Val/lib/zip64file-1.0.jar"/>
 	<classpathentry kind="src" path="KOST-Val/src/main/java"/>
 	<classpathentry kind="src" path="KOST-Val/src/main/resources"/>
 	<classpathentry kind="output" path="KOST-Val/target/classes"/>

@@ -23,7 +23,6 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -31,23 +30,20 @@ import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.compress.archivers.examples.Expander;
 import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import ch.kostceco.tools.kosttools.fileservice.Xmllint;
 import ch.kostceco.tools.kosttools.util.Util;
-import ch.kostceco.tools.kosttools.util.UtilZip;
-import ch.kostceco.tools.kosttools.util.Zip64Archiver;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationCheaderException;
 import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
@@ -63,14 +59,11 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationCheaderModule;
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
 
-public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements ValidationCheaderModule {
+public class ValidationCheaderModuleImpl2 extends ValidationModuleImpl implements ValidationCheaderModule {
 
 	public static String NEWLINE = System.getProperty("line.separator");
 
 	private boolean min = false;
-
-	private String records = "";
-	private String records0 = "";
 
 	@SuppressWarnings({ "resource", "unused" })
 	@Override
@@ -178,52 +171,6 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 			}
 		}
 
-		// Start Details ermitteln
-
-		/*
-		 * Wenn in der DB die Laenge von VARCHAR sehr gross ist z.B. ueber 4000 legt
-		 * SIARD Suite fuer jeden Eintrag eine recordXX.txt an auch wenn dieses leer
-		 * ist. Solche leere Dateien werden mehrfach abgelegt und sind identisch.
-		 * 
-		 * Dies kann zu Datenfehler bei der extraktion fuehren.
-		 */
-		try {
-			Integer compressed = 1000;
-			ZipFile zf = new ZipFile(valDatei.getAbsolutePath());
-			Enumeration<? extends ZipEntry> entries = zf.entries();
-			while (entries.hasMoreElements()) {
-				ZipEntry zEntry = entries.nextElement();
-				String fileName = zEntry.getName();
-				if (fileName.contains("record") && fileName.contains(".txt")) {
-					long fileSize = zEntry.getSize();
-					if (fileSize == 0) {
-						records0 = records0 + "</Message><Message> - " + zEntry.toString() + "   fileSize: " + fileSize;
-					} else {
-						// System.out.println("fileName: " +fileName + " fileSize: " + fileSize+"
-						// String: "+zEntry.toString() );
-						records = records + "</Message><Message> - " + zEntry.toString() + "   fileSize: " + fileSize;
-					}
-				}
-			}
-			// und wenn es klappt, gleich wieder schliessen
-			zf.close();
-			// set to null
-			zf = null;
-		} catch (Exception e) {
-			if (min) {
-				return false;
-			} else {
-				Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_C_SIARD)
-						+ getTextResourceService().getText(locale, MESSAGE_XML_C_INCORRECTZIP, " (Zip Name and Size)"));
-				// <Message>Die SIARD-Datei konnte nicht extrahiert werden.
-				// {0}</Message><Message> -> Versuchen Sie diese manuell zu extrahieren und
-				// wieder zu komprimieren (Deflate-ZIP). </Message><Message> => Validierung
-				// abgebrochen!</Message></Error>
-				return false;
-			}
-		}
-//Ende Details ermitteln
-
 		// Validierung metadata.xml mit metadata.xsd
 		File xmlToValidate = null;
 		File xsdToValidate = null;
@@ -260,7 +207,7 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 			ZipFile zipfile = new ZipFile(valDatei.getAbsolutePath());
 			Enumeration<? extends ZipEntry> entries = zipfile.entries();
 
-			// jeden entry durchgehen
+			// jeden entry durchgechen
 			while (entries.hasMoreElements()) {
 				ZipEntry entry = (ZipEntry) entries.nextElement();
 				String entryName = entry.getName();
@@ -515,9 +462,10 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 
 		} catch (Exception e) {
 			/*
-			 * TODO Modul gescheitert, versuch anders zu extrahieren
+			 * Modul gescheitert, versuch anders zu extrahieren
 			 * 
-			 * Modul wiederholen aber extrahieren mit "Apache Commons Compress"
+			 * Dies extrahiert nicht immer zuveraessig alle Dateien aber ein Versuch ist es
+			 * wert
 			 */
 			if (onWorkConfig.equals("yes")) {
 				// Ausgabe Modul Ersichtlich das KOST-Val arbeitet
@@ -616,8 +564,8 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 				 * name="configurationService" ref="configurationService" />
 				 */
 				// Arbeitsverzeichnis zum Entpacken des Archivs erstellen
-				String pathToWorkDirL2 = configMap.get("PathToWorkDir");
-				File tmpDir = new File(pathToWorkDirL2 + File.separator + "SIARD");
+				String pathToWorkDir = configMap.get("PathToWorkDir");
+				File tmpDir = new File(pathToWorkDir + File.separator + "SIARD");
 				if (tmpDir.exists()) {
 					Util.deleteDir(tmpDir);
 				}
@@ -636,137 +584,68 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 
 				String zipFilePath = valDatei.getAbsolutePath(); // Pfad zur ZIP64-Datei
 
-				try {
-					// new Expander().expand(archive, destination);
-					new Expander().expand(valDatei, tmpDir);
-				} catch (IOException e3) {
-					/*
-					 * Modul gescheitert, versuch 3 es anders zu extrahieren
-					 * 
-					 * Modul wiederholen aber extrahieren mit "enterag zip64"
-					 * 
-					 * TODO Dieses wird auch von SIARD Suite verwendet bei der erstellung dieser
-					 * Dateien, dies birgt jedoch ein gewisses Risiko. Ensprechend Warnung
-					 * herausgeben und neue SIARD-Datei ertellen anhand der extrahierten Dateien.
-					 */
-
-					try {
-						try {
-							Zip64Archiver.unzip64(valDatei, tmpDir);
-							Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_C_SIARD)
-									+ getTextResourceService().getText(locale, MESSAGE_XML_C_WARNING_UNZIP1));
-							// <Message>Warnung: Dies SIARD-Datei konnte nur mit einer veralteten Library
-							// extrahiert werden. </Message>
-						} catch (FileNotFoundException eEnterag) {
-							// ermitteln ob leere record.txt enthalten sind
-							if (!records0.isEmpty()) {
-								Logtxt.logtxt(logFile,
-										getTextResourceService().getText(locale, MESSAGE_XML_MODUL_C_SIARD)
-												+ getTextResourceService().getText(locale, MESSAGE_XML_C_INCORRECTZIP,
-														records0));
-								// es sind leere record.txt enthalten
-								// <Message>Die SIARD-Datei konnte nicht extrahiert werden.
-								// {0}</Message><Message> -> Versuchen Sie diese manuell zu extrahieren und
-								// wieder zu komprimieren (Deflate-ZIP). </Message><Message> => Validierung
-								// abgebrochen!</Message></Error>
-								return false;
-							} else if (!records.isEmpty()) {
-								Logtxt.logtxt(logFile,
-										getTextResourceService().getText(locale, MESSAGE_XML_MODUL_C_SIARD)
-												+ getTextResourceService().getText(locale, MESSAGE_XML_C_INCORRECTZIP,
-														records));
-								// es sind keine leeren record.txt enthalten aber andere
-								// <Message>Die SIARD-Datei konnte nicht extrahiert werden.
-								// {0}</Message><Message> -> Versuchen Sie diese manuell zu extrahieren und
-								// wieder zu komprimieren (Deflate-ZIP). </Message><Message> => Validierung
-								// abgebrochen!</Message></Error>
-								return false;
-							} else {
-								Logtxt.logtxt(logFile,
-										getTextResourceService().getText(locale, MESSAGE_XML_MODUL_C_SIARD)
-												+ getTextResourceService().getText(locale, MESSAGE_XML_C_INCORRECTZIP,
-														" (Zip64Archiver.unzip64)"));
-								// <Message>Die SIARD-Datei konnte nicht extrahiert werden.
-								// {0}</Message><Message> -> Versuchen Sie diese manuell zu extrahieren und
-								// wieder zu komprimieren (Deflate-ZIP). </Message><Message> => Validierung
-								// abgebrochen!</Message></Error>
-								return false;
-
+				try (ZipInputStream zipIs = new ZipInputStream(new FileInputStream(zipFilePath))) {
+					ZipEntry zipEntry;
+					while ((zipEntry = zipIs.getNextEntry()) != null) {
+						File newFile = new File(tmpDir, zipEntry.getName());
+						if (zipEntry.isDirectory()) {
+							newFile.mkdirs();
+						} else {
+							File parent = newFile.getParentFile();
+							if (!parent.exists()) {
+								parent.mkdirs();
 							}
-						}
 
-						// Outputverzeichnis zum neuen SIARD erstellen
-						String pathToUserVal = directoryOfLogfile.getParent();
-						File outDir = new File(pathToUserVal + File.separator + "OUTPUT");
-						if (!outDir.exists()) {
-							outDir.mkdir();
-						}
+							// Festhalten von metadata.xml und metadata.xsd
+							if (newFile.getName().endsWith(METADATA)) {
+								xmlToValidate = newFile;
+								System.out.println();
+								System.out.println("xmlToValidate: " + xmlToValidate.getAbsolutePath());
+							}
+							if (newFile.getName().endsWith(XSD_METADATA)) {
+								xsdToValidate = newFile;
+							}
 
-						// Subordner im Outputverzeichnis anhand Start erstellen
-						// <Infos><Start>02.04.2025 12:20:36</Start>
-						// 02.04.2025_122036
-						String start = "123456789";
-						try {
-							Scanner scanner = new Scanner(logFile);
-							while (scanner.hasNextLine()) {
-								String line = scanner.nextLine();
-								if (line.contains("<Infos><Start>")) {
-									start = line;
-									scanner.close();
-									break;
+							try (FileOutputStream fos = new FileOutputStream(newFile)) {
+								byte[] buffer = new byte[2048];
+								int length;
+								while ((length = zipIs.read(buffer)) > 0) {
+									fos.write(buffer, 0, length);
+								}
+								fos.close();
+							} catch (Exception e2) {
+								if (min) {
+									return false;
+								} else {
+									Logtxt.logtxt(logFile,
+											getTextResourceService().getText(locale, MESSAGE_XML_MODUL_C_SIARD)
+													+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN,
+															e2.getMessage() + " (FileOutputStream  b)"));
+									return false;
 								}
 							}
-							scanner.close();
-						} catch (FileNotFoundException e5) {
-							Logtxt.logtxt(logFile,
-									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_C_SIARD)
-											+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN,
-													e5.getMessage() + " (FileNotFoundException start-log)"));
-							return false;
 						}
-						start = start.replace("<Infos><Start>", "");
-						start = start.replace("</Start>", "");
-						start = start.replace(":", "");
-						start = start.replace(" ", "_");
-						File outDirStart = new File(outDir.getAbsolutePath() + File.separator + start);
-						if (!outDirStart.exists()) {
-							outDirStart.mkdir();
-						}
-
-						System.out.print("  " + outDirStart.getAbsolutePath());
-						// ZIP-Datei erstellen
-						File sourceDir = tmpDir;
-						File zipFile = new File(outDirStart + File.separator + valDatei.getName());
-						try {
-							UtilZip.zipDirectory(sourceDir, zipFile);
-							Logtxt.logtxt(logFile,
-									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_C_SIARD)
-											+ getTextResourceService().getText(locale, MESSAGE_XML_C_WARNING_UNZIP2,
-													zipFile.getAbsolutePath()));
-							// <Message> -> Es wurde eine neue SIARD-Datei erstellt und hier gespeichert
-							// {0}.</Message></Error><Warning>warning</Warning>
-						} catch (IOException ez) {
-							Logtxt.logtxt(logFile,
-									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_C_SIARD)
-											+ getTextResourceService().getText(locale, MESSAGE_XML_C_WARNING_UNZIP2,
-													"NoFile - Error during compression: " + ez.getMessage()));
-							// <Message> -> Es wurde eine neue SIARD-Datei erstellt und hier gespeichert
-							// {0}.</Message></Error><Warning>warning</Warning>
-						}
-
-						// Thread.sleep(100);
-					} catch (Exception e4) {
-						if (min) {
-							return false;
-						} else {
-							Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_C_SIARD)
-									+ getTextResourceService().getText(locale, MESSAGE_XML_C_INCORRECTZIP, " (e4)"));
-							// <Message>Die SIARD-Datei konnte nicht extrahiert werden.
-							// {0}</Message><Message> -> Versuchen Sie diese manuell zu extrahieren und
-							// wieder zu komprimieren (Deflate-ZIP). </Message><Message> => Validierung
-							// abgebrochen!</Message></Error>
-							return false;
-						}
+						zipIs.closeEntry();
+					}
+				} catch (IOException e3) {
+					if (min) {
+						return false;
+					} else {
+						Logtxt.logtxt(logFile,
+								getTextResourceService().getText(locale, MESSAGE_XML_MODUL_C_SIARD)
+										+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN,
+												e3.getMessage() + " (IOException - Extraction b)"));
+						result = false;
+					}
+				} catch (Exception e3) {
+					if (min) {
+						return false;
+					} else {
+						Logtxt.logtxt(logFile,
+								getTextResourceService().getText(locale, MESSAGE_XML_MODUL_C_SIARD)
+										+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN,
+												e3.getMessage() + " (ZipInputStream b)"));
+						return false;
 					}
 				}
 			} catch (Exception e3) {
@@ -987,18 +866,4 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 		}
 		return result;
 	}
-
-	public static File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {
-		File destFile = new File(destinationDir, zipEntry.getName());
-
-		String destDirPath = destinationDir.getCanonicalPath();
-		String destFilePath = destFile.getCanonicalPath();
-
-		if (!destFilePath.startsWith(destDirPath + File.separator)) {
-			throw new IOException("Entry is outside of the target dir: " + zipEntry.getName());
-		}
-
-		return destFile;
-	}
-
 }

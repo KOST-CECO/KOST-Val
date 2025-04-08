@@ -823,7 +823,7 @@ public class Controllervalfofile implements MessageConstants {
 
 	public static String valFoFileEgodv(File valDatei, File directoryOfLogfile, String dirOfJarPath,
 			Map<String, String> configMap, Locale locale) throws IOException {
-
+		// TODO elektronische Signaturpruefung
 		String pathToWorkDir = configMap.get("PathToWorkDir");
 		// Informationen holen, betreffend der Signaturvalidierung
 		String dvvalidation = configMap.get("dvvalidation");
@@ -1153,22 +1153,20 @@ public class Controllervalfofile implements MessageConstants {
 									+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE_SUM1, countSig,
 											strAnalysePdf + "</Message>" + execVerapdfSig
 													+ "<Message></Message><Message>(" + mixedSig + ") ");
-
-							// PDF-Report loeschen, da er nicht bestanden wurde
-							Util.deleteFile(outMixedSig);
 						}
 					}
 					if (Mixed == "no") {
 						// PDF-Report loeschen, da er nicht gewuenscht wird
 						Util.deleteFile(outMixedSig);
 					} else {
-						// PDF-Report behalten da valid und gewuenscht
+						// PDF-Report behalten da gewuenscht
 
 						// Kontrolle der Sprache, wenn nicht de dann nochmals in der gewuenschten
 						// Sprache testen
 						if (locale.toString().contains("de")) {
 							// de kein bedarf
 						} else {
+							Util.deleteFile(outMixedSig);
 							@SuppressWarnings("unused")
 							String mixedSigFrItEn = egovdv.execEgovdvCheck(valDatei, outMixedSig, workDir2,
 									dirOfJarPath, "Mixed", locale);

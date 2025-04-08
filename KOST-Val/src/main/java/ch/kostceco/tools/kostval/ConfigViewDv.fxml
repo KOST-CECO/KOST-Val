@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="860.0" prefHeight="460.0" style="-fx-background-color: silver;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.kostceco.tools.kostval.ConfigControllerDv">
+<StackPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="860.0" prefHeight="460.0" style="-fx-background-color: silver;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.kostceco.tools.kostval.ConfigControllerDv">
 	<children>
 		<GridPane minHeight="400.0">
 			<columnConstraints>
@@ -70,7 +70,7 @@
 				<Label fx:id="labelMandant" text="Mandant" GridPane.rowIndex="3" />
 				<Label fx:id="labelInstitut" text="Institution" GridPane.rowIndex="2" />
             <ChoiceBox fx:id="institut" maxWidth="300.0" minHeight="26.0" minWidth="300.0" nodeOrientation="LEFT_TO_RIGHT" onAction="#changeInstitut" prefHeight="26.0" prefWidth="300.0" value="" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
-            <Label fx:id="labelStar" text="* Wird immer geprüft, aber nur wenn es angewählt ist, wird der valide Report nicht gelöscht." GridPane.columnSpan="5" GridPane.rowIndex="12" />
+            <Label fx:id="labelStar" text="* Wird immer geprüft, aber nur wenn es angewählt ist, wird der Report nicht gelöscht." GridPane.columnSpan="5" GridPane.rowIndex="12" />
             <Label fx:id="labelStar1" text="° Wird nur geprüft, wenn es angewählt ist und der valide Report wird nicht gelöscht." GridPane.columnSpan="5" GridPane.rowIndex="13" />
 			</children>
 			<padding>

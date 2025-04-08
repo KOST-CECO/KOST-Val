@@ -49,7 +49,7 @@
 								<Insets left="90.0" />
 							</GridPane.margin>
 						</Button>
-						<TextField fx:id="fileFolder" minHeight="25.0" minWidth="40.0" onAction="#changeFileFolder" onDragOver="#changeFileFolderOver" prefHeight="25.0" GridPane.columnIndex="2" GridPane.columnSpan="4">
+						<TextField fx:id="fileFolder" minHeight="25.0" minWidth="40.0" onAction="#changeFileFolder" onDragDropped="#changeFileFolderOver" prefHeight="25.0" GridPane.columnIndex="2" GridPane.columnSpan="4">
 							<GridPane.margin>
 								<Insets left="10.0" right="20.0" />
 							</GridPane.margin>
@@ -128,7 +128,7 @@
 			<center>
 				<VBox maxHeight="1.7976931348623157E308" BorderPane.alignment="CENTER">
 					<children>
-						<WebView fx:id="wbv" maxHeight="1.7976931348623157E308" minHeight="200.0" minWidth="-1.0" onDragOver="#changeFileFolderOver" prefHeight="6000.0" prefWidth="-1.0">
+						<WebView fx:id="wbv" maxHeight="1.7976931348623157E308" minHeight="200.0" minWidth="-1.0" onDragDropped="#changeFileFolderOver" prefHeight="6000.0" prefWidth="-1.0">
 							<VBox.margin>
 								<Insets />
 							</VBox.margin>
