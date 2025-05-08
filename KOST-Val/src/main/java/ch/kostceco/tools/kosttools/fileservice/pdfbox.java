@@ -41,6 +41,7 @@ public class pdfbox {
 			PDDocument pdDoc = Loader.loadPDF(file);
 			PDFTextStripper pdfStripper = new PDFTextStripper();
 			resultExec = pdfStripper.getText(pdDoc);
+			resultExec = resultExec.replaceAll(":\n", ": ");
 			resultExec = resultExec.replaceAll("\n", "__");
 
 			// System.out.println( resultExec );

@@ -266,16 +266,17 @@ public class egovdv {
 	 * validate <account> -u https://egovsigval-backend.bit.admin.ch -m Mixed -f
 	 * <filename> -c -e -d -o <report>
 	 * 
-	 * @param -c Container check, validates all signatures in the pdf file.
-	 * @param -d Logs the JSON object of the request and response.
-	 * @param -e Generate report even for unsigned files
-	 * @param -f file to validate
-	 * @param -l get pdf report in the given language, supported codes: de, fr, it,
-	 *           en. This is an optional parameter, if omitted de is used.
-	 * @param -m mandator to use
-	 * @param -o pdf report will be saved at the given name
+	 * @param -c   Container check, validates all signatures in the pdf file.
+	 * @param -d   Logs the JSON object of the request and response.
+	 * @param -e   Generate report even for unsigned files
+	 * @param -f   file to validate
+	 * @param -l   get pdf report in the given language, supported codes: de, fr,
+	 *             it, en. This is an optional parameter, if omitted de is used.
+	 * @param -m   mandator to use
+	 * @param -o   pdf report will be saved at the given name
+	 * @param -suo "Test Archiv" Optional parameter for examiner organization
 	 * 
-	 * @param -u URL of the validation webservice.
+	 * @param -u   URL of the validation webservice.
 	 *
 	 * @return String ob Report existiert oder nicht ggf Exception
 	 */
@@ -361,8 +362,8 @@ public class egovdv {
 
 			String command = "\"\"cd " + fexeDir.getAbsolutePath() + "\" & \"" + fvalidateBat.getAbsolutePath() + "\" "
 					+ account + "-u https://egovsigval-backend.bit.admin.ch -m " + mandant + " -f \""
-					+ pdfFileNormalisiert.getAbsolutePath() + "\" -l " + optionLanguage + " -c -e -o \""
-					+ output.getAbsolutePath() + "\"\"";
+					+ pdfFileNormalisiert.getAbsolutePath() + "\" -l " + optionLanguage + " -c -e -suo \"" + institut
+					+ "\" -o \"" + output.getAbsolutePath() + "\"\"";
 
 			// validate <account> -u https://egovsigval-backend.bit.admin.ch -m
 			// Mixed -f <filename> -c -e -d -o <report>
@@ -372,7 +373,7 @@ public class egovdv {
 			String resultExec = Cmd.execToStringSplit(command, out, workDir);
 
 			// System.out.println( "resultExec: " + resultExec );
-			
+
 			// Normalisierte Datei wieder loeschen
 			if (pdfFileNormalisiert.exists()) {
 				pdfFileNormalisiert.delete();
@@ -477,64 +478,39 @@ public class egovdv {
 	 */
 	public static String prettyEgovdvPdf(String line) {
 		String lineOut = "LineNotFound";
-		// System.out.println( "1 " + line );
+		// System.out.println("1 " + line);
 
 		String newLine = "</Message><Message></Message><Message>" + line;
 		// System.out.println( "newLine=" + newLine );
 		String prettyPrint = newLine.replaceAll(":__", ": ");
 		prettyPrint = prettyPrint.replaceAll("__ __", "</Message><Message> - ");
 
-		String pathToKostValDir = System.getenv("USERPROFILE") + File.separator + ".kost-val_2x";
-		File directoryOfConfigfile = new File(pathToKostValDir + File.separator + "configuration");
-		File configFile = new File(directoryOfConfigfile + File.separator + "kostval.conf.xml");
-
-		Document doc = null;
-		String Institut = "Institut";
-
-		try {
-			BufferedInputStream bis;
-			bis = new BufferedInputStream(new FileInputStream(configFile));
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			doc = db.parse(bis);
-			doc.normalize();
-
-			Institut = doc.getElementsByTagName("Institut").item(0).getTextContent();
-			bis.close();
-		} catch (IOException | ParserConfigurationException | SAXException e) {
-			e.printStackTrace();
-			System.out.println("Fehler beim auslesen der config (egovdv)");
-		}
-
-		// Bereinigung ist nur auf de, der log wird danach in Controllervalfofile
-		// uebersetzt
-
-		prettyPrint = prettyPrint.replaceAll("Prüfbericht für elektronische Signaturen",
-				"Prüfbericht für elektronische Signaturen</Message><Message> - Geprüft durch: " + Institut);
-
-		prettyPrint = prettyPrint.replaceAll("__Datum/Zeit der Prüfung:",
-				"</Message><Message> - Datum/Zeit der Prüfung:");
-		prettyPrint = prettyPrint.replaceAll("__Name der signierten __Datei:",
-				"</Message><Message> - Name der signierten __Datei:");
-		prettyPrint = prettyPrint.replaceAll("__Name der signierten", "</Message><Message> - Name der signierten");
-		prettyPrint = prettyPrint.replaceAll("__Datei:", "Datei:");
-		prettyPrint = prettyPrint.replaceAll("__Hash der Datei ", "</Message><Message> - Hash der Datei ");
-
 		/*
+		 * 1. Abschnitt
+		 * 
+		 * Datum/Zeit der Prüfung: 09.04.2025 09:13:29 UTC Angaben der prüfenden Person:
+		 * Staatsarchiv Basel-Stadt Die Eingabe dieser Informationen ist nicht Teil des
+		 * Validierungsprozesses und unterliegt weder einer Überprüfung noch einer
+		 * Bestätigung. Name der signierten Datei: AS-2018-89-DE.pdf Hash der Datei
+		 * (SHA256): 91a62f1409693f77c6ed60eb12ab58e1 869e99f053c1155bc7f6e3c71922e1b4
 		 * Der Validator prüft, ob die in einem Dokument enthaltenen Signaturen den für
 		 * die Prüfung auszuwählenden Kriterien entsprechen. Die Kriterien können sich
 		 * auf die Gültigkeit des Dokuments als Ganzes (z. B. gültiger
 		 * Strafregisterauszug) oder auf die Gültigkeit aller darin enthaltenen
 		 * Unterschriften beziehen (z.B . qualifiziert signiertes Dokument).
+		 * 
 		 */
-		// __Der Validator prüft, ob die in einem Dokument enthaltenen
-		// Signaturen den für die Prüfung
-		// __auszuwählenden Kriterien entsprechen. Die Kriterien können sich auf
-		// die Gültigkeit des Dokuments
-		// __als Ganzes (z. B. gültiger Strafregisterauszug) oder auf die
-		// Gültigkeit aller darin enthaltenen
-		// __Unterschriften beziehen (z.B . qualifiziert signiertes Dokument).
-
+		prettyPrint = prettyPrint.replaceAll("__Datum/Zeit der Prüfung:",
+				"</Message><Message> - Datum/Zeit der Prüfung:");
+		prettyPrint = prettyPrint.replaceAll("__Angaben der prüfenden", "</Message><Message> - Angaben der prüfenden");
+		prettyPrint = prettyPrint.replaceAll("__ Die Eingabe dieser Informationen ist nicht Teil des ", "");
+		prettyPrint = prettyPrint.replaceAll("__Validierungsprozesses und unterliegt weder einer Überprüfung noch", "");
+		prettyPrint = prettyPrint.replaceAll("__einer Bestätigung.", "");
+		prettyPrint = prettyPrint.replaceAll("__Name der signierten __Datei:",
+				"</Message><Message> - Name der signierten __Datei:");
+		prettyPrint = prettyPrint.replaceAll("__Name der signierten", "</Message><Message> - Name der signierten");
+		prettyPrint = prettyPrint.replaceAll("__Datei:", "Datei:");
+		prettyPrint = prettyPrint.replaceAll("__Hash der Datei ", "</Message><Message> - Hash der Datei ");
 		prettyPrint = prettyPrint.replaceAll(
 				"__Der Validator prüft, ob die in einem Dokument enthaltenen Signaturen den für die Prüfung ", "");
 		prettyPrint = prettyPrint.replaceAll(
@@ -546,6 +522,19 @@ public class egovdv {
 		prettyPrint = prettyPrint.replaceAll("__Unterschriften beziehen \\(z.B . qualifiziert signiertes Dokument\\).",
 				"");
 
+		/*
+		 * 2. Abschnitt
+		 * 
+		 * Zusammenfassung der Dokumentprüfung Das Dokument ist gültig signiert. Das
+		 * geprüfte Dokument trägt mehrere elektronische Signaturen mit
+		 * unterschiedlichen Zertifikatsklassen, gemäss ZertES.
+		 * 
+		 * Das Dokument ist teilweise nicht gültig signiert. Das Dokument weist mehrere
+		 * elektronische Signaturen mit unterschiedlichen Zertifikatsklassen auf.
+		 * Mindestens eine der elektronischen Signaturen auf dem validierten Dokument
+		 * konnte keiner Dokumentenart (Mandant) zugeordnet werden. Die Prüfergebnisse
+		 * der einzelnen Signaturen sind im Detailbericht ersichtlich
+		 */
 		// invalide Fehlermeldungen
 		prettyPrint = prettyPrint.replaceAll("__Zusammenfassung der Dokumentprüfung", "");
 		prettyPrint = prettyPrint.replaceAll("__Das Dokument weist mehrere elektronische Signaturen mit",
@@ -558,8 +547,18 @@ public class egovdv {
 				"konnte keiner Dokumentenart (Mandant) zugeordnet werden. ");
 		prettyPrint = prettyPrint.replaceAll("__Die Prüfergebnisse der einzelnen Signaturen sind im", "");
 		prettyPrint = prettyPrint.replaceAll("__Detailbericht ersichtlich.", "");
-		prettyPrint = prettyPrint.replaceAll("__Anzahl Signaturen im Dokument: 1", "");
+
+		/*
+		 * 3. Abschnitt
+		 * 
+		 * Folgende Prüfungen wurden durchgeführt: Anzahl Signaturen im Dokument: 1 Das
+		 * Dokument ist nach der letzten Signatur nicht mehr verändert worden. Alle
+		 * validierten Signaturen des Dokumentes sind gültig gemäss ZertES. Alle zur
+		 * Signatur verwendeten Zertifikate sind nicht revoziert, also gültig. Alle in
+		 * diesem Dokument angebrachten
+		 */
 		prettyPrint = prettyPrint.replaceAll("__Anzahl Signaturen im Dokument: 0", "");
+		prettyPrint = prettyPrint.replaceAll("__Anzahl Signaturen im Dokument: 1", "");
 		prettyPrint = prettyPrint.replaceAll("__Anzahl Signaturen im Dokument: 2", "");
 		prettyPrint = prettyPrint.replaceAll("__Anzahl Signaturen im Dokument: 3", "");
 		prettyPrint = prettyPrint.replaceAll("__Anzahl Signaturen im Dokument: 4", "");
@@ -586,12 +585,17 @@ public class egovdv {
 		prettyPrint = prettyPrint.replaceAll("__ Alle in diesem Dokument",
 				"</Message><Message> - Alle in diesem Dokument");
 
+		/*
+		 * 4. Abschnitt
+		 * 
+		 */
 		// Bereinigung Prüfdetails
 		prettyPrint = prettyPrint.replaceAll("__Prüfdetails Signatur",
 				"</Message><Message></Message><Message>Prüfdetails Signatur [egovdv]");
 		prettyPrint = prettyPrint.replaceAll("__Informationen zur Signatur", "");
 		prettyPrint = prettyPrint.replaceAll("__Zeitpunkt der ", "</Message><Message> - Zeitpunkt der ");
 		prettyPrint = prettyPrint.replaceAll("__Signaturalgorithmus:", "</Message><Message> - Signaturalgorithmus:");
+		prettyPrint = prettyPrint.replace("Grund: ", "</Message><Message> - Grund: ");
 		prettyPrint = prettyPrint.replaceAll("__Die digitale Signatur ist",
 				"</Message><Message> - Die digitale Signatur ist");
 		prettyPrint = prettyPrint.replaceAll("__Information über den Zeitstempel",
@@ -677,7 +681,6 @@ public class egovdv {
 		prettyPrint = prettyPrint.replaceAll("__ZertES.", "");
 
 		prettyPrint = prettyPrint.replaceAll(" \\(Details siehe A\\)", "");
-		prettyPrint = prettyPrint.replace("Grund: ", "");
 		// System.out.println( "2 " + prettyPrint );
 
 		lineOut = prettyPrint;

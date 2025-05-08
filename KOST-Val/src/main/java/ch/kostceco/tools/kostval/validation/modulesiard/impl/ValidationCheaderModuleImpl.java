@@ -89,6 +89,8 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 			min = true;
 		}
 
+		Integer cRec = 0;
+		Integer cRec0 = 0;
 		boolean siard10 = false;
 		boolean siard21 = false;
 		boolean siard22 = false;
@@ -188,7 +190,6 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 		 * Dies kann zu Datenfehler bei der extraktion fuehren.
 		 */
 		try {
-			Integer compressed = 1000;
 			ZipFile zf = new ZipFile(valDatei.getAbsolutePath());
 			Enumeration<? extends ZipEntry> entries = zf.entries();
 			while (entries.hasMoreElements()) {
@@ -196,12 +197,20 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 				String fileName = zEntry.getName();
 				if (fileName.contains("record") && fileName.contains(".txt")) {
 					long fileSize = zEntry.getSize();
+					// TODO jeweils nur 10 Eintraege
 					if (fileSize == 0) {
-						records0 = records0 + "</Message><Message> - " + zEntry.toString() + "   fileSize: " + fileSize;
+						cRec0++;
+						if (cRec0 < 10) {
+							records0 = records0 + "</Message><Message> - " + zEntry.toString();
+						}
 					} else {
-						// System.out.println("fileName: " +fileName + " fileSize: " + fileSize+"
-						// String: "+zEntry.toString() );
-						records = records + "</Message><Message> - " + zEntry.toString() + "   fileSize: " + fileSize;
+						cRec++;
+						if (cRec < 10) {
+							// System.out.println("fileName: " +fileName + " fileSize: " + fileSize+"
+							// String: "+zEntry.toString() );
+							records = records + "</Message><Message> - " + zEntry.toString() + "   fileSize: "
+									+ fileSize;
+						}
 					}
 				}
 			}
@@ -659,27 +668,51 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 							// extrahiert werden. </Message>
 						} catch (FileNotFoundException eEnterag) {
 							// ermitteln ob leere record.txt enthalten sind
-							if (!records0.isEmpty()) {
-								Logtxt.logtxt(logFile,
-										getTextResourceService().getText(locale, MESSAGE_XML_MODUL_C_SIARD)
-												+ getTextResourceService().getText(locale, MESSAGE_XML_C_INCORRECTZIP,
-														records0));
+							if (!records0.isEmpty() && !records.isEmpty()) {
+								Logtxt.logtxt(logFile, getTextResourceService().getText(locale,
+										MESSAGE_XML_MODUL_C_SIARD)
+										+ getTextResourceService().getText(locale, MESSAGE_XML_C_INCORRECTZIP,
+												records0 + " (" + cRec0 + "x) " + records + " (" + cRec + "x)"));
 								// es sind leere record.txt enthalten
 								// <Message>Die SIARD-Datei konnte nicht extrahiert werden.
 								// {0}</Message><Message> -> Versuchen Sie diese manuell zu extrahieren und
 								// wieder zu komprimieren (Deflate-ZIP). </Message><Message> => Validierung
 								// abgebrochen!</Message></Error>
+
+								// cRec0 zaehler leerere txt records
+								// records0 = records0 + "</Message><Message> - " + zEntry.toString();
+
+								return false;
+							} else if (!records0.isEmpty()) {
+								Logtxt.logtxt(logFile,
+										getTextResourceService().getText(locale, MESSAGE_XML_MODUL_C_SIARD)
+												+ getTextResourceService().getText(locale, MESSAGE_XML_C_INCORRECTZIP,
+														records0 + " (" + cRec0 + "x)"));
+								// es sind leere record.txt enthalten
+								// <Message>Die SIARD-Datei konnte nicht extrahiert werden.
+								// {0}</Message><Message> -> Versuchen Sie diese manuell zu extrahieren und
+								// wieder zu komprimieren (Deflate-ZIP). </Message><Message> => Validierung
+								// abgebrochen!</Message></Error>
+
+								// cRec0 zaehler leerere txt records
+								// records0 = records0 + "</Message><Message> - " + zEntry.toString();
+
 								return false;
 							} else if (!records.isEmpty()) {
 								Logtxt.logtxt(logFile,
 										getTextResourceService().getText(locale, MESSAGE_XML_MODUL_C_SIARD)
 												+ getTextResourceService().getText(locale, MESSAGE_XML_C_INCORRECTZIP,
-														records));
+														records + " (" + cRec + "x)"));
 								// es sind keine leeren record.txt enthalten aber andere
 								// <Message>Die SIARD-Datei konnte nicht extrahiert werden.
 								// {0}</Message><Message> -> Versuchen Sie diese manuell zu extrahieren und
 								// wieder zu komprimieren (Deflate-ZIP). </Message><Message> => Validierung
 								// abgebrochen!</Message></Error>
+
+								// cRec zaehler txt records mit inhalt
+								// records = records + "</Message><Message> - " + zEntry.toString() + "
+								// fileSize: " + fileSize;
+
 								return false;
 							} else {
 								Logtxt.logtxt(logFile,
