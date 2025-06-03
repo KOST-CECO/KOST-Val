@@ -243,6 +243,17 @@ public class KOSTVal implements MessageConstants {
 
 			// TODO: Formatvalidierung an einer Datei --> erledigt --> nur Marker
 			if (!valDatei.isDirectory()) {
+				String xmlFileName = logFileName.replace(".kost-val.log", ".signature.log");
+				File xmlFile = new File(xmlFileName);
+				String sigDoku = configMap.get("sigDoku");
+				if (sigDoku.equals("yes")) {
+					// falls das File (Signaturdokumentation) von einem vorhergehenden Durchlauf
+					// bereits existiert, loeschen wir es
+					if (xmlFile.exists()) {
+						xmlFile.delete();
+					}
+				}
+
 				// System.out.print( valDatei.getAbsolutePath() + " " );
 				/*
 				 * boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile,
@@ -254,6 +265,10 @@ public class KOSTVal implements MessageConstants {
 						configMap, context, locale, logFile, countToValidated);
 
 				Logtxt.logtxt(logFile, "</Format>");
+
+				if (sigDoku.equals("yes")) {
+					Util.oldnewstringAll("<file></file>", "", xmlFile);
+				}
 
 				// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 				if (tmpDir.exists()) {
@@ -289,15 +304,22 @@ public class KOSTVal implements MessageConstants {
 
 				String xmlFileName = logFileName.replace(".kost-val.log", ".signature.log");
 				File xmlFile = new File(xmlFileName);
-				// falls das File (Signaturdokumentation) von einem vorhergehenden Durchlauf
-				// bereits existiert, loeschen wir es
-				if (xmlFile.exists()) {
-					xmlFile.delete();
+				String sigDoku = configMap.get("sigDoku");
+				if (sigDoku.equals("yes")) {
+					// falls das File (Signaturdokumentation) von einem vorhergehenden Durchlauf
+					// bereits existiert, loeschen wir es
+					if (xmlFile.exists()) {
+						xmlFile.delete();
+					}
 				}
 
 				Controllervalfolder controller2 = (Controllervalfolder) context.getBean("controllervalfolder");
 				boolean valFolder = controller2.valFolder(valDatei, logFileName, directoryOfLogfile, verbose,
 						dirOfJarPath, configMap, context, locale, logFile);
+
+				if (sigDoku.equals("yes")) {
+					Util.oldnewstringAll("<file></file>", "", xmlFile);
+				}
 
 				// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 				if (tmpDir.exists()) {

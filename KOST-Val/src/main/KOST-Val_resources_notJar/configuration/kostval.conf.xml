@@ -185,6 +185,7 @@
 	<egovdv>
 		<egovdvvalidation>&#x2717;</egovdvvalidation>
 		<Institut></Institut>
+		<sigDoku>no</sigDoku>
 		<Mandant>
 			<Mixed>no</Mixed>
 			<Qualified>no</Qualified>

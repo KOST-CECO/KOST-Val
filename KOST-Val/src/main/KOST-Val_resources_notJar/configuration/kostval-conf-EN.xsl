@@ -434,11 +434,17 @@
 						</td>
 					</tr>
 					<tr class="captioninfom">
-						<td>Report, welcher gesichert wird, wenn valide und yes:</td>
+						<td>XML-Signaturdokumentation erstellen [no]:</td>
+						<td>
+							<xsl:value-of select="configuration/egovdv/sigDoku" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>Report, welcher gesichert wird, wenn yes:</td>
 						<td></td>
 					</tr>
 					<tr class="captioninfom">
-						<td> - Mixed (unterschiedlichen Zertifikatsklassen)  [no]:</td>
+						<td> - Standard (alle Zertifikatsklassen)  [no]:</td>
 						<td><xsl:value-of select="configuration/egovdv/Mandant/Mixed" /></td>
 					</tr>
 					<tr class="captioninfom">
@@ -462,7 +468,7 @@
 						<td><xsl:value-of select="configuration/egovdv/Mandant/Siegel" /></td>
 					</tr>
 					<tr class="captioninfom">
-						<td> - Amtsblatt-Portal (offizielle amtliche Meldungen)  [no]:</td>
+						<td> - Amtsblatt-Portal Bund (offizielle amtliche Meldungen)  [no]:</td>
 						<td><xsl:value-of select="configuration/egovdv/Mandant/Amtsblattportal" /></td>
 					</tr>
 					<tr class="captioninfom">

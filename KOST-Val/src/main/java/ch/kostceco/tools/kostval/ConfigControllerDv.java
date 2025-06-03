@@ -48,8 +48,9 @@ import javafx.stage.Stage;
 public class ConfigControllerDv {
 
 	@FXML
-	private CheckBox checkMixed, checkQualified, checkSwissGovPKI, checkUpregfn, checkSiegel, checkAmtsblattportal,
-			checkEdec, checkESchKG, checkFederalLaw, checkStrafregisterauszug, checkKantonZugFinanzdirektion;
+	private CheckBox checkSigDoku, checkMixed, checkQualified, checkSwissGovPKI, checkUpregfn, checkSiegel,
+			checkAmtsblattportal, checkEdec, checkESchKG, checkFederalLaw, checkStrafregisterauszug,
+			checkKantonZugFinanzdirektion;
 
 	@FXML
 	private Button buttonConfigApply;
@@ -61,12 +62,12 @@ public class ConfigControllerDv {
 	private String dirOfJarPath, config, minOne = "Mindestens eine Variante muss erlaubt sein!";
 
 	@FXML
-	private Label labelInstitut, labelVal, labelMessage, labelMandant, labelConfig, labelStar, labelStar1;
+	private Label labelInstitut, labelVal, labelMessage, labelSigDoku, labelMandant, labelConfig, labelStar, labelStar1;
 
 	ObservableList<String> sizeInstitutList = FXCollections.observableArrayList("", "Staatsarchiv Aargau",
-			"Staatsarchiv Basel-Stadt", "Staatsarchiv Bern", "Staatsarchiv Graubünden", "Staatsarchiv Luzern", "Staatsarchiv St. Gallen",
-			"Staatsarchiv Thurgau", "Stadtarchiv Bern", "Stadtarchiv Luzern", "Stadtarchiv St. Gallen",
-			"Burgerbibliothek Bern");
+			"Staatsarchiv Basel-Stadt", "Staatsarchiv Bern", "Staatsarchiv Graubünden", "Staatsarchiv Luzern",
+			"Staatsarchiv St. Gallen", "Staatsarchiv Thurgau", "Stadtarchiv Bern", "Stadtarchiv Luzern",
+			"Stadtarchiv St. Gallen", "Burgerbibliothek Bern");
 
 	@FXML
 	private ChoiceBox<String> institut;
@@ -96,7 +97,7 @@ public class ConfigControllerDv {
 		// TODO --> initialize (wird einmalig am Anfang ausgefuehrt)
 
 		// Copyright ausgeben
-		labelConfig.setText("Copyright © KOST/CECO" );
+		labelConfig.setText("Copyright © KOST/CECO");
 
 		// festhalten von wo die Applikation (exe) gestartet wurde
 		dirOfJarPath = "";
@@ -118,30 +119,42 @@ public class ConfigControllerDv {
 		// Sprache anhand configFile (HauptGui) setzten
 		try {
 			if (Util.stringInFileLine("kostval-conf-DE.xsl", configFile)) {
+				labelSigDoku.setText("XML-Signaturdokumentation");
+				checkSigDoku.setText("erstellen");
 				labelMandant.setText("Mandant");
 				labelInstitut.setText("Institution");
 				labelVal.setText("Einstellungen für eGov diskret Signaturvalidator");
 				buttonConfigApply.setText("anwenden");
 				minOne = "Mindestens eine Variante muss erlaubt sein!";
-				labelStar.setText("* Wird immer geprüft, aber nur wenn es angewählt ist, wird der Report nicht gelöscht.");
-				labelStar1.setText("° Wird nur geprüft, wenn es angewählt ist und der valide Report wird nicht gelöscht.");
+				labelStar.setText(
+						"* Wird immer geprüft, aber nur wenn es angewählt ist, wird der Report nicht gelöscht.");
+				labelStar1.setText(
+						"° Wird nur geprüft, wenn es angewählt ist und der valide Report wird nicht gelöscht.");
 			} else if (Util.stringInFileLine("kostval-conf-FR.xsl", configFile)) {
+				labelSigDoku.setText("Documentation de signatures XML");
+				checkSigDoku.setText("créer (en allemand uniquement)");
 				labelMandant.setText("Mandant");
 				labelInstitut.setText("Institution");
 				labelVal.setText("Paramètres du validateur de signature discrète eGov");
 				buttonConfigApply.setText("appliquer");
 				minOne = "Au moins une variante doit etre autorisee !";
-				labelStar.setText("* Toujours vérifié, mais le rapport n'est pas supprimé uniquement lorsqu'il est sélectionné.");
+				labelStar.setText(
+						"* Toujours vérifié, mais le rapport n'est pas supprimé uniquement lorsqu'il est sélectionné.");
 				labelStar1.setText("° N'est vérifié que s'il est sélectionné et le rapport valide n'est pas supprimé.");
 			} else if (Util.stringInFileLine("kostval-conf-IT.xsl", configFile)) {
+				labelSigDoku.setText("Documentazione della firma XML");
+				checkSigDoku.setText("creare (solo in tedesco)");
 				labelMandant.setText("Cliente");
 				labelInstitut.setText("Istituzione");
 				labelVal.setText("Impostazioni per il validatore di firma discreta eGov");
 				buttonConfigApply.setText("Applica");
 				minOne = "Almeno una variante deve essere consentita!";
 				labelStar.setText("* È sempre controllato, ma solo se è selezionato, il rapporto non viene eliminato.");
-				labelStar1.setText("° Viene controllato solo se è selezionato e il rapporto valido non viene eliminato.");
+				labelStar1
+						.setText("° Viene controllato solo se è selezionato e il rapporto valido non viene eliminato.");
 			} else {
+				labelSigDoku.setText("XML signature documentation");
+				checkSigDoku.setText("create (in German only)");
 				labelMandant.setText("Client");
 				labelInstitut.setText("Institution");
 				labelVal.setText("Settings for eGov discrete signature validator");
@@ -176,6 +189,7 @@ public class ConfigControllerDv {
 			byte[] encoded;
 			encoded = Files.readAllBytes(Paths.get(configFile.getAbsolutePath()));
 			config = new String(encoded, StandardCharsets.UTF_8);
+			String noSigDoku = "<sigDoku>no</sigDoku>";
 			String noMixed = "<Mixed>no</Mixed>";
 			String noQualified = "<Qualified>no</Qualified>";
 			String noSwissGovPKI = "<SwissGovPKI>no</SwissGovPKI>";
@@ -188,6 +202,9 @@ public class ConfigControllerDv {
 			String noStrafregisterauszug = "<Strafregisterauszug>no</Strafregisterauszug>";
 			String noKantonZugFinanzdirektion = "<KantonZugFinanzdirektion>no</KantonZugFinanzdirektion>";
 
+			if (config.contains(noSigDoku)) {
+				checkSigDoku.setSelected(false);
+			}
 			if (config.contains(noMixed)) {
 				checkMixed.setSelected(false);
 			}
@@ -244,6 +261,25 @@ public class ConfigControllerDv {
 	}
 
 	/* TODO --> CheckBox ================= */
+
+	/*
+	 * checkSigDoku schaltet die SigDoku ein oder aus
+	 */
+	@FXML
+	void changeSigDoku(ActionEvent event) {
+		labelMessage.setText("");
+		String yes = "<sigDoku>yes</sigDoku>";
+		String no = "<sigDoku>no</sigDoku>";
+		try {
+			if (checkSigDoku.isSelected()) {
+				Util.oldnewstring(no, yes, configFile);
+			} else {
+				Util.oldnewstring(yes, no, configFile);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	/*
 	 * checkMixed schaltet diesen Mandant in der Konfiguration ein oder aus

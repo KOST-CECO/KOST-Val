@@ -19,11 +19,14 @@
 package ch.kostceco.tools.kostval.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.springframework.context.ApplicationContext;
 
 import ch.kostceco.tools.kosttools.fileservice.Recognition;
@@ -922,6 +925,34 @@ public class Controllervalfofile implements MessageConstants {
 							+ valDateiNameNormalisiert + "_dvReport_Mixed.pdf");
 					Locale localeDe = new Locale("de");
 
+					String sigDoku = configMap.get("sigDoku");
+					if (sigDoku.equals("yes")) {
+						File xmlEmptyDE = new File(dirOfJarPath + File.separator + "resources" + File.separator
+								+ "_signature_log_empty_DE.xml");
+						File xmlEmptyDEfile = new File(dirOfJarPath + File.separator + "resources" + File.separator
+								+ "_signature_log_empty_DE_file.xml");
+
+						try {
+							FileInputStream fis = new FileInputStream(xmlEmptyDEfile);
+							String stringFile = IOUtils.toString(fis, "UTF-8");
+							// falls xmlFile nicht existiert, kopieren wir die Leere Struktur
+							if (xmlFile.exists()) {
+								// System.out.println("neue File-Struktur einfuegen");
+								Util.oldnewstring("<file></file>", stringFile + "<file></file>", xmlFile);
+							} else {
+								// System.out.println("xml File-Struktur kopieren");
+								Util.copyFile(xmlEmptyDE, xmlFile);
+								Util.oldnewstring("<file></file>", stringFile + "<file></file>", xmlFile);
+							}
+							fis.close();
+						} catch (FileNotFoundException e) {
+							System.out.println(
+									"Fehler beim Erstellen des XML Signatur logs (FileNotFoundException: " + e + ")");
+						} catch (IOException e) {
+							System.out.println("Fehler beim Erstellen des XML Signatur logs (IOException: " + e + ")");
+						}
+					}
+
 					String mixedSig = egovdv.execEgovdvCheck(valDatei, outMixedSig, xmlFile, workDir2, dirOfJarPath,
 							"Mixed", localeDe);
 
@@ -964,7 +995,8 @@ public class Controllervalfofile implements MessageConstants {
 							 * und bestanden sind
 							 */
 
-							String strAnalysePdf = egovdv.analyseEgovdvPdf(outMixedSig, configMap, txtFile, xmlFile);
+							String strAnalysePdf = egovdv.analyseEgovdvPdf(valDatei, outMixedSig, configMap, txtFile,
+									xmlFile, locale);
 
 							// System.out.println(strAnalysePdf);
 
@@ -1146,20 +1178,29 @@ public class Controllervalfofile implements MessageConstants {
 								Util.deleteFile(outSiegelSig);
 							}
 
-							// Warnung mit Anzahl Signaturen und Ergebnis
-							// ausgeben
+							// Warnung mit Anzahl Signaturen und Ergebnis ausgeben
+							String execVerapdfSig = verapdf.execVerapdfSig(valDatei, workDir, signatureTmp, locale);
+
 							returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
 									+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE_SUM1, countSig,
-											strAnalysePdf
-													+ "</Message><Message></Message><Message>Metadaten der Signatur [verapdf]</Message><Message></Message><Message>("
-													+ mixedSig + ") ");
+											strAnalysePdf + "</Message>" + execVerapdfSig
+													+ "<Message></Message><Message>(" + mixedSig + ") ");
+
+							/*
+							 * returnEgovdvSum = getTextResourceService().getText(locale,
+							 * MESSAGE_XML_MODUL_A_PDFA) + getTextResourceService().getText(locale,
+							 * WARNING_XML_A_SIGNATURE_SUM1, countSig, strAnalysePdf +
+							 * "</Message><Message></Message><Message>Metadaten der Signatur [verapdf]</Message><Message></Message><Message>("
+							 * + mixedSig + ") ");
+							 */
 
 						} else {
 							// Mixed-Signatur-Validierung NICHT bestanden
 							// Kein Mandant ist valid
 							// Dokumentation des Ergebnisses
 
-							String strAnalysePdf = egovdv.analyseEgovdvPdf(outMixedSig, configMap, txtFile, xmlFile);
+							String strAnalysePdf = egovdv.analyseEgovdvPdf(valDatei, outMixedSig, configMap, txtFile,
+									xmlFile, locale);
 
 							// Warnung mit Anzahl Signaturen und Ergebnis ausgeben
 							String execVerapdfSig = verapdf.execVerapdfSig(valDatei, workDir, signatureTmp, locale);

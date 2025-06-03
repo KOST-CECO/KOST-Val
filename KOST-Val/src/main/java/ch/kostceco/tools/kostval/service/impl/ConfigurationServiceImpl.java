@@ -755,6 +755,14 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 			String Institut = doc.getElementsByTagName("Institut").item(0).getTextContent();
 			configMap.put("Institut", Institut);
 
+			String yesSigDoku = "<sigDoku>yes</sigDoku>";
+			String strSigDoku = "no";
+			if (config.contains(yesSigDoku)) {
+				strSigDoku = "yes";
+			} else {
+				strSigDoku = "no";
+			}
+			configMap.put("sigDoku", strSigDoku);
 			String yesMixed = "<Mixed>yes</Mixed>";
 			String strMixed = "no";
 			if (config.contains(yesMixed)) {

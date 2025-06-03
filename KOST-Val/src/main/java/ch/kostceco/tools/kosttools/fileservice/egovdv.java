@@ -53,7 +53,8 @@ public class egovdv {
 
 	private static String egovCli = exeDir + File.separator + "lib" + File.separator
 			+ "intarsys-egov-validationclient-cli-" + versionEgoDv + ".jar";
-	private static String stringFile = "<file></file>";
+	private static String stringFile = "";
+//	private static String stringFileEmpty = "";
 
 	/**
 	 * TODO: Listet mit egovdv via cmd die Signaturnamen in pdf auf und speichert
@@ -308,30 +309,6 @@ public class egovdv {
 			output.delete();
 		}
 
-		File xmlEmptyDE = new File(
-				dirOfJarPath + File.separator + "resources" + File.separator + "_signature_log_empty_DE.xml");
-		File xmlEmptyDEfile = new File(
-				dirOfJarPath + File.separator + "resources" + File.separator + "_signature_log_empty_DE_file.xml");
-
-		try {
-			FileInputStream fis = new FileInputStream(xmlEmptyDEfile);
-			stringFile = IOUtils.toString(fis, "UTF-8");
-			// falls xmlFile nicht existiert, kopieren wir die Leere Struktur
-			if (xmlFile.exists()) {
-				// System.out.println("neue File-Struktur einfuegen");
-				Util.oldnewstringAll("</file>", "</file>" + stringFile, xmlFile);
-			} else {
-				// System.out.println("xml File-Struktur kopieren");
-				Util.copyFile(xmlEmptyDE, xmlFile);
-				Util.oldnewstringAll("<file></file>", stringFile, xmlFile);
-			}
-			fis.close();
-		} catch (FileNotFoundException e) {
-			System.out.println("Fehler beim Erstellen des XML Signatur logs (FileNotFoundException: " + e + ")");
-		} catch (IOException e) {
-			System.out.println("Fehler beim Erstellen des XML Signatur logs (IOException: " + e + ")");
-		}
-
 		// egovdv cli hat Probleme wenn doppelleerschlag im Pfad und Namen
 		String pdfNameNormalisiert = fileToCheck.getName().replace("  ", " .");
 		File pdfFileNormalisiert = new File(workDir + File.separator + pdfNameNormalisiert);
@@ -496,16 +473,21 @@ public class egovdv {
 	 * @param File output, welcher analysiert wird
 	 * @return String mit PDF-ergebnis
 	 */
-	public static String analyseEgovdvPdf(File output, Map<String, String> configMap, File txtFile, File xmlFile) {
+	public static String analyseEgovdvPdf(File valDatei, File output, Map<String, String> configMap, File txtFile,
+			File xmlFile, Locale locale) {
 		String lineOut = "LineNotFound";
 		@SuppressWarnings("unused")
 		String lineOutXml = "LineNotFound";
+		String sigDoku = configMap.get("sigDoku");
+
 		try {
 			// Auslesen mit pdfbox
 			// lineOut = pdfbox.getTextPdfbox(output);
 			lineOut = pdfbox.getTxtPdfbox(output, txtFile);
 			// System.out.println( "lineOut=" + lineOut );
-			lineOutXml = prettyEgovdvPdfXml(lineOut, configMap, txtFile, xmlFile);
+			if (sigDoku.equals("yes")) {
+				lineOutXml = prettyEgovdvPdfXml(valDatei, lineOut, configMap, txtFile, xmlFile, locale);
+			}
 			lineOut = prettyEgovdvPdf(lineOut);
 
 		} catch (Exception e) {
@@ -621,15 +603,24 @@ public class egovdv {
 		prettyPrint = prettyPrint.replaceAll("__ Das Dokument weist ", "</Message><Message> - Das Dokument weist ");
 		prettyPrint = prettyPrint.replaceAll("__ Alle validierten ", "</Message><Message> - Alle validierten ");
 		prettyPrint = prettyPrint.replaceAll("__ Alle zur Signatur", "</Message><Message> - Alle zur Signatur");
-		if (prettyPrint.contains("Diese Signatur ist nicht LTV-fähig")) {
-			prettyPrint = prettyPrint.replaceAll("</Message><Message> - Das Dokument ist ",
-					"</Message><Message> - Nicht alle Signaturen sind LTV-fähig.</Message><Message> - Das Dokument ist ");
-		} else {
-			prettyPrint = prettyPrint.replaceAll("</Message><Message> - Das Dokument ist ",
-					"</Message><Message> - Alle Signaturen sind LTV-fähig.</Message><Message> - Das Dokument ist ");
-		}
+		/*
+		 * if (prettyPrint.contains("Diese Signatur ist nicht LTV-fähig")) { prettyPrint
+		 * = prettyPrint.replaceAll("</Message><Message> - Das Dokument ist ",
+		 * "</Message><Message> - Nicht alle Signaturen sind LTV-fähig.</Message><Message> - Das Dokument ist "
+		 * ); } else { prettyPrint =
+		 * prettyPrint.replaceAll("</Message><Message> - Das Dokument ist ",
+		 * "</Message><Message> - Alle Signaturen sind LTV-fähig.</Message><Message> - Das Dokument ist "
+		 * ); }
+		 */
 		prettyPrint = prettyPrint.replaceAll("__ Alle in diesem Dokument",
 				"</Message><Message> - Alle in diesem Dokument");
+		if (prettyPrint.contains("Diese Signatur ist nicht LTV-fähig")) {
+			prettyPrint = prettyPrint.replaceAll("</Message><Message> - Alle in diesem Dokument",
+					"</Message><Message> - Nicht alle Signaturen sind LTV-fähig.</Message><Message> - Alle in diesem Dokument");
+		} else if (prettyPrint.contains("Diese Signatur ist LTV-fähig")) {
+			prettyPrint = prettyPrint.replaceAll("</Message><Message> - Alle in diesem Dokument",
+					"</Message><Message> - Alle Signaturen sind LTV-fähig.</Message><Message> - Alle in diesem Dokument");
+		}
 
 		/*
 		 * 4. Abschnitt
@@ -740,7 +731,8 @@ public class egovdv {
 	 * @param String line, welcher bereinigt wird
 	 * @return String bereinigter XML-String
 	 */
-	public static String prettyEgovdvPdfXml(String line, Map<String, String> configMap, File txtFile, File xmlFile) {
+	public static String prettyEgovdvPdfXml(File valDatei, String line, Map<String, String> configMap, File txtFile,
+			File xmlFile, Locale locale) {
 
 		try {
 			Util.oldnewstringAll("ü", "ue", txtFile);
@@ -1099,6 +1091,7 @@ public class egovdv {
 			Util.oldnewstringAll("n3w2L1n3n3w2L1n3n3w2L1n3", "n3w2L1n3", txtFile);
 			Util.oldnewstringAll("n3w2L1n3n3w2L1n3", "n3w2L1n3", txtFile);
 
+			stringFile = "";
 			FileInputStream fis = new FileInputStream(txtFile);
 			stringFile = IOUtils.toString(fis, "UTF-8");
 			stringFile = stringFile + "</signature>";
@@ -1133,6 +1126,59 @@ public class egovdv {
 
 			fis.close();
 			reader.close();
+
+// Medatadaten Signaturen ergaenzen
+			try {
+				Locale localeDe = new Locale("de");
+
+				String pathToWorkDirValdatei = configMap.get("PathToWorkDir");
+				File workDir = new File(pathToWorkDirValdatei);
+				File signatureTmp = new File(workDir.getAbsolutePath() + File.separator + "veraPDF_signatureTmp.xml");
+				String execVerapdfSig = verapdf.execVerapdfSig(valDatei, workDir, signatureTmp, localeDe);
+
+				// <Message></Message><Message>Metadaten der Signatur 1 [verapdf]</Message>
+				// <Message> - Zeitpunkt der Unterschrift (Anbringen Signatur): [Date]</Message>
+				// <Message> - Name: [Name]</Message>
+				// <Message> - Ort: [Location]</Message>
+				// <Message> - Grund: [Reason]</Message>
+
+				execVerapdfSig = execVerapdfSig.replace("<Message> - ", "");
+				execVerapdfSig = execVerapdfSig.replace("<Message>", "");
+				execVerapdfSig = execVerapdfSig.replace("</Message>", "");
+				execVerapdfSig = execVerapdfSig.replace("\t", "");
+				execVerapdfSig = execVerapdfSig.replaceAll("\n", "</info>\n").replaceAll("\r", "");
+				execVerapdfSig = execVerapdfSig.replace("            ", "");
+
+				execVerapdfSig = execVerapdfSig.replace("Metadaten der Signatur",
+						"<mSignature label=\"Metadaten der Signatur");
+				execVerapdfSig = execVerapdfSig.replace("[verapdf]</info>", "[verapdf]\">");
+				execVerapdfSig = execVerapdfSig.replace("Zeitpunkt der Unterschrift (Anbringen Signatur): ",
+						"<info label=\"Zeitpunkt der Unterschrift (Anbringen Signatur):\">");
+				execVerapdfSig = execVerapdfSig.replace("Name: ", "<info label=\"Name:\">");
+				execVerapdfSig = execVerapdfSig.replace("Ort: ", "<info label=\"Ort:\">");
+				execVerapdfSig = execVerapdfSig.replace("Grund: ", "<info label=\"Grund:\">");
+
+				Util.oldnewstringAll("<mSignatureInfo>", execVerapdfSig, xmlFile);
+				Util.oldnewstringAll("</mSignatureInfo>", "</mSignature>", xmlFile);
+
+				// <metadata label="Metadaten (veraPDF)">
+				// <mSignatureInfo></mSignatureInfo>
+				// </metadata>
+
+				// <metadata label="Metadaten (veraPDF)">
+				// <mSignature label="Metadaten der Signatur 1 [verapdf]">
+				// <info label="Zeitpunkt der Unterschrift (Anbringen Signatur):">[Date]
+				// </info><info label="Name:">[Name]
+				// </info><info label="Ort:">[Location]
+				// </info><info label="Grund:">[Reason]
+				// </info></mSignature>
+				// </metadata>
+
+			} catch (InterruptedException e) {
+				line = "XML Error";
+				System.out.println("Fehler beim auslesen der Signatur-Metadaten (InterruptedException: " + e + ")");
+			}
+
 			line = "XML OK";
 
 		} catch (FileNotFoundException e) {
