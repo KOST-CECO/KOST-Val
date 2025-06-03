@@ -169,6 +169,8 @@ public interface MessageConstants {
 
 	String ERROR_XML_UNKNOWN = "val.error.xml.unknown";
 	String ERROR_XML_OUTOFMEMORYERROR = "val.error.xml.outofmemoryerror";
+	String ERROR_XML_OUTOFMEMORYERRORMAIN = "val.error.xml.outofmemoryerrormain";
+	String ERROR_XML_STACKOVERFLOWERRORRMAIN = "val.error.xml.stackoverflowerrormain";
 	String ERROR_XML_OUTOFMEMORYMAIN = "val.error.xml.outofmemorymain";
 	String ERROR_XML_STACKOVERFLOWMAIN = "val.error.xml.stackoverflowmain";
 
@@ -211,7 +213,7 @@ public interface MessageConstants {
 	String MESSAGE_XML_C_WARNING_UNZIP1 = "val.message.xml.c.warning.unzip1";
 	String MESSAGE_XML_C_WARNING_UNZIP2 = "val.message.xml.c.warning.unzip2";
 	String MESSAGE_XML_C_INCORRECTZIP = "val.message.xml.c.incorrectzip";
-	
+
 	// Modul D Meldungen
 	String MESSAGE_XML_D_INVALID_FOLDER = "val.message.xml.d.invalid.folder";
 	String MESSAGE_XML_D_MISSING_FOLDER = "val.message.xml.d.missing.folder";

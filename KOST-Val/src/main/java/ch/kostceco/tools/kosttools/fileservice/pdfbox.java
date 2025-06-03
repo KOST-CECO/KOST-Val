@@ -16,7 +16,9 @@
 
 package ch.kostceco.tools.kosttools.fileservice;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import org.apache.pdfbox.Loader;
@@ -45,6 +47,38 @@ public class pdfbox {
 			resultExec = resultExec.replaceAll("\n", "__");
 
 			// System.out.println( resultExec );
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return resultExec;
+	}
+
+	/**
+	 * Extrahiert den Text einer PDF-Datei und gibt das Ergebnis als String und
+	 * Datei zurueck
+	 * 
+	 * @param pdfFile PDF-Datei, welche ausgelesen werden soll
+	 * @return Textdatei mit Text aus dem PDF
+	 */
+	public static String getTxtPdfbox(File pdfFile, File txtFile) throws InterruptedException {
+		String resultExec = "NoTextInPdf";
+
+		try {
+			File file = pdfFile;
+			PDDocument pdDoc = Loader.loadPDF(file);
+			PDFTextStripper pdfStripper = new PDFTextStripper();
+			resultExec = pdfStripper.getText(pdDoc);
+			resultExec = resultExec.replaceAll(":\n\r", ": ");
+			resultExec = resultExec.replaceAll(": \n\r", ": ");
+			resultExec = resultExec.replaceAll("\n", "n3wL1n3").replaceAll("\r", "");
+
+			BufferedWriter writer = new BufferedWriter(new FileWriter(txtFile));
+			writer.write(resultExec);
+			writer.close();
+			// beim String werden die neuen Zeilen entfernt
+			resultExec = resultExec.replaceAll("n3wL1n3", "__");
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

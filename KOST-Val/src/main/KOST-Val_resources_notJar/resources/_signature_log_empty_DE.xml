@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<sigDocu>
+<files>
+<file></file>
+</files>
+<softwareInfos>
+<softwareInfo>
+<name>KOST-Val</name>
+<producer>KOST-CECO</producer>
+<version>KOST-Val</version>
+<disclaimer label="Disclaimer of Warranty (GENERAL PUBLIC LICENSE Version 3):">THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.  EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU.  SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.</disclaimer>
+</softwareInfo>
+<softwareInfo>
+<name>Diskreter Validator</name>
+<producer>Schweizerische Eidgenossenschaft</producer>
+<version>Diskreter Validator</version>
+<suffix label="Gueltigkeit einer Signatur">
+<sufA label="(A) Eine gueltige Signatur besitzt folgende Eigenschaften:">
+<sufMath>Alle Zertifikate in der Signatur wurden mathematisch geprueft.</sufMath>
+<sufKey>Es ist sichergestellt, dass der Unterzeichner den Schluessel seines Zertifikats fuer die Signatur verwendete.</sufKey>
+<sufPath>Der Zertifikatspfad jedes Zertifikats wurde geprueft. Dadurch wird die Echtheit des Zertifikats des Unterzeichners durch unabhaengige, vertrauenswuerdige Zertifikate bestaetigt.</sufPath>
+<sufSum>Das Zertifikat des Unterzeichners sowie alle uebergeordneten Zertifikate des Ausstellers waren zum Zeitpunkt der Signatur gueltig.</sufSum>
+</sufA>
+</suffix>
+<disclaimer label="Wichtige rechtliche Hinweise zur Pruefung">Diese Signaturpruefung wurde zum oben angegebenen Datum und Uhrzeit durchgefuehrt und bestaetigt die Richtigkeit der Angaben zum jeweiligen Zeitpunkt. Der Betreiber dieses Dienstes uebernimmt keine Gewaehr fuer die Angaben Dritter sowie die Unveraenderlichkeit dieses Berichts nach Speicherung, Ausdruck oder uebermittlung durch elektronische Medien. Das Ergebnis einer Verifikation einer Signatur beruht ausschliesslich auf der Auskunft des jeweiligen Ausstellers des Zertifikats, welches der Ersteller zur Erstellung der elektronischen Signatur verwendet hat. Es wird darauf hingewiesen, dass die Verifikation von Signaturen von der Verfuegbarkeit und technischen Kompatibilitaet von Auskunftsdiensten des jeweiligen Ausstellers des Zertifikats abhaengt, welches zur Erstellung der Signatur verwendet wurde. Um eine eindeutige und ueberpruefbare Zeitangabe zu ermoeglichen, entsprechen alle in diesem Verifikationsbericht angezeigten Zeitangaben der UTC Zeitzone. Diese Zeitangabe kann von der jeweiligen gesetzlich gueltigen Lokalzeit abweichen.</disclaimer>
+</softwareInfo>
+<softwareInfo>
+<name>veraPDF</name>
+<producer>veraPDF consortium</producer>
+<version>veraPDF</version>
+<disclaimer label="Disclaimer of Warranty (GENERAL PUBLIC LICENSE Version 3):">THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.  EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU.  SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.</disclaimer>
+</softwareInfo>
+</softwareInfos>
+<configuration>
+<Mandant></Mandant>
+</configuration>
+</sigDocu>

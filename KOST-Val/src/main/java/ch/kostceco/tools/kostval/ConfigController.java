@@ -128,9 +128,8 @@ public class ConfigController {
 	private WebView wbv;
 
 	private WebEngine engine;
-	
-	private String versionKostVal = "   (v2.3.0.1)";
 
+	private String versionKostVal = "   (v2.3.0.2)";
 
 	@FXML
 	void initialize() {
@@ -138,7 +137,7 @@ public class ConfigController {
 		// TODO --> initialize (wird einmalig am Anfang ausgefuehrt)
 
 		// Copyright ausgeben
-		labelConfig.setText("Copyright © KOST/CECO" );
+		labelConfig.setText("Copyright © KOST/CECO");
 
 		// Original Config Kopieren
 		try {

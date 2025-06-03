@@ -138,6 +138,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 		if (onWork.equals("nomin")) {
 			min = true;
 		}
+
+		String xmlFileName = logFile.getAbsolutePath().replace(".kost-val.log", ".signature.log");
+		File xmlFile = new File(xmlFileName);
+
 		// Create object
 		PdfValidatorAPI docPdf = null;
 
@@ -378,8 +382,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 		 */
 		String egovdvMsg = "";
 		try {
-			egovdvMsg = Controllervalfofile.valFoFileEgodv(valDatei, directoryOfLogfile, dirOfJarPath, configMap,
-					locale);
+			egovdvMsg = Controllervalfofile.valFoFileEgodv(valDatei, directoryOfLogfile, xmlFile, dirOfJarPath,
+					configMap, locale);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 			System.out.println("Fehler beim auslesen der config (pdfa)");

@@ -1,0 +1,24 @@
+<file>
+<header label="Pruefbericht fuer elektronische Signaturen">
+<hDate label="Datum/Zeit der Pruefung:"></hDate>
+<hName label="Angaben der pruefenden Person:"></hName>
+<hInfo>Die Eingabe dieser Informationen ist nicht Teil des Validierungsprozesses und unterliegt weder einer Ueberpruefung noch einer Bestaetigung.</hInfo>
+<hFilename label="Name der signierten Datei:"></hFilename>
+<hFilehash label="Hash der Datei (SHA-256):"></hFilehash>
+<hReportinfo>Der Validator prueft, ob die in einem Dokument enthaltenen Signaturen den fuer die Pruefung auszuwaehlenden Kriterien entsprechen. Die Kriterien koennen sich auf die Gueltigkeit des Dokuments als Ganzes (z. B. gueltiger Strafregisterauszug) oder auf die Gueltigkeit aller darin enthaltenen Unterschriften beziehen (z.B . qualifiziert signiertes Dokument).</hReportinfo>
+</header>
+<summary label="Zusammenfassung der Dokumentpruefung">
+<sMandant></sMandant>
+<sCert></sCert>
+</summary>
+<checks label="Folgende Pruefungen wurden durchgefuehrt:">
+<cChange></cChange>
+<cSigValid></cSigValid>
+<cSigRev></cSigRev>
+<cTime></cTime>
+<cSigLtv></cSigLtv>
+</checks>
+<signatures label="Anzahl Signaturen im Dokument: 99">
+<signature></signature>
+</signatures>
+</file>

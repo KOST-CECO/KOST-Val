@@ -71,6 +71,8 @@ public class verapdf {
 		/*
 		 * Aktualisieren von verapdf =========================
 		 * 
+		 * TODO: Version in egovdv.java eintragen
+		 * 
 		 * herunterladen von verapdf-gf-installer.zip auf der Seite
 		 * https://software.verapdf.org/dev/
 		 * 
@@ -300,7 +302,8 @@ public class verapdf {
 					// Signaturzaehler erhoehen
 					countSig++;
 					// line mit <signature> wird behalten
-					sb.append("<Message></Message><Message>Metadaten der Signatur " + countSig + " [verapdf]</Message>");
+					sb.append(
+							"<Message></Message><Message>Metadaten der Signatur " + countSig + " [verapdf]</Message>");
 					sb.append("\r\n");
 				} else if (lineModif.contains("<name>")) {
 					// line mit <name> wird behalten
@@ -332,7 +335,8 @@ public class verapdf {
 
 			// log erstellen und uebersetzten
 			if (locale.toString().contains("fr")) {
-				verapdfSigMetadata = verapdfSigMetadata.replace("Metadaten der Signatur","Metadonnees de la signature");
+				verapdfSigMetadata = verapdfSigMetadata.replace("Metadaten der Signatur",
+						"Metadonnees de la signature");
 				verapdfSigMetadata = verapdfSigMetadata.replace("<signDate>",
 						"<Message> - Date de la signature (apposition de la signature) : ");
 				verapdfSigMetadata = verapdfSigMetadata.replace("</signDate>", "</Message>");
@@ -343,7 +347,7 @@ public class verapdf {
 				verapdfSigMetadata = verapdfSigMetadata.replace("<reason>", "<Message> - Raison : ");
 				verapdfSigMetadata = verapdfSigMetadata.replace("</reason>", "</Message>");
 			} else if (locale.toString().contains("it")) {
-				verapdfSigMetadata = verapdfSigMetadata.replace("Metadaten der Signatur","Metadati della firma");
+				verapdfSigMetadata = verapdfSigMetadata.replace("Metadaten der Signatur", "Metadati della firma");
 				verapdfSigMetadata = verapdfSigMetadata.replace("<signDate>",
 						"<Message> - Data della firma (apposizione della firma): ");
 				verapdfSigMetadata = verapdfSigMetadata.replace("</signDate>", "</Message>");
@@ -354,7 +358,7 @@ public class verapdf {
 				verapdfSigMetadata = verapdfSigMetadata.replace("<reason>", "<Message> - Motivo: ");
 				verapdfSigMetadata = verapdfSigMetadata.replace("</reason>", "</Message>");
 			} else if (locale.toString().contains("en")) {
-				verapdfSigMetadata = verapdfSigMetadata.replace("Metadaten der Signatur","Metadata of the signature");
+				verapdfSigMetadata = verapdfSigMetadata.replace("Metadaten der Signatur", "Metadata of the signature");
 				verapdfSigMetadata = verapdfSigMetadata.replace("<signDate>",
 						"<Message> - Date of signature (affixing signature): ");
 				verapdfSigMetadata = verapdfSigMetadata.replace("</signDate>", "</Message>");

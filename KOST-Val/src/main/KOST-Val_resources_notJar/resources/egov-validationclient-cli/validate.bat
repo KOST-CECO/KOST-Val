@@ -28,13 +28,10 @@ set DIRNAME=%~dp0
 if "%DIRNAME%" == "" set DIRNAME=.
 set APP_BASE_NAME=%~n0
 set APP_HOME=%DIRNAME%
-set JAVA_HOME=%DIRNAME%..\..\..\PackageHandler\PH2.8\jre
-@rem set JAVA_HOME=%DIRNAME%..\..\..\Liberica_JRE 
-@rem neuere JAVA funktiniert nicht in einem geschachtelten Java cmd
+set JAVA_HOME=%APP_HOME%/../../../Liberica_JRE
 
 @rem Add default JVM options here. You can also use JAVA_OPTS and VALIDATE_OPTS to pass JVM options to this script.
 set DEFAULT_JVM_OPTS= 
-@rem set DEFAULT_JVM_OPTS= -Djavax.net.ssl.trustStore=truststore.jks -Djavax.net.ssl.trustStorePassword=changeit -Djavax.net.ssl.trustStoreType=jks
 
 @rem Find java.exe
 if defined JAVA_HOME goto findJavaFromJavaHome
@@ -52,7 +49,8 @@ echo location of your Java installation.
 goto fail
 
 :findJavaFromJavaHome
-set JAVA_HOME=%JAVA_HOME:"=%
+@rem set JAVA_HOME=%JAVA_HOME:"=%
+set JAVA_HOME=%APP_HOME%/../../../Liberica_JRE
 set JAVA_EXE=%JAVA_HOME%/bin/java.exe
 
 if exist "%JAVA_EXE%" goto init

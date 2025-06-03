@@ -109,7 +109,7 @@ public class GuiController {
 
 	private String arg0, arg1, arg2, arg3 = "--xml", dirOfJarPath, initInstructionsDe, initInstructionsFr,
 			initInstructionsIt, initInstructionsEn;
-	private String versionKostVal = "2.3.0.1";
+	private String versionKostVal = "2.3.0.2";
 	/*
 	 * TODO: versionKostVal auch hier anpassen:
 	 * 
@@ -117,13 +117,15 @@ public class GuiController {
 	 *
 	 * 3) ConfigController (1x)
 	 * 
-	 * 4) Konfigurationsdatei (2x) inkl 4x xsl
+	 * 4) egovdv.java (1x)
 	 * 
-	 * 5) xsl der Logdatei
+	 * 5) Konfigurationsdatei (2x) inkl 4x xsl
 	 * 
-	 * 6) Start-Bild (make_exe) // TODO 2.3.0.1
+	 * 6) xsl der Logdatei
 	 * 
-	 * 7) launch_KOST-Val_exe.xml --> VersionInfo // TODO 2.3.0.1
+	 * 7) Start-Bild (make_exe) // TODO 2.3.0.2
+	 * 
+	 * 8) launch_KOST-Val_exe.xml --> VersionInfo // TODO 2.3.0.2
 	 */
 
 	/*
