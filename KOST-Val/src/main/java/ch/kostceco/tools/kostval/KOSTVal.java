@@ -267,7 +267,9 @@ public class KOSTVal implements MessageConstants {
 				Logtxt.logtxt(logFile, "</Format>");
 
 				if (sigDoku.equals("yes")) {
+					if (xmlFile.exists()) {
 					Util.oldnewstringAll("<file></file>", "", xmlFile);
+					}
 				}
 
 				// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
@@ -286,6 +288,11 @@ public class KOSTVal implements MessageConstants {
 				File pathTemp = new File(directoryOfLogfile, "path.tmp");
 				if (pathTemp.exists()) {
 					Util.deleteFile(pathTemp);
+				}
+				String pathToWorkDirOut1Temp = directoryOfLogfile.getAbsolutePath() + File.separator + "OUTPUT-Temp";
+				File fileToWorkDirOut1Temp = new File(pathToWorkDirOut1Temp);
+				if (fileToWorkDirOut1Temp.exists()) {
+					Util.deleteDir(fileToWorkDirOut1Temp);
 				}
 
 				if (valFile.equals("countValid")) {
@@ -328,6 +335,11 @@ public class KOSTVal implements MessageConstants {
 				File pathTemp = new File(directoryOfLogfile, "path.tmp");
 				if (pathTemp.exists()) {
 					Util.deleteFile(pathTemp);
+				}
+				String pathToWorkDirOut1Temp = directoryOfLogfile.getAbsolutePath() + File.separator + "OUTPUT-Temp";
+				File fileToWorkDirOut1Temp = new File(pathToWorkDirOut1Temp);
+				if (fileToWorkDirOut1Temp.exists()) {
+					Util.deleteDir(fileToWorkDirOut1Temp);
 				}
 
 				if (valFolder) {

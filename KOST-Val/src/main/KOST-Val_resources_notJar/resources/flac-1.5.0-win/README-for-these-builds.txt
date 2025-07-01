@@ -1,4 +1,4 @@
-This package contains Windows builds of FLAC 1.4.3
+This package contains Windows builds of FLAC 1.5.0
 
 The directories Win32 and Win64 contain 32-bit and 64-bit builds
 respectively. Each directory contains flac.exe, metaflac.exe,

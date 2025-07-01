@@ -136,6 +136,9 @@
 		</siardversion>
 		<lobExtension>Error </lobExtension> <!--Warning / Error -->
 		<lobAzepted>Check </lobAzepted> <!--"" / Check -->
+		<siardrep>no </siardrep> <!--no / yes -->
+		<siardlobrep>no </siardlobrep> <!--no / yes -->
+		<siardrowsrep>no </siardrowsrep> <!--no / yes -->
 	</siard>
 	<csv>
 		<csvvalidation>(&#x2713;)</csvvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
@@ -183,7 +186,7 @@
 		<othervalidation></othervalidation>
 	</otherformats>
 	<egovdv>
-		<egovdvvalidation>&#x2717;</egovdvvalidation>
+		<egovdvvalidation>&#x2717;</egovdvvalidation><!--&#x2717; = keine Pruefung / &#x2713; = Signaturen pruefen -->
 		<Institut></Institut>
 		<sigDoku>no</sigDoku>
 		<Mandant>

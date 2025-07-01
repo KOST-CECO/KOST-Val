@@ -701,6 +701,18 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 			String lobAzepted = doc.getElementsByTagName("lobAzepted").item(0).getTextContent().replace(" ", "");
 			configMap.put("lobAzepted", lobAzepted);
 
+			// <siardrep>no </siardrep> <!--no / yes -->
+			String siardrep = doc.getElementsByTagName("siardrep").item(0).getTextContent().replace(" ", "");
+			configMap.put("siardrep", siardrep);
+
+			// <siardlobrep>no </siardlobrep> <!--no / yes -->
+			String siardlobrep = doc.getElementsByTagName("siardlobrep").item(0).getTextContent().replace(" ", "");
+			configMap.put("siardlobrep", siardlobrep);
+
+			// <siardrowsrep>no </siardrowsrep> <!--no / yes -->
+			String siardrowsrep = doc.getElementsByTagName("siardrowsrep").item(0).getTextContent().replace(" ", "");
+			configMap.put("siardrowsrep", siardrowsrep);
+
 			// Gibt an ob csv akzeptiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
 			String azCsv = "<csvvalidation>(&#x2713;)</csvvalidation>";

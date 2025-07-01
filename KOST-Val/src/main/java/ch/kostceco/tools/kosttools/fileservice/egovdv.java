@@ -1179,6 +1179,56 @@ public class egovdv {
 				System.out.println("Fehler beim auslesen der Signatur-Metadaten (InterruptedException: " + e + ")");
 			}
 
+// Konfiguration (Mandant) eintragen
+			String Mixed = configMap.get("Mixed");
+			String Qualified = configMap.get("Qualified");
+			String SwissGovPKI = configMap.get("SwissGovPKI");
+			String Upregfn = configMap.get("Upregfn");
+			String Siegel = configMap.get("Siegel");
+			String Amtsblattportal = configMap.get("Amtsblattportal");
+			String Edec = configMap.get("Edec");
+			String ESchKG = configMap.get("ESchKG");
+			String FederalLaw = configMap.get("FederalLaw");
+			String Strafregisterauszug = configMap.get("Strafregisterauszug");
+			String KantonZugFinanzdirektion = configMap.get("KantonZugFinanzdirektion");
+
+			if (Mixed == "yes") {
+				Util.oldnewstringAll("<Mixed>no</Mixed>", "<Mixed>yes</Mixed>", xmlFile);
+			}
+			if (Qualified == "yes") {
+				Util.oldnewstringAll("<Qualified>no</Qualified>", "<Qualified>yes</Qualified>", xmlFile);
+			}
+			if (SwissGovPKI == "yes") {
+				Util.oldnewstringAll("<SwissGovPKI>no</SwissGovPKI>", "<SwissGovPKI>yes</SwissGovPKI>", xmlFile);
+			}
+			if (Upregfn == "yes") {
+				Util.oldnewstringAll("<Upregfn>no</Upregfn>", "<Upregfn>yes</Upregfn>", xmlFile);
+			}
+			if (Siegel == "yes") {
+				Util.oldnewstringAll("<Siegel>no</Siegel>", "<Siegel>yes</Siegel>", xmlFile);
+			}
+			if (Amtsblattportal == "yes") {
+				Util.oldnewstringAll("<Amtsblattportal>no</Amtsblattportal>", "<Amtsblattportal>yes</Amtsblattportal>",
+						xmlFile);
+			}
+			if (Edec == "yes") {
+				Util.oldnewstringAll("<Edec>no</Edec>", "<Edec>yes</Edec>", xmlFile);
+			}
+			if (ESchKG == "yes") {
+				Util.oldnewstringAll("<ESchKG>no</ESchKG>", "<ESchKG>yes</ESchKG>", xmlFile);
+			}
+			if (FederalLaw == "yes") {
+				Util.oldnewstringAll("<FederalLaw>no</FederalLaw>", "<FederalLaw>yes</FederalLaw>", xmlFile);
+			}
+			if (Strafregisterauszug == "yes") {
+				Util.oldnewstringAll("<Strafregisterauszug>no</Strafregisterauszug>",
+						"<Strafregisterauszug>yes</Strafregisterauszug>", xmlFile);
+			}
+			if (KantonZugFinanzdirektion == "yes") {
+				Util.oldnewstringAll("<KantonZugFinanzdirektion>no</KantonZugFinanzdirektion>",
+						"<KantonZugFinanzdirektion>yes</KantonZugFinanzdirektion>", xmlFile);
+			}
+
 			line = "XML OK";
 
 		} catch (FileNotFoundException e) {

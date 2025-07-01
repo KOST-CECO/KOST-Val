@@ -20,6 +20,11 @@ package ch.kostceco.tools.kostval.validation.modulesiard.impl;
 
 import java.io.File;
 import java.util.Map;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,7 +39,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.helpers.XMLReaderFactory;
+//import org.xml.sax.helpers.XMLReaderFactory;
 
 import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationFrowException;
@@ -338,12 +343,16 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 		Range range = new Range();
 		RangeHandler rangeHandler = new RangeHandler();
 		try {
-			reader = XMLReaderFactory.createXMLReader();
+			// deprecated: reader = XMLReaderFactory.createXMLReader();
+			SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+			parserFactory.setNamespaceAware(true);
+			SAXParser parser = parserFactory.newSAXParser();
+			reader = parser.getXMLReader();
 			reader.setFeature("http://xml.org/sax/features/validation", false);
 			reader.setFeature("http://apache.org/xml/features/validation/schema", false);
 			reader.setContentHandler(rangeHandler);
 			reader.parse(new InputSource(new FileInputStream(xsdFile)));
-		} catch (SAXException e) {
+		} catch (SAXException | ParserConfigurationException e) {
 			range = rangeHandler.getRange();
 		}
 		return range;

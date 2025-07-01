@@ -28,23 +28,41 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.compress.archivers.examples.Expander;
 import org.apache.commons.io.FileUtils;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.Namespace;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.transform.JDOMSource;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import ch.kostceco.tools.kosttools.fileservice.Xmllint;
+import ch.kostceco.tools.kosttools.util.Hash;
 import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kosttools.util.UtilZip;
 import ch.kostceco.tools.kosttools.util.Zip64Archiver;
@@ -71,6 +89,8 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 
 	private String records = "";
 	private String records0 = "";
+	private static Integer cRecInLine = 0;
+	private static Integer cEmptyRows =0;
 
 	@SuppressWarnings({ "resource", "unused" })
 	@Override
@@ -195,7 +215,7 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 			while (entries.hasMoreElements()) {
 				ZipEntry zEntry = entries.nextElement();
 				String fileName = zEntry.getName();
-				if (fileName.contains("record") && fileName.contains(".txt")) {
+				if (fileName.contains("record") && fileName.contains(".")) {
 					long fileSize = zEntry.getSize();
 					// TODO jeweils nur 10 Eintraege
 					if (fileSize == 0) {
@@ -654,7 +674,7 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 					 * 
 					 * Modul wiederholen aber extrahieren mit "enterag zip64"
 					 * 
-					 * TODO Dieses wird auch von SIARD Suite verwendet bei der erstellung dieser
+					 * TODO Dieses wird auch von SIARD Suite verwendet bei der Erstellung dieser
 					 * Dateien, dies birgt jedoch ein gewisses Risiko. Ensprechend Warnung
 					 * herausgeben und neue SIARD-Datei ertellen anhand der extrahierten Dateien.
 					 */
@@ -1018,10 +1038,507 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 				}
 			}
 		}
+
+		if ((configMap.get("siardrep").equals("yes"))) {
+			if ((configMap.get("siardrowsrep").equals("yes")) || (configMap.get("siardlobrep").equals("yes"))) {
+				// TODO: nur ausfuehren wenn gewuenscht
+				String pathToWorkDir = configMap.get("PathToWorkDir");
+				pathToWorkDir = pathToWorkDir + File.separator + "SIARD";
+				File metadataXml = new File(new StringBuilder(pathToWorkDir).append(File.separator).append("header")
+						.append(File.separator).append("metadata.xml").toString());
+				boolean emptyRows;
+				try {
+					emptyRows = Util.stringInFile("<rows />", metadataXml);
+					if (!emptyRows) {
+						emptyRows = Util.stringInFile("<rows/>", metadataXml);
+					}
+					if (!emptyRows) {
+						emptyRows = Util.stringInFile("<rows></rows>", metadataXml);
+					}
+					if (!emptyRows) {
+						emptyRows = Util.stringInFile("<rows> </rows>", metadataXml);
+					}
+					if (cRec > 0 || cRec0 > 0 || emptyRows) {
+						int cRecTot = cRec + cRec0;
+
+						String repairSiard = "Start";
+						repairSiard = doRepairSiard(valDatei, directoryOfLogfile, configMap, locale, logFile,
+								dirOfJarPath, cRecTot, emptyRows);
+
+						if (cRecInLine > 0 ) {
+							String siardPath = repairSiard.replace(".zip", ".siard");
+
+							File zipFile = new File(repairSiard);
+							File siardFile = new File(siardPath);
+							if (zipFile.exists()) {
+								Util.deleteFile(zipFile);
+							}
+							if (siardFile.exists()) {
+								Logtxt.logtxt(logFile,
+										getTextResourceService().getText(locale, MESSAGE_XML_REPAIR_SIARD)
+												+ getTextResourceService().getText(locale, MESSAGE_XML_REP_LOB,
+														valDatei, cRecTot, cRecInLine, siardFile.getAbsolutePath()));
+							}
+						}
+						if (emptyRows) {
+							String siardPath = repairSiard.replace(".zip", ".siard");
+
+							File zipFile = new File(repairSiard);
+							File siardFile = new File(siardPath);
+							if (zipFile.exists()) {
+								Util.deleteFile(zipFile);
+							}
+							if (siardFile.exists()) {
+								if (siardFile.exists()) {
+									Logtxt.logtxt(logFile,
+											getTextResourceService().getText(locale, MESSAGE_XML_REPAIR_SIARD)
+													+ getTextResourceService().getText(locale, MESSAGE_XML_REP_ROWS,
+															valDatei, cEmptyRows, siardFile.getAbsolutePath()));
+								}
+							}
+						}
+					}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 		return result;
 	}
 
+	private static String doRepairSiard(File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale, File logFile, String dirOfJarPath, int cRecTot, boolean emptyRows) {
+
+		/*
+		 * TODO - doRepairSiard
+		 * 
+		 * Reparatur von SIARD-Dateien mit unnoetigen lob-Dateien
+		 * 
+		 * Dies insbesondere bei der Verwendung von SIARD-Suite und MSQServer und
+		 * varchar(max)
+		 * 
+		 * Obwohl der Standard inline erlaubt, schreibt SIARDSuite alles in lob.
+		 * 
+		 * Das hat zur folge, dass alles nicht mehr lesbar ist, die Dateien riesig
+		 * werden und das Handling dadurch extrem erschwert wird.
+		 * 
+		 * Im Schnitt wird die Datei 99% kleiner.
+		 * 
+		 * <c1>1</c1> <c2 digest="8CD479FAC7B2CAE778FB7130AD5AAA43" digestType="MD5"
+		 * file="content/schema0/table0/lob1/record0.txt" length="7"/>
+		 * 
+		 * 
+		 * 
+		 * 1) extrahiertes in output kopieren
+		 * 
+		 * 2) wenn lenth <1000 dann integrieren (wenn unbekannt auslesen)
+		 * 
+		 * 3) lob-Datei mit digest kontrollieren
+		 * 
+		 * 4) wenn korrekt inhalt der lob mit digest, digestType, file und length
+		 * ersetzen
+		 */
+
+		cRecInLine = 0;
+
+		// Arbeitsverzeichnis wo das entpackte SIARD zur Reparatur liegt (Original)
+		String pathToWorkDir = configMap.get("PathToWorkDir");
+		File tmpDir = new File(pathToWorkDir + File.separator + "SIARD");
+
+		// Output-Arbeitsverzeichnis zur Reparatur erstellen
+		String name = valDatei.getName().replace(".siard", "");
+		String pathToWorkDirOut1Temp = directoryOfLogfile.getAbsolutePath() + File.separator + "OUTPUT-Temp";
+		File fileToWorkDirOut1Temp = new File(pathToWorkDirOut1Temp);
+		if (fileToWorkDirOut1Temp.exists()) {
+			Util.deleteDir(fileToWorkDirOut1Temp);
+		}
+		if (!fileToWorkDirOut1Temp.exists()) {
+			fileToWorkDirOut1Temp.mkdir();
+		}
+		String pathToWorkDirOutTemp = fileToWorkDirOut1Temp.getAbsolutePath() + File.separator + name;
+		File fileToWorkDirOutTemp = new File(pathToWorkDirOutTemp);
+		if (fileToWorkDirOutTemp.exists()) {
+			Util.deleteDir(fileToWorkDirOutTemp);
+		}
+		if (!fileToWorkDirOutTemp.exists()) {
+			fileToWorkDirOutTemp.mkdir();
+		}
+
+		// Output-Verzeichnis erstellen
+		File parentLog = new File(directoryOfLogfile.getParent());
+		String pathToWorkDirOut = parentLog.getAbsolutePath() + File.separator + "OUTPUT";
+		File fileToWorkDirOut = new File(pathToWorkDirOut);
+		if (!fileToWorkDirOut.exists()) {
+			fileToWorkDirOut.mkdir();
+		}
+		
+		// Zieldatei
+		File siardFile = new File(pathToWorkDirOut + File.separator + name + ".siard");
+		if (siardFile.exists()) {
+			// von einem vorherigen durchlauf
+			Util.deleteFile(siardFile);
+			Util.deleteDir(siardFile);
+		}
+
+		String doRepairSiard = "subStart";
+
+		try {
+			// 1) extrahiertes in output kopieren
+			Util.copyDir(tmpDir, fileToWorkDirOutTemp);
+
+			File metadataXml = new File(new StringBuilder(pathToWorkDirOutTemp).append(File.separator).append("header")
+					.append(File.separator).append("metadata.xml").toString());
+			InputStream fin = new FileInputStream(metadataXml);
+			SAXBuilder builder = new SAXBuilder();
+			org.jdom2.Document document = builder.build(fin);
+
+			/*
+			 * read the document and for each schema and table entry verify existence in
+			 * temporary extracted structure
+			 */
+			boolean version1 = FileUtils.readFileToString(metadataXml, "ISO-8859-1")
+					.contains("http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd");
+			boolean version2 = FileUtils.readFileToString(metadataXml, "ISO-8859-1")
+					.contains("http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd");
+			Namespace ns = Namespace.getNamespace("http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd");
+			if (version1) {
+				// ns = Namespace.getNamespace(
+				// "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+			} else if (version2) {
+				ns = Namespace.getNamespace("http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd");
+			}
+			// select schema elements and loop
+			List<Element> schemas = ((org.jdom2.Document) document).getRootElement().getChild("schemas", ns)
+					.getChildren("schema", ns);
+			for (Element schema : schemas) {
+				Element schemaFolder = schema.getChild("folder", ns);
+				File schemaPath = new File(new StringBuilder(pathToWorkDirOutTemp).append(File.separator)
+						.append("content").append(File.separator).append(schemaFolder.getText()).toString());
+				if (schemaPath.isDirectory()) {
+					if (schema.getChild("tables", ns) != null) {
+
+						Element[] tables = schema.getChild("tables", ns).getChildren("table", ns)
+								.toArray(new Element[0]);
+						for (Element table : tables) {
+							Element tableFolder = table.getChild("folder", ns);
+							File tablePath = new File(new StringBuilder(schemaPath.getAbsolutePath())
+									.append(File.separator).append(tableFolder.getText()).toString());
+							if (tablePath.isDirectory()) {
+								File tableXml = new File(new StringBuilder(tablePath.getAbsolutePath())
+										.append(File.separator).append(tableFolder.getText() + ".xml").toString());
+
+								if (configMap.get("siardrowsrep").equals("yes") && cRecTot > 0) {
+
+									// <c1>1</c1>
+									// <c2 digest="8CD479FAC7B2CAE778FB7130AD5AAA43" digestType="MD5"
+									// file="content/schema0/table0/lob1/record0.txt" length="7"/>
+
+									InputStream finTab = new FileInputStream(tableXml);
+									SAXBuilder builderTab = new SAXBuilder();
+									org.jdom2.Document documentTab = builderTab.build(finTab);
+
+									// select row elements and loop
+									List<Element> tableTab = ((org.jdom2.Document) documentTab).getRootElement()
+											.getChildren();
+									for (Element row : tableTab) {
+										List<Element> cells = row.getChildren();
+										for (int y = 0; y < cells.size(); y++) {
+											Element cell = cells.get(y);
+											String cellAttFile = "xy";
+											String cellAttDigest = "xy";
+											String cellAttDigestType = "xy";
+											String cellAttLength = "xy";
+
+											cellAttFile = cell.getAttributeValue("file");
+											cellAttDigest = cell.getAttributeValue("digest");
+											cellAttDigestType = cell.getAttributeValue("digestType");
+											cellAttLength = cell.getAttributeValue("length");
+
+											String cellAttFileS = cellAttFile + " ";
+											String cellAttDigestS = cellAttDigest + " ";
+											String cellAttDigestTypeS = cellAttDigestType + " ";
+											String cellAttLengthS = cellAttLength + " ";
+
+											if ((cellAttFileS).equals("null ")) {
+												// keine Aktion noetig
+											} else {
+												File lobFile = new File(
+														pathToWorkDirOutTemp + File.separator + cellAttFile);
+												// separate LOB
+
+												boolean replace = false;
+
+												// wenn lenth <1000 dann integrieren (wenn unbekannt auslesen)
+												if ((cellAttLengthS).equals("null ")) {
+													int lobStringLenth = Files
+															.readString(lobFile.toPath(), StandardCharsets.UTF_8)
+															.length();
+													if (lobStringLenth < 1000) {
+														if ((cellAttDigestS).equals("null ")
+																|| (cellAttDigestTypeS).equals("null ")) {
+															replace = true;
+														} else {
+															// digestType (MD5, SHA-1, or SHA-256)
+															String hashFile = "99";
+															if (cellAttDigestType.equalsIgnoreCase("md5")) {
+																hashFile = Hash.getMd5(lobFile);
+															} else if (cellAttDigestType.equalsIgnoreCase("sha-1")) {
+																hashFile = Hash.getSha1(lobFile);
+															} else if (cellAttDigestType.equalsIgnoreCase("sha-256")) {
+																hashFile = Hash.getSha256(lobFile);
+															}
+															if (hashFile
+																	.equalsIgnoreCase(cellAttDigest.toLowerCase())) {
+																replace = true;
+															}
+														}
+													}
+												} else {
+													int cellAttLengthInt = Integer.parseInt(cellAttLength);
+													// System.out.println("cellAttLength "+cellAttLength +"
+													// cellAttLengthInt
+													// "+cellAttLengthInt);
+													if (cellAttLengthInt < 1000) {
+														if ((cellAttDigestS).equals("null ")
+																|| (cellAttDigestTypeS).equals("null ")) {
+															replace = true;
+														} else {
+															// digestType (MD5, SHA-1, or SHA-256)
+															String hashFile = "99";
+															if (cellAttDigestType.equalsIgnoreCase("md5")) {
+																hashFile = Hash.getMd5(lobFile);
+															} else if (cellAttDigestType.equalsIgnoreCase("sha-1")) {
+																hashFile = Hash.getSha1(lobFile);
+															} else if (cellAttDigestType.equalsIgnoreCase("sha-256")) {
+																hashFile = Hash.getSha256(lobFile);
+															}
+															if (hashFile
+																	.equalsIgnoreCase(cellAttDigest.toLowerCase())) {
+																replace = true;
+															}
+														}
+													}
+												}
+												if (replace) {
+													String lobString = Files.readString(lobFile.toPath(),
+															StandardCharsets.UTF_8);
+													cell.setText(lobString);
+													cell.removeAttribute("file");
+													cell.removeAttribute("digest");
+													cell.removeAttribute("digestType");
+													cell.removeAttribute("length");
+
+													// Save xml writing the modified content into XML file
+													TransformerFactory transformerFactory = TransformerFactory
+															.newInstance();
+													Transformer transformer = transformerFactory.newTransformer();
+													FileOutputStream output = new FileOutputStream(
+															tableXml.getAbsolutePath());
+													JDOMSource source = new JDOMSource(documentTab);
+													StreamResult result = new StreamResult(output);
+													transformer.transform(source, result);
+													lobFile.delete();
+													cRecInLine++;
+												}
+											}
+										}
+									}
+									finTab.close();
+									// set to null
+									finTab = null;
+
+								}
+								if (configMap.get("siardrowsrep").equals("yes") && emptyRows) {
+									/*
+									 * teilweise wird rows in metadata.xml nicht befuellt (Fehler in F)
+									 * 
+									 * Nachfolgend wird dies in der neuen SIARD-Kopie behoben
+									 */
+									
+									// "<rows />
+									// "<rows/>"
+									// "<rows></rows>"
+									// <rows> </rows>"
+									
+									int cRow=0;
+
+									Element tableRows = table.getChild("rows", ns);
+									String rowsValue = tableRows.getValue();
+									if (rowsValue.isBlank() || rowsValue.isEmpty() || rowsValue.equals(" ")) {
+										cEmptyRows++;
+										// dies ist die passende tableXml
+										BufferedReader reader = new BufferedReader(new FileReader(tableXml));
+										String line = "";
+										while ((line = reader.readLine()) != null) {
+											if (line.contains("<row>")) {
+												cRow++;
+												}
+										}
+										reader.close();
+										tableRows.setText(cRow+"");
+										// Save xml writing the modified content into XML file
+										TransformerFactory transformerFactory = TransformerFactory
+												.newInstance();
+										Transformer transformer = transformerFactory.newTransformer();
+										FileOutputStream output = new FileOutputStream(
+												metadataXml.getAbsolutePath());
+										JDOMSource source = new JDOMSource(document);
+										StreamResult result = new StreamResult(output);
+										transformer.transform(source, result);
+									}
+								}
+							}
+						}
+					} else {
+						// kein Fehler sondern leeres Schema
+					}
+				}
+			}
+
+			fin.close();
+			// set to null
+			fin = null;
+
+		} catch (FileNotFoundException e) {
+			doRepairSiard = e.getMessage() + " (Repair: FileNotFoundException)";
+		} catch (IOException e) {
+			doRepairSiard = e.getMessage() + " (Repair: IOException)";
+		} catch (JDOMException e) {
+			doRepairSiard = e.getMessage() + " (Repair: JDOMException)";
+		} catch (InterruptedException e) {
+			doRepairSiard = e.getMessage() + " (Repair: InterruptedException)";
+		} catch (TransformerConfigurationException e) {
+			doRepairSiard = e.getMessage() + " (Repair: TransformerConfigurationException)";
+		} catch (TransformerException e) {
+			doRepairSiard = e.getMessage() + " (Repair: TransformerException)";
+		}
+
+		if (fileToWorkDirOutTemp.exists()) {
+			doRepairSiard = "Existiert";
+			if (cRecInLine > 0|| emptyRows) {
+				// Zippen mit "Apache Commons Compress"
+				// new Expander().expand(archive, destination);
+
+				File sourceDir = fileToWorkDirOutTemp;
+
+				File zipFile = new File(pathToWorkDirOut + File.separator + name + ".zip");
+				if (zipFile.exists()) {
+					// von einem vorherigen durchlauf
+					Util.deleteDir(zipFile);
+				}
+				if (siardFile.exists()) {
+					// von einem vorherigen durchlauf
+					Util.deleteFile(siardFile);
+					Util.deleteDir(siardFile);
+				}
+
+				mainCreateZip(sourceDir, zipFile, pathToWorkDirOutTemp);
+				if (zipFile.exists()) {
+					zipFile.renameTo(new File(pathToWorkDirOut + File.separator + name + ".siard"));
+					doRepairSiard = zipFile.getAbsolutePath();
+				}
+			} else {
+				doRepairSiard = "keine";
+			}
+		}
+		// Output-Arbeitsverzeichnis loeschen
+		if (fileToWorkDirOutTemp.exists()) {
+			Util.deleteDir(fileToWorkDirOutTemp);
+		}
+		if (fileToWorkDirOut1Temp.exists()) {
+			Util.deleteDir(fileToWorkDirOut1Temp);
+		}
+		if (fileToWorkDirOutTemp.exists()) {
+			Util.deleteDir(fileToWorkDirOutTemp);
+		}
+		if (fileToWorkDirOut1Temp.exists()) {
+			Util.deleteDir(fileToWorkDirOut1Temp);
+		}
+
+		return doRepairSiard;
+	}
+
+	public static void mainCreateZip(File sourceDir, File zipFile, String rootName) {
+		// TODO - mainCreateZip
+		String[] files = {};
+		String[] directories = { sourceDir.getAbsolutePath() };
+
+		try (FileOutputStream fos = new FileOutputStream(zipFile); ZipOutputStream zos = new ZipOutputStream(fos)) {
+
+			// Adding files
+			for (String file : files) {
+				Path filePath = Paths.get(file);
+				if (!Files.exists(filePath)) {
+					System.err.println("File does not exists: " + filePath);
+					// throw new FileNotFoundException("File does not exists: " + filePath);
+				}
+				addToZipFile(filePath, zos, rootName);
+			}
+
+			// Adding directories
+			for (String dir : directories) {
+				Path dirPath = Paths.get(dir);
+				if (!Files.exists(dirPath) || !Files.isDirectory(dirPath)) {
+					System.err.println("Directory does not exist: " + dirPath);
+					// throw new IOException("Directory does not exist: " + dirPath);
+				}
+
+				try {
+					List<Path> allPaths = new ArrayList<>();
+					Files.walk(dirPath).forEach(allPaths::add);
+
+					for (Path path : allPaths) {
+						File child = new File(path.toString());
+						if (!Files.isDirectory(path)) {
+							addToZipFile(path, zos, rootName);
+						} else if (child.isDirectory() && child.list().length == 0
+								&& !child.getName().contains("lob")) {
+							// leere Ordner anlegen (z.B. Version)
+							String pathStr = path.toString().replace("\\", "/");
+							rootName = rootName.replace("\\", "/");
+							// root Verzeichnis nicht schreiben
+							pathStr = pathStr.replace((rootName + "/"), "");
+							zos.putNextEntry(new ZipEntry(pathStr + "/"));
+							zos.closeEntry();
+						}
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+					System.err.println("Repair (ZIP): mainCreateZip) ");
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void addToZipFile(Path file, ZipOutputStream zos, String rootName) {
+		// TODO - addToZipFile
+		try (FileInputStream fis = new FileInputStream(file.toFile())) {
+			// Replace backslashes with forward slashes for compatibility
+			String zipEntryName = file.toString().replace("\\", "/");
+			rootName = rootName.replace("\\", "/");
+			// root Verzeichnis nicht schreiben
+			zipEntryName = zipEntryName.replace((rootName + "/"), "");
+
+			zos.putNextEntry(new ZipEntry(zipEntryName));
+
+			byte[] buffer = new byte[1024];
+			int len;
+			while ((len = fis.read(buffer)) > 0) {
+				zos.write(buffer, 0, len);
+			}
+			zos.closeEntry();
+		} catch (IOException e) {
+			System.err.println("Failed to zip file: " + file);
+			e.printStackTrace();
+		}
+	}
+
 	public static File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {
+		// TODO - newFile
 		File destFile = new File(destinationDir, zipEntry.getName());
 
 		String destDirPath = destinationDir.getCanonicalPath();

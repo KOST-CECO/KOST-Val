@@ -65,7 +65,7 @@ public class ConfigControllerDv {
 	private Label labelInstitut, labelVal, labelMessage, labelSigDoku, labelMandant, labelConfig, labelStar, labelStar1;
 
 	ObservableList<String> sizeInstitutList = FXCollections.observableArrayList("", "Staatsarchiv Aargau",
-			"Staatsarchiv Basel-Stadt", "Staatsarchiv Bern", "Staatsarchiv Graubünden", "Staatsarchiv Luzern",
+			"Staatsarchiv Basel-Stadt", "Staatsarchiv Bern", "Staatsarchiv Graubuenden", "Staatsarchiv Luzern",
 			"Staatsarchiv St. Gallen", "Staatsarchiv Thurgau", "Stadtarchiv Bern", "Stadtarchiv Luzern",
 			"Stadtarchiv St. Gallen", "Burgerbibliothek Bern");
 
@@ -77,18 +77,18 @@ public class ConfigControllerDv {
 	 * "", "andere", "Staatsarchiv Aargau", "Staatsarchiv Appenzell Ausserrhoden",
 	 * "Landesarchiv Appenzell Innerrhoden", "Staatsarchiv Basel-Land",
 	 * "Staatsarchiv Basel-Stadt", "Staatsarchiv Bern", "Staatsarchiv Freiburg",
-	 * "Archives de l'Etat de Genève", "Landesarchiv Glarus",
-	 * "Staatsarchiv Graubünden", "Archives cantonales jurassiennes",
-	 * "Staatsarchiv Luzern", "Archives de l'Etat de Neuchâtel",
+	 * "Archives de l'Etat de Geneve", "Landesarchiv Glarus",
+	 * "Staatsarchiv Graubuenden", "Archives cantonales jurassiennes",
+	 * "Staatsarchiv Luzern", "Archives de l'Etat de Neuchatel",
 	 * "Staatsarchiv Nidwalden", "Staatsarchiv Obwalden", "Staatsarchiv Solothurn",
 	 * "Staatsarchiv St. Gallen", "Staatsarchiv Schaffhausen",
 	 * "Staatsarchiv Schwyz", "Staatsarchiv Thurgau",
 	 * "Archivio di Stato del Cantone Ticino", "Staatsarchiv Uri",
 	 * "Archives cantonales vaudoises", "Archives de l'Etat du Valais",
-	 * "Staatsarchiv Zug", "Staatsarchiv Zürich", "Schweizerisches Bundesarchiv",
-	 * "Landesarchiv Fürstentum Liechtenstein", "Burgerbibliothek Bern",
+	 * "Staatsarchiv Zug", "Staatsarchiv Zuerich", "Schweizerisches Bundesarchiv",
+	 * "Landesarchiv Fuerstentum Liechtenstein", "Burgerbibliothek Bern",
 	 * "Stadtarchiv Bern", "Stadtarchiv Luzern", "Stadtarchiv St. Gallen",
-	 * "Stadtarchiv Zürich", "UZH Archiv", "KOST-Geschäftsstelle" );
+	 * "Stadtarchiv Zuerich", "UZH Archiv", "KOST-Geschaeftsstelle" );
 	 */
 
 	@FXML

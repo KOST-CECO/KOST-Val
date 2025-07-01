@@ -153,6 +153,8 @@ public interface MessageConstants {
 	String MESSAGE_XML_MODUL_Cc_SIP = "val.message.xml.modul.cc.sip";
 	String MESSAGE_XML_MODUL_Cd_SIP = "val.message.xml.modul.cd.sip";
 
+	String MESSAGE_XML_REPAIR_SIARD = "val.message.xml.repair.siard";
+
 	String MESSAGE_XML_MODUL_A_AZ = "val.message.xml.modul.a.az";
 	String ERROR_XML_A_AZ_INCORRECTFILE = "val.error.xml.a.az.incorrectfile";
 	String ERROR_XML_A_NOTAZ = "val.error.xml.a.notaz";
@@ -267,6 +269,10 @@ public interface MessageConstants {
 
 	// Modul W Meldungen
 	String MESSAGE_XML_W_WARNING_INITVALUE = "val.message.xml.w.warning.initvalue";
+	
+	// Modul Reparatur
+	String MESSAGE_XML_REP_LOB = "val.message.xml.rep.lob";
+	String MESSAGE_XML_REP_ROWS = "val.message.xml.rep.rows";
 
 	// *************PDFA-Meldungen*************************************************************************
 	// Modul A Meldungen

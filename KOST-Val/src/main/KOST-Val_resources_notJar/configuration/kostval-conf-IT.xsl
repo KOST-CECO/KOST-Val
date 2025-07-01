@@ -334,6 +334,24 @@
 							<xsl:value-of select="configuration/siard/lobAzepted" />
 						</td>
 					</tr>
+					<tr class="captioninfom">
+						<td>Creare una copia SIARD riparata [no]:</td>
+						<td>
+							<xsl:value-of select="configuration/siard/siardrep" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>- salvare piccoli file LOB inline [no]:</td>
+						<td>
+							<xsl:value-of select="configuration/siard/siardlobrep" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>- compilare il numero di rows in metadata.xml [no]:</td>
+						<td>
+							<xsl:value-of select="configuration/siard/siardrowsrep" />
+						</td>
+					</tr>
 
 					<tr class="captioninfo">
 						<td>CSV: Accettazione [(&#x2713;)]</td>
