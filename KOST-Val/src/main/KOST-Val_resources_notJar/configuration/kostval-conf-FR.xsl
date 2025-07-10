@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:template match="/">
-		<!-- kostval.conf.xml_v2.3.0.2 -->
+		<!-- kostval.conf.xml_v2.3.0.3 -->
 		<html>
 			<head>
 				<style>
@@ -329,7 +329,7 @@
 						</td>
 					</tr>
 					<tr class="captioninfom">
-						<td>Remarques sur les formats de fichiers non acceptés [Azepted]:</td>
+						<td>Remarques sur les formats de fichiers non acceptés [Error]:</td>
 						<td>
 							<xsl:value-of select="configuration/siard/lobAzepted" />
 						</td>

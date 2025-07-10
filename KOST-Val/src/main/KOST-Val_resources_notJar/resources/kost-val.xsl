@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	<xsl:template match="/"><!-- kost-val.xsl_v2.3.0.2 -->
+	<xsl:template match="/"><!-- kost-val.xsl_v2.3.0.3 -->
 		<html>
 			<head>
 				<style>
@@ -146,6 +146,25 @@
 									</td>
 								</tr>
 							</xsl:for-each>
+						</table>
+					</div>
+					<br/>
+				</xsl:for-each>
+				<xsl:for-each select="KOSTValLog/Format/Validation/PdfToolsWarning">
+					<div>
+						<table width="100%">
+							<tr class="captionwarn">
+								<td>
+									<xsl:value-of select="Message"/>
+								</td>
+							</tr>
+						</table>
+						<table width="100%">
+							<tr class="captionwarnm">
+								<td>
+									<xsl:value-of select="MessageD"/>
+								</td>
+							</tr>
 						</table>
 					</div>
 					<br/>
@@ -342,7 +361,7 @@
 						<br/>
 					</xsl:if>
 				</xsl:for-each>
-				<h2>Warning:</h2>
+				<h2>Warning (Valid):</h2>
 				<xsl:for-each select="KOSTValLog/Format/Validation">
 					<xsl:if test="(Warning) and ((Valid) or (Accepted))">
 						<div>

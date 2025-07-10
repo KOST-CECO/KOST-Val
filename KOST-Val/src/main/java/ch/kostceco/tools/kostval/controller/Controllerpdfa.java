@@ -76,26 +76,39 @@ public class Controllerpdfa implements MessageConstants {
 			Locale locale, File logFile, String dirOfJarPath) {
 		boolean valid = true;
 
-		// Initialisation PDF-Tools
-		try {
-			if (this.getValidationAinitialisationModule().validate(valDatei, directoryOfLogfile, configMap, locale,
-					logFile, dirOfJarPath)) {
-				this.getValidationAinitialisationModule().getMessageService().print();
-			} else {
+		String pdftoolsConfig = configMap.get("pdftools");
+
+		/*
+		 * Nicht vergessen in
+		 * "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property
+		 * name="configurationService" ref="configurationService" />
+		 */
+
+		if (pdftoolsConfig.contentEquals("yes")) {
+
+			// Initialisation PDF-Tools
+			try {
+				if (this.getValidationAinitialisationModule().validate(valDatei, directoryOfLogfile, configMap, locale,
+						logFile, dirOfJarPath)) {
+					this.getValidationAinitialisationModule().getMessageService().print();
+				} else {
+					this.getValidationAinitialisationModule().getMessageService().print();
+					return false;
+				}
+			} catch (ValidationApdfavalidationException e) {
+				Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+						+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage() + " init1"));
 				this.getValidationAinitialisationModule().getMessageService().print();
 				return false;
+			} catch (Exception e) {
+				Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+						+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage() + " init2"));
+				return false;
 			}
-		} catch (ValidationApdfavalidationException e) {
-			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage() + " init1"));
-			this.getValidationAinitialisationModule().getMessageService().print();
-			return false;
-		} catch (Exception e) {
-			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage() + " init2"));
-			return false;
+		} else {
+			valid = true;
 		}
-
 		return valid;
 
 	}

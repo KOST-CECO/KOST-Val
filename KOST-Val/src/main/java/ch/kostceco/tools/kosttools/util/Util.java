@@ -434,6 +434,10 @@ public class Util {
 			// set to null
 			reader = null;
 			String newtext = oldtext.replace("<End></End>", stringEnd);
+			// PdfToolsWarning
+			String cPT= UtilPages.getPagesFinal();
+			newtext = newtext.replace(" >72000 ", " "+cPT+" ");
+			// sonstige Bereinigungen
 			newtext = newtext.replace("<Message>3c</Message></Error>", string3c);
 			newtext = newtext.replace("&", "&amp;");
 			newtext = newtext.replace("<http", "&lt;http");
@@ -466,7 +470,7 @@ public class Util {
 			writer.close();
 			// set to null
 			writer = null;
-		} catch (IOException ioe) {
+		} catch (Exception ioe) {
 			ioe.printStackTrace();
 		}
 	}

@@ -15,7 +15,7 @@
 	<classpathentry kind="lib" path="lib/badpeggy-2.0.jar" sourcepath="external-sources/badpeggy-2.0-sources.jar"/>
 	<classpathentry kind="lib" path="lib/greenfield-apps-1.29.61.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-2.0.6.1.jar" sourcepath="KOST-Val/external-sources/jdom-2.0.6.1-sources.jar"/>
-	<classpathentry kind="lib" path="lib/jhove-apps-1.32.0.jar"/>
+	<classpathentry kind="lib" path="lib/jhove-apps-1.34.0.jar"/>
 	<classpathentry kind="lib" path="lib/pdfbox-app-3.0.5.jar"/>
 	<classpathentry kind="lib" path="lib/spring-aop-6.2.7.jar"/>
 	<classpathentry kind="lib" path="lib/spring-beans-6.2.7.jar"/>

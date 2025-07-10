@@ -309,8 +309,8 @@ public class ConfigControllerSiard {
 	@FXML
 	void changeLobAzepted(ActionEvent event) {
 		labelMessage.setText("");
-		String yes = "<lobAzepted>Check </lobAzepted>";
-		String no = "<lobAzepted></lobAzepted>";
+		String yes = "<lobAzepted>Error </lobAzepted>";
+		String no = "<lobAzepted>Warning </lobAzepted>";
 		try {
 			if (checkLobExtension.isSelected()) {
 				Util.oldnewstring(no, yes, configFile);
