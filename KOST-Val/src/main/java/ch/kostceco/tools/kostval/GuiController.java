@@ -57,7 +57,11 @@ import javafx.print.Paper;
 import javafx.print.Printer;
 import javafx.print.PrinterJob;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
@@ -558,18 +562,22 @@ public class GuiController {
 		String strHeaderText = "Wählen Sie einen Drucker aus den verfügbaren Druckern";
 		String strTitle = "Druckerauswahl";
 		String strNoPrinter = "Kein Drucker. Es ist kein Drucker auf Ihrem System installiert.";
+		String printed = "Log-Datei wurde erfolgreich gedruckt.";
 		if (locale.toString().startsWith("fr")) {
 			strHeaderText = "Choisissez une imprimante parmi les imprimantes disponibles";
 			strTitle = "Choix de l'imprimante";
 			strNoPrinter = "Pas d'imprimante. Aucune imprimante n'est installée sur votre système";
+			printed = "Le fichier journal a ete imprime avec succes.";
 		} else if (locale.toString().startsWith("en")) {
 			strHeaderText = "Choose a printer from available printers";
 			strTitle = "Printer Choice";
 			strNoPrinter = "No printer. There is no printer installed on your system.";
+			printed = "Log file was printed successfully.";
 		} else if (locale.toString().startsWith("it")) {
 			strHeaderText = "Selezionare una stampante tra quelle disponibili.";
 			strTitle = "Selezione della stampante";
 			strNoPrinter = "Nessuna stampante. Non c'è nessuna stampante installata sul sistema.";
+			printed = "Il file di registro e stato stampato con successo.";
 		}
 		if (printerToUse != null) {
 
@@ -599,12 +607,15 @@ public class GuiController {
 				if (job != null) {
 					engine.print(job);
 					job.endJob();
+					System.out.println();
+					System.out.println(printed);
 				}
 			} else {
 				// System.out.println("Kein Drucker ausgewaehlt. [Abbrechen]
 				// gedrueckt");
 			}
 		} else {
+			System.out.println();
 			System.out.println(strNoPrinter);
 		}
 	}
@@ -615,37 +626,183 @@ public class GuiController {
 	 */
 	@FXML
 	void saveLog(ActionEvent e) {
+		Boolean saved = false;
+		Boolean doSave = false;
 		console.setText(" \n");
-		try {
-			DirectoryChooser folderChooser = new DirectoryChooser();
-			String copy = "Kopiere ";
-			if (locale.toString().startsWith("fr")) {
-				folderChooser.setTitle("Choisissez le dossier dans lequel le log doit être sauvegardé");
-				copy = "Copie ";
-			} else if (locale.toString().startsWith("en")) {
-				folderChooser.setTitle("Choose the folder where the log should be saved");
-				copy = "Copy ";
-			} else if (locale.toString().startsWith("it")) {
-				folderChooser.setTitle("Selezionare la directory in cui salvare il registro.");
-				copy = "Copia ";
+		DirectoryChooser folderChooser = new DirectoryChooser();
+		String copy = "Kopiere ";
+		String text1 = "Log in den Ordner \"";
+		String text2 = "\" speichern?";
+		String buttonSave = "Speichern";
+		String buttonCancel = "Abbrechen";
+		String noFile1 = "Die Datei ";
+		String noFile2 = " existiert nicht.";
+		String titelError = "Fehler beim Speichern";
+		String txtError = "Log konnte nicht gesichert werden.";
+		String titelWarning = "Abbruch beim Speichern";
+		String txtWarning = "Speichern abgebrochen. Wählen Sie einen Ordner und bestätigen sie es.";
+		String txtDetail = "";
+		String info = "Wählen Sie den Ordner in welcher der Log gespeichert werden soll";
+		if (locale.toString().startsWith("fr")) {
+			info = "Choisissez le dossier dans lequel le log doit être sauvegardé";
+			copy = "Copie ";
+			text1 = "Enregistrer le journal dans le dossier \"";
+			text2 = "\" ?";
+			buttonSave = "Enregistrer";
+			buttonCancel = "Annuler";
+			noFile1 = "Le fichier ";
+			noFile2 = " n`existe pas.";
+			titelError = "Erreur lors de la sauvegarde";
+			txtError = "Le journal n'a pas pu être sauvegardé";
+			titelWarning = "Enregistrement interrompu";
+			txtWarning = "Enregistrement interrompu. Sélectionnez un dossier et confirmez";
+		} else if (locale.toString().startsWith("en")) {
+			info = "Choose the folder where the log should be saved";
+			copy = "Copy ";
+			text1 = "Save log to folder \"";
+			text2 = "\" ?";
+			buttonSave = "Save";
+			buttonCancel = "Cancel";
+			noFile1 = "The file ";
+			noFile2 = " does not exist.";
+			titelError = "Error saving";
+			txtError = "Log could not be saved.";
+			titelWarning = "Cancel save";
+			txtWarning = "Save canceled. Select a folder and confirm.";
+		} else if (locale.toString().startsWith("it")) {
+			info = "Selezionare la directory in cui salvare il registro.";
+			copy = "Copia ";
+			text1 = "Salva il registro nella cartella \"";
+			text2 = "\" ?";
+			buttonSave = "Salva";
+			buttonCancel = "Annulla";
+			noFile1 = "Il file ";
+			noFile2 = " non esiste.";
+			titelError = "Errore nel salvataggio";
+			txtError = "Non è stato possibile salvare il registro";
+			titelWarning = "Annullamento del salvataggio";
+			txtWarning = "Salvataggio annullato. Selezionare una cartella e confermare";
+		}
+		folderChooser.setTitle(info);
+
+		Alert alertInfo = new Alert(AlertType.INFORMATION);
+		alertInfo.setTitle(info);
+		alertInfo.setHeaderText(null);
+		alertInfo.setContentText(info);
+		alertInfo.initStyle(StageStyle.UTILITY);
+		alertInfo.showAndWait();
+
+		File saveFolder = null;
+		saveFolder = folderChooser.showDialog(new Stage());
+
+		if (saveFolder != null) {
+
+			// doSave einholen (Benutzer wollen speichern druecken)
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle(buttonSave + "?");
+			// alert.setHeaderText("Log in den Ordner "+saveFolder.getAbsolutePath() +"
+			// speichern");
+			alert.setHeaderText(null);
+			alert.setContentText(text1 + saveFolder.getAbsolutePath() + text2);
+
+			ButtonType buttonTypeSave = new ButtonType(buttonSave);
+			ButtonType buttonTypeCancel = new ButtonType(buttonCancel, ButtonData.CANCEL_CLOSE);
+			alert.initStyle(StageStyle.UTILITY);
+			alert.getButtonTypes().setAll(buttonTypeSave, buttonTypeCancel);
+
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == buttonTypeSave) {
+				// speichern
+				doSave = true;
 			} else {
-				folderChooser.setTitle("Wählen Sie den Ordner in welcher der Log gespeichert werden soll");
-				copy = "Kopiere ";
+				// Abgebrochen oder geschlossen
+				doSave = false;
 			}
-			File saveFolder = folderChooser.showDialog(new Stage());
-			if (saveFolder != null) {
+		}
+
+		if (!doSave) {
+			Alert alertWarning = new Alert(AlertType.WARNING);
+			alertWarning.setTitle(titelWarning);
+			alertWarning.setHeaderText(null);
+			alertWarning.setContentText(txtWarning);
+			alertWarning.initStyle(StageStyle.UTILITY);
+			alertWarning.showAndWait();
+		}
+
+		if (saveFolder != null && doSave) {
+
+			// checken ob schreibrechte
+			if (saveFolder.canWrite()) {
+				// checken ob beide zu kopierende Dateien existieren
 				File logFileXsl = new File(System.getenv("USERPROFILE") + File.separator + ".kost-val_2x"
 						+ File.separator + "logs" + File.separator + "kost-val.xsl");
 				File logFileXslNew = new File(saveFolder.getAbsolutePath() + File.separator + "kost-val.xsl");
 				File logFileNew = new File(saveFolder.getAbsolutePath() + File.separator + logFile.getName());
-				Util.copyFile(logFileXsl, logFileXslNew);
+
+				if (!logFile.exists()) {
+					System.out.println();
+					txtDetail = noFile1 + logFile.getAbsolutePath() + noFile2;
+					System.out.println(txtDetail);
+				} else if (!logFileXsl.exists()) {
+					System.out.println();
+					txtDetail = noFile1 + logFileXsl.getAbsolutePath() + noFile2;
+					System.out.println(txtDetail);
+				} else {
+					try {
+						System.out.println();
+						System.out.print(copy);
+						Util.copyFile(logFileXsl, logFileXslNew);
+						System.out.println(logFileXsl.getAbsolutePath() + " > " + logFileXslNew.getAbsolutePath());
+						Util.copyFile(logFile, logFileNew);
+						System.out.println(copy + logFile.getAbsolutePath() + " > " + logFileNew.getAbsolutePath());
+						saved = true;
+					} catch (IOException eSave) {
+						eSave.printStackTrace();
+						System.out.println();
+						System.out.println("IOException - GuiController - saveLog");
+						saved = false;
+					}
+					// am schluss schauen ob die Dateien kopiert wurden
+					if (!logFileXslNew.exists()) {
+						System.out.println();
+						txtDetail = noFile1 + logFileXslNew.getAbsolutePath() + noFile2;
+						System.out.println(txtDetail);
+						saved = false;
+					}
+					if (!logFileNew.exists()) {
+						System.out.println();
+						txtDetail = noFile1 + logFileNew.getAbsolutePath() + noFile2;
+						System.out.println(txtDetail);
+						saved = false;
+					}
+				}
+			} else {
+				String notwritable = "In das angegebene Verzeichnis " + saveFolder.getAbsolutePath()
+						+ " kann nicht geschrieben werden (ev. fehlende Berechtigungen?).";
+				if (locale.toString().startsWith("fr")) {
+					notwritable = "Dans le dossier specifie " + saveFolder.getAbsolutePath()
+							+ " on n`y peut pas ecrire (eventuellement autorisations manquantes?).";
+				} else if (locale.toString().startsWith("en")) {
+					notwritable = "Into the folder specified " + saveFolder.getAbsolutePath()
+							+ " cannot been written (possibly missing permissions?).";
+				} else if (locale.toString().startsWith("it")) {
+					notwritable = "La directory " + saveFolder.getAbsolutePath()
+							+ " specificata non puo essere scritta (forse mancano i permessi?).";
+				} else {
+				}
 				System.out.println();
-				System.out.println(copy + logFileXsl.getAbsolutePath() + " > " + logFileXslNew.getAbsolutePath());
-				Util.copyFile(logFile, logFileNew);
-				System.out.println(copy + logFile.getAbsolutePath() + " > " + logFileNew.getAbsolutePath());
+				System.out.println(notwritable);
+				txtDetail = notwritable;
+				saved = false;
 			}
-		} catch (IOException eSave) {
-			eSave.printStackTrace();
+			if (!saved) {
+				Alert alertNotSaved = new Alert(AlertType.ERROR);
+				alertNotSaved.setTitle(titelError);
+				alertNotSaved.setHeaderText(txtError);
+				alertNotSaved.setContentText(txtDetail);
+				alertNotSaved.initStyle(StageStyle.UTILITY);
+				alertNotSaved.showAndWait();
+			}
 		}
 	}
 

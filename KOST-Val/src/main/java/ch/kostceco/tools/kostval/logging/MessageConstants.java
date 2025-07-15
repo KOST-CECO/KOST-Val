@@ -486,6 +486,7 @@ public interface MessageConstants {
 
 	// Modul 2a Meldungen
 	String MESSAGE_XML_BA_FILEMISSING = "val.message.xml.ba.filemissing";
+	String MESSAGE_XML_BA_IDNOTUNIQUE = "val.message.xml.ba.idnotunique";
 
 	// Modul 2b Meldungen
 	String MESSAGE_XML_BB_FILEMISSING = "val.message.xml.bb.filemissing";
