@@ -110,6 +110,8 @@ public class GuiController {
 
 	private File logFile, configFile = new File(System.getenv("USERPROFILE") + File.separator + ".kost-val_2x"
 			+ File.separator + "configuration" + File.separator + "kostval.conf.xml");
+	private File configFileSta = new File(System.getenv("USERPROFILE") + File.separator + ".kost-val_2x"
+			+ File.separator + "configuration" + File.separator + "STANDARD.kostval.conf.xml");
 
 	private String arg0, arg1, arg2, arg3 = "--xml", dirOfJarPath, initInstructionsDe, initInstructionsFr,
 			initInstructionsIt, initInstructionsEn;
@@ -220,6 +222,11 @@ public class GuiController {
 					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-FR.xsl", configFile);
 					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-FR.xsl", configFile);
 				}
+				if (configFileSta.exists()) {
+					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-FR.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-FR.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-FR.xsl", configFileSta);
+				}
 			} else if (locale.toString().startsWith("it")) {
 				locale = new Locale("it");
 				arg2 = locale.toString();
@@ -242,6 +249,11 @@ public class GuiController {
 					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-IT.xsl", configFile);
 					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-IT.xsl", configFile);
 					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-IT.xsl", configFile);
+				}
+				if (configFileSta.exists()) {
+					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-IT.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-IT.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-IT.xsl", configFileSta);
 				}
 			} else if (locale.toString().startsWith("en")) {
 				locale = new Locale("en");
@@ -266,6 +278,11 @@ public class GuiController {
 					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-EN.xsl", configFile);
 					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-EN.xsl", configFile);
 				}
+				if (configFileSta.exists()) {
+					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-EN.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-EN.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-EN.xsl", configFileSta);
+				}
 			} else {
 				locale = new Locale("de");
 				arg2 = locale.toString();
@@ -288,6 +305,11 @@ public class GuiController {
 					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-DE.xsl", configFile);
 					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-DE.xsl", configFile);
 					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-DE.xsl", configFile);
+				}
+				if (configFileSta.exists()) {
+					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-DE.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-DE.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-DE.xsl", configFileSta);
 				}
 			}
 		} catch (IOException e1) {
@@ -1535,6 +1557,11 @@ public class GuiController {
 					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-DE.xsl", configFile);
 					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-DE.xsl", configFile);
 				}
+				if (configFileSta.exists()) {
+					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-DE.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-DE.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-DE.xsl", configFileSta);
+				}
 				locale = new Locale("de");
 			} else if (selLang.equals("English")) {
 				buttonFormat.setText("Format only");
@@ -1555,6 +1582,11 @@ public class GuiController {
 					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-EN.xsl", configFile);
 					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-EN.xsl", configFile);
 					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-EN.xsl", configFile);
+				}
+				if (configFileSta.exists()) {
+					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-EN.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-EN.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-EN.xsl", configFileSta);
 				}
 				locale = new Locale("en");
 			} else if (selLang.equals("Italiano")) {
@@ -1577,6 +1609,11 @@ public class GuiController {
 					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-IT.xsl", configFile);
 					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-IT.xsl", configFile);
 				}
+				if (configFileSta.exists()) {
+					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-IT.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-IT.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-IT.xsl", configFileSta);
+				}
 				locale = new Locale("it");
 			} else {
 				buttonFormat.setText("Format uniquement");
@@ -1597,6 +1634,11 @@ public class GuiController {
 					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-FR.xsl", configFile);
 					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-FR.xsl", configFile);
 					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-FR.xsl", configFile);
+				}
+				if (configFileSta.exists()) {
+					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-FR.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-FR.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-FR.xsl", configFileSta);
 				}
 				locale = new Locale("fr");
 			}
