@@ -215,12 +215,9 @@ public class KOSTVal implements MessageConstants {
 				logFile, dirOfJarPath, versionKostVal);
 		if (valInitlog) {
 			// ggf alte SIP-Validierung-Versions-Notiz loeschen
-			// ermitteln welche Formate validiert werden koennen respektive
-			// eingeschaltet sind
-			// Im Pfad keine Sonderzeichen xml-Validierung SIP 1d und SIARD C
-			// stuerzen ab
-			// Im Pfad keine Sonderzeichen xml-Validierung SIP 1d und SIARD C
-			// stuerzen ab
+			// ermitteln welche Formate validiert werden koennen / eingeschaltet sind
+			// Im Pfad keine Sonderzeichen xml-Validierung SIP 1d und SIARD C stuerzen ab
+			// Im Pfad keine Sonderzeichen xml-Validierung SIP 1d und SIARD C stuerzen ab
 		} else {
 			// Fehler: es wird abgebrochen
 			context.close();
@@ -244,9 +241,19 @@ public class KOSTVal implements MessageConstants {
 		if (args[0].equalsIgnoreCase("--format")) {
 			Logtxt.logtxt(logFile, "<Format>");
 
-			// TODO: Formatvalidierung an einer Datei --> erledigt --> nur
-			// Marker
+			// TODO: Formatvalidierung an einer Datei --> erledigt --> nur Marker
 			if (!valDatei.isDirectory()) {
+				String xmlFileName = logFileName.replace(".kost-val.log", ".signature.log");
+				File xmlFile = new File(xmlFileName);
+				String sigDoku = configMap.get("sigDoku");
+				if (sigDoku.equals("yes")) {
+					// falls das File (Signaturdokumentation) von einem vorhergehenden Durchlauf
+					// bereits existiert, loeschen wir es
+					if (xmlFile.exists()) {
+						xmlFile.delete();
+					}
+				}
+
 				// System.out.print( valDatei.getAbsolutePath() + " " );
 				/*
 				 * boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile,
@@ -259,8 +266,13 @@ public class KOSTVal implements MessageConstants {
 
 				Logtxt.logtxt(logFile, "</Format>");
 
-				// Loeschen des Arbeitsverzeichnisses, falls eines angelegt
-				// wurde
+				if (sigDoku.equals("yes")) {
+					if (xmlFile.exists()) {
+					Util.oldnewstringAll("<file></file>", "", xmlFile);
+					}
+				}
+
+				// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 				if (tmpDir.exists()) {
 					Util.deleteDir(tmpDir);
 				}
@@ -269,8 +281,7 @@ public class KOSTVal implements MessageConstants {
 				// logFile bereinigung (& End und ggf 3c)
 				Util.valEnd3cAmp("", logFile);
 
-				// Loeschen des Arbeitsverzeichnisses, falls eines angelegt
-				// wurde
+				// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 				if (tmpDir.exists()) {
 					Util.deleteDir(tmpDir);
 				}
@@ -278,6 +289,14 @@ public class KOSTVal implements MessageConstants {
 				if (pathTemp.exists()) {
 					Util.deleteFile(pathTemp);
 				}
+				String pathToWorkDirOut1Temp = directoryOfLogfile.getAbsolutePath() + File.separator + "OUTPUT-Temp";
+				File fileToWorkDirOut1Temp = new File(pathToWorkDirOut1Temp);
+				if (fileToWorkDirOut1Temp.exists()) {
+					Util.deleteDir(fileToWorkDirOut1Temp);
+				}
+				System.out.println(kostval.getTextResourceService().getText(locale, MESSAGE_FORMATVALIDATION_DONE, 
+						logFile.getAbsolutePath()));
+				System.out.println("");
 
 				if (valFile.equals("countValid")) {
 					// Validierte Datei valide
@@ -291,20 +310,39 @@ public class KOSTVal implements MessageConstants {
 				}
 
 			} else {
-				// TODO: Formatvalidierung ueber ein Ordner --> erledigt --> nur
-				// Marker
+				// TODO: Formatvalidierung ueber ein Ordner --> erledigt --> nur Marker
+
+				String xmlFileName = logFileName.replace(".kost-val.log", ".signature.log");
+				File xmlFile = new File(xmlFileName);
+				String sigDoku = configMap.get("sigDoku");
+				if (sigDoku.equals("yes")) {
+					// falls das File (Signaturdokumentation) von einem vorhergehenden Durchlauf
+					// bereits existiert, loeschen wir es
+					if (xmlFile.exists()) {
+						xmlFile.delete();
+					}
+				}
+
 				Controllervalfolder controller2 = (Controllervalfolder) context.getBean("controllervalfolder");
 				boolean valFolder = controller2.valFolder(valDatei, logFileName, directoryOfLogfile, verbose,
 						dirOfJarPath, configMap, context, locale, logFile);
 
-				// Loeschen des Arbeitsverzeichnisses, falls eines angelegt
-				// wurde
+				if (sigDoku.equals("yes")) {
+					Util.oldnewstringAll("<file></file>", "", xmlFile);
+				}
+
+				// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 				if (tmpDir.exists()) {
 					Util.deleteDir(tmpDir);
 				}
 				File pathTemp = new File(directoryOfLogfile, "path.tmp");
 				if (pathTemp.exists()) {
 					Util.deleteFile(pathTemp);
+				}
+				String pathToWorkDirOut1Temp = directoryOfLogfile.getAbsolutePath() + File.separator + "OUTPUT-Temp";
+				File fileToWorkDirOut1Temp = new File(pathToWorkDirOut1Temp);
+				if (fileToWorkDirOut1Temp.exists()) {
+					Util.deleteDir(fileToWorkDirOut1Temp);
 				}
 
 				if (valFolder) {
@@ -341,8 +379,7 @@ public class KOSTVal implements MessageConstants {
 				// ausgeschaltet.</Message></Error>
 				Logtxt.logtxt(logFile, "<Invalid>invalid</Invalid></Validation></Sip></KOSTValLog>");
 
-				// ggf. Fehlermeldung 3c ergaenzen Util.val3c(summary3c, logFile
-				// );
+				// ggf. Fehlermeldung 3c ergaenzen Util.val3c(summary3c, logFile );
 				// logFile bereinigung (& End und ggf 3c)
 				Util.valEnd3cAmp("", logFile);
 
@@ -354,8 +391,7 @@ public class KOSTVal implements MessageConstants {
 				boolean valSip = controller3.valSip(valDatei, logFileName, directoryOfLogfile, verbose, dirOfJarPath,
 						configMap, context, locale, onlySip, logFile);
 
-				// Loeschen des Arbeitsverzeichnisses, falls eines angelegt
-				// wurde
+				// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 				if (tmpDir.exists()) {
 					Util.deleteDir(tmpDir);
 				}
@@ -365,8 +401,7 @@ public class KOSTVal implements MessageConstants {
 				}
 
 				if (valSip) {
-					// Loeschen des Arbeitsverzeichnisses, falls eines angelegt
-					// wurde
+					// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 					// Validierte Dateien valide
 					context.close();
 					mainBoolean = true;

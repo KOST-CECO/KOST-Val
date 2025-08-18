@@ -19,41 +19,15 @@
 		</copy>
 		<copy includeemptydirs="false" overwrite="true" todir="KOST-Val/target/classes">
 			<fileset dir="KOST-Val/src/main/KOST-Val_resources_notJar">
-				<!-- fuer schnellernen build, ggf aufkommentieren  -->
-				<exclude name="**/callas_pdfaPilotServer_x64_Win_13-2-388_cli/**" />
 			</fileset>
 		</copy>
 		<copy file="KOST-Val_README.md" todir="KOST-Val/target/classes" />
 		<copy file="KOST-Val/src/main/KOST-Val_resources_notJar/PdfValidatorAPI.dll" overwrite="true" todir="KOST-Val/target/classes"/>
-		<!-- .. SIARDexcerpt .. -->
-		<copy includeemptydirs="false" overwrite="true" todir="KOST-Val/target/classes">
-			<fileset dir="KOST-Val/src/main/SIARDexcerpt_resources_notJar">
-			</fileset>
-		</copy>
-		<copy file="SIARDexcerpt_README.md" todir="KOST-Val/target/classes" />
-		<!-- .. KOST-Ran .. -->
-		<copy includeemptydirs="false" overwrite="true" todir="KOST-Val/target/classes">
-			<fileset dir="KOST-Val/src/main/KOST-Ran_resources_notJar">
-			</fileset>
-		</copy>
-		<copy file="KOST-Ran_README.md" todir="KOST-Val/target/classes" />
 		<!--Kopiere alle benoetigten Ordner und Dokumente von KOST-Val_resources_notJar in ../../KOST-Val-->
         <mkdir dir="../../KOST-Val"/>
 		<copy overwrite="true" todir="../../KOST-Val">
 			<fileset dir="KOST-Val/src/main/KOST-Val_resources_notJar">
-				<!-- fuer schnellernen build, ggf aufkommentieren -->
-				<exclude name="**/callas_pdfaPilotServer_x64_Win_13-2-388_cli/**" /> 
 			</fileset>
 		</copy> 
-		<!--Kopiere alle benötigten Ordner und Dokumente von SIARDexcerpt_resources_notJar in ../../SIARDexcerpt--> 
-        <mkdir dir="../../SIARDexcerpt"/>
-		<copy overwrite="true" todir="../../SIARDexcerpt">
-			<fileset dir="KOST-Val/src/main/SIARDexcerpt_resources_notJar"/>
-		</copy>
-		<!--Kopiere alle benötigten Ordner und Dokumente von KOST-Ran_resources_notJar in ../../KOST-Ran--> 
-        <mkdir dir="../../KOST-Ran"/>
-		<copy overwrite="true" todir="../../KOST-Ran">
-			<fileset dir="KOST-Val/src/main/KOST-Ran_resources_notJar"/>
-		</copy>
 	</target>
 </project>

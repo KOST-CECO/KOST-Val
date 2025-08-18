@@ -19,11 +19,8 @@
 package ch.kostceco.tools.kostval.validation.modulesiard.impl;
 
 import java.io.File;
-import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Map;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 import org.apache.commons.io.FileUtils;
 
@@ -174,12 +171,12 @@ public class ValidationIrecognitionModuleImpl extends ValidationModuleImpl imple
 			 * entsprechenden Modul die property anzugeben: <property
 			 * name="configurationService" ref="configurationService" />
 			 */
-			
+
 			// Modul C
 			// Arbeitsverzeichnis zum Entpacken des Archivs erstellen
 
 			// Ausgabe der SIARD-Version
-			String pathToWorkDirVer = pathToWorkDir ;
+			String pathToWorkDirVer = pathToWorkDir;
 			File metadataXmlVer = new File(new StringBuilder(pathToWorkDirVer).append(File.separator).append("header")
 					.append(File.separator).append("metadata.xml").toString());
 			Boolean version1 = FileUtils.readFileToString(metadataXmlVer, "ISO-8859-1")

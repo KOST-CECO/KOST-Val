@@ -153,6 +153,8 @@ public interface MessageConstants {
 	String MESSAGE_XML_MODUL_Cc_SIP = "val.message.xml.modul.cc.sip";
 	String MESSAGE_XML_MODUL_Cd_SIP = "val.message.xml.modul.cd.sip";
 
+	String MESSAGE_XML_REPAIR_SIARD = "val.message.xml.repair.siard";
+
 	String MESSAGE_XML_MODUL_A_AZ = "val.message.xml.modul.a.az";
 	String ERROR_XML_A_AZ_INCORRECTFILE = "val.error.xml.a.az.incorrectfile";
 	String ERROR_XML_A_NOTAZ = "val.error.xml.a.notaz";
@@ -169,6 +171,8 @@ public interface MessageConstants {
 
 	String ERROR_XML_UNKNOWN = "val.error.xml.unknown";
 	String ERROR_XML_OUTOFMEMORYERROR = "val.error.xml.outofmemoryerror";
+	String ERROR_XML_OUTOFMEMORYERRORMAIN = "val.error.xml.outofmemoryerrormain";
+	String ERROR_XML_STACKOVERFLOWERRORRMAIN = "val.error.xml.stackoverflowerrormain";
 	String ERROR_XML_OUTOFMEMORYMAIN = "val.error.xml.outofmemorymain";
 	String ERROR_XML_STACKOVERFLOWMAIN = "val.error.xml.stackoverflowmain";
 
@@ -208,6 +212,9 @@ public interface MessageConstants {
 	String MESSAGE_XML_C_METADATA_ERRORS = "val.message.xml.c.metadata.errors";
 	String MESSAGE_XML_C_METADATA_ORIGERRORS = "val.message.xml.c.metadata.origerrors";
 	String MESSAGE_XML_C_METADATA_NSFOUND = "val.message.xml.c.metadata.nsfound";
+	String MESSAGE_XML_C_WARNING_UNZIP1 = "val.message.xml.c.warning.unzip1";
+	String MESSAGE_XML_C_WARNING_UNZIP2 = "val.message.xml.c.warning.unzip2";
+	String MESSAGE_XML_C_INCORRECTZIP = "val.message.xml.c.incorrectzip";
 
 	// Modul D Meldungen
 	String MESSAGE_XML_D_INVALID_FOLDER = "val.message.xml.d.invalid.folder";
@@ -262,6 +269,10 @@ public interface MessageConstants {
 
 	// Modul W Meldungen
 	String MESSAGE_XML_W_WARNING_INITVALUE = "val.message.xml.w.warning.initvalue";
+	
+	// Modul Reparatur
+	String MESSAGE_XML_REP_LOB = "val.message.xml.rep.lob";
+	String MESSAGE_XML_REP_ROWS = "val.message.xml.rep.rows";
 
 	// *************PDFA-Meldungen*************************************************************************
 	// Modul A Meldungen
@@ -475,6 +486,7 @@ public interface MessageConstants {
 
 	// Modul 2a Meldungen
 	String MESSAGE_XML_BA_FILEMISSING = "val.message.xml.ba.filemissing";
+	String MESSAGE_XML_BA_IDNOTUNIQUE = "val.message.xml.ba.idnotunique";
 
 	// Modul 2b Meldungen
 	String MESSAGE_XML_BB_FILEMISSING = "val.message.xml.bb.filemissing";

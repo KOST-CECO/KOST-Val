@@ -434,6 +434,10 @@ public class Util {
 			// set to null
 			reader = null;
 			String newtext = oldtext.replace("<End></End>", stringEnd);
+			// PdfToolsWarning
+			String cPT= UtilPages.getPagesFinal();
+			newtext = newtext.replace(" >72000 ", " "+cPT+" ");
+			// sonstige Bereinigungen
 			newtext = newtext.replace("<Message>3c</Message></Error>", string3c);
 			newtext = newtext.replace("&", "&amp;");
 			newtext = newtext.replace("<http", "&lt;http");
@@ -456,8 +460,8 @@ public class Util {
 			newtext = newtext.replace("\r\n</Message>", "</Message>");
 			newtext = newtext.replace("\r\n\r\n", "\r\n");
 			newtext = newtext.replace("\r\n\r\n", "\r\n");
-			newtext = newtext.replace("&amp;gt;","&gt;");
-			newtext = newtext.replace("&amp;lt;","&lt;");
+			newtext = newtext.replace("&amp;gt;", "&gt;");
+			newtext = newtext.replace("&amp;lt;", "&lt;");
 
 			newtext = Util.umlaute(newtext);
 			newtext = newtext.replace((char) 0, (char) 32);
@@ -466,7 +470,7 @@ public class Util {
 			writer.close();
 			// set to null
 			writer = null;
-		} catch (IOException ioe) {
+		} catch (Exception ioe) {
 			ioe.printStackTrace();
 		}
 	}
@@ -497,25 +501,21 @@ public class Util {
 			if (stringInFile("Validierung: SIP", file)) {
 				string = "Validierung: SIP" + string;
 				newtext = oldtext.replace("Validierung: SIP", string);
-				newtext = newtext.replace((char) 0, (char) 32);				
-			}
-			else if (stringInFile("Validation: SIP", file)) {
+				newtext = newtext.replace((char) 0, (char) 32);
+			} else if (stringInFile("Validation: SIP", file)) {
 				string = "Validation: SIP" + string;
 				newtext = oldtext.replace("Validation: SIP", string);
-				newtext = newtext.replace((char) 0, (char) 32);				
-			}
-			else if (stringInFile("Validazione:  SIP", file)) {
+				newtext = newtext.replace((char) 0, (char) 32);
+			} else if (stringInFile("Validazione:  SIP", file)) {
 				string = "Validazione:  SIP" + string;
 				newtext = oldtext.replace("Validazione:  SIP", string);
-				newtext = newtext.replace((char) 0, (char) 32);				
-			}
-			else if (stringInFile("Validation: SIP", file)) {
+				newtext = newtext.replace((char) 0, (char) 32);
+			} else if (stringInFile("Validation: SIP", file)) {
 				string = "Validation: SIP" + string;
 				newtext = oldtext.replace("Validation: SIP", string);
-				newtext = newtext.replace((char) 0, (char) 32);				
+				newtext = newtext.replace((char) 0, (char) 32);
 			}
-			
-			
+
 			FileWriter writer = new FileWriter(file);
 			writer.write(newtext);
 			writer.close();
@@ -575,6 +575,39 @@ public class Util {
 			// set to null
 			reader = null;
 			String newtext = oldtext.replace(oldstring, newstring);
+			newtext = newtext.replace((char) 0, (char) 32);
+			FileWriter writer = new FileWriter(file);
+			writer.write(newtext);
+			writer.close();
+			// set to null
+			writer = null;
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+	}
+
+	/**
+	 * Veraendert ersetzt oldstring mit newstring in file
+	 * 
+	 * ! Solche Ersetzungen duerfen nicht in einer Schleife gemacht werden sondern
+	 * erst am Schluss, da diese sehr Zeitintensiv sind !!!
+	 * 
+	 * @throws IOException
+	 */
+	public static void oldnewstringAll(String oldstring, String newstring, File file) throws IOException {
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(file));
+			String line = "", oldtext = "";
+			StringBuilder sb = new StringBuilder();
+			while ((line = reader.readLine()) != null) {
+				sb.append(line);
+				sb.append("\r\n");
+			}
+			oldtext = sb.toString();
+			reader.close();
+			// set to null
+			reader = null;
+			String newtext = oldtext.replaceAll(oldstring, newstring);
 			newtext = newtext.replace((char) 0, (char) 32);
 			FileWriter writer = new FileWriter(file);
 			writer.write(newtext);

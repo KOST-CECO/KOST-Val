@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:template match="/">
-		<!-- kostval.conf.xml_v2.3.0.0 -->
+		<!-- kostval.conf.xml_v2.3.0.3 -->
 		<html>
 			<head>
 				<style>
@@ -329,9 +329,27 @@
 						</td>
 					</tr>
 					<tr class="captioninfom">
-						<td>Remarques sur les formats de fichiers non acceptés [Azepted]:</td>
+						<td>Remarques sur les formats de fichiers non acceptés [Error]:</td>
 						<td>
 							<xsl:value-of select="configuration/siard/lobAzepted" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>Création d'une copie réparée de SIARD [no]:</td>
+						<td>
+							<xsl:value-of select="configuration/siard/siardrep" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>- enregistrer les petits fichiers LOB inline [no]:</td>
+						<td>
+							<xsl:value-of select="configuration/siard/siardlobrep" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>- remplir le nombre de rows dans metadata.xml [no]:</td>
+						<td>
+							<xsl:value-of select="configuration/siard/siardrowsrep" />
 						</td>
 					</tr>
 
@@ -428,11 +446,17 @@
 						</td>
 					</tr>
 					<tr class="captioninfom">
-						<td>Report, welcher gesichert wird, wenn valide und yes:</td>
+						<td>XML-Signaturdokumentation erstellen [no]:</td>
+						<td>
+							<xsl:value-of select="configuration/egovdv/sigDoku" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>Report, welcher gesichert wird, wenn yes:</td>
 						<td></td>
 					</tr>
 					<tr class="captioninfom">
-						<td> - Mixed (unterschiedlichen Zertifikatsklassen)  [no]:</td>
+						<td> - Standard (alle Zertifikatsklassen)  [no]:</td>
 						<td><xsl:value-of select="configuration/egovdv/Mandant/Mixed" /></td>
 					</tr>
 					<tr class="captioninfom">
@@ -456,7 +480,7 @@
 						<td><xsl:value-of select="configuration/egovdv/Mandant/Siegel" /></td>
 					</tr>
 					<tr class="captioninfom">
-						<td> - Amtsblatt-Portal (offizielle amtliche Meldungen)  [no]:</td>
+						<td> - Amtsblatt-Portal Bund (offizielle amtliche Meldungen)  [no]:</td>
 						<td><xsl:value-of select="configuration/egovdv/Mandant/Amtsblattportal" /></td>
 					</tr>
 					<tr class="captioninfom">

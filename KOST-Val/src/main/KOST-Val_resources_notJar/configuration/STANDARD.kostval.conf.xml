@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?><?xml-stylesheet type="text/xsl" href="kostval-conf-DE.xsl"?>
-<configuration><!-- kostval.conf.xml_v2.3.0.0 -->
+<configuration><!-- kostval.conf.xml_v2.3.0.3 -->
 <!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
 <!-- TEXT -->
 	<pdfa>
@@ -135,7 +135,10 @@
 			<siard22>2.2 </siard22><!--2.2 / / no -->
 		</siardversion>
 		<lobExtension>Error </lobExtension> <!--Warning / Error -->
-		<lobAzepted>Check </lobAzepted> <!--"" / Check -->
+		<lobAzepted>Error </lobAzepted> <!--Warning / Error -->
+		<siardrep>no </siardrep> <!--no / yes -->
+		<siardlobrep>no </siardlobrep> <!--no / yes -->
+		<siardrowsrep>no </siardrowsrep> <!--no / yes -->
 	</siard>
 	<csv>
 		<csvvalidation>(&#x2713;)</csvvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
@@ -183,8 +186,9 @@
 		<othervalidation></othervalidation>
 	</otherformats>
 	<egovdv>
-		<egovdvvalidation>&#x2717;</egovdvvalidation>
+		<egovdvvalidation>&#x2717;</egovdvvalidation><!--&#x2717; = keine Pruefung / &#x2713; = Signaturen pruefen -->
 		<Institut></Institut>
+		<sigDoku>no</sigDoku>
 		<Mandant>
 			<Mixed>no</Mixed>
 			<Qualified>no</Qualified>

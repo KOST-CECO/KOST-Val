@@ -36,7 +36,8 @@ import javafx.stage.Stage;
 public class ConfigControllerSiard {
 
 	@FXML
-	private CheckBox checkSiard10, checkSiard21, checkSiard22, checkLobExtension, checkLobAzepted;
+	private CheckBox checkSiard10, checkSiard21, checkSiard22, checkLobExtension, checkLobAzepted, checkSiardRep,
+			checkSiardLobRep, checkSiardRowsRep;
 
 	@FXML
 	private Button buttonConfigApply;
@@ -47,19 +48,15 @@ public class ConfigControllerSiard {
 	private String dirOfJarPath, config, minOne = "Mindestens eine Variante muss erlaubt sein!";
 
 	@FXML
-	private Label labelVersion, labelVal, labelMessage, labelConfig, labelLob;
+	private Label labelVersion, labelVal, labelMessage, labelConfig, labelLob, labelRep;
 
 	@FXML
 	void initialize() {
 
 		// TODO --> initialize (wird einmalig am Anfang ausgefuehrt)
 
-		// Copyright und Versionen ausgeben
-		String java6432 = System.getProperty("sun.arch.data.model");
-		String javaVersion = System.getProperty("java.version");
-		String javafxVersion = System.getProperty("javafx.version");
-		labelConfig.setText("Copyright © KOST/CECO          KOST-Val v2.3.0.0          JavaFX " + javafxVersion
-				+ "   &   Java-" + java6432 + " " + javaVersion + ".");
+		// Copyright ausgeben
+		labelConfig.setText("Copyright © KOST/CECO");
 
 		// festhalten von wo die Applikation (exe) gestartet wurde
 		dirOfJarPath = "";
@@ -86,7 +83,12 @@ public class ConfigControllerSiard {
 				checkSiard10.setText("SIARD-1.0 (eCH-0165 v1) [veraltet]");
 				checkLobExtension.setText("Bemängeln von nicht exakten Dateiendungen");
 				checkLobAzepted.setText("Bemängeln von nicht akzeptierent Dateiformaten");
+				checkSiardRep.setText(
+						"ich übernehme die Verantwortung für die Qualitätssicherung, Dokumentation und deren Weiterverwendung");
+				checkSiardLobRep.setText("kleine LOB-Dateien inline speichern");
+				checkSiardRowsRep.setText("<rows/> ausfüllen");
 				labelVal.setText("Validierungseinstellung: SIARD");
+				labelRep.setText("Reparatureinstellungen: SIARD");
 				buttonConfigApply.setText("anwenden");
 				minOne = "Mindestens eine Variante muss erlaubt sein!";
 			} else if (Util.stringInFileLine("kostval-conf-FR.xsl", configFile)) {
@@ -95,7 +97,12 @@ public class ConfigControllerSiard {
 				checkSiard10.setText("SIARD-1.0 (eCH-0165 v1) [obsolète]");
 				checkLobExtension.setText("Réclamer des extensions de fichiers non exactes");
 				checkLobAzepted.setText("Remarques sur les formats de fichiers non acceptés");
+				checkSiardRep.setText(
+						"j'assume la responsabilité de l'assurance qualité, de la documentation et de leur réutilisation");
+				checkSiardLobRep.setText("enregistrer les petits fichiers LOB en ligne");
+				checkSiardRowsRep.setText("remplir les <rows/>");
 				labelVal.setText("Paramètre de validation: SIARD");
+				labelRep.setText("Paramètres de réparation: SIARD");
 				buttonConfigApply.setText("appliquer");
 				minOne = "Au moins une variante doit etre autorisee !";
 			} else if (Util.stringInFileLine("kostval-conf-IT.xsl", configFile)) {
@@ -104,7 +111,12 @@ public class ConfigControllerSiard {
 				checkSiard10.setText("SIARD-1.0 (eCH-0165 v1) [obsolete]");
 				checkLobExtension.setText("Claim for incorrect file extensions");
 				checkLobAzepted.setText("Remarks on non-accepted file formats");
+				checkSiardRep.setText(
+						"Mi assumo la responsabilità della garanzia di qualità, della documentazione e del suo ulteriore utilizzo");
+				checkSiardLobRep.setText("Salva i file LOB piccoli in linea");
+				checkSiardRowsRep.setText("<riga/> compilare");
 				labelVal.setText("Parametro di convalida: SIARD");
+				labelRep.setText("Parametro di riparazione: SIARD");
 				buttonConfigApply.setText("Applica");
 				minOne = "Almeno una variante deve essere consentita!";
 			} else {
@@ -113,7 +125,11 @@ public class ConfigControllerSiard {
 				checkSiard10.setText("SIARD-1.0 (eCH-0165 v1) [obsoleto]");
 				checkLobExtension.setText("Richiesta di estensioni file errate");
 				checkLobAzepted.setText("Osservazioni sui formati di file non accettati");
+				checkSiardRep.setText("I take responsibility for quality assurance, documentation and its further use");
+				checkSiardLobRep.setText("save small LOB files inline");
+				checkSiardRowsRep.setText("<rows/> fill in");
 				labelVal.setText("Validation setting: SIARD");
+				labelRep.setText("Repair settings: SIARD");
 				buttonConfigApply.setText("apply");
 				minOne = "At least one variant must be allowed!";
 			}
@@ -132,6 +148,9 @@ public class ConfigControllerSiard {
 			String noSiard22 = "<siard22></siard22>";
 			String noLobExtension = "<lobExtension>Warning </lobExtension>";
 			String noLobAzepted = "<lobAzepted></lobAzepted>";
+			String noSiardRep = "<siardrep>no </siardrep>";
+			String noSiardLobRep = "<siardlobrep>no </siardlobrep>";
+			String noSiardRowsRep = "<siardrowsrep>no </siardrowsrep>";
 
 			if (config.contains(noSiard)) {
 				checkSiard10.setDisable(true);
@@ -152,6 +171,18 @@ public class ConfigControllerSiard {
 			}
 			if (config.contains(noLobAzepted)) {
 				checkLobAzepted.setSelected(false);
+			}
+
+			if (config.contains(noSiardRep)) {
+				checkSiardRep.setSelected(false);
+				checkSiardLobRep.setDisable(true);
+				checkSiardRowsRep.setDisable(true);
+			}
+			if (config.contains(noSiardLobRep)) {
+				checkSiardLobRep.setSelected(false);
+			}
+			if (config.contains(noSiardRowsRep)) {
+				checkSiardRowsRep.setSelected(false);
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -278,10 +309,74 @@ public class ConfigControllerSiard {
 	@FXML
 	void changeLobAzepted(ActionEvent event) {
 		labelMessage.setText("");
-		String yes = "<lobAzepted>Check </lobAzepted>";
-		String no = "<lobAzepted></lobAzepted>";
+		String yes = "<lobAzepted>Error </lobAzepted>";
+		String no = "<lobAzepted>Warning </lobAzepted>";
 		try {
 			if (checkLobExtension.isSelected()) {
+				Util.oldnewstring(no, yes, configFile);
+			} else {
+				Util.oldnewstring(yes, no, configFile);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/*
+	 * checkSiardRep aendert die Kontrolle ob Reparatur akzeptiert oder nicht in der
+	 * Konfiguration ein oder aus
+	 */
+	@FXML
+	void changeSiardRep(ActionEvent event) {
+		labelMessage.setText("");
+		String yes = "<siardrep>yes </siardrep>";
+		String no = "<siardrep>no </siardrep>";
+		try {
+			if (checkSiardRep.isSelected()) {
+				Util.oldnewstring(no, yes, configFile);
+				checkSiardLobRep.setDisable(false);
+				checkSiardRowsRep.setDisable(false);
+			} else {
+				Util.oldnewstring(yes, no, configFile);
+				checkSiardLobRep.setDisable(true);
+				checkSiardRowsRep.setDisable(true);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/*
+	 * checkSiardLobRep aendert die Kontrolle ob Lob-Reparatur akzeptiert oder nicht
+	 * in der Konfiguration ein oder aus
+	 */
+	@FXML
+	void changeSiardLobRep(ActionEvent event) {
+		labelMessage.setText("");
+		String yes = "<siardlobrep>yes </siardlobrep>";
+		String no = "<siardlobrep>no </siardlobrep>";
+		try {
+			if (checkSiardLobRep.isSelected()) {
+				Util.oldnewstring(no, yes, configFile);
+			} else {
+				Util.oldnewstring(yes, no, configFile);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/*
+	 * checkSiardRowsRep aendert die Kontrolle ob Rows-Reparatur akzeptiert oder
+	 * nicht in der Konfiguration ein oder aus
+	 */
+	@FXML
+	void changeSiardRowsRep(ActionEvent event) {
+		labelMessage.setText("");
+		String yes = "<siardrowsrep>yes </siardrowsrep>";
+		String no = "<siardrowsrep>no </siardrowsrep>";
+		try {
+			if (checkSiardRowsRep.isSelected()) {
 				Util.oldnewstring(no, yes, configFile);
 			} else {
 				Util.oldnewstring(yes, no, configFile);

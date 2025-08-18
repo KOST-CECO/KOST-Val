@@ -89,6 +89,13 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 				NodeList nodeLst = doc.getElementsByTagName("datei");
 				NodeList nodeLstO = doc.getElementsByTagName("ordner");
 
+				NodeList nodeLstDat = nodeLst;
+				NodeList nodeLstDok = doc.getElementsByTagName("dokument");
+				NodeList nodeLstDos = doc.getElementsByTagName("dossier");
+				NodeList nodeLstMap = doc.getElementsByTagName("mappe");
+				NodeList nodeLstOsp = doc.getElementsByTagName("ordnungssystemposition");
+				NodeList nodeLstOs = doc.getElementsByTagName("ordnungssystem");
+
 				for (int s = 0; s < nodeLst.getLength(); s++) {
 					Node dateiNode = nodeLst.item(s);
 					String path = null;
@@ -212,6 +219,137 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 					@SuppressWarnings("unused")
 					String removedEntry = filesInSip.remove(name);
 					pathO = "";
+				}
+
+				// Kontrolle ob id eindeutig ist
+				Map<String, String> idMap = new HashMap<String, String>();
+				idMap.put("KEY", "123");
+
+				for (int s = 0; s < nodeLstDat.getLength(); s++) {
+					Node node = nodeLstDat.item(s);
+					Node attId = node.getAttributes().getNamedItem("id");
+					if (attId == null) {
+						// ueberspringen
+					} else {
+						String idStrValue = attId.getNodeValue();
+						String idStr = node.getAttributes().getNamedItem("id").toString();
+						// idStrValue video_2022-11-28_NM
+						// idStr id="video_2022-11-28_NM"
+						if (idMap.containsKey(idStrValue)) {
+							// id nicht eindeutig Fehler ausgeben
+							Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Bb_SIP)
+									+ getTextResourceService().getText(locale, MESSAGE_XML_BA_IDNOTUNIQUE, idStr));							
+							valid = false;
+						} else {
+							// neue id erfassen
+							idMap.put(idStrValue, idStr);
+						}
+					}
+				}
+				for (int s = 0; s < nodeLstDok.getLength(); s++) {
+					Node node = nodeLstDok.item(s);
+					Node attId = node.getAttributes().getNamedItem("id");
+					if (attId == null) {
+						// ueberspringen
+					} else {
+						String idStrValue = attId.getNodeValue();
+						String idStr = node.getAttributes().getNamedItem("id").toString();
+						// idStrValue video_2022-11-28_NM
+						// idStr id="video_2022-11-28_NM"
+						if (idMap.containsKey(idStrValue)) {
+							// id nicht eindeutig Fehler ausgeben
+							Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Bb_SIP)
+									+ getTextResourceService().getText(locale, MESSAGE_XML_BA_IDNOTUNIQUE, idStr));							
+							valid = false;
+						} else {
+							// neue id erfassen
+							idMap.put(idStrValue, idStr);
+						}
+					}
+				}
+				for (int s = 0; s < nodeLstDos.getLength(); s++) {
+					Node node = nodeLstDos.item(s);
+					Node attId = node.getAttributes().getNamedItem("id");
+					if (attId == null) {
+						// ueberspringen
+					} else {
+						String idStrValue = attId.getNodeValue();
+						String idStr = node.getAttributes().getNamedItem("id").toString();
+						// idStrValue video_2022-11-28_NM
+						// idStr id="video_2022-11-28_NM"
+						if (idMap.containsKey(idStrValue)) {
+							// id nicht eindeutig Fehler ausgeben
+							Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Bb_SIP)
+									+ getTextResourceService().getText(locale, MESSAGE_XML_BA_IDNOTUNIQUE, idStr));							
+							valid = false;
+						} else {
+							// neue id erfassen
+							idMap.put(idStrValue, idStr);
+						}
+					}
+				}
+				for (int s = 0; s < nodeLstMap.getLength(); s++) {
+					Node node = nodeLstMap.item(s);
+					Node attId = node.getAttributes().getNamedItem("id");
+					if (attId == null) {
+						// ueberspringen
+					} else {
+						String idStrValue = attId.getNodeValue();
+						String idStr = node.getAttributes().getNamedItem("id").toString();
+						// idStrValue video_2022-11-28_NM
+						// idStr id="video_2022-11-28_NM"
+						if (idMap.containsKey(idStrValue)) {
+							// id nicht eindeutig Fehler ausgeben
+							Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Bb_SIP)
+									+ getTextResourceService().getText(locale, MESSAGE_XML_BA_IDNOTUNIQUE, idStr));							
+							valid = false;
+						} else {
+							// neue id erfassen
+							idMap.put(idStrValue, idStr);
+						}
+					}
+				}
+				for (int s = 0; s < nodeLstOsp.getLength(); s++) {
+					Node node = nodeLstOsp.item(s);
+					Node attId = node.getAttributes().getNamedItem("id");
+					if (attId == null) {
+						// ueberspringen
+					} else {
+						String idStrValue = attId.getNodeValue();
+						String idStr = node.getAttributes().getNamedItem("id").toString();
+						// idStrValue video_2022-11-28_NM
+						// idStr id="video_2022-11-28_NM"
+						if (idMap.containsKey(idStrValue)) {
+							// id nicht eindeutig Fehler ausgeben
+							Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Bb_SIP)
+									+ getTextResourceService().getText(locale, MESSAGE_XML_BA_IDNOTUNIQUE, idStr));							
+							valid = false;
+						} else {
+							// neue id erfassen
+							idMap.put(idStrValue, idStr);
+						}
+					}
+				}
+				for (int s = 0; s < nodeLstOs.getLength(); s++) {
+					Node node = nodeLstOs.item(s);
+					Node attId = node.getAttributes().getNamedItem("id");
+					if (attId == null) {
+						// ueberspringen
+					} else {
+						String idStrValue = attId.getNodeValue();
+						String idStr = node.getAttributes().getNamedItem("id").toString();
+						// idStrValue video_2022-11-28_NM
+						// idStr id="video_2022-11-28_NM"
+						if (idMap.containsKey(idStrValue)) {
+							// id nicht eindeutig Fehler ausgeben
+							Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Bb_SIP)
+									+ getTextResourceService().getText(locale, MESSAGE_XML_BA_IDNOTUNIQUE, idStr));							
+							valid = false;
+						} else {
+							// neue id erfassen
+							idMap.put(idStrValue, idStr);
+						}
+					}
 				}
 
 			} catch (Exception e) {

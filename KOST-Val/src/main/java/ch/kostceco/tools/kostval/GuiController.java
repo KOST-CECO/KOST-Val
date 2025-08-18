@@ -57,7 +57,11 @@ import javafx.print.Paper;
 import javafx.print.Printer;
 import javafx.print.PrinterJob;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
@@ -65,6 +69,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -90,7 +96,7 @@ public class GuiController {
 	private Label labelFileFolder, labelStart, labelConfig, label;
 
 	@FXML
-	private TextField fileFolder;
+	public TextField fileFolder;
 
 	@FXML
 	private TextArea console;
@@ -98,30 +104,34 @@ public class GuiController {
 	private PrintStream ps;
 
 	@FXML
-	private WebView wbv;
+	public WebView wbv;
 
-	private WebEngine engine;
+	public WebEngine engine;
 
 	private File logFile, configFile = new File(System.getenv("USERPROFILE") + File.separator + ".kost-val_2x"
 			+ File.separator + "configuration" + File.separator + "kostval.conf.xml");
+	private File configFileSta = new File(System.getenv("USERPROFILE") + File.separator + ".kost-val_2x"
+			+ File.separator + "configuration" + File.separator + "STANDARD.kostval.conf.xml");
 
 	private String arg0, arg1, arg2, arg3 = "--xml", dirOfJarPath, initInstructionsDe, initInstructionsFr,
 			initInstructionsIt, initInstructionsEn;
-	private String versionKostVal = "2.3.0.0";
+	private String versionKostVal = "2.3.0.3";
 	/*
 	 * TODO: versionKostVal auch hier anpassen:
 	 * 
 	 * 2) cmdKOSTVal.java
 	 *
-	 * 3) ConfigController inkl SubControllers
+	 * 3) ConfigController (1x)
 	 * 
-	 * 4) Konfigurationsdatei (2x) inkl 4x xsl
+	 * 4) egovdv.java (1x)
 	 * 
-	 * 5) xsl der Logdatei
+	 * 5) Konfigurationsdatei (2x) inkl 4x xsl
 	 * 
-	 * 6) Start-Bild (make_exe)
+	 * 6) xsl der Logdatei
 	 * 
-	 * 7) launch_KOST-Val_exe.xml --> VersionInfo
+	 * 7) Start-Bild (make_exe)
+	 * 
+	 * 8) launch_KOST-Val_exe.xml --> VersionInfo
 	 */
 
 	/*
@@ -129,7 +139,7 @@ public class GuiController {
 	 * 
 	 * val.message.xml.info = <Info>KOST-Val v{0}, Copyright (C) 2012-202x
 	 * 
-	 * sowie im Readme 
+	 * sowie im Readme
 	 */
 
 	private Locale locale = Locale.getDefault();
@@ -212,6 +222,11 @@ public class GuiController {
 					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-FR.xsl", configFile);
 					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-FR.xsl", configFile);
 				}
+				if (configFileSta.exists()) {
+					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-FR.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-FR.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-FR.xsl", configFileSta);
+				}
 			} else if (locale.toString().startsWith("it")) {
 				locale = new Locale("it");
 				arg2 = locale.toString();
@@ -234,6 +249,11 @@ public class GuiController {
 					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-IT.xsl", configFile);
 					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-IT.xsl", configFile);
 					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-IT.xsl", configFile);
+				}
+				if (configFileSta.exists()) {
+					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-IT.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-IT.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-IT.xsl", configFileSta);
 				}
 			} else if (locale.toString().startsWith("en")) {
 				locale = new Locale("en");
@@ -258,6 +278,11 @@ public class GuiController {
 					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-EN.xsl", configFile);
 					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-EN.xsl", configFile);
 				}
+				if (configFileSta.exists()) {
+					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-EN.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-EN.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-EN.xsl", configFileSta);
+				}
 			} else {
 				locale = new Locale("de");
 				arg2 = locale.toString();
@@ -280,6 +305,11 @@ public class GuiController {
 					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-DE.xsl", configFile);
 					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-DE.xsl", configFile);
 					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-DE.xsl", configFile);
+				}
+				if (configFileSta.exists()) {
+					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-DE.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-DE.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-DE.xsl", configFileSta);
 				}
 			}
 		} catch (IOException e1) {
@@ -554,18 +584,22 @@ public class GuiController {
 		String strHeaderText = "Wählen Sie einen Drucker aus den verfügbaren Druckern";
 		String strTitle = "Druckerauswahl";
 		String strNoPrinter = "Kein Drucker. Es ist kein Drucker auf Ihrem System installiert.";
+		String printed = "Log-Datei wurde erfolgreich gedruckt.";
 		if (locale.toString().startsWith("fr")) {
 			strHeaderText = "Choisissez une imprimante parmi les imprimantes disponibles";
 			strTitle = "Choix de l'imprimante";
 			strNoPrinter = "Pas d'imprimante. Aucune imprimante n'est installée sur votre système";
+			printed = "Le fichier journal a ete imprime avec succes.";
 		} else if (locale.toString().startsWith("en")) {
 			strHeaderText = "Choose a printer from available printers";
 			strTitle = "Printer Choice";
 			strNoPrinter = "No printer. There is no printer installed on your system.";
+			printed = "Log file was printed successfully.";
 		} else if (locale.toString().startsWith("it")) {
 			strHeaderText = "Selezionare una stampante tra quelle disponibili.";
 			strTitle = "Selezione della stampante";
 			strNoPrinter = "Nessuna stampante. Non c'è nessuna stampante installata sul sistema.";
+			printed = "Il file di registro e stato stampato con successo.";
 		}
 		if (printerToUse != null) {
 
@@ -595,12 +629,15 @@ public class GuiController {
 				if (job != null) {
 					engine.print(job);
 					job.endJob();
+					System.out.println();
+					System.out.println(printed);
 				}
 			} else {
 				// System.out.println("Kein Drucker ausgewaehlt. [Abbrechen]
 				// gedrueckt");
 			}
 		} else {
+			System.out.println();
 			System.out.println(strNoPrinter);
 		}
 	}
@@ -611,37 +648,183 @@ public class GuiController {
 	 */
 	@FXML
 	void saveLog(ActionEvent e) {
+		Boolean saved = false;
+		Boolean doSave = false;
 		console.setText(" \n");
-		try {
-			DirectoryChooser folderChooser = new DirectoryChooser();
-			String copy = "Kopiere ";
-			if (locale.toString().startsWith("fr")) {
-				folderChooser.setTitle("Choisissez le dossier dans lequel le log doit être sauvegardé");
-				copy = "Copie ";
-			} else if (locale.toString().startsWith("en")) {
-				folderChooser.setTitle("Choose the folder where the log should be saved");
-				copy = "Copy ";
-			} else if (locale.toString().startsWith("it")) {
-				folderChooser.setTitle("Selezionare la directory in cui salvare il registro.");
-				copy = "Copia ";
+		DirectoryChooser folderChooser = new DirectoryChooser();
+		String copy = "Kopiere ";
+		String text1 = "Log in den Ordner \"";
+		String text2 = "\" speichern?";
+		String buttonSave = "Speichern";
+		String buttonCancel = "Abbrechen";
+		String noFile1 = "Die Datei ";
+		String noFile2 = " existiert nicht.";
+		String titelError = "Fehler beim Speichern";
+		String txtError = "Log konnte nicht gesichert werden.";
+		String titelWarning = "Abbruch beim Speichern";
+		String txtWarning = "Speichern abgebrochen. Wählen Sie einen Ordner und bestätigen sie es.";
+		String txtDetail = "";
+		String info = "Wählen Sie den Ordner in welcher der Log gespeichert werden soll";
+		if (locale.toString().startsWith("fr")) {
+			info = "Choisissez le dossier dans lequel le log doit être sauvegardé";
+			copy = "Copie ";
+			text1 = "Enregistrer le journal dans le dossier \"";
+			text2 = "\" ?";
+			buttonSave = "Enregistrer";
+			buttonCancel = "Annuler";
+			noFile1 = "Le fichier ";
+			noFile2 = " n`existe pas.";
+			titelError = "Erreur lors de la sauvegarde";
+			txtError = "Le journal n'a pas pu être sauvegardé";
+			titelWarning = "Enregistrement interrompu";
+			txtWarning = "Enregistrement interrompu. Sélectionnez un dossier et confirmez";
+		} else if (locale.toString().startsWith("en")) {
+			info = "Choose the folder where the log should be saved";
+			copy = "Copy ";
+			text1 = "Save log to folder \"";
+			text2 = "\" ?";
+			buttonSave = "Save";
+			buttonCancel = "Cancel";
+			noFile1 = "The file ";
+			noFile2 = " does not exist.";
+			titelError = "Error saving";
+			txtError = "Log could not be saved.";
+			titelWarning = "Cancel save";
+			txtWarning = "Save canceled. Select a folder and confirm.";
+		} else if (locale.toString().startsWith("it")) {
+			info = "Selezionare la directory in cui salvare il registro.";
+			copy = "Copia ";
+			text1 = "Salva il registro nella cartella \"";
+			text2 = "\" ?";
+			buttonSave = "Salva";
+			buttonCancel = "Annulla";
+			noFile1 = "Il file ";
+			noFile2 = " non esiste.";
+			titelError = "Errore nel salvataggio";
+			txtError = "Non è stato possibile salvare il registro";
+			titelWarning = "Annullamento del salvataggio";
+			txtWarning = "Salvataggio annullato. Selezionare una cartella e confermare";
+		}
+		folderChooser.setTitle(info);
+
+		Alert alertInfo = new Alert(AlertType.INFORMATION);
+		alertInfo.setTitle(info);
+		alertInfo.setHeaderText(null);
+		alertInfo.setContentText(info);
+		alertInfo.initStyle(StageStyle.UTILITY);
+		alertInfo.showAndWait();
+
+		File saveFolder = null;
+		saveFolder = folderChooser.showDialog(new Stage());
+
+		if (saveFolder != null) {
+
+			// doSave einholen (Benutzer wollen speichern druecken)
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle(buttonSave + "?");
+			// alert.setHeaderText("Log in den Ordner "+saveFolder.getAbsolutePath() +"
+			// speichern");
+			alert.setHeaderText(null);
+			alert.setContentText(text1 + saveFolder.getAbsolutePath() + text2);
+
+			ButtonType buttonTypeSave = new ButtonType(buttonSave);
+			ButtonType buttonTypeCancel = new ButtonType(buttonCancel, ButtonData.CANCEL_CLOSE);
+			alert.initStyle(StageStyle.UTILITY);
+			alert.getButtonTypes().setAll(buttonTypeSave, buttonTypeCancel);
+
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == buttonTypeSave) {
+				// speichern
+				doSave = true;
 			} else {
-				folderChooser.setTitle("Wählen Sie den Ordner in welcher der Log gespeichert werden soll");
-				copy = "Kopiere ";
+				// Abgebrochen oder geschlossen
+				doSave = false;
 			}
-			File saveFolder = folderChooser.showDialog(new Stage());
-			if (saveFolder != null) {
+		}
+
+		if (!doSave) {
+			Alert alertWarning = new Alert(AlertType.WARNING);
+			alertWarning.setTitle(titelWarning);
+			alertWarning.setHeaderText(null);
+			alertWarning.setContentText(txtWarning);
+			alertWarning.initStyle(StageStyle.UTILITY);
+			alertWarning.showAndWait();
+		}
+
+		if (saveFolder != null && doSave) {
+
+			// checken ob schreibrechte
+			if (saveFolder.canWrite()) {
+				// checken ob beide zu kopierende Dateien existieren
 				File logFileXsl = new File(System.getenv("USERPROFILE") + File.separator + ".kost-val_2x"
 						+ File.separator + "logs" + File.separator + "kost-val.xsl");
 				File logFileXslNew = new File(saveFolder.getAbsolutePath() + File.separator + "kost-val.xsl");
 				File logFileNew = new File(saveFolder.getAbsolutePath() + File.separator + logFile.getName());
-				Util.copyFile(logFileXsl, logFileXslNew);
+
+				if (!logFile.exists()) {
+					System.out.println();
+					txtDetail = noFile1 + logFile.getAbsolutePath() + noFile2;
+					System.out.println(txtDetail);
+				} else if (!logFileXsl.exists()) {
+					System.out.println();
+					txtDetail = noFile1 + logFileXsl.getAbsolutePath() + noFile2;
+					System.out.println(txtDetail);
+				} else {
+					try {
+						System.out.println();
+						System.out.print(copy);
+						Util.copyFile(logFileXsl, logFileXslNew);
+						System.out.println(logFileXsl.getAbsolutePath() + " > " + logFileXslNew.getAbsolutePath());
+						Util.copyFile(logFile, logFileNew);
+						System.out.println(copy + logFile.getAbsolutePath() + " > " + logFileNew.getAbsolutePath());
+						saved = true;
+					} catch (IOException eSave) {
+						eSave.printStackTrace();
+						System.out.println();
+						System.out.println("IOException - GuiController - saveLog");
+						saved = false;
+					}
+					// am schluss schauen ob die Dateien kopiert wurden
+					if (!logFileXslNew.exists()) {
+						System.out.println();
+						txtDetail = noFile1 + logFileXslNew.getAbsolutePath() + noFile2;
+						System.out.println(txtDetail);
+						saved = false;
+					}
+					if (!logFileNew.exists()) {
+						System.out.println();
+						txtDetail = noFile1 + logFileNew.getAbsolutePath() + noFile2;
+						System.out.println(txtDetail);
+						saved = false;
+					}
+				}
+			} else {
+				String notwritable = "In das angegebene Verzeichnis " + saveFolder.getAbsolutePath()
+						+ " kann nicht geschrieben werden (ev. fehlende Berechtigungen?).";
+				if (locale.toString().startsWith("fr")) {
+					notwritable = "Dans le dossier specifie " + saveFolder.getAbsolutePath()
+							+ " on n`y peut pas ecrire (eventuellement autorisations manquantes?).";
+				} else if (locale.toString().startsWith("en")) {
+					notwritable = "Into the folder specified " + saveFolder.getAbsolutePath()
+							+ " cannot been written (possibly missing permissions?).";
+				} else if (locale.toString().startsWith("it")) {
+					notwritable = "La directory " + saveFolder.getAbsolutePath()
+							+ " specificata non puo essere scritta (forse mancano i permessi?).";
+				} else {
+				}
 				System.out.println();
-				System.out.println(copy + logFileXsl.getAbsolutePath() + " > " + logFileXslNew.getAbsolutePath());
-				Util.copyFile(logFile, logFileNew);
-				System.out.println(copy + logFile.getAbsolutePath() + " > " + logFileNew.getAbsolutePath());
+				System.out.println(notwritable);
+				txtDetail = notwritable;
+				saved = false;
 			}
-		} catch (IOException eSave) {
-			eSave.printStackTrace();
+			if (!saved) {
+				Alert alertNotSaved = new Alert(AlertType.ERROR);
+				alertNotSaved.setTitle(titelError);
+				alertNotSaved.setHeaderText(txtError);
+				alertNotSaved.setContentText(txtDetail);
+				alertNotSaved.initStyle(StageStyle.UTILITY);
+				alertNotSaved.showAndWait();
+			}
 		}
 	}
 
@@ -1171,107 +1354,12 @@ public class GuiController {
 		}
 		File valFile = fileChooser.showOpenDialog(new Stage());
 		if (valFile != null) {
-			/*
-			 * Minianleitung in engine anzeigen falls dann datei doch nicht angezeigt werden
-			 * kann...
-			 */
-			String sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/></h3></td><td><h3>Ausgewählte Datei: <br>"
-					+ valFile.getAbsolutePath()
-					+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>"
-					+ "<tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Validierung starten "
-					+ "<br/>&emsp;Nur Formate -> Formatvalidierung aller Formate im gesamten Ordner"
-					+ "<br/>&emsp;SIP inkl. Formate -> SIP-Validierung und Formatvalidierung aller Formate im content-Ordner"
-					+ "<br/>&emsp;Nur SIP -> SIP-Validierung ohne Formatvalidierung</h3></td></tr></table>";
-			if (locale.toString().startsWith("fr")) {
-				sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/></h3></td><td><h3>Fichier sélectionné : <br>"
-						+ valFile.getAbsolutePath()
-						+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Ajuster la configuration et le LogType si nécessaire </h3></td></tr>"
-						+ " <tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Commencer la validation"
-						+ "<br/>&emsp;Formats uniquement -> validation du format de tous les formats dans le dossier entier"
-						+ "<br/>&emsp;SIP y compris les formats -> Validation SIP et validation du format de tous les formats dans le dossier de content"
-						+ "<br/>&emsp;SIP uniquement -> Validation SIP sans validation de format</h3></td></tr></table>";
-			} else if (locale.toString().startsWith("en")) {
-				sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/></h3></td><td><h3>Selected file: <br>"
-						+ valFile.getAbsolutePath()
-						+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Adjust configuration and LogType if necessary </h3></td></tr> "
-						+ "<tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Start validation"
-						+ "<br/>&emsp;Formats only -> format validation of all formats in the entire folder"
-						+ "<br/>&emsp;SIP incl. formats -> SIP validation and format validation of all formats in the content folder"
-						+ "<br/>&emsp;SIP only -> SIP validation without format validation;</h3></td></tr></table>";
-			} else if (locale.toString().startsWith("it")) {
-				sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/></h3></td><td><h3>File selezionato: <br>"
-						+ valFile.getAbsolutePath()
-						+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Regolare la configurazione e il LogType, se necessario </h3></td></tr>"
-						+ " <tr><td><h3>3.</h3></td><td><h3>Avviare la convalida."
-						+ "<br/>&emsp;Solo formati -> convalida del formato di tutti i formati dell'intera cartella"
-						+ "<br/>&emsp;SIP incl. formati -> validazione SIP e validazione del formato di tutti i formati nella cartella dei content"
-						+ "<br/>&emsp;Solo SIP -> convalida SIP senza convalida del formato;</h3></td></tr></table>";
-			} else {
-				sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/></h3></td><td><h3>Ausgewählte Datei: <br>"
-						+ valFile.getAbsolutePath()
-						+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>"
-						+ "<tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Validierung starten "
-						+ "<br/>&emsp;Nur Formate -> Formatvalidierung aller Formate im gesamten Ordner"
-						+ "<br/>&emsp;SIP inkl. Formate -> SIP-Validierung und Formatvalidierung aller Formate im content-Ordner"
-						+ "<br/>&emsp;Nur SIP -> SIP-Validierung ohne Formatvalidierung</h3></td></tr></table>";
-			}
-			String text = "<html><body>" + sel + "</body></html>";
-			engine.loadContent(text);
-
-			fileFolder.clear();
-			fileFolder.setText(valFile.getAbsolutePath());
-
-			// Format und Sip Validierung erst moeglich wenn file ausgefuellt
-			buttonFormat.setDisable(false);
-			buttonPrint.setDisable(true);
-			buttonSave.setDisable(true);
-			String fileName = valFile.getName().toLowerCase();
-			if (fileName.endsWith(".txt") || fileName.endsWith(".jpeg") || fileName.endsWith(".jpg")
-					|| fileName.endsWith(".svg") || fileName.endsWith(".png") || fileName.endsWith(".xml")) {
-				/*
-				 * Die xml mit oder ohne Stylesheet wird in der ganzen engine angezeigt.
-				 * Entsprechend wird die Mini-Anleitung in die console geschrieben.
-				 */
-				console.setText(" \n");
-				engine.load("file:///" + valFile.getAbsolutePath());
-				if (locale.toString().startsWith("fr")) {
-					console.setText("1. Fichier selectionne : " + valFile.getAbsolutePath()
-							+ "\n2. Ajuster la configuration et le LogType si necessaire \n3. Demarrer la validation ");
-				} else if (locale.toString().startsWith("en")) {
-					console.setText("1. Selected file: " + valFile.getAbsolutePath()
-							+ "\n2. Adjust configuration and LogType if necessary \n3. Start validation ");
-				} else if (locale.toString().startsWith("it")) {
-					console.setText("1. File selezionato: " + valFile.getAbsolutePath()
-							+ "\n2. Regolare la configurazione e il LogType, se necessario \n3. Avviare la convalida ");
-				} else {
-					console.setText("1. Ausgewaehlte Datei: " + valFile.getAbsolutePath()
-							+ "\n2. Ggf. Konfiguration und LogType anpassen \n3. Validierung starten ");
-				}
-				if (valFile.getName().toLowerCase().endsWith(".kost-val.log.xml")) {
-					logFile = valFile;
-					buttonPrint.setDisable(false);
-					buttonSave.setDisable(false);
-					buttonFormat.setDisable(true);
-				}
-
-			} else {
-				String pathDetail = "file:/" + valFile.getAbsolutePath();
-				pathDetail = pathDetail.replace("\\\\", "/");
-				pathDetail = pathDetail.replace("\\", "/");
-
-				if (valFile.getName().startsWith("SIP")) {
-					String configSip0160 = "<ech0160validation>&#x2717;</ech0160validation>";
-					if (Util.stringInFileLine(configSip0160, configFile)) {
-						buttonSip.setDisable(true);
-						buttonOnlySip.setDisable(true);
-					} else {
-						buttonSip.setDisable(false);
-						buttonOnlySip.setDisable(false);
-					}
-				} else {
-					buttonSip.setDisable(true);
-					buttonOnlySip.setDisable(true);
-				}
+			try {
+				@SuppressWarnings("unused")
+				String init = initFoFile(valFile, configFile, locale, engine, fileFolder, buttonSip, buttonOnlySip,
+						buttonFormat, console, logFile, buttonPrint, buttonSave);
+			} catch (IOException e2) {
+				// Etwas hat nicht funktioniert -> keine Aktion
 			}
 		}
 	}
@@ -1319,69 +1407,14 @@ public class GuiController {
 		}
 		File valFolder = folderChooser.showDialog(new Stage());
 		if (valFolder != null) {
-			fileFolder.clear();
 			fileFolder.setText(valFolder.getAbsolutePath());
-			// Format und Sip Validierung erst moeglich wenn fileFolder
-			// ausgefuellt
-			// und auch in der Config erlaubt
-			if (Util.stringInFileLine("validation>&#x2713;</", configFile)) {
-				buttonFormat.setDisable(false);
-			} else if (Util.stringInFileLine("validation>(&#x2713;)</", configFile)) {
-				buttonFormat.setDisable(false);
-			} else {
-				buttonFormat.setDisable(true);
+			try {
+				@SuppressWarnings("unused")
+				String init = initFoFile(valFolder, configFile, locale, engine, fileFolder, buttonSip, buttonOnlySip,
+						buttonFormat, console, logFile, buttonPrint, buttonSave);
+			} catch (IOException e3) {
+				// Etwas hat nicht funktioniert -> keine Aktion
 			}
-			if (valFolder.getName().startsWith("SIP")) {
-				String configSip0160 = "<ech0160validation>&#x2717;</ech0160validation>";
-				if (Util.stringInFileLine(configSip0160, configFile)) {
-					buttonSip.setDisable(true);
-					buttonOnlySip.setDisable(true);
-				} else {
-					buttonSip.setDisable(false);
-					buttonOnlySip.setDisable(false);
-				}
-			} else {
-				buttonSip.setDisable(true);
-				buttonOnlySip.setDisable(true);
-			}
-			Map<String, File> fileMap = Util.getFileMapFile(valFolder);
-			int numberFile = fileMap.size();
-			String numberInFileMap = String.format("%,d", numberFile);
-
-			String sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/><br/></h3></td><td><h3>Ausgewählter Ordner: <br>"
-					+ valFolder.getAbsolutePath() + "<br>(" + numberInFileMap + " Dateien)</h3></td></tr>";
-			String sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>";
-			String sel3 = "<tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Validierung starten "
-					+ "<br/>&emsp;Nur Formate -> Formatvalidierung aller Formate im gesamten Ordner"
-					+ "<br/>&emsp;SIP inkl. Formate -> SIP-Validierung und Formatvalidierung aller Formate im content-Ordner"
-					+ "<br/>&emsp;Nur SIP -> SIP-Validierung ohne Formatvalidierung</h3></td></tr></table>";
-			if (locale.toString().startsWith("fr")) {
-				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/><br/></h3></td><td><h3>Dossier sélectionné : <br>"
-						+ valFolder.getAbsolutePath() + "<br>(" + numberInFileMap + " fichier)</h3></td></tr>";
-				sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ajuster la configuration et le LogType si nécessaire </h3></td></tr>";
-				sel3 = "<tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Commencer la validation"
-						+ "<br/>&emsp;Formats uniquement -> validation du format de tous les formats dans le dossier entier"
-						+ "<br/>&emsp;SIP y compris les formats -> Validation SIP et validation du format de tous les formats dans le dossier de content"
-						+ "<br/>&emsp;SIP uniquement -> Validation SIP sans validation de format</h3></td></tr></table>";
-			} else if (locale.toString().startsWith("it")) {
-				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/><br/></h3></td><td><h3>Directory selezionata: <br>"
-						+ valFolder.getAbsolutePath() + "<br>(" + numberInFileMap + " file)</h3></td></tr>";
-				sel2 = "<tr><td><h3>2.</h3></td><td><h3>Regolare la configurazione e il LogType, se necessario </h3></td></tr>";
-				sel3 = "<tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Avviare la convalida."
-						+ "<br/>&emsp;Solo formati -> convalida del formato di tutti i formati dell'intera cartella"
-						+ "<br/>&emsp;SIP incl. formati -> validazione SIP e validazione del formato di tutti i formati nella cartella dei content"
-						+ "<br/>&emsp;Solo SIP -> convalida SIP senza convalida del formato;</h3></td></tr></table>";
-			} else if (locale.toString().startsWith("en")) {
-				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/><br/></h3></td><td><h3>Selected folder: <br>"
-						+ valFolder.getAbsolutePath() + "<br>(" + numberInFileMap + " files)</h3></td></tr>";
-				sel2 = "<tr><td><h3>2.</h3></td><td><h3>Adjust configuration and LogType if necessary </h3></td></tr>";
-				sel3 = "<tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Start validation"
-						+ "<br/>&emsp;Formats only -> format validation of all formats in the entire folder"
-						+ "<br/>&emsp;SIP incl. formats -> SIP validation and format validation of all formats in the content folder"
-						+ "<br/>&emsp;SIP only -> SIP validation without format validation;</h3></td></tr></table>";
-			}
-			String text = "<html><body>" + sel1 + sel2 + sel3 + "</body></html>";
-			engine.loadContent(text);
 		}
 		buttonPrint.setDisable(true);
 		buttonSave.setDisable(true);
@@ -1412,7 +1445,7 @@ public class GuiController {
 			// New window (Stage)
 			Stage configStage = new Stage();
 
-			configStage.setTitle("KOST-Val   -   Configuration");
+			configStage.setTitle("KOST-Val   -   Configuration   (v" + versionKostVal + ")");
 			Image kostvalIcon = new Image(
 					"file:" + dirOfJarPath + File.separator + "doc" + File.separator + "valicon.png");
 			// Image kostvalIcon = new Image( "file:valicon.png" );
@@ -1454,6 +1487,169 @@ public class GuiController {
 		console.setText(" \n");
 		String pathFileFolder = fileFolder.getText();
 		File valFileFolder = new File(pathFileFolder);
+		try {
+			String init = initFoFile(valFileFolder, configFile, locale, engine, fileFolder, buttonSip, buttonOnlySip,
+					buttonFormat, console, logFile, buttonPrint, buttonSave);
+		} catch (IOException e) {
+			// Etwas hat nicht funktioniert -> keine Aktion
+		}
+	}
+
+	/* Wenn Aenderungen an changeFileFolderOver gemacht wird, wird es ausgeloest */
+	@FXML
+	void changeFileFolderOver(DragEvent event) {
+		console.setText(" \n");
+		Dragboard dragb = event.getDragboard();
+		if (dragb.hasFiles()) {
+			String fileFolderTxt = dragb.getFiles().get(0).toString();
+			fileFolder.setText(fileFolderTxt);
+			File valFileFolder = new File(fileFolderTxt);
+
+			try {
+				@SuppressWarnings("unused")
+				String init = initFoFile(valFileFolder, configFile, locale, engine, fileFolder, buttonSip,
+						buttonOnlySip, buttonFormat, console, logFile, buttonPrint, buttonSave);
+			} catch (IOException e) {
+				// Etwas hat nicht funktioniert -> keine Aktion
+			}
+		}
+	}
+
+	/* TODO --> ChoiceBox ================= */
+
+	// Mit changeLoType wird die Log umgestellt
+	@FXML
+	void changeLogType(ActionEvent event) {
+		console.setText(" \n");
+		String selLogType = logType.getValue();
+		if (selLogType.contains("--min")) {
+			arg3 = "--min";
+		} else if (selLogType.contains("--max")) {
+			arg3 = "--max";
+		} else {
+			arg3 = "--xml";
+		}
+	}
+
+	// Mit changeLang wird die Sprache umgestellt
+	@FXML
+	void changeLang(ActionEvent event) {
+		console.setText(" \n");
+		String selLang = lang.getValue();
+		try {
+			if (selLang.equals("Deutsch")) {
+				buttonFormat.setText("Nur Formate");
+				buttonSip.setText("SIP inkl. Formate");
+				buttonOnlySip.setText("Nur SIP");
+				labelFileFolder.setText("Wähle Datei / Ordner");
+				buttonFolder.setText("Ordner");
+				buttonFile.setText("Datei");
+				buttonHelp.setText("Hilfe ?");
+				buttonLicence.setText("Lizenzinformationen");
+				buttonChange.setText("Anpassen");
+				buttonShowConfig.setText("Anzeigen");
+				labelStart.setText("Starte Validierung");
+				labelConfig.setText("Konfiguration");
+				buttonSave.setText("Speichern");
+				buttonPrint.setText("Drucken");
+				if (configFile.exists()) {
+					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-DE.xsl", configFile);
+					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-DE.xsl", configFile);
+					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-DE.xsl", configFile);
+				}
+				if (configFileSta.exists()) {
+					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-DE.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-DE.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-DE.xsl", configFileSta);
+				}
+				locale = new Locale("de");
+			} else if (selLang.equals("English")) {
+				buttonFormat.setText("Format only");
+				buttonSip.setText("SIP incl. Format");
+				buttonOnlySip.setText("SIP only");
+				labelFileFolder.setText("Select file / folder");
+				buttonFolder.setText("Folder");
+				buttonFile.setText("File");
+				buttonHelp.setText("Help ?");
+				buttonLicence.setText("License information");
+				buttonChange.setText("Change");
+				buttonShowConfig.setText("Show");
+				labelStart.setText("Start validation");
+				labelConfig.setText("Configuration");
+				buttonSave.setText("Save");
+				buttonPrint.setText("Print");
+				if (configFile.exists()) {
+					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-EN.xsl", configFile);
+					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-EN.xsl", configFile);
+					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-EN.xsl", configFile);
+				}
+				if (configFileSta.exists()) {
+					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-EN.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-EN.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-EN.xsl", configFileSta);
+				}
+				locale = new Locale("en");
+			} else if (selLang.equals("Italiano")) {
+				buttonFormat.setText("Solo formati");
+				buttonSip.setText("SIP incl. formati");
+				buttonOnlySip.setText("Solo SIP");
+				labelFileFolder.setText("Seleziona");
+				buttonFolder.setText("Directory");
+				buttonFile.setText("File");
+				buttonHelp.setText("Aiuto ?");
+				buttonLicence.setText("Informazioni sulla licenza");
+				buttonChange.setText("Modifica");
+				buttonShowConfig.setText("Visualizza");
+				labelStart.setText("Avvia convalida");
+				labelConfig.setText("Configurazione");
+				buttonSave.setText("Salva");
+				buttonPrint.setText("Stampa");
+				if (configFile.exists()) {
+					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-IT.xsl", configFile);
+					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-IT.xsl", configFile);
+					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-IT.xsl", configFile);
+				}
+				if (configFileSta.exists()) {
+					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-IT.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-IT.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-IT.xsl", configFileSta);
+				}
+				locale = new Locale("it");
+			} else {
+				buttonFormat.setText("Format uniquement");
+				buttonSip.setText("SIP incl. formats");
+				buttonOnlySip.setText("SIP uniquement");
+				labelFileFolder.setText("Sélectionnez");
+				buttonFolder.setText("Dossier");
+				buttonFile.setText("Fichier");
+				buttonHelp.setText("Aide ?");
+				buttonLicence.setText("Informations sur la licence");
+				buttonChange.setText("Changer");
+				buttonShowConfig.setText("Afficher");
+				labelStart.setText("Lancer la validation");
+				labelConfig.setText("Configuration");
+				buttonSave.setText("Sauvegarder");
+				buttonPrint.setText("Imprimer");
+				if (configFile.exists()) {
+					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-FR.xsl", configFile);
+					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-FR.xsl", configFile);
+					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-FR.xsl", configFile);
+				}
+				if (configFileSta.exists()) {
+					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-FR.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-FR.xsl", configFileSta);
+					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-FR.xsl", configFileSta);
+				}
+				locale = new Locale("fr");
+			}
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+
+	public static String initFoFile(File valFileFolder, File configFile, Locale locale, WebEngine engine,
+			TextField fileFolder, Button buttonSip, Button buttonOnlySip, Button buttonFormat, TextArea console,
+			File logFile, Button buttonPrint, Button buttonSave) throws IOException {
 		if (valFileFolder.exists()) { // Format und Sip Validierung erst
 			// moeglich wenn fileFolder
 			// ausgefuellt
@@ -1576,16 +1772,6 @@ public class GuiController {
 						pathDetail = pathDetail.replace("\\\\", "/");
 						pathDetail = pathDetail.replace("\\", "/");
 					}
-				} else {
-					String notexist = "Ungültiger Pfad! " + valFileFolder.getAbsolutePath() + " existiert nicht.";
-					if (locale.toString().startsWith("fr")) {
-						notexist = "Lien invalide ! " + valFileFolder.getAbsolutePath() + " n'existe pas.";
-					} else if (locale.toString().startsWith("en")) {
-						notexist = "Illegal path! " + valFileFolder.getAbsolutePath() + " doesn't exist.";
-					} else if (locale.toString().startsWith("it")) {
-						notexist = "Percorso non valido! " + valFileFolder.getAbsolutePath() + " non esiste.";
-					}
-					engine.loadContent("<html><h2>" + notexist + "</h2></html>");
 				}
 			}
 		} else {
@@ -1640,118 +1826,8 @@ public class GuiController {
 				engine.loadContent("<html><h2>" + notexist + "</h2></html>");
 			}
 		}
-	}
 
-	/* TODO --> ChoiceBox ================= */
-
-	// Mit changeLoType wird die Log umgestellt
-	@FXML
-	void changeLogType(ActionEvent event) {
-		console.setText(" \n");
-		String selLogType = logType.getValue();
-		if (selLogType.contains("--min")) {
-			arg3 = "--min";
-		} else if (selLogType.contains("--max")) {
-			arg3 = "--max";
-		} else {
-			arg3 = "--xml";
-		}
-	}
-
-	// Mit changeLang wird die Sprache umgestellt
-	@FXML
-	void changeLang(ActionEvent event) {
-		console.setText(" \n");
-		String selLang = lang.getValue();
-		try {
-			if (selLang.equals("Deutsch")) {
-				buttonFormat.setText("Nur Formate");
-				buttonSip.setText("SIP inkl. Formate");
-				buttonOnlySip.setText("Nur SIP");
-				labelFileFolder.setText("Wähle Datei / Ordner");
-				buttonFolder.setText("Ordner");
-				buttonFile.setText("Datei");
-				buttonHelp.setText("Hilfe ?");
-				buttonLicence.setText("Lizenzinformationen");
-				buttonChange.setText("Anpassen");
-				buttonShowConfig.setText("Anzeigen");
-				labelStart.setText("Starte Validierung");
-				labelConfig.setText("Konfiguration");
-				buttonSave.setText("Speichern");
-				buttonPrint.setText("Drucken");
-				if (configFile.exists()) {
-					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-DE.xsl", configFile);
-					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-DE.xsl", configFile);
-					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-DE.xsl", configFile);
-				}
-				locale = new Locale("de");
-			} else if (selLang.equals("English")) {
-				buttonFormat.setText("Format only");
-				buttonSip.setText("SIP incl. Format");
-				buttonOnlySip.setText("SIP only");
-				labelFileFolder.setText("Select file / folder");
-				buttonFolder.setText("Folder");
-				buttonFile.setText("File");
-				buttonHelp.setText("Help ?");
-				buttonLicence.setText("License information");
-				buttonChange.setText("Change");
-				buttonShowConfig.setText("Show");
-				labelStart.setText("Start validation");
-				labelConfig.setText("Configuration");
-				buttonSave.setText("Save");
-				buttonPrint.setText("Print");
-				if (configFile.exists()) {
-					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-EN.xsl", configFile);
-					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-EN.xsl", configFile);
-					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-EN.xsl", configFile);
-				}
-				locale = new Locale("en");
-			} else if (selLang.equals("Italiano")) {
-				buttonFormat.setText("Solo formati");
-				buttonSip.setText("SIP incl. formati");
-				buttonOnlySip.setText("Solo SIP");
-				labelFileFolder.setText("Seleziona");
-				buttonFolder.setText("Directory");
-				buttonFile.setText("File");
-				buttonHelp.setText("Aiuto ?");
-				buttonLicence.setText("Informazioni sulla licenza");
-				buttonChange.setText("Modifica");
-				buttonShowConfig.setText("Visualizza");
-				labelStart.setText("Avvia convalida");
-				labelConfig.setText("Configurazione");
-				buttonSave.setText("Salva");
-				buttonPrint.setText("Stampa");
-				if (configFile.exists()) {
-					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-IT.xsl", configFile);
-					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-IT.xsl", configFile);
-					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-IT.xsl", configFile);
-				}
-				locale = new Locale("it");
-			} else {
-				buttonFormat.setText("Format uniquement");
-				buttonSip.setText("SIP incl. formats");
-				buttonOnlySip.setText("SIP uniquement");
-				labelFileFolder.setText("Sélectionnez");
-				buttonFolder.setText("Dossier");
-				buttonFile.setText("Fichier");
-				buttonHelp.setText("Aide ?");
-				buttonLicence.setText("Informations sur la licence");
-				buttonChange.setText("Changer");
-				buttonShowConfig.setText("Afficher");
-				labelStart.setText("Lancer la validation");
-				labelConfig.setText("Configuration");
-				buttonSave.setText("Sauvegarder");
-				buttonPrint.setText("Imprimer");
-				if (configFile.exists()) {
-					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-FR.xsl", configFile);
-					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-FR.xsl", configFile);
-					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-FR.xsl", configFile);
-				}
-				locale = new Locale("fr");
-			}
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
+		return "OK";
 	}
 
 }

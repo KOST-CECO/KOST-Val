@@ -245,7 +245,20 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
 			return false;
 		}
-		// jhoveReport / temp wird in Controllervalfile geloescht */
+		/* jhoveReport / temp wird in Controllervalfile geloescht 
+		 * 
+		 * Eine Kopie wurde auch hiergefunden: 
+		 * C:\Users\...\AppData\Local\Temp
+		 * 
+		 * Falls vorhanden loeschen
+		 */
+		
+		String pathToLocalTemp = System.getenv("USERPROFILE") + File.separator + "AppData"+ File.separator + "Local"+ File.separator + "Temp";
+		File jhoveLogTemp = new File(pathToLocalTemp, valDatei.getName() + ".jhove-log.txt");
+		if (jhoveLogTemp.exists()) {
+			Util.deleteFile(jhoveLogTemp);			
+		}
+		
 		return isValid;
 	}
 }
