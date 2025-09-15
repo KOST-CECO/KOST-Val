@@ -138,11 +138,16 @@ public class ValidationAvalidationMkvModuleImpl extends ValidationModuleImpl imp
 								formatCodec = " container=" + formatName + "  ";
 							} else {
 								// NOK
-								Logtxt.logtxt(logFile,
-										getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_MKV)
-												+ getTextResourceService().getText(locale,
-														ERROR_XML_A_AUDIOVIDEO_FORMAT_NAZ, formatName));
-								isValid = false;
+								if (min) {
+									scannerFormat.close();
+									return false;
+								} else {
+									Logtxt.logtxt(logFile,
+											getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_MKV)
+													+ getTextResourceService().getText(locale,
+															ERROR_XML_A_AUDIOVIDEO_FORMAT_NAZ, formatName));
+									isValid = false;
+								}
 							}
 						}
 					}
@@ -213,25 +218,31 @@ public class ValidationAvalidationMkvModuleImpl extends ValidationModuleImpl imp
 								countAudioCodec = countAudioCodec + 1;
 							} else {
 								// NOK
-								if (codec.equals("h264") || codec.equals("hevc") || codec.equals("ffv1")
-										|| codec.equals("av1") || codec.equals("jpeg2000") || codec.equals("huffyuv")
-										|| codec.equals("vp8") || codec.equals("vp9")) {
-									// TODO: laufend erweitern auch bei MP4
-									type = "videocodec";
-									countVideoCodec = countVideoCodec + 1;
-								} else if (codec.equals("mp3") || codec.equals("flac") || codec.equals("aac")
-										|| codec.equals("mp2") || codec.equals("ac3") || codec.equals("alac")
-										|| codec.equals("opus") || codec.equals("vorbis") || codec.contains("pcm_")) {
-									// TODO: laufend erweitern auch bei MP4
-									type = "audiocodec";
-									countAudioCodec = countAudioCodec + 1;
+								if (min) {
+									scanner.close();
+									return false;
+								} else {
+									if (codec.equals("h264") || codec.equals("hevc") || codec.equals("ffv1")
+											|| codec.equals("av1") || codec.equals("jpeg2000")
+											|| codec.equals("huffyuv") || codec.equals("vp8") || codec.equals("vp9")) {
+										// TODO: laufend erweitern auch bei MP4
+										type = "videocodec";
+										countVideoCodec = countVideoCodec + 1;
+									} else if (codec.equals("mp3") || codec.equals("flac") || codec.equals("aac")
+											|| codec.equals("mp2") || codec.equals("ac3") || codec.equals("alac")
+											|| codec.equals("opus") || codec.equals("vorbis")
+											|| codec.contains("pcm_")) {
+										// TODO: laufend erweitern auch bei MP4
+										type = "audiocodec";
+										countAudioCodec = countAudioCodec + 1;
+									}
+									formatCodec = formatCodec + type + "=" + codecName + "  ";
+									Logtxt.logtxt(logFile,
+											getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_MKV)
+													+ getTextResourceService().getText(locale,
+															ERROR_XML_A_AUDIOVIDEO_CODEC_NAZ, codecName, type));
+									isValid = false;
 								}
-								formatCodec = formatCodec + type + "=" + codecName + "  ";
-								Logtxt.logtxt(logFile,
-										getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_MKV)
-												+ getTextResourceService().getText(locale,
-														ERROR_XML_A_AUDIOVIDEO_CODEC_NAZ, codecName, type));
-								isValid = false;
 							}
 						}
 					}
@@ -241,20 +252,30 @@ public class ValidationAvalidationMkvModuleImpl extends ValidationModuleImpl imp
 
 					if (countFormat == 0) {
 						// NOK
-						Logtxt.logtxt(logFile,
-								getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_MKV)
-										+ getTextResourceService().getText(locale, ERROR_XML_A_AUDIOVIDEO_CODEC_NO,
-												"format", "MKV"));
-						isValid = false;
+						if (min) {
+							scanner.close();
+							return false;
+						} else {
+							Logtxt.logtxt(logFile,
+									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_MKV)
+											+ getTextResourceService().getText(locale, ERROR_XML_A_AUDIOVIDEO_CODEC_NO,
+													"format", "MKV"));
+							isValid = false;
+						}
 					}
 					if (countVideoCodec == 0) {
 						if (configMap.get("Allowedmkvnovideo").equals("Error")) {
 							// NOK
-							Logtxt.logtxt(logFile,
-									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_MKV)
-											+ getTextResourceService().getText(locale,
-													ERROR_XML_A_VIDEO_CODEC_NOVIDEO_ERROR, "MKV"));
-							isValid = false;
+							if (min) {
+								scanner.close();
+								return false;
+							} else {
+								Logtxt.logtxt(logFile,
+										getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_MKV)
+												+ getTextResourceService().getText(locale,
+														ERROR_XML_A_VIDEO_CODEC_NOVIDEO_ERROR, "MKV"));
+								isValid = false;
+							}
 						} else {
 							// Warnung
 							Logtxt.logtxt(logFile,
@@ -266,11 +287,16 @@ public class ValidationAvalidationMkvModuleImpl extends ValidationModuleImpl imp
 					if (countAudioCodec == 0) {
 						if (configMap.get("Allowedmkvnoaudio").equals("Error")) {
 							// NOK
-							Logtxt.logtxt(logFile,
-									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_MKV)
-											+ getTextResourceService().getText(locale,
-													ERROR_XML_A_AUDIOVIDEO_CODEC_NOAUDIO_ERROR, "MKV"));
-							isValid = false;
+							if (min) {
+								scanner.close();
+								return false;
+							} else {
+								Logtxt.logtxt(logFile,
+										getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_MKV)
+												+ getTextResourceService().getText(locale,
+														ERROR_XML_A_AUDIOVIDEO_CODEC_NOAUDIO_ERROR, "MKV"));
+								isValid = false;
+							}
 						} else {
 							// Warnung
 							Logtxt.logtxt(logFile,
@@ -281,11 +307,16 @@ public class ValidationAvalidationMkvModuleImpl extends ValidationModuleImpl imp
 					}
 					if (countVideoCodec == 0 && countAudioCodec == 0) {
 						// NOK
-						Logtxt.logtxt(logFile,
-								getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_MKV)
-										+ getTextResourceService().getText(locale, ERROR_XML_A_AUDIOVIDEO_CODEC_NO,
-												"codec", "MKV"));
-						isValid = false;
+						if (min) {
+							scanner.close();
+							return false;
+						} else {
+							Logtxt.logtxt(logFile,
+									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_MKV)
+											+ getTextResourceService().getText(locale, ERROR_XML_A_AUDIOVIDEO_CODEC_NO,
+													"codec", "MKV"));
+							isValid = false;
+						}
 					}
 
 					scanner.close();

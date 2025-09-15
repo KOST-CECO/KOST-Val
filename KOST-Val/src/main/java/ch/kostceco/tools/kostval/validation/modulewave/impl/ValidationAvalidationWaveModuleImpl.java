@@ -138,11 +138,16 @@ public class ValidationAvalidationWaveModuleImpl extends ValidationModuleImpl
 								formatCodec = " container=WAV  ";
 							} else {
 								// NOK
-								Logtxt.logtxt(logFile,
-										getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_WAVE)
-												+ getTextResourceService().getText(locale,
-														ERROR_XML_A_AUDIOVIDEO_FORMAT_NAZ, formatName));
-								isValid = false;
+								if (min) {
+									scannerFormat.close();
+									return false;
+								} else {
+									Logtxt.logtxt(logFile,
+											getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_WAVE)
+													+ getTextResourceService().getText(locale,
+															ERROR_XML_A_AUDIOVIDEO_FORMAT_NAZ, formatName));
+									isValid = false;
+								}
 							}
 						}
 					}
@@ -173,13 +178,18 @@ public class ValidationAvalidationWaveModuleImpl extends ValidationModuleImpl
 								countAudioCodec = countAudioCodec + 1;
 							} else {
 								// NOK
-								countAudioCodec = countAudioCodec + 1;
-								formatCodec = formatCodec + type + "=" + codecName + "  ";
-								Logtxt.logtxt(logFile,
-										getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_WAVE)
-												+ getTextResourceService().getText(locale,
-														ERROR_XML_A_AUDIOVIDEO_CODEC_NAZ, codecName, type));
-								isValid = false;
+								if (min) {
+									scanner.close();
+									return false;
+								} else {
+									countAudioCodec = countAudioCodec + 1;
+									formatCodec = formatCodec + type + "=" + codecName + "  ";
+									Logtxt.logtxt(logFile,
+											getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_WAVE)
+													+ getTextResourceService().getText(locale,
+															ERROR_XML_A_AUDIOVIDEO_CODEC_NAZ, codecName, type));
+									isValid = false;
+								}
 							}
 						}
 					}
@@ -190,19 +200,29 @@ public class ValidationAvalidationWaveModuleImpl extends ValidationModuleImpl
 
 					if (countFormat == 0) {
 						// NOK
-						Logtxt.logtxt(logFile,
-								getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_WAVE)
-										+ getTextResourceService().getText(locale, ERROR_XML_A_AUDIOVIDEO_CODEC_NO,
-												"format", "WAVE"));
-						isValid = false;
+						if (min) {
+							scanner.close();
+							return false;
+						} else {
+							Logtxt.logtxt(logFile,
+									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_WAVE)
+											+ getTextResourceService().getText(locale, ERROR_XML_A_AUDIOVIDEO_CODEC_NO,
+													"format", "WAVE"));
+							isValid = false;
+						}
 					}
 					if (countAudioCodec == 0) {
 						// NOK
-						Logtxt.logtxt(logFile,
-								getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_WAVE)
-										+ getTextResourceService().getText(locale,
-												ERROR_XML_A_AUDIOVIDEO_CODEC_NOAUDIO_ERROR, "WAVE"));
-						isValid = false;
+						if (min) {
+							scanner.close();
+							return false;
+						} else {
+							Logtxt.logtxt(logFile,
+									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_WAVE)
+											+ getTextResourceService().getText(locale,
+													ERROR_XML_A_AUDIOVIDEO_CODEC_NOAUDIO_ERROR, "WAVE"));
+							isValid = false;
+						}
 					}
 
 					scanner.close();
@@ -286,11 +306,15 @@ public class ValidationAvalidationWaveModuleImpl extends ValidationModuleImpl
 						scannerFormat.close();
 					}
 					if (!isValidB) {
-						// Fehlermeldungen ausgeben
-						isValid = false;
-						Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_B_WAVE)
-								+ getTextResourceService().getText(locale, ERROR_XML_B_AUDIOVIDEO_ERROR, errB1 + errB2
-										+ errB3 + errB4 + errB5 + errB6 + errB7 + errB8 + errB9 + errB10));
+						if (min) {
+							return false;
+						} else {
+							// Fehlermeldungen ausgeben
+							isValid = false;
+							Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_B_WAVE)
+									+ getTextResourceService().getText(locale, ERROR_XML_B_AUDIOVIDEO_ERROR, errB1
+											+ errB2 + errB3 + errB4 + errB5 + errB6 + errB7 + errB8 + errB9 + errB10));
+						}
 					}
 				}
 				// TODO: Erledigt: Analyse ffmpeg
