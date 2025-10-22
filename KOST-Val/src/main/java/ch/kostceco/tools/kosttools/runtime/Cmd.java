@@ -117,32 +117,130 @@ public class Cmd {
 		} catch (IOException ex) {
 			System.out.println("IOException exec P: " + ex);
 		}
+		String line = "";
+		String lineE = "";
+		String lineReturn = line;
+		try {
+			if (out) {
+				// System.out.println( "OUTPUT" );
+				InputStream stream = p.getInputStream();
+				BufferedReader in = new BufferedReader(new InputStreamReader(stream));
+				while ((line = in.readLine()) != null) {
+					// System.out.println(line);
+					if (lineReturn.equals("")) {
+						lineReturn = line;
+					} else {
+						if (lineReturn.contains(line)) {
+							// Fehler bereits festgehalten (dublikat)
+						} else {
+							lineReturn = lineReturn + "</Message><Message>" + line;
+						}
+					}
+				}
+				in.close();
+			}
+			// System.out.println( "ERROR-OUTPUT" );
+			InputStream streamE = p.getErrorStream();
+			BufferedReader inE = new BufferedReader(new InputStreamReader(streamE));
+			while ((lineE = inE.readLine()) != null) {
+				// System.out.println(lineE);
+				if (lineReturn.equals("")) {
+					lineReturn = "ERROR: " + lineE;
+				} else {
+					if (lineReturn.contains(lineE)) {
+						// Fehler bereits festgehalten (dublikat)
+					} else {
+						lineReturn = lineReturn + "</Message><Message>ERROR: " + lineE;
+					}
+				}
+			}
+			inE.close();
+		} catch (IOException ex) {
+			System.out.println("IOException exec Out Err: " + ex);
+		}
+		if (lineReturn.equals("")) {
+			lineReturn = "OK";
+		}
+		// System.out.println("return String exec: "+lineReturn);
+		return lineReturn;
+	}
+
+	// TODO
+	public static String execToStringSplitDv(String command, boolean out, File workDir) throws InterruptedException {
+		/*
+		 * exec nur für diskretValidator, da dieser immer wieder haengen bleibt
+		 * 
+		 * command = "\"\"" + exeFile.getAbsolutePath() + "\"" +
+		 * " --noout --stream --nowarning --schema " + "\"" + xsdFile.getAbsolutePath()
+		 * + "\"" + " " + "\"" + xmlFile.getAbsolutePath() + "\"\"";
+		 */
+
+		// System.out.println( "executing command: " + command );
+		Process p = null;
+		try {
+			p = Runtime.getRuntime().exec(("cmd /c " + command).split(" "), null, workDir);
+			// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag
+			// vorhanden ist!
+		} catch (IOException ex) {
+			System.out.println("IOException exec P: " + ex);
+		}
 		String line1 = "";
 		String line2 = "";
 		String lineE = "";
 		String lineReturn = line1;
-		Boolean jvmsof = false;
+		Boolean exception = false;
 		try {
 			if (out) {
-				if (command.contains("egov-validationclient-cli")) {
-					/*
-					 * diskretvalidator bleibt manchmal wegen StackOverFlow stecken, versuch dies zu
-					 * umgehen, indem beim diskretvalidatorzuerst getErrorStream ausgewertet wird
-					 */
+				/*
+				 * diskretvalidator bleibt manchmal wegen StackOverFlow stecken, versuch dies zu
+				 * umgehen, indem beim diskretvalidatorzuerst getErrorStream ausgewertet wird
+				 */
 
-					InputStream streamE = p.getErrorStream();
-					BufferedReader inE = new BufferedReader(new InputStreamReader(streamE));
-					while ((lineE = inE.readLine()) != null) {
-						// System.out.println(lineE);
-						if (lineE.contains("java.lang.StackOverflowError")
-								|| lineE.contains("java.lang.OutOfMemoryError")) {
-							// System.out.println(lineE);
-							/*
-							 * diskretvalidator bleibt manchmal wegen StackOverFlow stecken, versuch dies zu
-							 * umgehen
-							 */
-							jvmsof = true;
+				InputStream streamE1 = p.getErrorStream();
+				BufferedReader inE1 = new BufferedReader(new InputStreamReader(streamE1));
+				long secondsE = System.currentTimeMillis();
+				while (secondsE + (60 * 1000) > System.currentTimeMillis()) {
+					if(inE1.readLine() != null) {
+						// ende 
+						break;
+					}
+					lineE = inE1.readLine();
+					// System.out.println("lineE "+lineE);
+					if (lineE.contains("java.lang.StackOverflowError") || lineE.contains("java.lang.OutOfMemoryError")
+							|| lineE.contains("java.lang.NullPointerException")
+							|| lineE.contains("java.io.IOException")|| lineE.contains("Exception in thread")) {
+						// System.out.println(" -  E "+lineE);
+						/*
+						 * diskretvalidator bleibt manchmal wegen StackOverFlow stecken, versuch dies zu
+						 * umgehen
+						 */
+						exception = true;
+						break;
+					}
+				}
+				inE1.close();
+
+				if (!exception) {
+					InputStream stream2 = p.getInputStream();
+					BufferedReader in2 = new BufferedReader(new InputStreamReader(stream2));
+					while ((line2 = in2.readLine()) != null) {
+						// System.out.println("line2 "+line2);
+						if (lineReturn.equals("")) {
+							lineReturn = line2;
+						} else {
+							if (lineReturn.contains(line2)) {
+								// Fehler bereits festgehalten (dublikat)
+							} else {
+								lineReturn = lineReturn + "</Message><Message>" + line2;
+							}
 						}
+					}
+					in2.close();
+
+					InputStream streamE2 = p.getErrorStream();
+					BufferedReader inE2 = new BufferedReader(new InputStreamReader(streamE2));
+					while ((lineE = inE2.readLine()) != null) {
+						// System.out.println("lineE."+lineE);
 						if (lineReturn.equals("")) {
 							lineReturn = "ERROR: " + lineE;
 						} else {
@@ -153,58 +251,8 @@ public class Cmd {
 							}
 						}
 					}
-					inE.close();
+					inE2.close();
 
-					if (!jvmsof) {
-						InputStream stream2 = p.getInputStream();
-						BufferedReader in2 = new BufferedReader(new InputStreamReader(stream2));
-						while ((line2 = in2.readLine()) != null) {
-							// System.out.println(line);
-							if (lineReturn.equals("")) {
-								lineReturn = line2;
-							} else {
-								if (lineReturn.contains(line2)) {
-									// Fehler bereits festgehalten (dublikat)
-								} else {
-									lineReturn = lineReturn + "</Message><Message>" + line2;
-								}
-							}
-						}
-						in2.close();
-					}
-
-				} else {
-					InputStream stream1 = p.getInputStream();
-					BufferedReader in1 = new BufferedReader(new InputStreamReader(stream1));
-					while ((line1 = in1.readLine()) != null) {
-						// System.out.println(line);
-						if (lineReturn.equals("")) {
-							lineReturn = line1;
-						} else {
-							if (lineReturn.contains(line1)) {
-								// Fehler bereits festgehalten (dublikat)
-							} else {
-								lineReturn = lineReturn + "</Message><Message>" + line1;
-							}
-						}
-					}
-					in1.close();
-
-					InputStream streamE = p.getErrorStream();
-					BufferedReader inE = new BufferedReader(new InputStreamReader(streamE));
-					while ((lineE = inE.readLine()) != null) {
-						// System.out.println(lineE);
-						if (lineReturn.equals("")) {
-							lineReturn = "ERROR: " + lineE;
-						} else {
-							if (lineReturn.contains(lineE)) {
-								// Fehler bereits festgehalten (dublikat)
-							} else {
-								lineReturn = lineReturn + "</Message><Message>ERROR: " + lineE;
-							}
-						}
-					}
-					inE.close();
 				}
 			}
 		} catch (IOException ex) {
@@ -216,5 +264,6 @@ public class Cmd {
 		// System.out.println("return String exec: "+lineReturn);
 		return lineReturn;
 	}
+
 
 }
