@@ -240,7 +240,7 @@ public class Controllervalfofile implements MessageConstants {
 					if (recFormat.equals("PDFA")) {
 						intro = countToValidated + " " + "PDFA:  " + valDatei.getAbsolutePath() + " ";
 						if (pdfaValidation.equals("yes")) {
-							System.out.print(intro);
+							System.out.print(intro); // Bei PDF und PDFA immer ausgeben
 							// akzeptiert und soll validiert werden
 							Controllervalfile controller1 = (Controllervalfile) context.getBean("controllervalfile");
 							boolean valFile = controller1.valFile(valDatei, logFileName, directoryOfLogfile, verbose,
@@ -281,10 +281,12 @@ public class Controllervalfofile implements MessageConstants {
 							}
 
 							if (pdfaValidation.equals("az")) {
+								System.out.println(" = accepted"); // Bei PDF und PDFA immer ausgeben
 								// nur akzeptiert -> KEINE Validierung, nur
 								// Erkennung
 								recMsg = "AZ";
 							} else {
+								System.out.println(" = not accepted"); // Bei PDF und PDFA immer ausgeben
 								// NICHT akzeptiert -> invalid
 								recMsg = "notAZ";
 							}
@@ -311,6 +313,7 @@ public class Controllervalfofile implements MessageConstants {
 						}
 					} else if (recFormat.equals("PDF")) {
 						intro = countToValidated + " " + "PDF:   " + valDatei.getAbsolutePath() + " ";
+						System.out.print(intro); // Bei PDF und PDFA immer ausgeben
 						if (pdfValidation.equals("yes")) {
 							// akzeptiert und soll validiert werden
 							// Aktuell nicht moeglich, kein Validator dafuer
@@ -339,10 +342,12 @@ public class Controllervalfofile implements MessageConstants {
 								Logtxt.logtxt(logFile, egovdvMsg);
 							}
 							if (pdfValidation.equals("az")) {
+								System.out.println(" = accepted"); // Bei PDF und PDFA immer ausgeben
 								// nur akzeptiert -> KEINE Validierung, nur
 								// Erkennung
 								recMsg = "AZ";
 							} else {
+								System.out.println(" = not accepted"); // Bei PDF und PDFA immer ausgeben
 								// NICHT akzeptiert -> invalid
 								recMsg = "notAZ";
 							}
@@ -873,6 +878,7 @@ public class Controllervalfofile implements MessageConstants {
 		String returnEgovdvSum = "Error_egovdv";
 		try {
 			Integer countSig = egovdv.execEgovdvCountSig(valDatei, workDir2, dirOfJarPath);
+			String countSigStr = countSig + "";
 			/*
 			 * Gibt mit egovdv via cmd die Anzahl Signaturen in pdf aus
 			 * 
@@ -888,23 +894,37 @@ public class Controllervalfofile implements MessageConstants {
 			 * 
 			 * @return Integer mit der Anzahl Signaturen
 			 */
+			if (countSig == 998) {
+				// 998 = Fehler: Exception oder Report
+				// existiert nicht keine Zahl ausgeben
+				/*
+				 * returnEgovdvSum = getTextResourceService().getText(locale,
+				 * MESSAGE_XML_MODUL_A_PDFA) + getTextResourceService().getText(locale,
+				 * MESSAGE_XML_SERVICEINVALID, "egovdv", "");
+				 */
+				countSigStr = "";
+			} else if (countSig == 997) {
+				// die ersten beiden Zeilen fehlen
+				/*
+				 * returnEgovdvSum = getTextResourceService().getText(locale,
+				 * MESSAGE_XML_MODUL_A_PDFA) + getTextResourceService().getText(locale,
+				 * ERROR_XML_SERVICEFAILED, "egovdv", "missing lines");
+				 */
+				countSigStr = "";
+			} else if (countSig == 996) {
+				/*
+				 * returnEgovdvSum = getTextResourceService().getText(locale,
+				 * MESSAGE_XML_MODUL_A_PDFA) + getTextResourceService().getText(locale,
+				 * ERROR_XML_UNKNOWN, "egovdv: catch-Error");
+				 */
+				countSigStr = "";
+			}
+
 			if (countSig == 999) {
 				// 999 = Fehler: Es existiert nicht alles zu
 				// egovdv
 				returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
 						+ getTextResourceService().getText(locale, MESSAGE_XML_MISSING_FILE, "checkTool");
-			} else if (countSig == 998) {
-				// 998 = Fehler: Exception oder Report
-				// existiert nicht
-				returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-						+ getTextResourceService().getText(locale, MESSAGE_XML_SERVICEINVALID, "egovdv", "");
-			} else if (countSig == 997) {
-				// die ersten beiden Zeilen fehlen
-				returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-						+ getTextResourceService().getText(locale, ERROR_XML_SERVICEFAILED, "egovdv", "missing lines");
-			} else if (countSig == 996) {
-				returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-						+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, "egovdv: catch-Error");
 			} else if (countSig == 0) {
 				// keine Signature
 				returnEgovdvSum = "NoSignature";
@@ -961,7 +981,7 @@ public class Controllervalfofile implements MessageConstants {
 						String execVerapdfSig = verapdf.execVerapdfSig(valDatei, workDir, signatureTmp, locale);
 
 						returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-								+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE, countSig,
+								+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE, countSigStr,
 										"<Message></Message><Message>" + getTextResourceService().getText(locale,
 												ERROR_XML_A_EGOVDV_LICENSE, "</Message>" + execVerapdfSig));
 					} else if (mixedSig.contains("noConnectivity")) {
@@ -970,7 +990,7 @@ public class Controllervalfofile implements MessageConstants {
 						String execVerapdfSig = verapdf.execVerapdfSig(valDatei, workDir, signatureTmp, locale);
 
 						returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-								+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE, countSig,
+								+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE, countSigStr,
 										"<Message></Message><Message>" + getTextResourceService().getText(locale,
 												ERROR_XML_A_EGOVDV_URL, "</Message>" + execVerapdfSig));
 					} else if (mixedSig.contains("_NoReport_")) {
@@ -978,7 +998,7 @@ public class Controllervalfofile implements MessageConstants {
 						// und Egovdv-NoReport-Fehler ausgeben
 						String execVerapdfSig = verapdf.execVerapdfSig(valDatei, workDir, signatureTmp, locale);
 						returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-								+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE_SUM1, countSig,
+								+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE_SUM1, countSigStr,
 										"</Message><Message></Message><Message>"
 												+ getTextResourceService().getText(locale, ERROR_XML_A_EGOVDV_NOREPORT)
 												+ "</Message>" + execVerapdfSig + "<Message></Message><Message>("
@@ -1182,8 +1202,8 @@ public class Controllervalfofile implements MessageConstants {
 							String execVerapdfSig = verapdf.execVerapdfSig(valDatei, workDir, signatureTmp, locale);
 
 							returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-									+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE_SUM1, countSig,
-											strAnalysePdf + "</Message>" + execVerapdfSig
+									+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE_SUM1,
+											countSigStr, strAnalysePdf + "</Message>" + execVerapdfSig
 													+ "<Message></Message><Message>(" + mixedSig + ") ");
 
 							/*
@@ -1206,8 +1226,8 @@ public class Controllervalfofile implements MessageConstants {
 							String execVerapdfSig = verapdf.execVerapdfSig(valDatei, workDir, signatureTmp, locale);
 
 							returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-									+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE_SUM1, countSig,
-											strAnalysePdf + "</Message>" + execVerapdfSig
+									+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE_SUM1,
+											countSigStr, strAnalysePdf + "</Message>" + execVerapdfSig
 													+ "<Message></Message><Message>(" + mixedSig + ") ");
 						}
 					}
@@ -1233,7 +1253,7 @@ public class Controllervalfofile implements MessageConstants {
 					String execVerapdfSig = verapdf.execVerapdfSig(valDatei, workDir, signatureTmp, locale);
 
 					returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-							+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE, countSig,
+							+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE, countSigStr,
 									execVerapdfSig);
 				}
 				if (txtFile.exists()) {

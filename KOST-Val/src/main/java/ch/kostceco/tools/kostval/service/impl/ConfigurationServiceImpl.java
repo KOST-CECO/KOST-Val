@@ -709,6 +709,10 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 			String siardlobrep = doc.getElementsByTagName("siardlobrep").item(0).getTextContent().replace(" ", "");
 			configMap.put("siardlobrep", siardlobrep);
 
+			// <siardlobextrep>no </siardlobextrep> <!--no / yes -->
+			String siardlobextrep = doc.getElementsByTagName("siardlobextrep").item(0).getTextContent().replace(" ", "");
+			configMap.put("siardlobextrep", siardlobextrep);
+
 			// <siardrowsrep>no </siardrowsrep> <!--no / yes -->
 			String siardrowsrep = doc.getElementsByTagName("siardrowsrep").item(0).getTextContent().replace(" ", "");
 			configMap.put("siardrowsrep", siardrowsrep);

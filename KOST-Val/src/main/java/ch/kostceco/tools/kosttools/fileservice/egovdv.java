@@ -47,7 +47,7 @@ public class egovdv {
 	private static String validateBat = exeDir + File.separator + "validate.bat";
 
 	// TODO: muss aktualidiert werden
-	private static String versionKostVal = "2.3.0.3";
+	private static String versionKostVal = "2.3.0.5";
 	private static String versionEgoDv = "2.0.0";
 	private static String versionVerapdf = "1.27.99";
 
@@ -388,7 +388,7 @@ public class egovdv {
 
 			// System.out.println("command: " + command);
 
-			String resultExec = Cmd.execToStringSplit(command, out, workDir);
+			String resultExec = Cmd.execToStringSplitDv(command, out, workDir);
 
 			// System.out.println( "resultExec: " + resultExec );
 

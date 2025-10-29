@@ -256,7 +256,7 @@ public class Cmd {
 				}
 			}
 		} catch (IOException ex) {
-			System.out.println("IOException exec Out Err: " + ex);
+			// System.out.println("IOException exec Out Err: " + ex);
 		}
 		if (lineReturn.equals("")) {
 			lineReturn = "OK";

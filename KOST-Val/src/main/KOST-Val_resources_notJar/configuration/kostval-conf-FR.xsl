@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:template match="/">
-		<!-- kostval.conf.xml_v2.3.0.3 -->
+		<!-- kostval.conf.xml_v2.3.0.5 -->
 		<html>
 			<head>
 				<style>
@@ -344,6 +344,12 @@
 						<td>- enregistrer les petits fichiers LOB inline [no]:</td>
 						<td>
 							<xsl:value-of select="configuration/siard/siardlobrep" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>Corriger les extensions de fichiers LOB inexactes [no]:</td>
+						<td>
+							<xsl:value-of select="configuration/siard/siardlobextrep" />
 						</td>
 					</tr>
 					<tr class="captioninfom">

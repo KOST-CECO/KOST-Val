@@ -184,7 +184,7 @@ public interface MessageConstants {
 
 	String MESSAGE_WARNING_XML_SIZE = "val.warning.xml.size";
 
-	// *************TIFF-Meldungen*************************************************************************
+	// TODO ********TIFF-Meldungen*************************************************************************
 	// Modul A Meldungen --> neu in der Erkennung
 
 	// Modul B Meldungen
@@ -196,7 +196,7 @@ public interface MessageConstants {
 	String MESSAGE_XML_G_INVALID = "val.message.xml.g.invalid";
 	String MESSAGE_XML_CG_JHOVENIO = "val.message.xml.cg.jhovenio";
 
-	// *************SIARD-Meldungen*************************************************************************
+	// TODO ********SIARD-Meldungen*************************************************************************
 	// Modul A Meldungen
 	String ERROR_XML_A_DEFLATED = "val.error.xml.a.deflated";
 	String ERROR_XML_A_INCORRECTZIP = "val.error.xml.a.incorrectzip";
@@ -272,9 +272,10 @@ public interface MessageConstants {
 	
 	// Modul Reparatur
 	String MESSAGE_XML_REP_LOB = "val.message.xml.rep.lob";
+	String MESSAGE_XML_REP_LOBEXT = "val.message.xml.rep.lobext";
 	String MESSAGE_XML_REP_ROWS = "val.message.xml.rep.rows";
 
-	// *************PDFA-Meldungen*************************************************************************
+	// TODO ********PDFA-Meldungen*************************************************************************
 	// Modul A Meldungen
 	String ERROR_XML_CALLAS_MISSING = "val.error.xml.callas.missing";
 	String ERROR_XML_CALLAS_MISSING2 = "val.error.xml.callas.missing2";
@@ -322,7 +323,7 @@ public interface MessageConstants {
 	String ERROR_XML_K_OVERVIEW2 = "val.error.xml.k.overview2";
 	String ERROR_XML_K_DETAIL = "val.error.xml.k.detail";
 
-	// *************JP2-Meldungen*************************************************************************
+	// TODO ********JP2-Meldungen*************************************************************************
 	// Modul A Meldungen
 
 	// Modul A-D Meldungen (Zusammengefasste Jylyzer-Meldungen)
@@ -359,7 +360,7 @@ public interface MessageConstants {
 
 	String ERROR_XML_D_JP2_UNKNOWN = "val.error.xml.d.jp2.unknown";
 
-	// *************JPEG-Meldungen*************************************************************************
+	// TODO ********JPEG-Meldungen*************************************************************************
 	// Modul A Meldungen
 	String ERROR_XML_A_JPEG_JIIO_FILETYPE = "val.error.xml.a.jpeg.jiio.filetype";
 	String ERROR_XML_A_JPEG_JIIO_SCANFAILED = "val.error.xml.a.jpeg.jiio.scanfailed";
@@ -398,13 +399,13 @@ public interface MessageConstants {
 
 	String ERROR_XML_C_TRANSLATE = "val.error.xml.c.translate";
 
-	// *************PNG-Meldungen*************************************************************************
+	// TODO ********PNG-Meldungen*************************************************************************
 	// Modul A Meldungen
 
 	// Modul A-F Meldungen
 	String ERROR_XML_AF_PNG_TRANSLATE = "val.error.xml.af.png.translate";
 
-	// *************XML-Meldungen*************************************************************************
+	// TODO ********XML-Meldungen*************************************************************************
 	// Modul A Meldungen
 
 	// Modul B Meldungen
@@ -414,7 +415,7 @@ public interface MessageConstants {
 	String ERROR_XML_C_XML_NOXSDFILE = "val.error.xml.c.xml.noxsdfile";
 	String ERROR_XML_C_XML_NOSCHEMA = "val.error.xml.c.xml.noschema";
 
-	// *************Audio-/Video-Meldungen*************************************************************************
+	// TODO ********Audio-/Video-Meldungen*************************************************************************
 	// Modul A Meldungen
 	String ERROR_XML_A_AUDIOVIDEO_FORMAT_NAZ = "val.error.xml.a.audiovideo.format.naz";
 	String ERROR_XML_A_AUDIOVIDEO_CODEC_NAZ = "val.error.xml.a.audiovideo.codec.naz";
@@ -441,7 +442,7 @@ public interface MessageConstants {
 	String ERROR_XML_G_MKV_ERROR = "val.error.xml.g.mkv.error";
 	String ERROR_XML_H_MKV_ERROR = "val.error.xml.h.mkv.error";
 
-	// *************SIP-Meldungen*************************************************************************
+	// TODO ********SIP-Meldungen*************************************************************************
 	// Modul 1a Meldungen
 	String ERROR_XML_AA_INCORRECTFILEENDING = "val.error.xml.aa.incorrectfileending";
 	String ERROR_XML_AA_CANNOTEXTRACTZIP = "val.error.xml.aa.cannotextractzip";

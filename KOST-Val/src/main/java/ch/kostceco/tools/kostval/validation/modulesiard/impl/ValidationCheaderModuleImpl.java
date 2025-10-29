@@ -61,6 +61,7 @@ import org.jdom2.transform.JDOMSource;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import ch.kostceco.tools.kosttools.fileservice.Recognition;
 import ch.kostceco.tools.kosttools.fileservice.Xmllint;
 import ch.kostceco.tools.kosttools.util.Hash;
 import ch.kostceco.tools.kosttools.util.Util;
@@ -90,7 +91,8 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 	private String records = "";
 	private String records0 = "";
 	private static Integer cRecInLine = 0;
-	private static Integer cEmptyRows =0;
+	private static Integer cEmptyRows = 0;
+	private static Integer cExt = 0;
 
 	@SuppressWarnings({ "resource", "unused" })
 	@Override
@@ -208,14 +210,22 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 		 * ist. Solche leere Dateien werden mehrfach abgelegt und sind identisch.
 		 * 
 		 * Dies kann zu Datenfehler bei der extraktion fuehren.
+		 * 
+		 * Erstellen einer Liste mit allen externen lob
 		 */
 		try {
 			ZipFile zf = new ZipFile(valDatei.getAbsolutePath());
 			Enumeration<? extends ZipEntry> entries = zf.entries();
 			while (entries.hasMoreElements()) {
+				// nicht nur record sondern moeglichst alle lob-Datien
 				ZipEntry zEntry = entries.nextElement();
 				String fileName = zEntry.getName();
-				if (fileName.contains("record") && fileName.contains(".")) {
+				// fileName content/schema0/table0/lob7/record99.txt
+				// fileName content/schema0/table0/table0.xml
+				// fileName content/schema0/table0/table0.xsd
+
+				// if (fileName.contains("record") && fileName.contains(".")) {
+				if (fileName.contains(".") && (fileName.contains("lob") || fileName.contains("record"))) {
 					long fileSize = zEntry.getSize();
 					// TODO jeweils nur 10 Eintraege
 					if (fileSize == 0) {
@@ -238,6 +248,9 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 			zf.close();
 			// set to null
 			zf = null;
+			// System.out.println("cRec " + cRec);
+			// System.out.println("cRec0 " + cRec0);
+
 		} catch (Exception e) {
 			if (min) {
 				return false;
@@ -1040,7 +1053,8 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 		}
 
 		if ((configMap.get("siardrep").equals("yes"))) {
-			if ((configMap.get("siardrowsrep").equals("yes")) || (configMap.get("siardlobrep").equals("yes"))) {
+			if ((configMap.get("siardrowsrep").equals("yes")) || (configMap.get("siardlobrep").equals("yes"))
+					|| (configMap.get("siardlobextrep").equals("yes"))) {
 				// TODO: nur ausfuehren wenn gewuenscht
 				String pathToWorkDir = configMap.get("PathToWorkDir");
 				pathToWorkDir = pathToWorkDir + File.separator + "SIARD";
@@ -1065,7 +1079,7 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 						repairSiard = doRepairSiard(valDatei, directoryOfLogfile, configMap, locale, logFile,
 								dirOfJarPath, cRecTot, emptyRows);
 
-						if (cRecInLine > 0 ) {
+						if (cRecInLine > 0) {
 							String siardPath = repairSiard.replace(".zip", ".siard");
 
 							File zipFile = new File(repairSiard);
@@ -1078,6 +1092,26 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 										getTextResourceService().getText(locale, MESSAGE_XML_REPAIR_SIARD)
 												+ getTextResourceService().getText(locale, MESSAGE_XML_REP_LOB,
 														valDatei, cRecTot, cRecInLine, siardFile.getAbsolutePath()));
+							}
+						}
+						if (cExt > 0) {
+							String siardPath = repairSiard.replace(".zip", ".siard");
+
+							File zipFile = new File(repairSiard);
+							File siardFile = new File(siardPath);
+							if (zipFile.exists()) {
+								Util.deleteFile(zipFile);
+							}
+							if (siardFile.exists()) {
+								// <Message>{0} LOB-Dateiendungen konnten korrigiert
+								// werden.</Message><Message>Speicherort der reparierten SIARD-Kopie: {1}
+								// </Message><Message>-> reparierte SIARD-Datei durch das Archiv kontrollieren,
+								// revalidieren und falls gewuenscht
+								// weiterverwenden.</Message></Error><Warning>warning</Warning>
+								Logtxt.logtxt(logFile,
+										getTextResourceService().getText(locale, MESSAGE_XML_REPAIR_SIARD)
+												+ getTextResourceService().getText(locale, MESSAGE_XML_REP_LOBEXT, cExt,
+														siardFile.getAbsolutePath()));
 							}
 						}
 						if (emptyRows) {
@@ -1172,7 +1206,7 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 		if (!fileToWorkDirOut.exists()) {
 			fileToWorkDirOut.mkdir();
 		}
-		
+
 		// Zieldatei
 		File siardFile = new File(pathToWorkDirOut + File.separator + name + ".siard");
 		if (siardFile.exists()) {
@@ -1228,7 +1262,8 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 								File tableXml = new File(new StringBuilder(tablePath.getAbsolutePath())
 										.append(File.separator).append(tableFolder.getText() + ".xml").toString());
 
-								if (configMap.get("siardrowsrep").equals("yes") && cRecTot > 0) {
+								if ((configMap.get("siardlobrep").equals("yes")
+										|| configMap.get("siardlobextrep").equals("yes")) && cRecTot > 0) {
 
 									// <c1>1</c1>
 									// <c2 digest="8CD479FAC7B2CAE778FB7130AD5AAA43" digestType="MD5"
@@ -1263,83 +1298,192 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 											if ((cellAttFileS).equals("null ")) {
 												// keine Aktion noetig
 											} else {
-												File lobFile = new File(
-														pathToWorkDirOutTemp + File.separator + cellAttFile);
-												// separate LOB
+												if (configMap.get("siardlobrep").equals("yes")) {
+													File lobFile = new File(
+															pathToWorkDirOutTemp + File.separator + cellAttFile);
+													// separate LOB
 
-												boolean replace = false;
+													boolean replace = false;
 
-												// wenn lenth <1000 dann integrieren (wenn unbekannt auslesen)
-												if ((cellAttLengthS).equals("null ")) {
-													int lobStringLenth = Files
-															.readString(lobFile.toPath(), StandardCharsets.UTF_8)
-															.length();
-													if (lobStringLenth < 1000) {
-														if ((cellAttDigestS).equals("null ")
-																|| (cellAttDigestTypeS).equals("null ")) {
-															replace = true;
-														} else {
-															// digestType (MD5, SHA-1, or SHA-256)
-															String hashFile = "99";
-															if (cellAttDigestType.equalsIgnoreCase("md5")) {
-																hashFile = Hash.getMd5(lobFile);
-															} else if (cellAttDigestType.equalsIgnoreCase("sha-1")) {
-																hashFile = Hash.getSha1(lobFile);
-															} else if (cellAttDigestType.equalsIgnoreCase("sha-256")) {
-																hashFile = Hash.getSha256(lobFile);
-															}
-															if (hashFile
-																	.equalsIgnoreCase(cellAttDigest.toLowerCase())) {
+													// wenn lenth <1000 dann integrieren (wenn unbekannt auslesen)
+													if ((cellAttLengthS).equals("null ")) {
+														int lobStringLenth = Files
+																.readString(lobFile.toPath(), StandardCharsets.UTF_8)
+																.length();
+														if (lobStringLenth < 1000) {
+															if ((cellAttDigestS).equals("null ")
+																	|| (cellAttDigestTypeS).equals("null ")) {
 																replace = true;
+															} else {
+																// digestType (MD5, SHA-1, or SHA-256)
+																String hashFile = "99";
+																if (cellAttDigestType.equalsIgnoreCase("md5")) {
+																	hashFile = Hash.getMd5(lobFile);
+																} else if (cellAttDigestType
+																		.equalsIgnoreCase("sha-1")) {
+																	hashFile = Hash.getSha1(lobFile);
+																} else if (cellAttDigestType
+																		.equalsIgnoreCase("sha-256")) {
+																	hashFile = Hash.getSha256(lobFile);
+																}
+																if (hashFile.equalsIgnoreCase(
+																		cellAttDigest.toLowerCase())) {
+																	replace = true;
+																}
+															}
+														}
+													} else {
+														int cellAttLengthInt = Integer.parseInt(cellAttLength);
+														// System.out.println("cellAttLength "+cellAttLength +"
+														// cellAttLengthInt
+														// "+cellAttLengthInt);
+														if (cellAttLengthInt < 1000) {
+															if ((cellAttDigestS).equals("null ")
+																	|| (cellAttDigestTypeS).equals("null ")) {
+																replace = true;
+															} else {
+																// digestType (MD5, SHA-1, or SHA-256)
+																String hashFile = "99";
+																if (cellAttDigestType.equalsIgnoreCase("md5")) {
+																	hashFile = Hash.getMd5(lobFile);
+																} else if (cellAttDigestType
+																		.equalsIgnoreCase("sha-1")) {
+																	hashFile = Hash.getSha1(lobFile);
+																} else if (cellAttDigestType
+																		.equalsIgnoreCase("sha-256")) {
+																	hashFile = Hash.getSha256(lobFile);
+																}
+																if (hashFile.equalsIgnoreCase(
+																		cellAttDigest.toLowerCase())) {
+																	replace = true;
+																}
+															}
+														}
+													}
+
+													if (replace) {
+														String lobString = Files.readString(lobFile.toPath(),
+																StandardCharsets.UTF_8);
+														cell.setText(lobString);
+														cell.removeAttribute("file");
+														cell.removeAttribute("digest");
+														cell.removeAttribute("digestType");
+														cell.removeAttribute("length");
+
+														// Save xml writing the modified content into XML file
+														TransformerFactory transformerFactory = TransformerFactory
+																.newInstance();
+														Transformer transformer = transformerFactory.newTransformer();
+														FileOutputStream output = new FileOutputStream(
+																tableXml.getAbsolutePath());
+														JDOMSource source = new JDOMSource(documentTab);
+														StreamResult result = new StreamResult(output);
+														transformer.transform(source, result);
+														lobFile.delete();
+														cRecInLine++;
+													} else {
+														/*
+														 * LOB wird nicht integriert. In diesem Fall soll in einem
+														 * weiteren Schritt die Dateiendung kontrolliert und ggf.
+														 * korrigiert werden.
+														 */
+														if (configMap.get("siardlobextrep").equals("yes")) {
+															String recFormat = "new";
+															recFormat = Recognition.formatRec(lobFile);
+															String extRec = recFormat.replace("_ext", "").toLowerCase();
+															if (recFormat.contains("_ext")) {
+																cExt++;
+																// Erkannt aber nicht exakte Dateiendung
+
+																// File lobFile = new File(
+																// pathToWorkDirOutTemp + File.separator + cellAttFile);
+
+																// <c8 file="content/schema0/table0/lob7/record99.txt"
+																// length="13352"/>
+																String wrongExt10 = cellAttFile
+																		.substring(cellAttFile.lastIndexOf(".") - 10);
+																String wrongExt = cellAttFile
+																		.substring(cellAttFile.lastIndexOf(".") + 1);
+																String repExt10 = wrongExt10.replace(wrongExt, extRec);
+																String cellAttFileRep = cellAttFile.replace(wrongExt10,
+																		repExt10);
+																cell.removeAttribute("file");
+																cell.setAttribute("file", cellAttFileRep);
+
+																// Save xml writing the modified content into XML file
+																TransformerFactory transformerFactory = TransformerFactory
+																		.newInstance();
+																Transformer transformer = transformerFactory
+																		.newTransformer();
+																FileOutputStream output = new FileOutputStream(
+																		tableXml.getAbsolutePath());
+																JDOMSource source = new JDOMSource(documentTab);
+																StreamResult result = new StreamResult(output);
+																transformer.transform(source, result);
+
+																int i = lobFile.getName().lastIndexOf('.');
+																String nameRep = lobFile.getName().substring(0, i);
+																String nameRepExt = nameRep + "." + extRec;
+																File lobFileRep = new File(lobFile.getParent(),
+																		nameRepExt);
+
+																lobFile.renameTo(lobFileRep);
 															}
 														}
 													}
 												} else {
-													int cellAttLengthInt = Integer.parseInt(cellAttLength);
-													// System.out.println("cellAttLength "+cellAttLength +"
-													// cellAttLengthInt
-													// "+cellAttLengthInt);
-													if (cellAttLengthInt < 1000) {
-														if ((cellAttDigestS).equals("null ")
-																|| (cellAttDigestTypeS).equals("null ")) {
-															replace = true;
-														} else {
-															// digestType (MD5, SHA-1, or SHA-256)
-															String hashFile = "99";
-															if (cellAttDigestType.equalsIgnoreCase("md5")) {
-																hashFile = Hash.getMd5(lobFile);
-															} else if (cellAttDigestType.equalsIgnoreCase("sha-1")) {
-																hashFile = Hash.getSha1(lobFile);
-															} else if (cellAttDigestType.equalsIgnoreCase("sha-256")) {
-																hashFile = Hash.getSha256(lobFile);
-															}
-															if (hashFile
-																	.equalsIgnoreCase(cellAttDigest.toLowerCase())) {
-																replace = true;
-															}
+													// nur lob-Extension reparatur
+													File lobFile = new File(
+															pathToWorkDirOutTemp + File.separator + cellAttFile);
+													// separate LOB
+
+													/*
+													 * LOB wird nicht integriert. In diesem Fall soll die Dateiendung
+													 * kontrolliert und ggf. korrigiert werden.
+													 */
+													if (configMap.get("siardlobextrep").equals("yes")) {
+
+														String recFormat = "new";
+														recFormat = Recognition.formatRec(lobFile);
+														String extRec = recFormat.replace("_ext", "").toLowerCase();
+														if (recFormat.contains("_ext")) {
+															cExt++;
+															// Erkannt aber nicht exakte Dateiendung
+
+															// File lobFile = new File(
+															// pathToWorkDirOutTemp + File.separator + cellAttFile);
+
+															// <c8 file="content/schema0/table0/lob7/record99.txt"
+															// length="13352"/>
+															String wrongExt10 = cellAttFile
+																	.substring(cellAttFile.lastIndexOf(".") - 10);
+															String wrongExt = cellAttFile
+																	.substring(cellAttFile.lastIndexOf(".") + 1);
+															String repExt10 = wrongExt10.replace(wrongExt, extRec);
+															String cellAttFileRep = cellAttFile.replace(wrongExt10,
+																	repExt10);
+															cell.removeAttribute("file");
+															cell.setAttribute("file", cellAttFileRep);
+
+															// Save xml writing the modified content into XML file
+															TransformerFactory transformerFactory = TransformerFactory
+																	.newInstance();
+															Transformer transformer = transformerFactory
+																	.newTransformer();
+															FileOutputStream output = new FileOutputStream(
+																	tableXml.getAbsolutePath());
+															JDOMSource source = new JDOMSource(documentTab);
+															StreamResult result = new StreamResult(output);
+															transformer.transform(source, result);
+
+															int i = lobFile.getName().lastIndexOf('.');
+															String nameRep = lobFile.getName().substring(0, i);
+															String nameRepExt = nameRep + "." + extRec;
+															File lobFileRep = new File(lobFile.getParent(), nameRepExt);
+
+															lobFile.renameTo(lobFileRep);
 														}
 													}
-												}
-												if (replace) {
-													String lobString = Files.readString(lobFile.toPath(),
-															StandardCharsets.UTF_8);
-													cell.setText(lobString);
-													cell.removeAttribute("file");
-													cell.removeAttribute("digest");
-													cell.removeAttribute("digestType");
-													cell.removeAttribute("length");
-
-													// Save xml writing the modified content into XML file
-													TransformerFactory transformerFactory = TransformerFactory
-															.newInstance();
-													Transformer transformer = transformerFactory.newTransformer();
-													FileOutputStream output = new FileOutputStream(
-															tableXml.getAbsolutePath());
-													JDOMSource source = new JDOMSource(documentTab);
-													StreamResult result = new StreamResult(output);
-													transformer.transform(source, result);
-													lobFile.delete();
-													cRecInLine++;
 												}
 											}
 										}
@@ -1355,13 +1499,13 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 									 * 
 									 * Nachfolgend wird dies in der neuen SIARD-Kopie behoben
 									 */
-									
+
 									// "<rows />
 									// "<rows/>"
 									// "<rows></rows>"
 									// <rows> </rows>"
-									
-									int cRow=0;
+
+									int cRow = 0;
 
 									Element tableRows = table.getChild("rows", ns);
 									String rowsValue = tableRows.getValue();
@@ -1373,16 +1517,14 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 										while ((line = reader.readLine()) != null) {
 											if (line.contains("<row>")) {
 												cRow++;
-												}
+											}
 										}
 										reader.close();
-										tableRows.setText(cRow+"");
+										tableRows.setText(cRow + "");
 										// Save xml writing the modified content into XML file
-										TransformerFactory transformerFactory = TransformerFactory
-												.newInstance();
+										TransformerFactory transformerFactory = TransformerFactory.newInstance();
 										Transformer transformer = transformerFactory.newTransformer();
-										FileOutputStream output = new FileOutputStream(
-												metadataXml.getAbsolutePath());
+										FileOutputStream output = new FileOutputStream(metadataXml.getAbsolutePath());
 										JDOMSource source = new JDOMSource(document);
 										StreamResult result = new StreamResult(output);
 										transformer.transform(source, result);
@@ -1416,7 +1558,7 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 
 		if (fileToWorkDirOutTemp.exists()) {
 			doRepairSiard = "Existiert";
-			if (cRecInLine > 0|| emptyRows) {
+			if (cRecInLine > 0 || emptyRows || cExt > 0) {
 				// Zippen mit "Apache Commons Compress"
 				// new Expander().expand(archive, destination);
 

@@ -42,6 +42,7 @@ import org.xml.sax.SAXException;
 import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.controller.ControllerInit;
 import javafx.application.Platform;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -115,7 +116,7 @@ public class GuiController {
 
 	private String arg0, arg1, arg2, arg3 = "--xml", dirOfJarPath, initInstructionsDe, initInstructionsFr,
 			initInstructionsIt, initInstructionsEn;
-	private String versionKostVal = "2.3.0.3";
+	private String versionKostVal = "2.3.0.5";
 	/*
 	 * TODO: versionKostVal auch hier anpassen:
 	 * 
@@ -123,7 +124,7 @@ public class GuiController {
 	 *
 	 * 3) ConfigController (1x)
 	 * 
-	 * 4) egovdv.java (1x)
+	 * 4) kosttools.fileservice.egovdv.java (1x)
 	 * 
 	 * 5) Konfigurationsdatei (2x) inkl 4x xsl
 	 * 
@@ -148,6 +149,10 @@ public class GuiController {
 
 	@FXML
 	private ScrollPane scroll;
+
+	public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
+		console.setScrollTop(Double.MAX_VALUE); // this will scroll to the bottom
+	}
 
 	@SuppressWarnings("resource")
 	@FXML
@@ -340,7 +345,9 @@ public class GuiController {
 			init = controllerInit.init(locale, dirOfJarPath, versionKostVal);
 			if (!init) {
 				// zweiter Versuch
-				console.setText(" \n");
+				console.setText(" \n");// .setText loest keine Veraenderung im listener aus
+				console.appendText(""); // mit .appendText gibt es eine Veraenderung
+				// TextArea to the bottom
 				init2 = controllerInit.init(locale, dirOfJarPath, versionKostVal);
 				if (!init2) {
 					// Fehler: es wird abgebrochen
@@ -354,10 +361,12 @@ public class GuiController {
 					}
 					engine.loadContent("<html><h2>" + text + "</h2></html>");
 				} else {
-					console.setText(" \n");
+					console.setText(" \n");// loest keine Veraenderung im listener aus
+					console.appendText(""); // jetzt gibt es eine Veraenderung
 				}
 			} else {
-				console.setText(" \n");
+				console.setText(" \n");// loest keine Veraenderung im listener aus
+				console.appendText(""); // jetzt gibt es eine Veraenderung
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -467,7 +476,6 @@ public class GuiController {
 
 		public void write(int b) throws IOException {
 			appendText(String.valueOf((char) b));
-			scroll.setVvalue(1.0); // 1.0 = letzte Zeile der Konsole
 		}
 	}
 
@@ -475,7 +483,8 @@ public class GuiController {
 
 	@FXML
 	void showManual(ActionEvent e) {
-		console.setText(" \n");
+		console.setText(" \n");// loest keine Veraenderung im listener aus
+		console.appendText(""); // jetzt gibt es eine Veraenderung
 		/*
 		 * Kurzanleitung 1. Datei oder Ordner zur Validierung angeben / auswaehlen 2.
 		 * ggf. Konfiguration und LogType anpassen 3. Validierung starten
@@ -533,7 +542,8 @@ public class GuiController {
 
 	@FXML
 	void showLicence(ActionEvent e) {
-		console.setText(" \n");
+		console.setText(" \n");// loest keine Veraenderung im listener aus
+		console.appendText(""); // jetzt gibt es eine Veraenderung
 		String licence1;
 		String licence2;
 		String licence3;
@@ -578,7 +588,8 @@ public class GuiController {
 
 	@FXML
 	void printLog(ActionEvent e) {
-		console.setText(" \n");
+		console.setText(" \n");// loest keine Veraenderung im listener aus
+		console.appendText(""); // jetzt gibt es eine Veraenderung
 		Printer defaultprinter = Printer.getDefaultPrinter();
 		Printer printerToUse = defaultprinter;
 		String strHeaderText = "Wählen Sie einen Drucker aus den verfügbaren Druckern";
@@ -650,7 +661,8 @@ public class GuiController {
 	void saveLog(ActionEvent e) {
 		Boolean saved = false;
 		Boolean doSave = false;
-		console.setText(" \n");
+		console.setText(" \n");// loest keine Veraenderung im listener aus
+		console.appendText(""); // jetzt gibt es eine Veraenderung
 		DirectoryChooser folderChooser = new DirectoryChooser();
 		String copy = "Kopiere ";
 		String text1 = "Log in den Ordner \"";
@@ -830,7 +842,8 @@ public class GuiController {
 
 	@FXML
 	void showConfig(ActionEvent e) {
-		console.setText(" \n");
+		console.setText(" \n");// loest keine Veraenderung im listener aus
+		console.appendText(""); // jetzt gibt es eine Veraenderung
 		engine.load("file:///" + configFile.getAbsolutePath());
 		buttonPrint.setDisable(true);
 		buttonSave.setDisable(true);
@@ -842,7 +855,8 @@ public class GuiController {
 	 */
 	@FXML
 	void valFormat(ActionEvent e) {
-		console.setText(" \n");
+		console.setText(" \n");// loest keine Veraenderung im listener aus
+		console.appendText(""); // jetzt gibt es eine Veraenderung
 		String text = "<html><h2>Formatvalidierung wird durchgeführt. <br/><br/>Bitte warten ...</h2></html>";
 		if (locale.toString().startsWith("fr")) {
 			text = "<html><h2>La validation du format est lancée. <br/><br/>Veuillez patienter ...</h2></html>";
@@ -907,6 +921,7 @@ public class GuiController {
 		val.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 			@Override
 			public void handle(WorkerStateEvent t) {
+				console.appendText(""); // jetzt gibt es eine Veraenderung
 				// Validierung beendet Buttons freigeben
 				buttonHelp.setDisable(false);
 				buttonFolder.setDisable(false);
@@ -931,7 +946,6 @@ public class GuiController {
 					 * Da es erfolgreich war (valid / invalid) kann der Log angezeigt werden
 					 */
 					engine.load("file:///" + logFile.getAbsolutePath());
-					scroll.setVvalue(1.0); // 1.0 = letzte Zeile der Konsole
 					buttonPrint.setDisable(false);
 					buttonSave.setDisable(false);
 				} else {
@@ -945,7 +959,6 @@ public class GuiController {
 					} else if (locale.toString().startsWith("en")) {
 						text = "An error has occurred. See console.";
 					}
-					scroll.setVvalue(1.0); // 1.0 = letzte Zeile der Konsole
 					engine.loadContent("<html><h2>" + text + "</h2></html>");
 				}
 			}
@@ -953,6 +966,7 @@ public class GuiController {
 		val.setOnFailed(new EventHandler<WorkerStateEvent>() {
 			@Override
 			public void handle(WorkerStateEvent t) {
+				console.appendText(""); // jetzt gibt es eine Veraenderung
 				// Validierung beendet Buttons freigeben
 				buttonHelp.setDisable(false);
 				buttonFolder.setDisable(false);
@@ -985,7 +999,6 @@ public class GuiController {
 				} else if (locale.toString().startsWith("en")) {
 					text = "An unknown error has occurred ";
 				}
-				scroll.setVvalue(1.0); // 1.0 = letzte Zeile der Konsole
 				engine.loadContent("<html><h2>" + text + textArgs + "</h2></html>");
 			}
 		});
@@ -997,9 +1010,10 @@ public class GuiController {
 			@Override
 			protected Boolean call() {
 				Boolean result = false;
-				console.setText(" \n");
+				console.setText(" \n");// loest keine Veraenderung im listener aus
 				System.out.println("");
 				System.out.println("KOST-Val");
+				console.appendText(""); // jetzt gibt es eine Veraenderung
 				try {
 					if (KOSTVal.main(args, versionKostVal)) {
 						result = true;
@@ -1021,7 +1035,8 @@ public class GuiController {
 	 */
 	@FXML
 	void valSip(ActionEvent e) {
-		console.setText(" \n");
+		console.setText(" \n");// loest keine Veraenderung im listener aus
+		console.appendText(""); // jetzt gibt es eine Veraenderung
 		String text = "<html><h2>SIP-Validierung wird durchgeführt. <br/><br/>Bitte warten ...</h2></html>";
 		if (locale.toString().startsWith("fr")) {
 			text = "<html><h2>La validation du SIP est lancée. <br/><br/>Veuillez patienter ...</h2></html>";
@@ -1104,7 +1119,6 @@ public class GuiController {
 					 * Da es erfolgreich war (valid / invalid) kann der Log angezeigt werden
 					 */
 					engine.load("file:///" + logFile.getAbsolutePath());
-					scroll.setVvalue(1.0); // 1.0 = letzte Zeile der Konsole
 					buttonPrint.setDisable(false);
 					buttonSave.setDisable(false);
 				} else {
@@ -1118,7 +1132,6 @@ public class GuiController {
 					} else if (locale.toString().startsWith("en")) {
 						text = "An error has occurred. See console.";
 					}
-					scroll.setVvalue(1.0); // 1.0 = letzte Zeile der Konsole
 					engine.loadContent("<html><h2>" + text + "</h2></html>");
 				}
 			}
@@ -1156,7 +1169,6 @@ public class GuiController {
 				} else if (locale.toString().startsWith("en")) {
 					text = "An unknown error has occurred ";
 				}
-				scroll.setVvalue(1.0); // 1.0 = letzte Zeile der Konsole
 				engine.loadContent("<html><h2>" + text + textArgs + "</h2></html>");
 			}
 		});
@@ -1169,7 +1181,8 @@ public class GuiController {
 	 */
 	@FXML
 	void valOnlySip(ActionEvent e) {
-		console.setText(" \n");
+		console.setText(" \n");// loest keine Veraenderung im listener aus
+		console.appendText(""); // jetzt gibt es eine Veraenderung
 		String text = "<html><h2>Eine reine SIP-Validierung wird durchgeführt. <br/><br/>Bitte warten ...</h2></html>";
 		if (locale.toString().startsWith("fr")) {
 			text = "<html><h2>La validation du SIP pure est lancée. <br/><br/>Veuillez patienter ...</h2></html>";
@@ -1252,7 +1265,6 @@ public class GuiController {
 					 * Da es erfolgreich war (valid / invalid) kann der Log angezeigt werden
 					 */
 					engine.load("file:///" + logFile.getAbsolutePath());
-					scroll.setVvalue(1.0); // 1.0 = letzte Zeile der Konsole
 					buttonPrint.setDisable(false);
 					buttonSave.setDisable(false);
 				} else {
@@ -1266,7 +1278,6 @@ public class GuiController {
 					} else if (locale.toString().startsWith("en")) {
 						text = "An error has occurred. See console.";
 					}
-					scroll.setVvalue(1.0); // 1.0 = letzte Zeile der Konsole
 					engine.loadContent("<html><h2>" + text + "</h2></html>");
 				}
 			}
@@ -1304,7 +1315,6 @@ public class GuiController {
 				} else if (locale.toString().startsWith("en")) {
 					text = "An unknown error has occurred ";
 				}
-				scroll.setVvalue(1.0); // 1.0 = letzte Zeile der Konsole
 				engine.loadContent("<html><h2>" + text + textArgs + "</h2></html>");
 			}
 		});
@@ -1314,7 +1324,8 @@ public class GuiController {
 	/* Wenn choseFile betaetigt wird, kann eine Datei ausgewaehlt werden */
 	@FXML
 	void chooseFile(ActionEvent e) {
-		console.setText(" \n");
+		console.setText(" \n");// loest keine Veraenderung im listener aus
+		console.appendText(""); // jetzt gibt es eine Veraenderung
 		FileChooser fileChooser = new FileChooser();
 		if (!fileFolder.getText().isEmpty()) {
 			File dirFileFolder = new File(fileFolder.getText());
@@ -1367,7 +1378,8 @@ public class GuiController {
 	/* Wenn choseFoder betaetigt wird, kann ein Ordner ausgewaehlt werden */
 	@FXML
 	void chooseFolder(ActionEvent e) {
-		console.setText(" \n");
+		console.setText(" \n");// loest keine Veraenderung im listener aus
+		console.appendText(""); // jetzt gibt es eine Veraenderung
 		DirectoryChooser folderChooser = new DirectoryChooser();
 		if (!fileFolder.getText().isEmpty()) {
 			File dirFileFolder = new File(fileFolder.getText());
@@ -1425,7 +1437,8 @@ public class GuiController {
 	 */
 	@FXML
 	void changeConfig(ActionEvent e) {
-		console.setText(" \n");
+		console.setText(" \n");// loest keine Veraenderung im listener aus
+		console.appendText(""); // jetzt gibt es eine Veraenderung
 		String text = "<html><h2>Die Konfiguration wird in einem neuen Fenster bearbeitet. <br/><br/>Bitte warten ...</h2></html>";
 		if (locale.toString().startsWith("fr")) {
 			text = "<html><h2>La configuration est éditée dans une nouvelle fenêtre. <br/><br/>Veuillez patienter ...</h2></html>";
@@ -1464,15 +1477,18 @@ public class GuiController {
 				Util.deleteFile(configFileBackup);
 			});
 			configStage.show();
-			console.setText(" \n");
+			console.setText(" \n");// loest keine Veraenderung im listener aus
+			console.appendText(""); // jetzt gibt es eine Veraenderung
 			configStage.setOnHiding(event -> {
 				// hier engeben was beim schliessen gemacht werden soll
-				console.setText(" \n");
+				console.setText(" \n");// loest keine Veraenderung im listener aus
+				console.appendText(""); // jetzt gibt es eine Veraenderung
 				engine.load("file:///" + configFile.getAbsolutePath());
 				buttonPrint.setDisable(true);
 				buttonSave.setDisable(true);
 			});
-			console.setText(" \n");
+			console.setText(" \n");// loest keine Veraenderung im listener aus
+			console.appendText(""); // jetzt gibt es eine Veraenderung
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -1484,7 +1500,8 @@ public class GuiController {
 	/* Wenn Aenderungen an changeFileFolder gemacht wird, wird es ausgeloest */
 	@FXML
 	void changeFileFolder(ActionEvent event) {
-		console.setText(" \n");
+		console.setText(" \n");// loest keine Veraenderung im listener aus
+		console.appendText(""); // jetzt gibt es eine Veraenderung
 		String pathFileFolder = fileFolder.getText();
 		File valFileFolder = new File(pathFileFolder);
 		try {
@@ -1498,7 +1515,8 @@ public class GuiController {
 	/* Wenn Aenderungen an changeFileFolderOver gemacht wird, wird es ausgeloest */
 	@FXML
 	void changeFileFolderOver(DragEvent event) {
-		console.setText(" \n");
+		console.setText(" \n");// loest keine Veraenderung im listener aus
+		console.appendText(""); // jetzt gibt es eine Veraenderung
 		Dragboard dragb = event.getDragboard();
 		if (dragb.hasFiles()) {
 			String fileFolderTxt = dragb.getFiles().get(0).toString();
@@ -1520,7 +1538,8 @@ public class GuiController {
 	// Mit changeLoType wird die Log umgestellt
 	@FXML
 	void changeLogType(ActionEvent event) {
-		console.setText(" \n");
+		console.setText(" \n");// loest keine Veraenderung im listener aus
+		console.appendText(""); // jetzt gibt es eine Veraenderung
 		String selLogType = logType.getValue();
 		if (selLogType.contains("--min")) {
 			arg3 = "--min";
@@ -1534,7 +1553,8 @@ public class GuiController {
 	// Mit changeLang wird die Sprache umgestellt
 	@FXML
 	void changeLang(ActionEvent event) {
-		console.setText(" \n");
+		console.setText(" \n");// loest keine Veraenderung im listener aus
+		console.appendText(""); // jetzt gibt es eine Veraenderung
 		String selLang = lang.getValue();
 		try {
 			if (selLang.equals("Deutsch")) {
@@ -1745,7 +1765,7 @@ public class GuiController {
 					String fileName = valFileFolder.getName().toLowerCase();
 					if (fileName.endsWith(".txt") || fileName.endsWith(".jpeg") || fileName.endsWith(".jpg")
 							|| fileName.endsWith(".svg") || fileName.endsWith(".png") || fileName.endsWith(".xml")) {
-						console.setText(" \n");
+						console.setText(" \n");// loest keine Veraenderung im listener aus
 						engine.load("file:///" + valFileFolder.getAbsolutePath());
 						if (locale.toString().startsWith("fr")) {
 							console.setText("1. Fichier selectionne : " + valFileFolder.getAbsolutePath()
@@ -1760,6 +1780,7 @@ public class GuiController {
 							console.setText("1. Ausgewaehlte Datei: " + valFileFolder.getAbsolutePath()
 									+ "\n2. Ggf. Konfiguration und LogType anpassen \n3. Validierung starten ");
 						}
+						console.appendText(""); // jetzt gibt es eine Veraenderung
 						if (valFileFolder.getName().toLowerCase().endsWith(".kost-val.log.xml")) {
 							logFile = valFileFolder;
 							buttonPrint.setDisable(false);
