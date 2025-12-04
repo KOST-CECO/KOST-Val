@@ -76,6 +76,8 @@ public interface MessageConstants {
 	String MESSAGE_XML_MODUL_H_SIARD = "val.message.xml.modul.h.siard";
 	String MESSAGE_XML_MODUL_I_SIARD = "val.message.xml.modul.i.siard";
 	String MESSAGE_XML_MODUL_J_SIARD = "val.message.xml.modul.j.siard";
+	String MESSAGE_XML_MODUL_K_SIARD = "val.message.xml.modul.k.siard";
+	String MESSAGE_XML_MODUL_L_SIARD = "val.message.xml.modul.l.siard";
 	String MESSAGE_XML_MODUL_M_SIARD = "val.message.xml.modul.m.siard";
 	String MESSAGE_XML_MODUL_W_SIARD = "val.message.xml.modul.w.siard";
 
@@ -266,6 +268,37 @@ public interface MessageConstants {
 	String MESSAGE_XML_M_NOTAZ = "val.message.xml.m.notaz";
 	String MESSAGE_XML_M_AZ = "val.message.xml.m.az";
 	String MESSAGE_XML_M_UNKNOWN = "val.message.xml.m.unknown";
+
+	// DBPTK Meldungen A-M
+	String MESSAGE_XML_A_HEADER41 = "val.message.xml.a.header41";
+	String MESSAGE_XML_B_HEADER42 = "val.message.xml.b.header42"; 
+	String MESSAGE_XML_E_HEADER43 = "val.message.xml.e.header43"; 
+	String MESSAGE_XML_F_HEADER50 = "val.message.xml.f.header50";
+	String MESSAGE_XML_G_HEADER51 = "val.message.xml.g.header51"; 
+	String MESSAGE_XML_G_HEADER52 = "val.message.xml.g.header52";
+	String MESSAGE_XML_G_HEADER53 = "val.message.xml.g.header53"; 
+	String MESSAGE_XML_G_HEADER54 = "val.message.xml.g.header54"; 
+	String MESSAGE_XML_H_HEADER55 = "val.message.xml.h.header55"; 
+	String MESSAGE_XML_H_HEADER56 = "val.message.xml.h.header56"; 
+	String MESSAGE_XML_H_HEADER57 = "val.message.xml.h.header57"; 
+	String MESSAGE_XML_H_HEADER60 = "val.message.xml.h.header60"; 
+	String MESSAGE_XML_H_HEADER61 = "val.message.xml.h.header61"; 
+	String MESSAGE_XML_H_HEADER63 = "val.message.xml.h.header63"; 
+	String MESSAGE_XML_H_HEADER64 = "val.message.xml.h.header64";
+	String MESSAGE_XML_K_HEADER58 = "val.message.xml.k.header58"; 
+	String MESSAGE_XML_K_HEADER59 = "val.message.xml.k.header59"; 
+	String MESSAGE_XML_K_HEADER510 = "val.message.xml.k.header510"; 
+	String MESSAGE_XML_K_HEADER511 = "val.message.xml.k.header511"; 
+	String MESSAGE_XML_K_HEADER512 = "val.message.xml.k.header512";
+	String MESSAGE_XML_L_HEADER513 = "val.message.xml.l.header513"; 
+	String MESSAGE_XML_L_HEADER514 = "val.message.xml.l.header514";
+	String MESSAGE_XML_L_HEADER515 = "val.message.xml.l.header515"; 
+	String MESSAGE_XML_L_HEADER516 = "val.message.xml.l.header516";
+	String MESSAGE_XML_L_HEADER517 = "val.message.xml.l.header517"; 
+	String MESSAGE_XML_L_HEADER518 = "val.message.xml.l.header518"; 
+	String MESSAGE_XML_L_HEADER519 = "val.message.xml.l.header519"; 
+	String MESSAGE_XML_L_WARNING = "val.message.xml.l.warning";
+	String MESSAGE_XML_M_HEADER62 = "val.message.xml.m.header62";
 
 	// Modul W Meldungen
 	String MESSAGE_XML_W_WARNING_INITVALUE = "val.message.xml.w.warning.initvalue";

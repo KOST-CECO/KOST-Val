@@ -1022,9 +1022,27 @@ public class egovdv {
 			Util.oldnewstringAll("Zeitpunkt der", "<sigDate label=\"Zeitpunkt der", txtFile);
 			Util.oldnewstringAll("Unterschrift:", "Unterschrift:\">", txtFile);
 			Util.oldnewstringAll("Signaturalgorithmus:", "</sigDate><sigAlgo label=\"Signaturalgorithmus:\">", txtFile);
-			Util.oldnewstringAll("Grund:", "</sigAlgo><sigReason label=\"Grund:\">", txtFile);
-			Util.oldnewstringAll("Die digitale Signatur ist gueltig \\(Details siehe A\\)",
-					"</sigReason><sigSum>Die digitale Signatur ist gueltig \\(Details siehe A\\)</sigSum>", txtFile);
+			if (Util.stringInFile("Grund:", txtFile)) {
+				Util.oldnewstringAll("Grund:", "</sigAlgo><sigReason label=\"Grund:\">", txtFile);
+				Util.oldnewstringAll("Die digitale Signatur ist gueltig \\(Details siehe A\\)",
+						"</sigReason><sigSum>Die digitale Signatur ist gueltig \\(Details siehe A\\)</sigSum>",
+						txtFile);
+				Util.oldnewstringAll("Die digitale Signatur ist ungueltig \\(Details siehe A\\)",
+						"</sigReason><sigSum>Die digitale Signatur ist ungueltig \\(Details siehe A\\)</sigSum>",
+						txtFile);
+				Util.oldnewstringAll("Die digitale Signatur ist nicht gueltig \\(Details siehe A\\)",
+						"</sigReason><sigSum>Die digitale Signatur ist nicht gueltig \\(Details siehe A\\)</sigSum>",
+						txtFile);
+			} else {
+				Util.oldnewstringAll("Die digitale Signatur ist gueltig \\(Details siehe A\\)",
+						"</sigAlgo><sigSum>Die digitale Signatur ist gueltig \\(Details siehe A\\)</sigSum>", txtFile);
+				Util.oldnewstringAll("Die digitale Signatur ist ungueltig \\(Details siehe A\\)",
+						"</sigAlgo><sigSum>Die digitale Signatur ist ungueltig \\(Details siehe A\\)</sigSum>",
+						txtFile);
+				Util.oldnewstringAll("Die digitale Signatur ist nicht gueltig \\(Details siehe A\\)",
+						"</sigAlgo><sigSum>Die digitale Signatur ist nicht gueltig \\(Details siehe A\\)</sigSum>",
+						txtFile);
+			}
 			// TODO
 
 // timeInfos
@@ -1104,7 +1122,7 @@ public class egovdv {
 				stringFile = stringFile.replace("n3w2L1n3n3w2L1n3", "n3w2L1n3");
 			}
 
-			stringFile = stringFile.replace("n3w2L1n3<signature>", "</signature>n3w2L1n3<signature>");
+			stringFile = stringFile.replace("n3w2L1n3<signature ", "n3w2L1n3</signature><signature ");
 			stringFile = stringFile.replace("</signature></signature>", "</signature>");
 			stringFile = stringFile.replace("</signature>n3w2L1n3</signature>", "</signature>");
 			stringFile = stringFile.replace("n3w2L1n3", "\n");
@@ -1150,16 +1168,21 @@ public class egovdv {
 				execVerapdfSig = execVerapdfSig.replace("            ", "");
 
 				execVerapdfSig = execVerapdfSig.replace("Metadaten der Signatur",
-						"<mSignature label=\"Metadaten der Signatur");
+						"</mSignature><mSignature label=\"Metadaten der Signatur");
 				execVerapdfSig = execVerapdfSig.replace("[verapdf]</info>", "[verapdf]\">");
 				execVerapdfSig = execVerapdfSig.replace("Zeitpunkt der Unterschrift (Anbringen Signatur): ",
 						"<info label=\"Zeitpunkt der Unterschrift (Anbringen Signatur):\">");
 				execVerapdfSig = execVerapdfSig.replace("Name: ", "<info label=\"Name:\">");
 				execVerapdfSig = execVerapdfSig.replace("Ort: ", "<info label=\"Ort:\">");
 				execVerapdfSig = execVerapdfSig.replace("Grund: ", "<info label=\"Grund:\">");
-
+				execVerapdfSig = execVerapdfSig.replace("</mSignature><mSignature label=\"Metadaten der Signatur 1 ",
+						"<mSignature label=\"Metadaten der Signatur 1 ");
+				execVerapdfSig = execVerapdfSig + "</mSignature>";
 				Util.oldnewstringAll("<mSignatureInfo>", execVerapdfSig, xmlFile);
 				Util.oldnewstringAll("</mSignatureInfo>", "</mSignature>", xmlFile);
+				Util.oldnewstringAll("</mSignature></mSignature>", "</mSignature>", xmlFile);
+				Util.oldnewstringAll("</signature><signature label=\"Pruefdetails Signatur 1\"",
+						"<signature label=\"Pruefdetails Signatur 1\"", xmlFile);
 
 				// <metadata label="Metadaten (veraPDF)">
 				// <mSignatureInfo></mSignatureInfo>

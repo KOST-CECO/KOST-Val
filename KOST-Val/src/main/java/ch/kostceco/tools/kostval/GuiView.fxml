@@ -127,10 +127,10 @@
 			<center>
 				<VBox maxHeight="1.7976931348623157E308" BorderPane.alignment="CENTER">
 					<children>
-                  <SplitPane dividerPositions="0.8" orientation="VERTICAL" prefHeight="650.0" prefWidth="980.0">
+                  <SplitPane dividerPositions="0.8" orientation="VERTICAL" prefHeight="6100.0">
                     <items>
       						<WebView fx:id="wbv" maxHeight="1.7976931348623157E308" minHeight="100.0" minWidth="-1.0" onDragDropped="#changeFileFolderOver" prefHeight="6000.0" prefWidth="-1.0" />
-										<TextArea fx:id="console" maxHeight="6000.0" maxWidth="1.7976931348623157E308" minHeight="30.0" minWidth="850.0" prefHeight="100.0" prefWidth="2400.0" style="-fx-text-inner-color: black; -fx-background-color: darkgrey;">
+										<TextArea fx:id="console" maxHeight="6000.0" maxWidth="1.7976931348623157E308" minHeight="30.0" prefHeight="100.0" prefWidth="2400.0" style="-fx-text-inner-color: black; -fx-background-color: darkgrey;">
 											<font>
 												<Font name="Consolas" size="12.0" />
 											</font>
@@ -144,7 +144,7 @@
 				</VBox>
 			</center>
 			<bottom>
-				<Label fx:id="label" text="Label" textFill="WHITESMOKE" BorderPane.alignment="CENTER" />
+				<Label fx:id="label" maxHeight="20.0" minHeight="20.0" prefHeight="20.0" text="Label" textFill="WHITESMOKE" BorderPane.alignment="CENTER" />
 			</bottom>
 			<opaqueInsets>
 				<Insets />

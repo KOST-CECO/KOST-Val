@@ -239,9 +239,9 @@ public class Controllervalfofile implements MessageConstants {
 					// TODO Text
 					if (recFormat.equals("PDFA")) {
 						intro = countToValidated + " " + "PDFA:  " + valDatei.getAbsolutePath() + " ";
+						System.out.print(intro); // Bei PDF und PDFA immer ausgeben
+						// akzeptiert und soll validiert werden
 						if (pdfaValidation.equals("yes")) {
-							System.out.print(intro); // Bei PDF und PDFA immer ausgeben
-							// akzeptiert und soll validiert werden
 							Controllervalfile controller1 = (Controllervalfile) context.getBean("controllervalfile");
 							boolean valFile = controller1.valFile(valDatei, logFileName, directoryOfLogfile, verbose,
 									dirOfJarPath, configMap, context, locale, logFile, hash, valDateiXml);
@@ -940,9 +940,15 @@ public class Controllervalfofile implements MessageConstants {
 				// geloescht wird
 				// txtFile wird am Schluss geloescht
 				if (dvvalidation.equals("yes")) {
+					// Zeitstempel Start egovdv
+					java.util.Date nowStart = new java.util.Date();
+//					java.text.SimpleDateFormat sdfStart = new java.text.SimpleDateFormat("yyyy-mm-dd_HH:mm:ss");
+					java.text.SimpleDateFormat sdfStart = new java.text.SimpleDateFormat("HHmmss");
+					String ausgabeStart = sdfStart.format(nowStart);
+
 					// Signaturen validieren (Mixed)
 					File outMixedSig = new File(directoryOfLogfile.getAbsolutePath() + File.separator
-							+ valDateiNameNormalisiert + "_dvReport_Mixed.pdf");
+							+ valDateiNameNormalisiert + "_dvReport_Mixed_" + ausgabeStart + ".pdf");
 					Locale localeDe = new Locale("de");
 
 					String sigDoku = configMap.get("sigDoku");
@@ -958,11 +964,12 @@ public class Controllervalfofile implements MessageConstants {
 							// falls xmlFile nicht existiert, kopieren wir die Leere Struktur
 							if (xmlFile.exists()) {
 								// System.out.println("neue File-Struktur einfuegen");
-								Util.oldnewstring("<file></file>", stringFile + "<file></file>", xmlFile);
+								//Util.oldnewstring("<file></file>", stringFile + "<file></file>", xmlFile);
+								Util.oldnewstring("</file></files>", "</file>"+ stringFile + "</files>", xmlFile);
 							} else {
 								// System.out.println("xml File-Struktur kopieren");
 								Util.copyFile(xmlEmptyDE, xmlFile);
-								Util.oldnewstring("<file></file>", stringFile + "<file></file>", xmlFile);
+								Util.oldnewstring("</file></files>", "</file>"+ stringFile + "</files>", xmlFile);
 							}
 							fis.close();
 						} catch (FileNotFoundException e) {
@@ -1029,8 +1036,9 @@ public class Controllervalfofile implements MessageConstants {
 
 							// Signaturen validieren (Qualified)
 							if (Qualified != "no") {
+								// Signaturen validieren (Mixed)
 								File outQualifiedSig = new File(directoryOfLogfile.getAbsolutePath() + File.separator
-										+ valDateiNameNormalisiert + "_dvReport_Qualified.pdf");
+										+ valDateiNameNormalisiert + "_dvReport_Qualified_" + ausgabeStart + ".pdf");
 								String QualifiedSig = egovdv.execEgovdvCheck(valDatei, outQualifiedSig, xmlFile,
 										workDir2, dirOfJarPath, Qualified, locale);
 								if (QualifiedSig.contains("Validity-VALID_")) {
@@ -1046,7 +1054,7 @@ public class Controllervalfofile implements MessageConstants {
 							// Signaturen validieren (SwissGovPKI)
 							if (SwissGovPKI != "no") {
 								File outSwissGovPKISig = new File(directoryOfLogfile.getAbsolutePath() + File.separator
-										+ valDateiNameNormalisiert + "_dvReport_SwissGovPKI.pdf");
+										+ valDateiNameNormalisiert + "_dvReport_SwissGovPKI_" + ausgabeStart + ".pdf");
 								String SwissGovPKISig = egovdv.execEgovdvCheck(valDatei, outSwissGovPKISig, xmlFile,
 										workDir2, dirOfJarPath, SwissGovPKI, locale);
 								if (SwissGovPKISig.contains("Validity-VALID_")) {
@@ -1062,7 +1070,7 @@ public class Controllervalfofile implements MessageConstants {
 							// Signaturen validieren (Upregfn)
 							if (Upregfn != "no") {
 								File outUpregfnSig = new File(directoryOfLogfile.getAbsolutePath() + File.separator
-										+ valDateiNameNormalisiert + "_dvReport_Upregfn.pdf");
+										+ valDateiNameNormalisiert + "_dvReport_Upregfn_" + ausgabeStart + ".pdf");
 								String UpregfnSig = egovdv.execEgovdvCheck(valDatei, outUpregfnSig, xmlFile, workDir2,
 										dirOfJarPath, Upregfn, locale);
 								if (UpregfnSig.contains("Validity-VALID_")) {
@@ -1079,7 +1087,7 @@ public class Controllervalfofile implements MessageConstants {
 							if (KantonZugFinanzdirektion != "no") {
 								File outKantonZugFinanzdirektionSig = new File(
 										directoryOfLogfile.getAbsolutePath() + File.separator + valDateiNameNormalisiert
-												+ "_dvReport_KantonZugFinanzdirektion.pdf");
+												+ "_dvReport_KantonZugFinanzdirektion_" + ausgabeStart + ".pdf");
 								String KantonZugFinanzdirektionSig = egovdv.execEgovdvCheck(valDatei,
 										outKantonZugFinanzdirektionSig, xmlFile, workDir2, dirOfJarPath,
 										KantonZugFinanzdirektion, locale);
@@ -1095,7 +1103,7 @@ public class Controllervalfofile implements MessageConstants {
 							}
 							// Signaturen validieren (Siegel)
 							File outSiegelSig = new File(directoryOfLogfile.getAbsolutePath() + File.separator
-									+ valDateiNameNormalisiert + "_dvReport_Siegel.pdf");
+									+ valDateiNameNormalisiert + "_dvReport_Siegel_" + ausgabeStart + ".pdf");
 							String SiegelSig = egovdv.execEgovdvCheck(valDatei, outSiegelSig, xmlFile, workDir2,
 									dirOfJarPath, Siegel, locale);
 							if (SiegelSig.contains("Validity-VALID_")) {
@@ -1111,9 +1119,9 @@ public class Controllervalfofile implements MessageConstants {
 								// Kontrolle der anderen Siegel
 								// Signaturen validieren (Amtsblattportal)
 								if (Amtsblattportal != "no") {
-									File outAmtsblattportalSig = new File(
-											directoryOfLogfile.getAbsolutePath() + File.separator
-													+ valDateiNameNormalisiert + "_dvReport_Amtsblattportal.pdf");
+									File outAmtsblattportalSig = new File(directoryOfLogfile.getAbsolutePath()
+											+ File.separator + valDateiNameNormalisiert + "_dvReport_Amtsblattportal_"
+											+ ausgabeStart + ".pdf");
 									String AmtsblattportalSig = egovdv.execEgovdvCheck(valDatei, outAmtsblattportalSig,
 											xmlFile, workDir2, dirOfJarPath, Amtsblattportal, locale);
 									if (AmtsblattportalSig.contains("Validity-VALID_")) {
@@ -1129,7 +1137,7 @@ public class Controllervalfofile implements MessageConstants {
 								// Signaturen validieren (Edec)
 								if (Edec != "no") {
 									File outEdecSig = new File(directoryOfLogfile.getAbsolutePath() + File.separator
-											+ valDateiNameNormalisiert + "_dvReport_Edec.pdf");
+											+ valDateiNameNormalisiert + "_dvReport_Edec_" + ausgabeStart + ".pdf");
 									String EdecSig = egovdv.execEgovdvCheck(valDatei, outEdecSig, xmlFile, workDir2,
 											dirOfJarPath, Edec, locale);
 									if (EdecSig.contains("Validity-VALID_")) {
@@ -1145,7 +1153,7 @@ public class Controllervalfofile implements MessageConstants {
 								// Signaturen validieren (ESchKG)
 								if (ESchKG != "no") {
 									File outESchKGSig = new File(directoryOfLogfile.getAbsolutePath() + File.separator
-											+ valDateiNameNormalisiert + "_dvReport_ESchKG.pdf");
+											+ valDateiNameNormalisiert + "_dvReport_ESchKG_" + ausgabeStart + ".pdf");
 									String ESchKGSig = egovdv.execEgovdvCheck(valDatei, outESchKGSig, xmlFile, workDir2,
 											dirOfJarPath, ESchKG, locale);
 									if (ESchKGSig.contains("Validity-VALID_")) {
@@ -1161,7 +1169,8 @@ public class Controllervalfofile implements MessageConstants {
 								// Signaturen validieren (FederalLaw)
 								if (FederalLaw != "no") {
 									File outFederalLawSig = new File(directoryOfLogfile.getAbsolutePath()
-											+ File.separator + valDateiNameNormalisiert + "_dvReport_FederalLaw.pdf");
+											+ File.separator + valDateiNameNormalisiert + "_dvReport_FederalLaw_"
+											+ ausgabeStart + ".pdf");
 									String FederalLawSig = egovdv.execEgovdvCheck(valDatei, outFederalLawSig, xmlFile,
 											workDir2, dirOfJarPath, FederalLaw, locale);
 									if (FederalLawSig.contains("Validity-VALID_")) {
@@ -1176,9 +1185,9 @@ public class Controllervalfofile implements MessageConstants {
 								}
 								// Signaturen validieren (Strafregisterauszug)
 								if (Strafregisterauszug != "no") {
-									File outStrafregisterauszugSig = new File(
-											directoryOfLogfile.getAbsolutePath() + File.separator
-													+ valDateiNameNormalisiert + "_dvReport_Strafregisterauszug.pdf");
+									File outStrafregisterauszugSig = new File(directoryOfLogfile.getAbsolutePath()
+											+ File.separator + valDateiNameNormalisiert
+											+ "_dvReport_Strafregisterauszug_" + ausgabeStart + ".pdf");
 									String StrafregisterauszugSig = egovdv.execEgovdvCheck(valDatei,
 											outStrafregisterauszugSig, xmlFile, workDir2, dirOfJarPath,
 											Strafregisterauszug, locale);

@@ -26,6 +26,7 @@ import ch.kostceco.tools.kostval.exception.modulesiard.ValidationAzipException;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationBprimaryStructureException;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationCheaderException;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationDstructureException;
+import ch.kostceco.tools.kostval.exception.modulesiard.ValidationD2structureException;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationEcolumnException;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationFrowException;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationGtableException;
@@ -41,6 +42,7 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationAzipModule;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationBprimaryStructureModule;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationCheaderModule;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationDstructureModule;
+import ch.kostceco.tools.kostval.validation.modulesiard.ValidationD2structureModule;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationEcolumnModule;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationFrowModule;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationGtableModule;
@@ -70,6 +72,7 @@ public class Controllersiard implements MessageConstants {
 	private ValidationBprimaryStructureModule validationBprimaryStructureModule;
 	private ValidationCheaderModule validationCheaderModule;
 	private ValidationDstructureModule validationDstructureModule;
+	private ValidationD2structureModule validationD2structureModule;
 	private ValidationEcolumnModule validationEcolumnModule;
 	private ValidationFrowModule validationFrowModule;
 	private ValidationGtableModule validationGtableModule;
@@ -110,6 +113,14 @@ public class Controllersiard implements MessageConstants {
 
 	public void setValidationDstructureModule(ValidationDstructureModule validationDstructureModule) {
 		this.validationDstructureModule = validationDstructureModule;
+	}
+	
+	public ValidationD2structureModule getValidationD2structureModule() {
+		return validationD2structureModule;
+	}
+	
+	public void setValidationD2structureModule(ValidationD2structureModule validationD2structureModule) {
+		this.validationD2structureModule = validationD2structureModule;
 	}
 
 	/*
@@ -301,6 +312,39 @@ public class Controllersiard implements MessageConstants {
 		}
 
 		boolean valid = true;
+
+		
+		// wenn noch valid erfolgt validierung mit DBPTK
+		try {
+			if (this.getValidationD2structureModule().validate(valDatei, directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath)) {
+				this.getValidationD2structureModule().getMessageService().print();
+			} else {
+				this.getValidationD2structureModule().getMessageService().print();
+				if (min) {
+					return false;
+				} else {
+					valid = false;
+				}
+			}
+		} catch (ValidationD2structureException e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_D_SIARD)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
+			this.getValidationD2structureModule().getMessageService().print();
+			if (min) {
+				return false;
+			} else {
+				valid = false;
+			}
+		} catch (Exception e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_D_SIARD)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
+			if (min) {
+				return false;
+			} else {
+				valid = false;
+			}
+		}
 
 		// Validation Step E (Spalten-Validierung)
 		try {

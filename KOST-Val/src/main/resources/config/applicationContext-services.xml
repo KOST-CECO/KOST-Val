@@ -86,6 +86,11 @@
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 	</bean>
+	<bean id="validationD2structureModule"
+		class="ch.kostceco.tools.kostval.validation.modulesiard.impl.ValidationD2structureModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+	</bean>
 	<bean id="validationEcolumnModule"
 		class="ch.kostceco.tools.kostval.validation.modulesiard.impl.ValidationEcolumnModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
@@ -342,6 +347,8 @@
 		<property name="validationCheaderModule" ref="validationCheaderModule" />
 		<property name="validationDstructureModule"
 			ref="validationDstructureModule" />
+		<property name="validationD2structureModule"
+			ref="validationD2structureModule" />
 		<property name="validationEcolumnModule" ref="validationEcolumnModule" />
 		<property name="validationFrowModule" ref="validationFrowModule" />
 		<property name="validationGtableModule" ref="validationGtableModule" />
