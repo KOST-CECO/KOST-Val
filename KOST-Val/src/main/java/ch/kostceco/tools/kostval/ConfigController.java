@@ -129,7 +129,7 @@ public class ConfigController {
 
 	private WebEngine engine;
 
-	private String versionKostVal = "   (v2.3.0.5)";
+	private String versionKostVal = "   (v2.3.0.6)";
 
 	@FXML
 	void initialize() {

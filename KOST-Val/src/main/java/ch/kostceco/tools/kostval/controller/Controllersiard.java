@@ -315,7 +315,9 @@ public class Controllersiard implements MessageConstants {
 
 		
 		// wenn noch valid erfolgt validierung mit DBPTK
-		try {
+/* TODO fuer v2.3.0.6 noch nicht aktivieren (security Patch mit nur kleinen Anpassungen
+ * 
+ 		try {
 			if (this.getValidationD2structureModule().validate(valDatei, directoryOfLogfile, configMap, locale, logFile,
 					dirOfJarPath)) {
 				this.getValidationD2structureModule().getMessageService().print();
@@ -345,6 +347,7 @@ public class Controllersiard implements MessageConstants {
 				valid = false;
 			}
 		}
+		*/
 
 		// Validation Step E (Spalten-Validierung)
 		try {

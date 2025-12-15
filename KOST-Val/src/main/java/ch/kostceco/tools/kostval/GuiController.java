@@ -116,7 +116,7 @@ public class GuiController {
 
 	private String arg0, arg1, arg2, arg3 = "--xml", dirOfJarPath, initInstructionsDe, initInstructionsFr,
 			initInstructionsIt, initInstructionsEn;
-	private String versionKostVal = "2.3.0.5";
+	private String versionKostVal = "2.3.0.6";
 	/*
 	 * TODO: versionKostVal auch hier anpassen:
 	 * 
