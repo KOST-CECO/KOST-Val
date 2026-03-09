@@ -33,7 +33,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-import ch.kostceco.tools.kosttools.util.Util;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Document;
+import org.w3c.dom.bootstrap.DOMImplementationRegistry;
+import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSOutput;
+import org.w3c.dom.ls.LSSerializer;
+import org.xml.sax.SAXException;
 
 /** @author Rc Claire Roethlisberger, KOST-CECO */
 
@@ -174,6 +184,42 @@ public class Util {
 			return false;
 		} catch (FileNotFoundException e) {
 			return false;
+		}
+	}
+
+	/**
+	 * Kontrolliert ob text in einer Linie im File vorkommt und gibt dies Linie aus
+	 */
+	public static String stringInFileLineString(String text, File file) {
+		try {
+			Scanner scanner = new Scanner(file);
+			while (scanner.hasNextLine()) {
+				String line = scanner.nextLine();
+				if (line.contains(text)) {
+					scanner.close();
+					return line;
+				}
+			}
+			scanner.close();
+			return "false";
+		} catch (FileNotFoundException e) {
+			return "false";
+		}
+	}
+
+	/** text aus File herauslesen */
+	public static String getStringFromFile(File file) {
+		try {
+			Scanner scanner = new Scanner(file);
+			String text = "";
+			while (scanner.hasNextLine()) {
+				String line = scanner.nextLine();
+				text = text.concat(line);
+			}
+			scanner.close();
+			return text;
+		} catch (FileNotFoundException e) {
+			return "";
 		}
 	}
 
@@ -379,6 +425,75 @@ public class Util {
 		out = null;
 	}
 
+	/**
+	 * Kopiert ein Verzeichnis inkl MD5-Hash-Kontrolle.
+	 * 
+	 * @param quelle das zu kopierende Verzeichnis
+	 * @param ziel   das Ziel-Verzeichnis
+	 */
+	public static void copyDirFileMd5(File quelle, File ziel) throws FileNotFoundException, IOException {
+		if (quelle.isDirectory()) {
+			File[] files = quelle.listFiles();
+			File newFile = null;
+			// in diesem Objekt wird fuer jedes File der Zielpfad gespeichert.
+			// 1. Der alte Zielpfad
+			// 2. Das systemspezifische Pfadtrennungszeichen
+			// 3. Der Name des aktuellen Ordners/der aktuellen Datei
+			ziel.mkdirs(); // erstellt alle benoetigten Ordner
+			if (files != null) {
+				for (int i = 0; i < files.length; i++) {
+					newFile = new File(
+							ziel.getAbsolutePath() + System.getProperty("file.separator") + files[i].getName());
+					if (files[i].isDirectory()) {
+						copyDir(files[i], newFile);
+					} else {
+						copyFileMd5(files[i], newFile);
+					}
+				}
+			}
+		} else {
+			copyFileMd5(quelle, ziel);
+		}
+	}
+
+	/**
+	 * Kopiert eine Datei inkl MD5-Hash-Kontrolle.
+	 * 
+	 * @param file die zu kopierende Datei
+	 * @param ziel die Ziel-Datei
+	 */
+	public static void copyFileMd5(File file, File ziel) throws FileNotFoundException, IOException {
+		if (ziel.exists()) {
+			// Datei loeschen ansonsten wird Text hinzugefuegt
+			ziel.delete();
+		}
+		BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
+		BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(ziel, true));
+		int bytes = 0;
+		while ((bytes = in.read()) != -1) { // Datei einlesen
+			out.write(bytes); // Datei schreiben
+		}
+		in.close();
+		out.close();
+		// set to null
+		in = null;
+		out = null;
+		try {
+			String md5In = Hash.getMd5(file);
+			String md5out = Hash.getMd5(ziel);
+			if (md5In.equals(md5out)) {
+				// Bitidentische Kopie
+			} else {
+				// KEINE Bitidentische Kopie
+				// Kopieren wiederholen
+				System.out.println("KEINE Bitidentische Kopie -> Kopieren wiederholen");
+				copyFileMd5(file, ziel);
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
 	/*
 	 * TODO: Wichtige Notiz zur Performance
 	 * 
@@ -435,8 +550,8 @@ public class Util {
 			reader = null;
 			String newtext = oldtext.replace("<End></End>", stringEnd);
 			// PdfToolsWarning
-			String cPT= UtilPages.getPagesFinal();
-			newtext = newtext.replace(" >72000 ", " "+cPT+" ");
+			String cPT = UtilPages.getPagesFinal();
+			newtext = newtext.replace(" >72000 ", " " + cPT + " ");
 			// sonstige Bereinigungen
 			newtext = newtext.replace("<Message>3c</Message></Error>", string3c);
 			newtext = newtext.replace("&", "&amp;");
@@ -665,4 +780,43 @@ public class Util {
 		}
 	}
 
+	/**
+	 * prettyPrint einer XML-Datei
+	 * 
+	 * @throws ParserConfigurationException
+	 * 
+	 */
+	public static void prettyPrint(File inputFile, File outputFile) throws ParserConfigurationException {
+		try {
+			// XML einlesen
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			factory.setNamespaceAware(true);
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document document = builder.parse(inputFile);
+
+			// DOM Level 3 Load/Save Implementation holen
+			DOMImplementationRegistry registry;
+			registry = DOMImplementationRegistry.newInstance();
+			DOMImplementation impl = registry.getDOMImplementation("LS");
+
+			DOMImplementationLS implLS = (DOMImplementationLS) impl;
+
+			// Serializer erzeugen
+			LSSerializer serializer = implLS.createLSSerializer();
+
+			// Pretty Print aktivieren
+			serializer.getDomConfig().setParameter("format-pretty-print", true);
+
+			// Ausgabe konfigurieren
+			LSOutput output = implLS.createLSOutput();
+			output.setEncoding("UTF-8");
+			output.setByteStream(new FileOutputStream(outputFile));
+
+			serializer.write(document, output);
+		} catch (SAXException | IOException | ClassNotFoundException | InstantiationException | IllegalAccessException
+				| ClassCastException e) {
+			e.printStackTrace();
+
+		}
+	}
 }

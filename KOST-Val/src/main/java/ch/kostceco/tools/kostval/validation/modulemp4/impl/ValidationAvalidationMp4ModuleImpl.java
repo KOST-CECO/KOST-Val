@@ -42,7 +42,8 @@ public class ValidationAvalidationMp4ModuleImpl extends ValidationModuleImpl imp
 
 	@Override
 	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) throws ValidationAmp4validationException {
+			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart)
+			throws ValidationAmp4validationException {
 		String onWork = configMap.get("ShowProgressOnWork");
 		if (onWork.equals("nomin")) {
 			min = true;

@@ -54,7 +54,8 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) throws ValidationAjpegvalidationException {
+			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart)
+			throws ValidationAjpegvalidationException {
 		String onWork = configMap.get("ShowProgressOnWork");
 		if (onWork.equals("nomin")) {
 			min = true;

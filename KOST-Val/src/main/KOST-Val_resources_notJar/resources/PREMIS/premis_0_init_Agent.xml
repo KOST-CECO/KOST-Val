@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<premis xmlns="http://www.loc.gov/premis/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/premis/v3 premis-v3-0.xsd" version="3.0">
+
+<!-- Start: Object -->
+<!-- ToDo Object -->
+
+<!-- Start: Event -->
+<!-- ToDo Event -->
+
+<!-- Start: Agent -->
+<agent>
+<agentIdentifier>
+<agentIdentifierType valueURI="http://id.loc.gov/vocabulary/identifiers/local">local</agentIdentifierType>
+<agentIdentifierValue>[Institution]</agentIdentifierValue>
+</agentIdentifier>
+<agentName>[Institution]</agentName>
+<agentType valueURI="http://id.loc.gov/vocabulary/preservation/agentType/org">organization</agentType>
+</agent>
+<agent>
+<agentIdentifier>
+<agentIdentifierType valueURI="http://id.loc.gov/vocabulary/identifiers/local">local</agentIdentifierType>
+<agentIdentifierValue>KOST-Val</agentIdentifierValue>
+</agentIdentifier>
+<agentName>KOST-Val</agentName>
+<agentType valueURI="http://id.loc.gov/vocabulary/preservation/agentType/sof">software</agentType>
+<agentVersion>2.4.0.0</agentVersion>
+</agent>
+</premis>

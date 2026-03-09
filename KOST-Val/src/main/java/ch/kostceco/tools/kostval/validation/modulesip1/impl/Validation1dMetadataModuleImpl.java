@@ -51,7 +51,8 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
 	final int BUFFER = 2048;
 
 	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) throws Validation1dMetadataException {
+			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart)
+			throws Validation1dMetadataException {
 		String pathToWorkDir = configMap.get("PathToWorkDir");
 		File pathToWorkDirFile = new File(pathToWorkDir + File.separator + "header");
 		try {

@@ -143,12 +143,12 @@ public class Controllertiff implements MessageConstants {
 	}
 
 	public boolean executeMandatory(File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile, String dirOfJarPath) {
+			Locale locale, File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart) {
 		boolean valid = true;
 		// Validation Step A
 		try {
 			if (this.getValidationArecognitionModule().validate(valDatei, directoryOfLogfile, configMap, locale,
-					logFile, dirOfJarPath)) {
+					logFile, dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidationArecognitionModule().getMessageService().print();
 			} else {
 				// Ein negatives Validierungsresultat in diesem Schritt fuehrt
@@ -171,7 +171,7 @@ public class Controllertiff implements MessageConstants {
 	}
 
 	public boolean executeOptional(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) {
+			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart) {
 		String onWork = configMap.get("ShowProgressOnWork");
 		if (onWork.equals("nomin")) {
 			min = true;
@@ -181,7 +181,7 @@ public class Controllertiff implements MessageConstants {
 		// Validation Step B
 		try {
 			if (this.getValidationBjhoveValidationModule().validate(valDatei, directoryOfLogfile, configMap, locale,
-					logFile, dirOfJarPath)) {
+					logFile, dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidationBjhoveValidationModule().getMessageService().print();
 			} else {
 				this.getValidationBjhoveValidationModule().getMessageService().print();
@@ -205,7 +205,7 @@ public class Controllertiff implements MessageConstants {
 		// Validation Step C
 		try {
 			if (this.getValidationCcompressionValidationModule().validate(valDatei, directoryOfLogfile, configMap,
-					locale, logFile, dirOfJarPath)) {
+					locale, logFile, dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidationCcompressionValidationModule().getMessageService().print();
 			} else {
 				this.getValidationCcompressionValidationModule().getMessageService().print();
@@ -229,7 +229,7 @@ public class Controllertiff implements MessageConstants {
 		// Validation Step D
 		try {
 			if (this.getValidationDphotointerValidationModule().validate(valDatei, directoryOfLogfile, configMap,
-					locale, logFile, dirOfJarPath)) {
+					locale, logFile, dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidationDphotointerValidationModule().getMessageService().print();
 			} else {
 				this.getValidationDphotointerValidationModule().getMessageService().print();
@@ -253,7 +253,7 @@ public class Controllertiff implements MessageConstants {
 		// Validation Step E
 		try {
 			if (this.getValidationEbitspersampleValidationModule().validate(valDatei, directoryOfLogfile, configMap,
-					locale, logFile, dirOfJarPath)) {
+					locale, logFile, dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidationEbitspersampleValidationModule().getMessageService().print();
 			} else {
 				this.getValidationEbitspersampleValidationModule().getMessageService().print();
@@ -277,7 +277,7 @@ public class Controllertiff implements MessageConstants {
 		// Validation Step F
 		try {
 			if (this.getValidationFmultipageValidationModule().validate(valDatei, directoryOfLogfile, configMap, locale,
-					logFile, dirOfJarPath)) {
+					logFile, dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidationFmultipageValidationModule().getMessageService().print();
 			} else {
 				this.getValidationFmultipageValidationModule().getMessageService().print();
@@ -301,7 +301,7 @@ public class Controllertiff implements MessageConstants {
 		// Validation Step G
 		try {
 			if (this.getValidationGtilesValidationModule().validate(valDatei, directoryOfLogfile, configMap, locale,
-					logFile, dirOfJarPath)) {
+					logFile, dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidationGtilesValidationModule().getMessageService().print();
 			} else {
 				this.getValidationGtilesValidationModule().getMessageService().print();
@@ -325,7 +325,7 @@ public class Controllertiff implements MessageConstants {
 		// Validation Step H
 		try {
 			if (this.getValidationHsizeValidationModule().validate(valDatei, directoryOfLogfile, configMap, locale,
-					logFile, dirOfJarPath)) {
+					logFile, dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidationHsizeValidationModule().getMessageService().print();
 			} else {
 				this.getValidationHsizeValidationModule().getMessageService().print();

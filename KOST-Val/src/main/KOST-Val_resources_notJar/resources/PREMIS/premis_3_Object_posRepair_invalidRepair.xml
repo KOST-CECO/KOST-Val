@@ -1,0 +1,67 @@
+<object xsi:type="file">
+<objectIdentifier>
+<objectIdentifierType valueURI="http://id.loc.gov/vocabulary/identifiers/local">local</objectIdentifierType>
+<objectIdentifierValue>_[yyyymmdd][HHmmss][MD53]o</objectIdentifierValue>
+</objectIdentifier>
+<objectCharacteristics>
+<fixity>
+<messageDigestAlgorithm>md5</messageDigestAlgorithm>
+<messageDigest>[MD5]</messageDigest>
+</fixity>
+<size>[size]</size>
+<format>
+<formatDesignation>
+<formatName>[formatName]</formatName>
+</formatDesignation>
+</format>
+</objectCharacteristics>
+<originalName>[originalName]</originalName>
+<relationship>
+<relationshipType valueURI="http://id.loc.gov/vocabulary/preservation/relationshipType/der">derivation</relationshipType>
+<relationshipSubType valueURI="http://id.loc.gov/vocabulary/preservation/relationshipSubType/iso">is Source Of</relationshipSubType>
+<relatedObjectIdentifier>
+<relatedObjectIdentifierType valueURI="http://id.loc.gov/vocabulary/identifiers/local">local</relatedObjectIdentifierType>
+<relatedObjectIdentifierValue>_[yyyymmdd][HHmmss][MD53]oder</relatedObjectIdentifierValue>
+</relatedObjectIdentifier>
+</relationship>
+<linkingEventIdentifier>
+<linkingEventIdentifierType valueURI="http://id.loc.gov/vocabulary/identifiers/local">local</linkingEventIdentifierType>
+<linkingEventIdentifierValue>_[yyyymmdd][HHmmss][MD53]eval</linkingEventIdentifierValue>
+</linkingEventIdentifier>
+<linkingEventIdentifier>
+<linkingEventIdentifierType valueURI="http://id.loc.gov/vocabulary/identifiers/local">local</linkingEventIdentifierType>
+<linkingEventIdentifierValue>_[yyyymmdd][HHmmss][MD53]emig</linkingEventIdentifierValue>
+</linkingEventIdentifier>
+<linkingEventIdentifier>
+<linkingEventIdentifierType valueURI="http://id.loc.gov/vocabulary/identifiers/local">local</linkingEventIdentifierType>
+<linkingEventIdentifierValue>_[yyyymmdd][HHmmss][MD53]erep</linkingEventIdentifierValue>
+</linkingEventIdentifier>
+</object>
+<object xsi:type="file">
+<objectIdentifier>
+<objectIdentifierType valueURI="http://id.loc.gov/vocabulary/identifiers/local">local</objectIdentifierType>
+<objectIdentifierValue>_[yyyymmdd][HHmmss][MD53]oder</objectIdentifierValue>
+</objectIdentifier>
+<objectCharacteristics>
+<fixity>
+<messageDigestAlgorithm>md5</messageDigestAlgorithm>
+<messageDigest>[MD5]</messageDigest>
+</fixity>
+<size>[size]</size>
+<format>
+<formatDesignation>
+<formatName>[formatName]</formatName>
+</formatDesignation>
+</format>
+</objectCharacteristics>
+<originalName>[outputName]</originalName>
+<relationship>
+<relationshipType valueURI="http://id.loc.gov/vocabulary/preservation/relationshipType/der">derivation</relationshipType>
+<relationshipSubType valueURI="http://id.loc.gov/vocabulary/preservation/relationshipSubType/hss">has Source</relationshipSubType>
+<relatedObjectIdentifier>
+<relatedObjectIdentifierType valueURI="http://id.loc.gov/vocabulary/identifiers/local">local</relatedObjectIdentifierType>
+<relatedObjectIdentifierValue>_[yyyymmdd][HHmmss][MD53]o</relatedObjectIdentifierValue>
+</relatedObjectIdentifier>
+</relationship>
+</object>
+<!-- ToDo Object -->

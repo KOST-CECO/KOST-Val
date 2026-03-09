@@ -69,7 +69,8 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 
 	@Override
 	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) throws ValidationJsurplusFilesException {
+			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart)
+			throws ValidationJsurplusFilesException {
 		filesInSiardUnsorted.clear();
 		filesInSiard.clear();
 		tablesInSiard.clear();

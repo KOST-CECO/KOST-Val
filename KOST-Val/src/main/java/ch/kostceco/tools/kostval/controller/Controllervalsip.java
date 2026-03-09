@@ -69,6 +69,75 @@ public class Controllervalsip implements MessageConstants {
 	public boolean valSip(File valDatei, String logFileName, File directoryOfLogfile, boolean verbose,
 			String dirOfJarPath, Map<String, String> configMap, ApplicationContext context, Locale locale,
 			Boolean onlySip, File logFile) throws IOException {
+		/*
+		 * ermitteln ob Reparatur eingeschaltet ist
+		 * 
+		 * PDF/A: 2u <pdfarep> <pdfa2urep>
+		 * 
+		 * SIARD: lob, ext, rows <siardrep> <siardlobrep> <siardlobextrep>
+		 * <siardrowsrep>
+		 */
+		boolean repair = false;
+		boolean repairPdfa = false;
+		boolean repairSiard = false;
+		String configRepPdfa = configMap.get("pdfarep");
+		String configRepPdfa2u = configMap.get("pdfa2urep");
+		String configRepSiard = configMap.get("siardrep");
+		String configRepSiardLob = configMap.get("siardlobrep");
+		String configRepSiardExt = configMap.get("siardextrep");
+		String configRepSiardRows = configMap.get("siardrowsrep");
+		String initFolderPath = "";
+		if (configRepPdfa.contains("yes") && configRepPdfa2u.contains("yes")) {
+			repairPdfa = true;
+		}
+		if (configRepSiard.contains("yes") && (configRepSiardLob.contains("yes") || configRepSiardExt.contains("yes")
+				|| configRepSiardRows.contains("yes"))) {
+			repairSiard = true;
+		}
+		if (repairPdfa || repairSiard) {
+			repair = true;
+		}
+		/*
+		 * Aus LogFile Start herauslesen, damit bei Repair im OUTPUT einen
+		 * entsprechenden Ordner angelegt werden kann.
+		 * 
+		 * <Infos><Start>20.01.2026 13:21:14</Start>
+		 * 
+		 * yyyy.MM.dd HH:mm:ss -> yyyy.MM.dd_HH.mm.ss
+		 */
+		String startSearch = "<Infos><Start>";
+		String startSearch2 = "</Start>";
+		String startLine = Util.stringInFileLineString(startSearch, logFile);
+		String startFolder = startLine.replace(startSearch, "");
+		startFolder = startFolder.replace(startSearch2, "");
+		startFolder = startFolder.replace(" ", "_");
+		startFolder = startFolder.replace(":", ".");
+		// OUTPUT ordner anlegen
+		String pathToLogDir = configMap.get("PathToLogfile");
+		File fileToLogDir = new File(pathToLogDir);
+		File fileToOutput = new File(fileToLogDir.getParent() + File.separator + "OUTPUT");
+		if (!fileToOutput.exists() && (repair)) {
+			fileToOutput.mkdir();
+		}
+		// startFolder anlegen
+		File fileToOutputStart = new File(fileToOutput + File.separator + startFolder);
+		if (!fileToOutputStart.exists() && (repair)) {
+			fileToOutputStart.mkdir();
+		}
+		/*
+		 * Aus valDatei parent herauslesen, damit der initiale Pfad von valDatei
+		 * ausgegeben werden kann
+		 */
+		String topLevelFolder = valDatei.getName();
+		String topLevelPath = valDatei.getAbsolutePath();
+		initFolderPath = valDatei.getAbsolutePath().replace(topLevelFolder, "");
+		String topLevelFolderInit = topLevelPath.replace(initFolderPath, "");
+		// topFolder im startFolder anlegen falls Folder
+		File fileToOutputStartTop = new File(fileToOutputStart + File.separator + topLevelFolderInit);
+		if (valDatei.isDirectory() && !fileToOutputStartTop.exists() && (repair)) {
+			fileToOutputStartTop.mkdir();
+		}
+
 		// SIP-Validierung
 
 		boolean valSip = false;
@@ -316,9 +385,11 @@ public class Controllervalsip implements MessageConstants {
 						int countToValidated = numberInFileMap - countProgress;
 						// Kontrolle ob Datei akzeptiert ist und ob sie
 						// validiert werden soll
+						// TODO wenn auch SIPs repariert werden Util.copyDirMd5(new File(initFolderPath), fileToOutputStart);
 						Controllervalfofile controller1 = (Controllervalfofile) context.getBean("controllervalfofile");
 						String valFile = controller1.valFoFile(valDatei, logFileName, directoryOfLogfile, verbose,
-								dirOfJarPath, configMap, context, locale, logFile, countToValidated);
+								dirOfJarPath, configMap, context, locale, logFile, countToValidated, repair,
+								initFolderPath, fileToOutputStart, false, false, false);
 						if (valFile.equals("countValid")) {
 							countValid = countValid + 1;
 						} else if (valFile.equals("countNotaz")) {
@@ -389,7 +460,7 @@ public class Controllervalsip implements MessageConstants {
 			Controllersip controller = (Controllersip) context.getBean("controllersip");
 			boolean okMandatory = false;
 			okMandatory = controller.executeMandatory(valDatei, directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath);
+					dirOfJarPath, initFolderPath, fileToOutputStart);
 			boolean ok = false;
 
 			/*
@@ -401,7 +472,8 @@ public class Controllervalsip implements MessageConstants {
 			 * Controller mit 1b an
 			 */
 			if (okMandatory) {
-				ok = controller.executeOptional(valDatei, directoryOfLogfile, configMap, locale, logFile, dirOfJarPath);
+				ok = controller.executeOptional(valDatei, directoryOfLogfile, configMap, locale, logFile, dirOfJarPath,
+						initFolderPath, fileToOutputStart);
 			}
 			// Formatvalidierung validFormat
 			ok = (ok && okMandatory && validFormat);

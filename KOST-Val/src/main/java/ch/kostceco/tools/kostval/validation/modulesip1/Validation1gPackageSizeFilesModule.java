@@ -34,6 +34,7 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
 public interface Validation1gPackageSizeFilesModule extends ValidationModule {
 
 	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) throws Validation1gPackageSizeFilesException;
+			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart)
+			throws Validation1gPackageSizeFilesException;
 
 }

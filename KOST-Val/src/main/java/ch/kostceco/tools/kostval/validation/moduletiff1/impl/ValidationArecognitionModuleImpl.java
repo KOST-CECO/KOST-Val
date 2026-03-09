@@ -38,7 +38,8 @@ public class ValidationArecognitionModuleImpl extends ValidationModuleImpl imple
 
 	@Override
 	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) throws ValidationArecognitionException {
+			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart)
+			throws ValidationArecognitionException {
 
 		// Die Erkennung erfolgt bereits im Vorfeld
 		return true;

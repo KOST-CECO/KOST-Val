@@ -73,7 +73,7 @@ public class Controllerpdfa implements MessageConstants {
 	}
 
 	public boolean executeMandatory(File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile, String dirOfJarPath) {
+			Locale locale, File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart) {
 		boolean valid = true;
 
 		String pdftoolsConfig = configMap.get("pdftools");
@@ -90,7 +90,7 @@ public class Controllerpdfa implements MessageConstants {
 			// Initialisation PDF-Tools
 			try {
 				if (this.getValidationAinitialisationModule().validate(valDatei, directoryOfLogfile, configMap, locale,
-						logFile, dirOfJarPath)) {
+						logFile, dirOfJarPath, initFolderPath, fileToOutputStart)) {
 					this.getValidationAinitialisationModule().getMessageService().print();
 				} else {
 					this.getValidationAinitialisationModule().getMessageService().print();
@@ -114,7 +114,7 @@ public class Controllerpdfa implements MessageConstants {
 	}
 
 	public boolean executeOptional(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) {
+			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart) {
 		String onWork = configMap.get("ShowProgressOnWork");
 		if (onWork.equals("nomin")) {
 			min = true;
@@ -125,7 +125,7 @@ public class Controllerpdfa implements MessageConstants {
 		// Validation A - I
 		try {
 			if (this.getValidationAvalidationAiModule().validate(valDatei, directoryOfLogfile, configMap, locale,
-					logFile, dirOfJarPath)) {
+					logFile, dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidationAvalidationAiModule().getMessageService().print();
 			} else {
 				this.getValidationAvalidationAiModule().getMessageService().print();

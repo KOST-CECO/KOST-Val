@@ -45,7 +45,8 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 
 	@Override
 	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) throws ValidationCcompressionValidationException {
+			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart)
+			throws ValidationCcompressionValidationException {
 		String onWork = configMap.get("ShowProgressOnWork");
 		if (onWork.equals("nomin")) {
 			min = true;

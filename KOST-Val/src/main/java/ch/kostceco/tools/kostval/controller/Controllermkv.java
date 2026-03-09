@@ -72,13 +72,13 @@ public class Controllermkv implements MessageConstants {
 	}
 
 	public boolean executeMandatory(File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile, String dirOfJarPath) {
+			Locale locale, File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart) {
 		boolean valid = true;
 
 		// Validation A
 		try {
 			if (this.getValidationAvalidationMkvModule().validate(valDatei, directoryOfLogfile, configMap, locale,
-					logFile, dirOfJarPath)) {
+					logFile, dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidationAvalidationMkvModule().getMessageService().print();
 			} else {
 				this.getValidationAvalidationMkvModule().getMessageService().print();
@@ -99,13 +99,13 @@ public class Controllermkv implements MessageConstants {
 	}
 
 	public boolean executeOptional(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) {
+			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart) {
 
 		boolean valid = true;
 		// Validation Step B-H
 		try {
 			if (this.getValidationBHvalidationMkvModule().validate(valDatei, directoryOfLogfile, configMap, locale,
-					logFile, dirOfJarPath)) {
+					logFile, dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidationBHvalidationMkvModule().getMessageService().print();
 			} else {
 				this.getValidationBHvalidationMkvModule().getMessageService().print();

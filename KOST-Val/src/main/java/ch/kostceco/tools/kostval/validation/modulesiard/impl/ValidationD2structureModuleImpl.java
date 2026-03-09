@@ -47,7 +47,8 @@ public class ValidationD2structureModuleImpl extends ValidationModuleImpl implem
 
 	@Override
 	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) throws ValidationD2structureException {
+			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart)
+			throws ValidationD2structureException {
 		boolean showOnWork = false;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen

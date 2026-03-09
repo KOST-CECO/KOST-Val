@@ -228,6 +228,14 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 			String warning3to2 = doc.getElementsByTagName("warning3to2").item(0).getTextContent();
 			configMap.put("warning3to2", warning3to2);
 
+			// <pdfarep>no </pdfarep> <!--no / yes -->
+			String pdfarep = doc.getElementsByTagName("pdfarep").item(0).getTextContent().replace(" ", "");
+			configMap.put("pdfarep", pdfarep);
+
+			// <pdfarep>no </pdfarep> <!--no / yes -->
+			String pdfa2urep = doc.getElementsByTagName("pdfa2urep").item(0).getTextContent().replace(" ", "");
+			configMap.put("pdfa2urep", pdfa2urep);
+
 			// Gibt an ob JBIG2 erlaubt ist oder nicht
 			String jbig2allowed = doc.getElementsByTagName("jbig2allowed").item(0).getTextContent();
 			configMap.put("jbig2allowed", jbig2allowed);
@@ -710,7 +718,8 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 			configMap.put("siardlobrep", siardlobrep);
 
 			// <siardlobextrep>no </siardlobextrep> <!--no / yes -->
-			String siardlobextrep = doc.getElementsByTagName("siardlobextrep").item(0).getTextContent().replace(" ", "");
+			String siardlobextrep = doc.getElementsByTagName("siardlobextrep").item(0).getTextContent().replace(" ",
+					"");
 			configMap.put("siardlobextrep", siardlobextrep);
 
 			// <siardrowsrep>no </siardrowsrep> <!--no / yes -->
@@ -867,6 +876,15 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 				strKantonZugFinanzdirektion = "no";
 			}
 			configMap.put("KantonZugFinanzdirektion", strKantonZugFinanzdirektion);
+
+			// Institution
+			/*
+			 * Institution
+			 * 
+			 * [Archiv]
+			 */
+			String institution = doc.getElementsByTagName("Institution").item(0).getTextContent();
+			configMap.put("Institution", institution);
 
 			// hash
 			/*

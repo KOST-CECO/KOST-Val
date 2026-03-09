@@ -116,7 +116,7 @@ public class GuiController {
 
 	private String arg0, arg1, arg2, arg3 = "--xml", dirOfJarPath, initInstructionsDe, initInstructionsFr,
 			initInstructionsIt, initInstructionsEn;
-	private String versionKostVal = "2.3.0.6";
+	private String versionKostVal = "2.4.0.0";
 	/*
 	 * TODO: versionKostVal auch hier anpassen:
 	 * 
@@ -130,9 +130,11 @@ public class GuiController {
 	 * 
 	 * 6) xsl der Logdatei
 	 * 
-	 * 7) Start-Bild (make_exe)
+	 * 7) premis_0_init_Agent.xml
 	 * 
-	 * 8) launch_KOST-Val_exe.xml --> VersionInfo
+	 * 8) Start-Bild (make_exe) // TODO
+	 * 
+	 * 9) launch_KOST-Val_exe.xml --> VersionInfo // TODO
 	 */
 
 	/*
@@ -1015,7 +1017,7 @@ public class GuiController {
 				System.out.println("KOST-Val");
 				console.appendText(""); // jetzt gibt es eine Veraenderung
 				try {
-					if (KOSTVal.main(args, versionKostVal)) {
+					if (KOSTVal.main(args, versionKostVal, "gui")) {
 						result = true;
 					} else {
 						result = false;

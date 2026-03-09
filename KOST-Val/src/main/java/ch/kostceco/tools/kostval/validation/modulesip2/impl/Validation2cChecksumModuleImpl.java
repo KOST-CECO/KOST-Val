@@ -59,7 +59,8 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl impleme
 
 	@Override
 	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) throws Validation2cChecksumException {
+			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart)
+			throws Validation2cChecksumException {
 		boolean showOnWork = false;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen

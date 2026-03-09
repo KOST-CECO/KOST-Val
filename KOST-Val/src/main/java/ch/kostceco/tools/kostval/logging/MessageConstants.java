@@ -92,6 +92,7 @@ public interface MessageConstants {
 	String MESSAGE_XML_MODUL_I_PDFA = "val.message.xml.modul.i.pdfa";
 	String MESSAGE_XML_MODUL_J_PDFA = "val.message.xml.modul.j.pdfa";
 	String MESSAGE_XML_MODUL_K_PDFA = "val.message.xml.modul.k.pdfa";
+	String MESSAGE_XML_MODUL_Z_PDFA = "val.message.xml.modul.z.pdfa";
 
 	String MESSAGE_XML_MODUL_A_PDF = "val.message.xml.modul.a.pdf";
 
@@ -355,6 +356,11 @@ public interface MessageConstants {
 	String ERROR_XML_K_OVERVIEW = "val.error.xml.k.overview";
 	String ERROR_XML_K_OVERVIEW2 = "val.error.xml.k.overview2";
 	String ERROR_XML_K_DETAIL = "val.error.xml.k.detail";
+
+	String INFO_XML_Z_NOREP_NOREP1 = "val.info.xml.z.norep.norep1";
+	String INFO_XML_Z_NOREP_NOOUTPUT = "val.info.xml.z.norep.nooutput";
+	String INFO_XML_Z_NOREP_INVALID = "val.info.xml.z.norep.invalid";
+	String INFO_XML_Z_REP_VALID = "val.info.xml.z.rep.valid";
 
 	// TODO ********JP2-Meldungen*************************************************************************
 	// Modul A Meldungen

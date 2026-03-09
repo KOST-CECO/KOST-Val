@@ -74,7 +74,7 @@ public class CmdKOSTVal implements MessageConstants {
 		CmdKOSTVal cmdkostval = (CmdKOSTVal) context.getBean("cmdkostval");
 		Util.switchOnConsole();
 
-		String versionKostVal = "2.3.0.6";
+		String versionKostVal = "2.4.0.0";
 		System.out.println("KOST-Val " + versionKostVal);
 
 		// Ist die Anzahl Parameter (mind 2) korrekt?
@@ -221,7 +221,7 @@ public class CmdKOSTVal implements MessageConstants {
 
 		// System.out.println( "args: " + args[0] + " " + args[1] + " " +
 		// args[2] + " " + args[3] );
-		if (KOSTVal.main(args, versionKostVal)) {
+		if (KOSTVal.main(args, versionKostVal, "cli")) {
 			// Valid
 			// alle Validierten Dateien valide
 			context.close();

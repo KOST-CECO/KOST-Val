@@ -36,7 +36,8 @@ public class Validation1bFolderStructureModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) throws Validation1bFolderStructureException {
+			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart)
+			throws Validation1bFolderStructureException {
 		// Informationen zur Darstellung "onWork" holen
 		String onWork = configMap.get("ShowProgressOnWork");
 		/*

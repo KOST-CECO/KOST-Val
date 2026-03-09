@@ -97,7 +97,8 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 	@SuppressWarnings({ "resource", "unused" })
 	@Override
 	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) throws ValidationCheaderException {
+			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart)
+			throws ValidationCheaderException {
 		boolean showOnWork = false;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen

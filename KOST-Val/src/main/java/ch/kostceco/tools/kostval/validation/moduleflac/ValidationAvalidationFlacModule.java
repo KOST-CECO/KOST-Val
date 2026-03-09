@@ -34,6 +34,7 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
 public interface ValidationAvalidationFlacModule extends ValidationModule {
 
 	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) throws ValidationAflacvalidationException;
+			File logFile, String dirOfJarPat, String initFolderPath, File fileToOutputStarth)
+			throws ValidationAflacvalidationException;
 
 }

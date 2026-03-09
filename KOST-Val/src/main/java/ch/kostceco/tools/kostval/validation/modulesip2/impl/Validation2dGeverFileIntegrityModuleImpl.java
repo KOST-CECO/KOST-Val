@@ -54,7 +54,8 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 
 	@Override
 	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) throws Validation2dGeverFileIntegrityException {
+			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart)
+			throws Validation2dGeverFileIntegrityException {
 		boolean showOnWork = false;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen

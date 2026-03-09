@@ -16,9 +16,12 @@
 
 package ch.kostceco.tools.kosttools.util;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -104,6 +107,39 @@ public class Hash {
 				}
 		} else {
 			System.out.println("Only MD5, SHA-1, SHA-256 & SHA-521. Not " + algo);
+		}
+		hash = output;
+		return hash;
+	}
+
+	public static String getMd5Str(String text) throws InterruptedException {
+		hash = "";
+		// Start Hash Berechnung
+		String algo = "MD5";
+		String output = algo;
+		try {
+			MessageDigest messageDigest;
+			messageDigest = MessageDigest.getInstance(algo);
+			InputStream stream = new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8));
+			byte[] dataBytes = new byte[1024];
+			int bytesRead = 0;
+			while ((bytesRead = stream.read(dataBytes)) != -1) {
+				messageDigest.update(dataBytes, 0, bytesRead);
+			}
+			byte[] digestBytes = messageDigest.digest();
+			StringBuffer sb = new StringBuffer("");
+
+			for (int i = 0; i < digestBytes.length; i++) {
+				sb.append(Integer.toString((digestBytes[i] & 0xff) + 0x100, 16).substring(1));
+			}
+			output = sb.toString();
+			/*
+			 * while (output.length() < 32) { output = "0" + output; }
+			 */
+
+			stream.close();
+		} catch (NoSuchAlgorithmException | IOException e1) {
+			e1.printStackTrace();
 		}
 		hash = output;
 		return hash;

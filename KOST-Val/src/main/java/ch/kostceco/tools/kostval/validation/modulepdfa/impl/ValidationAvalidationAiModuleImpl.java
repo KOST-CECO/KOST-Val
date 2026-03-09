@@ -133,7 +133,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 	@Override
 	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) throws ValidationApdfavalidationException {
+			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart)
+			throws ValidationApdfavalidationException {
 		String onWork = configMap.get("ShowProgressOnWork");
 		if (onWork.equals("nomin")) {
 			min = true;
@@ -485,7 +486,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						verapdfReportFile, locale, logFile, detailvpConfig, warning3to2);
 				isValid = isValidVerapdf;
 				fontYesNo = "no";
-			} else if (pT == 1) {
+			} else if (pT <= 1) {
 				// PDF Tools als Hauptvalidator, da Lizenz eingehalten
 				isValidPdftools = validatePDFTools(docPdf, valDatei, level, detailptConfig, locale, logFile,
 						warning3to2, directoryOfLogfile);
@@ -625,6 +626,14 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 					/** Modul K **/
 					Logtxt.logtxt(logFile, errorK);
+					
+					/** Modul Z **/
+					String configRepPdfa = configMap.get("pdfarep");
+					String configRepPdfa2u = configMap.get("pdfa2urep");
+					if (configRepPdfa.contains("yes") && configRepPdfa2u.contains("yes")) {
+						// Platzhalter fuer Repair Resultat einfuegen
+						Logtxt.logtxt(logFile, "<ErrorZrepPdfa></ErrorZrepPdfa>");
+					}
 				}
 			}
 			if (verapdfReportFile.exists()) {

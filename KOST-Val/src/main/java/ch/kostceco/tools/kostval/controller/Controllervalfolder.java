@@ -72,6 +72,81 @@ public class Controllervalfolder implements MessageConstants {
 		String pathToWorkDir = configMap.get("PathToWorkDir");
 		File tmpDir = new File(pathToWorkDir);
 
+		/*
+		 * ermitteln ob Reparatur eingeschaltet ist
+		 * 
+		 * PDF/A: 2u <pdfarep> <pdfa2urep>
+		 * 
+		 * SIARD: lob, ext, rows <siardrep> <siardlobrep> <siardlobextrep>
+		 * <siardrowsrep>
+		 */
+		boolean repair = false;
+		boolean repairPdfa = false;
+		boolean repairSiard = false;
+		String configRepPdfa = configMap.get("pdfarep");
+		String configRepPdfa2u = configMap.get("pdfa2urep");
+		String configRepSiard = configMap.get("siardrep");
+		String configRepSiardLob = configMap.get("siardlobrep");
+		String configRepSiardExt = configMap.get("siardextrep");
+		String configRepSiardRows = configMap.get("siardrowsrep");
+		String initFolderPath = "";
+		if (configRepPdfa.contains("yes") && configRepPdfa2u.contains("yes")) {
+			repairPdfa = true;
+		}
+		if (configRepSiard.contains("yes") && (configRepSiardLob.contains("yes") || configRepSiardExt.contains("yes")
+				|| configRepSiardRows.contains("yes"))) {
+			repairSiard = true;
+		}
+		if (repairPdfa || repairSiard) {
+			repair = true;
+		}
+		/*
+		 * Aus LogFile Start herauslesen, damit bei Repair im OUTPUT einen
+		 * entsprechenden Ordner angelegt werden kann.
+		 * 
+		 * <Infos><Start>20.01.2026 13:21:14</Start>
+		 * 
+		 * yyyy.MM.dd HH:mm:ss -> yyyy.MM.dd_HH.mm.ss
+		 */
+		String startSearch = "<Infos><Start>";
+		String startSearch2 = "</Start>";
+		String startLine = Util.stringInFileLineString(startSearch, logFile);
+		String startFolder = startLine.replace(startSearch, "");
+		startFolder = startFolder.replace(startSearch2, "");
+		startFolder = startFolder.replace(" ", "_");
+		startFolder = startFolder.replace(":", ".");
+		// OUTPUT ordner anlegen
+		String pathToLogDir = configMap.get("PathToLogfile");
+		File fileToLogDir = new File(pathToLogDir);
+		File fileToOutput = new File(fileToLogDir.getParent() + File.separator + "OUTPUT");
+		if (!fileToOutput.exists() && (repair)) {
+			fileToOutput.mkdir();
+		}
+		/*
+		 * Aus valDatei parent herauslesen, damit der initiale Pfad von valDatei
+		 * ausgegeben werden kann
+		 */
+		String topLevelFolder = valDatei.getName();
+		// startFolder anlegen
+		File fileToOutputStart = new File(
+				fileToOutput.getAbsolutePath() + File.separator + startFolder + File.separator + topLevelFolder);
+		if (!fileToOutputStart.exists() && (repair)) {
+			fileToOutputStart.mkdir();
+		}
+
+		if (valDatei.isDirectory()) {
+			initFolderPath = valDatei.getAbsolutePath();
+		} else {
+			initFolderPath = valDatei.getAbsolutePath().replace(topLevelFolder, "");
+		}
+
+		String topLevelFolderInit = valDatei.getAbsolutePath().replace(initFolderPath, "");
+		// topFolder im startFolder anlegen falls Folder
+		File fileToOutputStartTop = new File(fileToOutputStart + File.separator + topLevelFolderInit);
+		if (valDatei.isDirectory() && !fileToOutputStartTop.exists() && (repair)) {
+			fileToOutputStartTop.mkdir();
+		}
+
 		try {
 			Map<String, File> fileUnsortedMap = Util.getFileMapFile(valDatei);
 			Map<String, File> fileMap = new TreeMap<String, File>(fileUnsortedMap);
@@ -92,7 +167,8 @@ public class Controllervalfolder implements MessageConstants {
 					// werden soll
 					Controllervalfofile controller1 = (Controllervalfofile) context.getBean("controllervalfofile");
 					String valFile = controller1.valFoFile(valDatei, logFileName, directoryOfLogfile, verbose,
-							dirOfJarPath, configMap, context, locale, logFile, countToValidated);
+							dirOfJarPath, configMap, context, locale, logFile, countToValidated, repair, initFolderPath,
+							fileToOutputStart, repairPdfa, repairSiard, false);
 					if (valFile.equals("countValid")) {
 						countValid = countValid + 1;
 					} else if (valFile.equals("countNotaz")) {

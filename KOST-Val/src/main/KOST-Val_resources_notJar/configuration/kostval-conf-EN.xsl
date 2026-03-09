@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:template match="/">
-		<!-- kostval.conf.xml_v2.3.0.6 -->
+		<!-- kostval.conf.xml_v2.4.0.0 -->
 		<html>
 			<head>
 				<style>
@@ -122,6 +122,18 @@
 						<td>JBIG2 compression allowed [yes]:</td>
 						<td>
 							<xsl:value-of select="configuration/pdfa/jbig2allowed" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>Create a repaired PDF/A copy [no]:</td>
+						<td>
+							<xsl:value-of select="configuration/pdfa/pdfarep" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>- repair invalid PDF/A and unacceptable PDF files to PDF/A-2u [no]:</td>
+						<td>
+							<xsl:value-of select="configuration/pdfa/pdfa2urep" />
 						</td>
 					</tr>
 
@@ -516,6 +528,12 @@
 						<td><xsl:value-of select="configuration/egovdv/Mandant/KantonZugFinanzdirektion" /></td>
 					</tr>
 					
+					<tr class="captioninfo">
+						<td>Name of the institution [Archiv]:</td>
+						<td>
+							<xsl:value-of select="configuration/Institution" />
+						</td>
+					</tr>
 					<tr class="captioninfo">
 						<td>Calculate and output hash value of files. Empty means no calculation and output []:</td>
 						<td>

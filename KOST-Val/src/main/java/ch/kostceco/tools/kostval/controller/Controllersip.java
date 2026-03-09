@@ -195,7 +195,7 @@ public class Controllersip implements MessageConstants {
 	}
 
 	public boolean executeMandatory(File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile, String dirOfJarPath) {
+			Locale locale, File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart) {
 		boolean valid = true;
 
 		// Validation Step Aa (wurde vor der Formatvalidierung in KOSTVal.jar
@@ -204,7 +204,7 @@ public class Controllersip implements MessageConstants {
 		// Validation Step Ab
 		try {
 			if (this.getValidation1bFolderStructureModule().validate(valDatei, directoryOfLogfile, configMap, locale,
-					logFile, dirOfJarPath)) {
+					logFile, dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidation1bFolderStructureModule().getMessageService().print();
 			} else {
 				// Ein negatives Validierungsresultat in diesem Schritt fuehrt
@@ -226,7 +226,7 @@ public class Controllersip implements MessageConstants {
 		// Validation Step Ac
 		try {
 			if (this.getValidation1cNamingModule().validate(valDatei, directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath)) {
+					dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidation1cNamingModule().getMessageService().print();
 			} else {
 				this.getValidation1cNamingModule().getMessageService().print();
@@ -248,7 +248,7 @@ public class Controllersip implements MessageConstants {
 		// Validation Step Ad
 		try {
 			if (this.getValidation1dMetadataModule().validate(valDatei, directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath)) {
+					dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidation1dMetadataModule().getMessageService().print();
 			} else {
 				this.getValidation1dMetadataModule().getMessageService().print();
@@ -272,12 +272,12 @@ public class Controllersip implements MessageConstants {
 	}
 
 	public boolean executeOptional(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) {
+			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart) {
 		boolean valid = true;
 		// Validation Step Ae
 		try {
 			if (this.getValidation1eSipTypeModule().validate(valDatei, directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath)) {
+					dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidation1eSipTypeModule().getMessageService().print();
 			} else {
 				this.getValidation1eSipTypeModule().getMessageService().print();
@@ -297,7 +297,7 @@ public class Controllersip implements MessageConstants {
 		// Validation Step Af
 		try {
 			if (this.getValidation1fPrimaryDataModule().validate(valDatei, directoryOfLogfile, configMap, locale,
-					logFile, dirOfJarPath)) {
+					logFile, dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidation1fPrimaryDataModule().getMessageService().print();
 			} else {
 				this.getValidation1fPrimaryDataModule().getMessageService().print();
@@ -317,7 +317,7 @@ public class Controllersip implements MessageConstants {
 		// Validation Step Ag
 		try {
 			if (this.getValidation1gPackageSizeFilesModule().validate(valDatei, directoryOfLogfile, configMap, locale,
-					logFile, dirOfJarPath)) {
+					logFile, dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidation1gPackageSizeFilesModule().getMessageService().print();
 			} else {
 				this.getValidation1gPackageSizeFilesModule().getMessageService().print();
@@ -337,7 +337,7 @@ public class Controllersip implements MessageConstants {
 		// Validation Step Ba
 		try {
 			if (this.getValidation2aFileIntegrityModule().validate(valDatei, directoryOfLogfile, configMap, locale,
-					logFile, dirOfJarPath)) {
+					logFile, dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidation2aFileIntegrityModule().getMessageService().print();
 			} else {
 				this.getValidation2aFileIntegrityModule().getMessageService().print();
@@ -359,7 +359,7 @@ public class Controllersip implements MessageConstants {
 		// Validation Step Bc
 		try {
 			if (this.getValidation2cChecksumModule().validate(valDatei, directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath)) {
+					dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidation2cChecksumModule().getMessageService().print();
 			} else {
 				this.getValidation2cChecksumModule().getMessageService().print();
@@ -379,7 +379,7 @@ public class Controllersip implements MessageConstants {
 		// Validation Step Bd
 		try {
 			if (this.getValidation2dGeverFileIntegrityModule().validate(valDatei, directoryOfLogfile, configMap, locale,
-					logFile, dirOfJarPath)) {
+					logFile, dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidation2dGeverFileIntegrityModule().getMessageService().print();
 			} else {
 				this.getValidation2dGeverFileIntegrityModule().getMessageService().print();
@@ -399,7 +399,7 @@ public class Controllersip implements MessageConstants {
 		// Validation Step Ca & Cb
 		try {
 			if (this.getValidation3aFormatRecognitionModule().validate(valDatei, directoryOfLogfile, configMap, locale,
-					logFile, dirOfJarPath)) {
+					logFile, dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidation3aFormatRecognitionModule().getMessageService().print();
 			} else {
 				this.getValidation3aFormatRecognitionModule().getMessageService().print();
@@ -419,7 +419,7 @@ public class Controllersip implements MessageConstants {
 		// Validation Step 3c
 		try {
 			if (this.getValidation3cFormatValidationModule().validate(valDatei, directoryOfLogfile, configMap, locale,
-					logFile, dirOfJarPath)) {
+					logFile, dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidation3cFormatValidationModule().getMessageService().print();
 			} else {
 				this.getValidation3cFormatValidationModule().getMessageService().print();
@@ -439,7 +439,7 @@ public class Controllersip implements MessageConstants {
 		// Validation Step 3d
 		try {
 			if (this.getValidation3dPeriodModule().validate(valDatei, directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath)) {
+					dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidation3dPeriodModule().getMessageService().print();
 			} else {
 				this.getValidation3dPeriodModule().getMessageService().print();

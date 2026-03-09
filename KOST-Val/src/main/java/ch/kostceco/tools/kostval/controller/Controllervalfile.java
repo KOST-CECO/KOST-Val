@@ -61,7 +61,7 @@ public class Controllervalfile implements MessageConstants {
 
 	public boolean valFile(File valDatei, String logFileName, File directoryOfLogfile, boolean verbose,
 			String dirOfJarPath, Map<String, String> configMap, ApplicationContext context, Locale locale, File logFile,
-			String hash, String valDateiXml) throws IOException {
+			String hash, String valDateiXml, String initFolderPath, File fileToOutputStart) throws IOException {
 		String originalValName = valDatei.getAbsolutePath();
 		String originalValNameXml = valDateiXml;
 		String valDateiName = valDatei.getName();
@@ -93,7 +93,7 @@ public class Controllervalfile implements MessageConstants {
 			Logtxt.logtxt(logFile, originalValNameXml);
 			Controllerjp2 controller1 = (Controllerjp2) context.getBean("controllerjp2");
 			boolean okMandatory = controller1.executeMandatory(valDatei, directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath);
+					dirOfJarPath, initFolderPath, fileToOutputStart);
 			valFile = okMandatory;
 
 			if (okMandatory) {
@@ -127,7 +127,7 @@ public class Controllervalfile implements MessageConstants {
 			Logtxt.logtxt(logFile, originalValNameXml);
 			Controllerjpeg controller1 = (Controllerjpeg) context.getBean("controllerjpeg");
 			boolean okMandatory = controller1.executeMandatory(valDatei, directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath);
+					dirOfJarPath, initFolderPath, fileToOutputStart);
 			valFile = okMandatory;
 
 			if (okMandatory) {
@@ -146,7 +146,7 @@ public class Controllervalfile implements MessageConstants {
 			Logtxt.logtxt(logFile, originalValNameXml);
 			Controllerpng controller1 = (Controllerpng) context.getBean("controllerpng");
 			boolean okMandatory = controller1.executeMandatory(valDatei, directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath);
+					dirOfJarPath, initFolderPath, fileToOutputStart);
 			valFile = okMandatory;
 
 			if (okMandatory) {
@@ -165,7 +165,7 @@ public class Controllervalfile implements MessageConstants {
 			Logtxt.logtxt(logFile, originalValNameXml);
 			Controllerxml controller1 = (Controllerxml) context.getBean("controllerxml");
 			boolean okMandatory = controller1.executeMandatory(valDatei, directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath);
+					dirOfJarPath, initFolderPath, fileToOutputStart);
 			valFile = okMandatory;
 
 			if (okMandatory) {
@@ -184,7 +184,7 @@ public class Controllervalfile implements MessageConstants {
 			Logtxt.logtxt(logFile, originalValNameXml);
 			Controllerflac controller1 = (Controllerflac) context.getBean("controllerflac");
 			boolean okMandatory = controller1.executeMandatory(valDatei, directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath);
+					dirOfJarPath, initFolderPath, fileToOutputStart);
 			valFile = okMandatory;
 
 			if (okMandatory) {
@@ -203,7 +203,7 @@ public class Controllervalfile implements MessageConstants {
 			Logtxt.logtxt(logFile, originalValNameXml);
 			Controllerwave controller1 = (Controllerwave) context.getBean("controllerwave");
 			boolean okMandatory = controller1.executeMandatory(valDatei, directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath);
+					dirOfJarPath, initFolderPath, fileToOutputStart);
 			valFile = okMandatory;
 
 			if (okMandatory) {
@@ -222,7 +222,7 @@ public class Controllervalfile implements MessageConstants {
 			Logtxt.logtxt(logFile, originalValNameXml);
 			Controllermp3 controller1 = (Controllermp3) context.getBean("controllermp3");
 			boolean okMandatory = controller1.executeMandatory(valDatei, directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath);
+					dirOfJarPath, initFolderPath, fileToOutputStart);
 			valFile = okMandatory;
 
 			if (okMandatory) {
@@ -241,7 +241,7 @@ public class Controllervalfile implements MessageConstants {
 			Logtxt.logtxt(logFile, originalValNameXml);
 			Controllermkv controller1 = (Controllermkv) context.getBean("controllermkv");
 			boolean okMandatory = controller1.executeMandatory(valDatei, directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath);
+					dirOfJarPath, initFolderPath, fileToOutputStart);
 			boolean ok = false;
 
 			/*
@@ -250,8 +250,8 @@ public class Controllervalfile implements MessageConstants {
 			 * ausgefuehrt werden.
 			 */
 			if (okMandatory) {
-				ok = controller1.executeOptional(valDatei, directoryOfLogfile, configMap, locale, logFile,
-						dirOfJarPath);
+				ok = controller1.executeOptional(valDatei, directoryOfLogfile, configMap, locale, logFile, dirOfJarPath,
+						initFolderPath, fileToOutputStart);
 				// Ausfuehren der optionalen Schritte
 			}
 
@@ -275,7 +275,7 @@ public class Controllervalfile implements MessageConstants {
 			Logtxt.logtxt(logFile, originalValNameXml);
 			Controllermp4 controller1 = (Controllermp4) context.getBean("controllermp4");
 			boolean okMandatory = controller1.executeMandatory(valDatei, directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath);
+					dirOfJarPath, initFolderPath, fileToOutputStart);
 			valFile = okMandatory;
 
 			if (okMandatory) {
@@ -294,7 +294,7 @@ public class Controllervalfile implements MessageConstants {
 			Logtxt.logtxt(logFile, originalValNameXml);
 			Controllertiff controller1 = (Controllertiff) context.getBean("controllertiff");
 			boolean okMandatory = controller1.executeMandatory(valDatei, directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath);
+					dirOfJarPath, initFolderPath, fileToOutputStart);
 			boolean ok = false;
 
 			/*
@@ -303,8 +303,8 @@ public class Controllervalfile implements MessageConstants {
 			 * fuehren, ausgefuehrt werden.
 			 */
 			if (okMandatory) {
-				ok = controller1.executeOptional(valDatei, directoryOfLogfile, configMap, locale, logFile,
-						dirOfJarPath);
+				ok = controller1.executeOptional(valDatei, directoryOfLogfile, configMap, locale, logFile, dirOfJarPath,
+						initFolderPath, fileToOutputStart);
 			}
 
 			ok = (ok && okMandatory);
@@ -347,7 +347,7 @@ public class Controllervalfile implements MessageConstants {
 			Logtxt.logtxt(logFile, originalValNameXml);
 			Controllersiard controller2 = (Controllersiard) context.getBean("controllersiard");
 			boolean okMandatory = controller2.executeMandatory(valDatei, directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath);
+					dirOfJarPath, initFolderPath, fileToOutputStart);
 			boolean ok = false;
 
 			/*
@@ -356,8 +356,8 @@ public class Controllervalfile implements MessageConstants {
 			 * fuehren, ausgefuehrt werden.
 			 */
 			if (okMandatory) {
-				ok = controller2.executeOptional(valDatei, directoryOfLogfile, configMap, locale, logFile,
-						dirOfJarPath);
+				ok = controller2.executeOptional(valDatei, directoryOfLogfile, configMap, locale, logFile, dirOfJarPath,
+						initFolderPath, fileToOutputStart);
 				// Ausfuehren der optionalen Schritte
 			}
 
@@ -381,7 +381,7 @@ public class Controllervalfile implements MessageConstants {
 			Controllerpdfa controller3 = (Controllerpdfa) context.getBean("controllerpdfa");
 
 			boolean okMandatory = controller3.executeMandatory(valDatei, directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath);
+					dirOfJarPath, initFolderPath, fileToOutputStart);
 			boolean ok = false;
 
 			/*
@@ -391,8 +391,8 @@ public class Controllervalfile implements MessageConstants {
 			 */
 
 			if (okMandatory) {
-				ok = controller3.executeOptional(valDatei, directoryOfLogfile, configMap, locale, logFile,
-						dirOfJarPath);
+				ok = controller3.executeOptional(valDatei, directoryOfLogfile, configMap, locale, logFile, dirOfJarPath,
+						initFolderPath, fileToOutputStart);
 				// Ausfuehren der validierung und optionalen Bildvalidierung
 			}
 

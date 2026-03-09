@@ -52,7 +52,8 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 
 	@Override
 	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) throws ValidationAzipException {
+			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart)
+			throws ValidationAzipException {
 		// Informationen zur Darstellung "onWork" holen
 		String onWork = configMap.get("ShowProgressOnWork");
 		if (onWork.equals("yes")) {

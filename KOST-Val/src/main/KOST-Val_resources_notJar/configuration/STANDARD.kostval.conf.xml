@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?><?xml-stylesheet type="text/xsl" href="kostval-conf-DE.xsl"?>
-<configuration><!-- kostval.conf.xml_v2.3.0.6 -->
+<configuration><!-- kostval.conf.xml_v2.4.0.0 -->
 <!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
 <!-- TEXT -->
 	<pdfa>
@@ -24,6 +24,8 @@
 		</pdfaversion>
 		<warning3to2>yes</warning3to2><!-- validiert wenn eingeschaltet PDF/A-3 nach PDF/A-2 und ignoriert den Fehler betreffend der Version und gibt stattdessten eine Warnung aus. -->	
 		<jbig2allowed>yes</jbig2allowed><!--no verwenden wenn JBIG2 in pdfa nicht erlaubt werden sollen, ansonsten yes -->
+		<pdfarep>no </pdfarep> <!--no / yes -->
+		<pdfa2urep>no </pdfa2urep> <!--no / yes -->
 	</pdfa>
 	<txt>
 		<txtvalidation>(&#x2713;)</txtvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
@@ -204,6 +206,7 @@
 			<KantonZugFinanzdirektion>no</KantonZugFinanzdirektion>
 		</Mandant>
 	</egovdv>
+	<Institution>Archiv</Institution>
 	<hash></hash><!--wenn leer wird kein Hashwert berechnet und ausgegeben / MD5 / SHA-1 / SHA-256 / SHA-512 -->
 	<sizeWarning></sizeWarning><!--wenn leer wird keine Warnung bei kleinen Dateien ausgegeben ansonsten limite in Kilobyte / 0.5KB / 1KB / 5KB -->
 	<pathtoworkdir></pathtoworkdir><!--wenn leer wird "USERPROFILE/.kost-val_2x/temp_KOST-Val" verwendet -->

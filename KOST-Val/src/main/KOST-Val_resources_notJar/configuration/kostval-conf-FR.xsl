@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:template match="/">
-		<!-- kostval.conf.xml_v2.3.0.6 -->
+		<!-- kostval.conf.xml_v2.4.0.0 -->
 		<html>
 			<head>
 				<style>
@@ -122,6 +122,18 @@
 						<td>Compression JBIG2 autorisée [yes] :</td>
 						<td>
 							<xsl:value-of select="configuration/pdfa/jbig2allowed" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>Création d'une copie réparée de PDF/A [no]:</td>
+						<td>
+							<xsl:value-of select="configuration/pdfa/pdfarep" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>- réparer les fichiers PDF/A invalides et les fichiers PDF non acceptés selon PDF/A-2u [no]:</td>
+						<td>
+							<xsl:value-of select="configuration/pdfa/pdfa2urep" />
 						</td>
 					</tr>
 
@@ -510,6 +522,12 @@
 						<td><xsl:value-of select="configuration/egovdv/Mandant/KantonZugFinanzdirektion" /></td>
 					</tr>
 					
+					<tr class="captioninfo">
+						<td>Nom de l'institution [Archiv]:</td>
+						<td>
+							<xsl:value-of select="configuration/Institution" />
+						</td>
+					</tr>
 					<tr class="captioninfo">
 						<td>Calculer et afficher la valeur de hachage des fichiers. Vide signifie pas de calcul ni de sortie [] :</td>
 						<td>

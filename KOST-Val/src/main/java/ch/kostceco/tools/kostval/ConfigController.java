@@ -27,6 +27,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Locale;
+import java.util.Optional;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -45,6 +46,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebEngine;
@@ -109,11 +111,11 @@ public class ConfigController {
 	private Button buttonSip0160, buttonSipVal;
 
 	@FXML
-	private Label labelOther, labelSignatur, labelDv, labelEgovDV, labelWarning, labelSize, labelWork, labelInput,
-			labelHint, labelHint1, labelConfig;
+	private Label labelOther, labelSignatur, labelDv, labelEgovDV, labelWarning, labelSize, labelWork, labelInstitution,
+			labelInput, labelHint, labelHint1, labelConfig;
 
 	@FXML
-	private Button buttonDv, buttonDvVal, buttonPuid, buttonWork, buttonInput;
+	private Button buttonDv, buttonDvVal, buttonPuid, buttonWork, buttonInput, buttonInstitution;
 
 	ObservableList<String> hashAlgoList = FXCollections.observableArrayList("MD5", "SHA-1", "SHA-256", "SHA-512", "");
 	@FXML
@@ -129,7 +131,7 @@ public class ConfigController {
 
 	private WebEngine engine;
 
-	private String versionKostVal = "   (v2.3.0.6)";
+	private String versionKostVal = "   (v2.4.0.0)";
 
 	@FXML
 	void initialize() {
@@ -209,6 +211,7 @@ public class ConfigController {
 				labelSize.setText("Warnung ausgeben, wenn die Datei kleiner als die ausgewählte Dateigrösse ist");
 				buttonWork.setText("Arbeitsverzeichnis");
 				buttonInput.setText("Inputverzeichnis");
+				labelInstitution.setText("Institution");
 				labelHint1.setText("Hinweis:");
 				labelHint.setText("öffnet die jeweilige Detailkonfiguration");
 				minOne = "Mindestens eine Variante muss erlaubt sein!";
@@ -231,6 +234,7 @@ public class ConfigController {
 						"Afficher un avertissement si le fichier est plus petit que la taille de fichier sélectionnée");
 				buttonWork.setText("Répertoire de travail");
 				buttonInput.setText("Répertoire d'entrée");
+				labelInstitution.setText("Institution");
 				labelHint1.setText("Remarque :");
 				labelHint.setText("ouvre la configuration détaillée correspondante");
 				minOne = "Au moins une variante doit etre autorisee !";
@@ -252,6 +256,7 @@ public class ConfigController {
 				labelSize.setText("Visualizza l'avviso se il file è più piccolo della dimensione selezionata");
 				buttonWork.setText("Directory di lavoro");
 				buttonInput.setText("Directory di input");
+				labelInstitution.setText("Institution");
 				labelHint1.setText("Nota:");
 				labelHint.setText("apre la configurazione dettagliata corrispondente");
 				minOne = "Almeno una variante deve essere consentita!";
@@ -273,6 +278,7 @@ public class ConfigController {
 				labelSize.setText("Display warning if the file is smaller than the selected file size");
 				buttonWork.setText("Working directory");
 				buttonInput.setText("Input directory");
+				labelInstitution.setText("Istituzione");
 				labelHint1.setText("Note:");
 				labelHint.setText("opens the respective detailed configuration");
 				minOne = "At least one variant must be allowed!";
@@ -561,6 +567,8 @@ public class ConfigController {
 			labelWork.setText(workString);
 			inputString = doc.getElementsByTagName("standardinputdir").item(0).getTextContent();
 			labelInput.setText(inputString);
+			String institutionInit = doc.getElementsByTagName("Institution").item(0).getTextContent();
+			buttonInstitution.setText(institutionInit);
 
 		} catch (IOException | SAXException | ParserConfigurationException e1) {
 			e1.printStackTrace();
@@ -1751,6 +1759,49 @@ public class ConfigController {
 			});
 		} catch (IOException e1) {
 			e1.printStackTrace();
+		}
+	}
+
+	/* Wenn Aenderungen an changeInstitution gemacht wird, wird es ausgeloest */
+	@FXML
+	void changeInstitution(ActionEvent event) {
+		String stringInstitution = buttonInstitution.getText();
+		// create a TextInputDialog mit der Texteingabe der Puid
+		TextInputDialog dialog = new TextInputDialog(stringInstitution);
+
+		// Set title & header text
+		String stringInstitutionInit = stringInstitution;
+
+		dialog.setTitle("KOST-Val - Configuration");
+		String headerDeFrItEn = "Name der Institution [Archiv]:";
+		if (locale.toString().startsWith("fr")) {
+			headerDeFrItEn = "Nom de l'institution [Archiv] :";
+		} else if (locale.toString().startsWith("it")) {
+			headerDeFrItEn = "Nome dell'istituzione [Archiv]:";
+		} else if (locale.toString().startsWith("en")) {
+			headerDeFrItEn = "Name of the institution [Archiv]:";
+		}
+		dialog.setHeaderText(headerDeFrItEn);
+		dialog.setContentText("");
+
+		// Show the dialog and capture the result.
+		Optional<String> result = dialog.showAndWait();
+
+		// If the "Okay" button was clicked, the result will contain our String
+		// in the get() method
+		String stringInstitutionNew = "";
+		if (result.isPresent()) {
+			try {
+				stringInstitutionNew = result.get();
+				buttonInstitution.setText(stringInstitutionNew);
+				String allowedformats = "<Institution>" + stringInstitutionInit + "</Institution>";
+				String allowedformatsNew = "<Institution>" + stringInstitutionNew + "</Institution>";
+				Util.oldnewstring(allowedformats, allowedformatsNew, configFile);
+			} catch (NumberFormatException | IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			// Keine Aktion
 		}
 	}
 
