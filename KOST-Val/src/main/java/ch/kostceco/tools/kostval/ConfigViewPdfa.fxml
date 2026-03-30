@@ -100,7 +100,7 @@
                   <Insets left="24.0" />
                </GridPane.margin>
             </CheckBox>
-            <Label fx:id="labelRep" text="Validierungseinstellungen PDF/A" GridPane.columnSpan="2" GridPane.rowIndex="10">
+            <Label fx:id="labelRep" text="Validierungseinstellungen PDF/A" GridPane.columnSpan="5" GridPane.rowIndex="10">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>

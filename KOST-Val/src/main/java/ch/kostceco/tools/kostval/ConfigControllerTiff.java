@@ -57,7 +57,7 @@ public class ConfigControllerTiff {
 		// TODO --> initialize (wird einmalig am Anfang ausgefuehrt)
 
 		// Copyright ausgeben
-		labelConfig.setText("Copyright © KOST/CECO" );
+		labelConfig.setText("Copyright © KOST/CECO");
 
 		// festhalten von wo die Applikation (exe) gestartet wurde
 		dirOfJarPath = "";

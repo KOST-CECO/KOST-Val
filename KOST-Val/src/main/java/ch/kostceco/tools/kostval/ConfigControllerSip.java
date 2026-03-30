@@ -48,20 +48,23 @@ import javafx.stage.Stage;
 public class ConfigControllerSip {
 
 	@FXML
-	private Button buttonConfigApply, buttonLength, buttonName;
+	private Button buttonConfigApply, buttonLength, buttonName, buttonSchutzfrist, buttonOeffentlichkeitsstatus;
 
 	@FXML
-	private CheckBox checkWarningOldDok, checkV10, checkV11, checkV12, checkV13;
+	private CheckBox checkWarningOldDok, checkV10, checkV11, checkV12, checkV13, checkSchutzfrist,
+			checkOeffentlichkeitsstatus, checkDatenschutz;
 
 	private File configFile = new File(System.getenv("USERPROFILE") + File.separator + ".kost-val_2x" + File.separator
 			+ "configuration" + File.separator + "kostval.conf.xml");
 
-	private String dirOfJarPath, stringName, stringLength, minOne = "Mindestens eine Variante muss erlaubt sein!";
+	private String dirOfJarPath, stringName, stringLength, stringSchutzfrist, stringOeffentlichkeitsstatus,
+			minOne = "Mindestens eine Variante muss erlaubt sein!";
 
 	private Locale locale = Locale.getDefault();
 
 	@FXML
-	private Label labelVal, labelMessage, labelConfig, labelLength, labelName, labelVersion;
+	private Label labelVal, labelMessage, labelConfig, labelLength, labelName, labelVersion, labelSchutzfrist,
+			labelOeffentlichkeitsstatus, labelDatenschutz, labelConfigDossier;
 
 	@FXML
 	void initialize() {
@@ -69,7 +72,7 @@ public class ConfigControllerSip {
 		// TODO --> initialize (wird einmalig am Anfang ausgefuehrt)
 
 		// Copyright ausgeben
-		labelConfig.setText("Copyright © KOST/CECO" );
+		labelConfig.setText("Copyright © KOST/CECO");
 
 		// festhalten von wo die Applikation (exe) gestartet wurde
 		dirOfJarPath = "";
@@ -95,6 +98,13 @@ public class ConfigControllerSip {
 				labelLength.setText("Pfadlänge");
 				labelName.setText("SIP Name");
 				labelVersion.setText("Akzeptierte Versionen");
+				labelConfigDossier.setText("Optionale Checks auf Dossierstufe:");
+				labelSchutzfrist.setText(" - Schutzfrist");
+				labelOeffentlichkeitsstatus.setText(" - Öffentlichkeitsstatus");
+				labelDatenschutz.setText(" - Datenschutz");
+				checkSchutzfrist.setText("nur einer dieser Werte:");
+				checkOeffentlichkeitsstatus.setText("nur einer dieser Werte:");
+				checkDatenschutz.setText("muss definiert sein.");
 				checkWarningOldDok.setText("Nur Warnung bei alten Dokumenten (Entstehungszeitraum)");
 				buttonConfigApply.setText("anwenden");
 				locale = new Locale("de");
@@ -104,6 +114,13 @@ public class ConfigControllerSip {
 				labelLength.setText("Longueur du chemin");
 				labelName.setText("Nom SIP");
 				labelVersion.setText("Versions acceptées");
+				labelConfigDossier.setText("Contrôles facultatifs au niveau du dossier :");
+				labelSchutzfrist.setText(" - Durée de protection");
+				labelOeffentlichkeitsstatus.setText(" - Statut public");
+				labelDatenschutz.setText(" - Protection des données");
+				checkSchutzfrist.setText("Une seule de ces valeurs :");
+				checkOeffentlichkeitsstatus.setText("Une seule de ces valeurs :");
+				checkDatenschutz.setText("doit être définie.");
 				checkWarningOldDok.setText("Avertissement uniquement pour les anciens documents (Entstehungszeitraum)");
 				buttonConfigApply.setText("appliquer");
 				locale = new Locale("fr");
@@ -113,6 +130,13 @@ public class ConfigControllerSip {
 				labelLength.setText("Lunghezza percorso");
 				labelName.setText("Nome SIP");
 				labelVersion.setText("Versioni accettate");
+				labelConfigDossier.setText("Controlli opzionali a livello di dossier:");
+				labelSchutzfrist.setText(" - Periodo di protezione");
+				labelOeffentlichkeitsstatus.setText(" - Stato di pubblicità");
+				labelDatenschutz.setText(" - Protezione dei dati");
+				checkSchutzfrist.setText("Solo uno di questi valori:");
+				checkOeffentlichkeitsstatus.setText("Solo uno di questi valori:");
+				checkDatenschutz.setText("deve essere definito.");
 				checkWarningOldDok.setText("Avviso solo per i vecchi documenti (Entstehungszeitraum)");
 				buttonConfigApply.setText("Applica");
 				locale = new Locale("it");
@@ -122,6 +146,13 @@ public class ConfigControllerSip {
 				labelLength.setText("Path length");
 				labelName.setText("SIP name");
 				labelVersion.setText("Accepted versions");
+				labelConfigDossier.setText("Optional checks at dossier level:");
+				labelSchutzfrist.setText(" - Protection period");
+				labelOeffentlichkeitsstatus.setText(" - Public status");
+				labelDatenschutz.setText(" - Data protection");
+				checkSchutzfrist.setText("only one of these values:");
+				checkOeffentlichkeitsstatus.setText("only one of these values:");
+				checkDatenschutz.setText("must be defined.");
 				checkWarningOldDok.setText("Only warning for old documents (Entstehungszeitraum)");
 				buttonConfigApply.setText("apply");
 				locale = new Locale("en");
@@ -143,6 +174,10 @@ public class ConfigControllerSip {
 			String allowedsipname = doc.getElementsByTagName("allowedsipname").item(0).getTextContent();
 			buttonLength.setText(allowedlengthofpaths);
 			buttonName.setText(allowedsipname);
+			String schutzfristvalue = doc.getElementsByTagName("schutzfristvalue").item(0).getTextContent();
+			String oeffentlichkeitvalue = doc.getElementsByTagName("oeffentlichkeitvalue").item(0).getTextContent();
+			buttonSchutzfrist.setText(schutzfristvalue);
+			buttonOeffentlichkeitsstatus.setText(oeffentlichkeitvalue);
 
 			byte[] encoded;
 			encoded = Files.readAllBytes(Paths.get(configFile.getAbsolutePath()));
@@ -168,6 +203,28 @@ public class ConfigControllerSip {
 			String nov13 = "<ech0160v13></ech0160v13>";
 			if (config.contains(nov13)) {
 				checkV13.setSelected(false);
+			}
+			// Kontrolle Schutzfrist
+			checkSchutzfrist.setSelected(true);
+			buttonSchutzfrist.setDisable(false);
+			String noSchutzfrist = "<schutzfristcheck>no</schutzfristcheck>";
+			if (config.contains(noSchutzfrist)) {
+				checkSchutzfrist.setSelected(false);
+				buttonSchutzfrist.setDisable(true);
+			}
+			// Kontrolle oeffentlichkeitsstatus
+			checkOeffentlichkeitsstatus.setSelected(true);
+			buttonOeffentlichkeitsstatus.setDisable(false);
+			String noOeffentlichkeitsstatus = "<oeffentlichkeitcheck>no</oeffentlichkeitcheck>";
+			if (config.contains(noOeffentlichkeitsstatus)) {
+				checkOeffentlichkeitsstatus.setSelected(false);
+				buttonOeffentlichkeitsstatus.setDisable(true);
+			}
+			// Kontrolle Datenschutz
+			checkDatenschutz.setSelected(true);
+			String noDatenschutz = "<datenschutzcheck>no</datenschutzcheck>";
+			if (config.contains(noDatenschutz)) {
+				checkDatenschutz.setSelected(false);
 			}
 			checkWarningOldDok.setSelected(true);
 			String noWarningOldDok = "<warningolddok>no</warningolddok>";
@@ -293,6 +350,113 @@ public class ConfigControllerSip {
 	}
 
 	/*
+	 * Wenn Aenderungen an changeSchutzfrist gemacht wird, wird es ausgeloest *
+	 * 
+	 * <schutzfristvalue>^(30|110)$</schutzfristvalue> <!-- Regex der moeglichen
+	 * Werte z.B. ^(30|110)$ -->
+	 */
+	@FXML
+	void changeSchutzfrist(ActionEvent event) {
+		labelMessage.setText("");
+		stringSchutzfrist = buttonSchutzfrist.getText();
+		// create a TextInputDialog mit der Texteingabe der Schutzfrist
+		TextInputDialog dialog = new TextInputDialog(stringSchutzfrist);
+
+		// Set title & header text
+		String schutzfristIntInit = stringSchutzfrist;
+
+		dialog.setTitle("KOST-Val - Configuration - SIP");
+		String headerDeFrItEn = "Geben Sie die Vorgaben zu der Schutzfrist ein [ ^(30|110)$ ]:\n(^(30|110)$ bedeutet z.B., dass nur die Werte 30 oder 110 erlaubt sind.)";
+		if (locale.toString().startsWith("fr")) {
+			headerDeFrItEn = "Saisissez les spécifications relatives à la durée de protection [ ^(30|110)$ ] :\n(^(30|110)$ signifie par exemple que seules les valeurs 30 ou 110 sont autorisées.)";
+		} else if (locale.toString().startsWith("it")) {
+			headerDeFrItEn = "Inserisci i valori predefiniti relativi al periodo di protezione [ ^(30|110)$ ]:\n(^(30|110)$ significa, ad esempio, che sono consentiti solo i valori 30 o 110.)";
+		} else if (locale.toString().startsWith("en")) {
+			headerDeFrItEn = "Enter the specifications for the protection period [^(30|110)$]:\n(^(30|110)$ means, for example, that only the values 30 or 110 are permitted.)";
+		}
+		dialog.setHeaderText(headerDeFrItEn);
+		dialog.setContentText("");
+
+		// Show the dialog and capture the result.
+		Optional<String> result = dialog.showAndWait();
+
+		// If the "Okay" button was clicked, the result will contain our String
+		// in the get() method
+		String stringSchutzfristNew = "";
+		if (result.isPresent()) {
+			try {
+				stringSchutzfristNew = result.get();
+				stringSchutzfrist = stringSchutzfristNew;
+				buttonSchutzfrist.setText(stringSchutzfrist);
+				String schutzfristvalue = "<schutzfristvalue>" + schutzfristIntInit + "</schutzfristvalue>";
+				String schutzfristvalueNew = "<schutzfristvalue>" + stringSchutzfristNew + "</schutzfristvalue>";
+				Util.oldnewstring(schutzfristvalue, schutzfristvalueNew, configFile);
+
+			} catch (NumberFormatException | IOException eInt) {
+				String message = eInt.getMessage();
+				labelMessage.setText(message);
+			}
+		} else {
+			// Keine Aktion
+		}
+	}
+
+	/*
+	 * Wenn Aenderungen an changeOeffentlichkeitsstatus gemacht wird, wird es
+	 * ausgeloest * Oeffentlichkeitsstatus
+	 * 
+	 * <oeffentlichkeitvalue>^(Einsehbar|Nicht Einsehbar)$</oeffentlichkeitvalue>
+	 * <!-- Regex der moeglichen Werte z.B. ^(Einsehbar|Nicht Einsehbar)$ -->
+	 */
+	@FXML
+	void changeOeffentlichkeitsstatus(ActionEvent event) {
+		labelMessage.setText("");
+		stringOeffentlichkeitsstatus = buttonOeffentlichkeitsstatus.getText();
+		// create a TextInputDialog mit der Texteingabe der Oeffentlichkeitsstatus
+		TextInputDialog dialog = new TextInputDialog(stringOeffentlichkeitsstatus);
+
+		// Set title & header text
+		String oeffentlichkeitsstatusIntInit = stringOeffentlichkeitsstatus;
+
+		dialog.setTitle("KOST-Val - Configuration - SIP");
+		String headerDeFrItEn = "Geben Sie die Vorgaben zu der Oeffentlichkeitsstatus ein [ ^(Einsehbar|Nicht Einsehbar)$ ]:\n(^(Einsehbar|Nicht Einsehbar)$ bedeutet z.B., dass nur die Werte 'Einsehbar' oder 'Nicht Einsehbar' erlaubt sind.)";
+		if (locale.toString().startsWith("fr")) {
+			headerDeFrItEn = "Saisissez les spécifications relatives à la durée de protection [ ^(Einsehbar|Nicht Einsehbar)$ ] :\n(^(Einsehbar|Nicht Einsehbar)$ signifie par exemple que seules les valeurs 'Einsehbar' ou 'Nicht Einsehbar' sont autorisées.)";
+		} else if (locale.toString().startsWith("it")) {
+			headerDeFrItEn = "Inserisci i valori predefiniti relativi al periodo di protezione [ ^(Einsehbar|Nicht Einsehbar)$ ]:\n(^(Einsehbar|Nicht Einsehbar)$ significa, ad esempio, che sono consentiti solo i valori 'Einsehbar' o 'Nicht Einsehbar'.)";
+		} else if (locale.toString().startsWith("en")) {
+			headerDeFrItEn = "Enter the specifications for the protection period [^(Einsehbar|Nicht Einsehbar)$]:\n(^(Einsehbar|Nicht Einsehbar)$ means, for example, that only the values 'Einsehbar' or 'Nicht Einsehbar' are permitted.)";
+		}
+		dialog.setHeaderText(headerDeFrItEn);
+		dialog.setContentText("");
+
+		// Show the dialog and capture the result.
+		Optional<String> result = dialog.showAndWait();
+
+		// If the "Okay" button was clicked, the result will contain our String
+		// in the get() method
+		String stringOeffentlichkeitsstatusNew = "";
+		if (result.isPresent()) {
+			try {
+				stringOeffentlichkeitsstatusNew = result.get();
+				stringOeffentlichkeitsstatus = stringOeffentlichkeitsstatusNew;
+				buttonOeffentlichkeitsstatus.setText(stringOeffentlichkeitsstatus);
+				String oeffentlichkeitvalue = "<oeffentlichkeitvalue>" + oeffentlichkeitsstatusIntInit
+						+ "</oeffentlichkeitvalue>";
+				String oeffentlichkeitvalueNew = "<oeffentlichkeitvalue>" + stringOeffentlichkeitsstatusNew
+						+ "</oeffentlichkeitvalue>";
+				Util.oldnewstring(oeffentlichkeitvalue, oeffentlichkeitvalueNew, configFile);
+
+			} catch (NumberFormatException | IOException eInt) {
+				String message = eInt.getMessage();
+				labelMessage.setText(message);
+			}
+		} else {
+			// Keine Aktion
+		}
+	}
+
+	/*
 	 * checkV1x schaltet diese Version ein (&#x2713;) oder aus (&#x2717;)
 	 */
 	@FXML
@@ -377,6 +541,77 @@ public class ConfigControllerSip {
 				} else {
 					Util.oldnewstring(yes, no, configFile);
 				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/*
+	 * checkChangeSchutzfrist schaltet diese optionale Kontrolle ein oder aus
+	 * 
+	 * <schutzfristcheck>no</schutzfristcheck> <!-- no = nicht kontrollieren / yes =
+	 * kontrollieren -->
+	 */
+	@FXML
+	void checkChangeSchutzfrist(ActionEvent event) {
+		labelMessage.setText("");
+		String yes = "<schutzfristcheck>yes</schutzfristcheck>";
+		String no = "<schutzfristcheck>no</schutzfristcheck>";
+		try {
+			if (checkSchutzfrist.isSelected()) {
+				Util.oldnewstring(no, yes, configFile);
+				buttonSchutzfrist.setDisable(false);
+			} else {
+				Util.oldnewstring(yes, no, configFile);
+				buttonSchutzfrist.setDisable(true);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/*
+	 * checkChangeOeffentlichkeitsstatus schaltet diese optionale Kontrolle ein oder
+	 * aus
+	 * 
+	 * <oeffentlichkeitcheck>no</oeffentlichkeitcheck> <!-- no = nicht kontrollieren
+	 * / yes = kontrollieren -->
+	 */
+	@FXML
+	void checkChangeOeffentlichkeitsstatus(ActionEvent event) {
+		labelMessage.setText("");
+		String yes = "<oeffentlichkeitcheck>yes</oeffentlichkeitcheck>";
+		String no = "<oeffentlichkeitcheck>no</oeffentlichkeitcheck>";
+		try {
+			if (checkOeffentlichkeitsstatus.isSelected()) {
+				Util.oldnewstring(no, yes, configFile);
+				buttonOeffentlichkeitsstatus.setDisable(false);
+			} else {
+				Util.oldnewstring(yes, no, configFile);
+				buttonOeffentlichkeitsstatus.setDisable(true);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/*
+	 * checkChangeDatenschutz schaltet diese optionale Kontrolle ein oder aus
+	 * 
+	 * <datenschutzcheck>no</datenschutzcheck> <!-- no = nicht kontrollieren / yes =
+	 * kontrollieren ob vorhanden -->
+	 */
+	@FXML
+	void checkChangeDatenschutz(ActionEvent event) {
+		labelMessage.setText("");
+		String yes = "<datenschutzcheck>yes</datenschutzcheck>";
+		String no = "<datenschutzcheck>no</datenschutzcheck>";
+		try {
+			if (checkDatenschutz.isSelected()) {
+				Util.oldnewstring(no, yes, configFile);
+			} else {
+				Util.oldnewstring(yes, no, configFile);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

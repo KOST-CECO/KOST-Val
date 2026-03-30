@@ -949,6 +949,31 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 			String ech0160v13 = doc.getElementsByTagName("ech0160v13").item(0).getTextContent().replace(" ", "");
 			configMap.put("ech0160v13", ech0160v13);
 
+			// optionale Konfigurierbare Checks auf Stuffe Dossier
+			// <schutzfristcheck>no</schutzfristcheck>
+			// <!-- no = nicht kontrollieren / yes = kontrollieren -->
+			String schutzfristcheck = doc.getElementsByTagName("schutzfristcheck").item(0).getTextContent().replace(" ",
+					"");
+			configMap.put("schutzfristcheck", schutzfristcheck);
+			// <schutzfristvalue>^(30|110)$</schutzfristvalue>
+			// <!-- Regex der moeglichen Werte z.B. ^(30|110)$ -->
+			String schutzfristvalue = doc.getElementsByTagName("schutzfristvalue").item(0).getTextContent();
+			configMap.put("schutzfristvalue", schutzfristvalue);
+			// <oeffentlichkeitcheck>no</oeffentlichkeitcheck> <!-- no = nicht kontrollieren
+			// / yes = kontrollieren -->
+			String oeffentlichkeitcheck = doc.getElementsByTagName("oeffentlichkeitcheck").item(0).getTextContent()
+					.replace(" ", "");
+			configMap.put("oeffentlichkeitcheck", oeffentlichkeitcheck);
+			// <oeffentlichkeitvalue>^(Einsehbar|Nicht Einsehbar)$</oeffentlichkeitvalue>
+			// <!-- Regex der moeglichen Werte z.B. ^(Einsehbar|Nicht Einsehbar)$ -->
+			String oeffentlichkeitvalue = doc.getElementsByTagName("oeffentlichkeitvalue").item(0).getTextContent();
+			configMap.put("oeffentlichkeitvalue", oeffentlichkeitvalue);
+			// <datenschutzcheck>no</datenschutzcheck>
+			// <!-- no = nicht kontrollieren / yes = kontrollieren ob vorhanden -->
+			String datenschutzcheck = doc.getElementsByTagName("datenschutzcheck").item(0).getTextContent().replace(" ",
+					"");
+			configMap.put("datenschutzcheck", datenschutzcheck);
+
 			// Gibt an ob aeltere Dokumente nur eine Warnung ergeben sollen
 			String warningolddok = doc.getElementsByTagName("warningolddok").item(0).getTextContent();
 			configMap.put("WarningOldDok", warningolddok);

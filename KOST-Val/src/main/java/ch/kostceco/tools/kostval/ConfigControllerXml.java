@@ -56,7 +56,7 @@ public class ConfigControllerXml {
 		// TODO --> initialize (wird einmalig am Anfang ausgefuehrt)
 
 		// Copyright ausgeben
-		labelConfig.setText("Copyright © KOST/CECO" );
+		labelConfig.setText("Copyright © KOST/CECO");
 
 		// festhalten von wo die Applikation (exe) gestartet wurde
 		dirOfJarPath = "";
@@ -84,8 +84,8 @@ public class ConfigControllerXml {
 				buttonConfigApply.setText("anwenden");
 				minOne = "Mindestens eine Variante muss erlaubt sein!";
 			} else if (Util.stringInFileLine("kostval-conf-FR.xsl", configFile)) {
-				labelSchema.setText("Validation du schéma") ;
-				labelSyntax.setText("Validation de la syntaxe (bien formé)") ;
+				labelSchema.setText("Validation du schéma");
+				labelSyntax.setText("Validation de la syntaxe (bien formé)");
 				labelVal.setText("Paramètre de validation: XML");
 				buttonConfigApply.setText("appliquer");
 				minOne = "Au moins une variante doit etre autorisee !";
@@ -106,7 +106,7 @@ public class ConfigControllerXml {
 			e.printStackTrace();
 		}
 
-	// Syntax immer eingeschaltet, kann nicht geaendert werden	
+		// Syntax immer eingeschaltet, kann nicht geaendert werden
 		checkSyntax.setDisable(true);
 		checkSyntax.setSelected(true);
 
@@ -123,7 +123,7 @@ public class ConfigControllerXml {
 			} else {
 				checkSchema.setDisable(false);
 			}
-			
+
 			if (config.contains(noXmlSchema)) {
 				checkSchema.setSelected(false);
 			} else {
@@ -166,7 +166,7 @@ public class ConfigControllerXml {
 			if (checkSchema.isSelected()) {
 				Util.oldnewstring(no, yes, configFile);
 			} else {
-					Util.oldnewstring(yes, no, configFile);
+				Util.oldnewstring(yes, no, configFile);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

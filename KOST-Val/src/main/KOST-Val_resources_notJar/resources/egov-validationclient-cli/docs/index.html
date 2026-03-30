@@ -702,55 +702,77 @@ div.contentContainer ul.blockList li.blockList h2 {
 	for UNIX-line operating systems&mdash;with the desired options. Valid options are as follows:
 	<div style="background-color: #f8f8f8; border: solid 1px; padding: 0px 5px 10px 20px; margin-top: 10px;">
 		<pre>
-Usage: validate [-de] [-list] [-E &lt;certificate[:password]>] -f &lt;filename> [-i
-                &lt;filename>] [-l &lt;lang>] -m PARAM [-o &lt;filename>] [-p &lt;proxyhost:
-                proxyport:proxyuser:proxypass>] [-pw &lt;password>] [-rs &lt;style>]
-                -u PARAM [-un &lt;username>] (-c | -s &lt;signaturename>)
+Usage: validate [-cde] [-list] [-b &lt;dir>] [-E &lt;certificate[:password]>] [-f
+                &lt;filename>] [-i &lt;filename>] [-l &lt;lang>] [-m &lt;mandator>] [-o
+                &lt;filename>] [-p &lt;proxyhost:proxyport:proxyuser:proxypass>] [-pw
+                &lt;password>] [-rs &lt;style>] [-s &lt;signaturename>] [-sun
+                &lt;serviceUserName>] [-suo &lt;serviceUserOrganization>] [-u &lt;url>]
+                [-un &lt;username>]
+  -b, --batch-input-dir &lt;dir>
+                             Path to the directory containing the files to be
+                               validated. The option -b is mutually exclusive
+                               with -f.
   -c, --container-check      Container check, validates all signatures in the
                                pdf file. The option -c is mutually exclusive
-                               with -s.
+                               with -s when using -f. This option is not
+                               supported with -b.
   -d, --dump                 Logs the JSON object of the request and response.
   -e, --unsigned             Generate report even for unsigned files
   -E, --cert &lt;certificate[:password]>
                              File name and optional password to use for client
                                certificate authentication. Supported file types
                                are PKCS12 and JKS.
-  -f, --pdffile &lt;filename>   file to validate
+  -f, --pdffile &lt;filename>   File to validate. The option -f is mutually
+                               exclusive with -b.
   -i, --config &lt;filename>    Name of configfile to use.
-  -suo, --serviceuserorganization &lt;user organization>          
-                             organization of the user requesting the validation
-  -sun, --serviceusername &lt;user name>
-                             name of the user requesting the validation
   -l, --lang &lt;lang>          get pdf report in the given language, supported
                                codes: de, fr, it, en. This is an optional
                                parameter, if omitted de is used.
-      -list                  List digital signatures of given PDF file
-  -m, --mandator PARAM       mandator to use, e.g. Qualified, FullQualified,
+  -list                  List digital signatures of given PDF file (is not
+                               supported with --batch-input-dir).
+  -m, --mandator &lt;mandator>  mandator to use, e.g. Qualified, FullQualified,
                                Strafregisterauszug, or BAKOM (Can also be
                                defined in config file)
-  -o, --report &lt;filename>    pdf report will be saved at the given name
+  -o, --report &lt;filename>    When -f is used, a PDF report will be saved at the
+                               given name.
+                             When -b is used, a batch report and a report for
+                               each file will be generated and packaged into a
+                               ZIP file.
+                             The ZIP will be saved at the given name. The batch
+                               report will be named "batch_report.pdf"
+                             The report for each file will be named after the
+                               validated document + "_report.pdf"
+                             Example:
+                             -o C:\tmp\example_report.zip
+                             -> C:\tmp\example_report.zip (contains
+                               batch_report.pdf and per-file reports)
   -p, --proxy &lt;proxyhost:proxyport:proxyuser:proxypass>
                              HTTP Proxy host and port to use for accessing the
                                validation webservice. If not present, the Java
                                System Properties are checked. For
                                authentication use the format proxy:port:user:
                                password
-      -pw, --password &lt;password>
+  -pw, --password &lt;password>
                              password for the basic authentication
-      -rs, --outputstyle &lt;style>
+  -rs, --outputstyle &lt;style>
                              Defines the style of the generated pdf report,
                                either a container with a report per signature
                                or one report for all.The valid options are: -rs
                                single or -rs container. The option can be
-                               omitted, default is single mode.
+                               omitted, default is single mode. This option is
+                               not supported with --batch-input-dir.
   -s, --signature &lt;signaturename>
                              Name of a signature to check in this pdf file (e.
-                               g. Signature1). Works only for not nested
-                               documents. The option -s is mutually exclusive
-                               with -c.
-  -u, --url PARAM            URL of the validation webservice. (Can also be
+                               g. Signature1). Mutually exclusive with -c when
+                               using -f. This option is not supported with
+                               --batch-input-dir.
+  -sun, --serviceusername &lt;serviceUserName>
+                             name of the user requesting the validation
+  -suo, --serviceuserorganization &lt;serviceUserOrganization>
+                             organization of the user requesting the validation
+  -u, --url &lt;url>            URL of the validation webservice. (Can also be
                                defined in config file)
-      -un, --username &lt;username>
+  -un, --username &lt;username>
                              username for the basic authentication
 </pre>
 	</div>
@@ -835,6 +857,21 @@ validate -u https://validationserver.mydomain.com/ -m myvalidation -f file.pdf -
 	<div style="background-color: #f8f8f8; border: solid 1px; padding: 0px 5px 10px 20px;">
 		<pre>
 validate -u https://validationserver.mydomain.com/ -m myvalidation -f file.pdf -c -o report.pdf
+	</pre>
+	</div>
+    <h3>Creating a validation report for multiple files (batch)</h3>
+	This example assumes that
+	<ul>
+		<li>the name of the directory containing the pdf files to be validated is <code>C:\Users\user\validator\input</code>,
+		</li>
+		<li>that you want to apply the validation rules for <code>myvalidation</code>.
+		</li>
+		<li>and that the validation service is running at <code>https://validationserver.mydomain.com/</code>.
+		</li>
+	</ul>
+	<div style="background-color: #f8f8f8; border: solid 1px; padding: 0px 5px 10px 20px;">
+		<pre>
+validate -u https://validationserver.mydomain.com/ -m myvalidation -b C:\Users\user\validator\input -o batch_report.zip
 	</pre>
 	</div>
 </body>

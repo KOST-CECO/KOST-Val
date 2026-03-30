@@ -377,20 +377,21 @@ public class KOSTVal implements MessageConstants {
 				if (fileToWorkDirOut1Temp.exists()) {
 					Util.deleteDir(fileToWorkDirOut1Temp);
 				}
-				System.out.println(kostval.getTextResourceService().getText(locale, MESSAGE_FORMATVALIDATION_DONE,
-						logFile.getAbsolutePath()));
-				System.out.println("");
-
+				String validInvalid = "invalid";
 				if (valFile.equals("countValid")) {
 					// Validierte Datei valide
 					mainBoolean = true;
-					return mainBoolean;
+					validInvalid = "ok";
 				} else {
 					// Fehler in Validierte Datei -->
 					// Datei nicht akzeptiert
 					mainBoolean = false;
-					return mainBoolean;
+					validInvalid = "nok";
 				}
+				System.out.println(kostval.getTextResourceService().getText(locale, MESSAGE_FORMATVALIDATION_DONE,
+						validInvalid, logFile.getAbsolutePath()));
+				System.out.println("");
+				return mainBoolean;
 
 			} else {
 				// TODO: Formatvalidierung ueber ein Ordner --> erledigt --> nur Marker

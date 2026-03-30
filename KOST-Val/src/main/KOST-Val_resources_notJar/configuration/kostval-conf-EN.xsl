@@ -406,6 +406,12 @@
 						</td>
 					</tr>
 					<tr class="captioninfom">
+						<td>Allowed eCH-0160 SIP versions [1.0, 1.1, 1.2, 1.3]:</td>
+						<td>
+							<xsl:value-of select="configuration/sip/sipversion" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
 						<td>Allowed maximum number of characters in path lengths [179]:</td>
 						<td>
 							<xsl:value-of select="configuration/sip/allowedlengthofpaths" />
@@ -418,9 +424,25 @@
 						</td>
 					</tr>
 					<tr class="captioninfom">
-						<td>Allowed eCH-0160 SIP versions [1.0, 1.1, 1.2, 1.3]:</td>
+						<td>Optional checks at dossier level:</td>
+						<td></td>
+					</tr>
+					<tr class="captioninfom">
+						<td>- Check regarding protection period [no] [^(30|110)$]:</td>
 						<td>
-							<xsl:value-of select="configuration/sip/sipversion" />
+							<xsl:value-of select="configuration/sip/dossiercheck/schutzfristcheck" />&#160; <xsl:value-of select="configuration/sip/dossiercheck/schutzfristvalue" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>- Check regarding public status [no] [^(Einsehbar|Nicht Einsehbar)$]:</td>
+						<td>
+							<xsl:value-of select="configuration/sip/dossiercheck/oeffentlichkeitcheck" />&#160; <xsl:value-of select="configuration/sip/dossiercheck/oeffentlichkeitvalue" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>- Check data protection [no]:</td>
+						<td>
+							<xsl:value-of select="configuration/sip/dossiercheck/datenschutzcheck" />
 						</td>
 					</tr>
 					<tr class="captioninfom">

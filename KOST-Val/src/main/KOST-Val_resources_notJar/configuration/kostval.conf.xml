@@ -163,6 +163,13 @@
 			<ech0160v12>1.2 </ech0160v12><!--leer = nicht akzeptiert / 1.2 = akzeptiert und validieren -->
 			<ech0160v13>1.3 </ech0160v13><!--leer = nicht akzeptiert / 1.3 = akzeptiert und validieren -->
 		</sipversion>
+		<dossiercheck> <!-- optionale Konfigurierbare Checks auf Stuffe Dossier -->
+			<schutzfristcheck>no</schutzfristcheck> <!-- no = nicht kontrollieren / yes = kontrollieren -->
+			<schutzfristvalue>^(30|110)$</schutzfristvalue> <!-- Regex der moeglichen Werte z.B. ^(30|110)$ -->
+			<oeffentlichkeitcheck>no</oeffentlichkeitcheck> <!-- no = nicht kontrollieren / yes = kontrollieren -->
+			<oeffentlichkeitvalue>^(Einsehbar|Nicht Einsehbar)$</oeffentlichkeitvalue> <!-- Regex der moeglichen Werte z.B. ^(Einsehbar|Nicht Einsehbar)$ -->
+			<datenschutzcheck>no</datenschutzcheck> <!-- no = nicht kontrollieren / yes = kontrollieren ob vorhanden -->
+		</dossiercheck>
 		<warningolddok>no</warningolddok> <!-- no = Fehler / yes = Warnung -->
 	</sip>
 <!-- SONSTIGES -->

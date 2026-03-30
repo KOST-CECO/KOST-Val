@@ -147,11 +147,11 @@ public class Dbptk {
 				if (!report.exists()) {
 
 					// Datei nicht angelegt...
-					resultExec = exitCode+": NoReport";
+					resultExec = exitCode + ": NoReport";
 				} else if (!logFile.exists()) {
 
 					// Datei nicht angelegt...
-					resultExec = exitCode+": NoLogFile";
+					resultExec = exitCode + ": NoLogFile";
 				}
 			}
 

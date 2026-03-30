@@ -25,6 +25,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.StringWriter;
 import java.net.URL;
 import java.util.Locale;
 import java.util.Map;
@@ -33,6 +34,11 @@ import java.util.Optional;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -114,8 +120,17 @@ public class GuiController {
 	private File configFileSta = new File(System.getenv("USERPROFILE") + File.separator + ".kost-val_2x"
 			+ File.separator + "configuration" + File.separator + "STANDARD.kostval.conf.xml");
 
-	private String arg0, arg1, arg2, arg3 = "--xml", dirOfJarPath, initInstructionsDe, initInstructionsFr,
-			initInstructionsIt, initInstructionsEn;
+	private String arg0, arg1, arg2, arg3 = "--xml";
+
+	private static String dirOfJarPath;
+
+	private String initInstructionsDe;
+
+	private String initInstructionsFr;
+
+	private String initInstructionsIt;
+
+	private String initInstructionsEn;
 	private String versionKostVal = "2.4.0.0";
 	/*
 	 * TODO: versionKostVal auch hier anpassen:
@@ -132,17 +147,17 @@ public class GuiController {
 	 * 
 	 * 7) premis_0_init_Agent.xml
 	 * 
-	 * 8) Start-Bild (make_exe) // TODO
+	 * 8) Start-Bild (make_exe)
 	 * 
-	 * 9) launch_KOST-Val_exe.xml --> VersionInfo // TODO
+	 * 9) launch_KOST-Val_exe.xml --> VersionInfo
 	 */
 
 	/*
-	 * fuer Februar-Release Jahreszahl in allen val.message.xml.info anpassen
+	 * TODO: fuer Februar-Release Jahreszahl in allen val.message.xml.info anpassen
 	 * 
 	 * val.message.xml.info = <Info>KOST-Val v{0}, Copyright (C) 2012-202x
 	 * 
-	 * sowie im Readme
+	 * sowie im KOST-Val_README.md
 	 */
 
 	private Locale locale = Locale.getDefault();
@@ -380,6 +395,7 @@ public class GuiController {
 		String strDate = sdfDate.format(nowStart);
 		java.text.SimpleDateFormat sdfYear = new java.text.SimpleDateFormat("yyyy");
 		String strYear = sdfYear.format(nowStart);
+		// strDate="05.01.2026"; // Test
 		if (strDate.contains(".01.")) {
 			if (strDate.contains("20.01") || strDate.contains("21.01") || strDate.contains("22.01")
 					|| strDate.contains("23.01") || strDate.contains("24.01") || strDate.contains("25.01")
@@ -389,7 +405,8 @@ public class GuiController {
 			} else {
 				URL urlNY = getClass().getResource("/config/NY");
 				egg = "<font size=\"50\" face=\"Script MT Bold\" color=\"green\"> <img src=\"" + urlNY
-						+ "\" height='40'> " + strYear + "</font>";
+						+ "\" height='85'> " + strYear + "</font>";
+				// 2025: height='40'
 			}
 		}
 		if (strDate.contains(".12.")) {
@@ -407,7 +424,8 @@ public class GuiController {
 				} else {
 					urlCE = getClass().getResource("/config/CE_DE");
 				}
-				egg = "<img src=\"" + urlCE + "\" height='50'>";
+				egg = "<img src=\"" + urlCE + "\" height='85'>";
+				// 2025: height='50'
 			}
 		}
 
@@ -1768,7 +1786,6 @@ public class GuiController {
 					if (fileName.endsWith(".txt") || fileName.endsWith(".jpeg") || fileName.endsWith(".jpg")
 							|| fileName.endsWith(".svg") || fileName.endsWith(".png") || fileName.endsWith(".xml")) {
 						console.setText(" \n");// loest keine Veraenderung im listener aus
-						engine.load("file:///" + valFileFolder.getAbsolutePath());
 						if (locale.toString().startsWith("fr")) {
 							console.setText("1. Fichier selectionne : " + valFileFolder.getAbsolutePath()
 									+ "\n2. Ajuster la configuration et le LogType si necessaire \n3. Demarrer la validation ");
@@ -1783,17 +1800,62 @@ public class GuiController {
 									+ "\n2. Ggf. Konfiguration und LogType anpassen \n3. Validierung starten ");
 						}
 						console.appendText(""); // jetzt gibt es eine Veraenderung
-						if (valFileFolder.getName().toLowerCase().endsWith(".kost-val.log.xml")) {
-							logFile = valFileFolder;
-							buttonPrint.setDisable(false);
-							buttonSave.setDisable(false);
-							buttonFormat.setDisable(true);
-						}
+						if (fileName.endsWith(".txt") || fileName.endsWith(".jpeg") || fileName.endsWith(".jpg")
+								|| fileName.endsWith(".svg") || fileName.endsWith(".png")) {
+							engine.load("file:///" + valFileFolder.getAbsolutePath());
+						} else if (fileName.endsWith(".xml")) {
+							// XML laden
+							System.out.println("XML laden print");
+							StreamSource xml = new StreamSource(valFileFolder);
+							if (Util.stringInFile("<?xml-stylesheet", valFileFolder)) {
+								System.out.println("stylesheet angezogen");
+								engine.load("file:///" + valFileFolder.getAbsolutePath());
+								if (valFileFolder.getName().toLowerCase().endsWith(".kost-val.log.xml")) {
+									logFile = valFileFolder;
+									buttonPrint.setDisable(false);
+									buttonSave.setDisable(false);
+									buttonFormat.setDisable(true);
+								}
+							} else {
+								// generisches stylesheet verwenden
+								System.out.println("generisches stylesheet verwenden");
+								try {
+									// XSL laden
+									File xslGeneral = new File(dirOfJarPath + File.separator + "resources"
+											+ File.separator + "general.xsl");
+									StreamSource xsl = new StreamSource(xslGeneral);
 
-					} else {
-						String pathDetail = "file:/" + valFileFolder.getAbsolutePath();
-						pathDetail = pathDetail.replace("\\\\", "/");
-						pathDetail = pathDetail.replace("\\", "/");
+									// Transformation durchfuehren
+									TransformerFactory factory = TransformerFactory.newInstance();
+									Transformer transformer = factory.newTransformer(xsl);
+
+									StringWriter writer = new StringWriter();
+									transformer.transform(xml, new StreamResult(writer));
+
+									String html = writer.toString();
+
+									// WebView anzeigen
+									/*
+									 * WebView webView = new WebView(); webView.getEngine().loadContent(html);
+									 */
+
+									engine.loadContent(html);
+								} catch (TransformerException e) {
+									System.out.println("catch (TransformerException e)");
+									System.out.println(e);
+									engine.load("file:///" + valFileFolder.getAbsolutePath());
+								}
+
+								/*
+								 * stage.setScene(new Scene(webView, 800, 600)); stage.setTitle("XML Viewer");
+								 * stage.show();
+								 */
+							}
+						} else {
+							String pathDetail = "file:/" + valFileFolder.getAbsolutePath();
+							pathDetail = pathDetail.replace("\\\\", "/");
+							pathDetail = pathDetail.replace("\\", "/");
+						}
 					}
 				}
 			}

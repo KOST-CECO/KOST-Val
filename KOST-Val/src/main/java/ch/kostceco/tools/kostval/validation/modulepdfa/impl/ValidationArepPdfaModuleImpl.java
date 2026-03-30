@@ -34,6 +34,7 @@ import com.pdftools.NativeLibrary;
 import com.pdftools.pdfvalidator.PdfError;
 import com.pdftools.pdfvalidator.PdfValidatorAPI;
 
+import ch.kostceco.tools.kosttools.fileservice.egovdv;
 import ch.kostceco.tools.kosttools.fileservice.verapdf;
 import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kosttools.util.UtilPages;
@@ -67,6 +68,99 @@ public class ValidationArepPdfaModuleImpl extends ValidationModuleImpl implement
 		String onWork = configMap.get("ShowProgressOnWork");
 		if (onWork.equals("nomin")) {
 			min = true;
+		}
+
+		try {
+			/* nur reparieren wenn KEINE Signaturen enthalten sind */
+
+			// Pfad zum Programm existiert die Dateien?
+			String checkTool = egovdv.checkEgovdv(dirOfJarPath);
+			if (!checkTool.equals("OK")) {
+				// es fehlen Dateien
+
+			} else {
+				// egovdv sollte vorhanden sein
+				String pathToWorkDirValdatei = configMap.get("PathToWorkDir");
+				File workDir2 = new File(pathToWorkDirValdatei);
+				Integer countSig = egovdv.execEgovdvCountSig(valDatei, workDir2, dirOfJarPath);
+				/*
+				 * Gibt mit egovdv via cmd die Anzahl Signaturen in pdf aus
+				 * 
+				 * 0 = keine Signatur
+				 * 
+				 * 999 = Fehler: Es existiert nicht alles zu egovdv
+				 * 
+				 * 998 = Fehler: Exception oder Report existiert nicht
+				 * 
+				 * 997 = Fehler: Die ersten beiden Zeilen zu egovdv fehlen
+				 * 
+				 * 996 = Fehler: Exception UNKNOWN Catch
+				 * 
+				 * @return Integer mit der Anzahl Signaturen
+				 */
+				if (countSig == 0) {
+					// 0 = keine Signatur
+					// repair darf gemacht werden
+				} else {
+					// signaturen vorhanden oder koennen nicht ausgeschlossen werden
+					// keine Reparatur durchfuehren
+
+					String noRep = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
+							+ getTextResourceService().getText(locale, INFO_XML_Z_NOREP_SIGN);
+					Util.oldnewstring("<ErrorZrepPdfa></ErrorZrepPdfa>", noRep, logFile);
+
+					return false;
+				}
+			}
+			
+			// nur reparieren wenn kein portfolio 
+			if (Util.stringInFile("/Collection", valDatei)||Util.stringInFile("/Portfolio", valDatei)) {
+				// portfolio vorhanden oder koennen nicht ausgeschlossen werden
+				// keine Reparatur durchfuehren
+				String noRep = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
+						+ getTextResourceService().getText(locale, INFO_XML_Z_NOREP_PORTFOLIO);
+				Util.oldnewstring("<ErrorZrepPdfa></ErrorZrepPdfa>", noRep, logFile);
+				return false;
+			} else {
+				// hoechstwahrscheinlich keine Portfolio
+				// repair darf gemacht werden
+			}
+
+			// nur reparieren wenn keine Attachments 
+			if (Util.stringInFile("/UseAttachments", valDatei)||Util.stringInFile("/Attachments", valDatei)) {
+				// Attachments vorhanden oder koennen nicht ausgeschlossen werden
+				// keine Reparatur durchfuehren
+				String noRep = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
+						+ getTextResourceService().getText(locale, INFO_XML_Z_NOREP_ATTACHMENTS);
+				Util.oldnewstring("<ErrorZrepPdfa></ErrorZrepPdfa>", noRep, logFile);
+				return false;
+			} else {
+				// hoechstwahrscheinlich keine Attachments
+				// repair darf gemacht werden
+			}
+
+			// nur reparieren wenn kein 3D 
+			if (Util.stringInFile("/3D", valDatei)) {
+				// 3D vorhanden oder koennen nicht ausgeschlossen werden
+				// keine Reparatur durchfuehren
+				String noRep = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
+						+ getTextResourceService().getText(locale, INFO_XML_Z_NOREP_3D);
+				Util.oldnewstring("<ErrorZrepPdfa></ErrorZrepPdfa>", noRep, logFile);
+				return false;
+			} else {
+				// hoechstwahrscheinlich keine Attachements
+				// repair darf gemacht werden
+			}
+
+		} catch (Throwable e) {
+			String logRepC = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, " repair signed? " + e.getMessage());
+			try {
+				Util.oldnewstring("<ErrorZrepPdfa></ErrorZrepPdfa>", logRepC, logFile);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			return false;
 		}
 
 		// TODO Kontrolle ob repair eingeschaltet ist und nicht via cli angesprochen

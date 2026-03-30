@@ -174,18 +174,22 @@ public class ControllerInit implements MessageConstants {
 		File configFileDe = new File(directoryOfConfigfile + File.separator + "kostval-conf-DE.xsl");
 		File configFileFrInit = new File(directoryOfConfigfileInit + File.separator + "kostval-conf-FR.xsl");
 		File configFileFr = new File(directoryOfConfigfile + File.separator + "kostval-conf-FR.xsl");
+		File configFileItInit = new File(directoryOfConfigfileInit + File.separator + "kostval-conf-IT.xsl");
+		File configFileIt = new File(directoryOfConfigfile + File.separator + "kostval-conf-IT.xsl");
 		File configFileEnInit = new File(directoryOfConfigfileInit + File.separator + "kostval-conf-EN.xsl");
 		File configFileEn = new File(directoryOfConfigfile + File.separator + "kostval-conf-EN.xsl");
 		if (!configFile.exists()) {
 			Util.copyFile(configFileInit, configFile);
 			Util.copyFile(configFileDeInit, configFileDe);
 			Util.copyFile(configFileFrInit, configFileFr);
+			Util.copyFile(configFileItInit, configFileIt);
 			Util.copyFile(configFileEnInit, configFileEn);
 		} else {
 			if (!Util.stringInFileLine(version, configFile)) {
 				Util.copyFile(configFileInit, configFile);
 				Util.copyFile(configFileDeInit, configFileDe);
 				Util.copyFile(configFileFrInit, configFileFr);
+				Util.copyFile(configFileItInit, configFileIt);
 				Util.copyFile(configFileEnInit, configFileEn);
 			}
 		}

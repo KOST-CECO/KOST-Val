@@ -385,7 +385,8 @@ public class Controllervalsip implements MessageConstants {
 						int countToValidated = numberInFileMap - countProgress;
 						// Kontrolle ob Datei akzeptiert ist und ob sie
 						// validiert werden soll
-						// TODO wenn auch SIPs repariert werden Util.copyDirMd5(new File(initFolderPath), fileToOutputStart);
+						// TODO wenn auch SIPs repariert werden Util.copyDirMd5(new
+						// File(initFolderPath), fileToOutputStart);
 						Controllervalfofile controller1 = (Controllervalfofile) context.getBean("controllervalfofile");
 						String valFile = controller1.valFoFile(valDatei, logFileName, directoryOfLogfile, verbose,
 								dirOfJarPath, configMap, context, locale, logFile, countToValidated, repair,
@@ -427,11 +428,35 @@ public class Controllervalsip implements MessageConstants {
 				// alle Validierten Dateien valide
 				validFormat = true;
 				fileName3c = "3c_Valide.txt";
+				
+				//System.out.println("Output mit repair unnoetig da alles  valide oder akzeptiert -> loeschen");
+				Util.deleteDir(fileToOutputStart.getParentFile());
+
 			} else {
 				// Fehler in Validierten Dateien --> invalide
 				// nicht akzeptierte Dateien
 				validFormat = false;
 				fileName3c = "3c_Invalide.txt";
+				
+				// NICHT alles valide oder akzeptiert
+
+				// Output mit "repair" nur behalten wenn was repariert wurde
+				// PREMIS.xml enthaelt "Repair successfully performed."
+				File premisFile = new File(
+						fileToOutputStart.getParentFile().getAbsolutePath() + File.separator + "PREMIS.xml");
+				String repairSuccess = "Repair successfully performed.";
+				if (premisFile.exists()) {
+					if (Util.stringInFile(repairSuccess, premisFile)) {
+						// reparatur erfolgreich -> nicht loeschen
+						// System.out.println("Output mit repair behalten, da reparatur erfolgreich ");
+
+					} else {
+						// keine erfolgreiche reparatur -> loeschen
+						// System.out.println("Output mit repair unnoetig da nichts erfolgreich repariert wurde -> loeschen");
+						Util.deleteDir(fileToOutputStart.getParentFile());
+					}
+				}
+
 			}
 			// outputFile3c = new File( directoryOfLogfile + fileName3c );
 			outputFile3c = new File(pathToWorkDir + File.separator + fileName3c);
@@ -537,11 +562,6 @@ public class Controllervalsip implements MessageConstants {
 					String oldtext = (oldtextList.get(i));
 					Util.oldnewstring(oldtext, "", pathTemp);
 				}
-			}
-
-			File callasNo = new File(directoryOfLogfile + File.separator + "_callas_NO.txt");
-			if (callasNo.exists()) {
-				callasNo.delete();
 			}
 
 			System.out.println(

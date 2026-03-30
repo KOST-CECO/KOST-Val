@@ -42,7 +42,7 @@
 <eventOutcomeInformation>
 <eventOutcome>no success</eventOutcome>
 <eventOutcomeDetail>
-<eventOutcomeDetailNote>The migrated [formatNameMig] file is invalid. No repair performed.</eventOutcomeDetailNote>
+<eventOutcomeDetailNote>No repair performed.</eventOutcomeDetailNote>
 </eventOutcomeDetail>
 </eventOutcomeInformation>
 <linkingAgentIdentifier>
@@ -66,7 +66,7 @@
 <eventIdentifierValue>[yyyymmdd][HHmmss][MD53]erep</eventIdentifierValue>
 </eventIdentifier>
 <eventType valueURI="http://id.loc.gov/vocabulary/preservation/eventType/rep">replication</eventType>
-<eventDateTime>[DateTimeRep]</eventDateTime>
+<eventDateTime>[DateTimeCopy]</eventDateTime>
 <eventDetailInformation>
 <eventDetail>creating an identical copy</eventDetail>
 </eventDetailInformation>

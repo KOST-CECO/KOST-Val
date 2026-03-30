@@ -37,8 +37,8 @@ public class ConfigControllerPdfa {
 
 	@FXML
 	private CheckBox checkPdfa, checkVerapdf, checkPdftools, checkPdfa1a, checkPdfa2a, checkFont, checkPdfaRep,
-	checkPdfa2uRep,checkJbig2,
-			checkDetailpt, checkDetailvp, checkPdfa1b, checkPdfa2b, checkFontTol, checkPdfa2u, checkWarning3to2;
+			checkPdfa2uRep, checkJbig2, checkDetailpt, checkDetailvp, checkPdfa1b, checkPdfa2b, checkFontTol,
+			checkPdfa2u, checkWarning3to2;
 
 	@FXML
 	private Button buttonConfigApply;
@@ -57,7 +57,7 @@ public class ConfigControllerPdfa {
 		// TODO --> initialize (wird einmalig am Anfang ausgefuehrt)
 
 		// Copyright ausgeben
-		labelConfig.setText("Copyright © KOST/CECO" );
+		labelConfig.setText("Copyright © KOST/CECO");
 
 		// festhalten von wo die Applikation (exe) gestartet wurde
 		dirOfJarPath = "";
@@ -82,11 +82,12 @@ public class ConfigControllerPdfa {
 				labelOtherPdfa.setText("Sonstiges");
 				labelVersion.setText("Versionen");
 				labelVal.setText("Validierungseinstellung: PDF/A");
-				labelRep.setText("Reparatureinstellungen: PDF/A");
+				labelRep.setText("Reparatureinstellungen: PDF/A (nur über die Benutzeroberfläche)");
 				checkPdfaRep.setText(
 						"ich übernehme die Verantwortung für die Qualitätssicherung, Dokumentation und deren Weiterverwendung");
 				checkPdfa2uRep.setText("invalide PDF/A- sowie nicht akzeptierte PDF-Dateien nach PDF/A-2u reparieren");
-				labelDms.setText("Reparatur bedingt eine Installation des dmstools PDF Converter (v1.7.x.x) sowie deren Lizenzierung.");
+				labelDms.setText(
+						"Reparatur bedingt eine Installation des 'dmstools PDF/A Converter' (v1.7.0.1) sowie deren Lizenzierung.");
 				labelDms2.setText("Die integrierte KOST-Lizenz steht nur unseren Trägern und Supporter zur Verfügung.");
 				buttonConfigApply.setText("anwenden");
 				minOne = "Mindestens eine Variante muss erlaubt sein!";
@@ -94,11 +95,13 @@ public class ConfigControllerPdfa {
 				labelOtherPdfa.setText("Divers");
 				labelVersion.setText("Versions");
 				labelVal.setText("Paramètre de validation: PDF/A");
-				labelRep.setText("Paramètres de réparation: PDF/A");
+				labelRep.setText("Paramètres de réparation: PDF/A (uniquement via l'interface graphique)");
 				checkPdfaRep.setText(
 						"j'assume la responsabilité de l'assurance qualité, de la documentation et de leur réutilisation");
-				checkPdfa2uRep.setText("réparer les fichiers PDF/A invalides et les fichiers PDF non acceptés selon PDF/A-2u");
-				labelDms.setText("La réparation nécessite l'installation du convertisseur PDF dmstools (v1.7.x.x) ainsi que l'obtention d'une licence.");
+				checkPdfa2uRep.setText(
+						"réparer les fichiers PDF/A invalides et les fichiers PDF non acceptés selon PDF/A-2u");
+				labelDms.setText(
+						"La réparation nécessite l'installation du 'dmstools PDF/A Converter' (v1.7.0.1) ainsi que l'obtention d'une licence.");
 				labelDms2.setText("La licence KOST intégrée est réservée à nos membres et supporters.");
 				buttonConfigApply.setText("appliquer");
 				minOne = "Au moins une variante doit etre autorisee !";
@@ -106,11 +109,13 @@ public class ConfigControllerPdfa {
 				labelOtherPdfa.setText("Altro");
 				labelVersion.setText("Versioni");
 				labelVal.setText("Parametro di convalida: PDF/A");
-				labelRep.setText("Parametro di riparazione: PDF/A");
+				labelRep.setText("Parametro di riparazione: PDF/A (solo tramite interfaccia grafica)");
 				checkPdfaRep.setText(
 						"Mi assumo la responsabilità della garanzia di qualità, della documentazione e del suo ulteriore utilizzo");
-				checkPdfa2uRep.setText("riparare i file PDF/A non validi e i file PDF non accettati secondo lo standard PDF/A-2u");
-				labelDms.setText("La riparazione richiede l'installazione di dmstools PDF Converter (v1.7.x.x) e la relativa licenza.");
+				checkPdfa2uRep.setText(
+						"riparare i file PDF/A non validi e i file PDF non accettati secondo lo standard PDF/A-2u");
+				labelDms.setText(
+						"La riparazione richiede l'installazione di 'dmstools PDF/A Converter' (v1.7.0.1) e la relativa licenza.");
 				labelDms.setText("La licenza KOST integrata è disponibile solo per i nostri membri e supportatori.");
 				buttonConfigApply.setText("Applica");
 				minOne = "Almeno una variante deve essere consentita!";
@@ -118,12 +123,12 @@ public class ConfigControllerPdfa {
 				labelOtherPdfa.setText("Other");
 				labelVersion.setText("Versions");
 				labelVal.setText("Validation setting: PDF/A");
-				labelRep.setText("Repair settings: PDF/A");
-				checkPdfaRep.setText(
-						"I take responsibility for quality assurance, documentation and its further use");
+				labelRep.setText("Repair settings: PDF/A (via GUI only)");
+				checkPdfaRep.setText("I take responsibility for quality assurance, documentation and its further use");
 				checkPdfa2uRep.setText("repair invalid PDF/A and unacceptable PDF files to PDF/A-2u");
-				labelDms.setText("Repair requires installation of dmstools PDF Converter (v1.7.x.x) and a license.");		
-				labelDms.setText("The integrated KOST license is only available to our members and supporters.");		
+				labelDms.setText(
+						"Repair requires installation of 'dmstools PDF/A Converter' (v1.7.0.1) and a license.");
+				labelDms.setText("The integrated KOST license is only available to our members and supporters.");
 				buttonConfigApply.setText("apply");
 				minOne = "At least one variant must be allowed!";
 			}
@@ -560,8 +565,8 @@ public class ConfigControllerPdfa {
 	}
 
 	/*
-	 * checkPdfa2uRep aendert die Kontrolle ob PDF/A-2u-Reparatur akzeptiert oder nicht
-	 * in der Konfiguration ein oder aus
+	 * checkPdfa2uRep aendert die Kontrolle ob PDF/A-2u-Reparatur akzeptiert oder
+	 * nicht in der Konfiguration ein oder aus
 	 */
 	@FXML
 	void changePdfa2uRep(ActionEvent event) {

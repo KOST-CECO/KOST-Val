@@ -1134,7 +1134,6 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 						}
 					}
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

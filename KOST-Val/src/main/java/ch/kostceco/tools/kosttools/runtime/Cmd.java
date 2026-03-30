@@ -200,16 +200,16 @@ public class Cmd {
 				BufferedReader inE1 = new BufferedReader(new InputStreamReader(streamE1));
 				long secondsE = System.currentTimeMillis();
 				while (secondsE + (60 * 1000) > System.currentTimeMillis()) {
-					if(inE1.readLine() != null) {
-						// ende 
+					if (inE1.readLine() != null) {
+						// ende
 						break;
 					}
 					lineE = inE1.readLine();
 					// System.out.println("lineE "+lineE);
 					if (lineE.contains("java.lang.StackOverflowError") || lineE.contains("java.lang.OutOfMemoryError")
-							|| lineE.contains("java.lang.NullPointerException")
-							|| lineE.contains("java.io.IOException")|| lineE.contains("Exception in thread")) {
-						// System.out.println(" -  E "+lineE);
+							|| lineE.contains("java.lang.NullPointerException") || lineE.contains("java.io.IOException")
+							|| lineE.contains("Exception in thread")) {
+						// System.out.println(" - E "+lineE);
 						/*
 						 * diskretvalidator bleibt manchmal wegen StackOverFlow stecken, versuch dies zu
 						 * umgehen
@@ -264,6 +264,5 @@ public class Cmd {
 		// System.out.println("return String exec: "+lineReturn);
 		return lineReturn;
 	}
-
 
 }

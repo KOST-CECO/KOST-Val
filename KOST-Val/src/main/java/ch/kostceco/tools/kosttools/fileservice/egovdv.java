@@ -46,13 +46,14 @@ public class egovdv {
 	private static String exeDir = "resources" + File.separator + "egov-validationclient-cli";
 	private static String validateBat = exeDir + File.separator + "validate.bat";
 
-	// TODO: muss aktualidiert werden
+	// TODO: muss aktualisiert werden
 	private static String versionKostVal = "2.4.0.0";
-	private static String versionEgoDv = "2.0.0";
-	private static String versionVerapdf = "1.27.99";
+	private static String versionEgoDv = "2.1.5";
+	private static String versionVerapdf = "1.31.17";
 
 	private static String egovCli = exeDir + File.separator + "lib" + File.separator
 			+ "intarsys-egov-validationclient-cli-" + versionEgoDv + ".jar";
+	// intarsys-egov-validationclient-cli-2.1.5.jar
 	private static String stringFile = "";
 //	private static String stringFileEmpty = "";
 

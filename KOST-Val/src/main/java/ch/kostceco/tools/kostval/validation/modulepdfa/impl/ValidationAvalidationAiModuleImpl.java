@@ -626,7 +626,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 					/** Modul K **/
 					Logtxt.logtxt(logFile, errorK);
-					
+
 					/** Modul Z **/
 					String configRepPdfa = configMap.get("pdfarep");
 					String configRepPdfa2u = configMap.get("pdfa2urep");

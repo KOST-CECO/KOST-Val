@@ -33,6 +33,7 @@ import ch.kostceco.tools.kostval.exception.modulesip2.Validation2dGeverFileInteg
 import ch.kostceco.tools.kostval.exception.modulesip3.Validation3aFormatRecognitionException;
 import ch.kostceco.tools.kostval.exception.modulesip3.Validation3cFormatValidationException;
 import ch.kostceco.tools.kostval.exception.modulesip3.Validation3dPeriodException;
+import ch.kostceco.tools.kostval.exception.modulesip3.Validation3zAddcheckException;
 import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
@@ -48,6 +49,7 @@ import ch.kostceco.tools.kostval.validation.modulesip2.Validation2dGeverFileInte
 import ch.kostceco.tools.kostval.validation.modulesip3.Validation3aFormatRecognitionModule;
 import ch.kostceco.tools.kostval.validation.modulesip3.Validation3cFormatValidationModule;
 import ch.kostceco.tools.kostval.validation.modulesip3.Validation3dPeriodModule;
+import ch.kostceco.tools.kostval.validation.modulesip3.Validation3zAddcheckModule;
 
 /**
  * Der Controller ruft die benoetigten Module zur Validierung des SIP-Archivs in
@@ -60,28 +62,20 @@ import ch.kostceco.tools.kostval.validation.modulesip3.Validation3dPeriodModule;
 public class Controllersip implements MessageConstants {
 
 	private Validation1bFolderStructureModule validation1bFolderStructureModule;
-
 	private Validation1cNamingModule validation1cNamingModule;
-
 	private Validation1dMetadataModule validation1dMetadataModule;
-
 	private Validation1eSipTypeModule validation1eSipTypeModule;
-
 	private Validation1fPrimaryDataModule validation1fPrimaryDataModule;
-
 	private Validation1gPackageSizeFilesModule validation1gPackageSizeFilesModule;
 
 	private Validation2aFileIntegrityModule validation2aFileIntegrityModule;
-
 	private Validation2cChecksumModule validation2cChecksumModule;
-
 	private Validation2dGeverFileIntegrityModule validation2dGeverFileIntegrityModule;
 
 	private Validation3aFormatRecognitionModule validation3aFormatRecognitionModule;
-
 	private Validation3cFormatValidationModule validation3cFormatValidationModule;
-
 	private Validation3dPeriodModule validation3dPeriodModule;
+	private Validation3zAddcheckModule validation3zAddcheckModule;
 
 	private TextResourceService textResourceService;
 
@@ -184,6 +178,14 @@ public class Controllersip implements MessageConstants {
 
 	public void setValidation3dPeriodModule(Validation3dPeriodModule validation3dPeriodModule) {
 		this.validation3dPeriodModule = validation3dPeriodModule;
+	}
+
+	public Validation3zAddcheckModule getValidation3zAddcheckModule() {
+		return validation3zAddcheckModule;
+	}
+
+	public void setValidation3zAddcheckModule(Validation3zAddcheckModule validation3zAddcheckModule) {
+		this.validation3zAddcheckModule = validation3zAddcheckModule;
 	}
 
 	public TextResourceService getTextResourceService() {
@@ -452,6 +454,26 @@ public class Controllersip implements MessageConstants {
 			return false;
 		} catch (Exception e) {
 			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Cd_SIP)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
+			return false;
+		}
+
+		// Validation Step 3z
+		try {
+			if (this.getValidation3zAddcheckModule().validate(valDatei, directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath, initFolderPath, fileToOutputStart)) {
+				this.getValidation3zAddcheckModule().getMessageService().print();
+			} else {
+				this.getValidation3zAddcheckModule().getMessageService().print();
+				valid = false;
+			}
+		} catch (Validation3zAddcheckException e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Cz_SIP)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
+			this.getValidation3zAddcheckModule().getMessageService().print();
+			return false;
+		} catch (Exception e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Cz_SIP)
 					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
 			return false;
 		}

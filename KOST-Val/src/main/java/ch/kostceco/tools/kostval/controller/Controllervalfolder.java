@@ -229,6 +229,11 @@ public class Controllervalfolder implements MessageConstants {
 				logFile.getAbsolutePath()));
 
 		if (countInvalid == 0 && countNotaz == 0) {
+			// alles valide oder akzeptiert
+
+			// System.out.println("Output mit repair unnoetig da alles  valide oder akzeptiert -> loeschen");
+			Util.deleteDir(fileToOutputStart.getParentFile());
+
 			// bestehendes Workverzeichnis ggf. loeschen
 			if (tmpDir.exists()) {
 				Util.deleteDir(tmpDir);
@@ -255,6 +260,24 @@ public class Controllervalfolder implements MessageConstants {
 			valFolder = true;
 			return valFolder;
 		} else {
+			// NICHT alles valide oder akzeptiert
+
+			// Output mit "repair" nur behalten wenn was repariert wurde
+			// PREMIS.xml enthaelt "Repair successfully performed."
+			File premisFile = new File(
+					fileToOutputStart.getParentFile().getAbsolutePath() + File.separator + "PREMIS.xml");
+			String repairSuccess = "Repair successfully performed.";
+			if (premisFile.exists()) {
+				if (Util.stringInFile(repairSuccess, premisFile)) {
+					// reparatur erfolgreich -> nicht loeschen
+					// System.out.println("Output mit repair behalten, da reparatur erfolgreich ");
+
+				} else {
+					// keine erfolgreiche reparatur -> loeschen
+					// System.out.println("Output mit repair unnoetig da nichts erfolgreich repariert wurde -> loeschen");
+					Util.deleteDir(fileToOutputStart.getParentFile());
+				}
+			}
 			// bestehendes Workverzeichnis ggf. loeschen
 			if (tmpDir.exists()) {
 				Util.deleteDir(tmpDir);

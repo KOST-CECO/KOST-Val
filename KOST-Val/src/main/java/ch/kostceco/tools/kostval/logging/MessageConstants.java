@@ -155,6 +155,7 @@ public interface MessageConstants {
 	String MESSAGE_XML_MODUL_Cb_SIP = "val.message.xml.modul.cb.sip";
 	String MESSAGE_XML_MODUL_Cc_SIP = "val.message.xml.modul.cc.sip";
 	String MESSAGE_XML_MODUL_Cd_SIP = "val.message.xml.modul.cd.sip";
+	String MESSAGE_XML_MODUL_Cz_SIP = "val.message.xml.modul.cz.sip";
 
 	String MESSAGE_XML_REPAIR_SIARD = "val.message.xml.repair.siard";
 
@@ -187,7 +188,8 @@ public interface MessageConstants {
 
 	String MESSAGE_WARNING_XML_SIZE = "val.warning.xml.size";
 
-	// TODO ********TIFF-Meldungen*************************************************************************
+	// TODO
+	// ********TIFF-Meldungen*************************************************************************
 	// Modul A Meldungen --> neu in der Erkennung
 
 	// Modul B Meldungen
@@ -199,7 +201,8 @@ public interface MessageConstants {
 	String MESSAGE_XML_G_INVALID = "val.message.xml.g.invalid";
 	String MESSAGE_XML_CG_JHOVENIO = "val.message.xml.cg.jhovenio";
 
-	// TODO ********SIARD-Meldungen*************************************************************************
+	// TODO
+	// ********SIARD-Meldungen*************************************************************************
 	// Modul A Meldungen
 	String ERROR_XML_A_DEFLATED = "val.error.xml.a.deflated";
 	String ERROR_XML_A_INCORRECTZIP = "val.error.xml.a.incorrectzip";
@@ -272,44 +275,45 @@ public interface MessageConstants {
 
 	// DBPTK Meldungen A-M
 	String MESSAGE_XML_A_HEADER41 = "val.message.xml.a.header41";
-	String MESSAGE_XML_B_HEADER42 = "val.message.xml.b.header42"; 
-	String MESSAGE_XML_E_HEADER43 = "val.message.xml.e.header43"; 
+	String MESSAGE_XML_B_HEADER42 = "val.message.xml.b.header42";
+	String MESSAGE_XML_E_HEADER43 = "val.message.xml.e.header43";
 	String MESSAGE_XML_F_HEADER50 = "val.message.xml.f.header50";
-	String MESSAGE_XML_G_HEADER51 = "val.message.xml.g.header51"; 
+	String MESSAGE_XML_G_HEADER51 = "val.message.xml.g.header51";
 	String MESSAGE_XML_G_HEADER52 = "val.message.xml.g.header52";
-	String MESSAGE_XML_G_HEADER53 = "val.message.xml.g.header53"; 
-	String MESSAGE_XML_G_HEADER54 = "val.message.xml.g.header54"; 
-	String MESSAGE_XML_H_HEADER55 = "val.message.xml.h.header55"; 
-	String MESSAGE_XML_H_HEADER56 = "val.message.xml.h.header56"; 
-	String MESSAGE_XML_H_HEADER57 = "val.message.xml.h.header57"; 
-	String MESSAGE_XML_H_HEADER60 = "val.message.xml.h.header60"; 
-	String MESSAGE_XML_H_HEADER61 = "val.message.xml.h.header61"; 
-	String MESSAGE_XML_H_HEADER63 = "val.message.xml.h.header63"; 
+	String MESSAGE_XML_G_HEADER53 = "val.message.xml.g.header53";
+	String MESSAGE_XML_G_HEADER54 = "val.message.xml.g.header54";
+	String MESSAGE_XML_H_HEADER55 = "val.message.xml.h.header55";
+	String MESSAGE_XML_H_HEADER56 = "val.message.xml.h.header56";
+	String MESSAGE_XML_H_HEADER57 = "val.message.xml.h.header57";
+	String MESSAGE_XML_H_HEADER60 = "val.message.xml.h.header60";
+	String MESSAGE_XML_H_HEADER61 = "val.message.xml.h.header61";
+	String MESSAGE_XML_H_HEADER63 = "val.message.xml.h.header63";
 	String MESSAGE_XML_H_HEADER64 = "val.message.xml.h.header64";
-	String MESSAGE_XML_K_HEADER58 = "val.message.xml.k.header58"; 
-	String MESSAGE_XML_K_HEADER59 = "val.message.xml.k.header59"; 
-	String MESSAGE_XML_K_HEADER510 = "val.message.xml.k.header510"; 
-	String MESSAGE_XML_K_HEADER511 = "val.message.xml.k.header511"; 
+	String MESSAGE_XML_K_HEADER58 = "val.message.xml.k.header58";
+	String MESSAGE_XML_K_HEADER59 = "val.message.xml.k.header59";
+	String MESSAGE_XML_K_HEADER510 = "val.message.xml.k.header510";
+	String MESSAGE_XML_K_HEADER511 = "val.message.xml.k.header511";
 	String MESSAGE_XML_K_HEADER512 = "val.message.xml.k.header512";
-	String MESSAGE_XML_L_HEADER513 = "val.message.xml.l.header513"; 
+	String MESSAGE_XML_L_HEADER513 = "val.message.xml.l.header513";
 	String MESSAGE_XML_L_HEADER514 = "val.message.xml.l.header514";
-	String MESSAGE_XML_L_HEADER515 = "val.message.xml.l.header515"; 
+	String MESSAGE_XML_L_HEADER515 = "val.message.xml.l.header515";
 	String MESSAGE_XML_L_HEADER516 = "val.message.xml.l.header516";
-	String MESSAGE_XML_L_HEADER517 = "val.message.xml.l.header517"; 
-	String MESSAGE_XML_L_HEADER518 = "val.message.xml.l.header518"; 
-	String MESSAGE_XML_L_HEADER519 = "val.message.xml.l.header519"; 
+	String MESSAGE_XML_L_HEADER517 = "val.message.xml.l.header517";
+	String MESSAGE_XML_L_HEADER518 = "val.message.xml.l.header518";
+	String MESSAGE_XML_L_HEADER519 = "val.message.xml.l.header519";
 	String MESSAGE_XML_L_WARNING = "val.message.xml.l.warning";
 	String MESSAGE_XML_M_HEADER62 = "val.message.xml.m.header62";
 
 	// Modul W Meldungen
 	String MESSAGE_XML_W_WARNING_INITVALUE = "val.message.xml.w.warning.initvalue";
-	
+
 	// Modul Reparatur
 	String MESSAGE_XML_REP_LOB = "val.message.xml.rep.lob";
 	String MESSAGE_XML_REP_LOBEXT = "val.message.xml.rep.lobext";
 	String MESSAGE_XML_REP_ROWS = "val.message.xml.rep.rows";
 
-	// TODO ********PDFA-Meldungen*************************************************************************
+	// TODO
+	// ********PDFA-Meldungen*************************************************************************
 	// Modul A Meldungen
 	String ERROR_XML_CALLAS_MISSING = "val.error.xml.callas.missing";
 	String ERROR_XML_CALLAS_MISSING2 = "val.error.xml.callas.missing2";
@@ -360,9 +364,14 @@ public interface MessageConstants {
 	String INFO_XML_Z_NOREP_NOREP1 = "val.info.xml.z.norep.norep1";
 	String INFO_XML_Z_NOREP_NOOUTPUT = "val.info.xml.z.norep.nooutput";
 	String INFO_XML_Z_NOREP_INVALID = "val.info.xml.z.norep.invalid";
+	String INFO_XML_Z_NOREP_SIGN = "val.info.xml.z.norep.sign";
+	String INFO_XML_Z_NOREP_PORTFOLIO = "val.info.xml.z.norep.portfolio";
+	String INFO_XML_Z_NOREP_ATTACHMENTS = "val.info.xml.z.norep.attachments";
+	String INFO_XML_Z_NOREP_3D = "val.info.xml.z.norep.3d";
 	String INFO_XML_Z_REP_VALID = "val.info.xml.z.rep.valid";
 
-	// TODO ********JP2-Meldungen*************************************************************************
+	// TODO
+	// ********JP2-Meldungen*************************************************************************
 	// Modul A Meldungen
 
 	// Modul A-D Meldungen (Zusammengefasste Jylyzer-Meldungen)
@@ -399,7 +408,8 @@ public interface MessageConstants {
 
 	String ERROR_XML_D_JP2_UNKNOWN = "val.error.xml.d.jp2.unknown";
 
-	// TODO ********JPEG-Meldungen*************************************************************************
+	// TODO
+	// ********JPEG-Meldungen*************************************************************************
 	// Modul A Meldungen
 	String ERROR_XML_A_JPEG_JIIO_FILETYPE = "val.error.xml.a.jpeg.jiio.filetype";
 	String ERROR_XML_A_JPEG_JIIO_SCANFAILED = "val.error.xml.a.jpeg.jiio.scanfailed";
@@ -438,13 +448,15 @@ public interface MessageConstants {
 
 	String ERROR_XML_C_TRANSLATE = "val.error.xml.c.translate";
 
-	// TODO ********PNG-Meldungen*************************************************************************
+	// TODO
+	// ********PNG-Meldungen*************************************************************************
 	// Modul A Meldungen
 
 	// Modul A-F Meldungen
 	String ERROR_XML_AF_PNG_TRANSLATE = "val.error.xml.af.png.translate";
 
-	// TODO ********XML-Meldungen*************************************************************************
+	// TODO
+	// ********XML-Meldungen*************************************************************************
 	// Modul A Meldungen
 
 	// Modul B Meldungen
@@ -454,7 +466,8 @@ public interface MessageConstants {
 	String ERROR_XML_C_XML_NOXSDFILE = "val.error.xml.c.xml.noxsdfile";
 	String ERROR_XML_C_XML_NOSCHEMA = "val.error.xml.c.xml.noschema";
 
-	// TODO ********Audio-/Video-Meldungen*************************************************************************
+	// TODO
+	// ********Audio-/Video-Meldungen*************************************************************************
 	// Modul A Meldungen
 	String ERROR_XML_A_AUDIOVIDEO_FORMAT_NAZ = "val.error.xml.a.audiovideo.format.naz";
 	String ERROR_XML_A_AUDIOVIDEO_CODEC_NAZ = "val.error.xml.a.audiovideo.codec.naz";
@@ -481,7 +494,8 @@ public interface MessageConstants {
 	String ERROR_XML_G_MKV_ERROR = "val.error.xml.g.mkv.error";
 	String ERROR_XML_H_MKV_ERROR = "val.error.xml.h.mkv.error";
 
-	// TODO ********SIP-Meldungen*************************************************************************
+	// TODO
+	// ********SIP-Meldungen*************************************************************************
 	// Modul 1a Meldungen
 	String ERROR_XML_AA_INCORRECTFILEENDING = "val.error.xml.aa.incorrectfileending";
 	String ERROR_XML_AA_CANNOTEXTRACTZIP = "val.error.xml.aa.cannotextractzip";
@@ -561,4 +575,8 @@ public interface MessageConstants {
 	String ERROR_XML_CD_WARNING_DOKUMENT_RANGE_CA = "val.error.xml.cd.warning.dokument.range.ca";
 	String ERROR_XML_CD_UNPARSEABLE_DATE = "val.error.xml.cd.unparseable.date";
 	String ERROR_XML_CD_WARNING_ANMERKUNG_CA = "val.error.xml.cd.warning.anmerkung.ca";
+
+	// Modul 3z Meldungen
+	String ERROR_XML_CZ_MISSING_METADATA = "val.error.xml.cz.missing.metadata";
+	String ERROR_XML_CZ_WRONG_VALUE = "val.error.xml.cz.wrong.value";
 }
