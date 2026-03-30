@@ -1,0 +1,61 @@
+<event>
+<eventIdentifier>
+<eventIdentifierType valueURI="http://id.loc.gov/vocabulary/identifiers/local">local</eventIdentifierType>
+<eventIdentifierValue>_[yyyymmdd][HHmmss][MD53]eval</eventIdentifierValue>
+</eventIdentifier>
+<eventType valueURI="http://id.loc.gov/vocabulary/preservation/eventType/val">validation</eventType>
+<eventDateTime>[DateTimeVal]</eventDateTime>
+<eventDetailInformation>
+<eventDetail>formatvalidation</eventDetail>
+</eventDetailInformation>
+<eventOutcomeInformation>
+<eventOutcome>[inv_notaz]</eventOutcome>
+</eventOutcomeInformation>
+<linkingAgentIdentifier>
+<linkingAgentIdentifierType valueURI="http://id.loc.gov/vocabulary/identifiers/local">local</linkingAgentIdentifierType>
+<linkingAgentIdentifierValue>[Institution]</linkingAgentIdentifierValue>
+<linkingAgentRole valueURI="https://id.loc.gov/vocabulary/preservation/eventRelatedAgentRole/aut.html">authorizer</linkingAgentRole>
+</linkingAgentIdentifier>
+<linkingAgentIdentifier>
+<linkingAgentIdentifierType valueURI="http://id.loc.gov/vocabulary/identifiers/local">local</linkingAgentIdentifierType>
+<linkingAgentIdentifierValue>KOST-Val</linkingAgentIdentifierValue>
+<linkingAgentRole valueURI="http://id.loc.gov/vocabulary/preservation/eventRelatedAgentRole/exe">executing program</linkingAgentRole>
+</linkingAgentIdentifier>
+<linkingObjectIdentifier>
+<linkingObjectIdentifierType valueURI="http://id.loc.gov/vocabulary/preservation/eventRelatedObjectRole/sou">source</linkingObjectIdentifierType>
+<linkingObjectIdentifierValue>_[yyyymmdd][HHmmss][MD53]o</linkingObjectIdentifierValue>
+</linkingObjectIdentifier>
+</event>
+<event>
+<eventIdentifier>
+<eventIdentifierType valueURI="http://id.loc.gov/vocabulary/identifiers/local">local</eventIdentifierType>
+<eventIdentifierValue>_[yyyymmdd][HHmmss][MD53]erep</eventIdentifierValue>
+</eventIdentifier>
+<eventType valueURI="http://id.loc.gov/vocabulary/preservation/eventType/rep">replication</eventType>
+<eventDateTime>[DateTimeCopy]</eventDateTime>
+<eventDetailInformation>
+<eventDetail>creating an identical copy</eventDetail>
+</eventDetailInformation>
+<eventOutcomeInformation>
+<eventOutcome>success</eventOutcome>
+</eventOutcomeInformation>
+<linkingAgentIdentifier>
+<linkingAgentIdentifierType valueURI="http://id.loc.gov/vocabulary/identifiers/local">local</linkingAgentIdentifierType>
+<linkingAgentIdentifierValue>[Institution]</linkingAgentIdentifierValue>
+<linkingAgentRole valueURI="https://id.loc.gov/vocabulary/preservation/eventRelatedAgentRole/aut.html">authorizer</linkingAgentRole>
+</linkingAgentIdentifier>
+<linkingAgentIdentifier>
+<linkingAgentIdentifierType valueURI="http://id.loc.gov/vocabulary/identifiers/local">local</linkingAgentIdentifierType>
+<linkingAgentIdentifierValue>KOST-Val</linkingAgentIdentifierValue>
+<linkingAgentRole valueURI="http://id.loc.gov/vocabulary/preservation/eventRelatedAgentRole/exe">executing program</linkingAgentRole>
+</linkingAgentIdentifier>
+<linkingObjectIdentifier>
+<linkingObjectIdentifierType valueURI="http://id.loc.gov/vocabulary/preservation/eventRelatedObjectRole/sou">source</linkingObjectIdentifierType>
+<linkingObjectIdentifierValue>_[yyyymmdd][HHmmss][MD53]o</linkingObjectIdentifierValue>
+</linkingObjectIdentifier>
+<linkingObjectIdentifier>
+<linkingObjectIdentifierType valueURI="http://id.loc.gov/vocabulary/preservation/eventRelatedObjectRole/out">outcome</linkingObjectIdentifierType>
+<linkingObjectIdentifierValue>_[yyyymmdd][HHmmss][MD53]oder</linkingObjectIdentifierValue>
+</linkingObjectIdentifier>
+</event>
+<!-- ToDo Event -->

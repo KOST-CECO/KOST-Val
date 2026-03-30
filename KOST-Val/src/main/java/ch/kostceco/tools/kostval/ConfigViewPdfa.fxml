@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="860.0" prefHeight="380.0" style="-fx-background-color: silver;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.kostceco.tools.kostval.ConfigControllerPdfa">
+<StackPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="860.0" prefHeight="550.0" style="-fx-background-color: silver;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.kostceco.tools.kostval.ConfigControllerPdfa">
 	<children>
 		<GridPane minHeight="330.0">
 			<columnConstraints>
@@ -31,8 +31,15 @@
 				<RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 				<RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="5.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="0.0" prefHeight="5.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="5.600012207031227" minHeight="0.0" prefHeight="0.8000244140624773" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="5.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
  			</rowConstraints>
 			<children>
@@ -46,8 +53,8 @@
 						<Insets />
 					</GridPane.margin>
 				</Button>
-				<Label fx:id="labelConfig" alignment="CENTER" contentDisplay="CENTER" maxHeight="20.0" maxWidth="780.0" minHeight="20.0" minWidth="780.0" prefHeight="20.0" prefWidth="780.0" text="Copyright © KOST/CECO" textAlignment="CENTER" textFill="WHITESMOKE" GridPane.columnSpan="5" GridPane.halignment="CENTER" GridPane.rowIndex="12" GridPane.valignment="CENTER" />
-            <Label fx:id="labelMessage" text="Meldung Validierungseinstellungen" textFill="RED" GridPane.columnSpan="5" GridPane.rowIndex="10" />
+				<Label fx:id="labelConfig" alignment="CENTER" contentDisplay="CENTER" maxHeight="20.0" maxWidth="780.0" minHeight="20.0" minWidth="780.0" prefHeight="20.0" prefWidth="780.0" text="Copyright © KOST/CECO" textAlignment="CENTER" textFill="WHITESMOKE" GridPane.columnSpan="5" GridPane.halignment="CENTER" GridPane.rowIndex="19" GridPane.valignment="CENTER" />
+            <Label fx:id="labelMessage" text="Meldung Validierungseinstellungen" textFill="RED" GridPane.columnSpan="5" GridPane.rowIndex="17" />
             <CheckBox fx:id="checkDetailvp" mnemonicParsing="false" onAction="#changeDetailvp" selected="true" text="details" GridPane.columnIndex="1" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets left="24.0" />
@@ -93,6 +100,24 @@
                   <Insets left="24.0" />
                </GridPane.margin>
             </CheckBox>
+            <Label fx:id="labelRep" text="Validierungseinstellungen PDF/A" GridPane.columnSpan="5" GridPane.rowIndex="10">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <CheckBox fx:id="checkPdfaRep" mnemonicParsing="false" onAction="#changePdfaRep" selected="true" text="Verantwortung" GridPane.columnSpan="5" GridPane.rowIndex="14" />
+            <Label text=" └" textFill="WHITESMOKE" GridPane.rowIndex="15" />
+            <CheckBox fx:id="checkPdfa2uRep" mnemonicParsing="false" onAction="#changePdfa2uRep" selected="true" text="2u" GridPane.columnSpan="5" GridPane.rowIndex="15">
+               <GridPane.margin>
+                  <Insets left="24.0" />
+               </GridPane.margin>
+            </CheckBox>
+            <Label fx:id="labelDms" text="* rep" GridPane.columnSpan="5" GridPane.rowIndex="12" />
+            <Label fx:id="labelDms2" text="2. Zeile" GridPane.columnSpan="5" GridPane.rowIndex="13">
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </Label>
 			</children>
 			<padding>
 				<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

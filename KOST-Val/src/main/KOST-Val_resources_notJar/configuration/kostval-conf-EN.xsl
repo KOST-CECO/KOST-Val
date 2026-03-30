@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:template match="/">
-		<!-- kostval.conf.xml_v2.3.0.3 -->
+		<!-- kostval.conf.xml_v2.4.0.0 -->
 		<html>
 			<head>
 				<style>
@@ -122,6 +122,18 @@
 						<td>JBIG2 compression allowed [yes]:</td>
 						<td>
 							<xsl:value-of select="configuration/pdfa/jbig2allowed" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>Create a repaired PDF/A copy [no]:</td>
+						<td>
+							<xsl:value-of select="configuration/pdfa/pdfarep" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>- repair invalid PDF/A and unacceptable PDF files to PDF/A-2u [no]:</td>
+						<td>
+							<xsl:value-of select="configuration/pdfa/pdfa2urep" />
 						</td>
 					</tr>
 
@@ -353,6 +365,12 @@
 						</td>
 					</tr>
 					<tr class="captioninfom">
+						<td>- correct inexact LOB file extensions [no]:</td>
+						<td>
+							<xsl:value-of select="configuration/siard/siardlobextrep" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
 						<td>- fill in number of rows in metadata.xml [no]:</td>
 						<td>
 							<xsl:value-of select="configuration/siard/siardrowsrep" />
@@ -388,6 +406,12 @@
 						</td>
 					</tr>
 					<tr class="captioninfom">
+						<td>Allowed eCH-0160 SIP versions [1.0, 1.1, 1.2, 1.3]:</td>
+						<td>
+							<xsl:value-of select="configuration/sip/sipversion" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
 						<td>Allowed maximum number of characters in path lengths [179]:</td>
 						<td>
 							<xsl:value-of select="configuration/sip/allowedlengthofpaths" />
@@ -400,9 +424,25 @@
 						</td>
 					</tr>
 					<tr class="captioninfom">
-						<td>Allowed eCH-0160 SIP versions [1.0, 1.1, 1.2, 1.3]:</td>
+						<td>Optional checks at dossier level:</td>
+						<td></td>
+					</tr>
+					<tr class="captioninfom">
+						<td>- Check regarding protection period [no] [^(30|110)$]:</td>
 						<td>
-							<xsl:value-of select="configuration/sip/sipversion" />
+							<xsl:value-of select="configuration/sip/dossiercheck/schutzfristcheck" />&#160; <xsl:value-of select="configuration/sip/dossiercheck/schutzfristvalue" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>- Check regarding public status [no] [^(Einsehbar|Nicht Einsehbar)$]:</td>
+						<td>
+							<xsl:value-of select="configuration/sip/dossiercheck/oeffentlichkeitcheck" />&#160; <xsl:value-of select="configuration/sip/dossiercheck/oeffentlichkeitvalue" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>- Check data protection [no]:</td>
+						<td>
+							<xsl:value-of select="configuration/sip/dossiercheck/datenschutzcheck" />
 						</td>
 					</tr>
 					<tr class="captioninfom">
@@ -510,6 +550,12 @@
 						<td><xsl:value-of select="configuration/egovdv/Mandant/KantonZugFinanzdirektion" /></td>
 					</tr>
 					
+					<tr class="captioninfo">
+						<td>Name of the institution [Archiv]:</td>
+						<td>
+							<xsl:value-of select="configuration/Institution" />
+						</td>
+					</tr>
 					<tr class="captioninfo">
 						<td>Calculate and output hash value of files. Empty means no calculation and output []:</td>
 						<td>

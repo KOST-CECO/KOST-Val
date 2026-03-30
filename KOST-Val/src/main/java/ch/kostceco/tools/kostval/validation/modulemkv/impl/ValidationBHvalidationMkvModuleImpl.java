@@ -42,7 +42,8 @@ public class ValidationBHvalidationMkvModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) throws ValidationBHmkvvalidationException {
+			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart)
+			throws ValidationBHmkvvalidationException {
 		String onWork = configMap.get("ShowProgressOnWork");
 		if (onWork.equals("nomin")) {
 			min = true;
@@ -304,61 +305,65 @@ public class ValidationBHvalidationMkvModuleImpl extends ValidationModuleImpl
 					}
 					scannerOutput.close();
 					// TODO Error nach Modul ausgeben
+					if (min) {
+						return false;
+					} else {
 
-					// B
-					if (errB1 != "") {
-						Logtxt.logtxt(logFile,
-								getTextResourceService().getText(locale, MESSAGE_XML_MODUL_B_MKV)
-										+ getTextResourceService().getText(locale, ERROR_XML_B_MKV_ERROR,
-												errB1 + errB2 + errB3 + errB4 + errB5));
-					}
+						// B
+						if (errB1 != "") {
+							Logtxt.logtxt(logFile,
+									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_B_MKV)
+											+ getTextResourceService().getText(locale, ERROR_XML_B_MKV_ERROR,
+													errB1 + errB2 + errB3 + errB4 + errB5));
+						}
 
-					// C
-					if (errC1 != "") {
-						Logtxt.logtxt(logFile,
-								getTextResourceService().getText(locale, MESSAGE_XML_MODUL_C_MKV)
-										+ getTextResourceService().getText(locale, ERROR_XML_C_MKV_ERROR,
-												errC1 + errC2 + errC3 + errC4 + errC5));
-					}
+						// C
+						if (errC1 != "") {
+							Logtxt.logtxt(logFile,
+									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_C_MKV)
+											+ getTextResourceService().getText(locale, ERROR_XML_C_MKV_ERROR,
+													errC1 + errC2 + errC3 + errC4 + errC5));
+						}
 
-					// D
-					if (errD1 != "") {
-						Logtxt.logtxt(logFile,
-								getTextResourceService().getText(locale, MESSAGE_XML_MODUL_D_MKV)
-										+ getTextResourceService().getText(locale, ERROR_XML_D_MKV_ERROR,
-												errD1 + errD2 + errD3 + errD4 + errD5));
-					}
+						// D
+						if (errD1 != "") {
+							Logtxt.logtxt(logFile,
+									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_D_MKV)
+											+ getTextResourceService().getText(locale, ERROR_XML_D_MKV_ERROR,
+													errD1 + errD2 + errD3 + errD4 + errD5));
+						}
 
-					// E
-					if (errE1 != "") {
-						Logtxt.logtxt(logFile,
-								getTextResourceService().getText(locale, MESSAGE_XML_MODUL_E_MKV)
-										+ getTextResourceService().getText(locale, ERROR_XML_E_MKV_ERROR,
-												errE1 + errE2 + errE3 + errE4 + errE5));
-					}
+						// E
+						if (errE1 != "") {
+							Logtxt.logtxt(logFile,
+									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_E_MKV)
+											+ getTextResourceService().getText(locale, ERROR_XML_E_MKV_ERROR,
+													errE1 + errE2 + errE3 + errE4 + errE5));
+						}
 
-					// F
-					if (errF1 != "") {
-						Logtxt.logtxt(logFile,
-								getTextResourceService().getText(locale, MESSAGE_XML_MODUL_F_MKV)
-										+ getTextResourceService().getText(locale, ERROR_XML_F_MKV_ERROR,
-												errF1 + errF2 + errF3 + errF4 + errF5));
-					}
+						// F
+						if (errF1 != "") {
+							Logtxt.logtxt(logFile,
+									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_F_MKV)
+											+ getTextResourceService().getText(locale, ERROR_XML_F_MKV_ERROR,
+													errF1 + errF2 + errF3 + errF4 + errF5));
+						}
 
-					// G
-					if (errG1 != "") {
-						Logtxt.logtxt(logFile,
-								getTextResourceService().getText(locale, MESSAGE_XML_MODUL_G_MKV)
-										+ getTextResourceService().getText(locale, ERROR_XML_G_MKV_ERROR,
-												errG1 + errG2 + errG3 + errG4 + errG5));
-					}
+						// G
+						if (errG1 != "") {
+							Logtxt.logtxt(logFile,
+									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_G_MKV)
+											+ getTextResourceService().getText(locale, ERROR_XML_G_MKV_ERROR,
+													errG1 + errG2 + errG3 + errG4 + errG5));
+						}
 
-					// H
-					if (errH1 != "") {
-						Logtxt.logtxt(logFile,
-								getTextResourceService().getText(locale, MESSAGE_XML_MODUL_H_MKV)
-										+ getTextResourceService().getText(locale, ERROR_XML_H_MKV_ERROR,
-												errH1 + errH2 + errH3 + errH4 + errH5));
+						// H
+						if (errH1 != "") {
+							Logtxt.logtxt(logFile,
+									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_H_MKV)
+											+ getTextResourceService().getText(locale, ERROR_XML_H_MKV_ERROR,
+													errH1 + errH2 + errH3 + errH4 + errH5));
+						}
 					}
 				}
 			} catch (Exception e) {

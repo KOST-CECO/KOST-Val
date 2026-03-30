@@ -121,7 +121,8 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	 */
 	@Override
 	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) throws ValidationEcolumnException {
+			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart)
+			throws ValidationEcolumnException {
 		configMapFinal = configMap;
 		// Informationen zur Darstellung "onWork" holen
 		String onWork = configMap.get("ShowProgressOnWork");

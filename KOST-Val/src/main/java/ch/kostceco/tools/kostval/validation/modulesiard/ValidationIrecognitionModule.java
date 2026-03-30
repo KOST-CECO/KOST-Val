@@ -37,6 +37,7 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
 public interface ValidationIrecognitionModule extends ValidationModule {
 
 	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) throws ValidationIrecognitionException;
+			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart)
+			throws ValidationIrecognitionException;
 
 }

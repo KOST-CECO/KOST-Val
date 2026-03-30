@@ -59,7 +59,8 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl implement
 
 	@Override
 	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) throws ValidationWwarningException {
+			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart)
+			throws ValidationWwarningException {
 		// Informationen zur Darstellung "onWork" holen
 		String onWork = configMap.get("ShowProgressOnWork");
 		/*

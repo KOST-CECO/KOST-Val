@@ -99,6 +99,7 @@ public class Cmd {
 		return lineReturn;
 	}
 
+	// TODO
 	public static String execToStringSplit(String command, boolean out, File workDir) throws InterruptedException {
 		/*
 		 * command = "\"\"" + exeFile.getAbsolutePath() + "\"" +
@@ -156,6 +157,106 @@ public class Cmd {
 			inE.close();
 		} catch (IOException ex) {
 			System.out.println("IOException exec Out Err: " + ex);
+		}
+		if (lineReturn.equals("")) {
+			lineReturn = "OK";
+		}
+		// System.out.println("return String exec: "+lineReturn);
+		return lineReturn;
+	}
+
+	// TODO
+	public static String execToStringSplitDv(String command, boolean out, File workDir) throws InterruptedException {
+		/*
+		 * exec nur für diskretValidator, da dieser immer wieder haengen bleibt
+		 * 
+		 * command = "\"\"" + exeFile.getAbsolutePath() + "\"" +
+		 * " --noout --stream --nowarning --schema " + "\"" + xsdFile.getAbsolutePath()
+		 * + "\"" + " " + "\"" + xmlFile.getAbsolutePath() + "\"\"";
+		 */
+
+		// System.out.println( "executing command: " + command );
+		Process p = null;
+		try {
+			p = Runtime.getRuntime().exec(("cmd /c " + command).split(" "), null, workDir);
+			// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag
+			// vorhanden ist!
+		} catch (IOException ex) {
+			System.out.println("IOException exec P: " + ex);
+		}
+		String line1 = "";
+		String line2 = "";
+		String lineE = "";
+		String lineReturn = line1;
+		Boolean exception = false;
+		try {
+			if (out) {
+				/*
+				 * diskretvalidator bleibt manchmal wegen StackOverFlow stecken, versuch dies zu
+				 * umgehen, indem beim diskretvalidatorzuerst getErrorStream ausgewertet wird
+				 */
+
+				InputStream streamE1 = p.getErrorStream();
+				BufferedReader inE1 = new BufferedReader(new InputStreamReader(streamE1));
+				long secondsE = System.currentTimeMillis();
+				while (secondsE + (60 * 1000) > System.currentTimeMillis()) {
+					if (inE1.readLine() != null) {
+						// ende
+						break;
+					}
+					lineE = inE1.readLine();
+					// System.out.println("lineE "+lineE);
+					if (lineE.contains("java.lang.StackOverflowError") || lineE.contains("java.lang.OutOfMemoryError")
+							|| lineE.contains("java.lang.NullPointerException") || lineE.contains("java.io.IOException")
+							|| lineE.contains("Exception in thread")) {
+						// System.out.println(" - E "+lineE);
+						/*
+						 * diskretvalidator bleibt manchmal wegen StackOverFlow stecken, versuch dies zu
+						 * umgehen
+						 */
+						exception = true;
+						break;
+					}
+				}
+				inE1.close();
+
+				if (!exception) {
+					InputStream stream2 = p.getInputStream();
+					BufferedReader in2 = new BufferedReader(new InputStreamReader(stream2));
+					while ((line2 = in2.readLine()) != null) {
+						// System.out.println("line2 "+line2);
+						if (lineReturn.equals("")) {
+							lineReturn = line2;
+						} else {
+							if (lineReturn.contains(line2)) {
+								// Fehler bereits festgehalten (dublikat)
+							} else {
+								lineReturn = lineReturn + "</Message><Message>" + line2;
+							}
+						}
+					}
+					in2.close();
+
+					InputStream streamE2 = p.getErrorStream();
+					BufferedReader inE2 = new BufferedReader(new InputStreamReader(streamE2));
+					while ((lineE = inE2.readLine()) != null) {
+						// System.out.println("lineE."+lineE);
+						if (lineReturn.equals("")) {
+							lineReturn = "ERROR: " + lineE;
+						} else {
+							if (lineReturn.contains(lineE)) {
+								// Fehler bereits festgehalten (dublikat)
+							} else {
+								lineReturn = lineReturn + "</Message><Message>ERROR: " + lineE;
+							}
+						}
+					}
+					inE2.close();
+
+				}
+			}
+		} catch (IOException ex) {
+			// System.out.println("IOException exec Out Err: " + ex);
 		}
 		if (lineReturn.equals("")) {
 			lineReturn = "OK";

@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.Map;
 
@@ -65,11 +66,15 @@ public class Controllervalfofile implements MessageConstants {
 
 	public String valFoFile(File valDatei, String logFileName, File directoryOfLogfile, boolean verbose,
 			String dirOfJarPath, Map<String, String> configMap, ApplicationContext context, Locale locale, File logFile,
-			int countToValidated) throws IOException {
+			int countToValidated, Boolean repair, String initFolderPath, File fileToOutputStart, boolean repairPdfa,
+			boolean repairSiard, boolean isFile) throws IOException {
 		String onWork = configMap.get("ShowProgressOnWork");
 		if (onWork.equals("nomin")) {
 			min = true;
 		}
+		String date = "", time = "", size = "", copyValStr = "", formatName = "", formatNameMig = "",
+				forLastModified = "", forRepair = "", startVal = "", institution = "", md5StrMig = "", lengthMig = "";
+
 		// Formatvalidierung und Erkennung einer Datei
 
 		/*
@@ -83,6 +88,16 @@ public class Controllervalfofile implements MessageConstants {
 
 		String pathToWorkDir = configMap.get("PathToWorkDir");
 		File tmpDir = new File(pathToWorkDir);
+
+		/*
+		 * TODO: aktuell ist fuer PREMIS nur pdfa Reparatur massgebend. Dies weil bei
+		 * SIARD manuell nachvalidiert, kontrolliert und entschieden werden soll.
+		 * 
+		 * Enstsprechend wird repair gleichgesetzt mit repairPdfa.
+		 * 
+		 * Spaeter ggf nch repairSiard ins PREMIS nehmen
+		 */
+		repair = repairPdfa;
 
 		// Informationen holen, welche Formate validiert werden sollen
 		String pdfaValidation = configMap.get("pdfaValidation");
@@ -109,6 +124,44 @@ public class Controllervalfofile implements MessageConstants {
 		String configHash = configMap.get("hash");
 		String sizeWarning = configMap.get("sizeWarning");
 
+		File fileToOutputStartParent = fileToOutputStart.getParentFile();
+		File premisOut = new File(fileToOutputStartParent.getAbsolutePath() + File.separator + "PREMIS.xml");
+		if (isFile) {
+			premisOut = new File(fileToOutputStart.getAbsolutePath() + File.separator + "PREMIS.xml");
+		}
+		File premis0 = new File(dirOfJarPath + File.separator + "resources" + File.separator + "PREMIS" + File.separator
+				+ "premis_0_init_Agent.xml");
+		File premis1e = new File(dirOfJarPath + File.separator + "resources" + File.separator + "PREMIS"
+				+ File.separator + "premis_1_Event_valid_noRepaire.xml");
+		File premis1o = new File(dirOfJarPath + File.separator + "resources" + File.separator + "PREMIS"
+				+ File.separator + "premis_1_Object_valid_noRep.xml");
+		File premis2e = new File(dirOfJarPath + File.separator + "resources" + File.separator + "PREMIS"
+				+ File.separator + "premis_2_Event_posRepair_sucessRepair.xml");
+		File premis2o = new File(dirOfJarPath + File.separator + "resources" + File.separator + "PREMIS"
+				+ File.separator + "premis_2_Object_posRepair_sucessRepair.xml");
+		File premis3e = new File(dirOfJarPath + File.separator + "resources" + File.separator + "PREMIS"
+				+ File.separator + "premis_3_Event_posRepair_invalidRepair.xml");
+		File premis3o = new File(dirOfJarPath + File.separator + "resources" + File.separator + "PREMIS"
+				+ File.separator + "premis_3_Object_posRepair_invalidRepair.xml");
+
+		// 1 = no repair / valid
+		String newText1o = Util.getStringFromFile(premis1o);
+		String newText1e = Util.getStringFromFile(premis1e);
+		// 2 = invalid + success repair
+		String newText2o = Util.getStringFromFile(premis2o);
+		String newText2e = Util.getStringFromFile(premis2e);
+		// 3 = invalid + repair failed
+		String newText3o = Util.getStringFromFile(premis3o);
+		String newText3e = Util.getStringFromFile(premis3e);
+
+		String tempO = "<!-- ToDo Object -->";
+		String tempE = "<!-- ToDo Event -->";
+		if (repair) {
+			if (!premisOut.exists()) {
+				Util.copyFile(premis0, premisOut);
+			}
+		}
+
 		try {
 			hash = "";
 			if (!valDatei.isDirectory()) {
@@ -127,8 +180,9 @@ public class Controllervalfofile implements MessageConstants {
 				// Hashwert der Datei berechnen welche gewuenscht sind
 				// MD5, SHA-1, SHA-256, SHA-512
 
+				String md5Str = Hash.getMd5(valDatei);
 				if (configHash.equals("MD5")) {
-					hash = "<md5>" + Hash.getMd5(valDatei) + "</md5>";
+					hash = "<md5>" + md5Str + "</md5>";
 				} else if (configHash.equals("SHA-1")) {
 					hash = "<sha1>" + Hash.getSha1(valDatei) + "</sha1>";
 				} else if (configHash.equals("SHA-256")) {
@@ -169,6 +223,54 @@ public class Controllervalfofile implements MessageConstants {
 
 				String valDateiXml = "<ValFile> -> " + valDatei.getAbsolutePath() + "</ValFile>" + sizeWarningTxt;
 
+				if (repair) {
+					/*
+					 * Angaben fuer Premis auslesen
+					 * 
+					 * [yyyymmdd] [HHmmss] [MD53] [MD5] [size] [formatName] [originalName]
+					 * [outputName] [Institution]
+					 * 
+					 * [DateTimeVal] [DateTimeCopy] 2025-09-30T14:28:27
+					 * 
+					 * [inv_notaz] valid / accepted / invalid / not accepted
+					 */
+
+					// Zeitstempel StartDatei
+					java.util.Date nowStart = new java.util.Date();
+					// java.text.SimpleDateFormat sdfStart = new
+					// java.text.SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+					java.text.SimpleDateFormat sdfDateStart = new java.text.SimpleDateFormat("yyyyMMdd");
+					date = sdfDateStart.format(nowStart);
+					java.text.SimpleDateFormat sdfTimeStart = new java.text.SimpleDateFormat("HHmmss");
+					time = sdfTimeStart.format(nowStart);
+					size = valDatei.length() + "";
+					/*
+					 * copyValStr = valDatei.getAbsolutePath().replace(initFolderPath,
+					 * fileToOutputStart.getAbsolutePath()); File copyValDatei = new
+					 * File(copyValStr);
+					 */
+
+					String valDateiPath = valDatei.getAbsolutePath();
+					File copyValDatei = new File(
+							valDateiPath.replace(initFolderPath, fileToOutputStart.getAbsolutePath()));
+					copyValStr = copyValDatei.getAbsolutePath();
+
+					forLastModified = "";
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+					// 2025-09-30T14:28:27
+					forLastModified = sdf.format(copyValDatei.lastModified());
+					forRepair = "";
+					forRepair = sdf.format(copyValDatei.lastModified());
+
+					java.util.Date nowStartVal = new java.util.Date();
+					// java.text.SimpleDateFormat sdfStart = new
+					// java.text.SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+					java.text.SimpleDateFormat sdfDateStartVal = new java.text.SimpleDateFormat(
+							"yyyy-MM-dd'T'HH:mm:ss");
+					startVal = sdfDateStartVal.format(nowStartVal);
+					institution = configMap.get("Institution");
+				}
+
 				/*
 				 * Ergebnis ist die Datei z.B. PDFA oder SIARD wenn einwandfrei erkannt
 				 * ansonsten wird _ext angehängt, wenn die Dateiendung nicht stimmt z.B.
@@ -176,18 +278,22 @@ public class Controllervalfofile implements MessageConstants {
 				 * 
 				 * Wenn nichts erkannt wird UNKNOWN_DATEIENDUNG ausgegeben z.B. UNKNOWN_CDR
 				 */
-
 				if (recFormat.contains("UNKNOWN_")) {
 					// TODO Unbekanntes oder weiteres Format
+					if (repair) {
+						/*
+						 * Reparatur eingeschaltet. Entsprechend werden alle Dateien, welche keine
+						 * Reparaturfunktion haben direkt kopiert (1).
+						 * 
+						 * [inv_notaz] valid / accepted / invalid / not accepted
+						 */
+						Util.oldnewstring(tempO, newText1o, premisOut);
+						Util.oldnewstring(tempE, newText1e, premisOut);
+					}
 
 					String formatUK = recFormat.replace("UNKNOWN_.", "");
 					formatUK = formatUK.replace("UNKNOWN_", "");
-
-					/*
-					 * System.out.println("recFormat "+recFormat);
-					 * System.out.println("formatUK "+formatUK);
-					 * System.out.println("otherformats "+otherformats);
-					 */
+					formatName = formatUK;
 					if (otherformats.contains(formatUK)) {
 						// nur akzeptiert -> KEINE Validierung,
 						// nur Erkennung
@@ -196,8 +302,7 @@ public class Controllervalfofile implements MessageConstants {
 										+ getTextResourceService().getText(locale, MESSAGE_XML_AZTYPE, " " + formatUK)
 										+ valDateiXml);
 						Logtxt.logtxt(logFile, "<Accepted>accepted</Accepted></Validation>");
-						// System.out.println( " = Accepted" );
-						return "countValid"; // countValid = countValid + 1;
+						recMsg = "AZ";
 					} else {
 						// NICHT akzeptiert -> invalid
 						Logtxt.logtxt(logFile, "<Validation>" + hash
@@ -207,14 +312,14 @@ public class Controllervalfofile implements MessageConstants {
 									+ getTextResourceService().getText(locale, ERROR_XML_A_NOTAZ_DROID));
 						}
 						Logtxt.logtxt(logFile, "<Notaccepted>not accepted</Notaccepted></Validation>");
-						// System.out.println( " = Not accepted" );
-						return "countNotaz"; // countNotaz = countNotaz + 1;
+						recMsg = "notAZ";
 					}
 				} else if (recFormat.contains("_ext")) {
 					// TODO bekanntes Format mit falscher Dateiendung =>
 					// invalid
 
 					String formatEXT = recFormat.replace("_ext", "");
+					formatName = formatEXT;
 
 					Logtxt.logtxt(logFile,
 							"<Validation>" + hash
@@ -228,31 +333,153 @@ public class Controllervalfofile implements MessageConstants {
 								getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_AZ)
 										+ getTextResourceService().getText(locale, ERROR_XML_A_AZ_INCORRECTFILE,
 												"`" + valDateiExt.toLowerCase() + "`", formatEXT));
+						if (formatEXT.toLowerCase().contains("pdf")) {
+							if (repair) {
+								if (repairPdfa) {
+									// Platzhalter fuer Repair Resultat einfuegen
+									Logtxt.logtxt(logFile, "<ErrorZrepPdfa></ErrorZrepPdfa>");
 
+									// NICHT akzeptiert -> invalid
+									// System.out.println(" nicht akzeptiertes PDF. Nach PDF/A-2u reparieren");
+									Controllerreppdfa controller3 = (Controllerreppdfa) context
+											.getBean("controllerreppdfa");
+									String wrongEXT = FilenameUtils.getExtension(valDatei.getName()).toLowerCase();
+									copyValStr = valDatei.getAbsolutePath().replace(initFolderPath,
+											fileToOutputStart.getAbsolutePath());
+									copyValStr = copyValStr.replace(wrongEXT, "pdf");
+									formatName = "PDF";
+									formatNameMig = "PDF/A";
+									boolean ok = false;
+									// System.out.println(" Start executeOptional = repair");
+									ok = controller3.executeOptional(valDatei, directoryOfLogfile, configMap, locale,
+											logFile, dirOfJarPath, initFolderPath, fileToOutputStart);
+
+									if (ok) {
+										// wenn RepairPdfa und ok dann [2]
+										Util.oldnewstring(tempO, newText2o, premisOut);
+										Util.oldnewstring(tempE, newText2e, premisOut);
+										SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+										// 2025-09-30T14:28:27
+										/*
+										 * copyValStr = valDatei.getAbsolutePath().replace(initFolderPath,
+										 * fileToOutputStart.getAbsolutePath());
+										 */
+										File copyValDatei = new File(copyValStr);
+										forRepair = sdf.format(copyValDatei.lastModified());
+
+										md5StrMig = Hash.getMd5(copyValDatei);
+										lengthMig = copyValDatei.length() + "";
+									} else {
+										// wenn RepairPdfa und !ok dann [3]
+										Util.oldnewstring(tempO, newText3o, premisOut);
+										Util.oldnewstring(tempE, newText3e, premisOut);
+									}
+								} else {
+									/*
+									 * Reparatur eingeschaltet aber nicht PDFA-Reparatur. Entsprechend werden alle
+									 * Dateien direkt kopiert (1).
+									 * 
+									 * [inv_notaz] invalid
+									 */
+									Util.oldnewstring(tempO, newText1o, premisOut);
+									Util.oldnewstring(tempE, newText1e, premisOut);
+								}
+							}
+						} else if (formatEXT.toLowerCase().contains("siard")) {
+							// TODO reparieren und PREMIS
+						} else {
+							// TODO spaeter reparieren und PREMIS
+						}
 					}
 					Logtxt.logtxt(logFile, "<Notaccepted>not accepted</Notaccepted></Validation>");
 					// System.out.println( " = Not accepted" );
-					return "countNotaz"; // countNotaz = countNotaz + 1;
-
+					recMsg = "notAZ";
 				} else {
 					// Format einwandfrei erkannt
+					formatName = recFormat;
+					formatNameMig = recFormat;
+
 					// TODO Text
 					if (recFormat.equals("PDFA")) {
 						intro = countToValidated + " " + "PDFA:  " + valDatei.getAbsolutePath() + " ";
+						System.out.print(intro); // Bei PDF und PDFA immer ausgeben
+						formatName = "PDF/A";
+
+						// akzeptiert und soll validiert werden
 						if (pdfaValidation.equals("yes")) {
-							System.out.print(intro);
-							// akzeptiert und soll validiert werden
 							Controllervalfile controller1 = (Controllervalfile) context.getBean("controllervalfile");
 							boolean valFile = controller1.valFile(valDatei, logFileName, directoryOfLogfile, verbose,
-									dirOfJarPath, configMap, context, locale, logFile, hash, valDateiXml);
+									dirOfJarPath, configMap, context, locale, logFile, hash, valDateiXml,
+									initFolderPath, fileToOutputStart);
 							if (valFile) {
-								return "countValid"; // countValid = countValid
-								// + 1;
-
+								recMsg = "valid";
+								// wenn RepairPdfa dann kopie belassen und [1]
+								if (repair) {
+									/*
+									 * Reparatur eingeschaltet und valide. Entsprechend werden alle Dateien direkt
+									 * kopiert (1).
+									 * 
+									 * [inv_notaz] valid
+									 */
+									Util.oldnewstring(tempO, newText1o, premisOut);
+									Util.oldnewstring(tempE, newText1e, premisOut);
+								}
 							} else {
-								return "countInvalid"; // countInvalid =
-								// countInvalid + 1;
+								recMsg = "invalid";
+								// wenn RepairPdfa dann schauen ob Reparierte Datei in Output [2] oder
+								// nicht [3]
+								if (repair) {
+									// eine Reparatur eingeschaltet
+									if (repairPdfa) {
+										// wenn RepairPdfa dann schauen ob Reparierte Datei in Output [2] oder
+										// nicht [3]
+										if (repairPdfa) {
+											// Platzhalter fuer Repair Resultat einfuegen
+											Logtxt.logtxt(logFile, "<ErrorZrepPdfa></ErrorZrepPdfa>");
 
+											// NICHT akzeptiert -> invalid
+											// System.out.println(" nicht akzeptiertes PDF. Nach PDF/A-2u reparieren");
+											Controllerreppdfa controller3 = (Controllerreppdfa) context
+													.getBean("controllerreppdfa");
+											formatNameMig = "PDF/A";
+
+											boolean ok = false;
+											// System.out.println(" Start executeOptional = repair");
+											ok = controller3.executeOptional(valDatei, directoryOfLogfile, configMap,
+													locale, logFile, dirOfJarPath, initFolderPath, fileToOutputStart);
+											if (ok) {
+												// wenn RepairPdfa und ok dann [2]
+												Util.oldnewstring(tempO, newText2o, premisOut);
+												Util.oldnewstring(tempE, newText2e, premisOut);
+												SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+												// 2025-09-30T14:28:27
+												/*
+												 * copyValStr = valDatei.getAbsolutePath().replace(initFolderPath,
+												 * fileToOutputStart.getAbsolutePath());
+												 */
+												File copyValDatei = new File(copyValStr);
+												forRepair = sdf.format(copyValDatei.lastModified());
+
+												md5StrMig = Hash.getMd5(copyValDatei);
+												lengthMig = copyValDatei.length() + "";
+											} else {
+												// wenn RepairPdfa und !ok dann [3]
+												Util.oldnewstring(tempO, newText3o, premisOut);
+												Util.oldnewstring(tempE, newText3e, premisOut);
+											}
+										}
+
+									} else {
+										/*
+										 * Reparatur eingeschaltet aber nicht PDFA-Reparatur. Entsprechend werden alle
+										 * Dateien direkt kopiert (1).
+										 * 
+										 * [inv_notaz] invalid
+										 */
+										Util.oldnewstring(tempO, newText1o, premisOut);
+										Util.oldnewstring(tempE, newText1e, premisOut);
+									}
+								}
 							}
 						} else {
 							// akzeptiert oder nicht
@@ -281,16 +508,49 @@ public class Controllervalfofile implements MessageConstants {
 							}
 
 							if (pdfaValidation.equals("az")) {
-								// nur akzeptiert -> KEINE Validierung, nur
-								// Erkennung
+								System.out.println(" = accepted"); // Bei PDF und PDFA immer ausgeben
+								// nur akzeptiert -> KEINE Validierung, nur Erkennung
 								recMsg = "AZ";
+								// wenn RepairPdfa dann kopie belassen und [1]
+								if (repair) {
+									/*
+									 * Validierung und Reparatur nicht eingeschaltet aber akzeptiert. Entsprechend
+									 * werden alle Dateien direkt kopiert (1).
+									 * 
+									 * [inv_notaz] accepted
+									 */
+									Util.oldnewstring(tempO, newText1o, premisOut);
+									Util.oldnewstring(tempE, newText1e, premisOut);
+								}
 							} else {
+								System.out.println(" = not accepted"); // Bei PDF und PDFA immer ausgeben
 								// NICHT akzeptiert -> invalid
 								recMsg = "notAZ";
+								// wenn RepairPdfa dann kopie belassen und [1] (noRepair)
+								if (repair) {
+									/*
+									 * Validierung und Reparatur nicht eingeschaltet. Entsprechend werden alle
+									 * Dateien direkt kopiert (1).
+									 * 
+									 * [inv_notaz] not accepted
+									 */
+									Util.oldnewstring(tempO, newText1o, premisOut);
+									Util.oldnewstring(tempE, newText1e, premisOut);
+								}
 							}
 						}
 					} else if (recFormat.equals("TXT")) {
 						intro = countToValidated + " " + "TXT:   " + valDatei.getAbsolutePath() + " ";
+						if (repair) {
+							/*
+							 * Reparatur eingeschaltet. Entsprechend werden alle Dateien, welche keine
+							 * Reparaturfunktion haben direkt kopiert (1).
+							 * 
+							 * [inv_notaz] valid / accepted / invalid / not accepted
+							 */
+							Util.oldnewstring(tempO, newText1o, premisOut);
+							Util.oldnewstring(tempE, newText1e, premisOut);
+						}
 						if (txtValidation.equals("yes")) {
 							// akzeptiert und soll validiert werden
 							// Aktuell nicht moeglich, kein Validator dafuer
@@ -311,6 +571,7 @@ public class Controllervalfofile implements MessageConstants {
 						}
 					} else if (recFormat.equals("PDF")) {
 						intro = countToValidated + " " + "PDF:   " + valDatei.getAbsolutePath() + " ";
+						System.out.print(intro); // Bei PDF und PDFA immer ausgeben
 						if (pdfValidation.equals("yes")) {
 							// akzeptiert und soll validiert werden
 							// Aktuell nicht moeglich, kein Validator dafuer
@@ -339,10 +600,72 @@ public class Controllervalfofile implements MessageConstants {
 								Logtxt.logtxt(logFile, egovdvMsg);
 							}
 							if (pdfValidation.equals("az")) {
+								System.out.println(" = accepted"); // Bei PDF und PDFA immer ausgeben
 								// nur akzeptiert -> KEINE Validierung, nur
 								// Erkennung
 								recMsg = "AZ";
+								if (repair) {
+									// eine Reparatur eingeschaltet
+									Util.oldnewstring(tempO, newText1o, premisOut);
+									Util.oldnewstring(tempE, newText1e, premisOut);
+								}
+
 							} else {
+								// NICHT akzeptiert -> invalid
+								if (repair) {
+									// eine Reparatur eingeschaltet
+									if (repairPdfa) {
+										// Platzhalter fuer Repair Resultat einfuegen
+										Logtxt.logtxt(logFile, "<ErrorZrepPdfa></ErrorZrepPdfa>");
+
+										// NICHT akzeptiert -> invalid
+										// System.out.println(" nicht akzeptiertes PDF. Nach PDF/A-2u reparieren");
+										Controllerreppdfa controller3 = (Controllerreppdfa) context
+												.getBean("controllerreppdfa");
+										String wrongEXT = FilenameUtils.getExtension(valDatei.getName()).toLowerCase();
+										copyValStr = valDatei.getAbsolutePath().replace(initFolderPath,
+												fileToOutputStart.getAbsolutePath());
+										copyValStr = copyValStr.replace(wrongEXT, "pdf");
+										formatName = "PDF";
+										formatNameMig = "PDF/A";
+										boolean ok = false;
+										// System.out.println(" Start executeOptional = repair");
+										ok = controller3.executeOptional(valDatei, directoryOfLogfile, configMap,
+												locale, logFile, dirOfJarPath, initFolderPath, fileToOutputStart);
+
+										if (ok) {
+											// wenn RepairPdfa und ok dann [2]
+											Util.oldnewstring(tempO, newText2o, premisOut);
+											Util.oldnewstring(tempE, newText2e, premisOut);
+											SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+											// 2025-09-30T14:28:27
+											/*
+											 * copyValStr = valDatei.getAbsolutePath().replace(initFolderPath,
+											 * fileToOutputStart.getAbsolutePath());
+											 */
+											File copyValDatei = new File(copyValStr);
+											forRepair = sdf.format(copyValDatei.lastModified());
+
+											md5StrMig = Hash.getMd5(copyValDatei);
+											lengthMig = copyValDatei.length() + "";
+										} else {
+											// wenn RepairPdfa und !ok dann [3]
+											Util.oldnewstring(tempO, newText3o, premisOut);
+											Util.oldnewstring(tempE, newText3e, premisOut);
+										}
+									} else {
+										/*
+										 * Reparatur eingeschaltet aber nicht PDFA-Reparatur. Entsprechend werden alle
+										 * Dateien direkt kopiert (1).
+										 * 
+										 * [inv_notaz] invalid
+										 */
+										Util.oldnewstring(tempO, newText1o, premisOut);
+										Util.oldnewstring(tempE, newText1e, premisOut);
+									}
+								}
+
+								System.out.println(" = not accepted"); // Bei PDF und PDFA immer ausgeben
 								// NICHT akzeptiert -> invalid
 								recMsg = "notAZ";
 							}
@@ -351,18 +674,27 @@ public class Controllervalfofile implements MessageConstants {
 						// TODO Bilder
 					} else if (recFormat.equals("JP2")) {
 						intro = countToValidated + " " + "JP2:   " + valDatei.getAbsolutePath() + " ";
+						if (repair) {
+							/*
+							 * Reparatur eingeschaltet. Entsprechend werden alle Dateien, welche keine
+							 * Reparaturfunktion haben direkt kopiert (1).
+							 * 
+							 * [inv_notaz] valid / accepted / invalid / not accepted
+							 */
+							Util.oldnewstring(tempO, newText1o, premisOut);
+							Util.oldnewstring(tempE, newText1e, premisOut);
+						}
 						if (jp2Validation.equals("yes")) {
 							System.out.print(intro);
 							// akzeptiert und soll validiert werden
 							Controllervalfile controller1 = (Controllervalfile) context.getBean("controllervalfile");
 							boolean valFile = controller1.valFile(valDatei, logFileName, directoryOfLogfile, verbose,
-									dirOfJarPath, configMap, context, locale, logFile, hash, valDateiXml);
+									dirOfJarPath, configMap, context, locale, logFile, hash, valDateiXml,
+									initFolderPath, fileToOutputStart);
 							if (valFile) {
-								return "countValid"; // countValid = countValid
-								// + 1;
+								recMsg = "valid";
 							} else {
-								return "countInvalid"; // countInvalid =
-								// countInvalid + 1;
+								recMsg = "invalid";
 							}
 						} else {
 							// akzeptiert oder nicht
@@ -381,18 +713,27 @@ public class Controllervalfofile implements MessageConstants {
 						}
 					} else if (recFormat.equals("JPEG")) {
 						intro = countToValidated + " " + "JPEG:  " + valDatei.getAbsolutePath() + " ";
+						if (repair) {
+							/*
+							 * Reparatur eingeschaltet. Entsprechend werden alle Dateien, welche keine
+							 * Reparaturfunktion haben direkt kopiert (1).
+							 * 
+							 * [inv_notaz] valid / accepted / invalid / not accepted
+							 */
+							Util.oldnewstring(tempO, newText1o, premisOut);
+							Util.oldnewstring(tempE, newText1e, premisOut);
+						}
 						if (jpegValidation.equals("yes")) {
 							System.out.print(intro);
 							// akzeptiert und soll validiert werden
 							Controllervalfile controller1 = (Controllervalfile) context.getBean("controllervalfile");
 							boolean valFile = controller1.valFile(valDatei, logFileName, directoryOfLogfile, verbose,
-									dirOfJarPath, configMap, context, locale, logFile, hash, valDateiXml);
+									dirOfJarPath, configMap, context, locale, logFile, hash, valDateiXml,
+									initFolderPath, fileToOutputStart);
 							if (valFile) {
-								return "countValid"; // countValid = countValid
-								// + 1;
+								recMsg = "valid";
 							} else {
-								return "countInvalid"; // countInvalid =
-								// countInvalid + 1;
+								recMsg = "invalid";
 							}
 						} else {
 							// akzeptiert oder nicht
@@ -411,18 +752,27 @@ public class Controllervalfofile implements MessageConstants {
 						}
 					} else if (recFormat.equals("TIFF")) {
 						intro = countToValidated + " " + "TIFF:  " + valDatei.getAbsolutePath() + " ";
+						if (repair) {
+							/*
+							 * Reparatur eingeschaltet. Entsprechend werden alle Dateien, welche keine
+							 * Reparaturfunktion haben direkt kopiert (1).
+							 * 
+							 * [inv_notaz] valid / accepted / invalid / not accepted
+							 */
+							Util.oldnewstring(tempO, newText1o, premisOut);
+							Util.oldnewstring(tempE, newText1e, premisOut);
+						}
 						if (tiffValidation.equals("yes")) {
 							System.out.print(intro);
 							// akzeptiert und soll validiert werden
 							Controllervalfile controller1 = (Controllervalfile) context.getBean("controllervalfile");
 							boolean valFile = controller1.valFile(valDatei, logFileName, directoryOfLogfile, verbose,
-									dirOfJarPath, configMap, context, locale, logFile, hash, valDateiXml);
+									dirOfJarPath, configMap, context, locale, logFile, hash, valDateiXml,
+									initFolderPath, fileToOutputStart);
 							if (valFile) {
-								return "countValid"; // countValid = countValid
-								// + 1;
+								recMsg = "valid";
 							} else {
-								return "countInvalid"; // countInvalid =
-								// countInvalid + 1;
+								recMsg = "invalid";
 							}
 						} else {
 							// akzeptiert oder nicht
@@ -441,18 +791,27 @@ public class Controllervalfofile implements MessageConstants {
 						}
 					} else if (recFormat.equals("PNG")) {
 						intro = countToValidated + " " + "PNG:   " + valDatei.getAbsolutePath() + " ";
+						if (repair) {
+							/*
+							 * Reparatur eingeschaltet. Entsprechend werden alle Dateien, welche keine
+							 * Reparaturfunktion haben direkt kopiert (1).
+							 * 
+							 * [inv_notaz] valid / accepted / invalid / not accepted
+							 */
+							Util.oldnewstring(tempO, newText1o, premisOut);
+							Util.oldnewstring(tempE, newText1e, premisOut);
+						}
 						if (pngValidation.equals("yes")) {
 							System.out.print(intro);
 							// akzeptiert und soll validiert werden
 							Controllervalfile controller1 = (Controllervalfile) context.getBean("controllervalfile");
 							boolean valFile = controller1.valFile(valDatei, logFileName, directoryOfLogfile, verbose,
-									dirOfJarPath, configMap, context, locale, logFile, hash, valDateiXml);
+									dirOfJarPath, configMap, context, locale, logFile, hash, valDateiXml,
+									initFolderPath, fileToOutputStart);
 							if (valFile) {
-								return "countValid"; // countValid = countValid
-								// + 1;
+								recMsg = "valid";
 							} else {
-								return "countInvalid"; // countInvalid =
-								// countInvalid + 1;
+								recMsg = "invalid";
 							}
 						} else {
 							// akzeptiert oder nicht
@@ -473,18 +832,27 @@ public class Controllervalfofile implements MessageConstants {
 						// TODO Audio
 					} else if (recFormat.equals("FLAC")) {
 						intro = countToValidated + "  " + "FLAC:  " + valDatei.getAbsolutePath() + " ";
+						if (repair) {
+							/*
+							 * Reparatur eingeschaltet. Entsprechend werden alle Dateien, welche keine
+							 * Reparaturfunktion haben direkt kopiert (1).
+							 * 
+							 * [inv_notaz] valid / accepted / invalid / not accepted
+							 */
+							Util.oldnewstring(tempO, newText1o, premisOut);
+							Util.oldnewstring(tempE, newText1e, premisOut);
+						}
 						if (flacValidation.equals("yes")) {
 							System.out.print(intro);
 							// akzeptiert und soll validiert werden
 							Controllervalfile controller1 = (Controllervalfile) context.getBean("controllervalfile");
 							boolean valFile = controller1.valFile(valDatei, logFileName, directoryOfLogfile, verbose,
-									dirOfJarPath, configMap, context, locale, logFile, hash, valDateiXml);
+									dirOfJarPath, configMap, context, locale, logFile, hash, valDateiXml,
+									initFolderPath, fileToOutputStart);
 							if (valFile) {
-								return "countValid"; // countValid = countValid
-								// + 1;
+								recMsg = "valid";
 							} else {
-								return "countInvalid"; // countInvalid =
-								// countInvalid + 1;
+								recMsg = "invalid";
 							}
 						} else {
 							// akzeptiert oder nicht
@@ -503,18 +871,27 @@ public class Controllervalfofile implements MessageConstants {
 						}
 					} else if (recFormat.equals("WAVE")) {
 						intro = countToValidated + "  " + "WAVE:  " + valDatei.getAbsolutePath() + " ";
+						if (repair) {
+							/*
+							 * Reparatur eingeschaltet. Entsprechend werden alle Dateien, welche keine
+							 * Reparaturfunktion haben direkt kopiert (1).
+							 * 
+							 * [inv_notaz] valid / accepted / invalid / not accepted
+							 */
+							Util.oldnewstring(tempO, newText1o, premisOut);
+							Util.oldnewstring(tempE, newText1e, premisOut);
+						}
 						if (waveValidation.equals("yes")) {
 							System.out.print(intro);
 							// akzeptiert und soll validiert werden
 							Controllervalfile controller1 = (Controllervalfile) context.getBean("controllervalfile");
 							boolean valFile = controller1.valFile(valDatei, logFileName, directoryOfLogfile, verbose,
-									dirOfJarPath, configMap, context, locale, logFile, hash, valDateiXml);
+									dirOfJarPath, configMap, context, locale, logFile, hash, valDateiXml,
+									initFolderPath, fileToOutputStart);
 							if (valFile) {
-								return "countValid"; // countValid = countValid
-								// + 1;
+								recMsg = "valid";
 							} else {
-								return "countInvalid"; // countInvalid =
-								// countInvalid + 1;
+								recMsg = "invalid";
 							}
 						} else {
 							// akzeptiert oder nicht
@@ -533,18 +910,27 @@ public class Controllervalfofile implements MessageConstants {
 						}
 					} else if (recFormat.equals("MP3")) {
 						intro = countToValidated + "  " + "MP3:  " + valDatei.getAbsolutePath() + " ";
+						if (repair) {
+							/*
+							 * Reparatur eingeschaltet. Entsprechend werden alle Dateien, welche keine
+							 * Reparaturfunktion haben direkt kopiert (1).
+							 * 
+							 * [inv_notaz] valid / accepted / invalid / not accepted
+							 */
+							Util.oldnewstring(tempO, newText1o, premisOut);
+							Util.oldnewstring(tempE, newText1e, premisOut);
+						}
 						if (mp3Validation.equals("yes")) {
 							System.out.print(intro);
 							// akzeptiert und soll validiert werden
 							Controllervalfile controller1 = (Controllervalfile) context.getBean("controllervalfile");
 							boolean valFile = controller1.valFile(valDatei, logFileName, directoryOfLogfile, verbose,
-									dirOfJarPath, configMap, context, locale, logFile, hash, valDateiXml);
+									dirOfJarPath, configMap, context, locale, logFile, hash, valDateiXml,
+									initFolderPath, fileToOutputStart);
 							if (valFile) {
-								return "countValid"; // countValid = countValid
-								// + 1;
+								recMsg = "valid";
 							} else {
-								return "countInvalid"; // countInvalid =
-								// countInvalid + 1;
+								recMsg = "invalid";
 							}
 						} else {
 							// akzeptiert oder nicht
@@ -565,18 +951,27 @@ public class Controllervalfofile implements MessageConstants {
 						// TODO Video
 					} else if (recFormat.equals("MKV")) {
 						intro = countToValidated + "  " + "MKV:  " + valDatei.getAbsolutePath() + " ";
+						if (repair) {
+							/*
+							 * Reparatur eingeschaltet. Entsprechend werden alle Dateien, welche keine
+							 * Reparaturfunktion haben direkt kopiert (1).
+							 * 
+							 * [inv_notaz] valid / accepted / invalid / not accepted
+							 */
+							Util.oldnewstring(tempO, newText1o, premisOut);
+							Util.oldnewstring(tempE, newText1e, premisOut);
+						}
 						if (mkvValidation.equals("yes")) {
 							System.out.print(intro);
 							// akzeptiert und soll validiert werden
 							Controllervalfile controller1 = (Controllervalfile) context.getBean("controllervalfile");
 							boolean valFile = controller1.valFile(valDatei, logFileName, directoryOfLogfile, verbose,
-									dirOfJarPath, configMap, context, locale, logFile, hash, valDateiXml);
+									dirOfJarPath, configMap, context, locale, logFile, hash, valDateiXml,
+									initFolderPath, fileToOutputStart);
 							if (valFile) {
-								return "countValid"; // countValid = countValid
-								// + 1;
+								recMsg = "valid";
 							} else {
-								return "countInvalid"; // countInvalid =
-								// countInvalid + 1;
+								recMsg = "invalid";
 							}
 						} else {
 							// akzeptiert oder nicht
@@ -595,18 +990,27 @@ public class Controllervalfofile implements MessageConstants {
 						}
 					} else if (recFormat.equals("MP4")) {
 						intro = countToValidated + " " + "MP4:   " + valDatei.getAbsolutePath() + " ";
+						if (repair) {
+							/*
+							 * Reparatur eingeschaltet. Entsprechend werden alle Dateien, welche keine
+							 * Reparaturfunktion haben direkt kopiert (1).
+							 * 
+							 * [inv_notaz] valid / accepted / invalid / not accepted
+							 */
+							Util.oldnewstring(tempO, newText1o, premisOut);
+							Util.oldnewstring(tempE, newText1e, premisOut);
+						}
 						if (mp4Validation.equals("yes")) {
 							System.out.print(intro);
 							// akzeptiert und soll validiert werden
 							Controllervalfile controller1 = (Controllervalfile) context.getBean("controllervalfile");
 							boolean valFile = controller1.valFile(valDatei, logFileName, directoryOfLogfile, verbose,
-									dirOfJarPath, configMap, context, locale, logFile, hash, valDateiXml);
+									dirOfJarPath, configMap, context, locale, logFile, hash, valDateiXml,
+									initFolderPath, fileToOutputStart);
 							if (valFile) {
-								return "countValid"; // countValid = countValid
-								// + 1;
+								recMsg = "valid";
 							} else {
-								return "countInvalid"; // countInvalid =
-								// countInvalid + 1;
+								recMsg = "invalid";
 							}
 						} else {
 							// akzeptiert oder nicht
@@ -625,18 +1029,27 @@ public class Controllervalfofile implements MessageConstants {
 						}
 					} else if (recFormat.equals("XML")) {
 						intro = countToValidated + " " + "XML:   " + valDatei.getAbsolutePath() + " ";
+						if (repair) {
+							/*
+							 * Reparatur eingeschaltet. Entsprechend werden alle Dateien, welche keine
+							 * Reparaturfunktion haben direkt kopiert (1).
+							 * 
+							 * [inv_notaz] valid / accepted / invalid / not accepted
+							 */
+							Util.oldnewstring(tempO, newText1o, premisOut);
+							Util.oldnewstring(tempE, newText1e, premisOut);
+						}
 						if (xmlValidation.equals("yes")) {
 							System.out.print(intro);
 							// akzeptiert und soll validiert werden
 							Controllervalfile controller1 = (Controllervalfile) context.getBean("controllervalfile");
 							boolean valFile = controller1.valFile(valDatei, logFileName, directoryOfLogfile, verbose,
-									dirOfJarPath, configMap, context, locale, logFile, hash, valDateiXml);
+									dirOfJarPath, configMap, context, locale, logFile, hash, valDateiXml,
+									initFolderPath, fileToOutputStart);
 							if (valFile) {
-								return "countValid"; // countValid = countValid
-								// + 1;
+								recMsg = "valid";
 							} else {
-								return "countInvalid"; // countInvalid =
-								// countInvalid + 1;
+								recMsg = "invalid";
 							}
 						} else {
 							// akzeptiert oder nicht
@@ -655,6 +1068,16 @@ public class Controllervalfofile implements MessageConstants {
 						}
 					} else if (recFormat.equals("JSON")) {
 						intro = countToValidated + " " + "JSON:   " + valDatei.getAbsolutePath() + " ";
+						if (repair) {
+							/*
+							 * Reparatur eingeschaltet. Entsprechend werden alle Dateien, welche keine
+							 * Reparaturfunktion haben direkt kopiert (1).
+							 * 
+							 * [inv_notaz] valid / accepted / invalid / not accepted
+							 */
+							Util.oldnewstring(tempO, newText1o, premisOut);
+							Util.oldnewstring(tempE, newText1e, premisOut);
+						}
 						if (jsonValidation.equals("yes")) {
 							// akzeptiert und soll validiert werden
 							// Aktuell nicht moeglich, kein Validator dafuer
@@ -680,13 +1103,39 @@ public class Controllervalfofile implements MessageConstants {
 							// akzeptiert und soll validiert werden
 							Controllervalfile controller1 = (Controllervalfile) context.getBean("controllervalfile");
 							boolean valFile = controller1.valFile(valDatei, logFileName, directoryOfLogfile, verbose,
-									dirOfJarPath, configMap, context, locale, logFile, hash, valDateiXml);
+									dirOfJarPath, configMap, context, locale, logFile, hash, valDateiXml,
+									initFolderPath, fileToOutputStart);
+							/*
+							 * // Kontrollieren ob eine reparierte SIARD-Datei im Output-Verzeichnis
+							 * existiert boolean rep=false; File parentLog = new
+							 * File(directoryOfLogfile.getParent()); String pathToWorkDirOut =
+							 * parentLog.getAbsolutePath() + File.separator + "OUTPUT"; File siardFile = new
+							 * File(pathToWorkDirOut + File.separator + valDatei.getName()); File
+							 * siardFileTemp = new File(pathToWorkDirOut + File.separator +
+							 * "Temp"+File.separator +valDatei.getName()); if (siardFileTemp.exists()) { //
+							 * Bestehende Datei in OUTPUT/Temp/SIARD-Datei loeschen
+							 * Util.deleteFile(siardFileTemp); Util.deleteDir(siardFileTemp); } if
+							 * (siardFile.exists()) { // Reparatur durchgefuehrt // Verschiebe Datei in
+							 * OUTPUT/Temp/SIARD-Datei Util.copyFileMd5(siardFile, siardFileTemp);
+							 * Util.deleteFile(siardFile); Util.deleteDir(siardFile);
+							 * 
+							 * File logDateiRep = siardFileTemp;
+							 * 
+							 * // Konfiguration des Loggings, ein File Logger wird zusaetzlich erstellt
+							 * Util.switchOffConsole(); LogConfigurator logConfigurator = (LogConfigurator)
+							 * context.getBean("logconfigurator"); String logFileNameRep =
+							 * logConfigurator.configure(directoryOfLogfile.getAbsolutePath(),
+							 * logDateiRep.getName());
+							 * 
+							 * if (controller1.valFile(siardFileTemp, logFileNameRep, directoryOfLogfile,
+							 * verbose, dirOfJarPath, configMap, context, locale, logFile, hash,
+							 * valDateiXml, initFolderPath, fileToOutputStart)) { // Reparierte SIARD ist
+							 * valide rep=true; } else { // Reparierte SIARD ist invalide rep=false; } }
+							 */
 							if (valFile) {
-								return "countValid"; // countValid = countValid
-								// + 1;
+								recMsg = "valid";
 							} else {
-								return "countInvalid"; // countInvalid =
-								// countInvalid + 1;
+								recMsg = "invalid";
 							}
 						} else {
 							// akzeptiert oder nicht
@@ -705,6 +1154,16 @@ public class Controllervalfofile implements MessageConstants {
 						}
 					} else if (recFormat.equals("CSV")) {
 						intro = countToValidated + " " + "CSV:   " + valDatei.getAbsolutePath() + " ";
+						if (repair) {
+							/*
+							 * Reparatur eingeschaltet. Entsprechend werden alle Dateien, welche keine
+							 * Reparaturfunktion haben direkt kopiert (1).
+							 * 
+							 * [inv_notaz] valid / accepted / invalid / not accepted
+							 */
+							Util.oldnewstring(tempO, newText1o, premisOut);
+							Util.oldnewstring(tempE, newText1e, premisOut);
+						}
 						if (csvValidation.equals("yes")) {
 							// akzeptiert und soll validiert werden
 							// Aktuell nicht moeglich, kein Validator dafuer
@@ -725,6 +1184,16 @@ public class Controllervalfofile implements MessageConstants {
 						}
 					} else if (recFormat.equals("XLSX")) {
 						intro = countToValidated + " " + "XLSX:  " + valDatei.getAbsolutePath() + " ";
+						if (repair) {
+							/*
+							 * Reparatur eingeschaltet. Entsprechend werden alle Dateien, welche keine
+							 * Reparaturfunktion haben direkt kopiert (1).
+							 * 
+							 * [inv_notaz] valid / accepted / invalid / not accepted
+							 */
+							Util.oldnewstring(tempO, newText1o, premisOut);
+							Util.oldnewstring(tempE, newText1e, premisOut);
+						}
 						if (xlsxValidation.equals("yes")) {
 							// akzeptiert und soll validiert werden
 							// Aktuell nicht moeglich, kein Validator dafuer
@@ -745,6 +1214,16 @@ public class Controllervalfofile implements MessageConstants {
 						}
 					} else if (recFormat.equals("ODS")) {
 						intro = countToValidated + " " + "ODS:   " + valDatei.getAbsolutePath() + " ";
+						if (repair) {
+							/*
+							 * Reparatur eingeschaltet. Entsprechend werden alle Dateien, welche keine
+							 * Reparaturfunktion haben direkt kopiert (1).
+							 * 
+							 * [inv_notaz] valid / accepted / invalid / not accepted
+							 */
+							Util.oldnewstring(tempO, newText1o, premisOut);
+							Util.oldnewstring(tempE, newText1e, premisOut);
+						}
 						if (odsValidation.equals("yes")) {
 							// akzeptiert und soll validiert werden
 							// Aktuell nicht moeglich, kein Validator dafuer
@@ -765,6 +1244,16 @@ public class Controllervalfofile implements MessageConstants {
 						}
 					} else {
 						// TODO Kontrolle weitere Formate
+						if (repair) {
+							/*
+							 * Reparatur eingeschaltet. Entsprechend werden alle Dateien, welche keine
+							 * Reparaturfunktion haben direkt kopiert (1).
+							 * 
+							 * [inv_notaz] valid / accepted / invalid / not accepted
+							 */
+							Util.oldnewstring(tempO, newText1o, premisOut);
+							Util.oldnewstring(tempE, newText1e, premisOut);
+						}
 
 						intro = countToValidated + " " + recFormat + ":  " + valDatei.getAbsolutePath() + " ";
 
@@ -781,31 +1270,68 @@ public class Controllervalfofile implements MessageConstants {
 							recMsg = "notAZ";
 						}
 					}
-				}
+					if (repair) {
+						/*
+						 * Reparatur eingeschaltet.
+						 * 
+						 * Entsprechend werden alle [Platzhalter] mit dem entsprechenden Text
+						 * ausgefuellt.
+						 */
 
-				// Meldungen ausgeben bei az und notaz
-				if (recMsg.equals("AZ")) {
-					Logtxt.logtxt(logFile, "<Accepted>accepted</Accepted></Validation>");
-					/*
-					 * System.out.println( intro+" = Accepted" ); Keine Konsolenausgabe, da es
-					 * ansonsten staut
-					 */
-					recMsg = "new";
-					intro = "new";
-					return "countValid"; // countValid = countValid + 1;
-				} else if (recMsg.equals("notAZ")) {
-					if (!min) {
-						Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_AZ)
-								+ getTextResourceService().getText(locale, ERROR_XML_A_NOTAZ, " " + recFormat));
+						// recMsg = notAZ AZ invalid valid
+						// [inv_notaz] valid / accepted / invalid / not accepted
+						if (recMsg.equals("valid")) {
+							Util.oldnewstring("[inv_notaz]", "valid", premisOut);
+						} else if (recMsg.equals("invalid")) {
+							Util.oldnewstring("[inv_notaz]", "invalid", premisOut);
+						} else if (recMsg.equals("AZ")) {
+							Util.oldnewstring("[inv_notaz]", "accepted", premisOut);
+						} else {
+							Util.oldnewstring("[inv_notaz]", "not accepted", premisOut);
+						}
+
+						Util.oldnewstring("[yyyymmdd]", date, premisOut);
+						Util.oldnewstring("[HHmmss]", time, premisOut);
+						Util.oldnewstring("[MD53]", md5Str.substring(0, 3), premisOut);
+						Util.oldnewstring("[MD5]", md5Str, premisOut);
+						Util.oldnewstring("[MD5Mig]", md5StrMig, premisOut);
+						Util.oldnewstring("[size]", size, premisOut);
+						Util.oldnewstring("[sizeMig]", lengthMig, premisOut);
+						Util.oldnewstring("[formatName]", formatName, premisOut);
+						Util.oldnewstring("[formatNameMig]", formatNameMig, premisOut);
+						Util.oldnewstring("[originalName]", valDatei.getAbsolutePath(), premisOut);
+						Util.oldnewstring("[outputName]", copyValStr, premisOut);
+						Util.oldnewstring("[migName]", copyValStr, premisOut);
+						Util.oldnewstring("[DateTimeCopy]", forLastModified, premisOut);
+						Util.oldnewstring("[DateTimeMig]", forRepair, premisOut);
+						Util.oldnewstring("[DateTimeVal]", startVal, premisOut);
+						Util.oldnewstring("[Institution]", institution, premisOut);
+
+						Util.prettyPrint(premisOut, premisOut);
 					}
-					Logtxt.logtxt(logFile, "<Notaccepted>not accepted</Notaccepted></Validation>");
-					/*
-					 * System.out.println( intro + " = Not accepted" );Keine Konsolenausgabe, da es
-					 * ansonsten staut
-					 */
-					recMsg = "new";
-					intro = "new";
-					return "countNotaz"; // countNotaz = countNotaz + 1;
+					// Meldungen ausgeben
+					if (recMsg.equals("valid")) {
+						return "countValid";
+						// countValid = countValid + 1;
+					} else if (recMsg.equals("invalid")) {
+						return "countInvalid";
+						// countInvalid = countInvalid + 1;
+					} else if (recMsg.equals("AZ")) {
+						Logtxt.logtxt(logFile, "<Accepted>accepted</Accepted></Validation>");
+						recMsg = "new";
+						intro = "new";
+						return "countValid"; // countValid = countValid + 1;
+					} else if (recMsg.equals("notAZ")) {
+						if (!min) {
+							Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_AZ)
+									+ getTextResourceService().getText(locale, ERROR_XML_A_NOTAZ, " " + recFormat));
+						}
+						Logtxt.logtxt(logFile, "<Notaccepted>not accepted</Notaccepted></Validation>");
+						recMsg = "new";
+						intro = "new";
+						return "countNotaz"; // countNotaz = countNotaz + 1;
+					}
+
 				}
 
 				// Nach allen Dateien: Loeschen des Arbeitsverzeichnisses,
@@ -813,7 +1339,14 @@ public class Controllervalfofile implements MessageConstants {
 				if (tmpDir.exists()) {
 					Util.deleteDir(tmpDir);
 				}
+
 			} else {
+				// newFolderInit im startFolder anlegen
+				String newFolderInit = valDatei.getAbsolutePath().replace(initFolderPath, "");
+				File newFolderInitStart = new File(fileToOutputStart + File.separator + newFolderInit);
+				if (!newFolderInitStart.exists() && (repair)) {
+					newFolderInitStart.mkdir();
+				}
 				// Ordner. Count aktualisieren
 				return "countProgress"; // countProgress = countProgress + 1;
 			}
@@ -872,372 +1405,417 @@ public class Controllervalfofile implements MessageConstants {
 
 		String returnEgovdvSum = "Error_egovdv";
 		try {
-			Integer countSig = egovdv.execEgovdvCountSig(valDatei, workDir2, dirOfJarPath);
-			/*
-			 * Gibt mit egovdv via cmd die Anzahl Signaturen in pdf aus
-			 * 
-			 * 0 = keine Signatur
-			 * 
-			 * 999 = Fehler: Es existiert nicht alles zu egovdv
-			 * 
-			 * 998 = Fehler: Exception oder Report existiert nicht
-			 * 
-			 * 997 = Fehler: Die ersten beiden Zeilen zu egovdv fehlen
-			 * 
-			 * 996 = Fehler: Exception UNKNOWN Catch
-			 * 
-			 * @return Integer mit der Anzahl Signaturen
-			 */
-			if (countSig == 999) {
-				// 999 = Fehler: Es existiert nicht alles zu
-				// egovdv
+			// Pfad zum Programm existiert die Dateien?
+			String checkTool = egovdv.checkEgovdv(dirOfJarPath);
+			if (!checkTool.equals("OK")) {
+				// es fehlen Dateien
 				returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-						+ getTextResourceService().getText(locale, MESSAGE_XML_MISSING_FILE, "checkTool");
-			} else if (countSig == 998) {
-				// 998 = Fehler: Exception oder Report
-				// existiert nicht
-				returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-						+ getTextResourceService().getText(locale, MESSAGE_XML_SERVICEINVALID, "egovdv", "");
-			} else if (countSig == 997) {
-				// die ersten beiden Zeilen fehlen
-				returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-						+ getTextResourceService().getText(locale, ERROR_XML_SERVICEFAILED, "egovdv", "missing lines");
-			} else if (countSig == 996) {
-				returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-						+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, "egovdv: catch-Error");
-			} else if (countSig == 0) {
-				// keine Signature
-				returnEgovdvSum = "NoSignature";
+						+ getTextResourceService().getText(locale, MESSAGE_XML_MISSING_FILE, checkTool);
+
 			} else {
-				// System.out.println("Anzahl Signaturen: "+countSig);
-				String pathToWorkDirValdatei = configMap.get("PathToWorkDir");
-				String valDateiNameNormalisiert = valDatei.getName().replace("  ", " .");
-				File workDir = new File(pathToWorkDirValdatei);
-				File signatureTmp = new File(workDir.getAbsolutePath() + File.separator + "veraPDF_signatureTmp.xml");
-				File txtFile = new File(directoryOfLogfile.getAbsolutePath() + File.separator + "txt_signatureTmp"
-						+ valDatei.getName() + ".txt");
-				// txtFile muss in log geschrieben werden, da work waehrend verarbeitung
-				// geloescht wird
-				// txtFile wird am Schluss geloescht
-				if (dvvalidation.equals("yes")) {
-					// Signaturen validieren (Mixed)
-					File outMixedSig = new File(directoryOfLogfile.getAbsolutePath() + File.separator
-							+ valDateiNameNormalisiert + "_dvReport_Mixed.pdf");
-					Locale localeDe = new Locale("de");
+				// egovdv sollte vorhanden sein
 
-					String sigDoku = configMap.get("sigDoku");
-					if (sigDoku.equals("yes")) {
-						File xmlEmptyDE = new File(dirOfJarPath + File.separator + "resources" + File.separator
-								+ "_signature_log_empty_DE.xml");
-						File xmlEmptyDEfile = new File(dirOfJarPath + File.separator + "resources" + File.separator
-								+ "_signature_log_empty_DE_file.xml");
+				Integer countSig = egovdv.execEgovdvCountSig(valDatei, workDir2, dirOfJarPath);
+				String countSigStr = countSig + "";
+				/*
+				 * Gibt mit egovdv via cmd die Anzahl Signaturen in pdf aus
+				 * 
+				 * 0 = keine Signatur
+				 * 
+				 * 999 = Fehler: Es existiert nicht alles zu egovdv
+				 * 
+				 * 998 = Fehler: Exception oder Report existiert nicht
+				 * 
+				 * 997 = Fehler: Die ersten beiden Zeilen zu egovdv fehlen
+				 * 
+				 * 996 = Fehler: Exception UNKNOWN Catch
+				 * 
+				 * @return Integer mit der Anzahl Signaturen
+				 */
+				if (countSig == 998) {
+					// 998 = Fehler: Exception oder Report
+					// existiert nicht keine Zahl ausgeben
+					/*
+					 * returnEgovdvSum = getTextResourceService().getText(locale,
+					 * MESSAGE_XML_MODUL_A_PDFA) + getTextResourceService().getText(locale,
+					 * MESSAGE_XML_SERVICEINVALID, "egovdv", "");
+					 */
+					countSigStr = "";
+				} else if (countSig == 997) {
+					// die ersten beiden Zeilen fehlen
+					/*
+					 * returnEgovdvSum = getTextResourceService().getText(locale,
+					 * MESSAGE_XML_MODUL_A_PDFA) + getTextResourceService().getText(locale,
+					 * ERROR_XML_SERVICEFAILED, "egovdv", "missing lines");
+					 */
+					countSigStr = "";
+				} else if (countSig == 996) {
+					/*
+					 * returnEgovdvSum = getTextResourceService().getText(locale,
+					 * MESSAGE_XML_MODUL_A_PDFA) + getTextResourceService().getText(locale,
+					 * ERROR_XML_UNKNOWN, "egovdv: catch-Error");
+					 */
+					countSigStr = "";
+				}
 
-						try {
-							FileInputStream fis = new FileInputStream(xmlEmptyDEfile);
-							String stringFile = IOUtils.toString(fis, "UTF-8");
-							// falls xmlFile nicht existiert, kopieren wir die Leere Struktur
-							if (xmlFile.exists()) {
-								// System.out.println("neue File-Struktur einfuegen");
-								Util.oldnewstring("<file></file>", stringFile + "<file></file>", xmlFile);
-							} else {
-								// System.out.println("xml File-Struktur kopieren");
-								Util.copyFile(xmlEmptyDE, xmlFile);
-								Util.oldnewstring("<file></file>", stringFile + "<file></file>", xmlFile);
+				if (countSig == 999) {
+					// 999 = Fehler: Es existiert nicht alles zu
+					// egovdv
+					returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+							+ getTextResourceService().getText(locale, MESSAGE_XML_MISSING_FILE, "checkTool");
+				} else if (countSig == 0) {
+					// keine Signature
+					returnEgovdvSum = "NoSignature";
+				} else {
+					// System.out.println("Anzahl Signaturen: "+countSig);
+					String pathToWorkDirValdatei = configMap.get("PathToWorkDir");
+					String valDateiNameNormalisiert = valDatei.getName().replace("  ", " .");
+					File workDir = new File(pathToWorkDirValdatei);
+					File signatureTmp = new File(
+							workDir.getAbsolutePath() + File.separator + "veraPDF_signatureTmp.xml");
+					File txtFile = new File(directoryOfLogfile.getAbsolutePath() + File.separator + "txt_signatureTmp"
+							+ valDatei.getName() + ".txt");
+					// txtFile muss in log geschrieben werden, da work waehrend verarbeitung
+					// geloescht wird
+					// txtFile wird am Schluss geloescht
+					if (dvvalidation.equals("yes")) {
+						// Zeitstempel Start egovdv
+						java.util.Date nowStart = new java.util.Date();
+						// java.text.SimpleDateFormat sdfStart = new
+						// java.text.SimpleDateFormat("yyyy-mm-dd_HH:mm:ss");
+						java.text.SimpleDateFormat sdfStart = new java.text.SimpleDateFormat("HHmmss");
+						String ausgabeStart = sdfStart.format(nowStart);
+
+						// Signaturen validieren (Mixed)
+						File outMixedSig = new File(directoryOfLogfile.getAbsolutePath() + File.separator
+								+ valDateiNameNormalisiert + "_dvReport_Mixed_" + ausgabeStart + ".pdf");
+						Locale localeDe = new Locale("de");
+
+						String sigDoku = configMap.get("sigDoku");
+						if (sigDoku.equals("yes")) {
+							File xmlEmptyDE = new File(dirOfJarPath + File.separator + "resources" + File.separator
+									+ "_signature_log_empty_DE.xml");
+							File xmlEmptyDEfile = new File(dirOfJarPath + File.separator + "resources" + File.separator
+									+ "_signature_log_empty_DE_file.xml");
+
+							try {
+								FileInputStream fis = new FileInputStream(xmlEmptyDEfile);
+								String stringFile = IOUtils.toString(fis, "UTF-8");
+								// falls xmlFile nicht existiert, kopieren wir die Leere Struktur
+								if (xmlFile.exists()) {
+									// System.out.println("neue File-Struktur einfuegen");
+									// Util.oldnewstring("<file></file>", stringFile + "<file></file>", xmlFile);
+									Util.oldnewstring("</file></files>", "</file>" + stringFile + "</files>", xmlFile);
+								} else {
+									// System.out.println("xml File-Struktur kopieren");
+									Util.copyFile(xmlEmptyDE, xmlFile);
+									Util.oldnewstring("</file></files>", "</file>" + stringFile + "</files>", xmlFile);
+								}
+								fis.close();
+							} catch (FileNotFoundException e) {
+								System.out
+										.println("Fehler beim Erstellen des XML Signatur logs (FileNotFoundException: "
+												+ e + ")");
+							} catch (IOException e) {
+								System.out.println(
+										"Fehler beim Erstellen des XML Signatur logs (IOException: " + e + ")");
 							}
-							fis.close();
-						} catch (FileNotFoundException e) {
-							System.out.println(
-									"Fehler beim Erstellen des XML Signatur logs (FileNotFoundException: " + e + ")");
-						} catch (IOException e) {
-							System.out.println("Fehler beim Erstellen des XML Signatur logs (IOException: " + e + ")");
 						}
-					}
 
-					String mixedSig = egovdv.execEgovdvCheck(valDatei, outMixedSig, xmlFile, workDir2, dirOfJarPath,
-							"Mixed", localeDe);
+						String mixedSig = egovdv.execEgovdvCheck(valDatei, outMixedSig, xmlFile, workDir2, dirOfJarPath,
+								"Mixed", localeDe);
 
-					if (mixedSig.contains("noLicense")) {
-						// Warnung mit Anzahl Signaturen ausgeben
-						String execVerapdfSig = verapdf.execVerapdfSig(valDatei, workDir, signatureTmp, locale);
+						if (mixedSig.contains("noLicense")) {
+							// Warnung mit Anzahl Signaturen ausgeben
+							String execVerapdfSig = verapdf.execVerapdfSig(valDatei, workDir, signatureTmp, locale);
 
-						returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-								+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE, countSig,
-										"<Message></Message><Message>" + getTextResourceService().getText(locale,
-												ERROR_XML_A_EGOVDV_LICENSE, "</Message>" + execVerapdfSig));
-					} else if (mixedSig.contains("noConnectivity")) {
-						// Warnung mit Anzahl Signaturen ausgeben
-						// Hinweis keine Internet-Verbindung
-						String execVerapdfSig = verapdf.execVerapdfSig(valDatei, workDir, signatureTmp, locale);
+							returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+									+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE, countSigStr,
+											"<Message></Message><Message>" + getTextResourceService().getText(locale,
+													ERROR_XML_A_EGOVDV_LICENSE, "</Message>" + execVerapdfSig));
+						} else if (mixedSig.contains("noConnectivity")) {
+							// Warnung mit Anzahl Signaturen ausgeben
+							// Hinweis keine Internet-Verbindung
+							String execVerapdfSig = verapdf.execVerapdfSig(valDatei, workDir, signatureTmp, locale);
 
-						returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-								+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE, countSig,
-										"<Message></Message><Message>" + getTextResourceService().getText(locale,
-												ERROR_XML_A_EGOVDV_URL, "</Message>" + execVerapdfSig));
-					} else if (mixedSig.contains("_NoReport_")) {
-						// Warnung mit Anzahl Signaturen
-						// und Egovdv-NoReport-Fehler ausgeben
-						String execVerapdfSig = verapdf.execVerapdfSig(valDatei, workDir, signatureTmp, locale);
-						returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-								+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE_SUM1, countSig,
-										"</Message><Message></Message><Message>"
-												+ getTextResourceService().getText(locale, ERROR_XML_A_EGOVDV_NOREPORT)
-												+ "</Message>" + execVerapdfSig + "<Message></Message><Message>("
-												+ mixedSig + ") ");
-					} else {
+							returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+									+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE, countSigStr,
+											"<Message></Message><Message>" + getTextResourceService().getText(locale,
+													ERROR_XML_A_EGOVDV_URL, "</Message>" + execVerapdfSig));
+						} else if (mixedSig.contains("_NoReport_")) {
+							// Warnung mit Anzahl Signaturen
+							// und Egovdv-NoReport-Fehler ausgeben
+							String execVerapdfSig = verapdf.execVerapdfSig(valDatei, workDir, signatureTmp, locale);
+							returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+									+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE_SUM1,
+											countSigStr,
+											"</Message><Message></Message><Message>"
+													+ getTextResourceService().getText(locale,
+															ERROR_XML_A_EGOVDV_NOREPORT)
+													+ "</Message>" + execVerapdfSig + "<Message></Message><Message>("
+													+ mixedSig + ") ");
+						} else {
 
-						// Analyse des Mixed-Ergebnisses
+							// Analyse des Mixed-Ergebnisses
 
-						if (mixedSig.contains("Validity-VALID_")) {
-							// Mixed-Signatur-Validierung bestanden
-							// Mindestens ein weiterer Mandant ist valid
-							/*
-							 * TODO Testen welche es sind und behalten jener Mandanten, welche eingeschalten
-							 * und bestanden sind
-							 */
+							if (mixedSig.contains("Validity-VALID_")) {
+								// Mixed-Signatur-Validierung bestanden
+								// Mindestens ein weiterer Mandant ist valid
+								/*
+								 * TODO Testen welche es sind und behalten jener Mandanten, welche eingeschalten
+								 * und bestanden sind
+								 */
 
-							String strAnalysePdf = egovdv.analyseEgovdvPdf(valDatei, outMixedSig, configMap, txtFile,
-									xmlFile, locale);
+								String strAnalysePdf = egovdv.analyseEgovdvPdf(valDatei, outMixedSig, configMap,
+										txtFile, xmlFile, locale);
 
-							// System.out.println(strAnalysePdf);
+								// System.out.println(strAnalysePdf);
 
-							String oldMsgMixed = "<Message>Das Dokument ist gültig signiert.";
-							String oldMsg2 = "<Message>Das Dokument ist gültig signiert. ";
-							String validMandant = "Das Dokument ist gültig signiert (Mandant: ";
-							String newMsg = "<Message>Das Dokument ist gültig signiert (Mandant: Mixed).";
-							strAnalysePdf = strAnalysePdf.replace(oldMsgMixed, newMsg);
-							strAnalysePdf = strAnalysePdf.replace(oldMsg2, newMsg);
+								String oldMsgMixed = "<Message>Das Dokument ist gültig signiert.";
+								String oldMsg2 = "<Message>Das Dokument ist gültig signiert. ";
+								String validMandant = "Das Dokument ist gültig signiert (Mandant: ";
+								String newMsg = "<Message>Das Dokument ist gültig signiert (Mandant: Mixed).";
+								strAnalysePdf = strAnalysePdf.replace(oldMsgMixed, newMsg);
+								strAnalysePdf = strAnalysePdf.replace(oldMsg2, newMsg);
 
-							// Signaturen validieren (Qualified)
-							if (Qualified != "no") {
-								File outQualifiedSig = new File(directoryOfLogfile.getAbsolutePath() + File.separator
-										+ valDateiNameNormalisiert + "_dvReport_Qualified.pdf");
-								String QualifiedSig = egovdv.execEgovdvCheck(valDatei, outQualifiedSig, xmlFile,
-										workDir2, dirOfJarPath, Qualified, locale);
-								if (QualifiedSig.contains("Validity-VALID_")) {
-									// pdf behalten
-									newMsg = validMandant + Qualified + ", ";
-									strAnalysePdf = strAnalysePdf.replace(validMandant, newMsg);
-								} else {
-									// PDF-Report loeschen, da er nicht
-									// bestanden hat
-									Util.deleteFile(outQualifiedSig);
+								// Signaturen validieren (Qualified)
+								if (Qualified != "no") {
+									// Signaturen validieren (Mixed)
+									File outQualifiedSig = new File(directoryOfLogfile.getAbsolutePath()
+											+ File.separator + valDateiNameNormalisiert + "_dvReport_Qualified_"
+											+ ausgabeStart + ".pdf");
+									String QualifiedSig = egovdv.execEgovdvCheck(valDatei, outQualifiedSig, xmlFile,
+											workDir2, dirOfJarPath, Qualified, locale);
+									if (QualifiedSig.contains("Validity-VALID_")) {
+										// pdf behalten
+										newMsg = validMandant + Qualified + ", ";
+										strAnalysePdf = strAnalysePdf.replace(validMandant, newMsg);
+									} else {
+										// PDF-Report loeschen, da er nicht
+										// bestanden hat
+										Util.deleteFile(outQualifiedSig);
+									}
 								}
-							}
-							// Signaturen validieren (SwissGovPKI)
-							if (SwissGovPKI != "no") {
-								File outSwissGovPKISig = new File(directoryOfLogfile.getAbsolutePath() + File.separator
-										+ valDateiNameNormalisiert + "_dvReport_SwissGovPKI.pdf");
-								String SwissGovPKISig = egovdv.execEgovdvCheck(valDatei, outSwissGovPKISig, xmlFile,
-										workDir2, dirOfJarPath, SwissGovPKI, locale);
-								if (SwissGovPKISig.contains("Validity-VALID_")) {
-									// pdf behalten
-									newMsg = validMandant + SwissGovPKI + ", ";
-									strAnalysePdf = strAnalysePdf.replace(validMandant, newMsg);
-								} else {
-									// PDF-Report loeschen, da er nicht
-									// bestanden hat
-									Util.deleteFile(outSwissGovPKISig);
+								// Signaturen validieren (SwissGovPKI)
+								if (SwissGovPKI != "no") {
+									File outSwissGovPKISig = new File(directoryOfLogfile.getAbsolutePath()
+											+ File.separator + valDateiNameNormalisiert + "_dvReport_SwissGovPKI_"
+											+ ausgabeStart + ".pdf");
+									String SwissGovPKISig = egovdv.execEgovdvCheck(valDatei, outSwissGovPKISig, xmlFile,
+											workDir2, dirOfJarPath, SwissGovPKI, locale);
+									if (SwissGovPKISig.contains("Validity-VALID_")) {
+										// pdf behalten
+										newMsg = validMandant + SwissGovPKI + ", ";
+										strAnalysePdf = strAnalysePdf.replace(validMandant, newMsg);
+									} else {
+										// PDF-Report loeschen, da er nicht
+										// bestanden hat
+										Util.deleteFile(outSwissGovPKISig);
+									}
 								}
-							}
-							// Signaturen validieren (Upregfn)
-							if (Upregfn != "no") {
-								File outUpregfnSig = new File(directoryOfLogfile.getAbsolutePath() + File.separator
-										+ valDateiNameNormalisiert + "_dvReport_Upregfn.pdf");
-								String UpregfnSig = egovdv.execEgovdvCheck(valDatei, outUpregfnSig, xmlFile, workDir2,
-										dirOfJarPath, Upregfn, locale);
-								if (UpregfnSig.contains("Validity-VALID_")) {
-									// pdf behalten
-									newMsg = validMandant + Upregfn + ", ";
-									strAnalysePdf = strAnalysePdf.replace(validMandant, newMsg);
-								} else {
-									// PDF-Report loeschen, da er nicht
-									// bestanden hat
-									Util.deleteFile(outUpregfnSig);
+								// Signaturen validieren (Upregfn)
+								if (Upregfn != "no") {
+									File outUpregfnSig = new File(directoryOfLogfile.getAbsolutePath() + File.separator
+											+ valDateiNameNormalisiert + "_dvReport_Upregfn_" + ausgabeStart + ".pdf");
+									String UpregfnSig = egovdv.execEgovdvCheck(valDatei, outUpregfnSig, xmlFile,
+											workDir2, dirOfJarPath, Upregfn, locale);
+									if (UpregfnSig.contains("Validity-VALID_")) {
+										// pdf behalten
+										newMsg = validMandant + Upregfn + ", ";
+										strAnalysePdf = strAnalysePdf.replace(validMandant, newMsg);
+									} else {
+										// PDF-Report loeschen, da er nicht
+										// bestanden hat
+										Util.deleteFile(outUpregfnSig);
+									}
 								}
-							}
-							// Signaturen validieren (KantonZugFinanzdirektion)
-							if (KantonZugFinanzdirektion != "no") {
-								File outKantonZugFinanzdirektionSig = new File(
-										directoryOfLogfile.getAbsolutePath() + File.separator + valDateiNameNormalisiert
-												+ "_dvReport_KantonZugFinanzdirektion.pdf");
-								String KantonZugFinanzdirektionSig = egovdv.execEgovdvCheck(valDatei,
-										outKantonZugFinanzdirektionSig, xmlFile, workDir2, dirOfJarPath,
-										KantonZugFinanzdirektion, locale);
-								if (KantonZugFinanzdirektionSig.contains("Validity-VALID_")) {
-									// pdf behalten
-									newMsg = validMandant + KantonZugFinanzdirektion + ", ";
-									strAnalysePdf = strAnalysePdf.replace(validMandant, newMsg);
-								} else {
-									// PDF-Report loeschen, da er nicht
-									// bestanden hat
-									Util.deleteFile(outKantonZugFinanzdirektionSig);
+								// Signaturen validieren (KantonZugFinanzdirektion)
+								if (KantonZugFinanzdirektion != "no") {
+									File outKantonZugFinanzdirektionSig = new File(directoryOfLogfile.getAbsolutePath()
+											+ File.separator + valDateiNameNormalisiert
+											+ "_dvReport_KantonZugFinanzdirektion_" + ausgabeStart + ".pdf");
+									String KantonZugFinanzdirektionSig = egovdv.execEgovdvCheck(valDatei,
+											outKantonZugFinanzdirektionSig, xmlFile, workDir2, dirOfJarPath,
+											KantonZugFinanzdirektion, locale);
+									if (KantonZugFinanzdirektionSig.contains("Validity-VALID_")) {
+										// pdf behalten
+										newMsg = validMandant + KantonZugFinanzdirektion + ", ";
+										strAnalysePdf = strAnalysePdf.replace(validMandant, newMsg);
+									} else {
+										// PDF-Report loeschen, da er nicht
+										// bestanden hat
+										Util.deleteFile(outKantonZugFinanzdirektionSig);
+									}
 								}
-							}
-							// Signaturen validieren (Siegel)
-							File outSiegelSig = new File(directoryOfLogfile.getAbsolutePath() + File.separator
-									+ valDateiNameNormalisiert + "_dvReport_Siegel.pdf");
-							String SiegelSig = egovdv.execEgovdvCheck(valDatei, outSiegelSig, xmlFile, workDir2,
-									dirOfJarPath, Siegel, locale);
-							if (SiegelSig.contains("Validity-VALID_")) {
-								if (Siegel != "no") {
-									// pdf behalten
-									newMsg = validMandant + Siegel + ", ";
-									strAnalysePdf = strAnalysePdf.replace(validMandant, newMsg);
+								// Signaturen validieren (Siegel)
+								File outSiegelSig = new File(directoryOfLogfile.getAbsolutePath() + File.separator
+										+ valDateiNameNormalisiert + "_dvReport_Siegel_" + ausgabeStart + ".pdf");
+								String SiegelSig = egovdv.execEgovdvCheck(valDatei, outSiegelSig, xmlFile, workDir2,
+										dirOfJarPath, Siegel, locale);
+								if (SiegelSig.contains("Validity-VALID_")) {
+									if (Siegel != "no") {
+										// pdf behalten
+										newMsg = validMandant + Siegel + ", ";
+										strAnalysePdf = strAnalysePdf.replace(validMandant, newMsg);
+									} else {
+										// PDF-Report loeschen, da er nicht
+										// bestanden wurde
+										Util.deleteFile(outSiegelSig);
+									}
+									// Kontrolle der anderen Siegel
+									// Signaturen validieren (Amtsblattportal)
+									if (Amtsblattportal != "no") {
+										File outAmtsblattportalSig = new File(directoryOfLogfile.getAbsolutePath()
+												+ File.separator + valDateiNameNormalisiert
+												+ "_dvReport_Amtsblattportal_" + ausgabeStart + ".pdf");
+										String AmtsblattportalSig = egovdv.execEgovdvCheck(valDatei,
+												outAmtsblattportalSig, xmlFile, workDir2, dirOfJarPath, Amtsblattportal,
+												locale);
+										if (AmtsblattportalSig.contains("Validity-VALID_")) {
+											// pdf behalten
+											newMsg = validMandant + Amtsblattportal + ", ";
+											strAnalysePdf = strAnalysePdf.replace(validMandant, newMsg);
+										} else {
+											// PDF-Report loeschen, da er nicht
+											// bestanden hat
+											Util.deleteFile(outAmtsblattportalSig);
+										}
+									}
+									// Signaturen validieren (Edec)
+									if (Edec != "no") {
+										File outEdecSig = new File(directoryOfLogfile.getAbsolutePath() + File.separator
+												+ valDateiNameNormalisiert + "_dvReport_Edec_" + ausgabeStart + ".pdf");
+										String EdecSig = egovdv.execEgovdvCheck(valDatei, outEdecSig, xmlFile, workDir2,
+												dirOfJarPath, Edec, locale);
+										if (EdecSig.contains("Validity-VALID_")) {
+											// pdf behalten
+											newMsg = validMandant + Edec + ", ";
+											strAnalysePdf = strAnalysePdf.replace(validMandant, newMsg);
+										} else {
+											// PDF-Report loeschen, da er nicht
+											// bestanden hat
+											Util.deleteFile(outEdecSig);
+										}
+									}
+									// Signaturen validieren (ESchKG)
+									if (ESchKG != "no") {
+										File outESchKGSig = new File(directoryOfLogfile.getAbsolutePath()
+												+ File.separator + valDateiNameNormalisiert + "_dvReport_ESchKG_"
+												+ ausgabeStart + ".pdf");
+										String ESchKGSig = egovdv.execEgovdvCheck(valDatei, outESchKGSig, xmlFile,
+												workDir2, dirOfJarPath, ESchKG, locale);
+										if (ESchKGSig.contains("Validity-VALID_")) {
+											// pdf behalten
+											newMsg = validMandant + ESchKG + ", ";
+											strAnalysePdf = strAnalysePdf.replace(validMandant, newMsg);
+										} else {
+											// PDF-Report loeschen, da er nicht
+											// bestanden hat
+											Util.deleteFile(outESchKGSig);
+										}
+									}
+									// Signaturen validieren (FederalLaw)
+									if (FederalLaw != "no") {
+										File outFederalLawSig = new File(directoryOfLogfile.getAbsolutePath()
+												+ File.separator + valDateiNameNormalisiert + "_dvReport_FederalLaw_"
+												+ ausgabeStart + ".pdf");
+										String FederalLawSig = egovdv.execEgovdvCheck(valDatei, outFederalLawSig,
+												xmlFile, workDir2, dirOfJarPath, FederalLaw, locale);
+										if (FederalLawSig.contains("Validity-VALID_")) {
+											// pdf behalten
+											newMsg = validMandant + FederalLaw + ", ";
+											strAnalysePdf = strAnalysePdf.replace(validMandant, newMsg);
+										} else {
+											// PDF-Report loeschen, da er nicht
+											// bestanden hat
+											Util.deleteFile(outFederalLawSig);
+										}
+									}
+									// Signaturen validieren (Strafregisterauszug)
+									if (Strafregisterauszug != "no") {
+										File outStrafregisterauszugSig = new File(directoryOfLogfile.getAbsolutePath()
+												+ File.separator + valDateiNameNormalisiert
+												+ "_dvReport_Strafregisterauszug_" + ausgabeStart + ".pdf");
+										String StrafregisterauszugSig = egovdv.execEgovdvCheck(valDatei,
+												outStrafregisterauszugSig, xmlFile, workDir2, dirOfJarPath,
+												Strafregisterauszug, locale);
+										if (StrafregisterauszugSig.contains("Validity-VALID_")) {
+											// pdf behalten
+											newMsg = validMandant + Strafregisterauszug + ", ";
+											strAnalysePdf = strAnalysePdf.replace(validMandant, newMsg);
+										} else {
+											// PDF-Report loeschen, da er nicht
+											// bestanden hat
+											Util.deleteFile(outStrafregisterauszugSig);
+										}
+									}
 								} else {
-									// PDF-Report loeschen, da er nicht
-									// bestanden wurde
+									// PDF-Report loeschen, da er nicht bestanden
+									// wurde
 									Util.deleteFile(outSiegelSig);
 								}
-								// Kontrolle der anderen Siegel
-								// Signaturen validieren (Amtsblattportal)
-								if (Amtsblattportal != "no") {
-									File outAmtsblattportalSig = new File(
-											directoryOfLogfile.getAbsolutePath() + File.separator
-													+ valDateiNameNormalisiert + "_dvReport_Amtsblattportal.pdf");
-									String AmtsblattportalSig = egovdv.execEgovdvCheck(valDatei, outAmtsblattportalSig,
-											xmlFile, workDir2, dirOfJarPath, Amtsblattportal, locale);
-									if (AmtsblattportalSig.contains("Validity-VALID_")) {
-										// pdf behalten
-										newMsg = validMandant + Amtsblattportal + ", ";
-										strAnalysePdf = strAnalysePdf.replace(validMandant, newMsg);
-									} else {
-										// PDF-Report loeschen, da er nicht
-										// bestanden hat
-										Util.deleteFile(outAmtsblattportalSig);
-									}
-								}
-								// Signaturen validieren (Edec)
-								if (Edec != "no") {
-									File outEdecSig = new File(directoryOfLogfile.getAbsolutePath() + File.separator
-											+ valDateiNameNormalisiert + "_dvReport_Edec.pdf");
-									String EdecSig = egovdv.execEgovdvCheck(valDatei, outEdecSig, xmlFile, workDir2,
-											dirOfJarPath, Edec, locale);
-									if (EdecSig.contains("Validity-VALID_")) {
-										// pdf behalten
-										newMsg = validMandant + Edec + ", ";
-										strAnalysePdf = strAnalysePdf.replace(validMandant, newMsg);
-									} else {
-										// PDF-Report loeschen, da er nicht
-										// bestanden hat
-										Util.deleteFile(outEdecSig);
-									}
-								}
-								// Signaturen validieren (ESchKG)
-								if (ESchKG != "no") {
-									File outESchKGSig = new File(directoryOfLogfile.getAbsolutePath() + File.separator
-											+ valDateiNameNormalisiert + "_dvReport_ESchKG.pdf");
-									String ESchKGSig = egovdv.execEgovdvCheck(valDatei, outESchKGSig, xmlFile, workDir2,
-											dirOfJarPath, ESchKG, locale);
-									if (ESchKGSig.contains("Validity-VALID_")) {
-										// pdf behalten
-										newMsg = validMandant + ESchKG + ", ";
-										strAnalysePdf = strAnalysePdf.replace(validMandant, newMsg);
-									} else {
-										// PDF-Report loeschen, da er nicht
-										// bestanden hat
-										Util.deleteFile(outESchKGSig);
-									}
-								}
-								// Signaturen validieren (FederalLaw)
-								if (FederalLaw != "no") {
-									File outFederalLawSig = new File(directoryOfLogfile.getAbsolutePath()
-											+ File.separator + valDateiNameNormalisiert + "_dvReport_FederalLaw.pdf");
-									String FederalLawSig = egovdv.execEgovdvCheck(valDatei, outFederalLawSig, xmlFile,
-											workDir2, dirOfJarPath, FederalLaw, locale);
-									if (FederalLawSig.contains("Validity-VALID_")) {
-										// pdf behalten
-										newMsg = validMandant + FederalLaw + ", ";
-										strAnalysePdf = strAnalysePdf.replace(validMandant, newMsg);
-									} else {
-										// PDF-Report loeschen, da er nicht
-										// bestanden hat
-										Util.deleteFile(outFederalLawSig);
-									}
-								}
-								// Signaturen validieren (Strafregisterauszug)
-								if (Strafregisterauszug != "no") {
-									File outStrafregisterauszugSig = new File(
-											directoryOfLogfile.getAbsolutePath() + File.separator
-													+ valDateiNameNormalisiert + "_dvReport_Strafregisterauszug.pdf");
-									String StrafregisterauszugSig = egovdv.execEgovdvCheck(valDatei,
-											outStrafregisterauszugSig, xmlFile, workDir2, dirOfJarPath,
-											Strafregisterauszug, locale);
-									if (StrafregisterauszugSig.contains("Validity-VALID_")) {
-										// pdf behalten
-										newMsg = validMandant + Strafregisterauszug + ", ";
-										strAnalysePdf = strAnalysePdf.replace(validMandant, newMsg);
-									} else {
-										// PDF-Report loeschen, da er nicht
-										// bestanden hat
-										Util.deleteFile(outStrafregisterauszugSig);
-									}
-								}
+
+								// Warnung mit Anzahl Signaturen und Ergebnis ausgeben
+								String execVerapdfSig = verapdf.execVerapdfSig(valDatei, workDir, signatureTmp, locale);
+
+								returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+										+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE_SUM1,
+												countSigStr, strAnalysePdf + "</Message>" + execVerapdfSig
+														+ "<Message></Message><Message>(" + mixedSig + ") ");
+
+								/*
+								 * returnEgovdvSum = getTextResourceService().getText(locale,
+								 * MESSAGE_XML_MODUL_A_PDFA) + getTextResourceService().getText(locale,
+								 * WARNING_XML_A_SIGNATURE_SUM1, countSig, strAnalysePdf +
+								 * "</Message><Message></Message><Message>Metadaten der Signatur [verapdf]</Message><Message></Message><Message>("
+								 * + mixedSig + ") ");
+								 */
+
 							} else {
-								// PDF-Report loeschen, da er nicht bestanden
-								// wurde
-								Util.deleteFile(outSiegelSig);
+								// Mixed-Signatur-Validierung NICHT bestanden
+								// Kein Mandant ist valid
+								// Dokumentation des Ergebnisses
+
+								String strAnalysePdf = egovdv.analyseEgovdvPdf(valDatei, outMixedSig, configMap,
+										txtFile, xmlFile, locale);
+
+								// Warnung mit Anzahl Signaturen und Ergebnis ausgeben
+								String execVerapdfSig = verapdf.execVerapdfSig(valDatei, workDir, signatureTmp, locale);
+
+								returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+										+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE_SUM1,
+												countSigStr, strAnalysePdf + "</Message>" + execVerapdfSig
+														+ "<Message></Message><Message>(" + mixedSig + ") ");
 							}
-
-							// Warnung mit Anzahl Signaturen und Ergebnis ausgeben
-							String execVerapdfSig = verapdf.execVerapdfSig(valDatei, workDir, signatureTmp, locale);
-
-							returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-									+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE_SUM1, countSig,
-											strAnalysePdf + "</Message>" + execVerapdfSig
-													+ "<Message></Message><Message>(" + mixedSig + ") ");
-
-							/*
-							 * returnEgovdvSum = getTextResourceService().getText(locale,
-							 * MESSAGE_XML_MODUL_A_PDFA) + getTextResourceService().getText(locale,
-							 * WARNING_XML_A_SIGNATURE_SUM1, countSig, strAnalysePdf +
-							 * "</Message><Message></Message><Message>Metadaten der Signatur [verapdf]</Message><Message></Message><Message>("
-							 * + mixedSig + ") ");
-							 */
-
-						} else {
-							// Mixed-Signatur-Validierung NICHT bestanden
-							// Kein Mandant ist valid
-							// Dokumentation des Ergebnisses
-
-							String strAnalysePdf = egovdv.analyseEgovdvPdf(valDatei, outMixedSig, configMap, txtFile,
-									xmlFile, locale);
-
-							// Warnung mit Anzahl Signaturen und Ergebnis ausgeben
-							String execVerapdfSig = verapdf.execVerapdfSig(valDatei, workDir, signatureTmp, locale);
-
-							returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-									+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE_SUM1, countSig,
-											strAnalysePdf + "</Message>" + execVerapdfSig
-													+ "<Message></Message><Message>(" + mixedSig + ") ");
 						}
-					}
-					if (Mixed == "no") {
-						// PDF-Report loeschen, da er nicht gewuenscht wird
-						Util.deleteFile(outMixedSig);
-					} else {
-						// PDF-Report behalten da gewuenscht
-
-						// Kontrolle der Sprache, wenn nicht de dann nochmals in der gewuenschten
-						// Sprache testen
-						if (locale.toString().contains("de")) {
-							// de kein bedarf
-						} else {
+						if (Mixed == "no") {
+							// PDF-Report loeschen, da er nicht gewuenscht wird
 							Util.deleteFile(outMixedSig);
-							@SuppressWarnings("unused")
-							String mixedSigFrItEn = egovdv.execEgovdvCheck(valDatei, outMixedSig, xmlFile, workDir2,
-									dirOfJarPath, "Mixed", locale);
-						}
-					}
-				} else {
-					// Warnung mit Anzahl Signaturen ausgeben (keine Validierung)
-					String execVerapdfSig = verapdf.execVerapdfSig(valDatei, workDir, signatureTmp, locale);
+						} else {
+							// PDF-Report behalten da gewuenscht
 
-					returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-							+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE, countSig,
-									execVerapdfSig);
-				}
-				if (txtFile.exists()) {
-					txtFile.delete();
+							// Kontrolle der Sprache, wenn nicht de dann nochmals in der gewuenschten
+							// Sprache testen
+							if (locale.toString().contains("de")) {
+								// de kein bedarf
+							} else {
+								Util.deleteFile(outMixedSig);
+								@SuppressWarnings("unused")
+								String mixedSigFrItEn = egovdv.execEgovdvCheck(valDatei, outMixedSig, xmlFile, workDir2,
+										dirOfJarPath, "Mixed", locale);
+							}
+						}
+					} else {
+						// Warnung mit Anzahl Signaturen ausgeben (keine Validierung)
+						String execVerapdfSig = verapdf.execVerapdfSig(valDatei, workDir, signatureTmp, locale);
+
+						returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+								+ getTextResourceService().getText(locale, WARNING_XML_A_SIGNATURE, countSigStr,
+										execVerapdfSig);
+					}
+					if (txtFile.exists()) {
+						txtFile.delete();
+					}
 				}
 			}
 		} catch (Exception e) {

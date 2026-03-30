@@ -42,7 +42,8 @@ public class ValidationAvalidationMp3ModuleImpl extends ValidationModuleImpl imp
 
 	@Override
 	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) throws ValidationAmp3validationException {
+			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart)
+			throws ValidationAmp3validationException {
 		String onWork = configMap.get("ShowProgressOnWork");
 		if (onWork.equals("nomin")) {
 			min = true;
@@ -135,11 +136,16 @@ public class ValidationAvalidationMp3ModuleImpl extends ValidationModuleImpl imp
 								formatCodec = " container=MP3  ";
 							} else {
 								// NOK
-								Logtxt.logtxt(logFile,
-										getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_MP3)
-												+ getTextResourceService().getText(locale,
-														ERROR_XML_A_AUDIOVIDEO_FORMAT_NAZ, formatName));
-								isValid = false;
+								if (min) {
+									scannerFormat.close();
+									return false;
+								} else {
+									Logtxt.logtxt(logFile,
+											getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_MP3)
+													+ getTextResourceService().getText(locale,
+															ERROR_XML_A_AUDIOVIDEO_FORMAT_NAZ, formatName));
+									isValid = false;
+								}
 							}
 						}
 					}
@@ -168,13 +174,18 @@ public class ValidationAvalidationMp3ModuleImpl extends ValidationModuleImpl imp
 								countAudioCodec = countAudioCodec + 1;
 							} else {
 								// NOK
-								countAudioCodec = countAudioCodec + 1;
-								formatCodec = formatCodec + type + "=" + codecName + "  ";
-								Logtxt.logtxt(logFile,
-										getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_MP3)
-												+ getTextResourceService().getText(locale,
-														ERROR_XML_A_AUDIOVIDEO_CODEC_NAZ, codecName, type));
-								isValid = false;
+								if (min) {
+									scanner.close();
+									return false;
+								} else {
+									countAudioCodec = countAudioCodec + 1;
+									formatCodec = formatCodec + type + "=" + codecName + "  ";
+									Logtxt.logtxt(logFile,
+											getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_MP3)
+													+ getTextResourceService().getText(locale,
+															ERROR_XML_A_AUDIOVIDEO_CODEC_NAZ, codecName, type));
+									isValid = false;
+								}
 							}
 						}
 					}
@@ -184,19 +195,29 @@ public class ValidationAvalidationMp3ModuleImpl extends ValidationModuleImpl imp
 
 					if (countFormat == 0) {
 						// NOK
-						Logtxt.logtxt(logFile,
-								getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_MP3)
-										+ getTextResourceService().getText(locale, ERROR_XML_A_AUDIOVIDEO_CODEC_NO,
-												"format", "MP3"));
-						isValid = false;
+						if (min) {
+							scanner.close();
+							return false;
+						} else {
+							Logtxt.logtxt(logFile,
+									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_MP3)
+											+ getTextResourceService().getText(locale, ERROR_XML_A_AUDIOVIDEO_CODEC_NO,
+													"format", "MP3"));
+							isValid = false;
+						}
 					}
 					if (countAudioCodec == 0) {
 						// NOK
-						Logtxt.logtxt(logFile,
-								getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_MP3)
-										+ getTextResourceService().getText(locale,
-												ERROR_XML_A_AUDIOVIDEO_CODEC_NOAUDIO_ERROR, "MP3"));
-						isValid = false;
+						if (min) {
+							scanner.close();
+							return false;
+						} else {
+							Logtxt.logtxt(logFile,
+									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_MP3)
+											+ getTextResourceService().getText(locale,
+													ERROR_XML_A_AUDIOVIDEO_CODEC_NOAUDIO_ERROR, "MP3"));
+							isValid = false;
+						}
 					}
 
 					scanner.close();
@@ -280,11 +301,15 @@ public class ValidationAvalidationMp3ModuleImpl extends ValidationModuleImpl imp
 						scannerFormat.close();
 					}
 					if (!isValidB) {
-						// Fehlermeldungen ausgeben
-						isValid = false;
-						Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_B_MP3)
-								+ getTextResourceService().getText(locale, ERROR_XML_B_AUDIOVIDEO_ERROR, errB1 + errB2
-										+ errB3 + errB4 + errB5 + errB6 + errB7 + errB8 + errB9 + errB10));
+						if (min) {
+							return false;
+						} else {
+							// Fehlermeldungen ausgeben
+							isValid = false;
+							Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_B_MP3)
+									+ getTextResourceService().getText(locale, ERROR_XML_B_AUDIOVIDEO_ERROR, errB1
+											+ errB2 + errB3 + errB4 + errB5 + errB6 + errB7 + errB8 + errB9 + errB10));
+						}
 					}
 				}
 				// TODO: Erledigt: Analyse ffmpeg

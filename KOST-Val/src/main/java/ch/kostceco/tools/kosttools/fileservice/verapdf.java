@@ -332,7 +332,7 @@ public class verapdf {
 			// <Message> - Ort: </Message>
 			// <Message> - Grund: </Message>
 			verapdfSigMetadata = sb.toString();
-			
+
 			// Sonderzeichen normalisieren
 			verapdfSigMetadata = verapdfSigMetadata.replace("â€“", "-");
 			verapdfSigMetadata = verapdfSigMetadata.replace("â€”", "-");

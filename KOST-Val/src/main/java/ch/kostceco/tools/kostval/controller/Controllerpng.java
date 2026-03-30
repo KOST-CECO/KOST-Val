@@ -61,13 +61,13 @@ public class Controllerpng implements MessageConstants {
 	}
 
 	public boolean executeMandatory(File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile, String dirOfJarPath) {
+			Locale locale, File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart) {
 		boolean valid = true;
 
 		// Validation A
 		try {
 			if (this.getValidationAvalidationPngModule().validate(valDatei, directoryOfLogfile, configMap, locale,
-					logFile, dirOfJarPath)) {
+					logFile, dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidationAvalidationPngModule().getMessageService().print();
 			} else {
 				this.getValidationAvalidationPngModule().getMessageService().print();

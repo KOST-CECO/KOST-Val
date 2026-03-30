@@ -86,6 +86,11 @@
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 	</bean>
+	<bean id="validationD2structureModule"
+		class="ch.kostceco.tools.kostval.validation.modulesiard.impl.ValidationD2structureModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+	</bean>
 	<bean id="validationEcolumnModule"
 		class="ch.kostceco.tools.kostval.validation.modulesiard.impl.ValidationEcolumnModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
@@ -134,6 +139,11 @@
 	</bean>
 	<bean id="validationAvalidationAiModule"
 		class="ch.kostceco.tools.kostval.validation.modulepdfa.impl.ValidationAvalidationAiModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+	</bean>
+	<bean id="validationArepPdfaModule"
+		class="ch.kostceco.tools.kostval.validation.modulepdfa.impl.ValidationArepPdfaModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 	</bean>
@@ -262,6 +272,11 @@
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 	</bean>
+	<bean id="validation3zAddcheckModule"
+		class="ch.kostceco.tools.kostval.validation.modulesip3.impl.Validation3zAddcheckModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+	</bean>
 
 	<bean id="kostval" class="ch.kostceco.tools.kostval.KOSTVal">
 		<property name="textResourceService" ref="textResourceService" />
@@ -342,6 +357,8 @@
 		<property name="validationCheaderModule" ref="validationCheaderModule" />
 		<property name="validationDstructureModule"
 			ref="validationDstructureModule" />
+		<property name="validationD2structureModule"
+			ref="validationD2structureModule" />
 		<property name="validationEcolumnModule" ref="validationEcolumnModule" />
 		<property name="validationFrowModule" ref="validationFrowModule" />
 		<property name="validationGtableModule" ref="validationGtableModule" />
@@ -361,6 +378,15 @@
 			ref="validationAinitialisationModule" />
 		<property name="validationAvalidationAiModule"
 			ref="validationAvalidationAiModule" />
+	</bean>
+
+	<bean id="controllerreppdfa"
+		class="ch.kostceco.tools.kostval.controller.Controllerreppdfa">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="validationAinitialisationModule"
+			ref="validationAinitialisationModule" />
+		<property name="validationArepPdfaModule"
+			ref="validationArepPdfaModule" />
 	</bean>
 
 	<bean id="controllerjp2"
@@ -455,6 +481,8 @@
 		<property name="validation3cFormatValidationModule"
 			ref="validation3cFormatValidationModule" />
 		<property name="validation3dPeriodModule" ref="validation3dPeriodModule" />
+		<property name="validation3zAddcheckModule"
+			ref="validation3zAddcheckModule" />
 	</bean>
 
 </beans>

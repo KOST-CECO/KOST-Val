@@ -93,7 +93,7 @@ public class KOSTVal implements MessageConstants {
 	 */
 
 	// @SuppressWarnings("resource")
-	public static boolean main(String[] args, String versionKostVal) throws IOException {
+	public static boolean main(String[] args, String versionKostVal, String cliOrGui) throws IOException {
 		boolean mainBoolean = true;
 		// System.out.println( new Timestamp( System.currentTimeMillis() ) + "
 		// 107 Start " );
@@ -175,6 +175,12 @@ public class KOSTVal implements MessageConstants {
 		Util.switchOffConsole();
 		LogConfigurator logConfigurator = (LogConfigurator) context.getBean("logconfigurator");
 		String logFileName = logConfigurator.configure(directoryOfLogfile.getAbsolutePath(), logDatei.getName());
+
+		// wenn via cli gestartet wird logfile anders benannt
+		if (cliOrGui.equals("cli")) {
+			logFileName = logFileName.replace(".kost-val.log", ".cli.kost-val.log");
+		}
+
 		File logFile = new File(logFileName);
 		Util.switchOnConsole();
 		// Ab hier kann ins log geschrieben werden...
@@ -240,9 +246,85 @@ public class KOSTVal implements MessageConstants {
 
 		if (args[0].equalsIgnoreCase("--format")) {
 			Logtxt.logtxt(logFile, "<Format>");
+			/*
+			 * ermitteln ob Reparatur eingeschaltet ist
+			 * 
+			 * PDF/A: 2u <pdfarep> <pdfa2urep>
+			 * 
+			 * SIARD: lob, ext, rows <siardrep> <siardlobrep> <siardlobextrep>
+			 * <siardrowsrep>
+			 */
+			boolean repair = false;
+			boolean repairPdfa = false;
+			boolean repairSiard = false;
+			String configRepPdfa = configMap.get("pdfarep");
+			String configRepPdfa2u = configMap.get("pdfa2urep");
+			String configRepSiard = configMap.get("siardrep");
+			String configRepSiardLob = configMap.get("siardlobrep");
+			String configRepSiardExt = configMap.get("siardextrep");
+			String configRepSiardRows = configMap.get("siardrowsrep");
+			String initFolderPath = "";
+			if (configRepPdfa.contains("yes") && configRepPdfa2u.contains("yes")) {
+				repairPdfa = true;
+			}
+			if (configRepSiard.contains("yes") && (configRepSiardLob.contains("yes")
+					|| configRepSiardExt.contains("yes") || configRepSiardRows.contains("yes"))) {
+				repairSiard = true;
+			}
+			if (repairPdfa || repairSiard) {
+				repair = true;
+			}
+			/*
+			 * Aus LogFile Start herauslesen, damit bei Repair im OUTPUT einen
+			 * entsprechenden Ordner angelegt werden kann.
+			 * 
+			 * <Infos><Start>20.01.2026 13:21:14</Start>
+			 * 
+			 * yyyy.MM.dd HH:mm:ss -> yyyy.MM.dd_HH.mm.ss
+			 */
+			String startSearch = "<Infos><Start>";
+			String startSearch2 = "</Start>";
+			String startLine = Util.stringInFileLineString(startSearch, logFile);
+			String startFolder = startLine.replace(startSearch, "");
+			startFolder = startFolder.replace(startSearch2, "");
+			startFolder = startFolder.replace(" ", "_");
+			startFolder = startFolder.replace(":", ".");
+			// OUTPUT ordner anlegen
+			String pathToLogDir = configMap.get("PathToLogfile");
+			File fileToLogDir = new File(pathToLogDir);
+			File fileToOutput = new File(fileToLogDir.getParent() + File.separator + "OUTPUT");
+			if (!fileToOutput.exists() && (repair)) {
+				fileToOutput.mkdir();
+			}
+			// startFolder anlegen
+			File fileToOutputStart = new File(fileToOutput + File.separator + startFolder);
+			if (!fileToOutputStart.exists() && (repair)) {
+				fileToOutputStart.mkdir();
+			}
+			/*
+			 * Aus valDatei parent herauslesen, damit der initiale Pfad von valDatei
+			 * ausgegeben werden kann
+			 */
+			String topLevelFolder = valDatei.getName();
+			if (valDatei.isDirectory()) {
+				initFolderPath = valDatei.getAbsolutePath();
+			} else {
+				initFolderPath = valDatei.getAbsolutePath().replace(topLevelFolder, "");
+			}
+			String topLevelFolderInit = valDatei.getAbsolutePath().replace(initFolderPath, "");
+			// topFolder im startFolder anlegen falls Folder
+			File fileToOutputStartTop = new File(fileToOutputStart + File.separator + topLevelFolderInit);
+			if (valDatei.isDirectory() && !fileToOutputStartTop.exists() && (repair)) {
+				fileToOutputStartTop.mkdir();
+			}
 
 			// TODO: Formatvalidierung an einer Datei --> erledigt --> nur Marker
 			if (!valDatei.isDirectory()) {
+				if (repair) {
+					Util.copyDirFileMd5(valDatei,
+							new File(fileToOutputStart.getAbsolutePath() + File.separator + valDatei.getName()));
+				}
+
 				String xmlFileName = logFileName.replace(".kost-val.log", ".signature.log");
 				File xmlFile = new File(xmlFileName);
 				String sigDoku = configMap.get("sigDoku");
@@ -262,13 +344,14 @@ public class KOSTVal implements MessageConstants {
 				int countToValidated = 0;
 				Controllervalfofile controller1 = (Controllervalfofile) context.getBean("controllervalfofile");
 				String valFile = controller1.valFoFile(valDatei, logFileName, directoryOfLogfile, verbose, dirOfJarPath,
-						configMap, context, locale, logFile, countToValidated);
+						configMap, context, locale, logFile, countToValidated, repair, initFolderPath,
+						fileToOutputStart, repairPdfa, repairSiard, true);
 
 				Logtxt.logtxt(logFile, "</Format>");
 
 				if (sigDoku.equals("yes")) {
 					if (xmlFile.exists()) {
-					Util.oldnewstringAll("<file></file>", "", xmlFile);
+						Util.oldnewstringAll("<file></file>", "", xmlFile);
 					}
 				}
 
@@ -294,23 +377,29 @@ public class KOSTVal implements MessageConstants {
 				if (fileToWorkDirOut1Temp.exists()) {
 					Util.deleteDir(fileToWorkDirOut1Temp);
 				}
-				System.out.println(kostval.getTextResourceService().getText(locale, MESSAGE_FORMATVALIDATION_DONE, 
-						logFile.getAbsolutePath()));
-				System.out.println("");
-
+				String validInvalid = "invalid";
 				if (valFile.equals("countValid")) {
 					// Validierte Datei valide
 					mainBoolean = true;
-					return mainBoolean;
+					validInvalid = "ok";
 				} else {
 					// Fehler in Validierte Datei -->
 					// Datei nicht akzeptiert
 					mainBoolean = false;
-					return mainBoolean;
+					validInvalid = "nok";
 				}
+				System.out.println(kostval.getTextResourceService().getText(locale, MESSAGE_FORMATVALIDATION_DONE,
+						validInvalid, logFile.getAbsolutePath()));
+				System.out.println("");
+				return mainBoolean;
 
 			} else {
 				// TODO: Formatvalidierung ueber ein Ordner --> erledigt --> nur Marker
+				if (repair) {
+					String initFolderName = new File(initFolderPath).getName();
+					fileToOutputStart = new File(fileToOutputStart.getAbsolutePath() + File.separator + initFolderName);
+					Util.copyDirFileMd5(new File(initFolderPath), fileToOutputStart);
+				}
 
 				String xmlFileName = logFileName.replace(".kost-val.log", ".signature.log");
 				File xmlFile = new File(xmlFileName);

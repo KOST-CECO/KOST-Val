@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:template match="/">
-		<!-- kostval.conf.xml_v2.3.0.3 -->
+		<!-- kostval.conf.xml_v2.4.0.0 -->
 		<html>
 			<head>
 				<style>
@@ -122,6 +122,18 @@
 						<td>È ammessa la compressione JBIG2 [yes]:</td>
 						<td>
 							<xsl:value-of select="configuration/pdfa/jbig2allowed" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>Creare una copia PDF/A riparata [no]:</td>
+						<td>
+							<xsl:value-of select="configuration/pdfa/pdfarep" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>- riparare i file PDF/A non validi e i file PDF non accettati secondo lo standard PDF/A-2u [no]:</td>
+						<td>
+							<xsl:value-of select="configuration/pdfa/pdfa2urep" />
 						</td>
 					</tr>
 
@@ -347,6 +359,12 @@
 						</td>
 					</tr>
 					<tr class="captioninfom">
+						<td>- correggi le estensioni dei file LOB non esatte [no]:</td>
+						<td>
+							<xsl:value-of select="configuration/siard/siardlobextrep" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
 						<td>- compilare il numero di rows in metadata.xml [no]:</td>
 						<td>
 							<xsl:value-of select="configuration/siard/siardrowsrep" />
@@ -382,6 +400,12 @@
 						</td>
 					</tr>
 					<tr class="captioninfom">
+						<td>Versioni eCH-0160 SIP ammesse [1.0, 1.1, 1.2, 1.3]:</td>
+						<td>
+							<xsl:value-of select="configuration/sip/sipversion" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
 						<td>Numero massimo di caratteri consentiti nella lunghezza dei percorsi [179]:</td>
 						<td>
 							<xsl:value-of select="configuration/sip/allowedlengthofpaths" />
@@ -394,9 +418,25 @@
 						</td>
 					</tr>
 					<tr class="captioninfom">
-						<td>Versioni eCH-0160 SIP ammesse [1.0, 1.1, 1.2, 1.3]:</td>
+						<td>Controlli opzionali a livello di dossier:</td>
+						<td></td>
+					</tr>
+					<tr class="captioninfom">
+						<td>- Controllo relativo al periodo di protezione [no] [^(30|110)$]:</td>
 						<td>
-							<xsl:value-of select="configuration/sip/sipversion" />
+							<xsl:value-of select="configuration/sip/dossiercheck/schutzfristcheck" />&#160; <xsl:value-of select="configuration/sip/dossiercheck/schutzfristvalue" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>- Controllo relativo allo status di pubblico dominio [no] [^(Einsehbar|Nicht Einsehbar)$]:</td>
+						<td>
+							<xsl:value-of select="configuration/sip/dossiercheck/oeffentlichkeitcheck" />&#160; <xsl:value-of select="configuration/sip/dossiercheck/oeffentlichkeitvalue" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>- Controllo della protezione dei dati [no]:</td>
+						<td>
+							<xsl:value-of select="configuration/sip/dossiercheck/datenschutzcheck" />
 						</td>
 					</tr>
 					<tr class="captioninfom">
@@ -504,6 +544,12 @@
 						<td><xsl:value-of select="configuration/egovdv/Mandant/KantonZugFinanzdirektion" /></td>
 					</tr>
 					
+					<tr class="captioninfo">
+						<td>Nome dell'istituzione [Archiv]:</td>
+						<td>
+							<xsl:value-of select="configuration/Institution" />
+						</td>
+					</tr>
 					<tr class="captioninfo">
 						<td>Calcola ed emette il valore hash dei file. Vuoto significa nessun calcolo e nessun output []:</td>
 						<td>

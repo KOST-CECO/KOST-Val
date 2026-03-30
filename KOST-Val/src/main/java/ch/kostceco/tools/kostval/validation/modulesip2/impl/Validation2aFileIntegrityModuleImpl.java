@@ -49,7 +49,8 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) throws Validation2aFileIntegrityException {
+			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart)
+			throws Validation2aFileIntegrityException {
 		boolean showOnWork = false;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
@@ -238,7 +239,7 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 						if (idMap.containsKey(idStrValue)) {
 							// id nicht eindeutig Fehler ausgeben
 							Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Bb_SIP)
-									+ getTextResourceService().getText(locale, MESSAGE_XML_BA_IDNOTUNIQUE, idStr));							
+									+ getTextResourceService().getText(locale, MESSAGE_XML_BA_IDNOTUNIQUE, idStr));
 							valid = false;
 						} else {
 							// neue id erfassen
@@ -259,7 +260,7 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 						if (idMap.containsKey(idStrValue)) {
 							// id nicht eindeutig Fehler ausgeben
 							Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Bb_SIP)
-									+ getTextResourceService().getText(locale, MESSAGE_XML_BA_IDNOTUNIQUE, idStr));							
+									+ getTextResourceService().getText(locale, MESSAGE_XML_BA_IDNOTUNIQUE, idStr));
 							valid = false;
 						} else {
 							// neue id erfassen
@@ -280,7 +281,7 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 						if (idMap.containsKey(idStrValue)) {
 							// id nicht eindeutig Fehler ausgeben
 							Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Bb_SIP)
-									+ getTextResourceService().getText(locale, MESSAGE_XML_BA_IDNOTUNIQUE, idStr));							
+									+ getTextResourceService().getText(locale, MESSAGE_XML_BA_IDNOTUNIQUE, idStr));
 							valid = false;
 						} else {
 							// neue id erfassen
@@ -301,7 +302,7 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 						if (idMap.containsKey(idStrValue)) {
 							// id nicht eindeutig Fehler ausgeben
 							Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Bb_SIP)
-									+ getTextResourceService().getText(locale, MESSAGE_XML_BA_IDNOTUNIQUE, idStr));							
+									+ getTextResourceService().getText(locale, MESSAGE_XML_BA_IDNOTUNIQUE, idStr));
 							valid = false;
 						} else {
 							// neue id erfassen
@@ -322,7 +323,7 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 						if (idMap.containsKey(idStrValue)) {
 							// id nicht eindeutig Fehler ausgeben
 							Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Bb_SIP)
-									+ getTextResourceService().getText(locale, MESSAGE_XML_BA_IDNOTUNIQUE, idStr));							
+									+ getTextResourceService().getText(locale, MESSAGE_XML_BA_IDNOTUNIQUE, idStr));
 							valid = false;
 						} else {
 							// neue id erfassen
@@ -343,7 +344,7 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 						if (idMap.containsKey(idStrValue)) {
 							// id nicht eindeutig Fehler ausgeben
 							Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Bb_SIP)
-									+ getTextResourceService().getText(locale, MESSAGE_XML_BA_IDNOTUNIQUE, idStr));							
+									+ getTextResourceService().getText(locale, MESSAGE_XML_BA_IDNOTUNIQUE, idStr));
 							valid = false;
 						} else {
 							// neue id erfassen

@@ -133,7 +133,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 	@Override
 	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) throws ValidationApdfavalidationException {
+			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart)
+			throws ValidationApdfavalidationException {
 		String onWork = configMap.get("ShowProgressOnWork");
 		if (onWork.equals("nomin")) {
 			min = true;
@@ -485,7 +486,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						verapdfReportFile, locale, logFile, detailvpConfig, warning3to2);
 				isValid = isValidVerapdf;
 				fontYesNo = "no";
-			} else if (pT == 1) {
+			} else if (pT <= 1) {
 				// PDF Tools als Hauptvalidator, da Lizenz eingehalten
 				isValidPdftools = validatePDFTools(docPdf, valDatei, level, detailptConfig, locale, logFile,
 						warning3to2, directoryOfLogfile);
@@ -625,6 +626,14 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 					/** Modul K **/
 					Logtxt.logtxt(logFile, errorK);
+
+					/** Modul Z **/
+					String configRepPdfa = configMap.get("pdfarep");
+					String configRepPdfa2u = configMap.get("pdfa2urep");
+					if (configRepPdfa.contains("yes") && configRepPdfa2u.contains("yes")) {
+						// Platzhalter fuer Repair Resultat einfuegen
+						Logtxt.logtxt(logFile, "<ErrorZrepPdfa></ErrorZrepPdfa>");
+					}
 				}
 			}
 			if (verapdfReportFile.exists()) {
@@ -1193,7 +1202,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 								|| errorMsgCode0x.toLowerCase().contains(" lzw")
 								|| errorMsgCode0x.toLowerCase().contains(" structelem")
 								|| errorMsgCode0x.toLowerCase().contains(" xref")
-								|| errorMsgCode0x.toLowerCase().contains(" eol")) {
+								|| errorMsgCode0x.toLowerCase().contains(" eol")
+								|| errorMsgCode0x.toLowerCase().contains(" eof")) {
 							if (pdftoolsB.toLowerCase().contains(errorMsgCode0x.toLowerCase())) {
 								// Fehlermeldung bereits erfasst ->
 								// keine Aktion
@@ -2059,15 +2069,38 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						 * Datei Zeile fuer Zeile lesen und ermitteln ob
 						 * "<exceptionMessage>Exception: Caught unexpected runtime exception" darin
 						 * enthalten ist
+						 * 
+						 * <exceptionMessage>Exception: Couldn't parse stream caused by exception:
+						 * Document doesn't contain startxref keyword in the last 1024
+						 * bytes</exceptionMessage>
 						 */
-						if (lineModif.contains("<exceptionMessage>Exception: Caught unexpected runtime exception")) {
-							String lineModifRTE = lineModif.replace("<exceptionMessage>", "");
-							lineModifRTE = lineModifRTE.replace("</exceptionMessage>", "");
 
-							verapdfA = verapdfA + getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
-									+ "<Message>" + lineModifRTE + " [verapdf runtime exception]</Message>"
-									+ "</Error>";
-							isValidVa = false;
+						// System.out.println(lineModif);
+						if (lineModif.contains("<exceptionMessage>Exception: ")) {
+							if (lineModif
+									.contains("<exceptionMessage>Exception: Caught unexpected runtime exception")) {
+								String lineModifRTE = lineModif.replace("<exceptionMessage>", "");
+								lineModifRTE = lineModifRTE.replace("</exceptionMessage>", "");
+								verapdfA = verapdfA + getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+										+ "<Message>" + lineModifRTE + " [verapdf runtime exception]</Message>"
+										+ "</Error>";
+								isValidVa = false;
+							} else if (lineModif.contains(
+									"<exceptionMessage>Exception: Couldn't parse stream caused by exception")) {
+								String lineModifRTE = lineModif.replace("<exceptionMessage>", "");
+								lineModifRTE = lineModifRTE.replace("</exceptionMessage>", "");
+								verapdfA = verapdfA + getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+										+ "<Message>" + lineModifRTE + " [verapdf parse exception]</Message>"
+										+ "</Error>";
+								isValidVa = false;
+							} else {
+								String lineModifRTE = lineModif.replace("<exceptionMessage>", "");
+								lineModifRTE = lineModifRTE.replace("</exceptionMessage>", "");
+								verapdfA = verapdfA + getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+										+ "<Message>" + lineModifRTE + " [verapdf other exception]</Message>"
+										+ "</Error>";
+								isValidVa = false;
+							}
 						}
 						if (lineModif.contains("<batchSummary totalJobs") && lineModif.contains("encrypted=")
 								&& !lineModif.contains("encrypted=\"0\"")) {

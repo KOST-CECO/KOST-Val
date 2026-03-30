@@ -34,6 +34,7 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
 public interface ValidationAvalidationMp4Module extends ValidationModule {
 
 	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) throws ValidationAmp4validationException;
+			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart)
+			throws ValidationAmp4validationException;
 
 }

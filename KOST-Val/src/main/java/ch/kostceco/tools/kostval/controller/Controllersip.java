@@ -33,6 +33,7 @@ import ch.kostceco.tools.kostval.exception.modulesip2.Validation2dGeverFileInteg
 import ch.kostceco.tools.kostval.exception.modulesip3.Validation3aFormatRecognitionException;
 import ch.kostceco.tools.kostval.exception.modulesip3.Validation3cFormatValidationException;
 import ch.kostceco.tools.kostval.exception.modulesip3.Validation3dPeriodException;
+import ch.kostceco.tools.kostval.exception.modulesip3.Validation3zAddcheckException;
 import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
@@ -48,6 +49,7 @@ import ch.kostceco.tools.kostval.validation.modulesip2.Validation2dGeverFileInte
 import ch.kostceco.tools.kostval.validation.modulesip3.Validation3aFormatRecognitionModule;
 import ch.kostceco.tools.kostval.validation.modulesip3.Validation3cFormatValidationModule;
 import ch.kostceco.tools.kostval.validation.modulesip3.Validation3dPeriodModule;
+import ch.kostceco.tools.kostval.validation.modulesip3.Validation3zAddcheckModule;
 
 /**
  * Der Controller ruft die benoetigten Module zur Validierung des SIP-Archivs in
@@ -60,28 +62,20 @@ import ch.kostceco.tools.kostval.validation.modulesip3.Validation3dPeriodModule;
 public class Controllersip implements MessageConstants {
 
 	private Validation1bFolderStructureModule validation1bFolderStructureModule;
-
 	private Validation1cNamingModule validation1cNamingModule;
-
 	private Validation1dMetadataModule validation1dMetadataModule;
-
 	private Validation1eSipTypeModule validation1eSipTypeModule;
-
 	private Validation1fPrimaryDataModule validation1fPrimaryDataModule;
-
 	private Validation1gPackageSizeFilesModule validation1gPackageSizeFilesModule;
 
 	private Validation2aFileIntegrityModule validation2aFileIntegrityModule;
-
 	private Validation2cChecksumModule validation2cChecksumModule;
-
 	private Validation2dGeverFileIntegrityModule validation2dGeverFileIntegrityModule;
 
 	private Validation3aFormatRecognitionModule validation3aFormatRecognitionModule;
-
 	private Validation3cFormatValidationModule validation3cFormatValidationModule;
-
 	private Validation3dPeriodModule validation3dPeriodModule;
+	private Validation3zAddcheckModule validation3zAddcheckModule;
 
 	private TextResourceService textResourceService;
 
@@ -186,6 +180,14 @@ public class Controllersip implements MessageConstants {
 		this.validation3dPeriodModule = validation3dPeriodModule;
 	}
 
+	public Validation3zAddcheckModule getValidation3zAddcheckModule() {
+		return validation3zAddcheckModule;
+	}
+
+	public void setValidation3zAddcheckModule(Validation3zAddcheckModule validation3zAddcheckModule) {
+		this.validation3zAddcheckModule = validation3zAddcheckModule;
+	}
+
 	public TextResourceService getTextResourceService() {
 		return textResourceService;
 	}
@@ -195,7 +197,7 @@ public class Controllersip implements MessageConstants {
 	}
 
 	public boolean executeMandatory(File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile, String dirOfJarPath) {
+			Locale locale, File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart) {
 		boolean valid = true;
 
 		// Validation Step Aa (wurde vor der Formatvalidierung in KOSTVal.jar
@@ -204,7 +206,7 @@ public class Controllersip implements MessageConstants {
 		// Validation Step Ab
 		try {
 			if (this.getValidation1bFolderStructureModule().validate(valDatei, directoryOfLogfile, configMap, locale,
-					logFile, dirOfJarPath)) {
+					logFile, dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidation1bFolderStructureModule().getMessageService().print();
 			} else {
 				// Ein negatives Validierungsresultat in diesem Schritt fuehrt
@@ -226,7 +228,7 @@ public class Controllersip implements MessageConstants {
 		// Validation Step Ac
 		try {
 			if (this.getValidation1cNamingModule().validate(valDatei, directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath)) {
+					dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidation1cNamingModule().getMessageService().print();
 			} else {
 				this.getValidation1cNamingModule().getMessageService().print();
@@ -248,7 +250,7 @@ public class Controllersip implements MessageConstants {
 		// Validation Step Ad
 		try {
 			if (this.getValidation1dMetadataModule().validate(valDatei, directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath)) {
+					dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidation1dMetadataModule().getMessageService().print();
 			} else {
 				this.getValidation1dMetadataModule().getMessageService().print();
@@ -272,12 +274,12 @@ public class Controllersip implements MessageConstants {
 	}
 
 	public boolean executeOptional(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) {
+			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart) {
 		boolean valid = true;
 		// Validation Step Ae
 		try {
 			if (this.getValidation1eSipTypeModule().validate(valDatei, directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath)) {
+					dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidation1eSipTypeModule().getMessageService().print();
 			} else {
 				this.getValidation1eSipTypeModule().getMessageService().print();
@@ -297,7 +299,7 @@ public class Controllersip implements MessageConstants {
 		// Validation Step Af
 		try {
 			if (this.getValidation1fPrimaryDataModule().validate(valDatei, directoryOfLogfile, configMap, locale,
-					logFile, dirOfJarPath)) {
+					logFile, dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidation1fPrimaryDataModule().getMessageService().print();
 			} else {
 				this.getValidation1fPrimaryDataModule().getMessageService().print();
@@ -317,7 +319,7 @@ public class Controllersip implements MessageConstants {
 		// Validation Step Ag
 		try {
 			if (this.getValidation1gPackageSizeFilesModule().validate(valDatei, directoryOfLogfile, configMap, locale,
-					logFile, dirOfJarPath)) {
+					logFile, dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidation1gPackageSizeFilesModule().getMessageService().print();
 			} else {
 				this.getValidation1gPackageSizeFilesModule().getMessageService().print();
@@ -337,7 +339,7 @@ public class Controllersip implements MessageConstants {
 		// Validation Step Ba
 		try {
 			if (this.getValidation2aFileIntegrityModule().validate(valDatei, directoryOfLogfile, configMap, locale,
-					logFile, dirOfJarPath)) {
+					logFile, dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidation2aFileIntegrityModule().getMessageService().print();
 			} else {
 				this.getValidation2aFileIntegrityModule().getMessageService().print();
@@ -359,7 +361,7 @@ public class Controllersip implements MessageConstants {
 		// Validation Step Bc
 		try {
 			if (this.getValidation2cChecksumModule().validate(valDatei, directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath)) {
+					dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidation2cChecksumModule().getMessageService().print();
 			} else {
 				this.getValidation2cChecksumModule().getMessageService().print();
@@ -379,7 +381,7 @@ public class Controllersip implements MessageConstants {
 		// Validation Step Bd
 		try {
 			if (this.getValidation2dGeverFileIntegrityModule().validate(valDatei, directoryOfLogfile, configMap, locale,
-					logFile, dirOfJarPath)) {
+					logFile, dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidation2dGeverFileIntegrityModule().getMessageService().print();
 			} else {
 				this.getValidation2dGeverFileIntegrityModule().getMessageService().print();
@@ -399,7 +401,7 @@ public class Controllersip implements MessageConstants {
 		// Validation Step Ca & Cb
 		try {
 			if (this.getValidation3aFormatRecognitionModule().validate(valDatei, directoryOfLogfile, configMap, locale,
-					logFile, dirOfJarPath)) {
+					logFile, dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidation3aFormatRecognitionModule().getMessageService().print();
 			} else {
 				this.getValidation3aFormatRecognitionModule().getMessageService().print();
@@ -419,7 +421,7 @@ public class Controllersip implements MessageConstants {
 		// Validation Step 3c
 		try {
 			if (this.getValidation3cFormatValidationModule().validate(valDatei, directoryOfLogfile, configMap, locale,
-					logFile, dirOfJarPath)) {
+					logFile, dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidation3cFormatValidationModule().getMessageService().print();
 			} else {
 				this.getValidation3cFormatValidationModule().getMessageService().print();
@@ -439,7 +441,7 @@ public class Controllersip implements MessageConstants {
 		// Validation Step 3d
 		try {
 			if (this.getValidation3dPeriodModule().validate(valDatei, directoryOfLogfile, configMap, locale, logFile,
-					dirOfJarPath)) {
+					dirOfJarPath, initFolderPath, fileToOutputStart)) {
 				this.getValidation3dPeriodModule().getMessageService().print();
 			} else {
 				this.getValidation3dPeriodModule().getMessageService().print();
@@ -452,6 +454,26 @@ public class Controllersip implements MessageConstants {
 			return false;
 		} catch (Exception e) {
 			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Cd_SIP)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
+			return false;
+		}
+
+		// Validation Step 3z
+		try {
+			if (this.getValidation3zAddcheckModule().validate(valDatei, directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath, initFolderPath, fileToOutputStart)) {
+				this.getValidation3zAddcheckModule().getMessageService().print();
+			} else {
+				this.getValidation3zAddcheckModule().getMessageService().print();
+				valid = false;
+			}
+		} catch (Validation3zAddcheckException e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Cz_SIP)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
+			this.getValidation3zAddcheckModule().getMessageService().print();
+			return false;
+		} catch (Exception e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Cz_SIP)
 					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
 			return false;
 		}

@@ -46,7 +46,8 @@ public class ValidationAvalidationFlacModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) throws ValidationAflacvalidationException {
+			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart)
+			throws ValidationAflacvalidationException {
 		String onWork = configMap.get("ShowProgressOnWork");
 		if (onWork.equals("nomin")) {
 			min = true;
@@ -152,11 +153,16 @@ public class ValidationAvalidationFlacModuleImpl extends ValidationModuleImpl
 								formatCodec = " container=FLAC  ";
 							} else {
 								// NOK
-								Logtxt.logtxt(logFile,
-										getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_FLAC)
-												+ getTextResourceService().getText(locale,
-														ERROR_XML_A_AUDIOVIDEO_FORMAT_NAZ, formatName));
-								isValid = false;
+								if (min) {
+									scannerFormat.close();
+									return false;
+								} else {
+									Logtxt.logtxt(logFile,
+											getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_FLAC)
+													+ getTextResourceService().getText(locale,
+															ERROR_XML_A_AUDIOVIDEO_FORMAT_NAZ, formatName));
+									isValid = false;
+								}
 							}
 						}
 					}
@@ -185,13 +191,18 @@ public class ValidationAvalidationFlacModuleImpl extends ValidationModuleImpl
 								countAudioCodec = countAudioCodec + 1;
 							} else {
 								// NOK
-								countAudioCodec = countAudioCodec + 1;
-								formatCodec = formatCodec + type + "=" + codecName + "  ";
-								Logtxt.logtxt(logFile,
-										getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_FLAC)
-												+ getTextResourceService().getText(locale,
-														ERROR_XML_A_AUDIOVIDEO_CODEC_NAZ, codecName, type));
-								isValid = false;
+								if (min) {
+									scanner.close();
+									return false;
+								} else {
+									countAudioCodec = countAudioCodec + 1;
+									formatCodec = formatCodec + type + "=" + codecName + "  ";
+									Logtxt.logtxt(logFile,
+											getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_FLAC)
+													+ getTextResourceService().getText(locale,
+															ERROR_XML_A_AUDIOVIDEO_CODEC_NAZ, codecName, type));
+									isValid = false;
+								}
 							}
 						}
 					}
@@ -202,19 +213,29 @@ public class ValidationAvalidationFlacModuleImpl extends ValidationModuleImpl
 
 					if (countFormat == 0) {
 						// NOK
-						Logtxt.logtxt(logFile,
-								getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_FLAC)
-										+ getTextResourceService().getText(locale, ERROR_XML_A_AUDIOVIDEO_CODEC_NO,
-												"format", "FLAC"));
-						isValid = false;
+						if (min) {
+							scanner.close();
+							return false;
+						} else {
+							Logtxt.logtxt(logFile,
+									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_FLAC)
+											+ getTextResourceService().getText(locale, ERROR_XML_A_AUDIOVIDEO_CODEC_NO,
+													"format", "FLAC"));
+							isValid = false;
+						}
 					}
 					if (countAudioCodec == 0) {
 						// NOK
-						Logtxt.logtxt(logFile,
-								getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_FLAC)
-										+ getTextResourceService().getText(locale,
-												ERROR_XML_A_AUDIOVIDEO_CODEC_NOAUDIO_ERROR, "FLAC"));
-						isValid = false;
+						if (min) {
+							scanner.close();
+							return false;
+						} else {
+							Logtxt.logtxt(logFile,
+									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_FLAC)
+											+ getTextResourceService().getText(locale,
+													ERROR_XML_A_AUDIOVIDEO_CODEC_NOAUDIO_ERROR, "FLAC"));
+							isValid = false;
+						}
 					}
 
 					scanner.close();
@@ -298,11 +319,15 @@ public class ValidationAvalidationFlacModuleImpl extends ValidationModuleImpl
 						scannerFormat.close();
 					}
 					if (!isValidB) {
-						// Fehlermeldungen ausgeben
-						isValid = false;
-						Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_B_FLAC)
-								+ getTextResourceService().getText(locale, ERROR_XML_B_AUDIOVIDEO_ERROR, errB1 + errB2
-										+ errB3 + errB4 + errB5 + errB6 + errB7 + errB8 + errB9 + errB10));
+						if (min) {
+							return false;
+						} else {
+							// Fehlermeldungen ausgeben
+							isValid = false;
+							Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_B_FLAC)
+									+ getTextResourceService().getText(locale, ERROR_XML_B_AUDIOVIDEO_ERROR, errB1
+											+ errB2 + errB3 + errB4 + errB5 + errB6 + errB7 + errB8 + errB9 + errB10));
+						}
 					}
 				}
 				// TODO: Erledigt: Analyse ffmpeg
@@ -524,11 +549,15 @@ public class ValidationAvalidationFlacModuleImpl extends ValidationModuleImpl
 					}
 
 					if (logError1 != "") {
-						// Fehler ausgeben
-						Logtxt.logtxt(logFile,
-								getTextResourceService().getText(locale, MESSAGE_XML_MODUL_C_FLAC)
-										+ getTextResourceService().getText(locale, ERROR_XML_C_FLAC_ERROR,
-												logError1 + logError2 + logError3 + logError4 + logError5));
+						if (min) {
+							return false;
+						} else {
+							// Fehler ausgeben
+							Logtxt.logtxt(logFile,
+									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_C_FLAC)
+											+ getTextResourceService().getText(locale, ERROR_XML_C_FLAC_ERROR,
+													logError1 + logError2 + logError3 + logError4 + logError5));
+						}
 					}
 					if (!isValidC) {
 						isValid = false;

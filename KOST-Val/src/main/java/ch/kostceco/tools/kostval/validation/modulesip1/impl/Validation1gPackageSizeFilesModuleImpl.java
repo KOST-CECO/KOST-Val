@@ -45,7 +45,8 @@ public class Validation1gPackageSizeFilesModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) throws Validation1gPackageSizeFilesException {
+			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart)
+			throws Validation1gPackageSizeFilesException {
 		boolean isValid = true;
 		// Informationen zur Darstellung "onWork" holen
 		String onWorkConfig = configMap.get("ShowProgressOnWork");

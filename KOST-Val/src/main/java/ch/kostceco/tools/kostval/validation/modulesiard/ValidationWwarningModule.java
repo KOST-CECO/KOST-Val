@@ -42,7 +42,8 @@ import ch.kostceco.tools.kostval.validation.bean.ValidationContext;
 public interface ValidationWwarningModule extends ValidationModule {
 
 	public boolean validate(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
-			File logFile, String dirOfJarPath) throws ValidationWwarningException;
+			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart)
+			throws ValidationWwarningException;
 
 	public boolean prepareValidation(ValidationContext validationContext) throws IOException, JDOMException, Exception;
 
