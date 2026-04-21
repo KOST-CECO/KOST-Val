@@ -223,6 +223,16 @@ public class Util {
 		}
 	}
 
+	/** erste Zeile aus File herauslesen */
+	public static String getStringFirstLineFromFile(File file) {
+		try (BufferedReader reader = new BufferedReader(new FileReader(file.getAbsolutePath()))) {
+			String firstLine = reader.readLine();
+			return firstLine;
+		} catch (IOException e) {
+			return "";
+		}
+	}
+
 	/**
 	 * Kontrolliert ob String existiert in file
 	 * 

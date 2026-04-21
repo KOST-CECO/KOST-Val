@@ -69,6 +69,8 @@ public class ConfigController {
 	private String dirOfJarPath, inputString, workString, config, stringPuid,
 			minOne = "Mindestens eine Variante muss erlaubt sein!";
 
+	private String versionKostVal = "   (v2.4.0.1)";
+
 	private Locale locale = Locale.getDefault();
 
 	@FXML
@@ -130,8 +132,6 @@ public class ConfigController {
 	private WebView wbv;
 
 	private WebEngine engine;
-
-	private String versionKostVal = "   (v2.4.0.0)";
 
 	@FXML
 	void initialize() {

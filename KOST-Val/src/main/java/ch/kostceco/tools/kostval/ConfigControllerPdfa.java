@@ -87,7 +87,7 @@ public class ConfigControllerPdfa {
 						"ich übernehme die Verantwortung für die Qualitätssicherung, Dokumentation und deren Weiterverwendung");
 				checkPdfa2uRep.setText("invalide PDF/A- sowie nicht akzeptierte PDF-Dateien nach PDF/A-2u reparieren");
 				labelDms.setText(
-						"Reparatur bedingt eine Installation des 'dmstools PDF/A Converter' (v1.7.0.1) sowie deren Lizenzierung.");
+						"Reparatur bedingt die eigenständige Installation des 'dmstools PDF/A Converter' (v1.7.0.1) sowie die Aktivierung eurer Lizenz.");
 				labelDms2.setText("Die integrierte KOST-Lizenz steht nur unseren Trägern und Supporter zur Verfügung.");
 				buttonConfigApply.setText("anwenden");
 				minOne = "Mindestens eine Variante muss erlaubt sein!";
@@ -101,7 +101,7 @@ public class ConfigControllerPdfa {
 				checkPdfa2uRep.setText(
 						"réparer les fichiers PDF/A invalides et les fichiers PDF non acceptés selon PDF/A-2u");
 				labelDms.setText(
-						"La réparation nécessite l'installation du 'dmstools PDF/A Converter' (v1.7.0.1) ainsi que l'obtention d'une licence.");
+						"Cette réparation nécessite l'installation autonome du logiciel 'dmstools PDF/A Converter' (v1.7.0.1) ainsi que l'activation de votre licence.");
 				labelDms2.setText("La licence KOST intégrée est réservée à nos membres et supporters.");
 				buttonConfigApply.setText("appliquer");
 				minOne = "Au moins une variante doit etre autorisee !";
@@ -115,8 +115,8 @@ public class ConfigControllerPdfa {
 				checkPdfa2uRep.setText(
 						"riparare i file PDF/A non validi e i file PDF non accettati secondo lo standard PDF/A-2u");
 				labelDms.setText(
-						"La riparazione richiede l'installazione di 'dmstools PDF/A Converter' (v1.7.0.1) e la relativa licenza.");
-				labelDms.setText("La licenza KOST integrata è disponibile solo per i nostri membri e supportatori.");
+						"La riparazione richiede l'installazione autonoma di 'dmstools PDF/A Converter' (v1.7.0.1) e l'attivazione della vostra licenza.");
+				labelDms2.setText("La licenza KOST integrata è disponibile solo per i nostri membri e supportatori.");
 				buttonConfigApply.setText("Applica");
 				minOne = "Almeno una variante deve essere consentita!";
 			} else {
@@ -127,8 +127,8 @@ public class ConfigControllerPdfa {
 				checkPdfaRep.setText("I take responsibility for quality assurance, documentation and its further use");
 				checkPdfa2uRep.setText("repair invalid PDF/A and unacceptable PDF files to PDF/A-2u");
 				labelDms.setText(
-						"Repair requires installation of 'dmstools PDF/A Converter' (v1.7.0.1) and a license.");
-				labelDms.setText("The integrated KOST license is only available to our members and supporters.");
+						"This repair requires you to install the 'dmstools PDF/A Converter' (v1.7.0.1) on your own and activate your license.");
+				labelDms2.setText("The integrated KOST license is only available to our members and supporters.");
 				buttonConfigApply.setText("apply");
 				minOne = "At least one variant must be allowed!";
 			}

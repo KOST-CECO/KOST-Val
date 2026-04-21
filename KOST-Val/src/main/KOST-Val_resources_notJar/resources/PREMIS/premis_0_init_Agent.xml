@@ -23,6 +23,6 @@
 </agentIdentifier>
 <agentName>KOST-Val</agentName>
 <agentType valueURI="http://id.loc.gov/vocabulary/preservation/agentType/sof">software</agentType>
-<agentVersion>2.4.0.0</agentVersion>
+<agentVersion>2.4.0.1</agentVersion>
 </agent>
 </premis>

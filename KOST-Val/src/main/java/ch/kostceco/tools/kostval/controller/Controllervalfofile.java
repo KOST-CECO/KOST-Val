@@ -303,6 +303,7 @@ public class Controllervalfofile implements MessageConstants {
 										+ valDateiXml);
 						Logtxt.logtxt(logFile, "<Accepted>accepted</Accepted></Validation>");
 						recMsg = "AZ";
+						return "countValid";
 					} else {
 						// NICHT akzeptiert -> invalid
 						Logtxt.logtxt(logFile, "<Validation>" + hash
@@ -313,6 +314,7 @@ public class Controllervalfofile implements MessageConstants {
 						}
 						Logtxt.logtxt(logFile, "<Notaccepted>not accepted</Notaccepted></Validation>");
 						recMsg = "notAZ";
+						return "countNotaz";
 					}
 				} else if (recFormat.contains("_ext")) {
 					// TODO bekanntes Format mit falscher Dateiendung =>
@@ -394,6 +396,7 @@ public class Controllervalfofile implements MessageConstants {
 					Logtxt.logtxt(logFile, "<Notaccepted>not accepted</Notaccepted></Validation>");
 					// System.out.println( " = Not accepted" );
 					recMsg = "notAZ";
+					return "countNotaz";
 				} else {
 					// Format einwandfrei erkannt
 					formatName = recFormat;

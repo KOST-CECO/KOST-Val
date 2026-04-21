@@ -46,7 +46,7 @@ public class Magic {
 				String sb2str3 = "";
 				String sb2str4 = "";
 				String sb1234 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 10) {
 					// System.out.printf("%02X ", i);
 					sb.append(String.format("%02X ", i));
 					if (sb2str1 == "") {
@@ -109,7 +109,7 @@ public class Magic {
 				String sb2str3 = "";
 				String sb2str4 = "";
 				String sb1234 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 10) {
 					sb.append(String.format("%02X ", i));
 					if (sb2str1 == "") {
 						sb2str1 = sb + "";
@@ -175,7 +175,7 @@ public class Magic {
 				String sb2str3 = "";
 				String sb2str4 = "";
 				String sb1234 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 10) {
 					// System.out.printf("%02X ", i);
 					sb.append(String.format("%02X ", i));
 					if (sb2str1 == "") {
@@ -237,7 +237,7 @@ public class Magic {
 				String sb2str3 = "";
 				String sb2str4 = "";
 				String sb1234 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 10) {
 					// System.out.printf("%02X ", i);
 					sb.append(String.format("%02X ", i));
 					if (sb2str1 == "") {
@@ -300,7 +300,7 @@ public class Magic {
 				String sb2str4 = "";
 				String sb2str5 = "";
 				String sb12345 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 10) {
 					sb.append(String.format("%02X ", i));
 					if (sb2str1 == "") {
 						sb2str1 = sb + "";
@@ -370,7 +370,7 @@ public class Magic {
 				String sb12345o1 = "";
 				String sb12345o2 = "";
 				String sb12345o3 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 20) {
 					// Durchgang mit Offset 3
 					sb.append(String.format("%02X ", i));
 					if (sb2str1ig == "") {
@@ -399,7 +399,7 @@ public class Magic {
 						cnt = 0;
 					}
 				}
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 20) {
 					// Durchgang mit Offset 2
 					sb.append(String.format("%02X ", i));
 					if (sb2str1ig == "") {
@@ -426,7 +426,7 @@ public class Magic {
 						cnt = 0;
 					}
 				}
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 20) {
 					// Durchgang mit Offset 1
 					sb.append(String.format("%02X ", i));
 					if (sb2str1ig == "") {
@@ -493,7 +493,7 @@ public class Magic {
 				String sb2str2 = "";
 				String sb2str3 = "";
 				String sb123 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 10) {
 					sb.append(String.format("%02X ", i));
 					if (sb2str1 == "") {
 						sb2str1 = sb + "";
@@ -558,7 +558,7 @@ public class Magic {
 				String sb2str9 = "";
 				String sb2str10 = "";
 				String sb1234567890 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 20) {
 					// System.out.printf("%02X ", i);
 					sb.append(String.format("%02X ", i));
 					if (sb2str1 == "") {
@@ -643,7 +643,7 @@ public class Magic {
 				String sb2str11 = "";
 				String sb2str12 = "";
 				String sb123456789012 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 20) {
 					// System.out.printf("%02X ", i);
 					sb.append(String.format("%02X ", i));
 					if (sb2str1 == "") {
@@ -723,7 +723,7 @@ public class Magic {
 				String sb2str5 = "";
 				String sb2str6 = "";
 				String sb123456 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 10) {
 					sb.append(String.format("%02X ", i));
 					if (sb2str1 == "") {
 						sb2str1 = sb + "";
@@ -787,7 +787,7 @@ public class Magic {
 				String sb2str3 = "";
 				String sb2str4 = "";
 				String sb1234 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 10) {
 					sb.append(String.format("%02X ", i));
 					if (sb2str1 == "") {
 						sb2str1 = sb + "";
@@ -847,7 +847,7 @@ public class Magic {
 				String sb2str3 = "";
 				String sb2str4 = "";
 				String sb1234 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 10) {
 					sb.append(String.format("%02X ", i));
 					if (sb2str1 == "") {
 						sb2str1 = sb + "";
@@ -915,7 +915,7 @@ public class Magic {
 				String sb2str6 = "";
 				String sb2str7 = "";
 				String sb1234567 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 14) {
 					sb.append(String.format("%02X ", i));
 					if (sb2str1ig == "") {
 						sb2str1ig = sb + "";
@@ -996,7 +996,7 @@ public class Magic {
 				String sb2str3 = "";
 				String sb2str4 = "";
 				String sb1234 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 14) {
 					sb.append(String.format("%02X ", i));
 					if (sb2str1ig == "") {
 						sb2str1ig = sb + "";
@@ -1067,7 +1067,7 @@ public class Magic {
 				String sb2str3 = "";
 				String sb2str4 = "";
 				String sb1234 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 10) {
 					sb.append(String.format("%02X ", i));
 					if (sb2str1 == "") {
 						sb2str1 = sb + "";
@@ -1131,7 +1131,7 @@ public class Magic {
 				String sb2str3 = "";
 				String sb2str4 = "";
 				String sb1234 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 14) {
 					sb.append(String.format("%02X ", i));
 					if (sb2str1ig == "") {
 						sb2str1ig = sb + "";
@@ -1205,7 +1205,7 @@ public class Magic {
 				String sb2str3 = "";
 				String sb2str4 = "";
 				String sb1234 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 14) {
 					sb.append(String.format("%02X ", i));
 					if (sb2str1ig == "") {
 						sb2str1ig = sb + "";
@@ -1276,7 +1276,7 @@ public class Magic {
 				String sb2str3 = "";
 				String sb2str4 = "";
 				String sb1234 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 10) {
 					sb.append(String.format("%02X ", i));
 					if (sb2str1 == "") {
 						sb2str1 = sb + "";
@@ -1338,7 +1338,7 @@ public class Magic {
 				String sb2str5 = "";
 				String sb2str6 = "";
 				String sb123456 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 10) {
 					sb.append(String.format("%02X ", i));
 					if (sb2str1 == "") {
 						sb2str1 = sb + "";
@@ -1408,7 +1408,7 @@ public class Magic {
 				String sb2str3 = "";
 				String sb12 = "";
 				String sb123 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 10) {
 					sb.append(String.format("%02X ", i));
 					if (sb2str1 == "") {
 						sb2str1 = sb + "";
@@ -1480,7 +1480,7 @@ public class Magic {
 				String sb2str3 = "";
 				String sb12 = "";
 				String sb123 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 10) {
 					sb.append(String.format("%02X ", i));
 					if (sb2str1 == "") {
 						sb2str1 = sb + "";
@@ -1546,7 +1546,7 @@ public class Magic {
 				String sb2str3 = "";
 				String sb2str4 = "";
 				String sb1234 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 10) {
 					// System.out.printf("%02X ", i);
 					sb.append(String.format("%02X ", i));
 					if (sb2str1 == "") {
@@ -1608,7 +1608,7 @@ public class Magic {
 				String sb2str3 = "";
 				String sb2str4 = "";
 				String sb1234 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 10) {
 					// System.out.printf("%02X ", i);
 					sb.append(String.format("%02X ", i));
 					if (sb2str1 == "") {
@@ -1672,7 +1672,7 @@ public class Magic {
 				String sb2str5 = "";
 				String sb2str6 = "";
 				String sb123456 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 10) {
 					// System.out.printf("%02X ", i);
 					sb.append(String.format("%02X ", i));
 					if (sb2str1 == "") {
@@ -1738,7 +1738,7 @@ public class Magic {
 				String sb2str3 = "";
 				String sb2str4 = "";
 				String sb1234 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 10) {
 					// System.out.printf("%02X ", i);
 					sb.append(String.format("%02X ", i));
 					if (sb2str1 == "") {
@@ -1801,7 +1801,7 @@ public class Magic {
 				String sb2str3 = "";
 				String sb2str4 = "";
 				String sb1234 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 10) {
 					// System.out.printf("%02X ", i);
 					sb.append(String.format("%02X ", i));
 					if (sb2str1 == "") {
@@ -1878,7 +1878,7 @@ public class Magic {
 				String sb12345 = "";
 				String sb12345678 = "";
 				String sb12345678910 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 20) {
 					sb.append(String.format("%02X ", i));
 					if (sb2str1 == "") {
 						sb2str1 = sb + "";
@@ -1960,7 +1960,7 @@ public class Magic {
 				String sb2str1 = "";
 				String sb2str2 = "";
 				String sb12 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 10) {
 					sb.append(String.format("%02X ", i));
 					if (sb2str1 == "") {
 						sb2str1 = sb + "";
@@ -2023,7 +2023,7 @@ public class Magic {
 				String sb2str8 = "";
 				String sb2str9 = "";
 				String sb123456789 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 20) {
 					sb.append(String.format("%02X ", i));
 					if (sb2str1 == "") {
 						sb2str1 = sb + "";
@@ -2096,7 +2096,7 @@ public class Magic {
 				String sb2str3 = "";
 				String sb2str4 = "";
 				String sb1234 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 150) {
 					sb.append(String.format("%02X ", i));
 					if (counterIgn < 128) {
 						counterIgn = counterIgn + 1;
@@ -2166,7 +2166,7 @@ public class Magic {
 				String sb2str7 = "";
 				String sb2str8 = "";
 				String sb12345678 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 20) {
 					sb.append(String.format("%02X ", i));
 					if (sb2str1 == "") {
 						sb2str1 = sb + "";
@@ -2235,7 +2235,7 @@ public class Magic {
 				String sb2str4 = "";
 				String sb2str5 = "";
 				String sb12345 = "";
-				while ((i = fis.read()) != -1) {
+				while ((i = fis.read()) != 10) {
 					sb.append(String.format("%02X ", i));
 					if (sb2str1 == "") {
 						sb2str1 = sb + "";

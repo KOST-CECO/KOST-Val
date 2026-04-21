@@ -53,33 +53,11 @@ public class Recognition {
 		try {
 			// TODO A) Sortieren anhand des 1. Char der Datei
 
-			FileInputStream fis = new FileInputStream(checkFile);
-			// A variable to hold a single byte of the file data
-			int i = 0;
-
-			// A counter to print a new line every 16 bytes read.
-			int cnt = 0;
-
-			// Read till the end of the file and print the byte in
-			// hexadecimal valueS.
-			StringBuilder sb = new StringBuilder();
 			String sb2str1 = "";
-			while ((i = fis.read()) != -1) {
-				// System.out.printf("%02X ", i);
-				sb.append(String.format("%02X ", i));
-				if (sb2str1 == "") {
-					sb2str1 = sb + "";
-					break;
-				}
-				cnt++;
-				if (cnt == 16) {
-					cnt = 0;
-				}
-			}
-			fis.close();
-
-			// System.out.println("Das erste Zeichen der Datei (Hex) =
-			// "+sb2str1);
+			FileInputStream fis1 = new FileInputStream(checkFile);
+			int i1 = fis1.read();
+			sb2str1 = (i1 != -1) ? String.format("%02X", i1) : "";
+			fis1.close();
 
 			// das IST character einordnen mit den bekannten cXY
 			if (sb2str1.contains("00")) {
@@ -508,6 +486,14 @@ public class Recognition {
 							// im File haben
 							return "XLSX";
 						}
+					} else if (checkFileExt.equals(".xlsm")) {
+						if (Util.stringInFile("workbook.xml.rels", checkFile)) {
+							// C) fuer XLSM auf SiF weiterkontrollieren
+							// Eine XLSM-Datei muss den String
+							// "workbook.xml.rels"
+							// im File haben
+							return "XLSM";
+						}
 					} else if (checkFileExt.equals(".docx")) {
 						if (Util.stringInFile("document.xml.rels", checkFile)) {
 							// C) fuer DOCX auf SiF weiterkontrollieren
@@ -516,6 +502,14 @@ public class Recognition {
 							// im File haben
 							return "DOCX";
 						}
+					} else if (checkFileExt.equals(".docm")) {
+						if (Util.stringInFile("document.xml.rels", checkFile)) {
+							// C) fuer DOCM auf SiF weiterkontrollieren
+							// Eine DOCM-Datei muss den String
+							// "document.xml.rels"
+							// im File haben
+							return "DOCM";
+						}
 					} else if (checkFileExt.equals(".pptx")) {
 						if (Util.stringInFile("slide1.xml.rels", checkFile)) {
 							// C) fuer PPTX auf SiF weiterkontrollieren
@@ -523,6 +517,14 @@ public class Recognition {
 							// "slide1.xml.rels"
 							// im File haben
 							return "PPTX";
+						}
+					} else if (checkFileExt.equals(".pptm")) {
+						if (Util.stringInFile("slide1.xml.rels", checkFile)) {
+							// C) fuer PPTM auf SiF weiterkontrollieren
+							// Eine PPTM-Datei muss den String
+							// "slide1.xml.rels"
+							// im File haben
+							return "PPTM";
 						}
 					} else if (checkFileExt.equals(".ods")) {
 						if (Util.stringInFile("opendocument.spreadsheet", checkFile)) {
@@ -764,116 +766,128 @@ public class Recognition {
 			}
 
 			// TODO: Kein passendes BOF; ggf. Format mit Offset im BOF
-			if (Magic.magicAlac(checkFile)) {
-				// Eine ALAC-Datei muss mit {4}ftypM4A [{4}667479704D3441]
-				// beginnen !!! Offset 4 !!!
-				if (Util.stringInFile("alac", checkFile)) {
-					// C) fuer ALAC auf SiF weiterkontrollieren
-					// Eine ALAC-Datei muss den String "alac" im
-					// File haben
-					// D) passende Extension kontrollieren
-					// Eine ALAC-Datei muss die extension .mp4, m4a haben
-					if (checkFileExt.equals(".mp4") || checkFileExt.equals(".m4a")) {
-						// eindeutig als ALAC-Datei erkannt
-						return "ALAC";
-					} else {
-						// als ALAC-Datei erkannt aber falsche Extension
-						return "ALAC_ext";
+			if (Util.getStringFirstLineFromFile(checkFile).contains("ftypM4A")) {
+				if (Magic.magicAlac(checkFile)) {
+					// Eine ALAC-Datei muss mit {4}ftypM4A [{4}667479704D3441]
+					// beginnen !!! Offset 4 !!!
+					if (Util.stringInFile("alac", checkFile)) {
+						// C) fuer ALAC auf SiF weiterkontrollieren
+						// Eine ALAC-Datei muss den String "alac" im
+						// File haben
+						// D) passende Extension kontrollieren
+						// Eine ALAC-Datei muss die extension .mp4, m4a haben
+						if (checkFileExt.equals(".mp4") || checkFileExt.equals(".m4a")) {
+							// eindeutig als ALAC-Datei erkannt
+							return "ALAC";
+						} else {
+							// als ALAC-Datei erkannt aber falsche Extension
+							return "ALAC_ext";
+						}
 					}
 				}
-			} else if (Magic.magicMp4(checkFile)) {
-				// Eine MP4-Datei muss mit {4}ftyp [{4}66747970]
-				// beginnen !!! Offset 4 !!!
-				if (Util.string15InFile("mp42", "mp41", "isom", "iso2", "iso2", checkFile)) {
-					// C) fuer MP4 auf SiF weiterkontrollieren
-					// Eine MP4-Datei muss den String "mp42 mp41 isom iso2" im
-					// File haben
-					// D) passende Extension kontrollieren
-					// Eine MP4-Datei muss die extension .mp4, .mpg4, .m4v,
-					// .m4a, .f4v, .f4a haben
-					if (checkFileExt.equals(".mp4") || checkFileExt.equals(".mpg4") || checkFileExt.equals(".m4v")
-							|| checkFileExt.equals(".m4a") || checkFileExt.equals(".f4v")
-							|| checkFileExt.equals(".f4a")) {
-						// eindeutig als MP4-Datei erkannt
-						return "MP4";
-					} else {
-						// als MP4-Datei erkannt aber falsche Extension
-						return "MP4_ext";
+			} else if (Util.getStringFirstLineFromFile(checkFile).contains("ftyp")) {
+				if (Magic.magicMp4(checkFile)) {
+					// Eine MP4-Datei muss mit {4}ftyp [{4}66747970]
+					// beginnen !!! Offset 4 !!!
+					if (Util.string15InFile("mp42", "mp41", "isom", "iso2", "iso2", checkFile)) {
+						// C) fuer MP4 auf SiF weiterkontrollieren
+						// Eine MP4-Datei muss den String "mp42 mp41 isom iso2" im
+						// File haben
+						// D) passende Extension kontrollieren
+						// Eine MP4-Datei muss die extension .mp4, .mpg4, .m4v,
+						// .m4a, .f4v, .f4a haben
+						if (checkFileExt.equals(".mp4") || checkFileExt.equals(".mpg4") || checkFileExt.equals(".m4v")
+								|| checkFileExt.equals(".m4a") || checkFileExt.equals(".f4v")
+								|| checkFileExt.equals(".f4a")) {
+							// eindeutig als MP4-Datei erkannt
+							return "MP4";
+						} else {
+							// als MP4-Datei erkannt aber falsche Extension
+							return "MP4_ext";
+						}
 					}
 				}
-			} else if (Magic.magicProres(checkFile)) {
-				// Eine PRORES-Datei muss mit {4}free [{4}66726565]
-				// beginnen !!! Offset 4 !!!
-				if (Util.stringInFile("icpf", checkFile)) {
-					// C) fuer PRORES auf SiF weiterkontrollieren
-					// Eine PRORES-Datei muss den String "icpf" im
-					// File haben
-					// D) passende Extension kontrollieren
-					// Eine PRORES-Datei muss die extension .mov haben
-					if (checkFileExt.equals(".mov")) {
-						// eindeutig als PRORES-Datei erkannt
-						return "PRORES";
-					} else {
-						// als PRORES-Datei erkannt aber falsche Extension
-						return "PRORES_ext";
+			} else if (Util.getStringFirstLineFromFile(checkFile).contains("free")) {
+				if (Magic.magicProres(checkFile)) {
+					// Eine PRORES-Datei muss mit {4}free [{4}66726565]
+					// beginnen !!! Offset 4 !!!
+					if (Util.stringInFile("icpf", checkFile)) {
+						// C) fuer PRORES auf SiF weiterkontrollieren
+						// Eine PRORES-Datei muss den String "icpf" im
+						// File haben
+						// D) passende Extension kontrollieren
+						// Eine PRORES-Datei muss die extension .mov haben
+						if (checkFileExt.equals(".mov")) {
+							// eindeutig als PRORES-Datei erkannt
+							return "PRORES";
+						} else {
+							// als PRORES-Datei erkannt aber falsche Extension
+							return "PRORES_ext";
+						}
 					}
 				}
-			} else if (Magic.magicQtm(checkFile)) {
-				// Eine QTM-Datei muss mit {4}moov [{4}6D6F6F76]
-				// beginnen !!! Offset 4 !!!
-				if (Util.string15InFile("mvhd", "cmov", "rmra", "rmra", "rmra", checkFile)) {
-					// C) fuer QTM auf SiF weiterkontrollieren
-					// Eine QTM-Datei muss den String "mvhd cmov rmra" im
-					// File haben
-					// D) passende Extension kontrollieren
-					// Eine QTM-Datei muss die extension .mov haben
-					if (checkFileExt.equals(".mov")) {
-						// eindeutig als QTM-Datei erkannt
-						return "QTM";
-					} else {
-						// als QTM-Datei erkannt aber falsche Extension
-						return "QTM_ext";
+			} else if (Util.getStringFirstLineFromFile(checkFile).contains("moov")) {
+				if (Magic.magicQtm(checkFile)) {
+					// Eine QTM-Datei muss mit {4}moov [{4}6D6F6F76]
+					// beginnen !!! Offset 4 !!!
+					if (Util.string15InFile("mvhd", "cmov", "rmra", "rmra", "rmra", checkFile)) {
+						// C) fuer QTM auf SiF weiterkontrollieren
+						// Eine QTM-Datei muss den String "mvhd cmov rmra" im
+						// File haben
+						// D) passende Extension kontrollieren
+						// Eine QTM-Datei muss die extension .mov haben
+						if (checkFileExt.equals(".mov")) {
+							// eindeutig als QTM-Datei erkannt
+							return "QTM";
+						} else {
+							// als QTM-Datei erkannt aber falsche Extension
+							return "QTM_ext";
+						}
 					}
 				}
-			} else if (Magic.magicXmlOff(checkFile)) {
-				// Eine XML-Datei beginnt in der Regel mit <?xml [3C3F786D6C]
-				// wobei einige wenige einen offset haben (z.B. XML TEI mit bis zu 3)
-				// {3}<?xml [{3}3C3F786D6C] {2}<?xml [{2}3C3F786D6C] {1}<?xml [{1}3C3F786D6C]
-				if (Util.string15InFile("INTERLIS", "I.N.T.E.R.L.I.S.", "INTERLIS", "INTERLIS", "INTERLIS",
-						checkFile)) {
-					// C) fuer INTERLIS auf SiF weiterkontrollieren
-					// Eine INTERLIS-Datei muss den String "INTERLIS" oder
-					// "I.N.T.E.R.L.I.S." im File haben
-					// INTERLIS .xtf, .xml "<?xml <.?.x.m.l." "3C3F786D6C
-					// 3C003F0078006D006C00" "INTERLIS I.N.T.E.R.L.I.S."
-					// D) passende Extension kontrollieren
-					// Eine solche INTERLIS-Datei muss die extension .xtf,
-					// .xml haben
-					if (checkFileExt.equals(".xtf") || checkFileExt.equals(".xml")) {
-						// eindeutig als INTERLIS-Datei erkannt
-						return "INTERLIS";
+			} else if (Util.getStringFirstLineFromFile(checkFile).contains("<?xml")) {
+				if (Magic.magicXmlOff(checkFile)) {
+					// Eine XML-Datei beginnt in der Regel mit <?xml [3C3F786D6C]
+					// wobei einige wenige einen offset haben (z.B. XML TEI mit bis zu 3)
+					// {3}<?xml [{3}3C3F786D6C] {2}<?xml [{2}3C3F786D6C] {1}<?xml [{1}3C3F786D6C]
+					if (Util.string15InFile("INTERLIS", "I.N.T.E.R.L.I.S.", "INTERLIS", "INTERLIS", "INTERLIS",
+							checkFile)) {
+						// C) fuer INTERLIS auf SiF weiterkontrollieren
+						// Eine INTERLIS-Datei muss den String "INTERLIS" oder
+						// "I.N.T.E.R.L.I.S." im File haben
+						// INTERLIS .xtf, .xml "<?xml <.?.x.m.l." "3C3F786D6C
+						// 3C003F0078006D006C00" "INTERLIS I.N.T.E.R.L.I.S."
+						// D) passende Extension kontrollieren
+						// Eine solche INTERLIS-Datei muss die extension .xtf,
+						// .xml haben
+						if (checkFileExt.equals(".xtf") || checkFileExt.equals(".xml")) {
+							// eindeutig als INTERLIS-Datei erkannt
+							return "INTERLIS";
+						} else {
+							// als INTERLIS-Datei erkannt aber falsche Extension
+							return "INTERLIS_ext";
+						}
+					}
+					// D) passende Extension kontrollieren (keine SiF)
+					// Eine XML-Datei muss die extension .xml, .xsd, .xsl haben
+					if (checkFileExt.equals(".xml") || checkFileExt.equals(".xsd") || checkFileExt.equals(".xsl")) {
+						// eindeutig als XML-Datei erkannt
+						return "XML";
+					} else if (checkFileExt.equals(".svg")) {
+						// eindeutig als SVG-Datei erkannt
+						return "SVG";
 					} else {
-						// als INTERLIS-Datei erkannt aber falsche Extension
-						return "INTERLIS_ext";
+						// als XML-Datei erkannt aber falsche Extension
+						return "XML_ext";
 					}
 				}
-				// D) passende Extension kontrollieren (keine SiF)
-				// Eine XML-Datei muss die extension .xml, .xsd, .xsl haben
-				if (checkFileExt.equals(".xml") || checkFileExt.equals(".xsd") || checkFileExt.equals(".xsl")) {
-					// eindeutig als XML-Datei erkannt
-					return "XML";
-				} else if (checkFileExt.equals(".svg")) {
-					// eindeutig als SVG-Datei erkannt
-					return "SVG";
-				} else {
-					// als XML-Datei erkannt aber falsche Extension
-					return "XML_ext";
+			} else if (Util.getStringFirstLineFromFile(checkFile).contains("DICM")) {
+				if (Magic.magicDicom(checkFile)) {
+					// Eine Dicom-Datei (keine Dateiendung noetig) muss mit
+					// {128}4449434D beginnen !!! Offset 128 !!!
+					// hat auf keine SiF oder Dateiendung
+					return "DICOM";
 				}
-			} else if (Magic.magicDicom(checkFile)) {
-				// Eine Dicom-Datei (keine Dateiendung noetig) muss mit
-				// {128}4449434D beginnen !!! Offset 128 !!!
-				// hat auf keine SiF oder Dateiendung
-				return "DICOM";
 			}
 
 			// TODO: Kein passendes BOF; ggf. Format ohne BOF
