@@ -21,7 +21,9 @@ package ch.kostceco.tools.kostval.validation.modulepng.impl;
 import java.io.File;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Scanner;
 
+import ch.kostceco.tools.kosttools.fileservice.ImageMagick;
 import ch.kostceco.tools.kosttools.fileservice.Pngcheck;
 import ch.kostceco.tools.kostval.exception.modulepng.ValidationApngvalidationException;
 import ch.kostceco.tools.kostval.logging.Logtxt;
@@ -34,6 +36,8 @@ import ch.kostceco.tools.kostval.validation.modulepng.ValidationAvalidationPngMo
  * 
  * Zuerste erfolgt eine Erkennung, wenn diese io kommt die Validierung mit
  * pngcheck.
+ * 
+ * Kann die Datei mit ImageMagick einwandfrei gelesen werden?
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
@@ -59,6 +63,105 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 		// Die Erkennung erfolgt bereits im Vorfeld
 
 		boolean isValid = false;
+
+		boolean isValidImageMagick = true;
+
+		File outputImageMagick = new File(pathToWorkDir + File.separator + "ImageMagick.txt");
+		// falls das File von einem vorhergehenden Durchlauf bereits
+		// existiert, loeschen wir es
+		if (outputImageMagick.exists()) {
+			outputImageMagick.delete();
+		}
+
+		// TODO: Start: Kontrolle mit ImageMagick
+
+		// - Initialisierung ImageMagick -> existiert alles zu ImageMagick?
+
+		// Pfad zum Programm existiert die Dateien?
+		String checkToolIM = ImageMagick.checkImageMagick(dirOfJarPath);
+		// System.out.println("" );
+		// System.out.println("ImageMagick checkTool = " + checkTool);
+
+		if (!checkToolIM.equals("OK")) {
+			if (min) {
+				return false;
+			} else {
+				Logtxt.logtxt(logFile,
+						getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PNG)
+								+ getTextResourceService().getText(locale, MESSAGE_XML_MISSING_FILE, checkToolIM,
+										getTextResourceService().getText(locale, ABORTED)));
+				isValidImageMagick = false;
+			}
+		} else {
+			// ImageMagick sollte vorhanden sein
+			// System.out.println("ImageMagick sollte vorhanden sein" );
+			try {
+				String resultExec = ImageMagick.execImageMagick(valDatei, outputImageMagick, workDir, dirOfJarPath);
+				// System.out.println("ImageMagick resultExec = " + resultExec);
+				if (!resultExec.equals("OK") || !outputImageMagick.exists()) {
+					// Exception oder Report existiert nicht
+					if (min) {
+						return false;
+					} else {
+						isValidImageMagick = false;
+						// Erster Fehler! Meldung A ausgeben und invalid setzten
+						Logtxt.logtxt(logFile,
+								getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PNG)
+										+ getTextResourceService().getText(locale, MESSAGE_XML_SERVICEINVALID_READ,
+												"ImageMagick", ""));
+					}
+				} else {
+					// Report existiert -> Auswerten...
+					String error = "magick.exe: ";
+					Scanner scannerOutput = new Scanner(outputImageMagick);
+					while (scannerOutput.hasNextLine()) {
+						// format_name=matroska,webm
+						String line = scannerOutput.nextLine();
+						// System.out.println("outputImageMagick 0 = " + line);
+						if (line.startsWith(error)) {
+							// NOK
+
+							// System.out.println(valDatei.getAbsolutePath());
+							// System.out.println("outputImageMagick 1 = " + line);
+							line = line.replace(valDatei.getAbsolutePath(), "");
+							line = line.replaceAll("`'", "");
+							line = line.replaceAll("''", "");
+							line = line.replaceAll("``", "");
+							line = line.replaceAll("´´", "");
+							line = line.replaceAll("magick.exe: ", "");
+							// System.out.println("outputImageMagick 2 = " + line);
+
+							if (isValidImageMagick) {
+								// Erste Fehlermeldung von ImageMagick
+								Logtxt.logtxt(logFile,
+										getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PNG)
+												+ getTextResourceService().getText(locale,
+														MESSAGE_XML_SERVICEINVALID_READ, "ImageMagick", ""));
+								isValidImageMagick = false;
+							}
+
+							// Error auslesen und ausgeben
+
+							Logtxt.logtxt(logFile,
+									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PNG)
+											+ getTextResourceService().getText(locale, MESSAGE_XML_SERVICEMESSAGE_INFO,
+													"- ", line+" [ImageMagick]"));
+
+							// magick.exe: LZWDecode: Strip 0 not terminated with EOI code. `LZWDecode' @
+							// error/tiff.c/TIFFErrors/571.
+						}
+					}
+					scannerOutput.close();
+				}
+			} catch (Exception e) {
+				Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PNG)
+						+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, "ImageMagick " + e.getMessage()));
+				return false;
+			}
+			// TODO: Ende: ImageMagick
+		}
+
+		isValid = isValidImageMagick;
 
 		// TODO: Erledigt: PNG Validierung
 
@@ -90,10 +193,13 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 							+ getTextResourceService().getText(locale, MESSAGE_XML_SERVICEINVALID, "pngcheck", ""));
 					// Linie mit der Fehlermeldung
 					String errorMsgOrig = resultExec;
+					errorMsgOrig=errorMsgOrig+" [Pngcheck]";
 
 					// TODO: Erledigt: Fehler Auswertung
 					String modul = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_F_PNG);
 					String msg = resultExec;
+					msg="- "+msg+" [Pngcheck]";
+
 					if (errorMsgOrig.contains("IHDR") || errorMsgOrig.contains("IEND")) {
 						modul = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_B_PNG);
 					} else if (errorMsgOrig.contains("PLTE") || errorMsgOrig.contains("bKGD")
@@ -115,11 +221,11 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 					if (msg.contains("additional data after IEND chunk")) {
 						// additional data after IEND chunk
 						if (locale.toString().startsWith("de")) {
-							msg = "Zusaetzliche Daten nach IEND-Chunk.";
+							msg = "- Zusaetzliche Daten nach IEND-Chunk. [Pngcheck]";
 						} else if (locale.toString().startsWith("fr")) {
-							msg = "Donnees supplementaires apres le chunk IEND.";
+							msg = "- Donnees supplementaires apres le chunk IEND. [Pngcheck]";
 						} else {
-							msg = "Additional data after IEND chunk.";
+							msg = "- Additional data after IEND chunk. [Pngcheck]";
 						}
 					} else if (msg.contains("must precede")) {
 						// bKGD must precede IDAT
@@ -138,11 +244,11 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 						msg = msg + ".";
 						modul = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PNG);
 						if (locale.toString().startsWith("de")) {
-							msg = "Es handelt sich nicht um einen PNG-Stream.";
+							msg = "- Es handelt sich nicht um einen PNG-Stream. [Pngcheck]";
 						} else if (locale.toString().startsWith("fr")) {
-							msg = "Ce n`est pas un stream PNG.";
+							msg = "- Ce n`est pas un stream PNG. [Pngcheck]";
 						} else {
-							msg = "This is not a PNG stream.";
+							msg = "- This is not a PNG stream. [Pngcheck]";
 						}
 					} else if (msg.contains("illegal (unless recently approved) unknown, public chunk")) {
 						// illegal (unless recently approved) unknown, public
@@ -187,11 +293,11 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 						// cannot read PNG or MNG signature
 						modul = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PNG);
 						if (locale.toString().startsWith("de")) {
-							msg = "PNG-Signatur kann nicht gelesen werden.";
+							msg = "- PNG-Signatur kann nicht gelesen werden. [Pngcheck]";
 						} else if (locale.toString().startsWith("fr")) {
-							msg = "La signature en PNG ne peut pas etre lue.";
+							msg = "- La signature en PNG ne peut pas etre lue. [Pngcheck]";
 						} else {
-							msg = "Cannot read PNG signature.";
+							msg = "- Cannot read PNG signature. [Pngcheck]";
 						}
 					} else if (msg.contains("multiple")) {
 						// multiple bKGD not allowed
@@ -231,20 +337,20 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 					} else if (msg.contains("file doesn't end with an IEND chunk")) {
 						// file doesn't end with an IEND chunk
 						if (locale.toString().startsWith("de")) {
-							msg = "Die Datei endet nicht mit einem IEND-Chunk.";
+							msg = "- Die Datei endet nicht mit einem IEND-Chunk. [Pngcheck]";
 						} else if (locale.toString().startsWith("fr")) {
-							msg = "Le fichier ne se termine pas par le chunk IEND.";
+							msg = "- Le fichier ne se termine pas par le chunk IEND. [Pngcheck]";
 						} else {
-							msg = "File doesn't end with an IEND chunk.";
+							msg = "- File doesn't end with an IEND chunk. [Pngcheck]";
 						}
 					} else if (msg.contains("first chunk must be IHDR")) {
 						// first chunk must be IHDR
 						if (locale.toString().startsWith("de")) {
-							msg = "Erster Chunk muss IHDR sein.";
+							msg = "- Erster Chunk muss IHDR sein. [Pngcheck]";
 						} else if (locale.toString().startsWith("fr")) {
-							msg = "Le premier chunk doit etre IHDR.";
+							msg = "- Le premier chunk doit etre IHDR. [Pngcheck]";
 						} else {
-							msg = "First chunk must be IHDR.";
+							msg = "- First chunk must be IHDR. [Pngcheck]";
 						}
 					} else if (msg.contains("keyword is longer than")) {
 						// tEXt keyword is longer than 79 characters
@@ -294,11 +400,11 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 						// CORRUPTED by text conversion
 						modul = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PNG);
 						if (locale.toString().startsWith("de")) {
-							msg = "Durch Textkonvertierung beschaedigt.";
+							msg = "- Durch Textkonvertierung beschaedigt. [Pngcheck]";
 						} else if (locale.toString().startsWith("fr")) {
-							msg = "Corrompu par la conversion du texte.";
+							msg = "- Corrompu par la conversion du texte. [Pngcheck]";
 						} else {
-							msg = "Corrupted by text conversion.";
+							msg = "- Corrupted by text conversion. [Pngcheck]";
 						}
 					} else if (msg.contains("not allowed in")) {
 						// PLTE not allowed in grayscale image
@@ -306,7 +412,7 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 						if (locale.toString().startsWith("de")) {
 							msg = msg.replace("not allowed in", "nicht erlaubt in");
 						} else if (locale.toString().startsWith("fr")) {
-							msg = msg.replace("not allowed in", "non autoris�s en");
+							msg = msg.replace("not allowed in", "non autorises en");
 						} else {
 							msg = msg.replace("not allowed in", "Not allowed in");
 						}
@@ -374,8 +480,8 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 					isValid = false;
 				}
 			} else {
-				// OK
-				isValid = true;
+				// OK jetzt noch Abgleich mit ImageMagick
+				isValid = isValidImageMagick;
 			}
 
 		} catch (Exception e) {

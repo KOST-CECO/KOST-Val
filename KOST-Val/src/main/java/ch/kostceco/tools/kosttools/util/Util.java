@@ -260,6 +260,31 @@ public class Util {
 	}
 
 	/**
+	 * zaehlt wie oft der String existiert in file
+	 * 
+	 * Solche Sachen duerfen nicht in einer Schleife gemacht werden, da diese sehr
+	 * Zeitintensiv sind!
+	 * 
+	 * @return Anzahl String in File  @throws IOException
+	 */
+	public static int stringCountInFile(String string, File file) throws IOException {
+		int stringCountInFile = 0;
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(file));
+			String line = "";
+			while ((line = reader.readLine()) != null) {
+				if (line.contains(string)) {
+					stringCountInFile++;
+				}
+			}
+			reader.close();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+		return stringCountInFile;
+	}
+
+	/**
 	 * Kontrolliert ob String 1-5 existiert in file
 	 * 
 	 * Solche Sachen duerfen nicht in einer Schleife gemacht werden, da diese sehr

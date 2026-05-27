@@ -244,6 +244,7 @@ public class egovdv {
 					scannerFormat.close();
 
 					if (!valDateiNameBoo && !mainInfoBoo) {
+					// if (!mainInfoBoo) {
 						// die ersten Zeilen fehlen
 						count = 997;
 						if (valDateiTempWorkDir.exists()) {

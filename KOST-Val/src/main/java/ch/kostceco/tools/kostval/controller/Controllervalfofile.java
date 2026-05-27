@@ -222,6 +222,12 @@ public class Controllervalfofile implements MessageConstants {
 				}
 
 				String valDateiXml = "<ValFile> -> " + valDatei.getAbsolutePath() + "</ValFile>" + sizeWarningTxt;
+				
+				File txtFileSig = new File(directoryOfLogfile.getAbsolutePath() + File.separator + "txt_signatureTmp"
+						+ valDatei.getName() + ".txt");
+				if (txtFileSig.exists()) {
+					txtFileSig.delete();
+				}
 
 				if (repair) {
 					/*
@@ -1435,6 +1441,14 @@ public class Controllervalfofile implements MessageConstants {
 				 * 
 				 * @return Integer mit der Anzahl Signaturen
 				 */
+
+				String pathToWorkDirValdateiPre = configMap.get("PathToWorkDir");
+				File workDirPre = new File(pathToWorkDirValdateiPre);
+				File signatureTmpPre = new File(
+						workDirPre.getAbsolutePath() + File.separator + "veraPDF_signatureTmp.xml");
+				String execVerapdfSigPre = verapdf.execVerapdfSig(valDatei, workDirPre, signatureTmpPre, locale);
+				// System.out.println("Metadaten Signaturen verapdf: " + execVerapdfSigPre);
+
 				if (countSig == 998) {
 					// 998 = Fehler: Exception oder Report
 					// existiert nicht keine Zahl ausgeben
@@ -1444,6 +1458,12 @@ public class Controllervalfofile implements MessageConstants {
 					 * MESSAGE_XML_SERVICEINVALID, "egovdv", "");
 					 */
 					countSigStr = "";
+					if (execVerapdfSigPre.equals("")) {
+						// 998 verapdf hat keine Metadaten zu Signaturen gefunden
+						// dann hoestwahrscheinlich keine Signaturen vorhanden
+						// System.out.println("998 verapdf hat keine Metadaten zu Signaturen gefunden");
+						countSig = 0;
+					}
 				} else if (countSig == 997) {
 					// die ersten beiden Zeilen fehlen
 					/*
@@ -1452,6 +1472,12 @@ public class Controllervalfofile implements MessageConstants {
 					 * ERROR_XML_SERVICEFAILED, "egovdv", "missing lines");
 					 */
 					countSigStr = "";
+					if (execVerapdfSigPre.equals("")) {
+						// 997 verapdf hat keine Metadaten zu Signaturen gefunden
+						// dann hoestwahrscheinlich keine Signaturen vorhanden
+						// System.out.println("997 verapdf hat keine Metadaten zu Signaturen gefunden");
+						countSig = 0;
+					}
 				} else if (countSig == 996) {
 					/*
 					 * returnEgovdvSum = getTextResourceService().getText(locale,
@@ -1459,6 +1485,12 @@ public class Controllervalfofile implements MessageConstants {
 					 * ERROR_XML_UNKNOWN, "egovdv: catch-Error");
 					 */
 					countSigStr = "";
+					if (execVerapdfSigPre.equals("")) {
+						// 996 verapdf hat keine Metadaten zu Signaturen gefunden
+						// dann hoestwahrscheinlich keine Signaturen vorhanden
+						// System.out.println("996 verapdf hat keine Metadaten zu Signaturen gefunden");
+						countSig = 0;
+					}
 				}
 
 				if (countSig == 999) {
@@ -1466,11 +1498,26 @@ public class Controllervalfofile implements MessageConstants {
 					// egovdv
 					returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
 							+ getTextResourceService().getText(locale, MESSAGE_XML_MISSING_FILE, "checkTool");
+				} else if (countSig == 998) {
+					// 998 = Fehler: Exception oder Report existiert nicht
+					returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+							+ getTextResourceService().getText(locale, ERROR_XML_SERVICEFAILED, "egovdv",
+									"998 = Fehler: Exception oder Report existiert nicht");
+				} else if (countSig == 997) {
+					// 997 = Fehler: Die ersten beiden Zeilen zu egovdv fehlen
+					returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+							+ getTextResourceService().getText(locale, ERROR_XML_SERVICEFAILED, "egovdv",
+									"997 = Fehler: Die ersten beiden Zeilen zu egovdv fehlen");
+				} else if (countSig == 996) {
+					// 996 = Fehler: Exception UNKNOWN Catch
+					returnEgovdvSum = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+							+ getTextResourceService().getText(locale, ERROR_XML_SERVICEFAILED, "egovdv",
+									"996 = Fehler: Exception UNKNOWN Catch");
 				} else if (countSig == 0) {
 					// keine Signature
 					returnEgovdvSum = "NoSignature";
 				} else {
-					// System.out.println("Anzahl Signaturen: "+countSig);
+					// System.out.println("Anzahl Signaturen: " + countSig);
 					String pathToWorkDirValdatei = configMap.get("PathToWorkDir");
 					String valDateiNameNormalisiert = valDatei.getName().replace("  ", " .");
 					File workDir = new File(pathToWorkDirValdatei);
@@ -1482,6 +1529,7 @@ public class Controllervalfofile implements MessageConstants {
 					// geloescht wird
 					// txtFile wird am Schluss geloescht
 					if (dvvalidation.equals("yes")) {
+						// Signaturvalidierung eingeschaltet
 						// Zeitstempel Start egovdv
 						java.util.Date nowStart = new java.util.Date();
 						// java.text.SimpleDateFormat sdfStart = new

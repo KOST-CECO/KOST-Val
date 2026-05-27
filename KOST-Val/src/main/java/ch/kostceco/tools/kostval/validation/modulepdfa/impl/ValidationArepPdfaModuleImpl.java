@@ -70,19 +70,37 @@ public class ValidationArepPdfaModuleImpl extends ValidationModuleImpl implement
 			min = true;
 		}
 
+		Boolean doRepair = true;
+		String noRep = "";
+
 		try {
 			/* nur reparieren wenn KEINE Signaturen enthalten sind */
 
 			// Pfad zum Programm existiert die Dateien?
 			String checkTool = egovdv.checkEgovdv(dirOfJarPath);
 			if (!checkTool.equals("OK")) {
-				// es fehlen Dateien
+				// es fehlen Dateien -> nach indizien von Signaturen suchen
+				// nur reparieren wenn keine signaturen
+				if (Util.stringInFile("/SigFlags", valDatei) || Util.stringInFile("FT/Sig", valDatei)
+						|| Util.stringInFile("FT /Sig", valDatei) || Util.stringInFile("Type/Sig", valDatei)
+						|| Util.stringInFile("Type /Sig", valDatei)) {
+					// Signaturen vorhanden oder koennen nicht ausgeschlossen werden
+					// keine Reparatur durchfuehren
+					noRep = noRep + getTextResourceService().getText(locale, INFO_XML_Z_NOREP_SIGN);
+					doRepair = false;
+				} else {
+					// hoechstwahrscheinlich keine Signaturen
+					// repair darf gemacht werden
+				}
 
 			} else {
 				// egovdv sollte vorhanden sein
-				String pathToWorkDirValdatei = configMap.get("PathToWorkDir");
+				String pathToWorkDirValdatei =
+
+						configMap.get("PathToWorkDir");
 				File workDir2 = new File(pathToWorkDirValdatei);
 				Integer countSig = egovdv.execEgovdvCountSig(valDatei, workDir2, dirOfJarPath);
+				Integer countSigVera = 99;
 				/*
 				 * Gibt mit egovdv via cmd die Anzahl Signaturen in pdf aus
 				 * 
@@ -98,60 +116,95 @@ public class ValidationArepPdfaModuleImpl extends ValidationModuleImpl implement
 				 * 
 				 * @return Integer mit der Anzahl Signaturen
 				 */
+
 				if (countSig == 0) {
 					// 0 = keine Signatur
 					// repair darf gemacht werden
 				} else {
-					// signaturen vorhanden oder koennen nicht ausgeschlossen werden
-					// keine Reparatur durchfuehren
+					// signaturen vorhanden oder Fehler (996-998)
+					String pathToWorkDirValdateiPre = configMap.get("PathToWorkDir");
+					File workDirPre = new File(pathToWorkDirValdateiPre);
+					File signatureTmpPre = new File(
+							workDirPre.getAbsolutePath() + File.separator + "veraPDF_signatureTmp.xml");
+					String execVerapdfSigPre = verapdf.execVerapdfSig(valDatei, workDirPre, signatureTmpPre, locale); //
+					// System.out.println("Metadaten Signaturen verapdf: " + execVerapdfSigPre);
 
-					String noRep = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
-							+ getTextResourceService().getText(locale, INFO_XML_Z_NOREP_SIGN);
-					Util.oldnewstring("<ErrorZrepPdfa></ErrorZrepPdfa>", noRep, logFile);
+					if (countSig == 998 || countSig == 997 || countSig == 996) {
+						if (execVerapdfSigPre.equals("")) {
+							// 998 verapdf hat keine Metadaten zu Signaturen gefunden
+							// dann hoestwahrscheinlich keine Signaturen vorhanden
+							// System.out.println("998 verapdf hat keine Metadaten zu Signaturen gefunden");
+							countSigVera = 0;
+						}
+					}
+					if (signatureTmpPre.exists()) {
+						signatureTmpPre.delete();
+					}
 
-					return false;
+					if (countSigVera == 0) {
+						// keine Signaturen mit veraPDF gefunden
+					} else {
+						// signaturen vorhanden oder koennen nicht ausgeschlossen werden
+						// keine Reparatur durchfuehren
+
+						noRep = noRep + getTextResourceService().getText(locale, INFO_XML_Z_NOREP_SIGN);
+						doRepair = false;
+					}
 				}
 			}
-			
-			// nur reparieren wenn kein portfolio 
-			if (Util.stringInFile("/Collection", valDatei)||Util.stringInFile("/Portfolio", valDatei)) {
+
+			// nur reparieren wenn keine signaturen
+			/*
+			 * if (Util.stringInFile("/SigFlags", valDatei) || Util.stringInFile("FT/Sig",
+			 * valDatei) || Util.stringInFile("FT /Sig", valDatei) ||
+			 * Util.stringInFile("Type/Sig", valDatei) || Util.stringInFile("Type /Sig",
+			 * valDatei)) { // Signaturen vorhanden oder koennen nicht ausgeschlossen werden
+			 * // keine Reparatur durchfuehren noRep = noRep +
+			 * getTextResourceService().getText(locale, INFO_XML_Z_NOREP_SIGN); doRepair =
+			 * false; } else { // hoechstwahrscheinlich keine Signaturen // repair darf
+			 * gemacht werden }
+			 */
+
+			// nur reparieren wenn kein portfolio
+			if (Util.stringInFile("/Collection", valDatei) || Util.stringInFile("/Portfolio", valDatei)) {
 				// portfolio vorhanden oder koennen nicht ausgeschlossen werden
 				// keine Reparatur durchfuehren
-				String noRep = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
-						+ getTextResourceService().getText(locale, INFO_XML_Z_NOREP_PORTFOLIO);
-				Util.oldnewstring("<ErrorZrepPdfa></ErrorZrepPdfa>", noRep, logFile);
-				return false;
+				noRep = noRep + getTextResourceService().getText(locale, INFO_XML_Z_NOREP_PORTFOLIO);
+				doRepair = false;
 			} else {
 				// hoechstwahrscheinlich keine Portfolio
 				// repair darf gemacht werden
 			}
 
-			// nur reparieren wenn keine Attachments 
-			if (Util.stringInFile("/UseAttachments", valDatei)||Util.stringInFile("/Attachments", valDatei)) {
+			// nur reparieren wenn keine Attachments
+			if (Util.stringInFile("/UseAttachments", valDatei) || Util.stringInFile("/Attachments", valDatei)) {
 				// Attachments vorhanden oder koennen nicht ausgeschlossen werden
 				// keine Reparatur durchfuehren
-				String noRep = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
-						+ getTextResourceService().getText(locale, INFO_XML_Z_NOREP_ATTACHMENTS);
-				Util.oldnewstring("<ErrorZrepPdfa></ErrorZrepPdfa>", noRep, logFile);
-				return false;
+				noRep = noRep + getTextResourceService().getText(locale, INFO_XML_Z_NOREP_ATTACHMENTS);
+				doRepair = false;
 			} else {
 				// hoechstwahrscheinlich keine Attachments
 				// repair darf gemacht werden
 			}
 
-			// nur reparieren wenn kein 3D 
-			if (Util.stringInFile("/3D", valDatei)) {
+			// nur reparieren wenn kein 3D
+			if (Util.stringInFile("Type /3D", valDatei) || Util.stringInFile("Type/3D", valDatei)
+					|| Util.stringInFile("/3D/", valDatei) || Util.stringInFile("/3DAnimationStyle", valDatei)) {
 				// 3D vorhanden oder koennen nicht ausgeschlossen werden
 				// keine Reparatur durchfuehren
-				String noRep = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
-						+ getTextResourceService().getText(locale, INFO_XML_Z_NOREP_3D);
-				Util.oldnewstring("<ErrorZrepPdfa></ErrorZrepPdfa>", noRep, logFile);
-				return false;
+				noRep = noRep + getTextResourceService().getText(locale, INFO_XML_Z_NOREP_3D);
+				doRepair = false;
 			} else {
 				// hoechstwahrscheinlich keine Attachements
 				// repair darf gemacht werden
 			}
 
+			if (!doRepair) {
+				// Meldungen warum keine Rep wurde bereits ausgegeben
+				noRep = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA) + noRep;
+				Util.oldnewstring("<ErrorZrepPdfa></ErrorZrepPdfa>", noRep + "</Error>", logFile);
+				return false;
+			}
 		} catch (Throwable e) {
 			String logRepC = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
 					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, " repair signed? " + e.getMessage());

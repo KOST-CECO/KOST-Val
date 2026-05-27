@@ -26,12 +26,10 @@ import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationBjhoveValidatio
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
 /**
- * Validierungsschritt 3c (einschaltbar) Formatvalidierung, mit JHOVE oder einer
- * aehnlichen Loesung sowie mit einem externem PDF/A-Validator (z.B. PDF/A
- * Manager von PDFTRON) aller nach Dateiformat ausgewaehlten Dateien in /content
- * (konfigurierbare Liste von den zu validierenden Dateiformaten).
- * Referenzierung in Log-Datei zu den allfaelligen zusaetzlich generierten
- * Logdateien der eingesetzten Programme.
+ * Validierungsschritt B (Jhove-Validierung) Ist die TIFF-Datei gemaess Jhove
+ * valid? valid --> Status: "Well-Formed and valid"
+ * 
+ * Kann die Datei mit ImageMagick einwandfrei gelesen werden?
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
