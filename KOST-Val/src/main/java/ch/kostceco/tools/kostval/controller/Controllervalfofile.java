@@ -222,7 +222,7 @@ public class Controllervalfofile implements MessageConstants {
 				}
 
 				String valDateiXml = "<ValFile> -> " + valDatei.getAbsolutePath() + "</ValFile>" + sizeWarningTxt;
-				
+
 				File txtFileSig = new File(directoryOfLogfile.getAbsolutePath() + File.separator + "txt_signatureTmp"
 						+ valDatei.getName() + ".txt");
 				if (txtFileSig.exists()) {
@@ -1874,221 +1874,227 @@ public class Controllervalfofile implements MessageConstants {
 					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, "egovdv: " + e.getMessage());
 		}
 		// Ende Ermittlung ob Signaturen enthalten sind und ggf validierung
-		returnEgovdvSum = returnEgovdvSum.replace("__", "");
-		returnEgovdvSum = returnEgovdvSum.replace("\n", "");
-		returnEgovdvSum = returnEgovdvSum.replace(System.getProperty("line.separator"), "");
-		returnEgovdvSum = returnEgovdvSum.replaceAll("\\R", "");
-		returnEgovdvSum = returnEgovdvSum.replace("  ", " ");
-		returnEgovdvSum = returnEgovdvSum.replace(" bis ", " - ");
-		returnEgovdvSum = returnEgovdvSum.replace("Zeitpunkt der Unterschrift:",
-				"Zeitpunkt der Unterschrift (Anbringen Zeitstempels):");
-		returnEgovdvSum = returnEgovdvSum.replace(
-				"Das Dokument weist mehrere elektronische Signaturen mit unterschiedlichen Zertifikatsklassen auf.",
-				"");
 
-		// TODO: log uebersetzten wenn fr, it oder en
-		if (locale.toString().contains("fr")) {
-			// fr log uebersetzten
-			returnEgovdvSum = returnEgovdvSum.replace("Prüfbericht für elektronische Signaturen",
-					"Rapport de controle pour signatures electroniques");
-			returnEgovdvSum = returnEgovdvSum.replace("Geprüft durch:", "Verifie par :");
-			returnEgovdvSum = returnEgovdvSum.replace("Datum/Zeit der Prüfung:", "Date/Heure du controle :");
-			returnEgovdvSum = returnEgovdvSum.replace("Name der signierten Datei:", "Nom du fichier signe :");
-			returnEgovdvSum = returnEgovdvSum.replace("Hash der Datei", "Empreinte du fichier");
-			returnEgovdvSum = returnEgovdvSum.replace("Pruefergebnis [egovdv]", "Resultat du test [egovdv] ");
-			returnEgovdvSum = returnEgovdvSum.replace("Das Dokument ist gültig signiert",
-					"Le document a ete signe valablement");
-			returnEgovdvSum = returnEgovdvSum.replace("Alle Signaturen sind LTV-fähig.",
-					"Toutes les signatures sont compatibles LTV.");
-			returnEgovdvSum = returnEgovdvSum.replace(
-					"Das Dokument ist nach der letzten Signatur nicht mehr verändert worden.",
-					"Le document n'a pas ete modifie depuis la derniere signature.");
-			returnEgovdvSum = returnEgovdvSum.replace(
-					"Alle validierten Signaturen des Dokumentes sind gültig gemäss ZertES.",
-					"Toutes les signatures validees du document sont valables selon SCSE.");
-			returnEgovdvSum = returnEgovdvSum.replace(
-					"Alle zur Signatur verwendeten Zertifikate sind nicht revoziert, also gültig.",
-					"Tous les certificats utilises pour la signature ne sont pas revoques, ils sont donc valables.");
-			returnEgovdvSum = returnEgovdvSum.replace(
-					"Alle in diesem Dokument angebrachten Zeitstempel sind gültig gemäss ZertES.",
-					"Tous les horodatages apposes sur le document sont valables selon la SCSE.");
-			returnEgovdvSum = returnEgovdvSum.replace("Prüfdetails Signatur", "Details du controle de la signature");
-			returnEgovdvSum = returnEgovdvSum.replace("Zeitpunkt der Unterschrift (Anbringen Zeitstempels):",
-					"Date et heure de la signature (apposition de l'horodatage) :");
-			returnEgovdvSum = returnEgovdvSum.replace("Signaturalgorithmus:", "Algorithme de signature :");
-			returnEgovdvSum = returnEgovdvSum.replace("Die digitale Signatur ist gültig",
-					"La signature digitale est valide");
-			returnEgovdvSum = returnEgovdvSum.replace("Information über den Zeitstempel",
-					"Information sur l'horodatage");
-			returnEgovdvSum = returnEgovdvSum.replace("Zertifikat ausgestellt für:", "Certificat delivre a :");
-			returnEgovdvSum = returnEgovdvSum.replace("Organisation:", "Organisation :");
-			returnEgovdvSum = returnEgovdvSum.replace("Organisationseinheit:", "Unite organisationnelle :");
-			returnEgovdvSum = returnEgovdvSum.replace("Zertifikat ausgestellt von:", "Certificat delivre par :");
-			returnEgovdvSum = returnEgovdvSum.replace("Gueltigkeit des Zertifikats:", "Validite du certificat :");
-			returnEgovdvSum = returnEgovdvSum.replace("Der Zeitstempel ist gültig", "L'horodatage est valide");
-			returnEgovdvSum = returnEgovdvSum.replace("Information über das Unterzeichnerzertifikat",
-					"Information sur le certificat du signataire");
-			returnEgovdvSum = returnEgovdvSum.replace("Gültigkeit des Zertifikats:", "Validite du certificat :");
-			returnEgovdvSum = returnEgovdvSum.replace("Revokationsstatus: Zertifikat revoziert",
-					"Statut de revocation : Certificat revoque");
-			returnEgovdvSum = returnEgovdvSum.replace("Revokationsstatus: Zertifikat nicht revoziert",
-					"Statut de revocation : Certificat non revoque");
-			returnEgovdvSum = returnEgovdvSum.replace("Zertifikatsträger:", "Detenteur de certificat :");
-			returnEgovdvSum = returnEgovdvSum.replace("Zertifikatsklasse:", "Classe de certificat :");
-			returnEgovdvSum = returnEgovdvSum.replace("Fortgeschrittene Elektronische Signatur oder Siegel",
-					"Signature ou Cachet electronique Avance");
-			returnEgovdvSum = returnEgovdvSum.replace(
-					"Diese Signatur ist LTV-fähig (Long Term Validation) und kann auch nach mehr als 11 Jahren nach Ablauf des signierenden Zertifikates validiert werden.",
-					"Cette signature est compatible LTV (Long Term Validation) et peut etre validee plus de 11 ans apres l'expiration du certificat de signature.");
-			returnEgovdvSum = returnEgovdvSum.replace("Nicht alle Signaturen sind LTV-fähig.",
-					"Pas toutes les signatures sont compatibles avec LTV.");
-			returnEgovdvSum = returnEgovdvSum.replace(
-					"Diese Signatur ist nicht LTV-fähig (Long Term Validation) und kann ab 11 Jahren nach Ablauf des signierenden Zertifikates unter Umständen nicht mehr validiert werden.",
-					"Cette signature n'est pas compatible LTV (Long Term Validation) et ne peut eventuellement plus etre validee a partir de 11 ans apres l'expiration du certificat signataire.");
-			returnEgovdvSum = returnEgovdvSum.replace("Das Dokument ist teilweise nicht gültig signiert.",
-					"Une partie du document n'est pas signee valablement.");
-			returnEgovdvSum = returnEgovdvSum.replace(
-					"Das Dokument weist mehrere elektronische Signaturen mit unterschiedlichen Zertifikatsklassen auf.",
-					"Le document presente plusieurs signatures electroniques avec differentes classes de certificats.");
-			returnEgovdvSum = returnEgovdvSum.replace(
-					"Mindestens eine der elektronischen Signaturen auf dem validierten Dokument konnte keiner Dokumentenart (Mandant) zugeordnet werden.",
-					"Au moins une des signatures electroniques sur le document valide n'a pu etre attribuee a aucun genre de document (Mandant).");
-		} else if (locale.toString().contains("it")) {
-			// it log uebersetzten
-			returnEgovdvSum = returnEgovdvSum.replace("Prüfbericht für elektronische Signaturen",
-					"Rapporto di verifica per firme elettroniche");
-			returnEgovdvSum = returnEgovdvSum.replace("Geprüft durch:", "Controllato da:");
-			returnEgovdvSum = returnEgovdvSum.replace("Datum/Zeit der Prüfung:", "Data/ora della verifica:");
-			returnEgovdvSum = returnEgovdvSum.replace("Name der signierten Datei:", "Nome del file firmato:");
-			returnEgovdvSum = returnEgovdvSum.replace("Hash der Datei", "Hash del file");
-			returnEgovdvSum = returnEgovdvSum.replace("Pruefergebnis [egovdv]", "Risultato del test [egovdv]");
-			returnEgovdvSum = returnEgovdvSum.replace("Das Dokument ist gültig signiert",
-					"Documento firmato in modo valido");
-			returnEgovdvSum = returnEgovdvSum.replace("Alle Signaturen sind LTV-fähig.",
-					"Tutte le firme sono compatibili con LTV.");
-			returnEgovdvSum = returnEgovdvSum.replace(
-					"Das Dokument ist nach der letzten Signatur nicht mehr verändert worden.",
-					"Il documento non e stato modificato dopo l'ultima firma.");
-			returnEgovdvSum = returnEgovdvSum.replace(
-					"Alle validierten Signaturen des Dokumentes sind gültig gemäss ZertES.",
-					"Tutte le firme convalidate del documento sono valide secondo FiEle.");
-			returnEgovdvSum = returnEgovdvSum.replace(
-					"Alle zur Signatur verwendeten Zertifikate sind nicht revoziert, also gültig.",
-					"Tutti i certificati utilizzati per la firma non sono stati revocati, cioe sono validi.");
-			returnEgovdvSum = returnEgovdvSum.replace(
-					"Alle in diesem Dokument angebrachten Zeitstempel sind gültig gemäss ZertES.",
-					"Tutte le marche temporali applicate al documento sono valide secondo FiEle.");
-			returnEgovdvSum = returnEgovdvSum.replace("Prüfdetails Signatur", "Dettagli verifica firma");
-			returnEgovdvSum = returnEgovdvSum.replace("Zeitpunkt der Unterschrift (Anbringen Zeitstempels):",
-					"Momento dell'apposizione della firma (Applicare la marca temporale):");
-			returnEgovdvSum = returnEgovdvSum.replace("Signaturalgorithmus:", "Algoritmo della firma:");
-			returnEgovdvSum = returnEgovdvSum.replace("Die digitale Signatur ist gültig", "La firma digitale e valida");
-			returnEgovdvSum = returnEgovdvSum.replace("Information über den Zeitstempel",
-					"Informazioni sulla marca temporale (timestamp)");
-			returnEgovdvSum = returnEgovdvSum.replace("Zertifikat ausgestellt für:", "Certificato emesso per:");
-			returnEgovdvSum = returnEgovdvSum.replace("Organisation:", "Organizzazione:");
-			returnEgovdvSum = returnEgovdvSum.replace("Organisationseinheit:", "Unita organizzativa:");
-			returnEgovdvSum = returnEgovdvSum.replace("Zertifikat ausgestellt von:", "Certificato emesso da:");
-			returnEgovdvSum = returnEgovdvSum.replace("Gueltigkeit des Zertifikats:", "Validita del certificato:");
-			returnEgovdvSum = returnEgovdvSum.replace("Der Zeitstempel ist gültig",
-					"La marca temporale (timestamp) e valida");
-			returnEgovdvSum = returnEgovdvSum.replace("Information über das Unterzeichnerzertifikat",
-					"Informazioni sul certificato del firmante");
-			returnEgovdvSum = returnEgovdvSum.replace("Gültigkeit des Zertifikats:", "Validita del certificato:");
-			returnEgovdvSum = returnEgovdvSum.replace("Revokationsstatus: Zertifikat revoziert",
-					"Stato di revoca: Certificato revocato");
-			returnEgovdvSum = returnEgovdvSum.replace("Revokationsstatus: Zertifikat nicht revoziert",
-					"Stato di revoca: Certificato non revocato");
-			returnEgovdvSum = returnEgovdvSum.replace("Zertifikatsträger:", "Supporto del certificato:");
-			returnEgovdvSum = returnEgovdvSum.replace("Zertifikatsklasse:", "Classe del certificato:");
-			returnEgovdvSum = returnEgovdvSum.replace("Fortgeschrittene Elektronische Signatur oder Siegel",
-					"Firma o Sigillo Elettronico Avanzato");
-			returnEgovdvSum = returnEgovdvSum.replace(
-					"Diese Signatur ist LTV-fähig (Long Term Validation) und kann auch nach mehr als 11 Jahren nach Ablauf des signierenden Zertifikates validiert werden.",
-					"Questa firma e compatibile con LTV (Long Term Validation) e può essere convalidata piu di 11 anni dopo la scadenza del certificato di firma.");
-			returnEgovdvSum = returnEgovdvSum.replace("Nicht alle Signaturen sind LTV-fähig.",
-					"Non tutte le firme sono in grado di gestire l'LTV.");
-			returnEgovdvSum = returnEgovdvSum.replace(
-					"Diese Signatur ist nicht LTV-fähig (Long Term Validation) und kann ab 11 Jahren nach Ablauf des signierenden Zertifikates unter Umständen nicht mehr validiert werden.",
-					"Questa firma non e abilitata alla LTV (Long Term Validation) e eventualmente non potra piu essere convalidata a partire da 11 anni dopo la scadenza del certificato di firma.");
-			returnEgovdvSum = returnEgovdvSum.replace("Das Dokument ist teilweise nicht gültig signiert.",
-					"Il documento non e parzialmente firmato in modo valido.");
-			returnEgovdvSum = returnEgovdvSum.replace(
-					"Das Dokument weist mehrere elektronische Signaturen mit unterschiedlichen Zertifikatsklassen auf.",
-					"Il documento ha diverse firme elettroniche con diverse classi di certificati.");
-			returnEgovdvSum = returnEgovdvSum.replace(
-					"Mindestens eine der elektronischen Signaturen auf dem validierten Dokument konnte keiner Dokumentenart (Mandant) zugeordnet werden.",
-					"Almeno una delle firme elettroniche sul documento convalidato non ha potuto essere assegnata a un genere di documento (Mandant).");
-		} else if (locale.toString().contains("en")) {
-			// en log uebersetzten
-			returnEgovdvSum = returnEgovdvSum.replace("Prüfbericht für elektronische Signaturen",
-					"Validation report of digital signatures");
-			returnEgovdvSum = returnEgovdvSum.replace("Geprüft durch:", "Validated by:");
-			returnEgovdvSum = returnEgovdvSum.replace("Datum/Zeit der Prüfung:", "Date/time of validation:");
-			returnEgovdvSum = returnEgovdvSum.replace("Name der signierten Datei:", "Name of signed file:");
-			returnEgovdvSum = returnEgovdvSum.replace("Hash der Datei", "Hash of file");
-			returnEgovdvSum = returnEgovdvSum.replace("Pruefergebnis [egovdv]", "Test result [egovdv]");
-			returnEgovdvSum = returnEgovdvSum.replace("Das Dokument ist gültig signiert",
-					"The document has been validly signed");
-			returnEgovdvSum = returnEgovdvSum.replace("Alle Signaturen sind LTV-fähig.",
-					"All signatures are LTV-capable.");
-			returnEgovdvSum = returnEgovdvSum.replace(
-					"Das Dokument ist nach der letzten Signatur nicht mehr verändert worden.",
-					"The document has not been changed after the last signature.");
-			returnEgovdvSum = returnEgovdvSum.replace(
-					"Alle validierten Signaturen des Dokumentes sind gültig gemäss ZertES.",
-					"All validated signatures of the document are valid according to ESigA.");
-			returnEgovdvSum = returnEgovdvSum.replace(
-					"Alle zur Signatur verwendeten Zertifikate sind nicht revoziert, also gültig.",
-					"All certificates used for the signature are not revoked, i.e. are valid.");
-			returnEgovdvSum = returnEgovdvSum.replace(
-					"Alle in diesem Dokument angebrachten Zeitstempel sind gültig gemäss ZertES.",
-					"All time stamps applied to the document are valid according to ESigA.");
-			returnEgovdvSum = returnEgovdvSum.replace("Prüfdetails Signatur", "Validation details signature");
-			returnEgovdvSum = returnEgovdvSum.replace("Zeitpunkt der Unterschrift (Anbringen Zeitstempels):",
-					"Date of signature (Affixing time stamp):");
-			returnEgovdvSum = returnEgovdvSum.replace("Signaturalgorithmus:", "Signature algorithm:");
-			returnEgovdvSum = returnEgovdvSum.replace("Die digitale Signatur ist gültig",
-					"The digital signature is valid");
-			returnEgovdvSum = returnEgovdvSum.replace("Information über den Zeitstempel",
-					"Information about timestamp");
-			returnEgovdvSum = returnEgovdvSum.replace("Zertifikat ausgestellt für:", "Certificate issued to:");
-			returnEgovdvSum = returnEgovdvSum.replace("Organisation:", "Organization:");
-			returnEgovdvSum = returnEgovdvSum.replace("Organisationseinheit:", "Organizational unit:");
-			returnEgovdvSum = returnEgovdvSum.replace("Zertifikat ausgestellt von:", "Certificate issued from:");
-			returnEgovdvSum = returnEgovdvSum.replace("Gueltigkeit des Zertifikats:", "Validity of certificate:");
-			returnEgovdvSum = returnEgovdvSum.replace("Der Zeitstempel ist gültig", "The timestamp is valid");
-			returnEgovdvSum = returnEgovdvSum.replace("Information über das Unterzeichnerzertifikat",
-					"Information on signing certificate");
-			returnEgovdvSum = returnEgovdvSum.replace("Gültigkeit des Zertifikats:", "Validity of certificate:");
-			returnEgovdvSum = returnEgovdvSum.replace("Revokationsstatus: Zertifikat revoziert",
-					"Revocation state: Certificate revoked");
-			returnEgovdvSum = returnEgovdvSum.replace("Revokationsstatus: Zertifikat nicht revoziert",
-					"Revocation state: Certificate not revoked");
-			returnEgovdvSum = returnEgovdvSum.replace("Zertifikatsträger:", "Certificate type:");
-			returnEgovdvSum = returnEgovdvSum.replace("Zertifikatsklasse:", "Certificate class:");
-			returnEgovdvSum = returnEgovdvSum.replace("Fortgeschrittene Elektronische Signatur oder Siegel",
-					"Advanced Electronic Signature or Seal");
-			returnEgovdvSum = returnEgovdvSum.replace(
-					"Diese Signatur ist LTV-fähig (Long Term Validation) und kann auch nach mehr als 11 Jahren nach Ablauf des signierenden Zertifikates validiert werden.",
-					"This signature is LTV-capable (Long Term Validation) and can be validated more than 11 years after the signing certificate has expired.");
-			returnEgovdvSum = returnEgovdvSum.replace("Nicht alle Signaturen sind LTV-fähig.",
-					"Not all signatures are LTV-capable.");
-			returnEgovdvSum = returnEgovdvSum.replace(
-					"Diese Signatur ist nicht LTV-fähig (Long Term Validation) und kann ab 11 Jahren nach Ablauf des signierenden Zertifikates unter Umständen nicht mehr validiert werden.",
-					"This signature is not LTV-capable (Long Term Validation) and may not be validated after 11 years from the expiration of the signing certificate.");
-			returnEgovdvSum = returnEgovdvSum.replace("Das Dokument ist teilweise nicht gültig signiert.",
-					"The document is partially not validly signed.");
-			returnEgovdvSum = returnEgovdvSum.replace(
-					"Das Dokument weist mehrere elektronische Signaturen mit unterschiedlichen Zertifikatsklassen auf.",
-					"The document has multiple electronic signatures with different certificate classes. ");
-			returnEgovdvSum = returnEgovdvSum.replace(
-					"Mindestens eine der elektronischen Signaturen auf dem validierten Dokument konnte keiner Dokumentenart (Mandant) zugeordnet werden.",
-					"At least one of the electronic signatures on the validated document could not be assigned to a kind of document (client).");
+		if (returnEgovdvSum == "NoSignature") {
+			// keine Signaturen , keine Bereinigung und Uebersetzung
 		} else {
-			// de kein bedarf
-		}
+			returnEgovdvSum = returnEgovdvSum.replace("__", "");
+			returnEgovdvSum = returnEgovdvSum.replace("\n", "");
+			returnEgovdvSum = returnEgovdvSum.replace(System.getProperty("line.separator"), "");
+			returnEgovdvSum = returnEgovdvSum.replaceAll("\\R", "");
+			returnEgovdvSum = returnEgovdvSum.replace("  ", " ");
+			returnEgovdvSum = returnEgovdvSum.replace(" bis ", " - ");
+			returnEgovdvSum = returnEgovdvSum.replace("Zeitpunkt der Unterschrift:",
+					"Zeitpunkt der Unterschrift (Anbringen Zeitstempels):");
+			returnEgovdvSum = returnEgovdvSum.replace(
+					"Das Dokument weist mehrere elektronische Signaturen mit unterschiedlichen Zertifikatsklassen auf.",
+					"");
 
+			// TODO: log uebersetzten wenn fr, it oder en
+			if (locale.toString().contains("fr")) {
+				// fr log uebersetzten
+				returnEgovdvSum = returnEgovdvSum.replace("Prüfbericht für elektronische Signaturen",
+						"Rapport de controle pour signatures electroniques");
+				returnEgovdvSum = returnEgovdvSum.replace("Geprüft durch:", "Verifie par :");
+				returnEgovdvSum = returnEgovdvSum.replace("Datum/Zeit der Prüfung:", "Date/Heure du controle :");
+				returnEgovdvSum = returnEgovdvSum.replace("Name der signierten Datei:", "Nom du fichier signe :");
+				returnEgovdvSum = returnEgovdvSum.replace("Hash der Datei", "Empreinte du fichier");
+				returnEgovdvSum = returnEgovdvSum.replace("Pruefergebnis [egovdv]", "Resultat du test [egovdv] ");
+				returnEgovdvSum = returnEgovdvSum.replace("Das Dokument ist gültig signiert",
+						"Le document a ete signe valablement");
+				returnEgovdvSum = returnEgovdvSum.replace("Alle Signaturen sind LTV-fähig.",
+						"Toutes les signatures sont compatibles LTV.");
+				returnEgovdvSum = returnEgovdvSum.replace(
+						"Das Dokument ist nach der letzten Signatur nicht mehr verändert worden.",
+						"Le document n'a pas ete modifie depuis la derniere signature.");
+				returnEgovdvSum = returnEgovdvSum.replace(
+						"Alle validierten Signaturen des Dokumentes sind gültig gemäss ZertES.",
+						"Toutes les signatures validees du document sont valables selon SCSE.");
+				returnEgovdvSum = returnEgovdvSum.replace(
+						"Alle zur Signatur verwendeten Zertifikate sind nicht revoziert, also gültig.",
+						"Tous les certificats utilises pour la signature ne sont pas revoques, ils sont donc valables.");
+				returnEgovdvSum = returnEgovdvSum.replace(
+						"Alle in diesem Dokument angebrachten Zeitstempel sind gültig gemäss ZertES.",
+						"Tous les horodatages apposes sur le document sont valables selon la SCSE.");
+				returnEgovdvSum = returnEgovdvSum.replace("Prüfdetails Signatur",
+						"Details du controle de la signature");
+				returnEgovdvSum = returnEgovdvSum.replace("Zeitpunkt der Unterschrift (Anbringen Zeitstempels):",
+						"Date et heure de la signature (apposition de l'horodatage) :");
+				returnEgovdvSum = returnEgovdvSum.replace("Signaturalgorithmus:", "Algorithme de signature :");
+				returnEgovdvSum = returnEgovdvSum.replace("Die digitale Signatur ist gültig",
+						"La signature digitale est valide");
+				returnEgovdvSum = returnEgovdvSum.replace("Information über den Zeitstempel",
+						"Information sur l'horodatage");
+				returnEgovdvSum = returnEgovdvSum.replace("Zertifikat ausgestellt für:", "Certificat delivre a :");
+				returnEgovdvSum = returnEgovdvSum.replace("Organisation:", "Organisation :");
+				returnEgovdvSum = returnEgovdvSum.replace("Organisationseinheit:", "Unite organisationnelle :");
+				returnEgovdvSum = returnEgovdvSum.replace("Zertifikat ausgestellt von:", "Certificat delivre par :");
+				returnEgovdvSum = returnEgovdvSum.replace("Gueltigkeit des Zertifikats:", "Validite du certificat :");
+				returnEgovdvSum = returnEgovdvSum.replace("Der Zeitstempel ist gültig", "L'horodatage est valide");
+				returnEgovdvSum = returnEgovdvSum.replace("Information über das Unterzeichnerzertifikat",
+						"Information sur le certificat du signataire");
+				returnEgovdvSum = returnEgovdvSum.replace("Gültigkeit des Zertifikats:", "Validite du certificat :");
+				returnEgovdvSum = returnEgovdvSum.replace("Revokationsstatus: Zertifikat revoziert",
+						"Statut de revocation : Certificat revoque");
+				returnEgovdvSum = returnEgovdvSum.replace("Revokationsstatus: Zertifikat nicht revoziert",
+						"Statut de revocation : Certificat non revoque");
+				returnEgovdvSum = returnEgovdvSum.replace("Zertifikatsträger:", "Detenteur de certificat :");
+				returnEgovdvSum = returnEgovdvSum.replace("Zertifikatsklasse:", "Classe de certificat :");
+				returnEgovdvSum = returnEgovdvSum.replace("Fortgeschrittene Elektronische Signatur oder Siegel",
+						"Signature ou Cachet electronique Avance");
+				returnEgovdvSum = returnEgovdvSum.replace(
+						"Diese Signatur ist LTV-fähig (Long Term Validation) und kann auch nach mehr als 11 Jahren nach Ablauf des signierenden Zertifikates validiert werden.",
+						"Cette signature est compatible LTV (Long Term Validation) et peut etre validee plus de 11 ans apres l'expiration du certificat de signature.");
+				returnEgovdvSum = returnEgovdvSum.replace("Nicht alle Signaturen sind LTV-fähig.",
+						"Pas toutes les signatures sont compatibles avec LTV.");
+				returnEgovdvSum = returnEgovdvSum.replace(
+						"Diese Signatur ist nicht LTV-fähig (Long Term Validation) und kann ab 11 Jahren nach Ablauf des signierenden Zertifikates unter Umständen nicht mehr validiert werden.",
+						"Cette signature n'est pas compatible LTV (Long Term Validation) et ne peut eventuellement plus etre validee a partir de 11 ans apres l'expiration du certificat signataire.");
+				returnEgovdvSum = returnEgovdvSum.replace("Das Dokument ist teilweise nicht gültig signiert.",
+						"Une partie du document n'est pas signee valablement.");
+				returnEgovdvSum = returnEgovdvSum.replace(
+						"Das Dokument weist mehrere elektronische Signaturen mit unterschiedlichen Zertifikatsklassen auf.",
+						"Le document presente plusieurs signatures electroniques avec differentes classes de certificats.");
+				returnEgovdvSum = returnEgovdvSum.replace(
+						"Mindestens eine der elektronischen Signaturen auf dem validierten Dokument konnte keiner Dokumentenart (Mandant) zugeordnet werden.",
+						"Au moins une des signatures electroniques sur le document valide n'a pu etre attribuee a aucun genre de document (Mandant).");
+			} else if (locale.toString().contains("it")) {
+				// it log uebersetzten
+				returnEgovdvSum = returnEgovdvSum.replace("Prüfbericht für elektronische Signaturen",
+						"Rapporto di verifica per firme elettroniche");
+				returnEgovdvSum = returnEgovdvSum.replace("Geprüft durch:", "Controllato da:");
+				returnEgovdvSum = returnEgovdvSum.replace("Datum/Zeit der Prüfung:", "Data/ora della verifica:");
+				returnEgovdvSum = returnEgovdvSum.replace("Name der signierten Datei:", "Nome del file firmato:");
+				returnEgovdvSum = returnEgovdvSum.replace("Hash der Datei", "Hash del file");
+				returnEgovdvSum = returnEgovdvSum.replace("Pruefergebnis [egovdv]", "Risultato del test [egovdv]");
+				returnEgovdvSum = returnEgovdvSum.replace("Das Dokument ist gültig signiert",
+						"Documento firmato in modo valido");
+				returnEgovdvSum = returnEgovdvSum.replace("Alle Signaturen sind LTV-fähig.",
+						"Tutte le firme sono compatibili con LTV.");
+				returnEgovdvSum = returnEgovdvSum.replace(
+						"Das Dokument ist nach der letzten Signatur nicht mehr verändert worden.",
+						"Il documento non e stato modificato dopo l'ultima firma.");
+				returnEgovdvSum = returnEgovdvSum.replace(
+						"Alle validierten Signaturen des Dokumentes sind gültig gemäss ZertES.",
+						"Tutte le firme convalidate del documento sono valide secondo FiEle.");
+				returnEgovdvSum = returnEgovdvSum.replace(
+						"Alle zur Signatur verwendeten Zertifikate sind nicht revoziert, also gültig.",
+						"Tutti i certificati utilizzati per la firma non sono stati revocati, cioe sono validi.");
+				returnEgovdvSum = returnEgovdvSum.replace(
+						"Alle in diesem Dokument angebrachten Zeitstempel sind gültig gemäss ZertES.",
+						"Tutte le marche temporali applicate al documento sono valide secondo FiEle.");
+				returnEgovdvSum = returnEgovdvSum.replace("Prüfdetails Signatur", "Dettagli verifica firma");
+				returnEgovdvSum = returnEgovdvSum.replace("Zeitpunkt der Unterschrift (Anbringen Zeitstempels):",
+						"Momento dell'apposizione della firma (Applicare la marca temporale):");
+				returnEgovdvSum = returnEgovdvSum.replace("Signaturalgorithmus:", "Algoritmo della firma:");
+				returnEgovdvSum = returnEgovdvSum.replace("Die digitale Signatur ist gültig",
+						"La firma digitale e valida");
+				returnEgovdvSum = returnEgovdvSum.replace("Information über den Zeitstempel",
+						"Informazioni sulla marca temporale (timestamp)");
+				returnEgovdvSum = returnEgovdvSum.replace("Zertifikat ausgestellt für:", "Certificato emesso per:");
+				returnEgovdvSum = returnEgovdvSum.replace("Organisation:", "Organizzazione:");
+				returnEgovdvSum = returnEgovdvSum.replace("Organisationseinheit:", "Unita organizzativa:");
+				returnEgovdvSum = returnEgovdvSum.replace("Zertifikat ausgestellt von:", "Certificato emesso da:");
+				returnEgovdvSum = returnEgovdvSum.replace("Gueltigkeit des Zertifikats:", "Validita del certificato:");
+				returnEgovdvSum = returnEgovdvSum.replace("Der Zeitstempel ist gültig",
+						"La marca temporale (timestamp) e valida");
+				returnEgovdvSum = returnEgovdvSum.replace("Information über das Unterzeichnerzertifikat",
+						"Informazioni sul certificato del firmante");
+				returnEgovdvSum = returnEgovdvSum.replace("Gültigkeit des Zertifikats:", "Validita del certificato:");
+				returnEgovdvSum = returnEgovdvSum.replace("Revokationsstatus: Zertifikat revoziert",
+						"Stato di revoca: Certificato revocato");
+				returnEgovdvSum = returnEgovdvSum.replace("Revokationsstatus: Zertifikat nicht revoziert",
+						"Stato di revoca: Certificato non revocato");
+				returnEgovdvSum = returnEgovdvSum.replace("Zertifikatsträger:", "Supporto del certificato:");
+				returnEgovdvSum = returnEgovdvSum.replace("Zertifikatsklasse:", "Classe del certificato:");
+				returnEgovdvSum = returnEgovdvSum.replace("Fortgeschrittene Elektronische Signatur oder Siegel",
+						"Firma o Sigillo Elettronico Avanzato");
+				returnEgovdvSum = returnEgovdvSum.replace(
+						"Diese Signatur ist LTV-fähig (Long Term Validation) und kann auch nach mehr als 11 Jahren nach Ablauf des signierenden Zertifikates validiert werden.",
+						"Questa firma e compatibile con LTV (Long Term Validation) e può essere convalidata piu di 11 anni dopo la scadenza del certificato di firma.");
+				returnEgovdvSum = returnEgovdvSum.replace("Nicht alle Signaturen sind LTV-fähig.",
+						"Non tutte le firme sono in grado di gestire l'LTV.");
+				returnEgovdvSum = returnEgovdvSum.replace(
+						"Diese Signatur ist nicht LTV-fähig (Long Term Validation) und kann ab 11 Jahren nach Ablauf des signierenden Zertifikates unter Umständen nicht mehr validiert werden.",
+						"Questa firma non e abilitata alla LTV (Long Term Validation) e eventualmente non potra piu essere convalidata a partire da 11 anni dopo la scadenza del certificato di firma.");
+				returnEgovdvSum = returnEgovdvSum.replace("Das Dokument ist teilweise nicht gültig signiert.",
+						"Il documento non e parzialmente firmato in modo valido.");
+				returnEgovdvSum = returnEgovdvSum.replace(
+						"Das Dokument weist mehrere elektronische Signaturen mit unterschiedlichen Zertifikatsklassen auf.",
+						"Il documento ha diverse firme elettroniche con diverse classi di certificati.");
+				returnEgovdvSum = returnEgovdvSum.replace(
+						"Mindestens eine der elektronischen Signaturen auf dem validierten Dokument konnte keiner Dokumentenart (Mandant) zugeordnet werden.",
+						"Almeno una delle firme elettroniche sul documento convalidato non ha potuto essere assegnata a un genere di documento (Mandant).");
+			} else if (locale.toString().contains("en")) {
+				// en log uebersetzten
+				returnEgovdvSum = returnEgovdvSum.replace("Prüfbericht für elektronische Signaturen",
+						"Validation report of digital signatures");
+				returnEgovdvSum = returnEgovdvSum.replace("Geprüft durch:", "Validated by:");
+				returnEgovdvSum = returnEgovdvSum.replace("Datum/Zeit der Prüfung:", "Date/time of validation:");
+				returnEgovdvSum = returnEgovdvSum.replace("Name der signierten Datei:", "Name of signed file:");
+				returnEgovdvSum = returnEgovdvSum.replace("Hash der Datei", "Hash of file");
+				returnEgovdvSum = returnEgovdvSum.replace("Pruefergebnis [egovdv]", "Test result [egovdv]");
+				returnEgovdvSum = returnEgovdvSum.replace("Das Dokument ist gültig signiert",
+						"The document has been validly signed");
+				returnEgovdvSum = returnEgovdvSum.replace("Alle Signaturen sind LTV-fähig.",
+						"All signatures are LTV-capable.");
+				returnEgovdvSum = returnEgovdvSum.replace(
+						"Das Dokument ist nach der letzten Signatur nicht mehr verändert worden.",
+						"The document has not been changed after the last signature.");
+				returnEgovdvSum = returnEgovdvSum.replace(
+						"Alle validierten Signaturen des Dokumentes sind gültig gemäss ZertES.",
+						"All validated signatures of the document are valid according to ESigA.");
+				returnEgovdvSum = returnEgovdvSum.replace(
+						"Alle zur Signatur verwendeten Zertifikate sind nicht revoziert, also gültig.",
+						"All certificates used for the signature are not revoked, i.e. are valid.");
+				returnEgovdvSum = returnEgovdvSum.replace(
+						"Alle in diesem Dokument angebrachten Zeitstempel sind gültig gemäss ZertES.",
+						"All time stamps applied to the document are valid according to ESigA.");
+				returnEgovdvSum = returnEgovdvSum.replace("Prüfdetails Signatur", "Validation details signature");
+				returnEgovdvSum = returnEgovdvSum.replace("Zeitpunkt der Unterschrift (Anbringen Zeitstempels):",
+						"Date of signature (Affixing time stamp):");
+				returnEgovdvSum = returnEgovdvSum.replace("Signaturalgorithmus:", "Signature algorithm:");
+				returnEgovdvSum = returnEgovdvSum.replace("Die digitale Signatur ist gültig",
+						"The digital signature is valid");
+				returnEgovdvSum = returnEgovdvSum.replace("Information über den Zeitstempel",
+						"Information about timestamp");
+				returnEgovdvSum = returnEgovdvSum.replace("Zertifikat ausgestellt für:", "Certificate issued to:");
+				returnEgovdvSum = returnEgovdvSum.replace("Organisation:", "Organization:");
+				returnEgovdvSum = returnEgovdvSum.replace("Organisationseinheit:", "Organizational unit:");
+				returnEgovdvSum = returnEgovdvSum.replace("Zertifikat ausgestellt von:", "Certificate issued from:");
+				returnEgovdvSum = returnEgovdvSum.replace("Gueltigkeit des Zertifikats:", "Validity of certificate:");
+				returnEgovdvSum = returnEgovdvSum.replace("Der Zeitstempel ist gültig", "The timestamp is valid");
+				returnEgovdvSum = returnEgovdvSum.replace("Information über das Unterzeichnerzertifikat",
+						"Information on signing certificate");
+				returnEgovdvSum = returnEgovdvSum.replace("Gültigkeit des Zertifikats:", "Validity of certificate:");
+				returnEgovdvSum = returnEgovdvSum.replace("Revokationsstatus: Zertifikat revoziert",
+						"Revocation state: Certificate revoked");
+				returnEgovdvSum = returnEgovdvSum.replace("Revokationsstatus: Zertifikat nicht revoziert",
+						"Revocation state: Certificate not revoked");
+				returnEgovdvSum = returnEgovdvSum.replace("Zertifikatsträger:", "Certificate type:");
+				returnEgovdvSum = returnEgovdvSum.replace("Zertifikatsklasse:", "Certificate class:");
+				returnEgovdvSum = returnEgovdvSum.replace("Fortgeschrittene Elektronische Signatur oder Siegel",
+						"Advanced Electronic Signature or Seal");
+				returnEgovdvSum = returnEgovdvSum.replace(
+						"Diese Signatur ist LTV-fähig (Long Term Validation) und kann auch nach mehr als 11 Jahren nach Ablauf des signierenden Zertifikates validiert werden.",
+						"This signature is LTV-capable (Long Term Validation) and can be validated more than 11 years after the signing certificate has expired.");
+				returnEgovdvSum = returnEgovdvSum.replace("Nicht alle Signaturen sind LTV-fähig.",
+						"Not all signatures are LTV-capable.");
+				returnEgovdvSum = returnEgovdvSum.replace(
+						"Diese Signatur ist nicht LTV-fähig (Long Term Validation) und kann ab 11 Jahren nach Ablauf des signierenden Zertifikates unter Umständen nicht mehr validiert werden.",
+						"This signature is not LTV-capable (Long Term Validation) and may not be validated after 11 years from the expiration of the signing certificate.");
+				returnEgovdvSum = returnEgovdvSum.replace("Das Dokument ist teilweise nicht gültig signiert.",
+						"The document is partially not validly signed.");
+				returnEgovdvSum = returnEgovdvSum.replace(
+						"Das Dokument weist mehrere elektronische Signaturen mit unterschiedlichen Zertifikatsklassen auf.",
+						"The document has multiple electronic signatures with different certificate classes. ");
+				returnEgovdvSum = returnEgovdvSum.replace(
+						"Mindestens eine der elektronischen Signaturen auf dem validierten Dokument konnte keiner Dokumentenart (Mandant) zugeordnet werden.",
+						"At least one of the electronic signatures on the validated document could not be assigned to a kind of document (client).");
+			} else {
+				// de kein bedarf
+			}
+		}
 		return returnEgovdvSum;
 	}
 }

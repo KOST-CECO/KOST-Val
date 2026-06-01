@@ -83,7 +83,7 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl imple
 		}
 
 		// TODO: Start: Kontrolle mit ImageMagick
-
+/*
 		// - Initialisierung ImageMagick -> existiert alles zu ImageMagick?
 
 		// Pfad zum Programm existiert die Dateien?
@@ -167,7 +167,7 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl imple
 				return false;
 			}
 			// TODO: Ende: ImageMagick
-		}
+		}*/
 
 		isValid = isValidImageMagick;
 

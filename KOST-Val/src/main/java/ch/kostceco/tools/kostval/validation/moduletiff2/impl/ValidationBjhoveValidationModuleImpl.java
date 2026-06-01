@@ -78,7 +78,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 		}
 
 		// TODO: Start: Kontrolle mit ImageMagick
-
+/*
 		// - Initialisierung ImageMagick -> existiert alles zu ImageMagick?
 
 		// Pfad zum Programm existiert die Dateien?
@@ -162,7 +162,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 				return false;
 			}
 			// TODO: Ende: ImageMagick
-		}
+		}*/
 
 		isValid = isValidImageMagick;
 

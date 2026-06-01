@@ -74,7 +74,7 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 		}
 
 		// TODO: Start: Kontrolle mit ImageMagick
-
+/*
 		// - Initialisierung ImageMagick -> existiert alles zu ImageMagick?
 
 		// Pfad zum Programm existiert die Dateien?
@@ -145,7 +145,7 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 							Logtxt.logtxt(logFile,
 									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PNG)
 											+ getTextResourceService().getText(locale, MESSAGE_XML_SERVICEMESSAGE_INFO,
-													"- ", line+" [ImageMagick]"));
+													"- ", line + " [ImageMagick]"));
 
 							// magick.exe: LZWDecode: Strip 0 not terminated with EOI code. `LZWDecode' @
 							// error/tiff.c/TIFFErrors/571.
@@ -159,7 +159,7 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 				return false;
 			}
 			// TODO: Ende: ImageMagick
-		}
+		}*/
 
 		isValid = isValidImageMagick;
 
@@ -193,12 +193,12 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 							+ getTextResourceService().getText(locale, MESSAGE_XML_SERVICEINVALID, "pngcheck", ""));
 					// Linie mit der Fehlermeldung
 					String errorMsgOrig = resultExec;
-					errorMsgOrig=errorMsgOrig+" [Pngcheck]";
+					errorMsgOrig = errorMsgOrig + " [Pngcheck]";
 
 					// TODO: Erledigt: Fehler Auswertung
 					String modul = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_F_PNG);
 					String msg = resultExec;
-					msg="- "+msg+" [Pngcheck]";
+					msg = "- " + msg + " [Pngcheck]";
 
 					if (errorMsgOrig.contains("IHDR") || errorMsgOrig.contains("IEND")) {
 						modul = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_B_PNG);
@@ -224,6 +224,8 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 							msg = "- Zusaetzliche Daten nach IEND-Chunk. [Pngcheck]";
 						} else if (locale.toString().startsWith("fr")) {
 							msg = "- Donnees supplementaires apres le chunk IEND. [Pngcheck]";
+						} else if (locale.toString().startsWith("it")) {
+							msg = "- Dati aggiuntivi dopo il blocco IEND. [Pngcheck]";
 						} else {
 							msg = "- Additional data after IEND chunk. [Pngcheck]";
 						}
@@ -234,6 +236,8 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 							msg = msg.replace("must precede", "muss diesem vorausgehen");
 						} else if (locale.toString().startsWith("fr")) {
 							msg = msg.replace("must precede", "doit preceder ceci");
+						} else if (locale.toString().startsWith("it")) {
+							msg = msg.replace("must precede", "deve precedere");
 						} else {
 							// msg ok
 						}
@@ -247,6 +251,8 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 							msg = "- Es handelt sich nicht um einen PNG-Stream. [Pngcheck]";
 						} else if (locale.toString().startsWith("fr")) {
 							msg = "- Ce n`est pas un stream PNG. [Pngcheck]";
+						} else if (locale.toString().startsWith("it")) {
+							msg = "- Questo non e un flusso PNG. [Pngcheck]";
 						} else {
 							msg = "- This is not a PNG stream. [Pngcheck]";
 						}
@@ -260,6 +266,9 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 						} else if (locale.toString().startsWith("fr")) {
 							msg = msg.replace("illegal (unless recently approved) unknown, public chunk",
 									"illegal (sauf approbation recente) inconnu, public chunk");
+						} else if (locale.toString().startsWith("it")) {
+							msg = msg.replace("illegal (unless recently approved) unknown, public chunk",
+									"illegale (a meno che non sia stato approvato di recente) sconosciuto, blocco pubblico");
 						} else {
 							msg = msg.replace("illegal", "Illegal");
 						}
@@ -275,6 +284,10 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 							msg = msg.replace("CRC error in chunk", "Erreur CRC dans le chunk");
 							msg = msg.replace("computed", "calcule");
 							msg = msg.replace("expected", "attendu");
+						} else if (locale.toString().startsWith("it")) {
+							msg = msg.replace("CRC error in chunk", "Errore CRC nel blocco");
+							msg = msg.replace("computed", "calcolato");
+							msg = msg.replace("expected", "previsto");
 						} else {
 							// msg ok
 						}
@@ -286,6 +299,8 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 							msg = msg.replace("EOF while reading", "Unerwartetes Ende (EOF) beim Lesen von");
 						} else if (locale.toString().startsWith("fr")) {
 							msg = msg.replace("EOF while reading", "Fin inattendue (EOF) en lisant");
+						} else if (locale.toString().startsWith("it")) {
+							msg = msg.replace("EOF while reading", "Fine del file (EOF) durante la lettura");
 						} else {
 							// msg ok
 						}
@@ -296,6 +311,8 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 							msg = "- PNG-Signatur kann nicht gelesen werden. [Pngcheck]";
 						} else if (locale.toString().startsWith("fr")) {
 							msg = "- La signature en PNG ne peut pas etre lue. [Pngcheck]";
+						} else if (locale.toString().startsWith("it")) {
+							msg = "- Impossibile leggere la firma PNG. [Pngcheck]";
 						} else {
 							msg = "- Cannot read PNG signature. [Pngcheck]";
 						}
@@ -304,10 +321,13 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 						msg = msg + ".";
 						if (locale.toString().startsWith("de")) {
 							msg = msg.replace("multiple", "Nur ein");
-							msg = msg.replace(" not allowed", "-Chunk erlaubt");
+							msg = msg.replace(" not allowed", "verboten");
 						} else if (locale.toString().startsWith("fr")) {
-							msg = msg.replace("multiple", "Un seul");
-							msg = msg.replace("not allowed", "chunk autorise");
+							msg = msg.replace("multiple", "plusieurs");
+							msg = msg.replace("not allowed", "interdit");
+						} else if (locale.toString().startsWith("it")) {
+							msg = msg.replace("multiple", "multiplol");
+							msg = msg.replace("not allowed", "non consentito");
 						} else {
 							msg = msg.replace("multiple", "Multiple");
 						}
@@ -321,6 +341,9 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 						} else if (locale.toString().startsWith("fr")) {
 							msg = msg.replace("invalid number of", "Nombre d'entrees");
 							msg = msg.replace("entries", "non valables");
+						} else if (locale.toString().startsWith("it")) {
+							msg = msg.replace("invalid number of", "numero non valido");
+							msg = msg.replace("entries", "voci");
 						} else {
 							msg = msg.replace("invalid number of", "Invalid number of");
 						}
@@ -331,6 +354,8 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 							msg = msg.replace("invalid", "Ungueltiges Element:");
 						} else if (locale.toString().startsWith("fr")) {
 							msg = msg.replace("invalid", "Element invalide:");
+						} else if (locale.toString().startsWith("it")) {
+							msg = msg.replace("invalid", "Elemento non valido:");
 						} else {
 							msg = msg.replace("invalid", "Invalid");
 						}
@@ -340,6 +365,8 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 							msg = "- Die Datei endet nicht mit einem IEND-Chunk. [Pngcheck]";
 						} else if (locale.toString().startsWith("fr")) {
 							msg = "- Le fichier ne se termine pas par le chunk IEND. [Pngcheck]";
+						} else if (locale.toString().startsWith("it")) {
+							msg = "- Il file non termina con un blocco IEND. [Pngcheck]";
 						} else {
 							msg = "- File doesn't end with an IEND chunk. [Pngcheck]";
 						}
@@ -349,6 +376,8 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 							msg = "- Erster Chunk muss IHDR sein. [Pngcheck]";
 						} else if (locale.toString().startsWith("fr")) {
 							msg = "- Le premier chunk doit etre IHDR. [Pngcheck]";
+						} else if (locale.toString().startsWith("it")) {
+							msg = "- Il primo blocco deve essere IHDR. [Pngcheck]";
 						} else {
 							msg = "- First chunk must be IHDR. [Pngcheck]";
 						}
@@ -361,6 +390,9 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 						} else if (locale.toString().startsWith("fr")) {
 							msg = msg.replace("keyword is longer than", "le mot-cle comporte plus de");
 							msg = msg.replace("characters", "caracteres");
+						} else if (locale.toString().startsWith("it")) {
+							msg = msg.replace("keyword is longer than", "la parola chiave e piu lunga di");
+							msg = msg.replace("characters", "caratteri");
 						} else {
 							// msg ok
 						}
@@ -373,6 +405,9 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 						} else if (locale.toString().startsWith("fr")) {
 							msg = msg.replace("text contains", "texte contient un ou plusieurs caracteres");
 							msg = msg.replace(" character(s)", "");
+						} else if (locale.toString().startsWith("it")) {
+							msg = msg.replace("text contains", "il testo contiene uno o più caratteri");
+							msg = msg.replace(" character(s)", "");
 						} else {
 							// msg ok
 						}
@@ -383,6 +418,8 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 							msg = msg.replace("not allowed with", "nicht erlaubt mit");
 						} else if (locale.toString().startsWith("fr")) {
 							msg = msg.replace("not allowed with", "n`est pas autorisee avec");
+						} else if (locale.toString().startsWith("it")) {
+							msg = msg.replace("not allowed with", "non consentito con");
 						} else {
 							// msg ok
 						}
@@ -393,6 +430,8 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 							msg = msg.replace("falls outside", "faellt aus");
 						} else if (locale.toString().startsWith("fr")) {
 							msg = msg.replace("falls outside", "tombe hors");
+						} else if (locale.toString().startsWith("it")) {
+							msg = msg.replace("falls outside", "non rientra");
 						} else {
 							// msg ok
 						}
@@ -403,6 +442,8 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 							msg = "- Durch Textkonvertierung beschaedigt. [Pngcheck]";
 						} else if (locale.toString().startsWith("fr")) {
 							msg = "- Corrompu par la conversion du texte. [Pngcheck]";
+						} else if (locale.toString().startsWith("it")) {
+							msg = "- Dati danneggiati dalla conversione del testo. [Pngcheck]";
 						} else {
 							msg = "- Corrupted by text conversion. [Pngcheck]";
 						}
@@ -413,6 +454,8 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 							msg = msg.replace("not allowed in", "nicht erlaubt in");
 						} else if (locale.toString().startsWith("fr")) {
 							msg = msg.replace("not allowed in", "non autorises en");
+						} else if (locale.toString().startsWith("it")) {
+							msg = msg.replace("not allowed in", "non ammesso");
 						} else {
 							msg = msg.replace("not allowed in", "Not allowed in");
 						}
@@ -424,6 +467,8 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 							msg = msg.replace("private (invalid?)", "Warnung: Privat (ungueltig?)");
 						} else if (locale.toString().startsWith("fr")) {
 							msg = msg.replace("private (invalid?)", "Avertissement: Prive (invalide ?)");
+						} else if (locale.toString().startsWith("it")) {
+							msg = msg.replace("private (invalid?)", "Avviso: Privato (non valido?)");
 						} else {
 							msg = msg.replace("private (invalid?)", "Warning: Private (invalid?)");
 						}
@@ -435,6 +480,8 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 							msg = msg.replace("(trying to skip", "Ein allgemeines Strukturproblem ist aufgetreten (");
 						} else if (locale.toString().startsWith("fr")) {
 							msg = msg.replace("(trying to skip", "Un probleme structurel general est apparu (");
+						} else if (locale.toString().startsWith("it")) {
+							msg = msg.replace("(trying to skip", "E emerso un problema strutturale generale (");
 						} else {
 							msg = msg.replace("(trying to skip", "A general structural problem has arisen (");
 						}
@@ -446,6 +493,9 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 							msg = msg.replace(" (data error)", ".");
 						} else if (locale.toString().startsWith("fr")) {
 							msg = msg.replace("zlib:", "Erreur de compression des donnees zlib:");
+							msg = msg.replace(" (data error)", ".");
+						} else if (locale.toString().startsWith("it")) {
+							msg = msg.replace("zlib:", "Errore di compressione dei dati zlib:");
 							msg = msg.replace(" (data error)", ".");
 						} else {
 							msg = msg.replace("zlib:", "Data compression error	zlib:");
@@ -465,6 +515,9 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 							msg = msg.replace(" chunks", "-Chunks");
 						} else if (locale.toString().startsWith("fr")) {
 							msg = msg.replace("no", "Pas de chunk");
+							msg = msg.replace(" chunks", "");
+						} else if (locale.toString().startsWith("it")) {
+							msg = msg.replace("no", "Nessun blocco");
 							msg = msg.replace(" chunks", "");
 						} else {
 							msg = msg.replace("no", "no");
