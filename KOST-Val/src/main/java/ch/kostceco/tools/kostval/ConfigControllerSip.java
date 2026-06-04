@@ -529,7 +529,7 @@ public class ConfigControllerSip {
 	void changeV13(ActionEvent event) {
 		labelMessage.setText("");
 		String yes = "<ech0160v13>1.3 </ech0160v13>";
-		String no = "<ech0160v1></ech0160v1>";
+		String no = "<ech0160v13></ech0160v13>";
 		try {
 			if (checkV13.isSelected()) {
 				Util.oldnewstring(no, yes, configFile);

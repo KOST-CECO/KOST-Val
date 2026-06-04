@@ -43,6 +43,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -54,6 +56,7 @@ import javafx.scene.web.WebView;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class ConfigController {
 
@@ -68,6 +71,8 @@ public class ConfigController {
 
 	private String dirOfJarPath, inputString, workString, config, stringPuid,
 			minOne = "Mindestens eine Variante muss erlaubt sein!";
+
+	private String versionKostVal = "   (v2.4.0.2)";
 
 	private Locale locale = Locale.getDefault();
 
@@ -130,8 +135,6 @@ public class ConfigController {
 	private WebView wbv;
 
 	private WebEngine engine;
-
-	private String versionKostVal = "   (v2.4.0.0)";
 
 	@FXML
 	void initialize() {
@@ -256,7 +259,7 @@ public class ConfigController {
 				labelSize.setText("Visualizza l'avviso se il file è più piccolo della dimensione selezionata");
 				buttonWork.setText("Directory di lavoro");
 				buttonInput.setText("Directory di input");
-				labelInstitution.setText("Institution");
+				labelInstitution.setText("Istituzione");
 				labelHint1.setText("Nota:");
 				labelHint.setText("apre la configurazione dettagliata corrispondente");
 				minOne = "Almeno una variante deve essere consentita!";
@@ -278,7 +281,7 @@ public class ConfigController {
 				labelSize.setText("Display warning if the file is smaller than the selected file size");
 				buttonWork.setText("Working directory");
 				buttonInput.setText("Input directory");
-				labelInstitution.setText("Istituzione");
+				labelInstitution.setText("Institution");
 				labelHint1.setText("Note:");
 				labelHint.setText("opens the respective detailed configuration");
 				minOne = "At least one variant must be allowed!";
@@ -595,9 +598,47 @@ public class ConfigController {
 
 	@FXML
 	void configApply(ActionEvent e) {
-		engine.loadContent("Apply");
-		Util.deleteFile(configFileBackup);
-		((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
+		int countCheck;
+		try {
+			countCheck = Util.stringCountInFile("<pdfa>", configFile);
+			if (countCheck != 1) {
+				String info1 = "Die Änderung der Konfiguration ergab einen Fehler. ";
+				String info2 = "Die Änderung wurde nicht übernommen sondern abgebrochen.";
+				if (locale.toString().startsWith("fr")) {
+					info1 = "La modification de la configuration a généré une erreur. ";
+					info2 = "La modification n'a pas été enregistrée et a été annulée.";
+				} else if (locale.toString().startsWith("en")) {
+					info1 = "The configuration change resulted in an error. ";
+					info2 = "The change was not applied but was aborted.";
+				} else if (locale.toString().startsWith("it")) {
+					info1 = "La modifica alla configurazione ha generato un errore. ";
+					info2 = "La modifica non è stata applicata, ma è stata interrotta.";
+				}
+				Alert alertInfo = new Alert(AlertType.INFORMATION);
+				alertInfo.setTitle(info1);
+				alertInfo.setHeaderText(null);
+				alertInfo.setContentText(info1 + info2);
+				alertInfo.initStyle(StageStyle.UTILITY);
+				alertInfo.showAndWait();
+
+				configFile.delete();
+				engine.loadContent("Cancel");
+				try {
+					Util.copyFile(configFileBackup, configFile);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				Util.deleteFile(configFileBackup);
+				((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
+			} else {
+				engine.loadContent("Apply");
+				Util.deleteFile(configFileBackup);
+				((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
+			}
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 
 	@FXML

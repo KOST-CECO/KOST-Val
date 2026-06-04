@@ -29,6 +29,11 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
  * Ist die vorliegende JP2-Datei eine valide JP2-Datei? JP2 Validierungs mit
  * Jpylyzer.
  * 
+ * Zuerste erfolgt eine Erkennung, wenn diese io kommt die Validierung mit
+ * Jpylyzer.
+ * 
+ * Kann die Datei mit ImageMagick einwandfrei gelesen werden?
+ * 
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
 

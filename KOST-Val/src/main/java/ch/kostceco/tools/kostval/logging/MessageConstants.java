@@ -183,6 +183,7 @@ public interface MessageConstants {
 	String ERROR_XML_SERVICEFAILED_EXIT = "val.error.xml.servicefailed.exit";
 	String ERROR_XML_SERVICEFAILED = "val.error.xml.servicefailed";
 	String MESSAGE_XML_SERVICEINVALID = "val.message.xml.serviceinvalid";
+	String MESSAGE_XML_SERVICEINVALID_READ = "val.message.xml.serviceinvalid.read";
 	String MESSAGE_XML_SERVICEMESSAGE = "val.message.xml.servicemessage";
 	String MESSAGE_XML_SERVICEMESSAGE_INFO = "val.message.xml.servicemessage.info";
 

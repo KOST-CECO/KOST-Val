@@ -59,5 +59,9 @@
 <linkingObjectIdentifierType valueURI="http://id.loc.gov/vocabulary/preservation/eventRelatedObjectRole/sou">source</linkingObjectIdentifierType>
 <linkingObjectIdentifierValue>[yyyymmdd][HHmmss][MD53]o</linkingObjectIdentifierValue>
 </linkingObjectIdentifier>
+<linkingObjectIdentifier>
+<linkingObjectIdentifierType valueURI="http://id.loc.gov/vocabulary/preservation/eventRelatedObjectRole/sou">source</linkingObjectIdentifierType>
+<linkingObjectIdentifierValue>[yyyymmdd][HHmmss][MD53]orep</linkingObjectIdentifierValue>
+</linkingObjectIdentifier>
 </event>
 <!-- ToDo Event -->

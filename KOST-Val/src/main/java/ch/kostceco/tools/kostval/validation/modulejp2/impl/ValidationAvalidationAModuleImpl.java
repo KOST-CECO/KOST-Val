@@ -21,8 +21,11 @@ package ch.kostceco.tools.kostval.validation.modulejp2.impl;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Scanner;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -31,7 +34,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import ch.kostceco.tools.kosttools.fileservice.ImageMagick;
 import ch.kostceco.tools.kosttools.fileservice.Jpylyzer;
+import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.exception.modulejp2.ValidationAjp2validationException;
 import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
@@ -43,6 +48,8 @@ import ch.kostceco.tools.kostval.validation.modulejp2.ValidationAvalidationAModu
  * 
  * Zuerste erfolgt eine Erkennung, wenn diese io kommt die Validierung mit
  * Jpylyzer.
+ * 
+ * Kann die Datei mit ImageMagick einwandfrei gelesen werden?
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
@@ -68,6 +75,121 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl imple
 		// Die Erkennung erfolgt bereits im Vorfeld
 
 		boolean isValid = false;
+
+		boolean isValidImageMagick = true;
+
+		File outputImageMagick = new File(pathToWorkDir + File.separator + "ImageMagick.txt");
+		// falls das File von einem vorhergehenden Durchlauf bereits
+		// existiert, loeschen wir es
+		if (outputImageMagick.exists()) {
+			outputImageMagick.delete();
+		}
+
+		// TODO: Start: Kontrolle mit ImageMagick
+		File tempImageMagick = new File(workDir.getAbsolutePath() + File.separator + "tempIM.jp2");
+		if (tempImageMagick.exists()) {
+			tempImageMagick.delete();
+		}
+		try {
+			Util.copyFile(valDatei, tempImageMagick);
+		} catch (FileNotFoundException e) {
+			System.out.println("ImageMagick - FileNotFoundException");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("ImageMagick - IOException");
+			e.printStackTrace();
+		}
+
+		// - Initialisierung ImageMagick -> existiert alles zu ImageMagick?
+
+		// Pfad zum Programm existiert die Dateien?
+		String checkToolIM = ImageMagick.checkImageMagick(dirOfJarPath);
+		// System.out.println("" );
+		// System.out.println("ImageMagick checkTool = " + checkTool);
+
+		if (!checkToolIM.equals("OK")) {
+			if (min) {
+				return false;
+			} else {
+				Logtxt.logtxt(logFile,
+						getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_JP2)
+								+ getTextResourceService().getText(locale, MESSAGE_XML_MISSING_FILE, checkToolIM,
+										getTextResourceService().getText(locale, ABORTED)));
+				isValidImageMagick = false;
+			}
+		} else {
+			// ImageMagick sollte vorhanden sein
+			// System.out.println("ImageMagick sollte vorhanden sein" );
+			try {
+				String resultExec = ImageMagick.execImageMagick(tempImageMagick, outputImageMagick, workDir,
+						dirOfJarPath);
+				// System.out.println("ImageMagick resultExec = " + resultExec);
+				if (!resultExec.equals("OK") || !outputImageMagick.exists()) {
+					// Exception oder Report existiert nicht
+					if (min) {
+						return false;
+					} else {
+						isValidImageMagick = false;
+						// Erster Fehler! Meldung A ausgeben und invalid setzten
+						Logtxt.logtxt(logFile,
+								getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_JP2)
+										+ getTextResourceService().getText(locale, MESSAGE_XML_SERVICEINVALID_READ,
+												"ImageMagick", ""));
+					}
+				} else {
+					// Report existiert -> Auswerten...
+					String error = "magick.exe: ";
+					Scanner scannerOutput = new Scanner(outputImageMagick);
+					while (scannerOutput.hasNextLine()) {
+						// format_name=matroska,webm
+						String line = scannerOutput.nextLine();
+						// System.out.println("outputImageMagick 0 = " + line);
+						if (line.startsWith(error)) {
+							// NOK
+
+							// System.out.println("outputImageMagick 1 = " + line);
+							line = line.replace(tempImageMagick.getAbsolutePath(), "");
+							line = line.replaceAll("`'", "");
+							line = line.replaceAll("''", "");
+							line = line.replaceAll("``", "");
+							line = line.replaceAll("´´", "");
+							line = line.replaceAll("magick.exe: ", "");
+							// System.out.println("outputImageMagick 2 = " + line);
+
+							if (isValidImageMagick) {
+								// Erste Fehlermeldung von ImageMagick
+								Logtxt.logtxt(logFile,
+										getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_JP2)
+												+ getTextResourceService().getText(locale,
+														MESSAGE_XML_SERVICEINVALID_READ, "ImageMagick", ""));
+								isValidImageMagick = false;
+							}
+
+							// Error auslesen und ausgeben
+
+							Logtxt.logtxt(logFile,
+									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_JP2)
+											+ getTextResourceService().getText(locale, MESSAGE_XML_SERVICEMESSAGE_INFO,
+													"- ", line + " [ImageMagick]"));
+
+							// magick.exe: LZWDecode: Strip 0 not terminated with EOI code. `LZWDecode' @
+							// error/tiff.c/TIFFErrors/571.
+						}
+					}
+					scannerOutput.close();
+				}
+				if (tempImageMagick.exists()) {
+					tempImageMagick.delete();
+				}
+			} catch (Exception e) {
+				Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_JP2)
+						+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, "ImageMagick " + e.getMessage()));
+				return false;
+			}
+			// TODO: Ende: ImageMagick
+		}
+
+		isValid = isValidImageMagick;
 
 		// TODO: Erledigt - Initialisierung Jpylyzer -> existiert Jpylyzer?
 
@@ -152,8 +274,8 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl imple
 
 					// Das Resultat ist False oder True
 					if (result.equalsIgnoreCase("True")) {
-						// valid
-						isValid = true;
+						// valid jetzt noch Abgleich mit ImageMagick
+						isValid = isValidImageMagick;
 					} else {
 						// invalide
 						if (min) {

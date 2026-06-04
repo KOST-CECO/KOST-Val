@@ -23,6 +23,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfarepException;
+import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfavalidationException;
 import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
@@ -47,18 +48,8 @@ public class Controllerreppdfa implements MessageConstants {
 
 	private TextResourceService textResourceService;
 
-//	private ValidationAvalidationAiModule validationAvalidationAiModule;
 	private ValidationArepPdfaModule validationArepPdfaModule;
 	private ValidationAinitialisationModule validationAinitialisationModule;
-
-	/*
-	 * public ValidationAvalidationAiModule getValidationAvalidationAiModule() {
-	 * return validationAvalidationAiModule; }
-	 * 
-	 * public void setValidationAvalidationAiModule(ValidationAvalidationAiModule
-	 * validationAvalidationAiModule) { this.validationAvalidationAiModule =
-	 * validationAvalidationAiModule; }
-	 */
 
 	public ValidationArepPdfaModule getValidationArepPdfaModule() {
 		return validationArepPdfaModule;
@@ -84,39 +75,6 @@ public class Controllerreppdfa implements MessageConstants {
 		this.textResourceService = textResourceService;
 	}
 
-	/*
-	 * public boolean executeMandatory(File valDatei, File directoryOfLogfile,
-	 * Map<String, String> configMap, Locale locale, File logFile, String
-	 * dirOfJarPath) { boolean valid = true;
-	 * 
-	 * // String pdftoolsConfig = configMap.get("pdftools");
-	 * 
-	 * /* Nicht vergessen in
-	 * "src/main/resources/config/applicationContext-services.xml" beim
-	 * entsprechenden Modul die property anzugeben: <property
-	 * name="configurationService" ref="configurationService" />
-	 */
-
-	/*
-	 * if (pdftoolsConfig.contentEquals("yes")) {
-	 * 
-	 * // Initialisation PDF-Tools try { if
-	 * (this.getValidationAinitialisationModule().validate(valDatei,
-	 * directoryOfLogfile, configMap, locale, logFile, dirOfJarPath)) {
-	 * this.getValidationAinitialisationModule().getMessageService().print(); } else
-	 * { this.getValidationAinitialisationModule().getMessageService().print();
-	 * return false; } } catch (ValidationApdfavalidationException e) {
-	 * Logtxt.logtxt(logFile, getTextResourceService().getText(locale,
-	 * MESSAGE_XML_MODUL_A_PDFA) + getTextResourceService().getText(locale,
-	 * ERROR_XML_UNKNOWN, e.getMessage() + " init1"));
-	 * this.getValidationAinitialisationModule().getMessageService().print(); return
-	 * false; } catch (Exception e) { Logtxt.logtxt(logFile,
-	 * getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA) +
-	 * getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage() +
-	 * " init2")); return false; } } else { valid = true; }
-	 */
-//		return valid;	}
-
 	public boolean executeOptional(File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale,
 			File logFile, String dirOfJarPath, String initFolderPath, File fileToOutputStart) {
 		String onWork = configMap.get("ShowProgressOnWork");
@@ -125,6 +83,26 @@ public class Controllerreppdfa implements MessageConstants {
 		}
 
 		boolean valid = true;
+
+		// Initialisation PDF-Tools
+		try {
+			if (this.getValidationAinitialisationModule().validate(valDatei, directoryOfLogfile, configMap, locale,
+					logFile, dirOfJarPath, initFolderPath, fileToOutputStart)) {
+				this.getValidationAinitialisationModule().getMessageService().print();
+			} else {
+				this.getValidationAinitialisationModule().getMessageService().print();
+				return false;
+			}
+		} catch (ValidationApdfavalidationException e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage() + " init1"));
+			this.getValidationAinitialisationModule().getMessageService().print();
+			return false;
+		} catch (Exception e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage() + " init2"));
+			return false;
+		}
 
 		// Reparatur
 		try {
@@ -142,7 +120,7 @@ public class Controllerreppdfa implements MessageConstants {
 			}
 
 		} catch (ValidationApdfarepException e) {
-			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
 					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage() + " Rep"));
 			this.getValidationArepPdfaModule().getMessageService().print();
 			if (min) {
@@ -151,7 +129,7 @@ public class Controllerreppdfa implements MessageConstants {
 				valid = false;
 			}
 		} catch (Exception e) {
-			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
 					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage() + " Rep"));
 			if (min) {
 				return false;

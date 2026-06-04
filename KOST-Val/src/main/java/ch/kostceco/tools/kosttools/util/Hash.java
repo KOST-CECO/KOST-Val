@@ -106,7 +106,7 @@ public class Hash {
 					e1.printStackTrace();
 				}
 		} else {
-			System.out.println("Only MD5, SHA-1, SHA-256 & SHA-521. Not " + algo);
+			System.out.println("File / Folder does not exist : \"" + fileFolder + "\"");
 		}
 		hash = output;
 		return hash;

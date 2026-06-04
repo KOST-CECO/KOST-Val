@@ -21,14 +21,18 @@ package ch.kostceco.tools.kostval.validation.moduletiff2.impl;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
 import ch.kostceco.tools.kosttools.fileservice.Jhove;
+import ch.kostceco.tools.kosttools.fileservice.ImageMagick;
 import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationBjhoveValidationException;
 import ch.kostceco.tools.kostval.logging.Logtxt;
@@ -38,6 +42,8 @@ import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationBjhoveValidati
 /**
  * Validierungsschritt B (Jhove-Validierung) Ist die TIFF-Datei gemaess Jhove
  * valid? valid --> Status: "Well-Formed and valid"
+ * 
+ * Kann die Datei mit ImageMagick einwandfrei gelesen werden?
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
@@ -59,6 +65,126 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 		}
 
 		boolean isValid = true;
+		boolean isValidImageMagick = true;
+
+		String pathToWorkDir = configMap.get("PathToWorkDir");
+		File workDir = new File(pathToWorkDir);
+		if (!workDir.exists()) {
+			workDir.mkdir();
+		}
+		File outputImageMagick = new File(pathToWorkDir + File.separator + "ImageMagick.txt");
+		// falls das File von einem vorhergehenden Durchlauf bereits
+		// existiert, loeschen wir es
+		if (outputImageMagick.exists()) {
+			outputImageMagick.delete();
+		}
+
+		// TODO: Start: Kontrolle mit ImageMagick
+		File tempImageMagick = new File(workDir.getAbsolutePath() + File.separator + "tempIM.tiff");
+		if (tempImageMagick.exists()) {
+			tempImageMagick.delete();
+		}
+		try {
+			Util.copyFile(valDatei, tempImageMagick);
+		} catch (FileNotFoundException e) {
+			System.out.println("ImageMagick - FileNotFoundException");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("ImageMagick - IOException");
+			e.printStackTrace();
+		}
+
+		// - Initialisierung ImageMagick -> existiert alles zu ImageMagick?
+
+		// Pfad zum Programm existiert die Dateien?
+		String checkToolIM = ImageMagick.checkImageMagick(dirOfJarPath);
+		// System.out.println("" );
+		// System.out.println("ImageMagick checkTool = " + checkTool);
+
+		if (!checkToolIM.equals("OK")) {
+			if (min) {
+				return false;
+			} else {
+				Logtxt.logtxt(logFile,
+						getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_TIFF)
+								+ getTextResourceService().getText(locale, MESSAGE_XML_MISSING_FILE, checkToolIM,
+										getTextResourceService().getText(locale, ABORTED)));
+				isValidImageMagick = false;
+			}
+		} else {
+			// ImageMagick sollte vorhanden sein
+			// System.out.println("ImageMagick sollte vorhanden sein" );
+			try {
+				String resultExec = ImageMagick.execImageMagick(tempImageMagick, outputImageMagick, workDir,
+						dirOfJarPath);
+				// System.out.println("ImageMagick resultExec = " + resultExec);
+				if (!resultExec.equals("OK") || !outputImageMagick.exists()) {
+					// Exception oder Report existiert nicht
+					if (min) {
+						return false;
+					} else {
+						isValidImageMagick = false;
+						// Erster Fehler! Meldung A ausgeben und invalid setzten
+						Logtxt.logtxt(logFile,
+								getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_TIFF)
+										+ getTextResourceService().getText(locale, MESSAGE_XML_SERVICEINVALID_READ,
+												"ImageMagick", ""));
+					}
+				} else {
+					// Report existiert -> Auswerten...
+					String error = "magick.exe: ";
+					Scanner scannerOutput = new Scanner(outputImageMagick);
+					while (scannerOutput.hasNextLine()) {
+						// format_name=matroska,webm
+						String line = scannerOutput.nextLine();
+						// System.out.println("outputImageMagick 0 = " + line);
+						if (line.startsWith(error)) {
+							// NOK
+
+							// System.out.println("outputImageMagick 1 = " + line);
+							line = line.replace(tempImageMagick.getAbsolutePath(), "");
+							line = line.replaceAll("`'", "");
+							line = line.replaceAll("''", "");
+							line = line.replaceAll("``", "");
+							line = line.replaceAll("´´", "");
+							line = line.replaceAll("magick.exe: ", "");
+							// System.out.println("outputImageMagick 2 = " + line);
+
+							if (isValidImageMagick) {
+								// Erste Fehlermeldung von ImageMagick
+								Logtxt.logtxt(logFile,
+										getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_TIFF)
+												+ getTextResourceService().getText(locale,
+														MESSAGE_XML_SERVICEINVALID_READ, "ImageMagick", ""));
+								isValidImageMagick = false;
+							}
+
+							// Error auslesen und ausgeben
+
+							Logtxt.logtxt(logFile,
+									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_TIFF)
+											+ getTextResourceService().getText(locale, MESSAGE_XML_SERVICEMESSAGE_INFO,
+													"- ", line + " [ImageMagick]"));
+
+							// magick.exe: LZWDecode: Strip 0 not terminated with EOI code. `LZWDecode' @
+							// error/tiff.c/TIFFErrors/571.
+						}
+					}
+					scannerOutput.close();
+				}
+				if (tempImageMagick.exists()) {
+					tempImageMagick.delete();
+				}
+			} catch (Exception e) {
+				Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_TIFF)
+						+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, "ImageMagick " + e.getMessage()));
+				return false;
+			}
+			// TODO: Ende: ImageMagick
+		}
+
+		isValid = isValidImageMagick;
+
 		// Informationen zum Jhove-Logverzeichnis holen
 		String pathToJhoveOutput2 = directoryOfLogfile.getAbsolutePath();
 		/*
@@ -66,7 +192,6 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 		 * Log-Verzeichnis abgelegt werden kann, welche auch geloescht werden kann.
 		 */
 		File jhoveLog = new File(pathToJhoveOutput2, valDatei.getName() + ".jhove-log.txt");
-		String pathToWorkDir = configMap.get("PathToWorkDir");
 
 		String toplevelDir = valDatei.getName();
 		int lastDotIdx = toplevelDir.lastIndexOf(".");
@@ -76,7 +201,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 		String jhoveString = Jhove.valTiff(valDatei, jhoveLog, pathToWorkDir);
 		if (jhoveString.equals("OK")) {
 			if (jhoveLog.exists()) {
-				isValid = true;
+				isValid = isValidImageMagick;
 			} else {
 				isValid = false;
 				if (min) {
@@ -139,6 +264,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 				// String detailIgnore = configMap.get( "ignore" );
 
 				if (line.contains("ErrorMessage:")) {
+					line = line.replace("ErrorMessage:", "");
 					if (line.contains(" out of sequence")) {
 						ignorcounter = ignorcounter + 1;
 						// } else if (detailIgnore.contains(line)){
@@ -155,7 +281,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 								Logtxt.logtxt(logFile,
 										getTextResourceService().getText(locale, MESSAGE_XML_MODUL_B_TIFF)
 												+ getTextResourceService().getText(locale, MESSAGE_XML_SERVICEINVALID,
-														"Jhove", status));
+														"", status));
 							}
 							statuscounter = 1; // Marker Status Ausgegeben
 						}
@@ -166,6 +292,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 						 * "  ErrorMessage: Unknown data type: Type = 0, Tag = 0" In einem Test wurde so
 						 * die Anzahl Errors von 65'060 auf 63 reduziert
 						 */
+						line = line + " [Jhove]";
 
 						if (lines.contains(line)) {
 							// Diese Linie = Fehlermelung wurde bereits
@@ -182,7 +309,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 									Logtxt.logtxt(logFile,
 											getTextResourceService().getText(locale, MESSAGE_XML_MODUL_B_TIFF)
 													+ getTextResourceService().getText(locale,
-															MESSAGE_XML_SERVICEMESSAGE, "- Jhove", line));
+															MESSAGE_XML_SERVICEMESSAGE, "-", line));
 									lines.add(line);
 								} else if (counter == 11) {
 									Logtxt.logtxt(logFile,
@@ -203,6 +330,8 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 					/*
 					 * Linie mit der Warnung auch mitausgeben, falls diese neu ist.
 					 */
+					line = line + " [Jhove]";
+					line = line.replace("InfoMessage:", "");
 
 					if (linesInfo.contains(line)) {
 						// Diese Linie = Fehlermelung wurde bereits
@@ -217,7 +346,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 								Logtxt.logtxt(logFile,
 										getTextResourceService().getText(locale, MESSAGE_XML_MODUL_B_TIFF)
 												+ getTextResourceService().getText(locale,
-														MESSAGE_XML_SERVICEMESSAGE_INFO, "- Jhove", line));
+														MESSAGE_XML_SERVICEMESSAGE_INFO, "-", line));
 								linesInfo.add(line);
 							} else if (counterInfo == 11) {
 								Logtxt.logtxt(logFile,

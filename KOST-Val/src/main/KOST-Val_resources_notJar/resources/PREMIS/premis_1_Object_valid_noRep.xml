@@ -59,5 +59,9 @@
 <relatedObjectIdentifierValue>_[yyyymmdd][HHmmss][MD53]o</relatedObjectIdentifierValue>
 </relatedObjectIdentifier>
 </relationship>
+<linkingEventIdentifier>
+<linkingEventIdentifierType valueURI="http://id.loc.gov/vocabulary/identifiers/local">local</linkingEventIdentifierType>
+<linkingEventIdentifierValue>_[yyyymmdd][HHmmss][MD53]erep</linkingEventIdentifierValue>
+</linkingEventIdentifier>
 </object>
 <!-- ToDo Object -->

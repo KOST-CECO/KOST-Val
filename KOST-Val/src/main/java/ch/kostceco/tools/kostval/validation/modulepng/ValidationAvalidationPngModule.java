@@ -32,6 +32,8 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
  * Zuerste erfolgt eine Erkennung, wenn diese io kommt die Validierung mit
  * pngcheck.
  * 
+ * Kann die Datei mit ImageMagick einwandfrei gelesen werden?
+ * 
  * @author Rc Claire Roethlisberger, KOST-CECO
  */
 

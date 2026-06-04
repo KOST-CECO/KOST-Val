@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:template match="/">
-		<!-- kostval.conf.xml_v2.4.0.0 -->
+		<!-- kostval.conf.xml_v2.4.0.2 -->
 		<html>
 			<head>
 				<style>
@@ -134,6 +134,12 @@
 						<td>- invalide PDF/A- sowie nicht akzeptierte PDF-Dateien nach PDF/A-2u reparieren [no]:</td>
 						<td>
 							<xsl:value-of select="configuration/pdfa/pdfa2urep" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>- wenn Reparatur nach PDFA-2u invalide, dann nach PDF/A-2b reparieren [no]:</td>
+						<td>
+							<xsl:value-of select="configuration/pdfa/pdfa2brep" />
 						</td>
 					</tr>
 

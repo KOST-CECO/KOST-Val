@@ -131,7 +131,7 @@ public class GuiController {
 	private String initInstructionsIt;
 
 	private String initInstructionsEn;
-	private String versionKostVal = "2.4.0.0";
+	private String versionKostVal = "2.4.0.2";
 	/*
 	 * TODO: versionKostVal auch hier anpassen:
 	 * 
@@ -1010,16 +1010,21 @@ public class GuiController {
 				 * Da es nicht erfolgreich war kann der Log nicht angezeigt werden
 				 */
 				String text = "Ein unbekannter Fehler ist aufgetreten ";
+				String help = "<br/><br/>Mögliche Hilfe => Konfiguration auf Standard zuruecksetzen! [Standard anwenden]";
+
 				String textArgs = "(WorkerStateEvent).<br/><br/>" + args[0] + " " + args[1] + " " + args[2] + " "
 						+ args[3];
 				if (locale.toString().startsWith("fr")) {
 					text = "Une erreur inconnue s`est produite ";
+					help = "<br/><br/>Aide possible => Réinitialiser la configuration par défaut ! [Appliquer le standard]";
 				} else if (locale.toString().startsWith("it")) {
 					text = "Si è verificato un errore sconosciuto";
+					help = "<br/><br/>Possibile soluzione => Ripristina impostazioni predefinite! [Applica predefinito]";
 				} else if (locale.toString().startsWith("en")) {
 					text = "An unknown error has occurred ";
+					help = "<br/><br/>Possible solution => Reset configuration to default! [Apply standard]";
 				}
-				engine.loadContent("<html><h2>" + text + textArgs + "</h2></html>");
+				engine.loadContent("<html><h2>" + text + textArgs + help + "</h2></html>");
 			}
 		});
 		new Thread(val).start();
@@ -1180,16 +1185,21 @@ public class GuiController {
 				 * Da es nicht erfolgreich war kann der Log nicht angezeigt werden
 				 */
 				String text = "Ein unbekannter Fehler ist aufgetreten ";
+				String help = "<br/><br/>Mögliche Hilfe => Konfiguration auf Standard zuruecksetzen! [Standard anwenden]";
+
 				String textArgs = "(WorkerStateEvent).<br/><br/>" + args[0] + " " + args[1] + " " + args[2] + " "
 						+ args[3];
 				if (locale.toString().startsWith("fr")) {
 					text = "Une erreur inconnue s`est produite ";
+					help = "<br/><br/>Aide possible => Réinitialiser la configuration par défaut ! [Appliquer le standard]";
 				} else if (locale.toString().startsWith("it")) {
 					text = "Si è verificato un errore sconosciuto";
+					help = "<br/><br/>Possibile soluzione => Ripristina impostazioni predefinite! [Applica predefinito]";
 				} else if (locale.toString().startsWith("en")) {
 					text = "An unknown error has occurred ";
+					help = "<br/><br/>Possible solution => Reset configuration to default! [Apply standard]";
 				}
-				engine.loadContent("<html><h2>" + text + textArgs + "</h2></html>");
+				engine.loadContent("<html><h2>" + text + textArgs + help + "</h2></html>");
 			}
 		});
 		new Thread(val).start();
@@ -1326,16 +1336,21 @@ public class GuiController {
 				 * Da es nicht erfolgreich war kann der Log nicht angezeigt werden
 				 */
 				String text = "Ein unbekannter Fehler ist aufgetreten ";
+				String help = "<br/><br/>Mögliche Hilfe => Konfiguration auf Standard zuruecksetzen! [Standard anwenden]";
+
 				String textArgs = "(WorkerStateEvent).<br/><br/>" + args[0] + " " + args[1] + " " + args[2] + " "
 						+ args[3];
 				if (locale.toString().startsWith("fr")) {
 					text = "Une erreur inconnue s`est produite ";
+					help = "<br/><br/>Aide possible => Réinitialiser la configuration par défaut ! [Appliquer le standard]";
 				} else if (locale.toString().startsWith("it")) {
 					text = "Si è verificato un errore sconosciuto";
+					help = "<br/><br/>Possibile soluzione => Ripristina impostazioni predefinite! [Applica predefinito]";
 				} else if (locale.toString().startsWith("en")) {
 					text = "An unknown error has occurred ";
+					help = "<br/><br/>Possible solution => Reset configuration to default! [Apply standard]";
 				}
-				engine.loadContent("<html><h2>" + text + textArgs + "</h2></html>");
+				engine.loadContent("<html><h2>" + text + textArgs + help + "</h2></html>");
 			}
 		});
 		new Thread(val).start();
@@ -1805,10 +1820,10 @@ public class GuiController {
 							engine.load("file:///" + valFileFolder.getAbsolutePath());
 						} else if (fileName.endsWith(".xml")) {
 							// XML laden
-							System.out.println("XML laden print");
+							// System.out.println("XML laden print");
 							StreamSource xml = new StreamSource(valFileFolder);
 							if (Util.stringInFile("<?xml-stylesheet", valFileFolder)) {
-								System.out.println("stylesheet angezogen");
+								// System.out.println("stylesheet angezogen");
 								engine.load("file:///" + valFileFolder.getAbsolutePath());
 								if (valFileFolder.getName().toLowerCase().endsWith(".kost-val.log.xml")) {
 									logFile = valFileFolder;
@@ -1818,7 +1833,7 @@ public class GuiController {
 								}
 							} else {
 								// generisches stylesheet verwenden
-								System.out.println("generisches stylesheet verwenden");
+								// System.out.println("generisches stylesheet verwenden");
 								try {
 									// XSL laden
 									File xslGeneral = new File(dirOfJarPath + File.separator + "resources"
