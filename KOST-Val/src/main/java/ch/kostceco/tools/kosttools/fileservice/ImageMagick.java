@@ -24,14 +24,14 @@ import ch.kostceco.tools.kosttools.util.Util;
 /** @author Rc Claire Roethlisberger, KOST-CECO */
 
 public class ImageMagick {
-	private static String exeDir = "resources" + File.separator + "ImageMagick-7.1.2-18-portable-Q16-x64";
+	private static String exeDir = ".." + File.separator + "ImageMagick";
 	private static String magickExe = exeDir + File.separator + "magick.exe";
 
 	/**
 	 * fuehrt eine Lesekontrolle mit ImageMagick via cmd durch und speichert das
 	 * Ergebnis in ein File (Report). Gibt zurueck ob Report existiert oder nicht
 	 * 
-	 * @param checkFile      MKV-Datei, welche validiert werden soll
+	 * @param checkFile    Datei, welche validiert werden soll
 	 * @param report       Datei fuer den Report
 	 * @param workDir      Temporaeres Verzeichnis
 	 * @param dirOfJarPath String mit dem Pfad von wo das Programm gestartet wurde

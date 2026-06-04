@@ -21,6 +21,8 @@ package ch.kostceco.tools.kostval.validation.moduletiff2.impl;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashSet;
@@ -78,7 +80,20 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 		}
 
 		// TODO: Start: Kontrolle mit ImageMagick
-/*
+		File tempImageMagick = new File(workDir.getAbsolutePath() + File.separator + "tempIM.tiff");
+		if (tempImageMagick.exists()) {
+			tempImageMagick.delete();
+		}
+		try {
+			Util.copyFile(valDatei, tempImageMagick);
+		} catch (FileNotFoundException e) {
+			System.out.println("ImageMagick - FileNotFoundException");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("ImageMagick - IOException");
+			e.printStackTrace();
+		}
+
 		// - Initialisierung ImageMagick -> existiert alles zu ImageMagick?
 
 		// Pfad zum Programm existiert die Dateien?
@@ -100,7 +115,8 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 			// ImageMagick sollte vorhanden sein
 			// System.out.println("ImageMagick sollte vorhanden sein" );
 			try {
-				String resultExec = ImageMagick.execImageMagick(valDatei, outputImageMagick, workDir, dirOfJarPath);
+				String resultExec = ImageMagick.execImageMagick(tempImageMagick, outputImageMagick, workDir,
+						dirOfJarPath);
 				// System.out.println("ImageMagick resultExec = " + resultExec);
 				if (!resultExec.equals("OK") || !outputImageMagick.exists()) {
 					// Exception oder Report existiert nicht
@@ -126,7 +142,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 							// NOK
 
 							// System.out.println("outputImageMagick 1 = " + line);
-							line = line.replace(valDatei.getAbsolutePath(), "");
+							line = line.replace(tempImageMagick.getAbsolutePath(), "");
 							line = line.replaceAll("`'", "");
 							line = line.replaceAll("''", "");
 							line = line.replaceAll("``", "");
@@ -148,7 +164,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 							Logtxt.logtxt(logFile,
 									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_TIFF)
 											+ getTextResourceService().getText(locale, MESSAGE_XML_SERVICEMESSAGE_INFO,
-													"- ", line+" [ImageMagick]"));
+													"- ", line + " [ImageMagick]"));
 
 							// magick.exe: LZWDecode: Strip 0 not terminated with EOI code. `LZWDecode' @
 							// error/tiff.c/TIFFErrors/571.
@@ -156,13 +172,16 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 					}
 					scannerOutput.close();
 				}
+				if (tempImageMagick.exists()) {
+					tempImageMagick.delete();
+				}
 			} catch (Exception e) {
 				Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_TIFF)
 						+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, "ImageMagick " + e.getMessage()));
 				return false;
 			}
 			// TODO: Ende: ImageMagick
-		}*/
+		}
 
 		isValid = isValidImageMagick;
 
@@ -245,7 +264,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 				// String detailIgnore = configMap.get( "ignore" );
 
 				if (line.contains("ErrorMessage:")) {
-					line=line.replace("ErrorMessage:", "");
+					line = line.replace("ErrorMessage:", "");
 					if (line.contains(" out of sequence")) {
 						ignorcounter = ignorcounter + 1;
 						// } else if (detailIgnore.contains(line)){
@@ -273,7 +292,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 						 * "  ErrorMessage: Unknown data type: Type = 0, Tag = 0" In einem Test wurde so
 						 * die Anzahl Errors von 65'060 auf 63 reduziert
 						 */
-						line=line+" [Jhove]";
+						line = line + " [Jhove]";
 
 						if (lines.contains(line)) {
 							// Diese Linie = Fehlermelung wurde bereits
@@ -311,9 +330,8 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 					/*
 					 * Linie mit der Warnung auch mitausgeben, falls diese neu ist.
 					 */
-					line=line+" [Jhove]";
-					line=line.replace("InfoMessage:", "");
-
+					line = line + " [Jhove]";
+					line = line.replace("InfoMessage:", "");
 
 					if (linesInfo.contains(line)) {
 						// Diese Linie = Fehlermelung wurde bereits

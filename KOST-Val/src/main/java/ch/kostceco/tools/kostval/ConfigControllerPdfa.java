@@ -37,7 +37,7 @@ public class ConfigControllerPdfa {
 
 	@FXML
 	private CheckBox checkPdfa, checkVerapdf, checkPdftools, checkPdfa1a, checkPdfa2a, checkFont, checkPdfaRep,
-			checkPdfa2uRep, checkJbig2, checkDetailpt, checkDetailvp, checkPdfa1b, checkPdfa2b, checkFontTol,
+			checkPdfa2uRep,checkPdfa2bRep, checkJbig2, checkDetailpt, checkDetailvp, checkPdfa1b, checkPdfa2b, checkFontTol,
 			checkPdfa2u, checkWarning3to2;
 
 	@FXML
@@ -86,6 +86,7 @@ public class ConfigControllerPdfa {
 				checkPdfaRep.setText(
 						"ich übernehme die Verantwortung für die Qualitätssicherung, Dokumentation und deren Weiterverwendung");
 				checkPdfa2uRep.setText("invalide PDF/A- sowie nicht akzeptierte PDF-Dateien nach PDF/A-2u reparieren");
+				checkPdfa2bRep.setText("wenn Reparatur nach PDFA-2u invalide, dann nach PDF/A-2b reparieren");
 				labelDms.setText(
 						"Reparatur bedingt die eigenständige Installation des 'dmstools PDF/A Converter' (v1.7.0.1) sowie die Aktivierung eurer Lizenz.");
 				labelDms2.setText("Die integrierte KOST-Lizenz steht nur unseren Trägern und Supporter zur Verfügung.");
@@ -100,6 +101,7 @@ public class ConfigControllerPdfa {
 						"j'assume la responsabilité de l'assurance qualité, de la documentation et de leur réutilisation");
 				checkPdfa2uRep.setText(
 						"réparer les fichiers PDF/A invalides et les fichiers PDF non acceptés selon PDF/A-2u");
+				checkPdfa2bRep.setText("Si la réparation est invalide selon la norme PDF/A-2u, réparer selon la norme PDF/A-2b");
 				labelDms.setText(
 						"Cette réparation nécessite l'installation autonome du logiciel 'dmstools PDF/A Converter' (v1.7.0.1) ainsi que l'activation de votre licence.");
 				labelDms2.setText("La licence KOST intégrée est réservée à nos membres et supporters.");
@@ -114,7 +116,7 @@ public class ConfigControllerPdfa {
 						"Mi assumo la responsabilità della garanzia di qualità, della documentazione e del suo ulteriore utilizzo");
 				checkPdfa2uRep.setText(
 						"riparare i file PDF/A non validi e i file PDF non accettati secondo lo standard PDF/A-2u");
-				labelDms.setText(
+				checkPdfa2bRep.setText("Se la riparazione secondo lo standard PDF/A-2u non è valida, eseguire la riparazione secondo lo standard PDF/A-2b");				labelDms.setText(
 						"La riparazione richiede l'installazione autonoma di 'dmstools PDF/A Converter' (v1.7.0.1) e l'attivazione della vostra licenza.");
 				labelDms2.setText("La licenza KOST integrata è disponibile solo per i nostri membri e supportatori.");
 				buttonConfigApply.setText("Applica");
@@ -126,6 +128,7 @@ public class ConfigControllerPdfa {
 				labelRep.setText("Repair settings: PDF/A (via GUI only)");
 				checkPdfaRep.setText("I take responsibility for quality assurance, documentation and its further use");
 				checkPdfa2uRep.setText("repair invalid PDF/A and unacceptable PDF files to PDF/A-2u");
+				checkPdfa2bRep.setText("If repair to PDF/A-2u is invalid, repair to PDF/A-2b");
 				labelDms.setText(
 						"This repair requires you to install the 'dmstools PDF/A Converter' (v1.7.0.1) on your own and activate your license.");
 				labelDms2.setText("The integrated KOST license is only available to our members and supporters.");
@@ -159,6 +162,7 @@ public class ConfigControllerPdfa {
 			String noPdfaJbig2 = "<jbig2allowed>no</jbig2allowed>";
 			String noPdfaRep = "<pdfarep>no </pdfarep>";
 			String noPdfa2uRep = "<pdfa2urep>no </pdfa2urep>";
+			String noPdfa2bRep = "<pdfa2brep>no </pdfa2brep>";
 
 			if (config.contains(noPdftools)) {
 				checkPdftools.setSelected(false);
@@ -215,9 +219,14 @@ public class ConfigControllerPdfa {
 			if (config.contains(noPdfaRep)) {
 				checkPdfaRep.setSelected(false);
 				checkPdfa2uRep.setDisable(true);
+				checkPdfa2bRep.setDisable(true);
 			}
 			if (config.contains(noPdfa2uRep)) {
 				checkPdfa2uRep.setSelected(false);
+				checkPdfa2bRep.setDisable(true);
+			}
+			if (config.contains(noPdfa2bRep)) {
+				checkPdfa2bRep.setSelected(false);
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -575,6 +584,28 @@ public class ConfigControllerPdfa {
 		String no = "<pdfa2urep>no </pdfa2urep>";
 		try {
 			if (checkPdfa2uRep.isSelected()) {
+				Util.oldnewstring(no, yes, configFile);
+				checkPdfa2bRep.setDisable(false);
+			} else {
+				Util.oldnewstring(yes, no, configFile);
+				checkPdfa2bRep.setDisable(true);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/*
+	 * checkPdfa2bRep aendert die Kontrolle ob PDF/A-2b-Reparatur akzeptiert oder
+	 * nicht in der Konfiguration ein oder aus
+	 */
+	@FXML
+	void changePdfa2bRep(ActionEvent event) {
+		labelMessage.setText("");
+		String yes = "<pdfa2brep>yes </pdfa2brep>";
+		String no = "<pdfa2brep>no </pdfa2brep>";
+		try {
+			if (checkPdfa2bRep.isSelected()) {
 				Util.oldnewstring(no, yes, configFile);
 			} else {
 				Util.oldnewstring(yes, no, configFile);

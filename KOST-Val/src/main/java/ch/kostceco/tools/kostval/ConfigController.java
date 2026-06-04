@@ -72,7 +72,7 @@ public class ConfigController {
 	private String dirOfJarPath, inputString, workString, config, stringPuid,
 			minOne = "Mindestens eine Variante muss erlaubt sein!";
 
-	private String versionKostVal = "   (v2.4.0.1)";
+	private String versionKostVal = "   (v2.4.0.2)";
 
 	private Locale locale = Locale.getDefault();
 

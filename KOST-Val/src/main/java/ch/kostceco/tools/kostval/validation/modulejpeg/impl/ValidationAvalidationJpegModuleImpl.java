@@ -21,6 +21,7 @@ package ch.kostceco.tools.kostval.validation.modulejpeg.impl;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -30,6 +31,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 import ch.kostceco.tools.kosttools.fileservice.ImageMagick;
+import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.exception.modulejpeg.ValidationAjpegvalidationException;
 import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
@@ -84,7 +86,20 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl
 		}
 
 		// TODO: Start: Kontrolle mit ImageMagick
-/*
+		File tempImageMagick = new File(workDir.getAbsolutePath() + File.separator + "tempIM.jpeg");
+		if (tempImageMagick.exists()) {
+			tempImageMagick.delete();
+		}
+		try {
+			Util.copyFile(valDatei, tempImageMagick);
+		} catch (FileNotFoundException e) {
+			System.out.println("ImageMagick - FileNotFoundException");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("ImageMagick - IOException");
+			e.printStackTrace();
+		}
+
 		// - Initialisierung ImageMagick -> existiert alles zu ImageMagick?
 
 		// Pfad zum Programm existiert die Dateien?
@@ -106,7 +121,8 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl
 			// ImageMagick sollte vorhanden sein
 			// System.out.println("ImageMagick sollte vorhanden sein" );
 			try {
-				String resultExec = ImageMagick.execImageMagick(valDatei, outputImageMagick, workDir, dirOfJarPath);
+				String resultExec = ImageMagick.execImageMagick(tempImageMagick, outputImageMagick, workDir,
+						dirOfJarPath);
 				// System.out.println("ImageMagick resultExec = " + resultExec);
 				if (!resultExec.equals("OK") || !outputImageMagick.exists()) {
 					// Exception oder Report existiert nicht
@@ -131,9 +147,9 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl
 						if (line.startsWith(error)) {
 							// NOK
 
-							// System.out.println(valDatei.getAbsolutePath());
+							// System.out.println(tempImageMagick.getAbsolutePath());
 							// System.out.println("outputImageMagick 1 = " + line);
-							line = line.replace(valDatei.getAbsolutePath(), "");
+							line = line.replace(tempImageMagick.getAbsolutePath(), "");
 							line = line.replaceAll("`'", "");
 							line = line.replaceAll("''", "");
 							line = line.replaceAll("``", "");
@@ -155,7 +171,7 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl
 							Logtxt.logtxt(logFile,
 									getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_JPEG)
 											+ getTextResourceService().getText(locale, MESSAGE_XML_SERVICEMESSAGE_INFO,
-													"- ", line+" [ImageMagick]"));
+													"- ", line + " [ImageMagick]"));
 
 							// magick.exe: LZWDecode: Strip 0 not terminated with EOI code. `LZWDecode' @
 							// error/tiff.c/TIFFErrors/571.
@@ -163,13 +179,16 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl
 					}
 					scannerOutput.close();
 				}
+				if (tempImageMagick.exists()) {
+					tempImageMagick.delete();
+				}
 			} catch (Exception e) {
 				Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_JPEG)
 						+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, "ImageMagick " + e.getMessage()));
 				return false;
 			}
 			// TODO: Ende: ImageMagick
-		}*/
+		}
 
 		isValid = isValidImageMagick;
 
@@ -234,7 +253,7 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl
 
 				// display the scanner's log messages
 				for (String msg : ires.collapsedMessages()) {
-					msg=msg+" [BadPeggy]";
+					msg = msg + " [BadPeggy]";
 
 					// Warnung abfangen
 					if (msg.startsWith("Unsupported Image Type")) {

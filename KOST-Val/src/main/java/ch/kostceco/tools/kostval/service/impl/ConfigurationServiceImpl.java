@@ -232,9 +232,13 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 			String pdfarep = doc.getElementsByTagName("pdfarep").item(0).getTextContent().replace(" ", "");
 			configMap.put("pdfarep", pdfarep);
 
-			// <pdfarep>no </pdfarep> <!--no / yes -->
+			// <pdfa2urep>no </pdfa2urep> <!--no / yes -->
 			String pdfa2urep = doc.getElementsByTagName("pdfa2urep").item(0).getTextContent().replace(" ", "");
 			configMap.put("pdfa2urep", pdfa2urep);
+
+			// <pdfa2brep>no </pdfa2brep> <!--no / yes -->
+			String pdfa2brep = doc.getElementsByTagName("pdfa2brep").item(0).getTextContent().replace(" ", "");
+			configMap.put("pdfa2brep", pdfa2brep);
 
 			// Gibt an ob JBIG2 erlaubt ist oder nicht
 			String jbig2allowed = doc.getElementsByTagName("jbig2allowed").item(0).getTextContent();

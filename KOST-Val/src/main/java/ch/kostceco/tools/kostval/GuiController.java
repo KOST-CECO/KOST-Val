@@ -131,7 +131,7 @@ public class GuiController {
 	private String initInstructionsIt;
 
 	private String initInstructionsEn;
-	private String versionKostVal = "2.4.0.1";
+	private String versionKostVal = "2.4.0.2";
 	/*
 	 * TODO: versionKostVal auch hier anpassen:
 	 * 

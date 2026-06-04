@@ -557,7 +557,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 				// Falls gewunscht Fontvalidierung mit PDFTools nur durchfuehren wenn
 				// pdftools und verapdf (A-I) bestanden haben.
 				if (!fontYesNo.equalsIgnoreCase("no")) {
-					isValidFont = validateFont(docPdf, valDatei, level, pathToLogDir, fontYesNo, locale, logFile,
+					isValidFont = validateFont(valDatei, level, pathToLogDir, fontYesNo, locale, logFile,
 							directoryOfLogfile, ignorUndefinied, fontErrorIgnor);
 				} else {
 					// ohne pdftools auch keine Font validierung
@@ -1290,71 +1290,76 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 				}
 			}
 		}
+		docPdf.close();
+		// Destroy the object and set to null
+		docPdf.destroyObject();
+		docPdf = null;
+		PdfValidatorAPI.terminate();
+
 		return isValidPdfTools;
 	}
 
-	private String validateFont(PdfValidatorAPI docPdf, File valDatei, String level, String pathToLogDir,
-			String fontYesNo, Locale locale, File logFile, File directoryOfLogfile, Boolean ignorUndefinied,
-			String fontErrorIgnor) {
+	private String validateFont(File valDatei, String level, String pathToLogDir, String fontYesNo, Locale locale,
+			File logFile, File directoryOfLogfile, Boolean ignorUndefinied, String fontErrorIgnor) {
 		// TODO FontValidierung
 		String isValidFont = "noFontVal";
 		errorK = "";
-		docPdf = new PdfValidatorAPI();
+		PdfValidatorAPI docPdfFont = new PdfValidatorAPI();
 		try {
 			UtilPages.setPages(directoryOfLogfile);
-			if (docPdf.open(valDatei.getAbsolutePath(), "", NativeLibrary.COMPLIANCE.ePDFUnk)) {
+			if (docPdfFont.open(valDatei.getAbsolutePath(), "", NativeLibrary.COMPLIANCE.ePDFUnk)) {
 				// PDF Konnte geoeffnet werden
-				docPdf.setStopOnError(true);
-				docPdf.setReportingLevel(1);
-				if (docPdf.getErrorCode() == NativeLibrary.ERRORCODE.PDF_E_PASSWORD) {
+				docPdfFont.setStopOnError(true);
+				docPdfFont.setReportingLevel(1);
+				if (docPdfFont.getErrorCode() == NativeLibrary.ERRORCODE.PDF_E_PASSWORD) {
 					// Keine Meldung da nur noch Fontvalidierung
 				}
 			} else {
 				// Keine Meldung da nur noch Fontvalidierung
 			}
 
-			docPdf = new PdfValidatorAPI();
-			docPdf.setStopOnError(false);
-			docPdf.setReportingLevel(2);
+			docPdfFont = new PdfValidatorAPI();
+			docPdfFont.setStopOnError(false);
+			docPdfFont.setReportingLevel(2);
 
 			/*
 			 * ePDFA1a 5122 ePDFA1b 5121 ePDFA2a 5891 ePDFA2b 5889 ePDFA2u 5890
 			 */
 			if (level.contentEquals("1A")) {
-				if (docPdf.open(valDatei.getAbsolutePath(), "", 5122)) {
-					docPdf.validate();
+				if (docPdfFont.open(valDatei.getAbsolutePath(), "", 5122)) {
+					docPdfFont.validate();
 				}
 			} else if (level.contentEquals("1B")) {
-				if (docPdf.open(valDatei.getAbsolutePath(), "", 5121)) {
-					docPdf.validate();
+				if (docPdfFont.open(valDatei.getAbsolutePath(), "", 5121)) {
+					docPdfFont.validate();
 				}
 			} else if (level.contentEquals("2A")) {
-				if (docPdf.open(valDatei.getAbsolutePath(), "", 5891)) {
-					docPdf.validate();
+				if (docPdfFont.open(valDatei.getAbsolutePath(), "", 5891)) {
+					docPdfFont.validate();
 				}
 			} else if (level.contentEquals("2B")) {
-				if (docPdf.open(valDatei.getAbsolutePath(), "", 5889)) {
-					docPdf.validate();
+				if (docPdfFont.open(valDatei.getAbsolutePath(), "", 5889)) {
+					docPdfFont.validate();
 				}
 			} else if (level.contentEquals("2U")) {
-				if (docPdf.open(valDatei.getAbsolutePath(), "", 5890)) {
-					docPdf.validate();
+				if (docPdfFont.open(valDatei.getAbsolutePath(), "", 5890)) {
+					docPdfFont.validate();
 				}
 			} else {
 				// Validierung nach 2b
 				level = "2B";
-				if (docPdf.open(valDatei.getAbsolutePath(), "", 5889)) {
-					docPdf.validate();
+				if (docPdfFont.open(valDatei.getAbsolutePath(), "", 5889)) {
+					docPdfFont.validate();
 				}
 			}
 
 			// Anzahl errors
-			PdfError err = docPdf.getFirstError();
+			PdfError err = docPdfFont.getFirstError();
 			int success = 0;
 
 			if (err != null) {
 				// auch bei min durchfuehren!
-				for (; err != null; err = docPdf.getNextError()) {
+				for (; err != null; err = docPdfFont.getNextError()) {
 					success = success + 1;
 				}
 			}
@@ -1377,7 +1382,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 			Stream xmlStream = fs;
 			boolean docPdfXML = false;
 			try {
-				docPdfXML = docPdf.writeFontValidationXML(xmlStream);
+				docPdfXML = docPdfFont.writeFontValidationXML(xmlStream);
 			} catch (Error e2) {
 				Logtxt.logtxt(logFile,
 						getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)
@@ -1400,7 +1405,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 				 * information: %s", docPdf.getErrorMessage()));
 				 */
 				System.out.println(
-						String.format("Failed to write font validation information: %s", docPdf.getErrorMessage()));
+						String.format("Failed to write font validation information: %s", docPdfFont.getErrorMessage()));
 			}
 			fs.close();
 			// set to null
@@ -1973,10 +1978,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					// geloescht (je nach verbose)
 				}
 			}
-			docPdf.close();
+			docPdfFont.close();
 			// Destroy the object and set to null
-			docPdf.destroyObject();
-			docPdf = null;
+			docPdfFont.destroyObject();
+			docPdfFont = null;
 			PdfValidatorAPI.terminate();
 		} catch (Exception e) {
 			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_PDFA)

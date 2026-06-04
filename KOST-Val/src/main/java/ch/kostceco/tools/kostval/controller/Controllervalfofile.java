@@ -462,15 +462,12 @@ public class Controllervalfofile implements MessageConstants {
 												Util.oldnewstring(tempE, newText2e, premisOut);
 												SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 												// 2025-09-30T14:28:27
-												/*
-												 * copyValStr = valDatei.getAbsolutePath().replace(initFolderPath,
-												 * fileToOutputStart.getAbsolutePath());
-												 */
-												File copyValDatei = new File(copyValStr);
-												forRepair = sdf.format(copyValDatei.lastModified());
-
-												md5StrMig = Hash.getMd5(copyValDatei);
-												lengthMig = copyValDatei.length() + "";
+												String migValStr = copyValStr.replace(valDatei.getName(),
+														File.separator + valDatei.getName());
+												File migValDatei = new File(migValStr);
+												forRepair = sdf.format(migValDatei.lastModified());
+												md5StrMig = Hash.getMd5(migValDatei);
+												lengthMig = migValDatei.length() + "";
 											} else {
 												// wenn RepairPdfa und !ok dann [3]
 												Util.oldnewstring(tempO, newText3o, premisOut);
@@ -648,15 +645,12 @@ public class Controllervalfofile implements MessageConstants {
 											Util.oldnewstring(tempE, newText2e, premisOut);
 											SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 											// 2025-09-30T14:28:27
-											/*
-											 * copyValStr = valDatei.getAbsolutePath().replace(initFolderPath,
-											 * fileToOutputStart.getAbsolutePath());
-											 */
-											File copyValDatei = new File(copyValStr);
-											forRepair = sdf.format(copyValDatei.lastModified());
-
-											md5StrMig = Hash.getMd5(copyValDatei);
-											lengthMig = copyValDatei.length() + "";
+											String migValStr = copyValStr.replace(valDatei.getName(),
+													File.separator + valDatei.getName());
+											File migValDatei = new File(migValStr);
+											forRepair = sdf.format(migValDatei.lastModified());
+											md5StrMig = Hash.getMd5(migValDatei);
+											lengthMig = migValDatei.length() + "";
 										} else {
 											// wenn RepairPdfa und !ok dann [3]
 											Util.oldnewstring(tempO, newText3o, premisOut);
