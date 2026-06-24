@@ -770,6 +770,16 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 			otherformats = otherformats.replace(";", "");
 			configMap.put("otherformats", otherformats);
 
+			// Gibt an ob Exoten mit DROID erkannt werden sollen
+			String droidYes = "<droid>yes</droid>";
+			String droid = "yes";
+			if (config.contains(droidYes)) {
+				droid = "yes";
+			} else {
+				droid = "no";
+			}
+			configMap.put("droid", droid);
+
 			// egovdv
 			// Wie soll der egovdv verwendet werden
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */

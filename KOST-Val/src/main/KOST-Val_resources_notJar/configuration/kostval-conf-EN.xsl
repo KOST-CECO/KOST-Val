@@ -484,6 +484,13 @@
 							<xsl:value-of select="configuration/otherformats/othervalidation" />
 						</td>
 					</tr>
+
+					<tr class="captioninfo">
+						<td>Identify rare species with DROID [yes]:</td>
+						<td>
+							<xsl:value-of select="configuration/droid" />
+						</td>
+					</tr>
 					
 					<tr class="captioninfo">
 						<td>Signatur in PDF/A- und PDF-Dateien: Prüfung [&#x2717;]</td>

@@ -122,6 +122,10 @@ public class ConfigController {
 	@FXML
 	private Button buttonDv, buttonDvVal, buttonPuid, buttonWork, buttonInput, buttonInstitution;
 
+	ObservableList<String> droidYesNoList = FXCollections.observableArrayList();
+	@FXML
+	private ChoiceBox<String> droidYesNo;
+
 	ObservableList<String> hashAlgoList = FXCollections.observableArrayList("MD5", "SHA-1", "SHA-256", "SHA-512", "");
 	@FXML
 	private ChoiceBox<String> hashAlgo;
@@ -168,7 +172,31 @@ public class ConfigController {
 
 		hashAlgo.getItems().addAll(hashAlgoList);
 		sizeWarning.getItems().addAll(sizeWarningList);
+			String droidInit = "";
+			String droidYesDe="Exotische Formate mit DROID erkennen";
+			String droidNoDe="Keine Formaterkennung bei exotischen Formaten";
+
+					String droidYesFr="Détecter les formats peu courants avec DROID";
+							String droidNoFr="Pas de détection des formats peu courants";
+
+									String droidYesIt="Detect exotic file formats with DROID";
+											String droidNoIt="No file format detection for exotic formats";
+
+													String droidYesEn="Riconoscere i formati non comuni con DROID";
+															String droidNoEn="Nessun riconoscimento dei formati non comuni";
+
+			droidYesNoList.setAll( droidYesDe,droidNoDe );
 		try {
+			Document docD = null;
+			BufferedInputStream bisD = new BufferedInputStream(new FileInputStream(configFile));
+			DocumentBuilderFactory dbfD = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dbD = dbfD.newDocumentBuilder();
+			docD = dbD.parse(bisD);
+			docD.normalize();
+			droidInit = docD.getElementsByTagName("droid").item(0).getTextContent();
+			bisD.close();
+			docD = null;
+			//droidYesNo.setValue(droidInit);
 			Document docH = null;
 			BufferedInputStream bisH = new BufferedInputStream(new FileInputStream(configFile));
 			DocumentBuilderFactory dbfH = DocumentBuilderFactory.newInstance();
@@ -219,6 +247,13 @@ public class ConfigController {
 				labelHint.setText("öffnet die jeweilige Detailkonfiguration");
 				minOne = "Mindestens eine Variante muss erlaubt sein!";
 				stringPuid = "weitere akzeptierte Dateiformate...";
+				droidYesNoList.setAll( droidYesDe,droidNoDe );
+				if (droidInit.contains("yes")) {
+					droidYesNo.setValue(droidYesDe);
+				} else {
+					droidYesNo.setValue(droidNoDe);
+				}
+				//labelDroid.setText("Exoten mit DROID erkennen");
 			} else if (Util.stringInFileLine("kostval-conf-FR.xsl", configFile)) {
 				locale = new Locale("fr");
 				buttonConfigApply.setText("Appliquer");
@@ -242,6 +277,13 @@ public class ConfigController {
 				labelHint.setText("ouvre la configuration détaillée correspondante");
 				minOne = "Au moins une variante doit etre autorisee !";
 				stringPuid = "autres formats de fichiers acceptés...";
+				droidYesNoList.setAll( droidYesFr,droidNoFr );
+				if (droidInit.contains("yes")) {
+					droidYesNo.setValue(droidYesFr);
+				} else {
+					droidYesNo.setValue(droidNoFr);
+				}
+				//labelDroid.setText("Reconnaître les exotiques avec DROID");
 			} else if (Util.stringInFileLine("kostval-conf-IT.xsl", configFile)) {
 				locale = new Locale("it");
 				buttonConfigApply.setText("Applica");
@@ -264,6 +306,13 @@ public class ConfigController {
 				labelHint.setText("apre la configurazione dettagliata corrispondente");
 				minOne = "Almeno una variante deve essere consentita!";
 				stringPuid = "altri formati di file accettati...";
+				droidYesNoList.setAll( droidYesIt,droidNoIt );
+				if (droidInit.contains("yes")) {
+					droidYesNo.setValue(droidYesIt);
+				} else {
+					droidYesNo.setValue(droidNoIt);
+				}
+				//labelDroid.setText("Riconoscere i dispositivi esotici con DROID");
 			} else {
 				locale = new Locale("en");
 				buttonConfigApply.setText("Apply");
@@ -286,12 +335,20 @@ public class ConfigController {
 				labelHint.setText("opens the respective detailed configuration");
 				minOne = "At least one variant must be allowed!";
 				stringPuid = "other accepted file formats...";
+				droidYesNoList.setAll( droidYesEn,droidNoEn );
+				if (droidInit.contains("yes")) {
+					droidYesNo.setValue(droidYesEn);
+				} else {
+					droidYesNo.setValue(droidNoEn);
+				}
+				//labelDroid.setText("Identify rare species with DROID");
 			}
 			buttonPuid.setText(stringPuid);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		droidYesNo.getItems().addAll(droidYesNoList);
+		
 		// Werte aus Konfiguration lesen und Check-Box entsprechend setzten
 		// checkPdfa, checkJpeg2000, checkJpeg, checkPng, checkXml, checkTiff,
 		// checkSiard;
@@ -1847,6 +1904,29 @@ public class ConfigController {
 	}
 
 	/* TODO --> ChoiceBox ================= */
+	
+	// Mit changeDroidYesNo wird die Formaterkennung der Exoten mit DROID ein- und ausgeschaltet
+	@FXML
+	void changeDroidYesNo(ActionEvent event) {
+		try {
+			String no = "<droid>no</droid>";
+			String yes = "<droid>yes</droid>";
+			String selDroid = droidYesNo.getValue();
+			if (selDroid.contains("DROID") ) {
+				Util.oldnewstring(no, yes, configFile);
+				droidYesNo.setValue(selDroid);
+			} else  {
+				Util.oldnewstring(yes, no, configFile);
+				droidYesNo.setValue(selDroid);
+			}
+
+			engine = wbv.getEngine();
+			engine.load("file:///" + configFile.getAbsolutePath());
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+
 
 	// Mit changeHashAlgo wird die Hash-Auswahl umgestellt
 	@FXML

@@ -478,6 +478,13 @@
 							<xsl:value-of select="configuration/otherformats/othervalidation" />
 						</td>
 					</tr>
+
+					<tr class="captioninfo">
+						<td>Riconoscere i dispositivi esotici con DROID [yes]:</td>
+						<td>
+							<xsl:value-of select="configuration/droid" />
+						</td>
+					</tr>
 					
 					<tr class="captioninfo">
 						<td>Signatur in PDF/A- und PDF-Dateien: Prüfung [&#x2717;]</td>

@@ -32,6 +32,7 @@ import org.springframework.context.ApplicationContext;
 
 import ch.kostceco.tools.kosttools.fileservice.Recognition;
 import ch.kostceco.tools.kosttools.fileservice.egovdv;
+import ch.kostceco.tools.kosttools.fileservice.droid;
 import ch.kostceco.tools.kosttools.fileservice.verapdf;
 import ch.kostceco.tools.kosttools.util.Hash;
 import ch.kostceco.tools.kosttools.util.Util;
@@ -99,6 +100,24 @@ public class Controllervalfofile implements MessageConstants {
 		 */
 		repair = repairPdfa;
 
+		if (repair) {
+			if (Util.stringInFile("<InfoNoRepairInvalid>", logFile)) {
+				// Infos bereits erfasst
+			} else {
+				Util.oldnewstring("</Infos>",
+						getTextResourceService().getText(locale, MESSAGE_INFO_NOREPAIR_INVALID) + "</Infos>", logFile);
+				Util.oldnewstring("</Infos>",
+						getTextResourceService().getText(locale, MESSAGE_INFO_NOREPAIR_NOTSIMY) + "</Infos>", logFile);
+				Util.oldnewstring("</Infos>",
+						getTextResourceService().getText(locale, MESSAGE_INFO_NOREPAIR_FUNCTION) + "</Infos>", logFile);
+				Util.oldnewstring("</Infos>",
+						getTextResourceService().getText(locale, MESSAGE_INFO_NOREPAIR_ERROR) + "</Infos>", logFile);
+				Util.oldnewstring("</Infos>",
+						getTextResourceService().getText(locale, MESSAGE_INFO_NOREPAIR_INSTALLATION) + "</Infos>",
+						logFile);
+			}
+		}
+
 		// Informationen holen, welche Formate validiert werden sollen
 		String pdfaValidation = configMap.get("pdfaValidation");
 		String txtValidation = configMap.get("txtValidation");
@@ -121,6 +140,7 @@ public class Controllervalfofile implements MessageConstants {
 		String otherformats = configMap.get("otherformats");
 		// TODO: Neue Formate auch in SIARD Modul M nachtragen
 
+		String configDroid = configMap.get("droid");
 		String configHash = configMap.get("hash");
 		String sizeWarning = configMap.get("sizeWarning");
 
@@ -312,13 +332,86 @@ public class Controllervalfofile implements MessageConstants {
 						return "countValid";
 					} else {
 						// NICHT akzeptiert -> invalid
-						Logtxt.logtxt(logFile, "<Validation>" + hash
-								+ getTextResourceService().getText(locale, MESSAGE_XML_AZTYPE, " ???") + valDateiXml);
+						String puid = "???";
 						if (!min) {
-							Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_AZ)
-									+ getTextResourceService().getText(locale, ERROR_XML_A_NOTAZ_DROID));
+							// Start: Erkennung mit DROID
+
+							// - Initialisierung DROID -> existiert alles zu DROID?
+
+							// Pfad zum Programm existiert die Dateien?
+							String checkToolDroid = droid.checkDroid(dirOfJarPath);
+							if (!checkToolDroid.equals("OK")) {
+								Logtxt.logtxt(logFile,
+										"<Validation>" + hash
+												+ getTextResourceService().getText(locale, MESSAGE_XML_AZTYPE, puid)
+												+ valDateiXml);
+								Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_AZ)
+										+ getTextResourceService().getText(locale, MESSAGE_XML_MISSING_FILE,
+												checkToolDroid, getTextResourceService().getText(locale, ABORTED)));
+								Logtxt.logtxt(logFile, "<Notaccepted>not accepted</Notaccepted></Validation>");
+							} else {
+								// DROID sollte vorhanden sein
+								if (configDroid.equals("yes")) {
+									try {
+										String resultExec = droid.execDroid(valDatei, tmpDir, dirOfJarPath,
+												directoryOfLogfile);
+										puid = resultExec;
+										int pos = puid.indexOf('=');
+										if (pos != -2) {
+											puid = puid.substring(0, pos);
+											puid = puid.replace("\"", "");
+										}
+										if (resultExec.equals("NoReport")) {
+											// Exception oder Report existiert nicht
+											Logtxt.logtxt(logFile, "<Validation>" + hash
+													+ getTextResourceService().getText(locale, MESSAGE_XML_AZTYPE, puid)
+													+ valDateiXml);
+											Logtxt.logtxt(logFile,
+													getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_AZ)
+															+ getTextResourceService().getText(locale,
+																	ERROR_XML_A_NOTAZ_DROID));
+											Logtxt.logtxt(logFile,
+													"<Notaccepted>not accepted</Notaccepted></Validation>");
+										} else {
+											// Format konnte erkannt werden
+											Logtxt.logtxt(logFile, "<Validation>" + hash
+													+ getTextResourceService().getText(locale, MESSAGE_XML_AZTYPE, puid)
+													+ valDateiXml);
+											Logtxt.logtxt(logFile,
+													getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_AZ)
+															+ getTextResourceService().getText(locale,
+																	ERROR_XML_A_NOTAZ_DROID2, resultExec));
+											Logtxt.logtxt(logFile,
+													"<Notaccepted>not accepted</Notaccepted></Validation>");
+										}
+
+									} catch (Exception e) {
+										Logtxt.logtxt(logFile, "<Validation>" + hash
+												+ getTextResourceService().getText(locale, MESSAGE_XML_AZTYPE, puid)
+												+ valDateiXml);
+										Logtxt.logtxt(logFile,
+												getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_AZ)
+														+ getTextResourceService().getText(locale,
+																ERROR_XML_A_NOTAZ_DROID));
+										Logtxt.logtxt(logFile, "<Notaccepted>not accepted</Notaccepted></Validation>");
+									}
+								} else {
+									Logtxt.logtxt(logFile,
+											"<Validation>" + hash
+													+ getTextResourceService().getText(locale, MESSAGE_XML_AZTYPE, puid)
+													+ valDateiXml);
+									Logtxt.logtxt(logFile,
+											getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_AZ)
+													+ getTextResourceService().getText(locale,
+															ERROR_XML_A_NOTAZ_DROID));
+									Logtxt.logtxt(logFile, "<Notaccepted>not accepted</Notaccepted></Validation>");
+								}
+							}
+						} else {
+							Logtxt.logtxt(logFile, "<Validation>" + hash
+									+ getTextResourceService().getText(locale, MESSAGE_XML_AZTYPE, puid) + valDateiXml);
+							Logtxt.logtxt(logFile, "<Notaccepted>not accepted</Notaccepted></Validation>");
 						}
-						Logtxt.logtxt(logFile, "<Notaccepted>not accepted</Notaccepted></Validation>");
 						recMsg = "notAZ";
 						return "countNotaz";
 					}
@@ -834,7 +927,7 @@ public class Controllervalfofile implements MessageConstants {
 
 						// TODO Audio
 					} else if (recFormat.equals("FLAC")) {
-						intro = countToValidated + "  " + "FLAC:  " + valDatei.getAbsolutePath() + " ";
+						intro = countToValidated + " " + "FLAC:  " + valDatei.getAbsolutePath() + " ";
 						if (repair) {
 							/*
 							 * Reparatur eingeschaltet. Entsprechend werden alle Dateien, welche keine
@@ -873,7 +966,7 @@ public class Controllervalfofile implements MessageConstants {
 							}
 						}
 					} else if (recFormat.equals("WAVE")) {
-						intro = countToValidated + "  " + "WAVE:  " + valDatei.getAbsolutePath() + " ";
+						intro = countToValidated + " " + "WAVE:  " + valDatei.getAbsolutePath() + " ";
 						if (repair) {
 							/*
 							 * Reparatur eingeschaltet. Entsprechend werden alle Dateien, welche keine
@@ -912,7 +1005,7 @@ public class Controllervalfofile implements MessageConstants {
 							}
 						}
 					} else if (recFormat.equals("MP3")) {
-						intro = countToValidated + "  " + "MP3:  " + valDatei.getAbsolutePath() + " ";
+						intro = countToValidated + " " + "MP3:   " + valDatei.getAbsolutePath() + " ";
 						if (repair) {
 							/*
 							 * Reparatur eingeschaltet. Entsprechend werden alle Dateien, welche keine
@@ -953,7 +1046,7 @@ public class Controllervalfofile implements MessageConstants {
 
 						// TODO Video
 					} else if (recFormat.equals("MKV")) {
-						intro = countToValidated + "  " + "MKV:  " + valDatei.getAbsolutePath() + " ";
+						intro = countToValidated + " " + "MKV:   " + valDatei.getAbsolutePath() + " ";
 						if (repair) {
 							/*
 							 * Reparatur eingeschaltet. Entsprechend werden alle Dateien, welche keine

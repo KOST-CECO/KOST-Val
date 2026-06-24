@@ -196,6 +196,7 @@
 		<emlvalidation></emlvalidation>
 		<othervalidation></othervalidation>
 	</otherformats>
+	<droid>yes</droid>
 	<egovdv>
 		<egovdvvalidation>&#x2717;</egovdvvalidation><!--&#x2717; = keine Pruefung / &#x2713; = Signaturen pruefen -->
 		<Institut></Institut>

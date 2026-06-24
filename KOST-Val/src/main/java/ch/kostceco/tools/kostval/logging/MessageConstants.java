@@ -163,6 +163,7 @@ public interface MessageConstants {
 	String ERROR_XML_A_AZ_INCORRECTFILE = "val.error.xml.a.az.incorrectfile";
 	String ERROR_XML_A_NOTAZ = "val.error.xml.a.notaz";
 	String ERROR_XML_A_NOTAZ_DROID = "val.error.xml.a.notaz.droid";
+	String ERROR_XML_A_NOTAZ_DROID2 = "val.error.xml.a.notaz.droid2";
 
 	String MESSAGE_XML_CONFIGURATION_ERROR_1 = "val.message.xml.configuration.error.1";
 	String MESSAGE_XML_CONFIGURATION_ERROR_2 = "val.message.xml.configuration.error.2";
@@ -188,6 +189,12 @@ public interface MessageConstants {
 	String MESSAGE_XML_SERVICEMESSAGE_INFO = "val.message.xml.servicemessage.info";
 
 	String MESSAGE_WARNING_XML_SIZE = "val.warning.xml.size";
+	
+	String MESSAGE_INFO_NOREPAIR_INVALID = "val.info.norepair.invalid";
+	String MESSAGE_INFO_NOREPAIR_NOTSIMY = "val.info.norepair.notsimy";
+	String MESSAGE_INFO_NOREPAIR_FUNCTION = "val.info.norepair.function";
+	String MESSAGE_INFO_NOREPAIR_ERROR = "val.info.norepair.error";
+	String MESSAGE_INFO_NOREPAIR_INSTALLATION = "val.info.norepair.installation";
 
 	// TODO
 	// ********TIFF-Meldungen*************************************************************************
@@ -365,6 +372,8 @@ public interface MessageConstants {
 	String INFO_XML_Z_NOREP_NOREP1 = "val.info.xml.z.norep.norep1";
 	String INFO_XML_Z_NOREP_NOOUTPUT = "val.info.xml.z.norep.nooutput";
 	String INFO_XML_Z_NOREP_INVALID = "val.info.xml.z.norep.invalid";
+	String INFO_XML_Z_NOREP_PROBNOTSIMY = "val.info.xml.z.norep.probnotsimy";
+	String INFO_XML_Z_NOREP_NOTSIMY = "val.info.xml.z.norep.notsimy";
 	String INFO_XML_Z_NOREP_SIGN = "val.info.xml.z.norep.sign";
 	String INFO_XML_Z_NOREP_PORTFOLIO = "val.info.xml.z.norep.portfolio";
 	String INFO_XML_Z_NOREP_ATTACHMENTS = "val.info.xml.z.norep.attachments";

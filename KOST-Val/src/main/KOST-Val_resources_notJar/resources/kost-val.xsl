@@ -36,6 +36,7 @@
 					<span class="logol">.</span>
 					<span class="logox"> - </span>
 				</p>
+				
 				<xsl:for-each select="KOSTValLog/Init">
 					<div>
 						<table width="100%">
@@ -53,6 +54,7 @@
 					</div>
 					<br/>
 				</xsl:for-each>
+				
 				<xsl:for-each select="KOSTValLog/IoExeption">
 					<h1>Error:</h1>
 					<div>
@@ -66,6 +68,7 @@
 					</div>
 					<br/>
 				</xsl:for-each>
+				
 				<xsl:for-each select="KOSTValLog/Sip/Validation">
 					<xsl:if test="Invalid">
 						<h1>SIP:</h1>
@@ -95,6 +98,7 @@
 					</xsl:if>
 					<br/>
 				</xsl:for-each>
+				
 				<xsl:for-each select="KOSTValLog/Sip/Validation">
 					<xsl:if test="Valid">
 						<h1>SIP:</h1>
@@ -150,6 +154,100 @@
 					</div>
 					<br/>
 				</xsl:for-each>
+				
+				<h2>No repair info:</h2>
+				<xsl:if test="KOSTValLog/Format/Validation/NoRepairInvalid">
+					<table width="100%">
+						<tr class="captioninfo">
+							<td width="100%">
+								Invalid: <xsl:value-of select="KOSTValLog/Infos/InfoNoRepairInvalid"/>
+							</td>
+						</tr>
+						<xsl:for-each select="KOSTValLog/Format/Validation">
+							<xsl:if test="NoRepairInvalid">
+								<tr class="captioninfom">
+									<td width="100%">
+										<xsl:value-of select="ValFile"/>
+									</td>
+								</tr>
+							</xsl:if>
+						</xsl:for-each>
+					</table>
+				</xsl:if>
+				<xsl:if test="KOSTValLog/Format/Validation/NoRepairNotsimy">
+					<table width="100%">
+						<tr class="captioninfo">
+							<td width="100%">
+								NotSimy: <xsl:value-of select="KOSTValLog/Infos/InfoNoRepairNotSimy"/>
+							</td>
+						</tr>
+						<xsl:for-each select="KOSTValLog/Format/Validation">
+							<xsl:if test="NoRepairNotsimy">
+								<tr class="captioninfom">
+									<td width="100%">
+										<xsl:value-of select="ValFile"/>
+									</td>
+								</tr>
+							</xsl:if>
+						</xsl:for-each>
+					</table>
+				</xsl:if>
+				<xsl:if test="KOSTValLog/Format/Validation/NoRepairFunction">
+					<table width="100%">
+						<tr class="captioninfo">
+							<td width="100%">
+								Function: <xsl:value-of select="KOSTValLog/Infos/InfoNoRepairFunction"/>
+							</td>
+						</tr>
+						<xsl:for-each select="KOSTValLog/Format/Validation">
+							<xsl:if test="NoRepairFunction">
+								<tr class="captioninfom">
+									<td width="100%">
+										<xsl:value-of select="ValFile"/>
+									</td>
+								</tr>
+							</xsl:if>
+						</xsl:for-each>
+					</table>
+				</xsl:if>
+				<xsl:if test="KOSTValLog/Format/Validation/NoRepairError">
+					<table width="100%">
+						<tr class="captioninfo">
+							<td width="100%">
+								Error: <xsl:value-of select="KOSTValLog/Infos/InfoNoRepairError"/>
+							</td>
+						</tr>
+						<xsl:for-each select="KOSTValLog/Format/Validation">
+							<xsl:if test="NoRepairError">
+								<tr class="captioninfom">
+									<td width="100%">
+										<xsl:value-of select="ValFile"/>
+									</td>
+								</tr>
+							</xsl:if>
+						</xsl:for-each>
+					</table>
+				</xsl:if>
+				<xsl:if test="KOSTValLog/Format/Validation/NoRepairInstallation">
+					<table width="100%">
+						<tr class="captioninfo">
+							<td width="100%">
+								Installation: <xsl:value-of select="KOSTValLog/Infos/InfoNoRepairInstallation"/>
+							</td>
+						</tr>
+						<xsl:for-each select="KOSTValLog/Format/Validation">
+							<xsl:if test="NoRepairInstallation">
+								<tr class="captioninfom">
+									<td width="100%">
+										<xsl:value-of select="ValFile"/>
+									</td>
+								</tr>
+							</xsl:if>
+						</xsl:for-each>
+					</table>
+				</xsl:if>
+				<br/>
+
 				<xsl:for-each select="KOSTValLog/Format/Validation/PdfToolsWarning">
 					<div>
 						<table width="100%">
@@ -169,6 +267,7 @@
 					</div>
 					<br/>
 				</xsl:for-each>
+				
 				<h2>Invalid:</h2>
 				<xsl:for-each select="KOSTValLog/Format/Validation">
 					<xsl:if test="Invalid">
@@ -290,6 +389,7 @@
 						<br/>
 					</xsl:if>
 				</xsl:for-each>
+				
 				<xsl:for-each select="KOSTValLog/Format/Validation">
 					<xsl:if test="Notaccepted">
 						<div>
@@ -361,6 +461,7 @@
 						<br/>
 					</xsl:if>
 				</xsl:for-each>
+				
 				<h2>Warning (Valid):</h2>
 				<xsl:for-each select="KOSTValLog/Format/Validation">
 					<xsl:if test="(Warning) and ((Valid) or (Accepted))">
@@ -432,6 +533,7 @@
 						</div>
 					</xsl:if>
 				</xsl:for-each>
+				
 				<h2>Valid:</h2>
 				<xsl:for-each select="KOSTValLog/Format/Validation">
 					<xsl:if test="not(Warning) and (Valid)">
@@ -503,6 +605,7 @@
 						</div>
 					</xsl:if>
 				</xsl:for-each>
+				
 				<xsl:for-each select="KOSTValLog/Format/Validation">
 					<xsl:if test="not(Warning) and (Accepted)">
 						<div>
@@ -573,6 +676,7 @@
 						</div>
 					</xsl:if>
 				</xsl:for-each>
+				
 				<br/>
 				<hr noshade="noshade" size="1"/>
 				<h3>
