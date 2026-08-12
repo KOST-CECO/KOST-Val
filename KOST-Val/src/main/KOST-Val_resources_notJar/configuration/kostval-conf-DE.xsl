@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:template match="/">
-		<!-- kostval.conf.xml_v2.4.0.2 -->
+		<!-- kostval.conf.xml_v2.4.0.4 -->
 		<html>
 			<head>
 				<style>
@@ -391,13 +391,6 @@
 						</td>
 					</tr>
 
-					<tr class="captioninfo">
-						<td>ODS: Akzeptanz [&#x2717;]</td>
-						<td>
-							<xsl:value-of select="configuration/ods/odsvalidation" />
-						</td>
-					</tr>
-
 					<!-- SIP -->
 					<tr class="captioninfo">
 						<td>SIP: Validierung [&#x2713;]:</td>
@@ -454,7 +447,7 @@
 
 					<!-- SONSTIGES -->
 					<tr class="captioninfo">
-						<td>Weitere akzeptierte Dateiformate [WARC, HTML, DWG]:</td>
+						<td>Weitere akzeptierte Dateiformate [EML, MBOX, WACZ, WARC, HTML, INTERLIS, DWG, IFC]:</td>
 						<td>
 							<xsl:value-of select="configuration/otherformats/docxvalidation" />
 							<xsl:value-of select="configuration/otherformats/pptxvalidation" />
@@ -465,7 +458,14 @@
 							<xsl:value-of select="configuration/otherformats/oggvalidation" />
 							<xsl:value-of select="configuration/otherformats/mpeg2validation" />
 							<xsl:value-of select="configuration/otherformats/avivalidation" />
+							<xsl:value-of select="configuration/otherformats/odsvalidation" />
+							<xsl:value-of select="configuration/otherformats/xlsvalidation" />
+							<xsl:value-of select="configuration/otherformats/msgvalidation" />
+							<xsl:value-of select="configuration/otherformats/emlvalidation" />
+							<xsl:value-of select="configuration/otherformats/mboxvalidation" />
+							<xsl:value-of select="configuration/otherformats/pstvalidation" />
 							<xsl:value-of select="configuration/otherformats/htmlvalidation" />
+							<xsl:value-of select="configuration/otherformats/waczvalidation" />
 							<xsl:value-of select="configuration/otherformats/warcvalidation" />
 							<xsl:value-of select="configuration/otherformats/arcvalidation" />
 							<xsl:value-of select="configuration/otherformats/dwgvalidation" />
@@ -473,8 +473,6 @@
 							<xsl:value-of select="configuration/otherformats/dxfvalidation" />
 							<xsl:value-of select="configuration/otherformats/interlisvalidation" />
 							<xsl:value-of select="configuration/otherformats/dicomvalidation" />
-							<xsl:value-of select="configuration/otherformats/msgvalidation" />
-							<xsl:value-of select="configuration/otherformats/emlvalidation" />
 							<xsl:value-of select="configuration/otherformats/othervalidation" />
 						</td>
 					</tr>
@@ -558,7 +556,7 @@
 					</tr>
 					
 					<tr class="captioninfo">
-						<td>Name der Institution [Archiv]:</td>
+						<td>Name der Institution (für PREMIS-Agent) [Archiv]:</td>
 						<td>
 							<xsl:value-of select="configuration/Institution" />
 						</td>

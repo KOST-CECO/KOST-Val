@@ -560,10 +560,15 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 			if (doc.getElementsByTagName("allowedmkvav1").item(0) != null) {
 				allowedmkvav1 = doc.getElementsByTagName("allowedmkvav1").item(0).getTextContent().replace(" ", "");
 			}
+			String allowedmkvmpeg2 = "0";
+			if (doc.getElementsByTagName("allowedmkvmpeg2").item(0) != null) {
+				allowedmkvmpeg2 = doc.getElementsByTagName("allowedmkvmpeg2").item(0).getTextContent().replace(" ", "");
+			}
 			configMap.put("Allowedmkvffv1", allowedmkvffv1);
 			configMap.put("Allowedmkvavc", allowedmkvavc);
 			configMap.put("Allowedmkvhevc", allowedmkvhevc);
 			configMap.put("Allowedmkvav1", allowedmkvav1);
+			configMap.put("Allowedmkvmpeg2", allowedmkvmpeg2);
 
 			// Gibt die Audiocodecs aus, welche im MKV vorkommen duerfen.
 			String allowedmkvflac = "0";
@@ -578,9 +583,14 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 			if (doc.getElementsByTagName("allowedmkvaac").item(0) != null) {
 				allowedmkvaac = doc.getElementsByTagName("allowedmkvaac").item(0).getTextContent().replace(" ", "");
 			}
+			String allowedmkvac3 = "0";
+			if (doc.getElementsByTagName("allowedmkvac3").item(0) != null) {
+				allowedmkvac3 = doc.getElementsByTagName("allowedmkvac3").item(0).getTextContent().replace(" ", "");
+			}
 			configMap.put("Allowedmkvflac", allowedmkvflac);
 			configMap.put("Allowedmkvmp3", allowedmkvmp3);
 			configMap.put("Allowedmkvaac", allowedmkvaac);
+			configMap.put("Allowedmkvac3", allowedmkvac3);
 
 			// Gibt an ob Videocodes fehlen duerfen.
 			String allowedmkvnovideo = "Error";
@@ -619,8 +629,13 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 			if (doc.getElementsByTagName("allowedmp4hevc").item(0) != null) {
 				allowedmp4hevc = doc.getElementsByTagName("allowedmp4hevc").item(0).getTextContent().replace(" ", "");
 			}
+			String allowedmp4mpeg2 = "0";
+			if (doc.getElementsByTagName("allowedmp4mpeg2").item(0) != null) {
+				allowedmp4mpeg2 = doc.getElementsByTagName("allowedmp4mpeg2").item(0).getTextContent().replace(" ", "");
+			}
 			configMap.put("Allowedmp4avc", allowedmp4avc);
 			configMap.put("Allowedmp4hevc", allowedmp4hevc);
+			configMap.put("Allowedmp4mpeg2", allowedmp4mpeg2);
 
 			// Gibt die Audiocodecs aus, welche im MP4 vorkommen duerfen.
 			String allowedmp4mp3 = "0";
@@ -631,8 +646,13 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 			if (doc.getElementsByTagName("allowedmp4aac").item(0) != null) {
 				allowedmp4aac = doc.getElementsByTagName("allowedmp4aac").item(0).getTextContent().replace(" ", "");
 			}
+			String allowedmp4ac3 = "0";
+			if (doc.getElementsByTagName("allowedmp4ac3").item(0) != null) {
+				allowedmp4ac3 = doc.getElementsByTagName("allowedmp4ac3").item(0).getTextContent().replace(" ", "");
+			}
 			configMap.put("Allowedmp4mp3", allowedmp4mp3);
 			configMap.put("Allowedmp4aac", allowedmp4aac);
+			configMap.put("Allowedmp4ac3", allowedmp4ac3);
 
 			// Gibt an ob Videocodes fehlen duerfen.
 			String allowedmp4novideo = "Error";
@@ -751,17 +771,6 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 				xlsxvalidation = "no";
 			}
 			configMap.put("xlsxValidation", xlsxvalidation);
-
-			// Gibt an ob ods akzeptiert werden soll
-			/* durch die Sonderzeichen muss es anders ausgelesen werden */
-			String azOds = "<odsvalidation>(&#x2713;)</odsvalidation>";
-			String odsvalidation = "no";
-			if (config.contains(azOds)) {
-				odsvalidation = "az";
-			} else {
-				odsvalidation = "no";
-			}
-			configMap.put("odsValidation", odsvalidation);
 
 			// otherformats
 			// Gibt eine Liste mit den PUIDs aus, welche auch akzeptiert sind.

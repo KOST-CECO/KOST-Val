@@ -136,7 +136,6 @@ public class Controllervalfofile implements MessageConstants {
 		String siardValidation = configMap.get("siardValidation");
 		String csvValidation = configMap.get("csvValidation");
 		String xlsxValidation = configMap.get("xlsxValidation");
-		String odsValidation = configMap.get("odsValidation");
 		String otherformats = configMap.get("otherformats");
 		// TODO: Neue Formate auch in SIARD Modul M nachtragen
 
@@ -1300,36 +1299,6 @@ public class Controllervalfofile implements MessageConstants {
 											+ getTextResourceService().getText(locale, MESSAGE_XML_AZTYPE, " XLSX")
 											+ valDateiXml);
 							if (xlsxValidation.equals("az")) {
-								// nur akzeptiert -> KEINE Validierung, nur
-								// Erkennung
-								recMsg = "AZ";
-							} else {
-								// NICHT akzeptiert -> invalid
-								recMsg = "notAZ";
-							}
-						}
-					} else if (recFormat.equals("ODS")) {
-						intro = countToValidated + " " + "ODS:   " + valDatei.getAbsolutePath() + " ";
-						if (repair) {
-							/*
-							 * Reparatur eingeschaltet. Entsprechend werden alle Dateien, welche keine
-							 * Reparaturfunktion haben direkt kopiert (1).
-							 * 
-							 * [inv_notaz] valid / accepted / invalid / not accepted
-							 */
-							Util.oldnewstring(tempO, newText1o, premisOut);
-							Util.oldnewstring(tempE, newText1e, premisOut);
-						}
-						if (odsValidation.equals("yes")) {
-							// akzeptiert und soll validiert werden
-							// Aktuell nicht moeglich, kein Validator dafuer
-						} else {
-							// akzeptiert oder nicht
-							Logtxt.logtxt(logFile,
-									"<Validation>" + hash
-											+ getTextResourceService().getText(locale, MESSAGE_XML_AZTYPE, " ODS")
-											+ valDateiXml);
-							if (odsValidation.equals("az")) {
 								// nur akzeptiert -> KEINE Validierung, nur
 								// Erkennung
 								recMsg = "AZ";

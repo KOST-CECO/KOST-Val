@@ -117,9 +117,11 @@ public class ValidationAvalidationMkvModuleImpl extends ValidationModuleImpl imp
 					String avcCodec = "codec_name=h264";
 					String hevcCodec = "codec_name=hevc";
 					String av1Codec = "codec_name=av1";
+					String mpeg2Codec = "codec_name=mpeg2video";
 					String flacCodec = "codec_name=flac";
 					String mp3Codec = "codec_name=mp3";
 					String aacCodec = "codec_name=aac";
+					String ac3Codec = "codec_name=ac3";
 					String formatCodec = "";
 					Scanner scannerFormat = new Scanner(outputProbe);
 					int countFormat = 0;
@@ -166,9 +168,11 @@ public class ValidationAvalidationMkvModuleImpl extends ValidationModuleImpl imp
 					String avcConfig = configMap.get("Allowedmkvavc");
 					String hevcConfig = configMap.get("Allowedmkvhevc");
 					String av1Config = configMap.get("Allowedmkvav1");
+					String mpeg2Config = configMap.get("Allowedmkvmpeg2");
 					String flacConfig = configMap.get("Allowedmkvflac");
 					String mp3Config = configMap.get("Allowedmkvmp3");
 					String aacConfig = configMap.get("Allowedmkvaac");
+					String ac3Config = configMap.get("Allowedmkvac3");
 
 					Scanner scanner = new Scanner(outputProbe);
 					while (scanner.hasNextLine()) {
@@ -176,8 +180,8 @@ public class ValidationAvalidationMkvModuleImpl extends ValidationModuleImpl imp
 						if (line.contains("codec_name=")) {
 							// Codec auswerten
 
-							// Video: FFV1 AVC HEVC AV1
-							// Audio: FLAC MP3 AAC
+							// Video: FFV1 AVC HEVC AV1 (MPEG-2)
+							// Audio: FLAC MP3 AAC (AC-3)
 
 							String codec = line.replace("codec_name=", "");
 							String codecName = codec.toUpperCase();
@@ -202,6 +206,11 @@ public class ValidationAvalidationMkvModuleImpl extends ValidationModuleImpl imp
 								type = "videocodec";
 								formatCodec = formatCodec + type + "=" + av1Config + "  ";
 								countVideoCodec = countVideoCodec + 1;
+							} else if (line.contains(mpeg2Codec) && mpeg2Config.equals("MPEG-2")) {
+								// OK
+								type = "videocodec";
+								formatCodec = formatCodec + type + "=" + mpeg2Config + "  ";
+								countVideoCodec = countVideoCodec + 1;
 							} else if (line.contains(flacCodec) && flacConfig.equals("FLAC")) {
 								// OK
 								type = "audiocodec";
@@ -217,6 +226,11 @@ public class ValidationAvalidationMkvModuleImpl extends ValidationModuleImpl imp
 								type = "audiocodec";
 								formatCodec = formatCodec + type + "=" + aacConfig + "  ";
 								countAudioCodec = countAudioCodec + 1;
+							} else if (line.contains(ac3Codec) && ac3Config.equals("AC-3")) {
+								// OK
+								type = "audiocodec";
+								formatCodec = formatCodec + type + "=" + ac3Config + "  ";
+								countAudioCodec = countAudioCodec + 1;
 							} else {
 								// NOK
 								if (min) {
@@ -224,14 +238,15 @@ public class ValidationAvalidationMkvModuleImpl extends ValidationModuleImpl imp
 									return false;
 								} else {
 									if (codec.equals("h264") || codec.equals("hevc") || codec.equals("ffv1")
-											|| codec.equals("av1") || codec.equals("jpeg2000")
-											|| codec.equals("huffyuv") || codec.equals("vp8") || codec.equals("vp9")) {
+											|| codec.equals("av1") || codec.equals("mpeg2video")
+											|| codec.equals("jpeg2000") || codec.equals("huffyuv")
+											|| codec.equals("vp8") || codec.equals("vp9")) {
 										// TODO: laufend erweitern auch bei MP4
 										type = "videocodec";
 										countVideoCodec = countVideoCodec + 1;
 									} else if (codec.equals("mp3") || codec.equals("flac") || codec.equals("aac")
-											|| codec.equals("mp2") || codec.equals("ac3") || codec.equals("alac")
-											|| codec.equals("opus") || codec.equals("vorbis")
+											|| codec.equals("ac3") || codec.equals("mp2") || codec.equals("ac3")
+											|| codec.equals("alac") || codec.equals("opus") || codec.equals("vorbis")
 											|| codec.contains("pcm_")) {
 										// TODO: laufend erweitern auch bei MP4
 										type = "audiocodec";

@@ -211,8 +211,8 @@ public class ValidationArepPdfaModuleImpl extends ValidationModuleImpl implement
 			if (!doRepair) {
 				// Meldungen warum keine Rep wurde bereits ausgegeben
 				noRep = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA) + noRep;
-				Util.oldnewstring("<ErrorZrepPdfa></ErrorZrepPdfa>", noRep + "</Error><NoRepairFunction>function</NoRepairFunction>",
-						logFile);
+				Util.oldnewstring("<ErrorZrepPdfa></ErrorZrepPdfa>",
+						noRep + "</Error><NoRepairFunction>function</NoRepairFunction>", logFile);
 				return false;
 			}
 		} catch (Throwable e) {
@@ -323,12 +323,6 @@ public class ValidationArepPdfaModuleImpl extends ValidationModuleImpl implement
 									+ " does NOT have the same number of pages as the original " + pagesOrig;
 							isSimy = "false";
 						} else {
-							java.util.Date nowStart = new java.util.Date();
-							java.text.SimpleDateFormat sdfStart = new java.text.SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-							System.out.println("StartVergleich "+sdfStart.format(nowStart));
-
-							
-							
 							// System.out.println("Info: Das reparierte PDF " + pagesRep + " hat gleich
 							// viele Seite wie das Original " + pagesOrig);
 
@@ -364,10 +358,14 @@ public class ValidationArepPdfaModuleImpl extends ValidationModuleImpl implement
 								isSimy = "false";
 							}
 							if (extractNumOrig != pagesOrig) {
-								simyDetail = "The number of pages extracted as images (" + extractNumOrig+") did not match the number of pages (" + pagesOrig+") in the original PDF file. ";
+								simyDetail = "The number of pages extracted as images (" + extractNumOrig
+										+ ") did not match the number of pages (" + pagesOrig
+										+ ") in the original PDF file. ";
 								isSimy = "false";
-							} else if (extractNumRep != pagesRep) { 
-								simyDetail = "The number of pages extracted as images (" + extractNumOrig+") did not match the number of pages (" + pagesOrig+") in the repaired PDF file. ";
+							} else if (extractNumRep != pagesRep) {
+								simyDetail = "The number of pages extracted as images (" + extractNumOrig
+										+ ") did not match the number of pages (" + pagesOrig
+										+ ") in the repaired PDF file. ";
 								isSimy = "false";
 							} else if (extractNumOrig != extractNumRep) {
 								simyDetail = "The repaired PDF " + extractNumRep
@@ -422,10 +420,10 @@ public class ValidationArepPdfaModuleImpl extends ValidationModuleImpl implement
 									} else {
 										valDirLog.mkdir();
 									}
-									String compResult="";
+									String compResult = "";
 									for (int counterEmpty = 0; counterEmpty < 10; counterEmpty++) {
-										 compResult = ImageMagick.execCompare(workDirOrig, workDirRep,
-												imTolerance, percentageValid, workDir, valDirLog, dirOfJarPath);
+										compResult = ImageMagick.execCompare(workDirOrig, workDirRep, imTolerance,
+												percentageValid, workDir, valDirLog, dirOfJarPath);
 										// System.out.println("compResult = " + compResult);
 										if (!compResult.equals("empty")) {
 											counterEmpty = 99;
@@ -434,29 +432,32 @@ public class ValidationArepPdfaModuleImpl extends ValidationModuleImpl implement
 									if (compResult.equals("OK")) {
 										// Optischer Vergleich bestanden
 									} else if (compResult.contains("ERROR_XML_CI_PIXELINVALID")) {
-										// errorSP + " " + pageNr + " " + "ERROR_XML_CI_PIXELINVALID " + imgPx1 + " "+ imgPx2;
+										// errorSP + " " + pageNr + " " + "ERROR_XML_CI_PIXELINVALID " + imgPx1 + " "+
+										// imgPx2;
 										simyDetail = "The repaired image does not contain the same number of pixels as the original.";
 										isSimy = "false";
 										// Reparierte Seite enthaelt nicht gleich viele Pixel wie das Original
 									} else if (compResult.contains("ERROR_XML_CI_SIZEINVALID")) {
-										//errorSP + " " + pageNr + " " + "ERROR_XML_CI_SIZEINVALID " + imgSize1
+										// errorSP + " " + pageNr + " " + "ERROR_XML_CI_SIZEINVALID " + imgSize1
 										simyDetail = "The repaired page does not have the same dimensions as the original.";
 										isSimy = "false";
 										// Reparierte Seite hat nicht die gleichen Dimensionen wie das Original
 									} else if (compResult.contains("ERROR_XML_CI_CIINVALID")) {
-										// " " + pageNr + " " + "ERROR_XML_CI_CIINVALID " + percentageCalcInv+ " " + z2 + " " + imToleranceTxt + " " + z1
-										simyDetail = "The visual discrepancy is too great. A manual inspection of the difference images at "+valDirLog.getAbsolutePath()+" must be performed.";
+										// " " + pageNr + " " + "ERROR_XML_CI_CIINVALID " + percentageCalcInv+ " " + z2
+										// + " " + imToleranceTxt + " " + z1
+										simyDetail = "The visual discrepancy is too great. A manual inspection of the difference images at "
+												+ valDirLog.getAbsolutePath() + " must be performed.";
 										isSimy = "man";
-										// Die optische Abweichung ist zu gross. Eine manuelle Kontrolle der Differenzbilder muss vorgenommen werden.
+										// Die optische Abweichung ist zu gross. Eine manuelle Kontrolle der
+										// Differenzbilder muss vorgenommen werden.
 									} else {
-										// Optischer Vergleich konnte nicht durchgefuehrt werden. Eine manuelle Kontrolle muss vorgenommen werden.
+										// Optischer Vergleich konnte nicht durchgefuehrt werden. Eine manuelle
+										// Kontrolle muss vorgenommen werden.
 										simyDetail = "A visual comparison could not be performed. A manual check must be made.";
 										isSimy = "man";
 									}
 								}
 							}
-							java.util.Date nowEnde = new java.util.Date();
-							System.out.println("EndeVergleich "+sdfStart.format(nowEnde));
 						}
 
 						if (isSimy.equals("true")) {
@@ -464,7 +465,8 @@ public class ValidationArepPdfaModuleImpl extends ValidationModuleImpl implement
 						} else if (isSimy.equals("man")) {
 							// Reparierte Datei hat den automatischen Vergleich nicht bestanden
 							logRep = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
-									+ getTextResourceService().getText(locale, INFO_XML_Z_NOREP_PROBNOTSIMY, simyDetail, outFile);
+									+ getTextResourceService().getText(locale, INFO_XML_Z_NOREP_PROBNOTSIMY, simyDetail,
+											outFile);
 							// Ausgabe nicht vergleichbar -> manuelle Kontrolle
 							Util.oldnewstring("<ErrorZrepPdfa></ErrorZrepPdfa>", logRep, logFile);
 							return false;
@@ -540,16 +542,43 @@ public class ValidationArepPdfaModuleImpl extends ValidationModuleImpl implement
 			try {
 				dmsOwner = ValidationAinitialisationModuleImpl.dmsInternasOwner(directoryOfConfigfile.getAbsolutePath(),
 						dllJacobPath);
-				if (dmsOwner.equals("NoLicense") || dmsOwner.equals("noInstallation")) {
+				if (dmsOwner.equals("NoLicenseF") ) {
 					logRep = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
 							+ getTextResourceService().getText(locale, INFO_XML_Z_NOREP_NOREP1,
-									directoryOfConfigfile.getAbsolutePath());
+									directoryOfConfigfile.getAbsolutePath(), "(noLicenseFile)");
 					Util.oldnewstring("<ErrorZrepPdfa></ErrorZrepPdfa>", logRep, logFile);
 					if (outFile.exists()) {
 						outFile.delete();
 					}
 					isRepairDms = false;
-				}
+				} else if (dmsOwner.equals("NoLicenseV")) {
+					logRep = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
+							+ getTextResourceService().getText(locale, INFO_XML_Z_NOREP_NOREP1,
+									directoryOfConfigfile.getAbsolutePath(), "(noValidLicense)");
+					Util.oldnewstring("<ErrorZrepPdfa></ErrorZrepPdfa>", logRep, logFile);
+					if (outFile.exists()) {
+						outFile.delete();
+					}
+					isRepairDms = false;
+				} else if (dmsOwner.equals("NoLicenseE") ) {
+					logRep = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
+							+ getTextResourceService().getText(locale, INFO_XML_Z_NOREP_NOREP1,
+									directoryOfConfigfile.getAbsolutePath(), "(Exception)");
+					Util.oldnewstring("<ErrorZrepPdfa></ErrorZrepPdfa>", logRep, logFile);
+					if (outFile.exists()) {
+						outFile.delete();
+					}
+					isRepairDms = false;
+				} else if (dmsOwner.equals("noInstallation")) {
+					logRep = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
+							+ getTextResourceService().getText(locale, INFO_XML_Z_NOREP_NOREP1,
+									directoryOfConfigfile.getAbsolutePath(), "(noInstallation)");
+					Util.oldnewstring("<ErrorZrepPdfa></ErrorZrepPdfa>", logRep, logFile);
+					if (outFile.exists()) {
+						outFile.delete();
+					}
+					isRepairDms = false;
+				} else 
 				dmsKey = ValidationAinitialisationModuleImpl.dmsInternasKey(directoryOfConfigfile.getAbsolutePath(),
 						dmsOwner);
 			} catch (Throwable e) {
@@ -653,7 +682,7 @@ public class ValidationArepPdfaModuleImpl extends ValidationModuleImpl implement
 				Integer sec = Integer.parseInt(milisec);
 				sec = sec / 1000;
 				if (!sec.equals(0)) {
-					System.out.print("  You have to wait " + sec
+					System.out.println("         You have to wait " + sec
 							+ " seconds because the internal dmstools license does not have batch mode. ");
 				}
 

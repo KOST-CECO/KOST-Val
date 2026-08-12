@@ -187,6 +187,28 @@ public class Util {
 		}
 	}
 
+	/** Kontrolliert ob text in der ersten Linie im File vorkommt */
+	public static boolean stringInFirstFileLine(String text, File file) {
+		try {
+			Scanner scanner = new Scanner(file);
+			while (scanner.hasNextLine()) {
+				String line = scanner.nextLine();
+				if (line.contains(text)) {
+					scanner.close();
+					return true;
+				} else {
+					// abbrechen = return False
+					scanner.close();
+					return false;
+				}
+			}
+			scanner.close();
+			return false;
+		} catch (FileNotFoundException e) {
+			return false;
+		}
+	}
+
 	/**
 	 * Kontrolliert ob text in einer Linie im File vorkommt und gibt dies Linie aus
 	 */
@@ -265,7 +287,7 @@ public class Util {
 	 * Solche Sachen duerfen nicht in einer Schleife gemacht werden, da diese sehr
 	 * Zeitintensiv sind!
 	 * 
-	 * @return Anzahl String in File  @throws IOException
+	 * @return Anzahl String in File @throws IOException
 	 */
 	public static int stringCountInFile(String string, File file) throws IOException {
 		int stringCountInFile = 0;

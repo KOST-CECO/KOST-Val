@@ -32,10 +32,26 @@ set APP_HOME=%DIRNAME%
 @rem Add default JVM options here. You can also use JAVA_OPTS and VALIDATE_OPTS to pass JVM options to this script.
 set DEFAULT_JVM_OPTS=
 
+@rem Liberica_JRE verwenden und nicht eigenes Java
 @rem Find java.exe
-if defined JAVA_HOME goto findJavaFromJavaHome
+@rem if defined JAVA_HOME goto findJavaFromJavaHome
 
-set JAVA_EXE=java.exe
+@rem set JAVA_EXE=java.exe
+@rem %JAVA_EXE% -version >NUL 2>&1
+@rem if "%ERRORLEVEL%" == "0" goto init
+
+set JAVA_HOME=%APP_HOME%/../Liberica_JRE
+set JAVA_EXE=%JAVA_HOME%/bin/java.exe
+%JAVA_EXE% -version >NUL 2>&1
+if "%ERRORLEVEL%" == "0" goto init
+
+set JAVA_HOME=%APP_HOME%/../../Liberica_JRE
+set JAVA_EXE=%JAVA_HOME%/bin/java.exe
+%JAVA_EXE% -version >NUL 2>&1
+if "%ERRORLEVEL%" == "0" goto init
+
+set JAVA_HOME=%APP_HOME%/../../../Liberica_JRE
+set JAVA_EXE=%JAVA_HOME%/bin/java.exe
 %JAVA_EXE% -version >NUL 2>&1
 if "%ERRORLEVEL%" == "0" goto init
 
@@ -47,19 +63,19 @@ echo location of your Java installation.
 
 goto fail
 
-:findJavaFromJavaHome
-set JAVA_HOME=%JAVA_HOME:"=%
-set JAVA_EXE=%JAVA_HOME%/bin/java.exe
+@rem :findJavaFromJavaHome
+@rem set JAVA_HOME=%JAVA_HOME:"=%
+@rem set JAVA_EXE=%JAVA_HOME%/bin/java.exe
 
-if exist "%JAVA_EXE%" goto init
+@rem if exist "%JAVA_EXE%" goto init
 
-echo.
-echo ERROR: JAVA_HOME is set to an invalid directory: %JAVA_HOME%
-echo.
-echo Please set the JAVA_HOME variable in your environment to match the
-echo location of your Java installation.
+@rem echo.
+@rem echo ERROR: JAVA_HOME is set to an invalid directory: %JAVA_HOME%
+@rem echo.
+@rem echo Please set the JAVA_HOME variable in your environment to match the
+@rem echo location of your Java installation.
 
-goto fail
+@rem goto fail
 
 :init
 @rem Get command-line arguments, handling Windows variants

@@ -19,6 +19,7 @@ package ch.kostceco.tools.kosttools.fileservice;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 
 import ch.kostceco.tools.kosttools.runtime.Cmd;
 import ch.kostceco.tools.kosttools.util.StreamGobbler;
@@ -43,6 +44,7 @@ public class ImageMagick {
 	 */
 	public static String execImageMagick(File checkFile, File report, File workDir, String dirOfJarPath)
 			throws InterruptedException {
+		// TODO: execImageMagick
 		boolean out = true;
 		File fmagickExe = new File(dirOfJarPath + File.separator + magickExe);
 		// falls das File von einem vorhergehenden Durchlauf bereits existiert,
@@ -51,8 +53,28 @@ public class ImageMagick {
 			report.delete();
 		}
 
+		try {
+
+			Process p = new ProcessBuilder("taskkill", "/F", "/IM", "magick.exe").start();
+
+			int exitCode = p.waitFor();
+			//System.out.println("ExitCode: " + exitCode);
+			if (exitCode == 0) {
+				// System.out.println("ImageMagick wurde erfolgreich gestoppt " + exitCode);
+			} else if (exitCode == 128) {
+				// System.out.println("ImageMagick -> kein passende Prozess " + exitCode);
+			} else {
+				// System.out.println("ImageMagick -> " + exitCode);
+			}
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+		}
+
 		// ImageMagick-Befehl: PathTo_magick.exe checkFile -regard-warnings -verbose
 		// info: 2> report
+
+		// mit -limit thread 4 koennte eingeschraenkt werden wie viele Kerne maximal
+		// verwendet werden besser leer lassen und dann wird das maximum genommen
 		String command = "\"\"" + fmagickExe.getAbsolutePath() + "\" \"" + checkFile.getAbsolutePath()
 				+ "\" -regard-warnings -verbose info: 2>\"" + report.getAbsolutePath() + "\"\"";
 
@@ -88,6 +110,7 @@ public class ImageMagick {
 	 * @return String mit Kontrollergebnis
 	 */
 	public static String checkImageMagick(String dirOfJarPath) {
+		// TODO: checkImageMagick
 		String result = "";
 		boolean checkFiles = true;
 		// Pfad zum Programm existiert die Dateien?
@@ -476,8 +499,8 @@ public class ImageMagick {
 			if (diffPixel.isEmpty()) {
 				diffPixel = "empty";
 				// System.out.println("diffPixel (empty) = " + diffPixel);
-				// wenn empty 10 sekunden warten und wiederholen
-				Thread.sleep(10000);
+				// wenn empty 0.10 sekunden warten und wiederholen
+				Thread.sleep(100);
 				return "empty";
 			} else {
 				// Invalide Zahl aus der Klammer extrahieren all: 50.0846 (0.000764242)
