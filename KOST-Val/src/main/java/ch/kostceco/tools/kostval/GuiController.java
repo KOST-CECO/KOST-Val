@@ -20,16 +20,22 @@ package ch.kostceco.tools.kostval;
 
 import java.awt.Desktop;
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.StringWriter;
 import java.net.URL;
+import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -131,7 +137,7 @@ public class GuiController {
 	private String initInstructionsIt;
 
 	private String initInstructionsEn;
-	private String versionKostVal = "2.4.0.2";
+	private String versionKostVal = "2.4.0.4";
 	/*
 	 * TODO: versionKostVal auch hier anpassen:
 	 * 
@@ -1031,6 +1037,12 @@ public class GuiController {
 	}
 
 	public Task<Boolean> doVal(String[] args) {
+		// Temp Arbeitsverzeichnis von SIARD loeschen
+		File tmpDir = new File(System.getenv("USERPROFILE") + File.separator + ".kost-val_2x" + File.separator + "logs"
+				+ File.separator + "Temp_SIARD");
+		if (tmpDir.exists()) {
+			Util.deleteDir(tmpDir);
+		}
 		return new Task<Boolean>() {
 			@Override
 			protected Boolean call() {
@@ -1798,8 +1810,10 @@ public class GuiController {
 					// ausgefuellt
 					buttonFormat.setDisable(false);
 					String fileName = valFileFolder.getName().toLowerCase();
-					if (fileName.endsWith(".txt") || fileName.endsWith(".jpeg") || fileName.endsWith(".jpg")
-							|| fileName.endsWith(".svg") || fileName.endsWith(".png") || fileName.endsWith(".xml")) {
+					if (fileName.endsWith(".txt") || fileName.endsWith(".csv") || fileName.endsWith(".rtf")
+							|| fileName.endsWith(".jpeg") || fileName.endsWith(".jpg") || fileName.endsWith(".svg")
+							|| fileName.endsWith(".png") || fileName.endsWith(".xml") || fileName.endsWith(".siard")) {
+						// TODO: Inhalt anzeigen
 						console.setText(" \n");// loest keine Veraenderung im listener aus
 						if (locale.toString().startsWith("fr")) {
 							console.setText("1. Fichier selectionne : " + valFileFolder.getAbsolutePath()
@@ -1815,8 +1829,9 @@ public class GuiController {
 									+ "\n2. Ggf. Konfiguration und LogType anpassen \n3. Validierung starten ");
 						}
 						console.appendText(""); // jetzt gibt es eine Veraenderung
-						if (fileName.endsWith(".txt") || fileName.endsWith(".jpeg") || fileName.endsWith(".jpg")
-								|| fileName.endsWith(".svg") || fileName.endsWith(".png")) {
+						if (fileName.endsWith(".txt") || fileName.endsWith(".csv") || fileName.endsWith(".rtf")
+								|| fileName.endsWith(".jpeg") || fileName.endsWith(".jpg") || fileName.endsWith(".svg")
+								|| fileName.endsWith(".png")) {
 							engine.load("file:///" + valFileFolder.getAbsolutePath());
 						} else if (fileName.endsWith(".xml")) {
 							// XML laden
@@ -1866,6 +1881,131 @@ public class GuiController {
 								 * stage.show();
 								 */
 							}
+						} else if (fileName.endsWith(".siard")) {
+							// 1) metadata.xml extrahieren in log
+
+							/*
+							 * Das metadata.xml und sein xsd muessen in das Filesystem extrahiert werden,
+							 * weil bei bei Verwendung eines Inputstreams bei der Validierung ein Problem
+							 * mit den xs:include Statements besteht, die includes koennen so nicht
+							 * aufgeloest werden. Es werden hier jedoch nicht nur diese Files extrahiert,
+							 * sondern gleich die ganze Zip-Datei, weil auch spaetere Validierungen nur mit
+							 * den extrahierten Files arbeiten koennen.
+							 */
+							int BUFFER = 2048;
+							ZipFile zipfile = new ZipFile(valFileFolder.getAbsolutePath());
+							// Arbeitsverzeichnis zum Entpacken des Archivs erstellen
+							File tmpDir = new File(System.getenv("USERPROFILE") + File.separator + ".kost-val_2x"
+									+ File.separator + "logs" + File.separator + "Temp_SIARD");
+							if (tmpDir.exists()) {
+								Util.deleteDir(tmpDir);
+							}
+							if (!tmpDir.exists()) {
+								tmpDir.mkdir();
+							}
+							String fileMdxml = "metadata.xml";
+							File mdxml = new File(tmpDir + File.separator + fileMdxml);
+
+							Enumeration<? extends ZipEntry> entries = zipfile.entries();
+
+							// jeden entry durchgehen
+							while (entries.hasMoreElements()) {
+								ZipEntry entry = (ZipEntry) entries.nextElement();
+								String entryName = entry.getName();
+								File destFile = new File(tmpDir, entryName);
+								// System.out.println (entryName);
+
+								// erstelle den Ueberordner
+								File destinationParent = destFile.getParentFile();
+								if (!entry.isDirectory()) {
+									if (destinationParent.getName().equals("header")) {
+										destinationParent.mkdirs();
+									}
+									// Festhalten von metadata.xml und metadata.xsd
+									if (destFile.getName().endsWith(fileMdxml)) {
+										mdxml = destFile;
+										InputStream stream = zipfile.getInputStream(entry);
+										BufferedInputStream is = new BufferedInputStream(stream);
+										int currentByte;
+
+										// erstellung Buffer zum schreiben der Dateien
+										byte data[] = new byte[BUFFER];
+
+										// schreibe die aktuelle Datei an den gewuenschten Ort
+										FileOutputStream fos = new FileOutputStream(destFile);
+										BufferedOutputStream dest = new BufferedOutputStream(fos, BUFFER);
+										while ((currentByte = is.read(data, 0, BUFFER)) != -1) {
+											dest.write(data, 0, currentByte);
+										}
+										dest.flush();
+										dest.close();
+										is.close();
+										stream.close();
+										fos.close();
+										fos = null;
+										is = null;
+										stream = null;
+										break;
+									}
+								} else {
+									if (destFile.getName().equals("header")) {
+										destFile.mkdirs();
+									}
+								}
+								entry = null;
+							}
+							entries = null;
+							zipfile.close();
+
+							// 2) metadata.xml mit siard.xsl anzeigen -> Uebersicht
+							// 3) metadata.xml in log loeschen bei start
+							// System.out.println("XML laden print");
+							StreamSource xml = new StreamSource(mdxml);
+
+							// generisches stylesheet verwenden
+							// System.out.println("generisches stylesheet verwenden");
+							try {
+								// XSL laden
+								File xslGeneral = new File(
+										dirOfJarPath + File.separator + "resources" + File.separator + "siard.xsl");
+
+								StreamSource xsl = new StreamSource(xslGeneral);
+
+								// Transformation durchfuehren
+								TransformerFactory factory = TransformerFactory.newInstance();
+								Transformer transformer = factory.newTransformer(xsl);
+
+								StringWriter writer = new StringWriter();
+								transformer.transform(xml, new StreamResult(writer));
+
+								String html = writer.toString();
+
+								// Dateipfad der SIARD-Datei (als header)
+								String xmlPath = valFileFolder.getAbsolutePath();
+
+								// HTML für die WebView aufbauen
+								String htmlWithPath = "<html>" + "<head>" + "<style>"
+										+ "body { margin: 0; padding: 0; }" + ".xml-path {" + "    padding: 8px 10px;"
+										+ "    background-color: #eeeeee;" + "    border-bottom: 1px solid #cccccc;"
+										+ "    font-family: Arial, sans-serif;" + "    font-size: 12px;"
+										+ "    color: #444444;" + "}" + "</style>" + "</head>" + "<body>"
+										+ "<div class=\"xml-path\">" + xmlPath + "</div>" + html + "</body>"
+										+ "</html>";
+
+								// WebView anzeigen
+								engine.loadContent(htmlWithPath);
+
+								buttonPrint.setDisable(false);
+							} catch (TransformerException e) {
+								System.out.println("catch (TransformerException e)");
+								System.out.println(e);
+								engine.load("file:///" + mdxml.getAbsolutePath());
+							}
+
+							/*
+							 * stage.setScene(new Scene(webView, 800, 600)); stage.setTitle("XML Viewer");
+							 * stage.show();
+							 */
 						} else {
 							String pathDetail = "file:/" + valFileFolder.getAbsolutePath();
 							pathDetail = pathDetail.replace("\\\\", "/");

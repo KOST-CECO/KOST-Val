@@ -27,7 +27,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Locale;
-import java.util.Optional;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -48,12 +47,10 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -69,10 +66,9 @@ public class ConfigController {
 	private File configFile = new File(System.getenv("USERPROFILE") + File.separator + ".kost-val_2x" + File.separator
 			+ "configuration" + File.separator + "kostval.conf.xml");
 
-	private String dirOfJarPath, inputString, workString, config, stringPuid,
-			minOne = "Mindestens eine Variante muss erlaubt sein!";
+	private String dirOfJarPath, config, stringPuid, minOne = "Mindestens eine Variante muss erlaubt sein!";
 
-	private String versionKostVal = "   (v2.4.0.2)";
+	private String versionKostVal = "   (v2.4.0.4)";
 
 	private Locale locale = Locale.getDefault();
 
@@ -104,10 +100,10 @@ public class ConfigController {
 	private Button buttonMkv, buttonMkvVal, buttonMp4, buttonMp4Val;
 
 	@FXML
-	private Label labelData, labelXml, labelJson, labelSiard, labelCsv, labelXlsx, labelOds;
+	private Label labelData, labelXml, labelJson, labelSiard, labelCsv, labelXlsx;
 
 	@FXML
-	private Button buttonXml, buttonXmlVal, buttonJson, buttonSiard, buttonSiardVal, buttonCsv, buttonXlsx, buttonOds;
+	private Button buttonXml, buttonXmlVal, buttonJson, buttonSiard, buttonSiardVal, buttonCsv, buttonXlsx;
 
 	@FXML
 	private Label labelSip, labelEch0160;
@@ -116,20 +112,14 @@ public class ConfigController {
 	private Button buttonSip0160, buttonSipVal;
 
 	@FXML
-	private Label labelOther, labelSignatur, labelDv, labelEgovDV, labelWarning, labelSize, labelWork, labelInstitution,
-			labelInput, labelHint, labelHint1, labelConfig;
+	private Label labelOther, labelOther1, labelHint, labelHint1, labelHint3, labelConfig, labelConfig2;
 
 	@FXML
-	private Button buttonDv, buttonDvVal, buttonPuid, buttonWork, buttonInput, buttonInstitution;
+	private Button buttonPuid, buttonPuidT, buttonPuidI, buttonPuidA, buttonPuidV, buttonPuidD, buttonConfig2;
 
-	ObservableList<String> hashAlgoList = FXCollections.observableArrayList("MD5", "SHA-1", "SHA-256", "SHA-512", "");
+	ObservableList<String> droidYesNoList = FXCollections.observableArrayList();
 	@FXML
-	private ChoiceBox<String> hashAlgo;
-
-	ObservableList<String> sizeWarningList = FXCollections.observableArrayList("", "0.5KB", "1KB", "5KB");
-
-	@FXML
-	private ChoiceBox<String> sizeWarning;
+	private ChoiceBox<String> droidYesNo;
 
 	@FXML
 	private WebView wbv;
@@ -166,31 +156,31 @@ public class ConfigController {
 			e1.printStackTrace();
 		}
 
-		hashAlgo.getItems().addAll(hashAlgoList);
-		sizeWarning.getItems().addAll(sizeWarningList);
+		String droidInit = "";
+		String droidYesDe = "Exotische Formate mit DROID erkennen";
+		String droidNoDe = "Keine Formaterkennung bei exotischen Formaten";
+
+		String droidYesFr = "Détecter les formats peu courants avec DROID";
+		String droidNoFr = "Pas de détection des formats peu courants";
+
+		String droidYesIt = "Detect exotic file formats with DROID";
+		String droidNoIt = "No file format detection for exotic formats";
+
+		String droidYesEn = "Riconoscere i formati non comuni con DROID";
+		String droidNoEn = "Nessun riconoscimento dei formati non comuni";
+
+		droidYesNoList.setAll(droidYesDe, droidNoDe);
 		try {
-			Document docH = null;
-			BufferedInputStream bisH = new BufferedInputStream(new FileInputStream(configFile));
-			DocumentBuilderFactory dbfH = DocumentBuilderFactory.newInstance();
-			DocumentBuilder dbH = dbfH.newDocumentBuilder();
-			docH = dbH.parse(bisH);
-			docH.normalize();
-			String hashAlgoInit = "";
-			hashAlgoInit = docH.getElementsByTagName("hash").item(0).getTextContent();
-			bisH.close();
-			docH = null;
-			hashAlgo.setValue(hashAlgoInit);
-			Document docS = null;
-			BufferedInputStream bisS = new BufferedInputStream(new FileInputStream(configFile));
-			DocumentBuilderFactory dbfS = DocumentBuilderFactory.newInstance();
-			DocumentBuilder dbS = dbfS.newDocumentBuilder();
-			docS = dbS.parse(bisS);
-			docS.normalize();
-			String sizeWarningInit = "";
-			sizeWarningInit = docS.getElementsByTagName("sizeWarning").item(0).getTextContent();
-			bisS.close();
-			docS = null;
-			sizeWarning.setValue(sizeWarningInit);
+			Document docD = null;
+			BufferedInputStream bisD = new BufferedInputStream(new FileInputStream(configFile));
+			DocumentBuilderFactory dbfD = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dbD = dbfD.newDocumentBuilder();
+			docD = dbD.parse(bisD);
+			docD.normalize();
+			droidInit = docD.getElementsByTagName("droid").item(0).getTextContent();
+			bisD.close();
+			docD = null;
+			// droidYesNo.setValue(droidInit);
 		} catch (IOException | ParserConfigurationException | SAXException e1) {
 			e1.printStackTrace();
 		}
@@ -202,6 +192,7 @@ public class ConfigController {
 				buttonConfigApply.setText("Anwenden");
 				buttonConfigApplyStandard.setText("Standard anwenden");
 				buttonConfigCancel.setText("Verwerfen");
+				buttonConfig2.setText("Anpassen");
 				labelText.setText("Text");
 				labelImage.setText("Bild");
 				labelAudio.setText("Audio");
@@ -209,21 +200,25 @@ public class ConfigController {
 				labelData.setText("Daten");
 				labelSip.setText("SIP");
 				labelOther.setText("Sonstige");
-				labelEgovDV.setText("Prüfung von el. Signaturen in PDF/A- und PDF-Dateien (Lizenz erforderlich)");
-				labelWarning.setText("Dateigrösse");
-				labelSize.setText("Warnung ausgeben, wenn die Datei kleiner als die ausgewählte Dateigrösse ist");
-				buttonWork.setText("Arbeitsverzeichnis");
-				buttonInput.setText("Inputverzeichnis");
-				labelInstitution.setText("Institution");
+				labelOther1.setText("Kategorien");
+				labelConfig2.setText("Weitere Konfigurationen");
 				labelHint1.setText("Hinweis:");
 				labelHint.setText("öffnet die jeweilige Detailkonfiguration");
+				labelHint3.setText("weitere Formate dieser Kategorie");
 				minOne = "Mindestens eine Variante muss erlaubt sein!";
 				stringPuid = "weitere akzeptierte Dateiformate...";
+				droidYesNoList.setAll(droidYesDe, droidNoDe);
+				if (droidInit.contains("yes")) {
+					droidYesNo.setValue(droidYesDe);
+				} else {
+					droidYesNo.setValue(droidNoDe);
+				}
 			} else if (Util.stringInFileLine("kostval-conf-FR.xsl", configFile)) {
 				locale = new Locale("fr");
 				buttonConfigApply.setText("Appliquer");
 				buttonConfigApplyStandard.setText("Appliquer le standard");
 				buttonConfigCancel.setText("Annuler");
+				buttonConfig2.setText("Changer");
 				labelText.setText("Texte");
 				labelImage.setText("Image");
 				labelAudio.setText("Audio");
@@ -231,22 +226,25 @@ public class ConfigController {
 				labelData.setText("Données");
 				labelSip.setText("SIP");
 				labelOther.setText("Autres");
-				labelEgovDV.setText("Vérification des signatures él. dans PDF/A et PDF (licence requise)");
-				labelWarning.setText("Taille");
-				labelSize.setText(
-						"Afficher un avertissement si le fichier est plus petit que la taille de fichier sélectionnée");
-				buttonWork.setText("Répertoire de travail");
-				buttonInput.setText("Répertoire d'entrée");
-				labelInstitution.setText("Institution");
+				labelOther1.setText("catégories");
+				labelConfig2.setText("Autres configurations");
 				labelHint1.setText("Remarque :");
 				labelHint.setText("ouvre la configuration détaillée correspondante");
+				labelHint3.setText("autres formats de cette catégorie");
 				minOne = "Au moins une variante doit etre autorisee !";
 				stringPuid = "autres formats de fichiers acceptés...";
+				droidYesNoList.setAll(droidYesFr, droidNoFr);
+				if (droidInit.contains("yes")) {
+					droidYesNo.setValue(droidYesFr);
+				} else {
+					droidYesNo.setValue(droidNoFr);
+				}
 			} else if (Util.stringInFileLine("kostval-conf-IT.xsl", configFile)) {
 				locale = new Locale("it");
 				buttonConfigApply.setText("Applica");
 				buttonConfigApplyStandard.setText("Applica predefinito");
 				buttonConfigCancel.setText("Annulla");
+				buttonConfig2.setText("Modifica");
 				labelText.setText("Testo");
 				labelImage.setText("Immagine");
 				labelAudio.setText("Audio");
@@ -254,21 +252,24 @@ public class ConfigController {
 				labelData.setText("Dati");
 				labelSip.setText("SIP");
 				labelOther.setText("Altro");
-				labelEgovDV.setText("Verifica delle firme el. nei file PDF/A e PDF (licenza necessaria)");
-				labelWarning.setText("Dimensione");
-				labelSize.setText("Visualizza l'avviso se il file è più piccolo della dimensione selezionata");
-				buttonWork.setText("Directory di lavoro");
-				buttonInput.setText("Directory di input");
-				labelInstitution.setText("Istituzione");
+				labelOther1.setText("categorie");
+				labelConfig2.setText("Altre configurazioni");
 				labelHint1.setText("Nota:");
 				labelHint.setText("apre la configurazione dettagliata corrispondente");
-				minOne = "Almeno una variante deve essere consentita!";
+				labelHint3.setText("altri formati di questa categoria");
 				stringPuid = "altri formati di file accettati...";
+				droidYesNoList.setAll(droidYesIt, droidNoIt);
+				if (droidInit.contains("yes")) {
+					droidYesNo.setValue(droidYesIt);
+				} else {
+					droidYesNo.setValue(droidNoIt);
+				}
 			} else {
 				locale = new Locale("en");
 				buttonConfigApply.setText("Apply");
 				buttonConfigApplyStandard.setText("Apply Standard");
 				buttonConfigCancel.setText("Cancel");
+				buttonConfig2.setText("Change");
 				labelText.setText("Text");
 				labelImage.setText("Image");
 				labelAudio.setText("Audio");
@@ -276,22 +277,25 @@ public class ConfigController {
 				labelData.setText("Data");
 				labelSip.setText("SIP");
 				labelOther.setText("Other");
-				labelEgovDV.setText("Verification of el. signatures in PDF/A and PDF files (license required)");
-				labelWarning.setText("File size");
-				labelSize.setText("Display warning if the file is smaller than the selected file size");
-				buttonWork.setText("Working directory");
-				buttonInput.setText("Input directory");
-				labelInstitution.setText("Institution");
+				labelOther1.setText("categories");
+				labelConfig2.setText("Additional Configurations");
 				labelHint1.setText("Note:");
 				labelHint.setText("opens the respective detailed configuration");
+				labelHint3.setText("other formats in this category");
 				minOne = "At least one variant must be allowed!";
 				stringPuid = "other accepted file formats...";
+				droidYesNoList.setAll(droidYesEn, droidNoEn);
+				if (droidInit.contains("yes")) {
+					droidYesNo.setValue(droidYesEn);
+				} else {
+					droidYesNo.setValue(droidNoEn);
+				}
 			}
 			buttonPuid.setText(stringPuid);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		droidYesNo.getItems().addAll(droidYesNoList);
 		// Werte aus Konfiguration lesen und Check-Box entsprechend setzten
 		// checkPdfa, checkJpeg2000, checkJpeg, checkPng, checkXml, checkTiff,
 		// checkSiard;
@@ -332,13 +336,9 @@ public class ConfigController {
 			String yesSiard = "<siardvalidation>&#x2713;</siardvalidation>";
 			String noCsv = "<csvvalidation>&#x2717;</csvvalidation>";
 			String noXlsx = "<xlsxvalidation>&#x2717;</xlsxvalidation>";
-			String noOds = "<odsvalidation>&#x2717;</odsvalidation>";
 
 			String noSip0160 = "<ech0160validation>&#x2717;</ech0160validation>";
 			String yesSip0160 = "<ech0160validation>&#x2713;</ech0160validation>";
-
-			String noDv = "<egovdvvalidation>&#x2717;</egovdvvalidation>";
-			String yesDv = "<egovdvvalidation>&#x2713;</egovdvvalidation>";
 
 			if (config.contains(noPdfa)) {
 				buttonPdfaVal.setDisable(true);
@@ -519,13 +519,6 @@ public class ConfigController {
 				buttonXlsx.setText("(✓)");
 				buttonXlsx.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
 			}
-			if (config.contains(noOds)) {
-				buttonOds.setText("✗");
-				buttonOds.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
-			} else {
-				buttonOds.setText("(✓)");
-				buttonOds.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
-			}
 
 			if (config.contains(noSip0160)) {
 				buttonSipVal.setDisable(true);
@@ -541,20 +534,6 @@ public class ConfigController {
 				buttonSip0160.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
 			}
 
-			if (config.contains(noDv)) {
-				buttonDvVal.setDisable(true);
-				buttonDv.setText("✗");
-				buttonDv.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
-			} else if (config.contains(yesDv)) {
-				buttonDvVal.setDisable(false);
-				buttonDv.setText("✓");
-				buttonDv.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
-			} else {
-				buttonDvVal.setDisable(false);
-				buttonDv.setText("✓");
-				buttonDv.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
-			}
-
 			Document doc = null;
 			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(configFile));
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -566,13 +545,6 @@ public class ConfigController {
 			 * .getTextContent();
 			 */
 			buttonPuid.setText(stringPuid);
-			workString = doc.getElementsByTagName("pathtoworkdir").item(0).getTextContent();
-			labelWork.setText(workString);
-			inputString = doc.getElementsByTagName("standardinputdir").item(0).getTextContent();
-			labelInput.setText(inputString);
-			String institutionInit = doc.getElementsByTagName("Institution").item(0).getTextContent();
-			buttonInstitution.setText(institutionInit);
-
 		} catch (IOException | SAXException | ParserConfigurationException e1) {
 			e1.printStackTrace();
 		}
@@ -1494,30 +1466,6 @@ public class ConfigController {
 		}
 	}
 
-	/* changeOds schaltet zwischen x (v) herum */
-	@FXML
-	void changeOds(ActionEvent event) {
-		String az = "<odsvalidation>(&#x2713;)</odsvalidation>";
-		String no = "<odsvalidation>&#x2717;</odsvalidation>";
-		try {
-			String optButton = buttonOds.getText();
-			if (optButton.equals("✗")) {
-				Util.oldnewstring(no, az, configFile);
-				buttonOds.setText("(✓)");
-				buttonOds.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
-				engine.load("file:///" + configFile.getAbsolutePath());
-			} else {
-				Util.oldnewstring(az, no, configFile);
-				buttonOds.setText("✗");
-				buttonOds.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
-				engine.load("file:///" + configFile.getAbsolutePath());
-				// TODO Check etwas angewaehlt
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 	/* TODO --> SIP ================= */
 
 	/* changeSip0160 schaltet zwischen x V herum */
@@ -1597,9 +1545,189 @@ public class ConfigController {
 
 	/* TODO --> Other ================= */
 
+	// Mit changePuidT werden zusaetzliche Formate angezeigt
+	@FXML
+	void changePuidT(ActionEvent eventOtherT) {
+		try {
+			StackPane otherLayout = new StackPane();
+
+			otherLayout = FXMLLoader.load(getClass().getResource("ConfigViewOtherT.fxml"));
+			Scene otherScene = new Scene(otherLayout);
+			otherScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+
+			// New window (Stage)
+			Stage otherStage = new Stage();
+
+			otherStage.setTitle("KOST-Val   -   Configuration   -   Other Text Formats" + versionKostVal);
+			Image kostvalIcon = new Image(
+					"file:" + dirOfJarPath + File.separator + "doc" + File.separator + "valicon.png");
+			// Image kostvalIcon = new Image( "file:valicon.png" );
+			otherStage.initModality(Modality.APPLICATION_MODAL);
+			otherStage.getIcons().add(kostvalIcon);
+			otherStage.setScene(otherScene);
+			otherStage.setOnCloseRequest(event -> {
+				// hier engeben was beim schliessen gemacht werden soll
+				engine.load("file:///" + configFile.getAbsolutePath());
+				buttonPuid.setText(stringPuid);
+			});
+			otherStage.show();
+			otherStage.setOnHiding(event -> {
+				// hier engeben was beim schliessen gemacht werden soll
+				engine.load("file:///" + configFile.getAbsolutePath());
+				buttonPuid.setText(stringPuid);
+			});
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+
+	// Mit changePuidI werden zusaetzliche Formate angezeigt
+	@FXML
+	void changePuidI(ActionEvent eventOtherI) {
+		try {
+			StackPane otherLayout = new StackPane();
+
+			otherLayout = FXMLLoader.load(getClass().getResource("ConfigViewOtherI.fxml"));
+			Scene otherScene = new Scene(otherLayout);
+			otherScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+
+			// New window (Stage)
+			Stage otherStage = new Stage();
+
+			otherStage.setTitle("KOST-Val   -   Configuration   -   Other Image Formats" + versionKostVal);
+			Image kostvalIcon = new Image(
+					"file:" + dirOfJarPath + File.separator + "doc" + File.separator + "valicon.png");
+			// Image kostvalIcon = new Image( "file:valicon.png" );
+			otherStage.initModality(Modality.APPLICATION_MODAL);
+			otherStage.getIcons().add(kostvalIcon);
+			otherStage.setScene(otherScene);
+			otherStage.setOnCloseRequest(event -> {
+				// hier engeben was beim schliessen gemacht werden soll
+				engine.load("file:///" + configFile.getAbsolutePath());
+				buttonPuid.setText(stringPuid);
+			});
+			otherStage.show();
+			otherStage.setOnHiding(event -> {
+				// hier engeben was beim schliessen gemacht werden soll
+				engine.load("file:///" + configFile.getAbsolutePath());
+				buttonPuid.setText(stringPuid);
+			});
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+
+	// Mit changePuidA werden zusaetzliche Formate angezeigt
+	@FXML
+	void changePuidA(ActionEvent eventOtherA) {
+		try {
+			StackPane otherLayout = new StackPane();
+
+			otherLayout = FXMLLoader.load(getClass().getResource("ConfigViewOtherA.fxml"));
+			Scene otherScene = new Scene(otherLayout);
+			otherScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+
+			// New window (Stage)
+			Stage otherStage = new Stage();
+
+			otherStage.setTitle("KOST-Val   -   Configuration   -   Other Audio Formats" + versionKostVal);
+			Image kostvalIcon = new Image(
+					"file:" + dirOfJarPath + File.separator + "doc" + File.separator + "valicon.png");
+			// Image kostvalIcon = new Image( "file:valicon.png" );
+			otherStage.initModality(Modality.APPLICATION_MODAL);
+			otherStage.getIcons().add(kostvalIcon);
+			otherStage.setScene(otherScene);
+			otherStage.setOnCloseRequest(event -> {
+				// hier engeben was beim schliessen gemacht werden soll
+				engine.load("file:///" + configFile.getAbsolutePath());
+				buttonPuid.setText(stringPuid);
+			});
+			otherStage.show();
+			otherStage.setOnHiding(event -> {
+				// hier engeben was beim schliessen gemacht werden soll
+				engine.load("file:///" + configFile.getAbsolutePath());
+				buttonPuid.setText(stringPuid);
+			});
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+
+	// Mit changePuidV werden zusaetzliche Formate angezeigt
+	@FXML
+	void changePuidV(ActionEvent eventOtherV) {
+		try {
+			StackPane otherLayout = new StackPane();
+
+			otherLayout = FXMLLoader.load(getClass().getResource("ConfigViewOtherV.fxml"));
+			Scene otherScene = new Scene(otherLayout);
+			otherScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+
+			// New window (Stage)
+			Stage otherStage = new Stage();
+
+			otherStage.setTitle("KOST-Val   -   Configuration   -   Other Video Formats" + versionKostVal);
+			Image kostvalIcon = new Image(
+					"file:" + dirOfJarPath + File.separator + "doc" + File.separator + "valicon.png");
+			// Image kostvalIcon = new Image( "file:valicon.png" );
+			otherStage.initModality(Modality.APPLICATION_MODAL);
+			otherStage.getIcons().add(kostvalIcon);
+			otherStage.setScene(otherScene);
+			otherStage.setOnCloseRequest(event -> {
+				// hier engeben was beim schliessen gemacht werden soll
+				engine.load("file:///" + configFile.getAbsolutePath());
+				buttonPuid.setText(stringPuid);
+			});
+			otherStage.show();
+			otherStage.setOnHiding(event -> {
+				// hier engeben was beim schliessen gemacht werden soll
+				engine.load("file:///" + configFile.getAbsolutePath());
+				buttonPuid.setText(stringPuid);
+			});
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+
+	// Mit changePuidD werden zusaetzliche Formate angezeigt
+	@FXML
+	void changePuidD(ActionEvent eventOtherD) {
+		try {
+			StackPane otherLayout = new StackPane();
+
+			otherLayout = FXMLLoader.load(getClass().getResource("ConfigViewOtherD.fxml"));
+			Scene otherScene = new Scene(otherLayout);
+			otherScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+
+			// New window (Stage)
+			Stage otherStage = new Stage();
+
+			otherStage.setTitle("KOST-Val   -   Configuration   -   Other Data Formats" + versionKostVal);
+			Image kostvalIcon = new Image(
+					"file:" + dirOfJarPath + File.separator + "doc" + File.separator + "valicon.png");
+			// Image kostvalIcon = new Image( "file:valicon.png" );
+			otherStage.initModality(Modality.APPLICATION_MODAL);
+			otherStage.getIcons().add(kostvalIcon);
+			otherStage.setScene(otherScene);
+			otherStage.setOnCloseRequest(event -> {
+				// hier engeben was beim schliessen gemacht werden soll
+				engine.load("file:///" + configFile.getAbsolutePath());
+				buttonPuid.setText(stringPuid);
+			});
+			otherStage.show();
+			otherStage.setOnHiding(event -> {
+				// hier engeben was beim schliessen gemacht werden soll
+				engine.load("file:///" + configFile.getAbsolutePath());
+				buttonPuid.setText(stringPuid);
+			});
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+
 	// Mit changePuid werden zusaetzliche Formate angezeigt
 	@FXML
-	void changePuid(ActionEvent eventPdfa) {
+	void changePuid(ActionEvent eventOther) {
 		try {
 			StackPane otherLayout = new StackPane();
 
@@ -1665,255 +1793,63 @@ public class ConfigController {
 	 * eInt ) { String message = eInt.getMessage(); engine.loadContent( message ); }
 	 * } else { // Keine Aktion } }
 	 */
-	/* Wenn chooseWork betaetigt wird, kann ein Ordner ausgewaehlt werden */
-	@FXML
-	void chooseWork(ActionEvent e) {
-		try {
-			Document doc = null;
-			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(configFile));
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			doc = db.parse(bis);
-			doc.normalize();
-			String workInit = "";
-			if (!config.contains("<pathtoworkdir></pathtoworkdir>")) {
-				workInit = doc.getElementsByTagName("pathtoworkdir").item(0).getTextContent();
-			}
-			bis.close();
-			doc = null;
-			String pathtoworkdir = "<pathtoworkdir>" + workInit + "</pathtoworkdir>";
-			DirectoryChooser folderChooser = new DirectoryChooser();
-			if (locale.toString().startsWith("fr")) {
-				folderChooser.setTitle("Choisissez le dossier");
-			} else if (locale.toString().startsWith("it")) {
-				folderChooser.setTitle("Selezionare la directory");
-			} else if (locale.toString().startsWith("en")) {
-				folderChooser.setTitle("Choose the folder");
-			} else {
-				folderChooser.setTitle("Wählen Sie den Ordner");
-			}
-			File workFolder = folderChooser.showDialog(new Stage());
-			if (workFolder != null) {
-				labelWork.setText(workFolder.getAbsolutePath());
-				String pathtoworkdirNew = "<pathtoworkdir>" + workFolder.getAbsolutePath() + "</pathtoworkdir>";
-				Util.oldnewstring(pathtoworkdir, pathtoworkdirNew, configFile);
-			}
-			engine.load("file:///" + configFile.getAbsolutePath());
-		} catch (IOException | ParserConfigurationException | SAXException e1) {
-			e1.printStackTrace();
-		}
-	}
 
-	/* Wenn chooseInput betaetigt wird, kann ein Ordner ausgewaehlt werden */
 	@FXML
-	void chooseInput(ActionEvent e) {
+	void changeConfig2(ActionEvent eventConfig2) {
 		try {
-			Document doc = null;
-			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(configFile));
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			doc = db.parse(bis);
-			doc.normalize();
-			String inputInit = "";
-			if (!config.contains("<standardinputdir></standardinputdir>")) {
-				inputInit = doc.getElementsByTagName("standardinputdir").item(0).getTextContent();
-			}
-			bis.close();
-			doc = null;
-			String standardinputdir = "<standardinputdir>" + inputInit + "</standardinputdir>";
-			DirectoryChooser folderChooser = new DirectoryChooser();
-			if (locale.toString().startsWith("fr")) {
-				folderChooser.setTitle("Choisissez le dossier");
-			} else if (locale.toString().startsWith("it")) {
-				folderChooser.setTitle("Selezionare la directory");
-			} else if (locale.toString().startsWith("en")) {
-				folderChooser.setTitle("Choose the folder");
-			} else {
-				folderChooser.setTitle("Wählen Sie den Ordner");
-			}
-			File inputFolder = folderChooser.showDialog(new Stage());
-			if (inputFolder != null) {
-				labelInput.setText(inputFolder.getAbsolutePath());
-				String standardinputdirNew = "<standardinputdir>" + inputFolder.getAbsolutePath()
-						+ "</standardinputdir>";
-				Util.oldnewstring(standardinputdir, standardinputdirNew, configFile);
-			}
-			engine.load("file:///" + configFile.getAbsolutePath());
-		} catch (IOException | ParserConfigurationException | SAXException e1) {
-			e1.printStackTrace();
-		}
-	}
+			StackPane otherLayout = new StackPane();
 
-	/* changeDv schaltet zwischen x V herum */
-	@FXML
-	void changeDv(ActionEvent event) {
-		String yes = "<egovdvvalidation>&#x2713;</egovdvvalidation>";
-		String no = "<egovdvvalidation>&#x2717;</egovdvvalidation>";
-		try {
-			String optButton = buttonDv.getText();
-			if (optButton.equals("✗")) {
-				buttonDvVal.setDisable(false);
-				Util.oldnewstring(no, yes, configFile);
-				buttonDv.setText("✓");
-				buttonDv.setStyle("-fx-text-fill: LimeGreen; -fx-background-color: WhiteSmoke");
-				engine.load("file:///" + configFile.getAbsolutePath());
-			} else {
-				buttonDvVal.setDisable(true);
-				Util.oldnewstring(yes, no, configFile);
-				buttonDv.setText("✗");
-				buttonDv.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
-				engine.load("file:///" + configFile.getAbsolutePath());
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	// Mit changeDvVal wird die Signatur-Haupteinstellung umgestellt
-	@FXML
-	void changeDvVal(ActionEvent eventpdfa) {
-		try {
-			StackPane dvLayout = new StackPane();
-
-			dvLayout = FXMLLoader.load(getClass().getResource("ConfigViewDv.fxml"));
-			Scene dvScene = new Scene(dvLayout);
-			dvScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			otherLayout = FXMLLoader.load(getClass().getResource("ConfigView2.fxml"));
+			Scene otherScene = new Scene(otherLayout);
+			otherScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
 			// New window (Stage)
-			Stage dvStage = new Stage();
+			Stage otherStage = new Stage();
 
-			dvStage.setTitle("KOST-Val   -   Configuration   -    eGov diskret Signaturvalidator" + versionKostVal);
+			otherStage.setTitle("KOST-Val   -   Additional Configurations" + versionKostVal);
 			Image kostvalIcon = new Image(
 					"file:" + dirOfJarPath + File.separator + "doc" + File.separator + "valicon.png");
 			// Image kostvalIcon = new Image( "file:valicon.png" );
-			dvStage.initModality(Modality.APPLICATION_MODAL);
-			dvStage.getIcons().add(kostvalIcon);
-			dvStage.setScene(dvScene);
-			dvStage.setOnCloseRequest(event -> {
+			otherStage.initModality(Modality.APPLICATION_MODAL);
+			otherStage.getIcons().add(kostvalIcon);
+			otherStage.setScene(otherScene);
+			otherStage.setOnCloseRequest(event -> {
 				// hier engeben was beim schliessen gemacht werden soll
 				engine.load("file:///" + configFile.getAbsolutePath());
+				// buttonPuid.setText(stringPuid);
 			});
-			dvStage.show();
-			dvStage.setOnHiding(event -> {
+			otherStage.show();
+			otherStage.setOnHiding(event -> {
 				// hier engeben was beim schliessen gemacht werden soll
 				engine.load("file:///" + configFile.getAbsolutePath());
+				// buttonPuid.setText(stringPuid);
 			});
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 	}
 
-	/* Wenn Aenderungen an changeInstitution gemacht wird, wird es ausgeloest */
-	@FXML
-	void changeInstitution(ActionEvent event) {
-		String stringInstitution = buttonInstitution.getText();
-		// create a TextInputDialog mit der Texteingabe der Puid
-		TextInputDialog dialog = new TextInputDialog(stringInstitution);
-
-		// Set title & header text
-		String stringInstitutionInit = stringInstitution;
-
-		dialog.setTitle("KOST-Val - Configuration");
-		String headerDeFrItEn = "Name der Institution [Archiv]:";
-		if (locale.toString().startsWith("fr")) {
-			headerDeFrItEn = "Nom de l'institution [Archiv] :";
-		} else if (locale.toString().startsWith("it")) {
-			headerDeFrItEn = "Nome dell'istituzione [Archiv]:";
-		} else if (locale.toString().startsWith("en")) {
-			headerDeFrItEn = "Name of the institution [Archiv]:";
-		}
-		dialog.setHeaderText(headerDeFrItEn);
-		dialog.setContentText("");
-
-		// Show the dialog and capture the result.
-		Optional<String> result = dialog.showAndWait();
-
-		// If the "Okay" button was clicked, the result will contain our String
-		// in the get() method
-		String stringInstitutionNew = "";
-		if (result.isPresent()) {
-			try {
-				stringInstitutionNew = result.get();
-				buttonInstitution.setText(stringInstitutionNew);
-				String allowedformats = "<Institution>" + stringInstitutionInit + "</Institution>";
-				String allowedformatsNew = "<Institution>" + stringInstitutionNew + "</Institution>";
-				Util.oldnewstring(allowedformats, allowedformatsNew, configFile);
-			} catch (NumberFormatException | IOException e) {
-				e.printStackTrace();
-			}
-		} else {
-			// Keine Aktion
-		}
-	}
-
 	/* TODO --> ChoiceBox ================= */
 
-	// Mit changeHashAlgo wird die Hash-Auswahl umgestellt
+	// Mit changeDroidYesNo wird die Formaterkennung der Exoten mit DROID ein- und
+	// ausgeschaltet
 	@FXML
-	void changeHashAlgo(ActionEvent event) {
+	void changeDroidYesNo(ActionEvent event) {
 		try {
-			Document doc = null;
-			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(configFile));
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			doc = db.parse(bis);
-			doc.normalize();
-			String hashAlgoInit = "";
-			hashAlgoInit = doc.getElementsByTagName("hash").item(0).getTextContent();
-			bis.close();
-			doc = null;
-			String hashAlgoOld = "<hash>" + hashAlgoInit + "</hash>";
-			String selHashType = hashAlgo.getValue();
-			String hashAlgoNew = "<hash></hash>";
-			if (selHashType.equals("MD5") || selHashType.equals("SHA-1") || selHashType.equals("SHA-256")
-					|| selHashType.equals("SHA-512")) {
-				hashAlgoNew = "<hash>" + selHashType + "</hash>";
-				hashAlgo.setValue(selHashType);
+			String no = "<droid>no</droid>";
+			String yes = "<droid>yes</droid>";
+			String selDroid = droidYesNo.getValue();
+			if (selDroid.contains("DROID")) {
+				Util.oldnewstring(no, yes, configFile);
+				droidYesNo.setValue(selDroid);
 			} else {
-				hashAlgoNew = "<hash></hash>";
-				hashAlgo.setValue("");
+				Util.oldnewstring(yes, no, configFile);
+				droidYesNo.setValue(selDroid);
 			}
-			Util.oldnewstring(hashAlgoOld, hashAlgoNew, configFile);
 
 			engine = wbv.getEngine();
 			engine.load("file:///" + configFile.getAbsolutePath());
-		} catch (IOException | ParserConfigurationException | SAXException e1) {
-			e1.printStackTrace();
-		}
-	}
-
-	// Mit changeSizeWarning wird die Warnung kleiner Dateien umgestellt
-
-	@FXML
-	void changeSizeWarning(ActionEvent event) {
-		try {
-			Document doc = null;
-			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(configFile));
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			doc = db.parse(bis);
-			doc.normalize();
-			String sizeWarningInit = "";
-			sizeWarningInit = doc.getElementsByTagName("sizeWarning").item(0).getTextContent();
-			bis.close();
-			doc = null;
-			String sizeWarningOld = "<sizeWarning>" + sizeWarningInit + "</sizeWarning>";
-			String selSizeWarning = sizeWarning.getValue();
-			String sizeWarningNew = sizeWarningOld;
-			if (selSizeWarning.equals("0.5KB")) {
-				sizeWarningNew = "<sizeWarning>" + selSizeWarning + "</sizeWarning>";
-			} else if (selSizeWarning.equals("1KB")) {
-				sizeWarningNew = "<sizeWarning>" + selSizeWarning + "</sizeWarning>";
-			} else if (selSizeWarning.equals("5KB")) {
-				sizeWarningNew = "<sizeWarning>" + selSizeWarning + "</sizeWarning>";
-			} else {
-				sizeWarningNew = "<sizeWarning></sizeWarning>";
-			}
-			Util.oldnewstring(sizeWarningOld, sizeWarningNew, configFile);
-
-			engine = wbv.getEngine();
-			engine.load("file:///" + configFile.getAbsolutePath());
-		} catch (IOException | ParserConfigurationException | SAXException e1) {
+		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 	}

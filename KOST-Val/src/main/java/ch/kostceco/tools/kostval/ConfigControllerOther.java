@@ -47,9 +47,8 @@ import javafx.stage.Stage;
 public class ConfigControllerOther {
 
 	@FXML
-	private Button buttonConfigApply, buttonRtf, buttonPptx, buttonDocx, buttonHtml, buttonOgg, buttonSvg, buttonJpm,
-			buttonJpx, buttonMpeg2, buttonAvi, buttonArc, buttonWarc, buttonInterlis, buttonDwg, buttonIfc, buttonMsg,
-			buttonEml, buttonDicom, buttonDxf, buttonOther2;
+	private Button buttonConfigApply, buttonHtml, buttonArc, buttonWarc, buttonWacz, buttonInterlis, buttonDwg,
+			buttonIfc, buttonMsg, buttonEml, buttonMbox, buttonPst, buttonDicom, buttonDxf, buttonOther2;
 
 	private File configFile = new File(System.getenv("USERPROFILE") + File.separator + ".kost-val_2x" + File.separator
 			+ "configuration" + File.separator + "kostval.conf.xml");
@@ -59,8 +58,7 @@ public class ConfigControllerOther {
 	private Locale locale;
 
 	@FXML
-	private Label labelOther, labelConfig, labelText, labelImage, labelAudioVideo, labelHyper, labelGis, labelCad,
-			labelMedicine, labelMail, labelOther2;
+	private Label labelOther, labelConfig, labelHyper, labelGis, labelCad, labelMedicine, labelMail, labelOther2;
 
 	@FXML
 	void initialize() {
@@ -89,11 +87,8 @@ public class ConfigControllerOther {
 		try {
 			if (Util.stringInFileLine("kostval-conf-DE.xsl", configFile)) {
 				locale = new Locale("de");
-				labelOther.setText("Einstellungen weitere Formate");
+				labelOther.setText("Formate von weiteren Formatkategorien");
 				buttonConfigApply.setText("anwenden");
-				labelText.setText("Text");
-				labelImage.setText("Bild");
-				labelAudioVideo.setText("Audio/Video");
 				labelHyper.setText("Hypertext");
 				labelGis.setText("GIS");
 				labelCad.setText("CAD/CAM");
@@ -102,11 +97,8 @@ public class ConfigControllerOther {
 				labelOther2.setText("Weitere");
 			} else if (Util.stringInFileLine("kostval-conf-FR.xsl", configFile)) {
 				locale = new Locale("fr");
-				labelOther.setText("Paramètres d'autres formats");
+				labelOther.setText("Formats d'autres catégories de formats");
 				buttonConfigApply.setText("appliquer");
-				labelText.setText("Texte");
-				labelImage.setText("Image");
-				labelAudioVideo.setText("Audio/Vidéo");
 				labelHyper.setText("Hypertexte");
 				labelGis.setText("GIS");
 				labelCad.setText("CAD/CAM");
@@ -115,11 +107,8 @@ public class ConfigControllerOther {
 				labelOther2.setText("Autres");
 			} else if (Util.stringInFileLine("kostval-conf-IT.xsl", configFile)) {
 				locale = new Locale("it");
-				labelOther.setText("Impostazioni di altri formati");
+				labelOther.setText("Formati di altre categorie di formati");
 				buttonConfigApply.setText("Applica");
-				labelText.setText("Testo");
-				labelImage.setText("Immagine");
-				labelAudioVideo.setText("Audio/Video");
 				labelHyper.setText("Ipertesto");
 				labelGis.setText("GIS");
 				labelCad.setText("CAD/CAM");
@@ -128,11 +117,8 @@ public class ConfigControllerOther {
 				labelOther2.setText("Altri");
 			} else {
 				locale = new Locale("en");
-				labelOther.setText("Settings other formats");
+				labelOther.setText("Formats from other format categories");
 				buttonConfigApply.setText("apply");
-				labelText.setText("Text");
-				labelImage.setText("Image");
-				labelAudioVideo.setText("Audio/Video");
 				labelHyper.setText("Hypertext");
 				labelGis.setText("GIS");
 				labelCad.setText("CAD/CAM");
@@ -150,16 +136,8 @@ public class ConfigControllerOther {
 			encoded = Files.readAllBytes(Paths.get(configFile.getAbsolutePath()));
 			config = new String(encoded, StandardCharsets.UTF_8);
 			// <otherformats>WARC HTML DWG</otherformats>
-			String noDocx = "<docxvalidation></docxvalidation>";
-			String noPptx = "<pptxvalidation></pptxvalidation>";
-			String noRtf = "<rtfvalidation></rtfvalidation>";
-			String noJpx = "<jpxvalidation></jpxvalidation>";
-			String noJpm = "<jpmvalidation></jpmvalidation>";
-			String noSvg = "<svgvalidation></svgvalidation>";
-			String noOgg = "<oggvalidation></oggvalidation>";
-			String noMpeg2 = "<mpeg2validation></mpeg2validation>";
-			String noAvi = "<avivalidation></avivalidation>";
 			String noHtml = "<htmlvalidation></htmlvalidation>";
+			String noWacz = "<waczvalidation></waczvalidation>";
 			String noWarc = "<warcvalidation></warcvalidation>";
 			String noArc = "<arcvalidation></arcvalidation>";
 			String noDwg = "<dwgvalidation></dwgvalidation>";
@@ -169,80 +147,26 @@ public class ConfigControllerOther {
 			String noDicom = "<dicomvalidation></dicomvalidation>";
 			String noMsg = "<msgvalidation></msgvalidation>";
 			String noEml = "<emlvalidation></emlvalidation>";
+			String noMbox = "<mboxvalidation></mboxvalidation>";
+			String noPst = "<pstvalidation></pstvalidation>";
 
 			// TODO: bei Controllervalfofile ca Zeile 80 muss die Aenderung
 			// neue oder entfernte Formate nachgetragen werden. Damit das Format
 			// in der Header-Zeile des Logs erscheint.
 
-			if (config.contains(noDocx)) {
-				buttonDocx.setText("✗");
-				buttonDocx.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
-			} else {
-				buttonDocx.setText("(✓)");
-				buttonDocx.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
-			}
-			if (config.contains(noPptx)) {
-				buttonPptx.setText("✗");
-				buttonPptx.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
-			} else {
-				buttonPptx.setText("(✓)");
-				buttonPptx.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
-			}
-			if (config.contains(noRtf)) {
-				buttonRtf.setText("✗");
-				buttonRtf.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
-			} else {
-				buttonRtf.setText("(✓)");
-				buttonRtf.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
-			}
-			if (config.contains(noJpx)) {
-				buttonJpx.setText("✗");
-				buttonJpx.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
-			} else {
-				buttonJpx.setText("(✓)");
-				buttonJpx.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
-			}
-			if (config.contains(noJpm)) {
-				buttonJpm.setText("✗");
-				buttonJpm.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
-			} else {
-				buttonJpm.setText("(✓)");
-				buttonJpm.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
-			}
-			if (config.contains(noSvg)) {
-				buttonSvg.setText("✗");
-				buttonSvg.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
-			} else {
-				buttonSvg.setText("(✓)");
-				buttonSvg.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
-			}
-			if (config.contains(noOgg)) {
-				buttonOgg.setText("✗");
-				buttonOgg.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
-			} else {
-				buttonOgg.setText("(✓)");
-				buttonOgg.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
-			}
-			if (config.contains(noMpeg2)) {
-				buttonMpeg2.setText("✗");
-				buttonMpeg2.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
-			} else {
-				buttonMpeg2.setText("(✓)");
-				buttonMpeg2.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
-			}
-			if (config.contains(noAvi)) {
-				buttonAvi.setText("✗");
-				buttonAvi.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
-			} else {
-				buttonAvi.setText("(✓)");
-				buttonAvi.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
-			}
 			if (config.contains(noHtml)) {
 				buttonHtml.setText("✗");
 				buttonHtml.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
 			} else {
 				buttonHtml.setText("(✓)");
 				buttonHtml.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
+			}
+			if (config.contains(noWacz)) {
+				buttonWacz.setText("✗");
+				buttonWacz.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+			} else {
+				buttonWacz.setText("(✓)");
+				buttonWacz.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
 			}
 			if (config.contains(noWarc)) {
 				buttonWarc.setText("✗");
@@ -307,6 +231,20 @@ public class ConfigControllerOther {
 				buttonEml.setText("(✓)");
 				buttonEml.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
 			}
+			if (config.contains(noMbox)) {
+				buttonMbox.setText("✗");
+				buttonMbox.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+			} else {
+				buttonMbox.setText("(✓)");
+				buttonMbox.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
+			}
+			if (config.contains(noPst)) {
+				buttonPst.setText("✗");
+				buttonPst.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+			} else {
+				buttonPst.setText("(✓)");
+				buttonPst.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
+			}
 			Document doc = null;
 			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(configFile));
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -341,186 +279,6 @@ public class ConfigControllerOther {
 
 	/* change... schaltet zwischen x (v) herum */
 	@FXML
-	void changeDocx(ActionEvent event) {
-		String az = "<docxvalidation>DOCX </docxvalidation>";
-		String no = "<docxvalidation></docxvalidation>";
-		try {
-			String optButton = buttonDocx.getText();
-			if (optButton.equals("✗")) {
-				Util.oldnewstring(no, az, configFile);
-				buttonDocx.setText("(✓)");
-				buttonDocx.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
-			} else {
-				Util.oldnewstring(az, no, configFile);
-				buttonDocx.setText("✗");
-				buttonDocx.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@FXML
-	void changePptx(ActionEvent event) {
-		String az = "<pptxvalidation>PPTX </pptxvalidation>";
-		String no = "<pptxvalidation></pptxvalidation>";
-		try {
-			String optButton = buttonPptx.getText();
-			if (optButton.equals("✗")) {
-				Util.oldnewstring(no, az, configFile);
-				buttonPptx.setText("(✓)");
-				buttonPptx.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
-			} else {
-				Util.oldnewstring(az, no, configFile);
-				buttonPptx.setText("✗");
-				buttonPptx.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@FXML
-	void changeRtf(ActionEvent event) {
-		String az = "<rtfvalidation>RTF </rtfvalidation>";
-		String no = "<rtfvalidation></rtfvalidation>";
-		try {
-			String optButton = buttonRtf.getText();
-			if (optButton.equals("✗")) {
-				Util.oldnewstring(no, az, configFile);
-				buttonRtf.setText("(✓)");
-				buttonRtf.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
-			} else {
-				Util.oldnewstring(az, no, configFile);
-				buttonRtf.setText("✗");
-				buttonRtf.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@FXML
-	void changeJpx(ActionEvent event) {
-		String az = "<jpxvalidation>JPX </jpxvalidation>";
-		String no = "<jpxvalidation></jpxvalidation>";
-		try {
-			String optButton = buttonJpx.getText();
-			if (optButton.equals("✗")) {
-				Util.oldnewstring(no, az, configFile);
-				buttonJpx.setText("(✓)");
-				buttonJpx.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
-			} else {
-				Util.oldnewstring(az, no, configFile);
-				buttonJpx.setText("✗");
-				buttonJpx.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@FXML
-	void changeJpm(ActionEvent event) {
-		String az = "<jpmvalidation>JPM </jpmvalidation>";
-		String no = "<jpmvalidation></jpmvalidation>";
-		try {
-			String optButton = buttonJpm.getText();
-			if (optButton.equals("✗")) {
-				Util.oldnewstring(no, az, configFile);
-				buttonJpm.setText("(✓)");
-				buttonJpm.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
-			} else {
-				Util.oldnewstring(az, no, configFile);
-				buttonJpm.setText("✗");
-				buttonJpm.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@FXML
-	void changeSvg(ActionEvent event) {
-		String az = "<svgvalidation>SVG </svgvalidation>";
-		String no = "<svgvalidation></svgvalidation>";
-		try {
-			String optButton = buttonSvg.getText();
-			if (optButton.equals("✗")) {
-				Util.oldnewstring(no, az, configFile);
-				buttonSvg.setText("(✓)");
-				buttonSvg.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
-			} else {
-				Util.oldnewstring(az, no, configFile);
-				buttonSvg.setText("✗");
-				buttonSvg.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@FXML
-	void changeOgg(ActionEvent event) {
-		String az = "<oggvalidation>OGG </oggvalidation>";
-		String no = "<oggvalidation></oggvalidation>";
-		try {
-			String optButton = buttonOgg.getText();
-			if (optButton.equals("✗")) {
-				Util.oldnewstring(no, az, configFile);
-				buttonOgg.setText("(✓)");
-				buttonOgg.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
-			} else {
-				Util.oldnewstring(az, no, configFile);
-				buttonOgg.setText("✗");
-				buttonOgg.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@FXML
-	void changeMpeg2(ActionEvent event) {
-		String az = "<mpeg2validation>MPEG2 </mpeg2validation>";
-		String no = "<mpeg2validation></mpeg2validation>";
-		try {
-			String optButton = buttonMpeg2.getText();
-			if (optButton.equals("✗")) {
-				Util.oldnewstring(no, az, configFile);
-				buttonMpeg2.setText("(✓)");
-				buttonMpeg2.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
-			} else {
-				Util.oldnewstring(az, no, configFile);
-				buttonMpeg2.setText("✗");
-				buttonMpeg2.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@FXML
-	void changeAvi(ActionEvent event) {
-		String az = "<avivalidation>AVI </avivalidation>";
-		String no = "<avivalidation></avivalidation>";
-		try {
-			String optButton = buttonAvi.getText();
-			if (optButton.equals("✗")) {
-				Util.oldnewstring(no, az, configFile);
-				buttonAvi.setText("(✓)");
-				buttonAvi.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
-			} else {
-				Util.oldnewstring(az, no, configFile);
-				buttonAvi.setText("✗");
-				buttonAvi.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@FXML
 	void changeHtml(ActionEvent event) {
 		String az = "<htmlvalidation>HTML </htmlvalidation>";
 		String no = "<htmlvalidation></htmlvalidation>";
@@ -534,6 +292,26 @@ public class ConfigControllerOther {
 				Util.oldnewstring(az, no, configFile);
 				buttonHtml.setText("✗");
 				buttonHtml.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@FXML
+	void changeWacz(ActionEvent event) {
+		String az = "<waczvalidation>WACZ </waczvalidation>";
+		String no = "<waczvalidation></waczvalidation>";
+		try {
+			String optButton = buttonWacz.getText();
+			if (optButton.equals("✗")) {
+				Util.oldnewstring(no, az, configFile);
+				buttonWacz.setText("(✓)");
+				buttonWacz.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
+			} else {
+				Util.oldnewstring(az, no, configFile);
+				buttonWacz.setText("✗");
+				buttonWacz.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -714,6 +492,46 @@ public class ConfigControllerOther {
 				Util.oldnewstring(az, no, configFile);
 				buttonEml.setText("✗");
 				buttonEml.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@FXML
+	void changeMbox(ActionEvent event) {
+		String az = "<mboxvalidation>MBOX </mboxvalidation>";
+		String no = "<mboxvalidation></mboxvalidation>";
+		try {
+			String optButton = buttonMbox.getText();
+			if (optButton.equals("✗")) {
+				Util.oldnewstring(no, az, configFile);
+				buttonMbox.setText("(✓)");
+				buttonMbox.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
+			} else {
+				Util.oldnewstring(az, no, configFile);
+				buttonMbox.setText("✗");
+				buttonMbox.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@FXML
+	void changePst(ActionEvent event) {
+		String az = "<pstvalidation>PST </pstvalidation>";
+		String no = "<pstvalidation></pstvalidation>";
+		try {
+			String optButton = buttonPst.getText();
+			if (optButton.equals("✗")) {
+				Util.oldnewstring(no, az, configFile);
+				buttonPst.setText("(✓)");
+				buttonPst.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
+			} else {
+				Util.oldnewstring(az, no, configFile);
+				buttonPst.setText("✗");
+				buttonPst.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

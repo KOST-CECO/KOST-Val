@@ -84,7 +84,6 @@ public class Controllervalinitlog implements MessageConstants {
 		String siardValidation = configMap.get("siardValidation");
 		String csvValidation = configMap.get("csvValidation");
 		String xlsxValidation = configMap.get("xlsxValidation");
-		String odsValidation = configMap.get("odsValidation");
 		String otherformats = configMap.get("otherformats");
 
 		String formatValOn = "";
@@ -310,19 +309,6 @@ public class Controllervalinitlog implements MessageConstants {
 				formatRecOn = "XLSX";
 			} else {
 				formatRecOn = formatRecOn + ", XLSX";
-			}
-		}
-		if (odsValidation.equals("yes")) {
-			if (formatValOn.equals("")) {
-				formatValOn = "ODS";
-			} else {
-				formatValOn = formatValOn + ", ODS";
-			}
-		} else if (odsValidation.equals("az")) {
-			if (formatRecOn.equals("")) {
-				formatRecOn = "ODS";
-			} else {
-				formatRecOn = formatRecOn + ", ODS";
 			}
 		}
 		if (!otherformats.equals("")) {

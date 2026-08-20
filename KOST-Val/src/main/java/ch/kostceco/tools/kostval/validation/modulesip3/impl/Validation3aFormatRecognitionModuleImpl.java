@@ -77,7 +77,6 @@ public class Validation3aFormatRecognitionModuleImpl extends ValidationModuleImp
 		String siardValidation = configMap.get("siardValidation");
 		String csvValidation = configMap.get("csvValidation");
 		String xlsxValidation = configMap.get("xlsxValidation");
-		String odsValidation = configMap.get("odsValidation");
 		String otherformats = configMap.get("otherformats");
 
 		String formatValOn = "";
@@ -198,13 +197,6 @@ public class Validation3aFormatRecognitionModuleImpl extends ValidationModuleImp
 				formatValOn = " XLSX ";
 			} else {
 				formatValOn = formatValOn + " XLSX ";
-			}
-		}
-		if (!odsValidation.equals("no")) {
-			if (formatValOn.equals("")) {
-				formatValOn = " ODS  ";
-			} else {
-				formatValOn = formatValOn + " ODS  ";
 			}
 		}
 		if (!otherformats.equals("")) {

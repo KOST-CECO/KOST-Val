@@ -18,12 +18,18 @@
 
 package ch.kostceco.tools.kostval.validation.modulepdfa.impl;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
+
 import org.apache.commons.io.FilenameUtils;
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.rendering.PDFRenderer;
 
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.ComFailException;
@@ -34,6 +40,7 @@ import com.pdftools.NativeLibrary;
 import com.pdftools.pdfvalidator.PdfError;
 import com.pdftools.pdfvalidator.PdfValidatorAPI;
 
+import ch.kostceco.tools.kosttools.fileservice.ImageMagick;
 import ch.kostceco.tools.kosttools.fileservice.egovdv;
 import ch.kostceco.tools.kosttools.fileservice.verapdf;
 import ch.kostceco.tools.kosttools.util.Util;
@@ -73,6 +80,7 @@ public class ValidationArepPdfaModuleImpl extends ValidationModuleImpl implement
 
 		Boolean doRepair = true;
 		String noRep = "";
+		String pathToWorkDir = configMap.get("PathToWorkDir");
 
 		try {
 			/* nur reparieren wenn KEINE Signaturen enthalten sind */
@@ -203,7 +211,8 @@ public class ValidationArepPdfaModuleImpl extends ValidationModuleImpl implement
 			if (!doRepair) {
 				// Meldungen warum keine Rep wurde bereits ausgegeben
 				noRep = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA) + noRep;
-				Util.oldnewstring("<ErrorZrepPdfa></ErrorZrepPdfa>", noRep + "</Error>", logFile);
+				Util.oldnewstring("<ErrorZrepPdfa></ErrorZrepPdfa>",
+						noRep + "</Error><NoRepairFunction>function</NoRepairFunction>", logFile);
 				return false;
 			}
 		} catch (Throwable e) {
@@ -291,16 +300,186 @@ public class ValidationArepPdfaModuleImpl extends ValidationModuleImpl implement
 					// TODO: erledigt: Ggf Fehler und Warnungen ausgeben
 
 					if (!isValid) {
-						// Reparierte Datei ist invalid PREMIS [3]
-						// schreiben
+						// Reparierte Datei ist invalid PREMIS [3] schreiben
 						logRep = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
-								+ getTextResourceService().getText(locale, INFO_XML_Z_NOREP_INVALID,levelFinal );
+								+ getTextResourceService().getText(locale, INFO_XML_Z_NOREP_INVALID, levelFinal);
 						Util.oldnewstring("<ErrorZrepPdfa></ErrorZrepPdfa>", logRep, logFile);
 						// outFile wird im Ausbauschritt 1 und 2 geloescht
 						outFile.delete();
 						return false;
 					} else {
-						// Reparierte Datei ist valid PREMIS [2]
+						// Reparierte Datei ist valid ggf. PREMIS [2]
+
+						// TODO neue Datei optisch vergleichen (analog KOST-Simy)
+						// 1) Anzahl Seiten vergleichen (immer)
+						String isSimy = "true";
+						PDDocument docOrig = Loader.loadPDF(valDatei);
+						int pagesOrig = docOrig.getNumberOfPages();
+						PDDocument docPrep = Loader.loadPDF(outFile);
+						int pagesRep = docPrep.getNumberOfPages();
+						String simyDetail = "";
+						if (pagesOrig != pagesRep) {
+							simyDetail = "The repaired PDF " + pagesRep
+									+ " does NOT have the same number of pages as the original " + pagesOrig;
+							isSimy = "false";
+						} else {
+							// System.out.println("Info: Das reparierte PDF " + pagesRep + " hat gleich
+							// viele Seite wie das Original " + pagesOrig);
+
+							// 2 von jeder PDF-Seite eine JPEG erstellen
+							File workDir = new File(pathToWorkDir);
+							File workDirOrig = new File(pathToWorkDir + File.separator + "origJpgs");
+							if (workDirOrig.exists()) {
+								Util.deleteDir(workDirOrig);
+								workDirOrig.delete();
+							}
+							if (!workDirOrig.exists()) {
+								workDirOrig.mkdir();
+							}
+							File workDirRep = new File(pathToWorkDir + File.separator + "repJpgs");
+							if (workDirRep.exists()) {
+								Util.deleteDir(workDirRep);
+								workDirRep.delete();
+							}
+							if (!workDirRep.exists()) {
+								workDirRep.mkdir();
+							}
+							int extractNumOrig = generateImageFromPDF(valDatei, workDirOrig);
+							int extractNumRep = generateImageFromPDF(outFile, workDirRep);
+
+							// fuer Test
+							// extractNumOrig=extractNumOrig+2;
+							if (extractNumOrig == 0) {
+								simyDetail = "The pages from the original PDF could NOT be extracted as JPEG files";
+								isSimy = "false";
+							}
+							if (extractNumRep == 0) {
+								simyDetail = "The pages from the repaired PDF could NOT be extracted as JPEG files";
+								isSimy = "false";
+							}
+							if (extractNumOrig != pagesOrig) {
+								simyDetail = "The number of pages extracted as images (" + extractNumOrig
+										+ ") did not match the number of pages (" + pagesOrig
+										+ ") in the original PDF file. ";
+								isSimy = "false";
+							} else if (extractNumRep != pagesRep) {
+								simyDetail = "The number of pages extracted as images (" + extractNumOrig
+										+ ") did not match the number of pages (" + pagesOrig
+										+ ") in the repaired PDF file. ";
+								isSimy = "false";
+							} else if (extractNumOrig != extractNumRep) {
+								simyDetail = "The repaired PDF " + extractNumRep
+										+ " did NOT extract the same number of pages as the original " + extractNumOrig;
+								isSimy = "false";
+							} else {
+								// System.out.println("Info: Das reparierte PDF " + extractNumRep + " hat gleich
+								// viele Seite extrahiert wie das Original " + extractNumOrig);
+								// Pfad zum Programm existiert die Dateien?
+								String checkToolIM = ImageMagick.checkImageMagick(dirOfJarPath);
+								if (!checkToolIM.equals("OK")) {
+									if (min) {
+										return false;
+									} else {
+										simyDetail = getTextResourceService().getText(locale, MESSAGE_XML_MISSING_FILE,
+												checkToolIM);
+										isSimy = "man";
+									}
+								} else {
+									// ImageMagick sollte vorhanden sein
+									// System.out.println("ImageMagick sollte vorhanden sein" );
+
+									// 3 Seiten vergleichen
+
+									// imTolerance = In ImageMagick, the -fuzz setting allows operations to treat
+									// similar colors as identical.
+									String imTolerance = "20%";
+									// Minimal zu erreichende aehnlichkeit
+									float percentageValid = (float) 99.999;
+									/*
+									 * Mit dieser Einstellung kann das Ergebnis trotz geringer Exportqualitaet am
+									 * bessten verglichen werden.
+									 * 
+									 * Die geringe Exportqualitaet ermoeglicht eine rasche verarbeitung, bedingt
+									 * aber ein hoehere FUZZ Toleranz.
+									 * 
+									 * Aber dann muss die Minimal zu erreichende aehnlichkeit sehr hoch sein
+									 */
+
+									// Dateinamen fuer Log normalisieren und Leerschlaege entfernen. Ansonsten gibt
+									// es Probleme beim Report zu schreiben
+									String valDateiNorm = valDatei.getName();
+									valDateiNorm = valDateiNorm.replace(" ", "");
+									valDateiNorm = Util.umlaute(valDateiNorm);
+									File valDirLog = new File(
+											directoryOfLogfile.getAbsolutePath() + File.separator + valDateiNorm);
+									// File valDirLog = new File(directoryOfLogfile.getAbsolutePath() +
+									// File.separator + "IM-Log");
+									if (valDirLog.exists()) {
+										Util.deleteDir(valDirLog);
+										valDirLog.mkdir();
+									} else {
+										valDirLog.mkdir();
+									}
+									String compResult = "";
+									for (int counterEmpty = 0; counterEmpty < 10; counterEmpty++) {
+										compResult = ImageMagick.execCompare(workDirOrig, workDirRep, imTolerance,
+												percentageValid, workDir, valDirLog, dirOfJarPath);
+										// System.out.println("compResult = " + compResult);
+										if (!compResult.equals("empty")) {
+											counterEmpty = 99;
+										}
+									}
+									if (compResult.equals("OK")) {
+										// Optischer Vergleich bestanden
+									} else if (compResult.contains("ERROR_XML_CI_PIXELINVALID")) {
+										// errorSP + " " + pageNr + " " + "ERROR_XML_CI_PIXELINVALID " + imgPx1 + " "+
+										// imgPx2;
+										simyDetail = "The repaired image does not contain the same number of pixels as the original.";
+										isSimy = "false";
+										// Reparierte Seite enthaelt nicht gleich viele Pixel wie das Original
+									} else if (compResult.contains("ERROR_XML_CI_SIZEINVALID")) {
+										// errorSP + " " + pageNr + " " + "ERROR_XML_CI_SIZEINVALID " + imgSize1
+										simyDetail = "The repaired page does not have the same dimensions as the original.";
+										isSimy = "false";
+										// Reparierte Seite hat nicht die gleichen Dimensionen wie das Original
+									} else if (compResult.contains("ERROR_XML_CI_CIINVALID")) {
+										// " " + pageNr + " " + "ERROR_XML_CI_CIINVALID " + percentageCalcInv+ " " + z2
+										// + " " + imToleranceTxt + " " + z1
+										simyDetail = "The visual discrepancy is too great. A manual inspection of the difference images at "
+												+ valDirLog.getAbsolutePath() + " must be performed.";
+										isSimy = "man";
+										// Die optische Abweichung ist zu gross. Eine manuelle Kontrolle der
+										// Differenzbilder muss vorgenommen werden.
+									} else {
+										// Optischer Vergleich konnte nicht durchgefuehrt werden. Eine manuelle
+										// Kontrolle muss vorgenommen werden.
+										simyDetail = "A visual comparison could not be performed. A manual check must be made.";
+										isSimy = "man";
+									}
+								}
+							}
+						}
+
+						if (isSimy.equals("true")) {
+							// vergleich bestanden
+						} else if (isSimy.equals("man")) {
+							// Reparierte Datei hat den automatischen Vergleich nicht bestanden
+							logRep = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
+									+ getTextResourceService().getText(locale, INFO_XML_Z_NOREP_PROBNOTSIMY, simyDetail,
+											outFile);
+							// Ausgabe nicht vergleichbar -> manuelle Kontrolle
+							Util.oldnewstring("<ErrorZrepPdfa></ErrorZrepPdfa>", logRep, logFile);
+							return false;
+						} else if (isSimy.equals("false")) {
+							// Reparierte Datei ist invalid PREMIS [3] schreiben
+							logRep = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
+									+ getTextResourceService().getText(locale, INFO_XML_Z_NOREP_NOTSIMY, simyDetail);
+							// Ausgabe unterschiedlich (z.B. Seitenzahl oder Dimensionen)
+							Util.oldnewstring("<ErrorZrepPdfa></ErrorZrepPdfa>", logRep, logFile);
+							// outFile wird im Ausbauschritt 1 und 2 geloescht
+							outFile.delete();
+							return false;
+						}
 
 						// TODO Datei ersetzten
 						if (initFolderPath != null && !initFolderPath.isEmpty()) {
@@ -349,6 +528,7 @@ public class ValidationArepPdfaModuleImpl extends ValidationModuleImpl implement
 
 	private Boolean repairDms(String dirOfJarPath, String level, File valDatei, File outFile, String logRep,
 			File logFile, Locale locale) {
+		// TODO repairDms
 		boolean isRepairDms = true;
 		try {
 			// System.out.println(" Start Repair ");
@@ -362,16 +542,43 @@ public class ValidationArepPdfaModuleImpl extends ValidationModuleImpl implement
 			try {
 				dmsOwner = ValidationAinitialisationModuleImpl.dmsInternasOwner(directoryOfConfigfile.getAbsolutePath(),
 						dllJacobPath);
-				if (dmsOwner.equals("NoLicense") || dmsOwner.equals("noInstallation")) {
+				if (dmsOwner.equals("NoLicenseF") ) {
 					logRep = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
 							+ getTextResourceService().getText(locale, INFO_XML_Z_NOREP_NOREP1,
-									directoryOfConfigfile.getAbsolutePath());
+									directoryOfConfigfile.getAbsolutePath(), "(noLicenseFile)");
 					Util.oldnewstring("<ErrorZrepPdfa></ErrorZrepPdfa>", logRep, logFile);
 					if (outFile.exists()) {
 						outFile.delete();
 					}
 					isRepairDms = false;
-				}
+				} else if (dmsOwner.equals("NoLicenseV")) {
+					logRep = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
+							+ getTextResourceService().getText(locale, INFO_XML_Z_NOREP_NOREP1,
+									directoryOfConfigfile.getAbsolutePath(), "(noValidLicense)");
+					Util.oldnewstring("<ErrorZrepPdfa></ErrorZrepPdfa>", logRep, logFile);
+					if (outFile.exists()) {
+						outFile.delete();
+					}
+					isRepairDms = false;
+				} else if (dmsOwner.equals("NoLicenseE") ) {
+					logRep = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
+							+ getTextResourceService().getText(locale, INFO_XML_Z_NOREP_NOREP1,
+									directoryOfConfigfile.getAbsolutePath(), "(Exception)");
+					Util.oldnewstring("<ErrorZrepPdfa></ErrorZrepPdfa>", logRep, logFile);
+					if (outFile.exists()) {
+						outFile.delete();
+					}
+					isRepairDms = false;
+				} else if (dmsOwner.equals("noInstallation")) {
+					logRep = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
+							+ getTextResourceService().getText(locale, INFO_XML_Z_NOREP_NOREP1,
+									directoryOfConfigfile.getAbsolutePath(), "(noInstallation)");
+					Util.oldnewstring("<ErrorZrepPdfa></ErrorZrepPdfa>", logRep, logFile);
+					if (outFile.exists()) {
+						outFile.delete();
+					}
+					isRepairDms = false;
+				} else 
 				dmsKey = ValidationAinitialisationModuleImpl.dmsInternasKey(directoryOfConfigfile.getAbsolutePath(),
 						dmsOwner);
 			} catch (Throwable e) {
@@ -475,7 +682,7 @@ public class ValidationArepPdfaModuleImpl extends ValidationModuleImpl implement
 				Integer sec = Integer.parseInt(milisec);
 				sec = sec / 1000;
 				if (!sec.equals(0)) {
-					System.out.print("  You have to wait " + sec
+					System.out.println("         You have to wait " + sec
 							+ " seconds because the internal dmstools license does not have batch mode. ");
 				}
 
@@ -880,5 +1087,36 @@ public class ValidationArepPdfaModuleImpl extends ValidationModuleImpl implement
 			isValidverapdf = false;
 		}
 		return isValidverapdf;
+	}
+
+	private int generateImageFromPDF(File pdfFile, File dirJpegs) {
+		// TODO: Erstellt aus jeder PDF-Seite eine JPEG
+		int pages = 0;
+		try (PDDocument document = Loader.loadPDF(pdfFile)) {
+			PDFRenderer renderer = new PDFRenderer(document);
+			// System.out.println("");
+			// System.out.println("Die PDF-Datei " + pdfFile.getName() + " hat " +
+			// document.getNumberOfPages() + " Seiten");
+			pages = document.getNumberOfPages();
+			for (int page = 0; page < document.getNumberOfPages(); page++) {
+				// 75 DPI fuer ausreichende aber nicht uebertriebene Qualitaet (Dauer des
+				// Vergleichs wird hoeher)
+				BufferedImage image = renderer.renderImageWithDPI(page, 75);
+				File output = new File(
+						dirJpegs.getAbsolutePath() + File.separator + String.format("seite_%03d.jpg", page + 1));
+				ImageIO.write(image, "JPEG", output);
+				// System.out.println("Gespeichert: " + output.getAbsolutePath());
+			}
+		} catch (IOException e) {
+			System.out.println("IOException - generateImageFromPDF");
+			e.printStackTrace();
+			pages = 0;
+		}
+		String[] jpegList = dirJpegs.list();
+		// System.out.println("Laenge der Liste: " + pngList.length);
+		if (jpegList.length != pages) {
+			pages = 0;
+		}
+		return pages;
 	}
 }

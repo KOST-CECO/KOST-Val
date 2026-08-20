@@ -36,7 +36,7 @@ import javafx.stage.Stage;
 public class ConfigControllerMp4 {
 
 	@FXML
-	private CheckBox checkH264, checkH265, checkMp3, checkAac, checkNoVideo, checkNoAudio;
+	private CheckBox checkH264, checkH265, checkH262, checkMp3, checkAac, checkAc3, checkNoVideo, checkNoAudio;
 
 	@FXML
 	private Button buttonConfigApply;
@@ -124,8 +124,10 @@ public class ConfigControllerMp4 {
 			config = new String(encoded, StandardCharsets.UTF_8);
 			String noAvc = "<allowedmp4avc></allowedmp4avc>";
 			String noHevc = "<allowedmp4hevc></allowedmp4hevc>";
+			String noMpeg2 = "<allowedmp4mpeg2></allowedmp4mpeg2>";
 			String noMp3 = "<allowedmp4mp3></allowedmp4mp3>";
 			String noAac = "<allowedmp4aac></allowedmp4aac>";
+			String noAc3 = "<allowedmp4ac3></allowedmp4ac3>";
 			String noVideo = "<allowedmp4novideo>Error</allowedmp4novideo>";
 			String noAudio = "<allowedmp4noaudio>Error</allowedmp4noaudio>";
 
@@ -135,11 +137,17 @@ public class ConfigControllerMp4 {
 			if (config.contains(noHevc)) {
 				checkH265.setSelected(false);
 			}
+			if (config.contains(noMpeg2)) {
+				checkH262.setSelected(false);
+			}
 			if (config.contains(noMp3)) {
 				checkMp3.setSelected(false);
 			}
 			if (config.contains(noAac)) {
 				checkAac.setSelected(false);
+			}
+			if (config.contains(noAc3)) {
+				checkAc3.setSelected(false);
 			}
 			if (config.contains(noVideo)) {
 				checkNoVideo.setSelected(false);
@@ -217,6 +225,28 @@ public class ConfigControllerMp4 {
 	}
 
 	@FXML
+	void changeH262(ActionEvent event) {
+		labelMessage.setText("");
+		String yes = "<allowedmp4mpeg2>MPEG-2 </allowedmp4mpeg2>";
+		String no = "<allowedmp4mpeg2></allowedmp4mpeg2>";
+		try {
+			if (checkH262.isSelected()) {
+				Util.oldnewstring(no, yes, configFile);
+			} else {
+				// abwaehlen nur moeglich wenn noch eines selected
+				if (!checkH262.isSelected()) {
+					labelMessage.setText(minOne);
+					checkH262.setSelected(true);
+				} else {
+					Util.oldnewstring(yes, no, configFile);
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@FXML
 	void changeMp3(ActionEvent event) {
 		labelMessage.setText("");
 		String yes = "<allowedmp4mp3>MP3 </allowedmp4mp3>";
@@ -251,6 +281,28 @@ public class ConfigControllerMp4 {
 				if (!checkMp3.isSelected()) {
 					labelMessage.setText(minOne);
 					checkAac.setSelected(true);
+				} else {
+					Util.oldnewstring(yes, no, configFile);
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@FXML
+	void changeAc3(ActionEvent event) {
+		labelMessage.setText("");
+		String yes = "<allowedmp4ac3>AC-3 </allowedmp4ac3>";
+		String no = "<allowedmp4ac3></allowedmp4ac3>";
+		try {
+			if (checkAc3.isSelected()) {
+				Util.oldnewstring(no, yes, configFile);
+			} else {
+				// abwaehlen nur moeglich wenn noch eines selected
+				if (!checkAc3.isSelected()) {
+					labelMessage.setText(minOne);
+					checkAc3.setSelected(true);
 				} else {
 					Util.oldnewstring(yes, no, configFile);
 				}

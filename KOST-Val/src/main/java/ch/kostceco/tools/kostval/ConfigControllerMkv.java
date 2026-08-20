@@ -36,8 +36,8 @@ import javafx.stage.Stage;
 public class ConfigControllerMkv {
 
 	@FXML
-	private CheckBox checkFfv1, checkH264, checkH265, checkAv1, checkFlac, checkMp3, checkAac, checkNoVideo,
-			checkNoAudio;
+	private CheckBox checkFfv1, checkH264, checkH265, checkAv1, checkH262, checkFlac, checkMp3, checkAac, checkAc3,
+			checkNoVideo, checkNoAudio;
 
 	@FXML
 	private Button buttonConfigApply;
@@ -127,9 +127,11 @@ public class ConfigControllerMkv {
 			String noAvc = "<allowedmkvavc></allowedmkvavc>";
 			String noHevc = "<allowedmkvhevc></allowedmkvhevc>";
 			String noAv1 = "<allowedmkvav1></allowedmkvav1>";
+			String noMpeg2 = "<allowedmkvmpeg2></allowedmkvmpeg2>";
 			String noFlac = "<allowedmkvflac></allowedmkvflac>";
 			String noMp3 = "<allowedmkvmp3></allowedmkvmp3>";
 			String noAac = "<allowedmkvaac></allowedmkvaac>";
+			String noAc3 = "<allowedmkvac3></allowedmkvac3>";
 			String noVideo = "<allowedmkvnovideo>Error</allowedmkvnovideo>";
 			String noAudio = "<allowedmkvnoaudio>Error</allowedmkvnoaudio>";
 
@@ -145,6 +147,9 @@ public class ConfigControllerMkv {
 			if (config.contains(noAv1)) {
 				checkAv1.setSelected(false);
 			}
+			if (config.contains(noMpeg2)) {
+				checkH262.setSelected(false);
+			}
 			if (config.contains(noFlac)) {
 				checkFlac.setSelected(false);
 			}
@@ -153,6 +158,9 @@ public class ConfigControllerMkv {
 			}
 			if (config.contains(noAac)) {
 				checkAac.setSelected(false);
+			}
+			if (config.contains(noAc3)) {
+				checkAc3.setSelected(false);
 			}
 			if (config.contains(noVideo)) {
 				checkNoVideo.setSelected(false);
@@ -274,6 +282,28 @@ public class ConfigControllerMkv {
 	}
 
 	@FXML
+	void changeH262(ActionEvent event) {
+		labelMessage.setText("");
+		String yes = "<allowedmkvmpeg2>MPEG-2 </allowedmkvmpeg2>";
+		String no = "<allowedmkvmpeg2></allowedmkvmpeg2>";
+		try {
+			if (checkH262.isSelected()) {
+				Util.oldnewstring(no, yes, configFile);
+			} else {
+				// abwaehlen nur moeglich wenn noch eines selected
+				if (!checkH262.isSelected()) {
+					labelMessage.setText(minOne);
+					checkH262.setSelected(true);
+				} else {
+					Util.oldnewstring(yes, no, configFile);
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@FXML
 	void changeFlac(ActionEvent event) {
 		labelMessage.setText("");
 		String yes = "<allowedmkvflac>FLAC </allowedmkvflac>";
@@ -330,6 +360,28 @@ public class ConfigControllerMkv {
 				if (!checkMp3.isSelected() && !checkFlac.isSelected()) {
 					labelMessage.setText(minOne);
 					checkAac.setSelected(true);
+				} else {
+					Util.oldnewstring(yes, no, configFile);
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@FXML
+	void changeAc3(ActionEvent event) {
+		labelMessage.setText("");
+		String yes = "<allowedmkvac3>AC-3 </allowedmkvac3>";
+		String no = "<allowedmkvac3></allowedmkvac3>";
+		try {
+			if (checkAc3.isSelected()) {
+				Util.oldnewstring(no, yes, configFile);
+			} else {
+				// abwaehlen nur moeglich wenn noch eines selected
+				if (!checkAc3.isSelected()) {
+					labelMessage.setText(minOne);
+					checkAc3.setSelected(true);
 				} else {
 					Util.oldnewstring(yes, no, configFile);
 				}

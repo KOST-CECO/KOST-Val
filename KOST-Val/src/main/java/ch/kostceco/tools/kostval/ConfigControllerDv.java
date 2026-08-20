@@ -65,7 +65,7 @@ public class ConfigControllerDv {
 	private Label labelInstitut, labelVal, labelMessage, labelSigDoku, labelMandant, labelConfig, labelStar, labelStar1;
 
 	ObservableList<String> sizeInstitutList = FXCollections.observableArrayList("", "Staatsarchiv Aargau",
-			"Staatsarchiv Basel-Stadt", "Staatsarchiv Bern", "Staatsarchiv Graubuenden", "Staatsarchiv Luzern",
+			"Staatsarchiv Basel-Landschaft", "Staatsarchiv Basel-Stadt", "Staatsarchiv Bern", "Staatsarchiv Graubuenden", "Staatsarchiv Luzern",
 			"Staatsarchiv St. Gallen", "Staatsarchiv Thurgau", "Stadtarchiv Bern", "Stadtarchiv Luzern",
 			"Stadtarchiv St. Gallen", "Burgerbibliothek Bern");
 
@@ -75,7 +75,7 @@ public class ConfigControllerDv {
 	/*
 	 * ObservableList<String> sizeInstitutList = FXCollections .observableArrayList(
 	 * "", "andere", "Staatsarchiv Aargau", "Staatsarchiv Appenzell Ausserrhoden",
-	 * "Landesarchiv Appenzell Innerrhoden", "Staatsarchiv Basel-Land",
+	 * "Landesarchiv Appenzell Innerrhoden", "Staatsarchiv Basel-Landschaft",
 	 * "Staatsarchiv Basel-Stadt", "Staatsarchiv Bern", "Staatsarchiv Freiburg",
 	 * "Archives de l'Etat de Geneve", "Landesarchiv Glarus",
 	 * "Staatsarchiv Graubuenden", "Archives cantonales jurassiennes",

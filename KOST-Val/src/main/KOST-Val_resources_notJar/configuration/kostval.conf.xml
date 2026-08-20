@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="kostval-conf-DE.xsl"?>
-<configuration><!-- kostval.conf.xml_v2.4.0.2 -->
+<configuration><!-- kostval.conf.xml_v2.4.0.4 -->
 <!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
 <!-- TEXT -->
 	<pdfa>
@@ -100,11 +100,13 @@
 			<allowedmkvavc>AVC </allowedmkvavc><!-- / AVC -->
 			<allowedmkvhevc>HEVC </allowedmkvhevc><!-- / HEVC -->
 			<allowedmkvav1>AV1 </allowedmkvav1><!-- / AV1 -->
+			<allowedmkvmpeg2></allowedmkvmpeg2><!-- / MPEG-2 -->
 		</allowedmkvvideo>
 		<allowedmkvaudio>
 			<allowedmkvflac>FLAC </allowedmkvflac><!-- / FLAC -->
 			<allowedmkvmp3>MP3 </allowedmkvmp3><!-- / MP3 -->
 			<allowedmkvaac>AAC </allowedmkvaac><!-- / AAC -->
+			<allowedmkvac3></allowedmkvac3><!-- / AC-3 -->
 		</allowedmkvaudio>
 		<allowedmkvnoaudio>Warning</allowedmkvnoaudio><!--Warning / / Error -->
 		<allowedmkvnovideo>Warning</allowedmkvnovideo><!--Warning / / Error -->
@@ -114,10 +116,12 @@
 		<allowedmp4video>
 			<allowedmp4avc>AVC </allowedmp4avc><!-- / AVC -->
 			<allowedmp4hevc>HEVC </allowedmp4hevc><!-- / HEVC -->
+			<allowedmp4mpeg2></allowedmp4mpeg2><!-- / MPEG-2 -->
 		</allowedmp4video>
 		<allowedmp4audio>
 			<allowedmp4mp3>MP3 </allowedmp4mp3><!-- / MP3 -->
 			<allowedmp4aac>AAC </allowedmp4aac><!-- / AAC -->
+			<allowedmp4ac3></allowedmp4ac3><!-- / AC-3 -->
 		</allowedmp4audio>
 		<allowedmp4noaudio>Warning</allowedmp4noaudio><!--Warning / Error -->
 		<allowedmp4novideo>Warning</allowedmp4novideo><!--Warning / Error -->
@@ -150,9 +154,6 @@
 	<xlsx>
 		<xlsxvalidation>(&#x2713;)</xlsxvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
 	</xlsx>
-	<ods>
-		<odsvalidation>&#x2717;</odsvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
-	</ods>
 <!-- SIP -->
 	<sip>
 		<ech0160validation>&#x2713;</ech0160validation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
@@ -173,7 +174,7 @@
 		</dossiercheck>
 		<warningolddok>no</warningolddok> <!-- no = Fehler / yes = Warnung -->
 	</sip>
-<!-- SONSTIGES -->
+<!-- SONSTIGES EML, MBOX, WACZ, WARC, HTML, INTERLIS, DWG, IFC -->
 	<otherformats><!--&#x2717; / Leer = nicht akzeptiert / (&#x2713;) / Bezeichnung = akzeptiert -->
 		<docxvalidation></docxvalidation>
 		<pptxvalidation></pptxvalidation>
@@ -184,18 +185,24 @@
 		<oggvalidation></oggvalidation>
 		<mpeg2validation></mpeg2validation>
 		<avivalidation></avivalidation>
+		<odsvalidation></odsvalidation>
+		<xlsvalidation></xlsvalidation>
 		<htmlvalidation>HTML </htmlvalidation>
+		<waczvalidation>WACZ </waczvalidation>
 		<warcvalidation>WARC </warcvalidation>
 		<arcvalidation></arcvalidation>
 		<dwgvalidation>DWG </dwgvalidation>
-		<ifcvalidation></ifcvalidation>
+		<ifcvalidation>IFC </ifcvalidation>
 		<dxfvalidation></dxfvalidation>
-		<interlisvalidation></interlisvalidation>
+		<interlisvalidation>INTERLIS </interlisvalidation>
 		<dicomvalidation></dicomvalidation>
 		<msgvalidation></msgvalidation>
-		<emlvalidation></emlvalidation>
+		<emlvalidation>EML </emlvalidation>
+		<mboxvalidation>MBOX </mboxvalidation>
+		<pstvalidation></pstvalidation>
 		<othervalidation></othervalidation>
 	</otherformats>
+	<droid>yes</droid>
 	<egovdv>
 		<egovdvvalidation>&#x2717;</egovdvvalidation><!--&#x2717; = keine Pruefung / &#x2713; = Signaturen pruefen -->
 		<Institut></Institut>

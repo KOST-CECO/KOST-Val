@@ -151,7 +151,7 @@ public class ConfigControllerSiard {
 			String noSiard21 = "<siard21></siard21>";
 			String noSiard22 = "<siard22></siard22>";
 			String noLobExtension = "<lobExtension>Warning </lobExtension>";
-			String noLobAzepted = "<lobAzepted></lobAzepted>";
+			String noLobAzepted = "<lobAzepted>Warning </lobAzepted>";
 			String noSiardRep = "<siardrep>no </siardrep>";
 			String noSiardLobRep = "<siardlobrep>no </siardlobrep>";
 			String noSiardLobExtRep = "<siardlobextrep>no </siardlobextrep>";
@@ -321,7 +321,7 @@ public class ConfigControllerSiard {
 		String yes = "<lobAzepted>Error </lobAzepted>";
 		String no = "<lobAzepted>Warning </lobAzepted>";
 		try {
-			if (checkLobExtension.isSelected()) {
+			if (checkLobAzepted.isSelected()) {
 				Util.oldnewstring(no, yes, configFile);
 			} else {
 				Util.oldnewstring(yes, no, configFile);

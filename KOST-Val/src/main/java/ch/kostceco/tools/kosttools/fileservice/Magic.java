@@ -2073,6 +2073,151 @@ public class Magic {
 		return mn;
 	}
 
+	public static boolean magicMbox(File file) throws IOException {
+		FileReader fr = null;
+		BufferedReader read = null;
+		boolean mn = false;
+
+		try {
+			// Eine MBOX Datei (.mbox) beginnt mit 46726F6D20 -> 'From '
+			fr = new FileReader(file);
+			read = new BufferedReader(fr);
+
+			Boolean reco = false;
+			try (FileInputStream fis = new FileInputStream(file)) {
+				int i = 0;
+				int cnt = 0;
+				StringBuilder sb = new StringBuilder();
+				String sb2str1 = "";
+				String sb2str2 = "";
+				String sb2str3 = "";
+				String sb2str4 = "";
+				String sb2str5 = "";
+				String sb12345 = "";
+				while ((i = fis.read()) != 10) {
+					sb.append(String.format("%02X ", i));
+					if (sb2str1 == "") {
+						sb2str1 = sb + "";
+					} else if (sb2str2 == "") {
+						sb2str2 = sb + "";
+					} else if (sb2str3 == "") {
+						sb2str3 = sb + "";
+					} else if (sb2str4 == "") {
+						sb2str4 = sb + "";
+					} else if (sb2str5 == "") {
+						sb2str5 = sb + "";
+						sb12345 = sb + "";
+						break;
+					}
+					cnt++;
+					if (cnt == 16) {
+						cnt = 0;
+					}
+				}
+				if (sb12345.contains("46 72 6F 6D 20")) {
+					reco = true;
+				}
+			}
+			if (reco) {
+				// hoechstwahrscheinlich eine MBOX
+				mn = true;
+			}
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		} catch (Exception e) {
+			System.out.println("Exception magic file mbox: " + e.getMessage());
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		}
+		return mn;
+	}
+
+	public static boolean magicPst(File file) throws IOException {
+		FileReader fr = null;
+		BufferedReader read = null;
+		boolean mn = false;
+
+		try {
+			// Eine PST Datei (.pst) muss mit 2142444E{4}534D -> !BDN{4}SM beginnen
+			fr = new FileReader(file);
+			read = new BufferedReader(fr);
+
+			Boolean reco = false;
+			try (FileInputStream fis = new FileInputStream(file)) {
+				int i = 0;
+				int cnt = 0;
+				StringBuilder sb = new StringBuilder();
+				String sb2str1 = "";
+				String sb2str2 = "";
+				String sb2str3 = "";
+				String sb2str4 = "";
+				String sb2str5ig = "";
+				String sb2str6ig = "";
+				String sb2str7ig = "";
+				String sb2str8ig = "";
+				String sb2str9 = "";
+				String sb2str10 = "";
+				String sb123490 = "";
+				while ((i = fis.read()) != 20) {
+					// System.out.printf("%02X ", i);
+					sb.append(String.format("%02X ", i));
+					if (sb2str1 == "") {
+						sb2str1 = sb + "";
+					} else if (sb2str2 == "") {
+						sb2str2 = sb + "";
+					} else if (sb2str3 == "") {
+						sb2str3 = sb + "";
+					} else if (sb2str4 == "") {
+						sb2str4 = sb + "";
+					} else if (sb2str5ig == "") {
+						sb2str5ig = sb + "";
+					} else if (sb2str6ig == "") {
+						sb2str6ig = sb + "";
+					} else if (sb2str7ig == "") {
+						sb2str7ig = sb + "";
+					} else if (sb2str8ig == "") {
+						sb2str8ig = sb + "";
+						// Die Zeichen 5-8 ignorieren ; sb neu setzten
+						sb = new StringBuilder();
+					} else if (sb2str9 == "") {
+						sb2str9 = sb + "";
+					} else if (sb2str10 == "") {
+						sb2str10 = sb + "";
+						sb123490 = sb2str4 + sb + "";
+						break;
+					}
+					cnt++;
+					if (cnt == 16) {
+						cnt = 0;
+					}
+				}
+				if (sb123490.contains("21 42 44 4E 53 4D")) {
+					reco = true;
+				}
+			}
+
+			if (reco) {
+				// hoechstwahrscheinlich ein JP2
+				mn = true;
+			}
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		} catch (Exception e) {
+			System.out.println("Exception magic file JP2: " + e.getMessage());
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		}
+		return mn;
+	}
+
 	public static boolean magicDicom(File file) throws IOException {
 		FileReader fr = null;
 		BufferedReader read = null;

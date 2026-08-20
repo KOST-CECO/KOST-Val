@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 
-<StackPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="550.0" minWidth="1400.0" prefHeight="620.0" style="-fx-background-color: silver;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.kostceco.tools.kostval.ConfigController">
+<StackPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="580.0" minWidth="1400.0" prefHeight="650.0" style="-fx-background-color: silver;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.kostceco.tools.kostval.ConfigController">
 	<children>
 		<GridPane maxHeight="1.7976931348623157E308" minHeight="530.0">
 			<columnConstraints>
@@ -36,19 +36,20 @@
 				<RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES" />
 				<RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 				<RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 				<RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="15.0" minHeight="15.0" prefHeight="15.0" vgrow="SOMETIMES" />
 				<RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="15.0" minHeight="15.0" prefHeight="15.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="25.0" minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
             <RowConstraints />
             <RowConstraints />
             <RowConstraints />
@@ -66,21 +67,19 @@
             <RowConstraints />
 			</rowConstraints>
 			<children>
-				<Line endX="480.0" stroke="WHITESMOKE" GridPane.columnSpan="4" GridPane.rowIndex="5" />
-				<Line endX="670.0" stroke="WHITESMOKE" GridPane.columnSpan="5" GridPane.rowIndex="7" />
-				<Line endX="480.0" stroke="WHITESMOKE" GridPane.columnSpan="4" GridPane.rowIndex="1">
+				<Line endX="500.0" stroke="WHITESMOKE" GridPane.columnSpan="4" GridPane.rowIndex="5" />
+				<Line endX="680.0" stroke="WHITESMOKE" GridPane.columnSpan="5" GridPane.rowIndex="7" />
+				<Line endX="500.0" stroke="WHITESMOKE" GridPane.columnSpan="4" GridPane.rowIndex="1">
 					<GridPane.margin>
 						<Insets />
 					</GridPane.margin>
 				</Line>
-				<Line endX="480.0" stroke="WHITESMOKE" GridPane.columnSpan="4" GridPane.rowIndex="3">
+				<Line endX="500.0" stroke="WHITESMOKE" GridPane.columnSpan="4" GridPane.rowIndex="3">
 					<GridPane.margin>
 						<Insets />
 					</GridPane.margin>
 				</Line>
-				<Line endX="670.0" stroke="WHITESMOKE" GridPane.columnSpan="5" GridPane.rowIndex="9" />
-				<Line endX="670.0" stroke="WHITESMOKE" GridPane.columnSpan="5" GridPane.rowIndex="11" />
-				<Line endX="670.0" stroke="WHITESMOKE" GridPane.columnSpan="5" GridPane.rowIndex="13" />
+				<Line endX="680.0" stroke="WHITESMOKE" GridPane.columnSpan="5" GridPane.rowIndex="9" />
 				<Button fx:id="buttonConfigCancel" alignment="TOP_LEFT" maxHeight="26.0" maxWidth="170.0" minHeight="26.0" minWidth="170.0" mnemonicParsing="false" onAction="#configCancel" prefHeight="26.0" prefWidth="170.0" style="-fx-border-color: Red;" text="Verwerfen" GridPane.columnIndex="5">
 					<GridPane.margin>
 						<Insets />
@@ -95,20 +94,8 @@
 					</GridPane.margin>
 				</Button>
 				<Button fx:id="buttonConfigApplyStandard" alignment="TOP_LEFT" layoutX="851.0" layoutY="47.0" maxHeight="26.0" maxWidth="170.0" minHeight="26.0" minWidth="170.0" mnemonicParsing="false" onAction="#configApplyStandard" prefHeight="26.0" prefWidth="170.0" style="-fx-border-color: LimeGreen;" text="Standard anwenden" GridPane.columnIndex="5" GridPane.rowIndex="4" />
-				<Button fx:id="buttonWork" alignment="TOP_LEFT" maxHeight="26.0" minHeight="26.0" mnemonicParsing="false" onAction="#chooseWork" prefHeight="26.0" prefWidth="260.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="Arbeitsverzeichnis" GridPane.columnSpan="2" GridPane.rowIndex="18">
-					<GridPane.margin>
-						<Insets right="10.0" />
-					</GridPane.margin>
-				</Button>
-				<Button fx:id="buttonInput" alignment="TOP_LEFT" maxHeight="26.0" minHeight="26.0" mnemonicParsing="false" onAction="#chooseInput" prefHeight="26.0" prefWidth="260.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="Inputverzeichnis" GridPane.columnSpan="2" GridPane.rowIndex="19">
-					<GridPane.margin>
-						<Insets right="10.0" />
-					</GridPane.margin>
-				</Button>
-				<Label fx:id="labelWork" layoutX="131.0" layoutY="372.0" text="(work)" GridPane.columnIndex="2" GridPane.columnSpan="4" GridPane.rowIndex="18" />
-				<Label fx:id="labelInput" layoutX="131.0" layoutY="467.0" text="(input)" GridPane.columnIndex="2" GridPane.columnSpan="4" GridPane.rowIndex="19" />
 				<WebView fx:id="wbv" minHeight="-1.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="7" GridPane.rowSpan="34" />
-				<Label fx:id="labelConfig" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="670.0" text="Copyright © KOST/CECO" textAlignment="CENTER" textFill="WHITESMOKE" GridPane.columnSpan="6" GridPane.halignment="CENTER" GridPane.rowIndex="22" GridPane.valignment="CENTER" />
+				<Label fx:id="labelConfig" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="670.0" text="Copyright © KOST/CECO" textAlignment="CENTER" textFill="WHITESMOKE" GridPane.columnSpan="6" GridPane.halignment="CENTER" GridPane.rowIndex="23" GridPane.valignment="CENTER" />
             <Label fx:id="labelText" text="Text">
                <font>
                   <Font name="System Bold" size="18.0" />
@@ -175,12 +162,12 @@
                   <Insets left="50.0" />
                </GridPane.margin>
             </Button>
-            <Label fx:id="labelSip" text="SIP" GridPane.rowIndex="10">
+            <Label fx:id="labelSip" text="SIP" GridPane.rowIndex="13">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Label fx:id="labelOther" text="Sonstige" GridPane.rowIndex="12">
+            <Label fx:id="labelOther" text="Sonstige" GridPane.rowIndex="10">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -297,14 +284,6 @@
                   <Insets left="25.0" />
                </padding>
             </Label>
-            <Label fx:id="labelOds" text="ODS" GridPane.columnIndex="5" GridPane.rowIndex="8">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-               <padding>
-                  <Insets left="125.0" />
-               </padding>
-            </Label>
             <Label fx:id="labelMp4" text="MP4" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="6">
                <font>
                   <Font name="System Bold" size="12.0" />
@@ -345,7 +324,7 @@
                   <Insets left="25.0" />
                </padding>
             </Label>
-            <Button fx:id="buttonPuid" alignment="TOP_LEFT" maxHeight="26.0" minHeight="26.0" minWidth="90.0" mnemonicParsing="false" onAction="#changePuid" prefHeight="26.0" style="-fx-background-color: WhiteSmoke; -fx-border-color: WhiteSmoke;" text="aendern" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="12" />
+            <Button fx:id="buttonPuid" alignment="TOP_LEFT" maxHeight="26.0" minHeight="26.0" minWidth="90.0" mnemonicParsing="false" onAction="#changePuid" prefHeight="26.0" style="-fx-background-color: WhiteSmoke; -fx-border-color: WhiteSmoke;" text="aendern" GridPane.columnIndex="1" GridPane.columnSpan="5" GridPane.rowIndex="10" />
             <Label fx:id="labelJpeg2000" text="JPEG2000" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <font>
                   <Font name="System Bold" size="12.0" />
@@ -422,7 +401,7 @@
                   <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
                </padding>
             </Button>
-            <Label fx:id="labelSip0160" text="eCH-0160" GridPane.columnIndex="1" GridPane.rowIndex="10">
+            <Label fx:id="labelSip0160" text="eCH-0160" GridPane.columnIndex="1" GridPane.rowIndex="13">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -430,7 +409,7 @@
                   <Insets left="25.0" />
                </padding>
             </Label>
-            <Button fx:id="buttonSip0160" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changeSip0160" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="V" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="10">
+            <Button fx:id="buttonSip0160" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changeSip0160" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="V" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="13">
                <font>
                   <Font name="System Bold" size="11.0" />
                </font>
@@ -441,7 +420,7 @@
                   <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
                </padding>
             </Button>
-            <Button fx:id="buttonSipVal" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changeSipVal" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: silver; -fx-background-color: silver;" text="▼" textAlignment="RIGHT" textFill="WHITESMOKE" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="10">
+            <Button fx:id="buttonSipVal" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changeSipVal" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: silver; -fx-background-color: silver;" text="▼" textAlignment="RIGHT" textFill="WHITESMOKE" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="13">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -453,20 +432,6 @@
                </padding>
                <GridPane.margin>
                   <Insets left="81.0" />
-               </GridPane.margin>
-            </Button>
-            <Button fx:id="buttonOds" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changeOds" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="V" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="5" GridPane.rowIndex="8">
-               <font>
-                  <Font name="System Bold" size="11.0" />
-               </font>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-               <padding>
-                  <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
-               </padding>
-               <GridPane.margin>
-                  <Insets left="100.0" />
                </GridPane.margin>
             </Button>
             <Button fx:id="buttonXlsx" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changeXlsx" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="V" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="5" GridPane.rowIndex="8">
@@ -546,26 +511,20 @@
                   <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
                </padding>
             </Button>
-            <Label fx:id="labelHash" text="Hash" GridPane.rowIndex="16">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-            <ChoiceBox fx:id="hashAlgo" maxWidth="90.0" minHeight="26.0" minWidth="90.0" nodeOrientation="LEFT_TO_RIGHT" onAction="#changeHashAlgo" prefHeight="26.0" prefWidth="90.0" value="" GridPane.columnIndex="1" GridPane.rowIndex="16" />
-            <Label fx:id="labelHint1" alignment="CENTER_RIGHT" contentDisplay="RIGHT" minHeight="20.0" minWidth="-Infinity" prefHeight="20.0" prefWidth="96.0" text="Hinweis:" textAlignment="RIGHT" GridPane.rowIndex="21">
+            <Label fx:id="labelHint1" alignment="CENTER_RIGHT" contentDisplay="RIGHT" minHeight="20.0" minWidth="-Infinity" prefHeight="20.0" prefWidth="96.0" text="Hinweis:" textAlignment="RIGHT" GridPane.rowIndex="20">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <Label fx:id="labelHint" alignment="CENTER" contentDisplay="CENTER" minHeight="20.0" minWidth="-Infinity" prefHeight="20.0" text="öffnet die jeweilige Detailkonfiguration" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="21">
+            <Label fx:id="labelHint" alignment="CENTER" contentDisplay="CENTER" minHeight="20.0" minWidth="-Infinity" prefHeight="20.0" text="öffnet die jeweilige Detailkonfiguration" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.columnSpan="4" GridPane.rowIndex="20">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
                <GridPane.margin>
-                  <Insets left="17.0" />
+                  <Insets left="25.0" />
                </GridPane.margin>
             </Label>
-            <Label fx:id="labelHint2" alignment="CENTER" contentDisplay="CENTER" minHeight="20.0" minWidth="-Infinity" prefHeight="20.0" text="▼" textAlignment="CENTER" textFill="WHITESMOKE" GridPane.columnIndex="1" GridPane.rowIndex="21">
+            <Label fx:id="labelHint2" alignment="CENTER" contentDisplay="CENTER" minHeight="20.0" minWidth="-Infinity" prefHeight="20.0" text="▼" textAlignment="CENTER" textFill="WHITESMOKE" GridPane.columnIndex="1" GridPane.rowIndex="20">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -617,52 +576,11 @@
                   <Insets left="55.0" />
                </GridPane.margin>
             </Button>
-            <Label fx:id="labelWarning" text="Dateigrösse" GridPane.rowIndex="17">
+            <Label fx:id="labelConfig2" text="Weitere Konfigurationen" GridPane.columnSpan="3" GridPane.rowIndex="15">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <ChoiceBox fx:id="sizeWarning" maxWidth="90.0" minHeight="26.0" minWidth="90.0" nodeOrientation="LEFT_TO_RIGHT" onAction="#changeSizeWarning" prefHeight="26.0" prefWidth="90.0" value="" GridPane.columnIndex="1" GridPane.rowIndex="17" />
-            <Label fx:id="labelSize" text="Warnung ausgeben, wenn die Datei kleiner als die ausgewählte Dateigrösse ist" GridPane.columnIndex="2" GridPane.columnSpan="4" GridPane.rowIndex="17" />
-            <Label fx:id="labelDv" text="egovDV" GridPane.columnIndex="1" GridPane.rowIndex="14">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-               <padding>
-                  <Insets left="25.0" />
-               </padding>
-            </Label>
-            <Button fx:id="buttonDv" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changeDv" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="O" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="14">
-               <font>
-                  <Font name="System Bold" size="11.0" />
-               </font>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-               <padding>
-                  <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
-               </padding>
-            </Button>
-            <Button fx:id="buttonDvVal" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changeDvVal" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: silver; -fx-background-color: silver;" text="▼" textAlignment="RIGHT" textFill="WHITESMOKE" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="14">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-               <padding>
-                  <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
-               </padding>
-               <GridPane.margin>
-                  <Insets left="72.0" />
-               </GridPane.margin>
-            </Button>
-            <Label fx:id="labelSignatur" text="Signatur" GridPane.rowIndex="14">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-            <Label fx:id="labelEgovDV" text="Validierung von el. Signaturen in PDF/A- und PDF-Dateien (Lizenz erforderlich)" GridPane.columnIndex="2" GridPane.columnSpan="4" GridPane.rowIndex="14" />
             <Button fx:id="buttonXmlVal" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changeXmlVal" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: silver; -fx-background-color: silver;" text="▼" textAlignment="RIGHT" textFill="WHITESMOKE" textOverrun="CLIP" GridPane.columnIndex="2" GridPane.rowIndex="8">
                <font>
                   <Font name="System Bold" size="14.0" />
@@ -677,13 +595,73 @@
                   <Insets left="55.0" />
                </GridPane.margin>
             </Button>
-            <Label fx:id="labelInstitution" text="Institution" GridPane.rowIndex="15">
+            <ChoiceBox fx:id="droidYesNo" maxWidth="400.0" minHeight="26.0" minWidth="400.0" nodeOrientation="LEFT_TO_RIGHT" onAction="#changeDroidYesNo" prefHeight="26.0" prefWidth="400.0" value="" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+            <Button fx:id="buttonPuidT" alignment="TOP_LEFT" maxHeight="20.0" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" onAction="#changePuidT" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: WhiteSmoke; -fx-border-color: WhiteSmoke;" text="..." GridPane.columnIndex="4">
+               <font>
+                  <Font name="System Bold" size="8.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets left="70.0" />
+               </GridPane.margin>
+            </Button>
+            <Button fx:id="buttonPuidI" alignment="TOP_LEFT" maxHeight="20.0" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" onAction="#changePuidI" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: WhiteSmoke; -fx-border-color: WhiteSmoke;" text="..." GridPane.columnIndex="4" GridPane.rowIndex="2">
+               <font>
+                  <Font name="System Bold" size="8.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets left="70.0" />
+               </GridPane.margin>
+            </Button>
+            <Button fx:id="buttonPuidA" alignment="TOP_LEFT" maxHeight="20.0" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" onAction="#changePuidA" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: WhiteSmoke; -fx-border-color: WhiteSmoke;" text="..." GridPane.columnIndex="4" GridPane.rowIndex="4">
+               <font>
+                  <Font name="System Bold" size="8.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets left="70.0" />
+               </GridPane.margin>
+            </Button>
+            <Button fx:id="buttonPuidV" alignment="TOP_LEFT" maxHeight="20.0" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" onAction="#changePuidV" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: WhiteSmoke; -fx-border-color: WhiteSmoke;" text="..." GridPane.columnIndex="4" GridPane.rowIndex="6">
+               <font>
+                  <Font name="System Bold" size="8.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets left="70.0" />
+               </GridPane.margin>
+            </Button>
+            <Button fx:id="buttonPuidD" alignment="TOP_LEFT" maxHeight="20.0" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" onAction="#changePuidD" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: WhiteSmoke; -fx-border-color: WhiteSmoke;" text="..." GridPane.columnIndex="5" GridPane.rowIndex="8">
+               <font>
+                  <Font name="System Bold" size="8.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets left="150.0" />
+               </GridPane.margin>
+            </Button>
+            <Button fx:id="buttonConfig2" alignment="TOP_LEFT" maxHeight="26.0" minHeight="26.0" mnemonicParsing="false" onAction="#changeConfig2" prefHeight="26.0" prefWidth="80.0" style="-fx-border-color: WhiteSmoke;" text="Anpassen" GridPane.columnIndex="2" GridPane.rowIndex="15">
+               <GridPane.margin>
+                  <Insets left="20.0" />
+               </GridPane.margin>
+            </Button>
+            <Label fx:id="labelOther1" text="Kategorien" GridPane.columnSpan="2" GridPane.rowIndex="11">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Button fx:id="buttonInstitution" alignment="TOP_LEFT" maxHeight="26.0" minHeight="26.0" mnemonicParsing="false" onAction="#changeInstitution" prefHeight="26.0" prefWidth="400.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="Archiv" GridPane.columnIndex="1" GridPane.columnSpan="4" GridPane.rowIndex="15" />
-			</children>
+            <Line endX="680.0" stroke="WHITESMOKE" strokeWidth="5.0" GridPane.rowIndex="12" />
+            <Line endX="680.0" stroke="WHITESMOKE" strokeWidth="5.0" GridPane.rowIndex="14" />
+            <Label fx:id="labelHint3" alignment="CENTER" contentDisplay="CENTER" minHeight="20.0" minWidth="-Infinity" prefHeight="20.0" text="weitere Formate dieser Kategorie" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.columnSpan="4" GridPane.rowIndex="21">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets left="25.0" />
+               </GridPane.margin>
+            </Label>
+            <Button alignment="TOP_LEFT" maxHeight="20.0" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: WhiteSmoke; -fx-border-color: WhiteSmoke;" text="..." GridPane.columnIndex="1" GridPane.rowIndex="21">
+               <font>
+                  <Font name="System Bold" size="8.0" />
+               </font>
+            </Button>
+ 			</children>
 			<padding>
 				<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 			</padding>

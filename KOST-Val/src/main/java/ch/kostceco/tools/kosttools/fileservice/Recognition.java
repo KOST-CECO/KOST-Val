@@ -187,6 +187,20 @@ public class Recognition {
 						return "MKV_ext";
 					}
 				}
+			} else if (sb2str1.contains("21")) {
+				// TODO B) Die moeglichen BOF kontrollieren (beginnt mit 21)
+				if (Magic.magicPst(checkFile)) {
+					// Eine PST Datei muss mit 2142444E{4}534D -> !BDN{4}SM beginnen
+					// D) passende Extension kontrollieren (keine SiF)
+					// Eine PST-Datei muss die extension .pst haben
+					if (checkFileExt.equals(".pst")) {
+						// eindeutig als PST-Datei erkannt
+						return "PST";
+					} else {
+						// als PST-Datei erkannt aber falsche Extension
+						return "PST_ext";
+					}
+				}
 			} else if (sb2str1.contains("25")) {
 				// TODO B) Die moeglichen BOF kontrollieren (beginnt mit 25)
 				if (Magic.magicPdf(checkFile)) {
@@ -315,6 +329,33 @@ public class Recognition {
 						// als DWG-Datei erkannt aber falsche Extension
 						return "DWG_ext";
 					}
+				}
+
+			} else if (sb2str1.contains("46")) {
+				// TODO B) Die moeglichen BOF kontrollieren (beginnt mit 46)
+				if (Magic.magicMbox(checkFile)) {
+					// Eine MBOX Datei (.mbox) beginnt mit 46726F6D20 -> 'From '
+					if (Util.stringInFirstFileLine("Mon", checkFile) || Util.stringInFirstFileLine("Tue", checkFile)
+							|| Util.stringInFirstFileLine("Wed", checkFile)
+							|| Util.stringInFirstFileLine("Thu", checkFile)
+							|| Util.stringInFirstFileLine("Fri", checkFile)
+							|| Util.stringInFirstFileLine("Sat", checkFile)
+							|| Util.stringInFirstFileLine("Sun", checkFile)) {
+						// C) fuer MBOX auf SiF weiterkontrollieren
+						// Eine MBOX-Datei muss den String
+						// (Mon|Tue|Wed|Thu|Fri|Sat|Sun)
+						// im File haben
+						// D) passende Extension kontrollieren
+						// Eine MBOX-Datei muss die extension .mbox haben
+						if (checkFileExt.equals(".mbox")) {
+							// eindeutig als MBOX-Datei erkannt
+							return "MBOX";
+						} else {
+							// als MBOX-Datei erkannt aber falsche Extension
+							return "MBOX_ext";
+						}
+					}
+
 				}
 
 			} else if (sb2str1.contains("49")) {
@@ -532,6 +573,13 @@ public class Recognition {
 							// Eine ODS-Datei muss den String
 							// "opendocument.spreadsheet" im File haben
 							return "ODS";
+						}
+					} else if (checkFileExt.equals(".wacz")) {
+						if (Util.stringInFile("wacz_version", checkFile)) {
+							// C) fuer WACZ auf SiF weiterkontrollieren
+							// Eine WACZ-Datei muss den String
+							// "wacz_version" im File haben
+							return "WACZ";
 						}
 					} else {
 						// scheint eine normale ZIP-Datei zu sein
@@ -888,6 +936,9 @@ public class Recognition {
 					// hat auf keine SiF oder Dateiendung
 					return "DICOM";
 				}
+			} else if (Util.stringInFile("InternetShortcut", checkFile)) {
+				// InternetShortcut (URL)
+				return "InternetShortcut";
 			}
 
 			// TODO: Kein passendes BOF; ggf. Format ohne BOF
@@ -921,8 +972,9 @@ public class Recognition {
 				// und enthaelt auch } alternativ [ (5B) respektive ]
 				// als JSON-Datei erkannt (keine SiF)
 				return "JSON";
-			} else if (checkFileExt.equals(".eml")) {
-				// Eine EML-Datei muss die extension .eml haben
+			} else if (checkFileExt.equals(".eml") && Util.stringInFile("From:", checkFile)
+					&& Util.stringInFile("Date:", checkFile)) {
+				// Eine EML-Datei muss die extension .eml haben sowie From: und Date:
 				return "EML";
 			} else {
 				// System.out.println("kein bekannte Archivformat erkannt " +

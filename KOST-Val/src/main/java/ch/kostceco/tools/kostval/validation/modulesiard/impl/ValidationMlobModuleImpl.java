@@ -282,7 +282,6 @@ public class ValidationMlobModuleImpl extends ValidationModuleImpl implements Va
 				String siardValidation = configMap.get("siardValidation");
 				String csvValidation = configMap.get("csvValidation");
 				String xlsxValidation = configMap.get("xlsxValidation");
-				String odsValidation = configMap.get("odsValidation");
 				String otherformats = configMap.get("otherformats");
 
 				try {
@@ -502,11 +501,6 @@ public class ValidationMlobModuleImpl extends ValidationModuleImpl implements Va
 									}
 								} else if (recFormat.contains("XLSX")) {
 									if (xlsxValidation.equals("no")) {
-										// NICHT akzeptiert -> invalid
-										recMsg = "notAZ";
-									}
-								} else if (recFormat.contains("ODS")) {
-									if (odsValidation.equals("no")) {
 										// NICHT akzeptiert -> invalid
 										recMsg = "notAZ";
 									}
