@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.concurrent.TimeUnit;
 
 /** @author Rc Claire Roethlisberger, KOST-CECO */
 
@@ -51,6 +52,18 @@ public class Cmd {
 		} catch (IOException ex) {
 			System.out.println("IOException exec P: " + ex);
 		}
+	    if (p != null && p.isAlive()) {
+	    	p.destroy();
+	        try {
+	            if (!p.waitFor(1, TimeUnit.SECONDS)) {
+	            	p.destroyForcibly();
+	            }
+	        } catch (InterruptedException ep) {
+	            Thread.currentThread().interrupt();
+	            p.destroyForcibly();
+	        }
+	    }
+
 		String line = "";
 		String lineE = "";
 		String lineReturn = line;
@@ -117,6 +130,18 @@ public class Cmd {
 		} catch (IOException ex) {
 			System.out.println("IOException exec P: " + ex);
 		}
+	    if (p != null && p.isAlive()) {
+	    	p.destroy();
+	        try {
+	            if (!p.waitFor(1, TimeUnit.SECONDS)) {
+	            	p.destroyForcibly();
+	            }
+	        } catch (InterruptedException ep) {
+	            Thread.currentThread().interrupt();
+	            p.destroyForcibly();
+	        }
+	    }
+
 		String line = "";
 		String lineE = "";
 		String lineReturn = line;
@@ -184,6 +209,18 @@ public class Cmd {
 		} catch (IOException ex) {
 			System.out.println("IOException exec P: " + ex);
 		}
+	    if (p != null && p.isAlive()) {
+	    	p.destroy();
+	        try {
+	            if (!p.waitFor(1, TimeUnit.SECONDS)) {
+	            	p.destroyForcibly();
+	            }
+	        } catch (InterruptedException ep) {
+	            Thread.currentThread().interrupt();
+	            p.destroyForcibly();
+	        }
+	    }
+
 		String line1 = "";
 		String line2 = "";
 		String lineE = "";

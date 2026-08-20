@@ -18,6 +18,7 @@ package ch.kostceco.tools.kosttools.fileservice;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 /** @author Rc Claire Roethlisberger, KOST-CECO */
 
@@ -154,6 +155,17 @@ public class Dbptk {
 					resultExec = exitCode + ": NoLogFile";
 				}
 			}
+		    if (process != null && process.isAlive()) {
+		    	process.destroy();
+		        try {
+		            if (!process.waitFor(1, TimeUnit.SECONDS)) {
+		            	process.destroyForcibly();
+		            }
+		        } catch (InterruptedException ep) {
+		            Thread.currentThread().interrupt();
+		            process.destroyForcibly();
+		        }
+		    }
 
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();

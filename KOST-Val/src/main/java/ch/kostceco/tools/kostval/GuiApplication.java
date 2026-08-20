@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -60,6 +61,10 @@ public class GuiApplication extends Application {
 			// Image kostvalIcon = new Image( "file:valicon.png" );
 			stage.getIcons().add(kostvalIcon);
 			stage.setScene(scene);
+			stage.setOnCloseRequest(event -> {
+				Platform.exit();
+				System.exit(0);
+			});
 			stage.show();
 		} catch (IOException e) {
 			e.printStackTrace();
