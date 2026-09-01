@@ -42,17 +42,17 @@ set DEFAULT_JVM_OPTS=
 
 set JAVA_HOME=%APP_HOME%/../Liberica_JRE
 set JAVA_EXE=%JAVA_HOME%/bin/java.exe
-%JAVA_EXE% -version >NUL 2>&1
+"%JAVA_EXE%" -version >NUL 2>&1
 if "%ERRORLEVEL%" == "0" goto init
 
 set JAVA_HOME=%APP_HOME%/../../Liberica_JRE
 set JAVA_EXE=%JAVA_HOME%/bin/java.exe
-%JAVA_EXE% -version >NUL 2>&1
+"%JAVA_EXE%" -version >NUL 2>&1
 if "%ERRORLEVEL%" == "0" goto init
 
 set JAVA_HOME=%APP_HOME%/../../../Liberica_JRE
 set JAVA_EXE=%JAVA_HOME%/bin/java.exe
-%JAVA_EXE% -version >NUL 2>&1
+"%JAVA_EXE%" -version >NUL 2>&1
 if "%ERRORLEVEL%" == "0" goto init
 
 echo.

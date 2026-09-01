@@ -16,7 +16,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.kostceco.tools.kostval.GuiController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1040.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.kostceco.tools.kostval.GuiController">
 
 	<children>
 		<BorderPane prefHeight="600.0" prefWidth="1160.0">
@@ -64,12 +64,17 @@
 								<Insets left="90.0" />
 							</GridPane.margin>
 						</Button>
-						<ChoiceBox fx:id="logType" layoutX="700.0" layoutY="12.0" maxWidth="150.0" minHeight="26.0" minWidth="150.0" nodeOrientation="LEFT_TO_RIGHT" onAction="#changeLogType" prefHeight="26.0" prefWidth="150.0" value="LogType: --xml" GridPane.columnIndex="3" GridPane.rowIndex="1">
+						<ChoiceBox fx:id="logType" layoutX="700.0" layoutY="12.0" maxWidth="190.0" minHeight="26.0" minWidth="170.0" nodeOrientation="LEFT_TO_RIGHT" onAction="#changeLogType" prefHeight="26.0" prefWidth="190.0" value="LogType: --xml" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.rowIndex="1">
 							<opaqueInsets>
 								<Insets />
 							</opaqueInsets>
 							<GridPane.margin>
-								<Insets left="10.0" />
+								<Insets left="10.0" right="20.0" />
+							</GridPane.margin>
+						</ChoiceBox>
+						<ChoiceBox fx:id="configChoice" layoutX="700.0" layoutY="12.0" maxWidth="150.0" minHeight="26.0" minWidth="150.0" nodeOrientation="LEFT_TO_RIGHT" onAction="#changeConfigChoice" prefHeight="26.0" prefWidth="150.0" value="kostval.conf.xml" GridPane.columnIndex="2" GridPane.rowIndex="1">
+							<GridPane.margin>
+                                <Insets left="10.0" />
 							</GridPane.margin>
 						</ChoiceBox>
 						<Label fx:id="labelStart" text="Starte Validierung" GridPane.rowIndex="2" />
@@ -113,9 +118,9 @@
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Button>
-                  <Label layoutX="10.0" layoutY="47.0" text="LogType" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                  <Label layoutX="10.0" layoutY="47.0" text="LogType" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                      <GridPane.margin>
-                        <Insets left="10.0" />
+                        <Insets left="10.0" right="10.0" />
                      </GridPane.margin>
                   </Label>
 					</children>

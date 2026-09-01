@@ -20,7 +20,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 import ch.kostceco.tools.kosttools.runtime.Cmd;
 import ch.kostceco.tools.kosttools.util.StreamGobbler;
@@ -63,21 +62,10 @@ public class ImageMagick {
 			if (exitCode == 0) {
 				// System.out.println("ImageMagick wurde erfolgreich gestoppt " + exitCode);
 			} else if (exitCode == 128) {
-				// System.out.println("ImageMagick -> kein passender Prozess " + exitCode);
+				// System.out.println("ImageMagick -> kein passende Prozess " + exitCode);
 			} else {
 				// System.out.println("ImageMagick -> " + exitCode);
 			}
-		    if (p != null && p.isAlive()) {
-		        p.destroy();
-		        try {
-		            if (!p.waitFor(1, TimeUnit.SECONDS)) {
-		                p.destroyForcibly();
-		            }
-		        } catch (InterruptedException e) {
-		            Thread.currentThread().interrupt();
-		            p.destroyForcibly();
-		        }
-		    }
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -257,44 +245,11 @@ public class ImageMagick {
 								Util.switchOnConsole();
 								// Kontrolle ob die Reports existieren
 								if (!reportId.exists()) {
-								    if (proc != null && proc.isAlive()) {
-								        proc.destroy();
-								        try {
-								            if (!proc.waitFor(1, TimeUnit.SECONDS)) {
-								                proc.destroyForcibly();
-								            }
-								        } catch (InterruptedException ep) {
-								            Thread.currentThread().interrupt();
-								            proc.destroyForcibly();
-								        }
-								    }
 									return "ERROR_XML_IMCMP_NOREPORT, " + reportId.getAbsolutePath();
 								}
 							} catch (Exception e) {
-							    if (proc != null && proc.isAlive()) {
-							        proc.destroy();
-							        try {
-							            if (!proc.waitFor(1, TimeUnit.SECONDS)) {
-							                proc.destroyForcibly();
-							            }
-							        } catch (InterruptedException ep) {
-							            Thread.currentThread().interrupt();
-							            proc.destroyForcibly();
-							        }
-							    }
 								return "ERROR_XML_IMCMP_SERVICEFAILED, " + e.getMessage();
 							}
-						    if (proc != null && proc.isAlive()) {
-						        proc.destroy();
-						        try {
-						            if (!proc.waitFor(1, TimeUnit.SECONDS)) {
-						                proc.destroyForcibly();
-						            }
-						        } catch (InterruptedException ep) {
-						            Thread.currentThread().interrupt();
-						            proc.destroyForcibly();
-						        }
-						    }
 
 							// Ende IMCMP direkt auszuloesen
 

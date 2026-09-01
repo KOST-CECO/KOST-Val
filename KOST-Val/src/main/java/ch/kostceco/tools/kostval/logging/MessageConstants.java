@@ -158,6 +158,7 @@ public interface MessageConstants {
 	String MESSAGE_XML_MODUL_Cz_SIP = "val.message.xml.modul.cz.sip";
 
 	String MESSAGE_XML_REPAIR_SIARD = "val.message.xml.repair.siard";
+	String MESSAGE_XML_REPAIR_GEN = "val.message.xml.repair.gen";
 
 	String MESSAGE_XML_MODUL_A_AZ = "val.message.xml.modul.a.az";
 	String ERROR_XML_A_AZ_INCORRECTFILE = "val.error.xml.a.az.incorrectfile";
@@ -589,4 +590,12 @@ public interface MessageConstants {
 	// Modul 3z Meldungen
 	String ERROR_XML_CZ_MISSING_METADATA = "val.error.xml.cz.missing.metadata";
 	String ERROR_XML_CZ_WRONG_VALUE = "val.error.xml.cz.wrong.value";
+	
+	// TODO
+	// ********Allg Reparatur-Meldungen*************************************************************************
+	String INFO_XML_Z_NOREP_NOREPEXE = "val.info.xml.z.norep.norepexe";
+	// bei PDF/A -> val.info.xml.z.norep.nooutput
+	String INFO_XML_Z_NOREP_ALLREADYEXISTS = "val.info.xml.z.norep.allreadyexists";
+	String INFO_XML_Z_REP_OK = "val.info.xml.z.rep.ok";
+
 }

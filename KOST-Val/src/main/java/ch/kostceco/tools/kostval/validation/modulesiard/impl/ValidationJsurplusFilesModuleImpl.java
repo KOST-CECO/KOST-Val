@@ -107,7 +107,7 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 			// alle Dateien in SIARD in die Map filesInSiard schreiben (Inhalt)
 			for (Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext();) {
 				String entryName = iterator.next();
-				// System.out.println( "entryName: " + entryName );
+				// System.out.println("entryName: " + entryName);
 				// entryName: content/schema1/table7/table7.xsd
 				if (!entryName.equalsIgnoreCase(contentString)) {
 					filesInSiardUnsorted.put(entryName, entryName);
@@ -255,7 +255,7 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 						String entryName = iterator.next();
 						File entryNameFile = new File(entryName);
 						String entryNameParent = entryNameFile.getParent();
-						// System.out.println( "gesucht: " + entryName );
+						// System.out.println("gesucht: " + entryName);
 						Set<String> tablesInSiardKeys = tablesInSiard.keySet();
 						for (Iterator<String> iteratorTables = tablesInSiardKeys.iterator(); iteratorTables
 								.hasNext();) {
@@ -296,29 +296,21 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 										dirOfJarPath);
 								if (!resultExec.equals("OK")) {
 									// Exception oder Report existiert nicht
-									if (min) {
-										return false;
-									} else {
-										if (resultExec.equals("NoReport")) {
-											// Report existiert nicht
-											Logtxt.logtxt(logFile,
-													getTextResourceService().getText(locale, MESSAGE_XML_MODUL_J_SIARD)
-															+ getTextResourceService().getText(locale,
-																	MESSAGE_XML_MISSING_REPORT));
-											return false;
-										} else {
-											// Exception
-											Logtxt.logtxt(logFile,
-													getTextResourceService().getText(locale, MESSAGE_XML_MODUL_J_SIARD)
-															+ getTextResourceService().getText(locale,
-																	ERROR_XML_SERVICEFAILED, "sed", resultExec));
-											return false;
-										}
-									}
+									// dennoch versuchen tableXml direkt auszulesen (ohne sed Bereinugung)
+									/*
+									 * if (min) { return false; } else { if (resultExec.equals("NoReport")) { //
+									 * Report existiert nicht Logtxt.logtxt(logFile,
+									 * getTextResourceService().getText(locale, MESSAGE_XML_MODUL_J_SIARD) +
+									 * getTextResourceService().getText(locale, MESSAGE_XML_MISSING_REPORT, "sed",
+									 * " ")); return false; } else { // Exception Logtxt.logtxt(logFile,
+									 * getTextResourceService().getText(locale, MESSAGE_XML_MODUL_J_SIARD) +
+									 * getTextResourceService().getText(locale, ERROR_XML_SERVICEFAILED, "sed",
+									 * resultExec)); return false; }
+									 */
+								} else {
+									tableXml = fSearchtableTemp;
 								}
 								// Ende Sed direkt auszuloesen
-
-								tableXml = fSearchtableTemp;
 							} else {
 								tableXml = fSearchtableTemp;
 							}

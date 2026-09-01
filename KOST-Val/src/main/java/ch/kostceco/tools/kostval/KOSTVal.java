@@ -254,26 +254,38 @@ public class KOSTVal implements MessageConstants {
 			 * SIARD: lob, ext, rows <siardrep> <siardlobrep> <siardlobextrep>
 			 * <siardrowsrep>
 			 */
-			boolean repair = false;
 			boolean repairPdfa = false;
-			boolean repairSiard = false;
 			String configRepPdfa = configMap.get("pdfarep");
 			String configRepPdfa2u = configMap.get("pdfa2urep");
+			if (configRepPdfa.contains("yes") && configRepPdfa2u.contains("yes")) {
+				System.out.println("repairPdfa = true;");
+				repairPdfa = true;
+			}
+
+			boolean repairSiard = false;
 			String configRepSiard = configMap.get("siardrep");
 			String configRepSiardLob = configMap.get("siardlobrep");
 			String configRepSiardExt = configMap.get("siardextrep");
 			String configRepSiardRows = configMap.get("siardrowsrep");
-			String initFolderPath = "";
-			if (configRepPdfa.contains("yes") && configRepPdfa2u.contains("yes")) {
-				repairPdfa = true;
-			}
-			if (configRepSiard.contains("yes") && (configRepSiardLob.contains("yes")
-					|| configRepSiardExt.contains("yes") || configRepSiardRows.contains("yes"))) {
+			if (configRepSiard.contains("yes") && (configRepSiardLob.contains("yes") || configRepSiardExt.contains("yes")
+					|| configRepSiardRows.contains("yes"))) {
 				repairSiard = true;
 			}
-			if (repairPdfa || repairSiard) {
+
+			boolean repairXls = false;
+			String configRepData = configMap.get("datarep");
+			String configRepDataXls = configMap.get("dataxlsrep");
+			if (configRepData.contains("yes") && configRepDataXls.contains("yes")) {
+				repairXls = true;
+			}
+
+			String initFolderPath = "";
+			boolean repair = false;
+			if (repairPdfa || repairSiard || repairXls) {
 				repair = true;
 			}
+
+			
 			/*
 			 * Aus LogFile Start herauslesen, damit bei Repair im OUTPUT einen
 			 * entsprechenden Ordner angelegt werden kann.
@@ -345,7 +357,7 @@ public class KOSTVal implements MessageConstants {
 				Controllervalfofile controller1 = (Controllervalfofile) context.getBean("controllervalfofile");
 				String valFile = controller1.valFoFile(valDatei, logFileName, directoryOfLogfile, verbose, dirOfJarPath,
 						configMap, context, locale, logFile, countToValidated, repair, initFolderPath,
-						fileToOutputStart, repairPdfa, repairSiard, true);
+						fileToOutputStart, repairPdfa, repairSiard, repairXls, true);
 
 				Logtxt.logtxt(logFile, "</Format>");
 

@@ -29,10 +29,14 @@ import ch.kostceco.tools.kosttools.util.Util;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 public class ConfigControllerOtherD {
+
+	@FXML
+	private CheckBox checkDataRep, checkXlsRep;
 
 	@FXML
 	private Button buttonConfigApply, buttonXls, buttonOds;
@@ -43,7 +47,7 @@ public class ConfigControllerOtherD {
 	private String dirOfJarPath, config;
 
 	@FXML
-	private Label labelOtherD, labelConfig;
+	private Label labelOtherD, labelConfig, labelRepD;
 
 	@FXML
 	void initialize() {
@@ -71,16 +75,27 @@ public class ConfigControllerOtherD {
 		// Sprache anhand configFile (HauptGui) setzten
 		try {
 			if (Util.stringInFileLine("kostval-conf-DE.xsl", configFile)) {
-				labelOtherD.setText("Einstellungen weitere Video-Formate");
+				labelOtherD.setText("Einstellungen weitere Daten-Formate");
+				labelRepD.setText("Reparatureinstellungen: Daten-Formate");
+				checkDataRep.setText(
+						"ich übernehme die Verantwortung für die Qualitätssicherung, Dokumentation und deren Weiterverwendung");
 				buttonConfigApply.setText("anwenden");
 			} else if (Util.stringInFileLine("kostval-conf-FR.xsl", configFile)) {
 				labelOtherD.setText("Paramètres pour d'autres formats de données");
+				labelRepD.setText("Paramètres de réparation: Daten-Formate");
+				checkDataRep.setText(
+						"j'assume la responsabilité de l'assurance qualité, de la documentation et de leur réutilisation");
 				buttonConfigApply.setText("appliquer");
 			} else if (Util.stringInFileLine("kostval-conf-IT.xsl", configFile)) {
 				labelOtherD.setText("Impostazioni di altri formati di dati");
+				labelRepD.setText("Parametro di riparazione: Daten-Formate");
+				checkDataRep.setText(
+						"Mi assumo la responsabilità della garanzia di qualità, della documentazione e del suo ulteriore utilizzo");
 				buttonConfigApply.setText("Applica");
 			} else {
 				labelOtherD.setText("Settings other data formats");
+				labelRepD.setText("Repair settings: Daten-Formate");
+				checkDataRep.setText("I take responsibility for quality assurance, documentation and its further use");
 				buttonConfigApply.setText("apply");
 			}
 		} catch (Exception e) {
@@ -95,6 +110,8 @@ public class ConfigControllerOtherD {
 			// <otherformats>WARC HTML DWG</otherformats>
 			String noOds = "<odsvalidation></odsvalidation>";
 			String noXls = "<xlsvalidation></xlsvalidation>";
+			String noDataRep = "<datarep>no </datarep>";
+			String noXlsRep = "<dataxlsrep>no </dataxlsrep>";
 
 			// TODO: bei Controllervalfofile ca Zeile 80 muss die Aenderung
 			// neue oder entfernte Formate nachgetragen werden. Damit das Format
@@ -113,6 +130,15 @@ public class ConfigControllerOtherD {
 			} else {
 				buttonXls.setText("(✓)");
 				buttonXls.setStyle("-fx-text-fill: Orange; -fx-background-color: WhiteSmoke");
+			}
+
+			if (config.contains(noDataRep)) {
+				checkDataRep.setSelected(false);
+				checkXlsRep.setDisable(true);
+			}
+
+			if (config.contains(noXlsRep)) {
+				checkXlsRep.setSelected(false);
 			}
 
 		} catch (IOException/* | ParserConfigurationException | SAXException */ e1) {
@@ -172,6 +198,48 @@ public class ConfigControllerOtherD {
 				Util.oldnewstring(az, no, configFile);
 				buttonXls.setText("✗");
 				buttonXls.setStyle("-fx-text-fill: Red; -fx-background-color: WhiteSmoke");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/*
+	 * checkDataRep aendert die Kontrolle ob Reparatur akzeptiert oder nicht in der
+	 * Konfiguration ein oder aus
+	 */
+	@FXML
+	void changeDataRep(ActionEvent event) {
+		// labelMessage.setText("");
+		String yes = "<datarep>yes </datarep>";
+		String no = "<datarep>no </datarep>";
+		try {
+			if (checkDataRep.isSelected()) {
+				Util.oldnewstring(no, yes, configFile);
+				checkXlsRep.setDisable(false);
+			} else {
+				Util.oldnewstring(yes, no, configFile);
+				checkXlsRep.setDisable(true);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/*
+	 * checkXlsRep aendert die Reparatur in xls nach xlsx in der Konfiguration ein
+	 * oder aus
+	 */
+	@FXML
+	void changeXlsRep(ActionEvent event) {
+		// labelMessage.setText("");
+		String yes = "<dataxlsrep>yes </dataxlsrep>";
+		String no = "<dataxlsrep>no </dataxlsrep>";
+		try {
+			if (checkXlsRep.isSelected()) {
+				Util.oldnewstring(no, yes, configFile);
+			} else {
+				Util.oldnewstring(yes, no, configFile);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

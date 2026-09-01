@@ -23,6 +23,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,9 +32,12 @@ import java.io.PrintStream;
 import java.io.StringWriter;
 import java.net.URL;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -51,6 +55,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import ch.kostceco.tools.kosttools.util.Hash;
 import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.controller.ControllerInit;
 import javafx.application.Platform;
@@ -99,11 +104,12 @@ public class GuiController {
 			buttonChange, buttonShowConfig, buttonPrint, buttonSave;
 
 	ObservableList<String> langList = FXCollections.observableArrayList("Deutsch", "Français", "Italiano", "English");
+	ObservableList<String> configList = FXCollections.observableArrayList("kostval.conf.xml", "KOST");
 	ObservableList<String> logTypeList = FXCollections.observableArrayList(" --xml (default)", " --min (valid/invalid)",
 			" --max (verbose)");
 
 	@FXML
-	private ChoiceBox<String> lang, logType;
+	private ChoiceBox<String> lang, logType, configChoice;
 
 	@FXML
 	private Label labelFileFolder, labelStart, labelConfig, label;
@@ -121,10 +127,11 @@ public class GuiController {
 
 	public WebEngine engine;
 
-	private File logFile, configFile = new File(System.getenv("USERPROFILE") + File.separator + ".kost-val_2x"
-			+ File.separator + "configuration" + File.separator + "kostval.conf.xml");
-	private File configFileSta = new File(System.getenv("USERPROFILE") + File.separator + ".kost-val_2x"
-			+ File.separator + "configuration" + File.separator + "STANDARD.kostval.conf.xml");
+	private File logFile, configDir = new File(
+			System.getenv("USERPROFILE") + File.separator + ".kost-val_2x" + File.separator + "configuration");
+	private File configFile = new File(configDir.getAbsolutePath() + File.separator + "kostval.conf.xml");
+	private File configFileSta = new File(configDir.getAbsolutePath() + File.separator + "STANDARD.kostval.conf.xml");
+	private File configFileKost = new File(configDir.getAbsolutePath() + File.separator + "KOST_kostval.conf.xml");
 
 	private String arg0, arg1, arg2, arg3 = "--xml";
 
@@ -214,6 +221,90 @@ public class GuiController {
 			dirOfJarPath = pathJarFile20.getAbsolutePath();
 			dirOfJarPath = dirOfJarPath.replaceAll("%20", " ");
 			pathJarFile20 = new File(dirOfJarPath);
+
+			// Kontrollieren ob die Konfiguration existiert und aktuell ist
+			String actVersion = "<configuration><!-- kostval.conf.xml_v" + versionKostVal;
+			File dirConfigJar = new File(dirOfJarPath + File.separator + "configuration");
+			if (configFile.exists()) {
+				if (Util.stringInFile(actVersion, configFile)) {
+					// keine Aktion
+				} else {
+					Util.deleteFile(configFile);
+					Util.copyFile(new File(dirConfigJar + File.separator + configFile.getName()), configFile);
+				}
+			} else {
+				Util.copyFile(new File(dirConfigJar + File.separator + configFile.getName()), configFile);
+			}
+			if (configFileSta.exists()) {
+				if (Util.stringInFile(actVersion, configFileSta)) {
+					// in Liste eintragen
+					configList.add("STANDARD");
+				} else {
+					Util.deleteFile(configFileSta);
+					Util.copyFile(new File(dirConfigJar + File.separator + configFileSta.getName()), configFileSta);
+					configList.add("STANDARD");
+				}
+			} else {
+				Util.copyFile(new File(dirConfigJar + File.separator + configFileSta.getName()), configFileSta);
+				configList.add("STANDARD");
+			}
+			if (configFileKost.exists()) {
+				if (Util.stringInFile(actVersion, configFileKost)) {
+					// keine Aktion
+				} else {
+					Util.deleteFile(configFileKost);
+					Util.copyFile(new File(dirConfigJar + File.separator + configFileKost.getName()), configFileKost);
+				}
+			} else {
+				Util.copyFile(new File(dirConfigJar + File.separator + configFileKost.getName()), configFileKost);
+			}
+
+			configChoice.setValue("kostval.conf.xml");
+
+			// Liste mit allen Dateien aus configDir mit der Endung "_kostval.conf.xml"
+			// erstellen
+			try {
+				Map<String, File> fileUnsortedMap = Util.getFileMapFile(configDir);
+				Map<String, File> fileMap = new TreeMap<String, File>(fileUnsortedMap);
+				Set<String> fileMapKeys = fileMap.keySet();
+				for (Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext();) {
+
+					String entryName = iterator.next();
+					File newFile = fileMap.get(entryName);
+					if (!newFile.isDirectory()) {
+						// Eintrag ist eine Datei
+						String newFileName = newFile.getName();
+						if (newFileName.endsWith("_kostval.conf.xml")) {
+							if (Util.stringInFile(actVersion, configFileKost)) {
+								// Aktuelle Version -> in Liste uebernehmen
+								String nameList = newFileName.replace("_kostval.conf.xml", "");
+								if (!configList.contains(nameList)) {
+									configList.add(nameList);
+								}
+
+								// wenn kostval.conf.xml mit einer gespeicherten Datei uebereinstimmt dann
+								// diese in die Liste als gewaehlt setzten
+								String configMd5=Hash.getMd5(configFile);
+								String fileMd5=Hash.getMd5(newFile);
+								if (configMd5.equals(fileMd5)) {
+									configChoice.setValue(nameList);
+								}
+							} else {
+								// alte Version -> .xml in .old umbenennen
+								String pathOld = newFile.getAbsolutePath().replace("_kostval.conf.xml",
+										"_kostval.conf.old");
+								newFile.renameTo(new File(pathOld));
+							}
+						}
+					}
+				}
+			} catch (Exception e) {
+				System.out.println("Exception: " + e.getMessage());
+			} catch (StackOverflowError eso) {
+				System.out.println("Exception: " + "StackOverflowError" + eso.getMessage());
+			} catch (OutOfMemoryError eoom) {
+				System.out.println("Exception: " + "OutOfMemoryError" + eoom.getMessage());
+			}
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
@@ -255,6 +346,11 @@ public class GuiController {
 					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-FR.xsl", configFileSta);
 					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-FR.xsl", configFileSta);
 				}
+				if (configFileKost.exists()) {
+					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-FR.xsl", configFileKost);
+					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-FR.xsl", configFileKost);
+					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-FR.xsl", configFileKost);
+				}
 			} else if (locale.toString().startsWith("it")) {
 				locale = new Locale("it");
 				arg2 = locale.toString();
@@ -282,6 +378,11 @@ public class GuiController {
 					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-IT.xsl", configFileSta);
 					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-IT.xsl", configFileSta);
 					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-IT.xsl", configFileSta);
+				}
+				if (configFileKost.exists()) {
+					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-IT.xsl", configFileKost);
+					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-IT.xsl", configFileKost);
+					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-IT.xsl", configFileKost);
 				}
 			} else if (locale.toString().startsWith("en")) {
 				locale = new Locale("en");
@@ -311,6 +412,11 @@ public class GuiController {
 					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-EN.xsl", configFileSta);
 					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-EN.xsl", configFileSta);
 				}
+				if (configFileKost.exists()) {
+					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-EN.xsl", configFileKost);
+					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-EN.xsl", configFileKost);
+					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-EN.xsl", configFileKost);
+				}
 			} else {
 				locale = new Locale("de");
 				arg2 = locale.toString();
@@ -339,6 +445,11 @@ public class GuiController {
 					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-DE.xsl", configFileSta);
 					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-DE.xsl", configFileSta);
 				}
+				if (configFileKost.exists()) {
+					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-DE.xsl", configFileKost);
+					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-DE.xsl", configFileKost);
+					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-DE.xsl", configFileKost);
+				}
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -357,6 +468,7 @@ public class GuiController {
 
 		lang.getItems().addAll(langList);
 		logType.getItems().addAll(logTypeList);
+		configChoice.getItems().addAll(configList);
 
 		/*
 		 * Kontrolle der wichtigsten Eigenschaften: Log-Verzeichnis, Arbeitsverzeichnis,
@@ -909,6 +1021,7 @@ public class GuiController {
 		fileFolder.setDisable(true);
 		lang.setDisable(true);
 		logType.setDisable(true);
+		configChoice.setDisable(true);
 
 		/*
 		 * hier die diversen args an main uebergeben
@@ -963,6 +1076,7 @@ public class GuiController {
 				fileFolder.setDisable(false);
 				lang.setDisable(false);
 				logType.setDisable(false);
+				configChoice.setDisable(false);
 
 				// kein Handler Problem
 				if (logFile.exists()) {
@@ -1008,6 +1122,7 @@ public class GuiController {
 				fileFolder.setDisable(false);
 				lang.setDisable(false);
 				logType.setDisable(false);
+				configChoice.setDisable(false);
 
 				/*
 				 * Dieser handler wird ausgefuehrt wenn die Validierung nicht korrekt abgelaufen
@@ -1097,6 +1212,7 @@ public class GuiController {
 		fileFolder.setDisable(true);
 		lang.setDisable(true);
 		logType.setDisable(true);
+		configChoice.setDisable(true);
 
 		/*
 		 * hier die diversen args an main uebergeben
@@ -1147,6 +1263,7 @@ public class GuiController {
 				fileFolder.setDisable(false);
 				lang.setDisable(false);
 				logType.setDisable(false);
+				configChoice.setDisable(false);
 
 				// kein Handler Problem
 				if (logFile.exists()) {
@@ -1189,6 +1306,7 @@ public class GuiController {
 				fileFolder.setDisable(false);
 				lang.setDisable(false);
 				logType.setDisable(false);
+				configChoice.setDisable(false);
 
 				/*
 				 * Dieser handler wird ausgefuehrt wenn die Validierung nicht korrekt abgelaufen
@@ -1248,6 +1366,7 @@ public class GuiController {
 		fileFolder.setDisable(true);
 		lang.setDisable(true);
 		logType.setDisable(true);
+		configChoice.setDisable(true);
 
 		/*
 		 * hier die diversen args an main uebergeben
@@ -1298,6 +1417,7 @@ public class GuiController {
 				fileFolder.setDisable(false);
 				lang.setDisable(false);
 				logType.setDisable(false);
+				configChoice.setDisable(false);
 
 				// kein Handler Problem
 				if (logFile.exists()) {
@@ -1340,6 +1460,7 @@ public class GuiController {
 				fileFolder.setDisable(false);
 				lang.setDisable(false);
 				logType.setDisable(false);
+				configChoice.setDisable(false);
 
 				/*
 				 * Dieser handler wird ausgefuehrt wenn die Validierung nicht korrekt abgelaufen
@@ -1597,6 +1718,34 @@ public class GuiController {
 		}
 	}
 
+	// Mit changeConfigChoice wird die Config umgestellt
+	@FXML
+	void changeConfigChoice(ActionEvent event) {
+		console.setText(" \n");// loest keine Veraenderung im listener aus
+		console.appendText(""); // jetzt gibt es eine Veraenderung
+		String selConfig = configChoice.getValue();
+		String configName = "kostval.conf.xml";
+		if (selConfig.equals(configName)) {
+			// keine Veraenderung
+		} else if (selConfig.equals("STANDARD")) {
+			try {
+				Util.copyFile(new File(configDir + File.separator + selConfig + "." + configName), configFile);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			try {
+				Util.copyFile(new File(configDir + File.separator + selConfig + "_" + configName), configFile);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	// Mit changeLang wird die Sprache umgestellt
 	@FXML
 	void changeLang(ActionEvent event) {
@@ -1629,6 +1778,11 @@ public class GuiController {
 					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-DE.xsl", configFileSta);
 					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-DE.xsl", configFileSta);
 				}
+				if (configFileKost.exists()) {
+					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-DE.xsl", configFileKost);
+					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-DE.xsl", configFileKost);
+					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-DE.xsl", configFileKost);
+				}
 				locale = new Locale("de");
 			} else if (selLang.equals("English")) {
 				buttonFormat.setText("Format only");
@@ -1654,6 +1808,11 @@ public class GuiController {
 					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-EN.xsl", configFileSta);
 					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-EN.xsl", configFileSta);
 					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-EN.xsl", configFileSta);
+				}
+				if (configFileKost.exists()) {
+					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-EN.xsl", configFileKost);
+					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-EN.xsl", configFileKost);
+					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-EN.xsl", configFileKost);
 				}
 				locale = new Locale("en");
 			} else if (selLang.equals("Italiano")) {
@@ -1681,6 +1840,11 @@ public class GuiController {
 					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-IT.xsl", configFileSta);
 					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-IT.xsl", configFileSta);
 				}
+				if (configFileKost.exists()) {
+					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-IT.xsl", configFileKost);
+					Util.oldnewstring("kostval-conf-FR.xsl", "kostval-conf-IT.xsl", configFileKost);
+					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-IT.xsl", configFileKost);
+				}
 				locale = new Locale("it");
 			} else {
 				buttonFormat.setText("Format uniquement");
@@ -1706,6 +1870,11 @@ public class GuiController {
 					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-FR.xsl", configFileSta);
 					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-FR.xsl", configFileSta);
 					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-FR.xsl", configFileSta);
+				}
+				if (configFileKost.exists()) {
+					Util.oldnewstring("kostval-conf-DE.xsl", "kostval-conf-FR.xsl", configFileKost);
+					Util.oldnewstring("kostval-conf-IT.xsl", "kostval-conf-FR.xsl", configFileKost);
+					Util.oldnewstring("kostval-conf-EN.xsl", "kostval-conf-FR.xsl", configFileKost);
 				}
 				locale = new Locale("fr");
 			}

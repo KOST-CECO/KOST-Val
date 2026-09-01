@@ -772,6 +772,16 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 			}
 			configMap.put("xlsxValidation", xlsxvalidation);
 
+			// <datarep>no </datarep> <!--no / yes -->
+			String datarep = doc.getElementsByTagName("datarep").item(0).getTextContent().replace(" ", "");
+			configMap.put("datarep", datarep);
+
+			// <dataxlsrep>no </dataxlsrep> <!--no / yes -->
+			String dataxlsrep = doc.getElementsByTagName("dataxlsrep").item(0).getTextContent().replace(" ", "");
+			configMap.put("dataxlsrep", dataxlsrep);
+
+			// TODO Weitere
+
 			// otherformats
 			// Gibt eine Liste mit den PUIDs aus, welche auch akzeptiert sind.
 			String otherformats = doc.getElementsByTagName("otherformats").item(0).getTextContent();

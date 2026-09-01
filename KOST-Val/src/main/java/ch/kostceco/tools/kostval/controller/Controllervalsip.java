@@ -390,7 +390,7 @@ public class Controllervalsip implements MessageConstants {
 						Controllervalfofile controller1 = (Controllervalfofile) context.getBean("controllervalfofile");
 						String valFile = controller1.valFoFile(valDatei, logFileName, directoryOfLogfile, verbose,
 								dirOfJarPath, configMap, context, locale, logFile, countToValidated, repair,
-								initFolderPath, fileToOutputStart, false, false, false);
+								initFolderPath, fileToOutputStart, false, false, false, false);
 						if (valFile.equals("countValid")) {
 							countValid = countValid + 1;
 						} else if (valFile.equals("countNotaz")) {
