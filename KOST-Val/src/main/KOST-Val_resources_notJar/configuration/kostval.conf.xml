@@ -154,6 +154,8 @@
 	<xlsx>
 		<xlsxvalidation>(&#x2713;)</xlsxvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
 	</xlsx>
+	<datarep>no </datarep>
+	<dataxlsrep>no </dataxlsrep>
 <!-- SIP -->
 	<sip>
 		<ech0160validation>&#x2713;</ech0160validation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->

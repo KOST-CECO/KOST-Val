@@ -18,6 +18,7 @@ package ch.kostceco.tools.kosttools.fileservice;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import ch.kostceco.tools.kosttools.util.Util;
 
@@ -71,7 +72,7 @@ public class droid {
 
 		pb.redirectErrorStream(true);
 
-		Process process;
+		Process process= null;
 		try {
 			process = pb.start();
 
@@ -94,6 +95,17 @@ public class droid {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	    if (process != null && process.isAlive()) {
+	    	process.destroy();
+	        try {
+	            if (!process.waitFor(1, TimeUnit.SECONDS)) {
+	            	process.destroyForcibly();
+	            }
+	        } catch (InterruptedException ep) {
+	            Thread.currentThread().interrupt();
+	            process.destroyForcibly();
+	        }
+	    }
 
 		if (reportDroid.exists()) {
 			reportDroid.delete();

@@ -68,7 +68,7 @@ public class Controllervalfofile implements MessageConstants {
 	public String valFoFile(File valDatei, String logFileName, File directoryOfLogfile, boolean verbose,
 			String dirOfJarPath, Map<String, String> configMap, ApplicationContext context, Locale locale, File logFile,
 			int countToValidated, Boolean repair, String initFolderPath, File fileToOutputStart, boolean repairPdfa,
-			boolean repairSiard, boolean isFile) throws IOException {
+			boolean repairSiard, boolean repairXls, boolean isFile) throws IOException {
 		String onWork = configMap.get("ShowProgressOnWork");
 		if (onWork.equals("nomin")) {
 			min = true;
@@ -98,7 +98,11 @@ public class Controllervalfofile implements MessageConstants {
 		 * 
 		 * Spaeter ggf nch repairSiard ins PREMIS nehmen
 		 */
-		repair = repairPdfa;
+		if (repairPdfa || repairXls) {
+			repair = true;
+		} else {
+			repair = false;
+		}
 
 		if (repair) {
 			if (Util.stringInFile("<InfoNoRepairInvalid>", logFile)) {
@@ -279,6 +283,7 @@ public class Controllervalfofile implements MessageConstants {
 					File copyValDatei = new File(
 							valDateiPath.replace(initFolderPath, fileToOutputStart.getAbsolutePath()));
 					copyValStr = copyValDatei.getAbsolutePath();
+					copyValStr = copyValStr.replace(valDatei.getName(), "\\"+valDatei.getName());
 
 					forLastModified = "";
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -1122,6 +1127,8 @@ public class Controllervalfofile implements MessageConstants {
 								recMsg = "notAZ";
 							}
 						}
+
+						// TODO Daten
 					} else if (recFormat.equals("XML")) {
 						intro = countToValidated + " " + "XML:   " + valDatei.getAbsolutePath() + " ";
 						if (repair) {
@@ -1309,30 +1316,148 @@ public class Controllervalfofile implements MessageConstants {
 						}
 					} else {
 						// TODO Kontrolle weitere Formate
-						if (repair) {
-							/*
-							 * Reparatur eingeschaltet. Entsprechend werden alle Dateien, welche keine
-							 * Reparaturfunktion haben direkt kopiert (1).
-							 * 
-							 * [inv_notaz] valid / accepted / invalid / not accepted
-							 */
-							Util.oldnewstring(tempO, newText1o, premisOut);
-							Util.oldnewstring(tempE, newText1e, premisOut);
-						}
 
-						intro = countToValidated + " " + recFormat + ":  " + valDatei.getAbsolutePath() + " ";
+						// unterscheiden zwischen mit und ohne Reparatur
+						if (recFormat.equals("XLS")) {
+							// System.out.println("xls erkannt");
+							Logtxt.logtxt(logFile, "<Validation>" + hash
+									+ getTextResourceService().getText(locale, MESSAGE_XML_AZTYPE, " " + recFormat)
+									+ valDateiXml);
+							// Kontrollieren ob repairXls true
+							if (repair && !repairXls) {
+								/*
+								 * Reparatur eingeschaltet aber nicht XLS. Entsprechend werden alle Dateien,
+								 * welche keine Reparaturfunktion haben direkt kopiert (1).
+								 * 
+								 * [inv_notaz] valid / accepted / invalid / not accepted
+								 */
+								Util.oldnewstring(tempO, newText1o, premisOut);
+								Util.oldnewstring(tempE, newText1e, premisOut);
+							} else if (repair && repairXls) {
+								/*
+								 * XLS Reparatur eingeschaltet. Entsprechend werden alle XLS nach XLSX migriert.
+								 * 
+								 * Wenn XLSX welche keine Reparaturfunktion haben direkt kopiert (1).
+								 * 
+								 * [inv_notaz] valid / accepted / invalid / not accepted
+								 */
 
-						Logtxt.logtxt(logFile,
-								"<Validation>" + hash
-										+ getTextResourceService().getText(locale, MESSAGE_XML_AZTYPE, " " + recFormat)
-										+ valDateiXml);
-						if (otherformats.contains(recFormat)) {
-							// nur akzeptiert -> KEINE Validierung, nur
-							// Erkennung
-							recMsg = "AZ";
+								 // System.out.println("xls erkannt - repairXls");
+								
+								// NICHT akzeptiert -> invalid
+								// System.out.println(" nicht akzeptiertes XLS. Nach XLSX reparieren");
+								Controllerrepxls controller3 = (Controllerrepxls) context.getBean("controllerrepxls");
+								boolean ok = false;
+								// System.out.println(" Start executeOptional = repair");
+								ok = controller3.executeOptional(valDatei, directoryOfLogfile, configMap, locale,
+										logFile, dirOfJarPath, fileToOutputStart);
+
+								if (ok) {
+									// wenn RepairXls und ok dann [2]
+									Util.oldnewstring(tempO, newText2o, premisOut);
+									Util.oldnewstring(tempE, newText2e, premisOut);
+
+									Util.oldnewstring("[formatNameMig]", "XLSX", premisOut);
+									Util.oldnewstring("XLSX file is valid.", "XLSX file exists.", premisOut);
+
+									copyValStr=copyValStr.replace(".xls",".xlsx");
+
+									SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+									// 2025-09-30T14:28:27
+									/*
+									 * copyValStr = valDatei.getAbsolutePath().replace(initFolderPath,
+									 * fileToOutputStart.getAbsolutePath());
+									 */
+									File copyValDatei = new File(copyValStr);
+									forRepair = sdf.format(copyValDatei.lastModified());
+
+									md5StrMig = Hash.getMd5(copyValDatei);
+									lengthMig = copyValDatei.length() + "";
+								} else {
+									// wenn RepairXls und !ok dann [3]
+									Util.oldnewstring(tempO, newText3o, premisOut);
+									Util.oldnewstring(tempE, newText3e, premisOut);
+									
+									Util.oldnewstring("[formatNameMig]", "XLSX", premisOut);
+								}
+							}
+
+							intro = countToValidated + " " + recFormat + ":  " + valDatei.getAbsolutePath() + " ";
+
+							/*Logtxt.logtxt(logFile, "<Validation>" + hash
+									+ getTextResourceService().getText(locale, MESSAGE_XML_AZTYPE, " " + recFormat)
+									+ valDateiXml);*/
+							if (otherformats.contains(recFormat)) {
+								// nur akzeptiert -> KEINE Validierung, nur
+								// Erkennung
+								recMsg = "AZ";
+							} else {
+								// NICHT akzeptiert -> invalid
+								recMsg = "notAZ";
+								// System.out.println("xls erkannt");
+								/*
+								 * if (recFormat.equals("XLS") && repairXls) { //
+								 * System.out.println("xls erkannt - repairXls"); // Platzhalter fuer Repair
+								 * Resultat einfuegen Logtxt.logtxt(logFile, "<ErrorZrepPdfa></ErrorZrepPdfa>");
+								 * 
+								 * // NICHT akzeptiert -> invalid //
+								 * System.out.println(" nicht akzeptiertes XLS. Nach XLSX reparieren");
+								 * Controllerrepxls controller3 = (Controllerrepxls)
+								 * context.getBean("controllerrepxls"); boolean ok = false; //
+								 * System.out.println(" Start executeOptional = repair"); ok =
+								 * controller3.executeOptional(valDatei, directoryOfLogfile, configMap, locale,
+								 * logFile, dirOfJarPath, fileToOutputStart);
+								 * 
+								 * if (ok) { // wenn RepairXls und ok dann [2] Util.oldnewstring(tempO,
+								 * newText2o, premisOut); Util.oldnewstring(tempE, newText2e, premisOut);
+								 * SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"); //
+								 * 2025-09-30T14:28:27 /* copyValStr =
+								 * valDatei.getAbsolutePath().replace(initFolderPath,
+								 * fileToOutputStart.getAbsolutePath());
+								 */
+								/*
+								 * File copyValDatei = new File(copyValStr); forRepair =
+								 * sdf.format(copyValDatei.lastModified());
+								 * 
+								 * md5StrMig = Hash.getMd5(copyValDatei); lengthMig = copyValDatei.length() +
+								 * ""; } else { // wenn RepairXls und !ok dann [3] Util.oldnewstring(tempO,
+								 * newText3o, premisOut); Util.oldnewstring(tempE, newText3e, premisOut); } }
+								 * else { /* Reparatur eingeschaltet aber nicht XLS-Reparatur. Entsprechend
+								 * werden alle Dateien direkt kopiert (1).
+								 * 
+								 * [inv_notaz] invalid
+								 */
+								/*
+								 * Util.oldnewstring(tempO, newText1o, premisOut); Util.oldnewstring(tempE,
+								 * newText1e, premisOut); }
+								 */
+							}
 						} else {
-							// NICHT akzeptiert -> invalid
-							recMsg = "notAZ";
+							// weitere Formate & keine Reparatur
+							if (repair) {
+								/*
+								 * Reparatur eingeschaltet. Entsprechend werden alle Dateien, welche keine
+								 * Reparaturfunktion haben direkt kopiert (1).
+								 * 
+								 * [inv_notaz] valid / accepted / invalid / not accepted
+								 */
+								Util.oldnewstring(tempO, newText1o, premisOut);
+								Util.oldnewstring(tempE, newText1e, premisOut);
+							}
+
+							intro = countToValidated + " " + recFormat + ":  " + valDatei.getAbsolutePath() + " ";
+
+							Logtxt.logtxt(logFile, "<Validation>" + hash
+									+ getTextResourceService().getText(locale, MESSAGE_XML_AZTYPE, " " + recFormat)
+									+ valDateiXml);
+							if (otherformats.contains(recFormat)) {
+								// nur akzeptiert -> KEINE Validierung, nur
+								// Erkennung
+								recMsg = "AZ";
+							} else {
+								// NICHT akzeptiert -> invalid
+								recMsg = "notAZ";
+							}
 						}
 					}
 					if (repair) {
@@ -1354,6 +1479,7 @@ public class Controllervalfofile implements MessageConstants {
 						} else {
 							Util.oldnewstring("[inv_notaz]", "not accepted", premisOut);
 						}
+						copyValStr = copyValStr.replace("\\\\", "\\");
 
 						Util.oldnewstring("[yyyymmdd]", date, premisOut);
 						Util.oldnewstring("[HHmmss]", time, premisOut);
@@ -1503,7 +1629,8 @@ public class Controllervalfofile implements MessageConstants {
 				File signatureTmpPre = new File(
 						workDirPre.getAbsolutePath() + File.separator + "veraPDF_signatureTmp.xml");
 				String execVerapdfSigPre = verapdf.execVerapdfSig(valDatei, workDirPre, signatureTmpPre, locale);
-				// System.out.println("Metadaten Signaturen verapdf: " + execVerapdfSigPre);
+				// System.out.println("Metadaten Signaturen verapdf: '" +
+				// execVerapdfSigPre+"'");
 
 				if (countSig == 998) {
 					// 998 = Fehler: Exception oder Report

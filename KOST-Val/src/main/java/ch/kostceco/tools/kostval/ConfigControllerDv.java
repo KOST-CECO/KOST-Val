@@ -66,7 +66,7 @@ public class ConfigControllerDv {
 
 	ObservableList<String> sizeInstitutList = FXCollections.observableArrayList("", "Staatsarchiv Aargau",
 			"Staatsarchiv Basel-Landschaft", "Staatsarchiv Basel-Stadt", "Staatsarchiv Bern", "Staatsarchiv Graubuenden", "Staatsarchiv Luzern",
-			"Staatsarchiv St. Gallen", "Staatsarchiv Thurgau", "Stadtarchiv Bern", "Stadtarchiv Luzern",
+			"Staatsarchiv St. Gallen", "Staatsarchiv Schaffhausen", "Staatsarchiv Thurgau", "Stadtarchiv Bern", "Stadtarchiv Luzern",
 			"Stadtarchiv St. Gallen", "Burgerbibliothek Bern");
 
 	@FXML

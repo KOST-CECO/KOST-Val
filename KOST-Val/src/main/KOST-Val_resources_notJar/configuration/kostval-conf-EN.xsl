@@ -397,6 +397,23 @@
 						</td>
 					</tr>
 
+					<tr class="captioninfo">
+						<td>Data Repair </td>
+						<td> </td>
+					</tr>
+					<tr class="captioninfom">
+						<td>Creating Additional Copies of Repaired Data [no]:</td>
+						<td>
+							<xsl:value-of select="configuration/datarep" />
+						</td>
+					</tr>
+					<tr class="captioninfom">
+						<td>- Migrating from XLS to XLSX [no]:</td>
+						<td>
+							<xsl:value-of select="configuration/dataxlsrep" />
+						</td>
+					</tr>
+
 					<!-- SIP -->
 					<tr class="captioninfo">
 						<td>SIP: Validation [&#x2713;]:</td>

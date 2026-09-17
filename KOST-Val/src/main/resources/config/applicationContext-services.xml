@@ -277,6 +277,10 @@
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 	</bean>
+	
+	<bean id="xls"
+		class="ch.kostceco.tools.kosttools.repair.xls">
+	</bean>
 
 	<bean id="kostval" class="ch.kostceco.tools.kostval.KOSTVal">
 		<property name="textResourceService" ref="textResourceService" />
@@ -387,6 +391,13 @@
 			ref="validationAinitialisationModule" />
 		<property name="validationArepPdfaModule"
 			ref="validationArepPdfaModule" />
+	</bean>
+
+	<bean id="controllerrepxls"
+		class="ch.kostceco.tools.kostval.controller.Controllerrepxls">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="xls"
+			ref="xls" />
 	</bean>
 
 	<bean id="controllerjp2"

@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+// import java.util.concurrent.TimeUnit;
 
 /** @author Rc Claire Roethlisberger, KOST-CECO */
 
@@ -51,6 +52,19 @@ public class Cmd {
 		} catch (IOException ex) {
 			System.out.println("IOException exec P: " + ex);
 		}
+		/* if (p != null && p.isAlive()) {
+			p.destroy();
+			/*
+			 * destroyForcibly(); macht unter anderem, dass egovdv nicht mehr funktioniert!
+			 * 
+			 * Nicht generell einsetzten...
+			 * 
+			 * try { if (!p.waitFor(1, TimeUnit.SECONDS)) { p.destroyForcibly(); } } catch
+			 * (InterruptedException ep) { Thread.currentThread().interrupt();
+			 * p.destroyForcibly(); }
+			 
+		}*/
+
 		String line = "";
 		String lineE = "";
 		String lineReturn = line;
@@ -60,7 +74,7 @@ public class Cmd {
 				InputStream stream = p.getInputStream();
 				BufferedReader in = new BufferedReader(new InputStreamReader(stream));
 				while ((line = in.readLine()) != null) {
-					System.out.println(line);
+					// System.out.println(line);
 					if (lineReturn.equals("")) {
 						lineReturn = line;
 					} else {
@@ -117,6 +131,19 @@ public class Cmd {
 		} catch (IOException ex) {
 			System.out.println("IOException exec P: " + ex);
 		}
+		/* if (p != null && p.isAlive()) {
+			p.destroy();
+			/*
+			 * destroyForcibly(); macht unter anderem, dass egovdv nicht mehr funktioniert!
+			 * 
+			 * Nicht generell einsetzten...
+			 * 
+			 * try { if (!p.waitFor(1, TimeUnit.SECONDS)) { p.destroyForcibly(); } } catch
+			 * (InterruptedException ep) { Thread.currentThread().interrupt();
+			 * p.destroyForcibly(); }
+			 *
+		}*/
+
 		String line = "";
 		String lineE = "";
 		String lineReturn = line;
@@ -184,6 +211,19 @@ public class Cmd {
 		} catch (IOException ex) {
 			System.out.println("IOException exec P: " + ex);
 		}
+		/* if (p != null && p.isAlive()) {
+			p.destroy();
+			/*
+			 * destroyForcibly(); macht unter anderem, dass egovdv nicht mehr funktioniert!
+			 * 
+			 * Nicht generell einsetzten...
+			 * 
+			 * try { if (!p.waitFor(1, TimeUnit.SECONDS)) { p.destroyForcibly(); } } catch
+			 * (InterruptedException ep) { Thread.currentThread().interrupt();
+			 * p.destroyForcibly(); }
+			 *
+		}*/
+
 		String line1 = "";
 		String line2 = "";
 		String lineE = "";
