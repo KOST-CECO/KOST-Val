@@ -610,6 +610,7 @@ public class Util {
 			String cPT = UtilPages.getPagesFinal();
 			newtext = newtext.replace(" >72000 ", " " + cPT + " ");
 			// sonstige Bereinigungen
+			newtext = newtext.replace("<Message>", "</Message><Message>"); 
 			newtext = newtext.replace("<Message>3c</Message></Error>", string3c);
 			newtext = newtext.replace("&", "&amp;");
 			newtext = newtext.replace("<http", "&lt;http");
@@ -634,6 +635,11 @@ public class Util {
 			newtext = newtext.replace("\r\n\r\n", "\r\n");
 			newtext = newtext.replace("&amp;gt;", "&gt;");
 			newtext = newtext.replace("&amp;lt;", "&lt;");
+			newtext = newtext.replace("</Message></Message>", "</Message>"); 
+			newtext = newtext.replace("</Message>      </Message>", "</Message>"); 
+			newtext = newtext.replace("</Modul> ", "</Modul>"); 
+			newtext = newtext.replace("</Modul></Message>", "</Modul>"); 
+			newtext = newtext.replace("</Modul> </Message>", "</Modul>"); 
 
 			newtext = Util.umlaute(newtext);
 			newtext = newtext.replace((char) 0, (char) 32);

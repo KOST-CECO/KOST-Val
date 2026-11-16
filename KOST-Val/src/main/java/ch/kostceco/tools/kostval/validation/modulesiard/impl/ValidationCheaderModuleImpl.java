@@ -32,6 +32,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -1080,60 +1081,136 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 						repairSiard = doRepairSiard(valDatei, directoryOfLogfile, configMap, locale, logFile,
 								dirOfJarPath, cRecTot, emptyRows);
 
-						if (cRecInLine > 0) {
-							String siardPath = repairSiard.replace(".zip", ".siard");
+						// TODO hier wenn etwas repariert von OUTPUT nach OUTPUT/Datum verschieben und
+						// PREMIS-XML schreiben
 
+						// String initFolderPath, File fileToOutputStart
+
+						File fileToOutputStartParent = fileToOutputStart.getParentFile();
+						// File premisOut = new File(fileToOutputStartParent.getAbsolutePath() +
+						// File.separator + "PREMIS.xml");
+						File premisOut = new File(fileToOutputStart.getAbsolutePath() + File.separator + "PREMIS.xml");
+
+						File premis0 = new File(dirOfJarPath + File.separator + "resources" + File.separator + "PREMIS"
+								+ File.separator + "premis_0_init_Agent.xml");
+						File premis1e = new File(dirOfJarPath + File.separator + "resources" + File.separator + "PREMIS"
+								+ File.separator + "premis_1_Event_valid_noRepaire.xml");
+						File premis1o = new File(dirOfJarPath + File.separator + "resources" + File.separator + "PREMIS"
+								+ File.separator + "premis_1_Object_valid_noRep.xml");
+						File premis2e = new File(dirOfJarPath + File.separator + "resources" + File.separator + "PREMIS"
+								+ File.separator + "premis_2_Event_posRepair_sucessRepair.xml");
+						File premis2o = new File(dirOfJarPath + File.separator + "resources" + File.separator + "PREMIS"
+								+ File.separator + "premis_2_Object_posRepair_sucessRepair.xml");
+						File premis3e = new File(dirOfJarPath + File.separator + "resources" + File.separator + "PREMIS"
+								+ File.separator + "premis_3_Event_posRepair_invalidRepair.xml");
+						File premis3o = new File(dirOfJarPath + File.separator + "resources" + File.separator + "PREMIS"
+								+ File.separator + "premis_3_Object_posRepair_invalidRepair.xml");
+
+						// 1 = no repair / valid
+						String newText1o = Util.getStringFromFile(premis1o);
+						String newText1e = Util.getStringFromFile(premis1e);
+						// 2 = invalid + success repair
+						String newText2o = Util.getStringFromFile(premis2o);
+						String newText2e = Util.getStringFromFile(premis2e);
+						// 3 = invalid + repair failed
+						String newText3o = Util.getStringFromFile(premis3o);
+						String newText3e = Util.getStringFromFile(premis3e);
+
+						String tempO = "<!-- ToDo Object -->";
+						String tempE = "<!-- ToDo Event -->";
+
+						String date = "", time = "", size = "", copyValStr = "", formatName = "", formatNameMig = "",
+								forLastModified = "", forRepair = "", startVal = "", institution = "", md5StrMig = "",
+								lengthMig = "";
+
+						if (cRecInLine > 0 || cExt > 0 || emptyRows) {
+							String siardPath = repairSiard.replace(".zip", ".siard");
 							File zipFile = new File(repairSiard);
 							File siardFile = new File(siardPath);
 							if (zipFile.exists()) {
 								Util.deleteFile(zipFile);
 							}
-							if (siardFile.exists()) {
-								Logtxt.logtxt(logFile,
-										getTextResourceService().getText(locale, MESSAGE_XML_REPAIR_SIARD)
-												+ getTextResourceService().getText(locale, MESSAGE_XML_REP_LOB,
-														valDatei, cRecTot, cRecInLine, siardFile.getAbsolutePath()));
+							
+							if (initFolderPath != null && !initFolderPath.isEmpty()) {
+								char lastChar = initFolderPath.charAt(initFolderPath.length() - 1);
+								String lastStr = lastChar + "";
+								if (lastStr.equals("/") || lastStr.equals("\\")) {
+									if (initFolderPath != null && initFolderPath.length() > 0) {
+										initFolderPath = initFolderPath.substring(0, initFolderPath.length() - 1);
+									}
+								}
 							}
-						}
-						if (cExt > 0) {
-							String siardPath = repairSiard.replace(".zip", ".siard");
+							String valDateiPath = valDatei.getAbsolutePath();
+							File newOutFile = new File(
+									valDateiPath.replace(initFolderPath, fileToOutputStart.getAbsolutePath()));
+							if (newOutFile.exists()) {
+								Util.deleteFile(newOutFile);
+							}
+							Util.copyFile(siardFile, newOutFile);
+							if (siardFile.exists()) {
+								Util.deleteFile(siardFile);
+							}
+							siardFile=newOutFile;
 
-							File zipFile = new File(repairSiard);
-							File siardFile = new File(siardPath);
-							if (zipFile.exists()) {
-								Util.deleteFile(zipFile);
-							}
-							if (siardFile.exists()) {
-								// <Message>{0} LOB-Dateiendungen konnten korrigiert
-								// werden.</Message><Message>Speicherort der reparierten SIARD-Kopie: {1}
-								// </Message><Message>-> reparierte SIARD-Datei durch das Archiv kontrollieren,
-								// revalidieren und falls gewuenscht
-								// weiterverwenden.</Message></Error><Warning>warning</Warning>
-								Logtxt.logtxt(logFile,
-										getTextResourceService().getText(locale, MESSAGE_XML_REPAIR_SIARD)
-												+ getTextResourceService().getText(locale, MESSAGE_XML_REP_LOBEXT, cExt,
-														siardFile.getAbsolutePath()));
-							}
-						}
-						if (emptyRows) {
-							String siardPath = repairSiard.replace(".zip", ".siard");
+							// Repair ok dann [2]
+							Util.oldnewstring(tempO, newText2o, premisOut);
+							Util.oldnewstring(tempE, newText2e, premisOut);
 
-							File zipFile = new File(repairSiard);
-							File siardFile = new File(siardPath);
-							if (zipFile.exists()) {
-								Util.deleteFile(zipFile);
-							}
-							if (siardFile.exists()) {
+							Util.oldnewstring("[formatNameMig]", "SIARD", premisOut);
+							Util.oldnewstring("SIARD file is valid.", "repaired SIARD file exists.", premisOut);
+
+							SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+							// 2025-09-30T14:28:27
+							/*
+							 * copyValStr = valDatei.getAbsolutePath().replace(initFolderPath,
+							 * fileToOutputStart.getAbsolutePath());
+							 */
+							forRepair = sdf.format(siardFile.lastModified());
+
+							md5StrMig = Hash.getMd5(siardFile);
+							lengthMig = siardFile.length() + "";
+
+							if (cRecInLine > 0) {
 								if (siardFile.exists()) {
 									Logtxt.logtxt(logFile,
 											getTextResourceService().getText(locale, MESSAGE_XML_REPAIR_SIARD)
-													+ getTextResourceService().getText(locale, MESSAGE_XML_REP_ROWS,
-															valDatei, cEmptyRows, siardFile.getAbsolutePath()));
+													+ getTextResourceService().getText(locale, MESSAGE_XML_REP_LOB,
+															valDatei, cRecTot, cRecInLine,
+															siardFile.getAbsolutePath()));
 								}
 							}
+							if (cExt > 0) {
+								if (siardFile.exists()) {
+									// <Message>{0} LOB-Dateiendungen konnten korrigiert
+									// werden.</Message><Message>Speicherort der reparierten SIARD-Kopie: {1}
+									// </Message><Message>-> reparierte SIARD-Datei durch das Archiv kontrollieren,
+									// revalidieren und falls gewuenscht
+									// weiterverwenden.</Message></Error><Warning>warning</Warning>
+									Logtxt.logtxt(logFile,
+											getTextResourceService().getText(locale, MESSAGE_XML_REPAIR_SIARD)
+													+ getTextResourceService().getText(locale, MESSAGE_XML_REP_LOBEXT,
+															cExt, siardFile.getAbsolutePath()));
+								}
+							}
+							if (emptyRows) {
+								if (siardFile.exists()) {
+									if (siardFile.exists()) {
+										Logtxt.logtxt(logFile,
+												getTextResourceService().getText(locale, MESSAGE_XML_REPAIR_SIARD)
+														+ getTextResourceService().getText(locale, MESSAGE_XML_REP_ROWS,
+																valDatei, cEmptyRows, siardFile.getAbsolutePath()));
+									}
+								}
+							}
+						} else {
+							// Repair !ok dann [3]
+							Util.oldnewstring(tempO, newText3o, premisOut);
+							Util.oldnewstring(tempE, newText3e, premisOut);
+
+							Util.oldnewstring("[formatNameMig]", "SIARD", premisOut);
 						}
 					}
-				} catch (IOException e) {
+				} catch (IOException | InterruptedException e) {
 					e.printStackTrace();
 				}
 			}

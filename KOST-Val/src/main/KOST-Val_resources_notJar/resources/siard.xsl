@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <!--
 === SiardMetaToXhtml.xsl ===============================================
-alte metadata.xsl erneuert
+allg. Darstellung von metadata.xsl (SIARD)
+inkl. Primär- und Fremschlüssel
 ========================================================================
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:siard="http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" xmlns:html="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml" exclude-result-prefixes="html" version="2.0">
@@ -38,45 +39,46 @@ alte metadata.xsl erneuert
 		<!-- Common table  styles -->
 		.tableTitleDark { 
 			text-align: left; font-weight: bold; 
-			color: black;
+			color: black; font-size: 10pt;
 			border-style: none; }
 
-		.horizontalTitleColumn { text-align: left; }
+		.horizontalTitleColumn { text-align: left; font-weight: bold; }
 
 		table.light th { <!-- Spaltenbeschriftung -->
 			border-width: 1px; padding: 1px;
 			border-style: none; border-color: white;
-			vertical-align: text-top; 
+			vertical-align: text-top; font-size: 10pt;
 			background-color: #afdfee; <!-- tuerkis-blau -->
 		}
 
 		table.light td { <!-- Spaltendetails -->
 			border-width: 1px; padding: 1px; 
 			border-style: none; border-color: white;
-			vertical-align: text-top; 
+			vertical-align: text-top; font-size: 10pt; 
 			background-color: #F0F8FF; <!-- hellblau -->
 		}
 
 		table.strong td { <!-- Schemazeile -->
 			border-width: 1px; padding: 1px; 
 			border-style: none; border-color: white;
-			vertical-align: text-top; 
+			vertical-align: text-top; font-size: 10pt;
 			background-color: #5da0e3; <!-- dunkelblau -->
 		}
 
 		table.title th { <!-- Metadatenbeschriftung -->
 			border-width: 1px; padding: 1px; 
 			border-style: none; border-color: white;
-			vertical-align: text-top; 
+			vertical-align: text-top; font-size: 10pt;
 			background-color: #c9c9c9; <!-- grau -->
 		}
 
 		table.title td { <!-- Metadatentext -->
 			border-width: 1px; padding: 1px; 
 			border-style: none; border-color: white;
-			vertical-align: text-top; 
+			vertical-align: text-top; font-size: 10pt;
 			background-color: #F5F5F5; <!-- hellgrau -->
 		}
+
 		<!-- Einrückung (statt verschachtelte Listen) -->
 		.indented {
 			margin-left: 20px; margin-top: 10px;
@@ -92,13 +94,13 @@ alte metadata.xsl erneuert
 		}
 		
 	<!-- Data base description styles -->
-	.databaseTitleColumn { text-align: left; } 
-	.databaseValueColumn { text-align: left; }
+	.databaseTitleColumn { text-align: left;  font-size: 10pt;} 
+	.databaseValueColumn { text-align: left;  font-size: 10pt;}
 
 	<!-- Schema description styles -->
-	.schemaValueColumn { text-align: left; }
+	.schemaValueColumn { text-align: left;  font-size: 10pt;}
 
-	h1.small { font-size: 14pt; }
+	h1.small { font-size: 10pt; }
 
 	}
 </xsl:template>
@@ -106,14 +108,14 @@ alte metadata.xsl erneuert
 		table.tabelle { <!-- TABLE Tabellen -->
 			border-width: 1px; padding: 1px; 
 			border-style: none; border-color: white;
-			vertical-align: text-top; 
+			vertical-align: text-top;  font-size: 10pt;
 			background-color: #add6ff; <!-- blau -->
 		}
 	
 		table.tabelle td { <!-- TABLE Tabellen -->
 			border-width: 1px; padding: 1px; 
 			border-style: none; border-color: white;
-			vertical-align: text-top; 
+			vertical-align: text-top;  font-size: 10pt;
 			background-color: #add6ff; <!-- blau -->
 		}
 		
@@ -270,6 +272,55 @@ alte metadata.xsl erneuert
 			</table>
 			<!--recurse into columns-->
 			<xsl:apply-templates select="*[local-name()='columns']"/>
+			<!-- Primary key anzeigen -->
+			<xsl:if test="*[local-name()='primaryKey']">
+				<div class="indented2">
+					<table class="title" width="66.6666%">
+						<tr>
+							<th colspan="2" class="horizontalTitleColumn">Primärschlüssel (Primary Key)</th>
+						</tr>
+						<tr>
+							<td width="50%" class="horizontalTitleColumn">Name</td>
+							<td class="horizontalTitleColumn">Spalte</td>
+						</tr>
+						<tr>
+							<td><xsl:value-of select="*[local-name()='primaryKey']/*[local-name()='name']"/></td>
+							<td>
+								<xsl:for-each select="*[local-name()='primaryKey']/*[local-name()='column']">
+									<xsl:if test="position() &gt; 1">, </xsl:if>
+									<xsl:value-of select="."/>
+								</xsl:for-each>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</xsl:if>
+			<!-- Foreign keys anzeigen -->
+			<xsl:if test="*[local-name()='foreignKeys']/*[local-name()='foreignKey']">
+				<div class="indented2">
+					<table class="title" width="100%">
+						<tr><th colspan="3" class="horizontalTitleColumn">Fremdschlüssel (Foreign Keys)</th></tr>
+						<tr>
+							<td width="33.3333%" class="horizontalTitleColumn">Name</td>
+							<td width="33.3333%" class="horizontalTitleColumn">Lokale Tabelle -> Referenzierte Tabelle</td>
+							<td width="33.3333%" class="horizontalTitleColumn">Lokale Spalte -> referenzierte Spalte</td>
+						</tr>
+						<xsl:for-each select="*[local-name()='foreignKeys']/*[local-name()='foreignKey']">
+							<tr>
+								<td><xsl:value-of select="*[local-name()='name']"/></td>
+								<!--<td><xsl:value-of select="ancestor::*[local-name()='schema'][1]/*[local-name()='name']"/>.<xsl:value-of select="ancestor::*[local-name()='table'][1]/*[local-name()='name']"/><xsl:text> -> </xsl:text><xsl:value-of select="*[local-name()='referencedSchema']"/>.<xsl:value-of select="*[local-name()='referencedTable']"/></td>-->
+								<td><xsl:value-of select="ancestor::*[local-name()='table'][1]/*[local-name()='name']"/><xsl:text> -> </xsl:text><xsl:value-of select="*[local-name()='referencedTable']"/></td>
+								<td>
+									<xsl:for-each select="*[local-name()='reference']">
+										<xsl:if test="position() &gt; 1">, </xsl:if>
+										<xsl:value-of select="*[local-name()='column']"/> -> <xsl:value-of select="*[local-name()='referenced']"/>
+									</xsl:for-each>
+								</td>
+							</tr>
+						</xsl:for-each>
+					</table>
+				</div>
+			</xsl:if>
 		</div>
 	</xsl:template>
 	<!-- mode="overview" level3: column group (columns) Create the columns table -->

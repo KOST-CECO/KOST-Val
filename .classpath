@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-15">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
@@ -10,19 +10,18 @@
 	<classpathentry kind="lib" path="KOST-Val/lib/commons-io-2.22.0.jar" sourcepath="KOST-Val/external-sources/commons-io-2.22.0-sources.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/commons-logging-1.4.0.jar" sourcepath="KOST-Val/external-sources/commons-logging-1.4.0-sources.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/jacob-1.21.jar"/>
-	<!--<classpathentry kind="lib" path="KOST-Val/lib/jacob-1.21-x64.dll"/>-->
 	<classpathentry kind="lib" path="KOST-Val/lib/jdom-2.0.6.1.jar" sourcepath="KOST-Val/external-sources/jdom-2.0.6.1-sources.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/jhove-apps-1.34.0.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/pdfbox-app-3.0.8.jar"/>
-	<classpathentry kind="lib" path="KOST-Val/lib/spring-aop-7.0.8.jar"/>
-	<classpathentry kind="lib" path="KOST-Val/lib/spring-beans-7.0.8.jar"/>
-	<classpathentry kind="lib" path="KOST-Val/lib/spring-context-7.0.8.jar"/>
-	<classpathentry kind="lib" path="KOST-Val/lib/spring-core-7.0.8.jar"/>
-	<classpathentry kind="lib" path="KOST-Val/lib/spring-expression-7.0.8.jar"/>
+	<classpathentry kind="lib" path="KOST-Val/lib/spring-aop-7.0.9.jar"/>
+	<classpathentry kind="lib" path="KOST-Val/lib/spring-beans-7.0.9.jar"/>
+	<classpathentry kind="lib" path="KOST-Val/lib/spring-context-7.0.9.jar"/>
+	<classpathentry kind="lib" path="KOST-Val/lib/spring-core-7.0.9.jar"/>
+	<classpathentry kind="lib" path="KOST-Val/lib/spring-expression-7.0.9.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/tiff-hul-1.9.5.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/VALA.-6.27.13.5.RELEASE.jar"/>
-	<classpathentry kind="lib" path="KOST-Val/lib/verapdf-greenfield-cli-1.31.105.jar"/>
-	<classpathentry kind="lib" path="KOST-Val/lib/verapdf-greenfield-gui-1.31.105.jar"/>
+	<classpathentry kind="lib" path="KOST-Val/lib/verapdf-greenfield-cli-1.31.218.jar"/>
+	<classpathentry kind="lib" path="KOST-Val/lib/verapdf-greenfield-gui-1.31.218.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/xercesImpl-2.12.2.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/zip64-1.0.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/zip64file-1.0.jar"/>

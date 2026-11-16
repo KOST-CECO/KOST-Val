@@ -198,7 +198,7 @@ public class ValidationArepPdfaModuleImpl extends ValidationModuleImpl implement
 
 			// nur reparieren wenn kein 3D
 			if (Util.stringInFile("Type /3D", valDatei) || Util.stringInFile("Type/3D", valDatei)
-					|| Util.stringInFile("/3D/", valDatei) || Util.stringInFile("/3DAnimationStyle", valDatei)) {
+					|| Util.stringInFile("/3DAnimationStyle", valDatei)) {
 				// 3D vorhanden oder koennen nicht ausgeschlossen werden
 				// keine Reparatur durchfuehren
 				noRep = noRep + getTextResourceService().getText(locale, INFO_XML_Z_NOREP_3D);
@@ -394,7 +394,7 @@ public class ValidationArepPdfaModuleImpl extends ValidationModuleImpl implement
 									// similar colors as identical.
 									String imTolerance = "20%";
 									// Minimal zu erreichende aehnlichkeit
-									float percentageValid = (float) 99.999;
+									float percentageValid = (float) 99.99;
 									/*
 									 * Mit dieser Einstellung kann das Ergebnis trotz geringer Exportqualitaet am
 									 * bessten verglichen werden.
@@ -542,7 +542,7 @@ public class ValidationArepPdfaModuleImpl extends ValidationModuleImpl implement
 			try {
 				dmsOwner = ValidationAinitialisationModuleImpl.dmsInternasOwner(directoryOfConfigfile.getAbsolutePath(),
 						dllJacobPath);
-				if (dmsOwner.equals("NoLicenseF") ) {
+				if (dmsOwner.equals("NoLicenseF")) {
 					logRep = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
 							+ getTextResourceService().getText(locale, INFO_XML_Z_NOREP_NOREP1,
 									directoryOfConfigfile.getAbsolutePath(), "(noLicenseFile)");
@@ -560,7 +560,7 @@ public class ValidationArepPdfaModuleImpl extends ValidationModuleImpl implement
 						outFile.delete();
 					}
 					isRepairDms = false;
-				} else if (dmsOwner.equals("NoLicenseE") ) {
+				} else if (dmsOwner.equals("NoLicenseE")) {
 					logRep = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
 							+ getTextResourceService().getText(locale, INFO_XML_Z_NOREP_NOREP1,
 									directoryOfConfigfile.getAbsolutePath(), "(Exception)");
@@ -578,9 +578,9 @@ public class ValidationArepPdfaModuleImpl extends ValidationModuleImpl implement
 						outFile.delete();
 					}
 					isRepairDms = false;
-				} else 
-				dmsKey = ValidationAinitialisationModuleImpl.dmsInternasKey(directoryOfConfigfile.getAbsolutePath(),
-						dmsOwner);
+				} else
+					dmsKey = ValidationAinitialisationModuleImpl.dmsInternasKey(directoryOfConfigfile.getAbsolutePath(),
+							dmsOwner);
 			} catch (Throwable e) {
 				logRep = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA) + getTextResourceService()
 						.getText(locale, ERROR_XML_UNKNOWN, " repair owner/key " + e.getMessage());
@@ -704,21 +704,36 @@ public class ValidationArepPdfaModuleImpl extends ValidationModuleImpl implement
 				// Dispatch.call(engine, "AddPDF", "c:\\Temp\\in.pdf", "");
 				Dispatch.call(engine, "AddPDF", valDatei.getAbsolutePath(), "");
 
-				// System.out.println("07 Engine.Save");
-				// Engine.Save "c:\out.pdf"
-				// Dispatch.call(engine, "Save", "c:\\Temp\\out.pdf");
-				Dispatch.call(engine, "Save", outFile.getAbsolutePath());
+				try {
+					// System.out.println("07 Engine.Save");
+					// Engine.Save "c:\out.pdf"
+					// Dispatch.call(engine, "Save", "c:\\Temp\\out.pdf");
+					Dispatch.call(engine, "Save", outFile.getAbsolutePath());
+				} catch (Exception e) {
+					if (min) {
+					} else {
+						logRep = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
+								+ getTextResourceService().getText(locale, INFO_XML_Z_NOREP_NOOUTPUT,
+										"<Message> - " + e.getMessage() + "</Message>");
+						Util.oldnewstring("<ErrorZrepPdfa></ErrorZrepPdfa>", logRep, logFile);
+						if (outFile.exists()) {
+							outFile.delete();
+						}
+					}
+					isRepairDms = false;
+				}
 
 				// System.out.println("PDF erfolgreich verarbeitet.");
 			} catch (Exception e) {
 				if (min) {
 				} else {
 					logRep = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
-							+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, "Repair DMS Failure: ");
+							+ getTextResourceService().getText(locale, INFO_XML_Z_NOREP_NOOUTPUT,
+									"<Message> - Repair DMS Failure: </Message>");
 					try {
 						Util.oldnewstring("<ErrorZrepPdfa></ErrorZrepPdfa>", logRep, logFile);
 					} catch (IOException e1) {
-						e1.printStackTrace();
+						e1.getMessage();
 					}
 					if (outFile.exists()) {
 						outFile.delete();
@@ -736,7 +751,7 @@ public class ValidationArepPdfaModuleImpl extends ValidationModuleImpl implement
 			}
 			if (!outFile.exists()) {
 				logRep = getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Z_PDFA)
-						+ getTextResourceService().getText(locale, INFO_XML_Z_NOREP_NOOUTPUT);
+						+ getTextResourceService().getText(locale, INFO_XML_Z_NOREP_NOOUTPUT, "");
 				try {
 					Util.oldnewstring("<ErrorZrepPdfa></ErrorZrepPdfa>", logRep, logFile);
 				} catch (IOException e) {

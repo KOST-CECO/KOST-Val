@@ -163,6 +163,7 @@ public interface MessageConstants {
 	String MESSAGE_XML_MODUL_A_AZ = "val.message.xml.modul.a.az";
 	String ERROR_XML_A_AZ_INCORRECTFILE = "val.error.xml.a.az.incorrectfile";
 	String ERROR_XML_A_NOTAZ = "val.error.xml.a.notaz";
+	String ERROR_XML_A_NOTAZ_ZIP = "val.error.xml.a.notaz.zip";
 	String ERROR_XML_A_NOTAZ_DROID = "val.error.xml.a.notaz.droid";
 	String ERROR_XML_A_NOTAZ_DROID2 = "val.error.xml.a.notaz.droid2";
 

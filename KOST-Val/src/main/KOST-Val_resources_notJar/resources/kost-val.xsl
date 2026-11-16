@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	<xsl:template match="/"><!-- kost-val.xsl_v2.4.0.4 -->
+	<xsl:template match="/"><!-- kost-val.xsl_v2.4.0.5 -->
 		<html>
 			<head>
 				<style>

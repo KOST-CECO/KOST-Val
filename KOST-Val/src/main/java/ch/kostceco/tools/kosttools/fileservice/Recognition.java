@@ -813,8 +813,9 @@ public class Recognition {
 				// kein bekanntes BOF
 			}
 
+			String firstLine=Util.getStringFirstLineFromFile(checkFile);
 			// TODO: Kein passendes BOF; ggf. Format mit Offset im BOF
-			if (Util.getStringFirstLineFromFile(checkFile).contains("ftypM4A")) {
+			if (firstLine.contains("ftypM4A")) {
 				if (Magic.magicAlac(checkFile)) {
 					// Eine ALAC-Datei muss mit {4}ftypM4A [{4}667479704D3441]
 					// beginnen !!! Offset 4 !!!
@@ -833,7 +834,7 @@ public class Recognition {
 						}
 					}
 				}
-			} else if (Util.getStringFirstLineFromFile(checkFile).contains("ftyp")) {
+			} else if (firstLine.contains("ftyp")) {
 				if (Magic.magicMp4(checkFile)) {
 					// Eine MP4-Datei muss mit {4}ftyp [{4}66747970]
 					// beginnen !!! Offset 4 !!!
@@ -855,7 +856,7 @@ public class Recognition {
 						}
 					}
 				}
-			} else if (Util.getStringFirstLineFromFile(checkFile).contains("free")) {
+			} else if (firstLine.contains("free")) {
 				if (Magic.magicProres(checkFile)) {
 					// Eine PRORES-Datei muss mit {4}free [{4}66726565]
 					// beginnen !!! Offset 4 !!!
@@ -874,7 +875,7 @@ public class Recognition {
 						}
 					}
 				}
-			} else if (Util.getStringFirstLineFromFile(checkFile).contains("moov")) {
+			} else if (firstLine.contains("moov")) {
 				if (Magic.magicQtm(checkFile)) {
 					// Eine QTM-Datei muss mit {4}moov [{4}6D6F6F76]
 					// beginnen !!! Offset 4 !!!
@@ -893,7 +894,7 @@ public class Recognition {
 						}
 					}
 				}
-			} else if (Util.getStringFirstLineFromFile(checkFile).contains("<?xml")) {
+			} else if (firstLine.contains("<?xml")) {
 				if (Magic.magicXmlOff(checkFile)) {
 					// Eine XML-Datei beginnt in der Regel mit <?xml [3C3F786D6C]
 					// wobei einige wenige einen offset haben (z.B. XML TEI mit bis zu 3)
@@ -928,8 +929,10 @@ public class Recognition {
 						// als XML-Datei erkannt aber falsche Extension
 						return "XML_ext";
 					}
+				} else {
+					System.out.println("magicXmlOff NICHT bestanden");
 				}
-			} else if (Util.getStringFirstLineFromFile(checkFile).contains("DICM")) {
+			} else if (firstLine.contains("DICM")) {
 				if (Magic.magicDicom(checkFile)) {
 					// Eine Dicom-Datei (keine Dateiendung noetig) muss mit
 					// {128}4449434D beginnen !!! Offset 128 !!!

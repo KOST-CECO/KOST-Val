@@ -18,13 +18,12 @@ package ch.kostceco.tools.kosttools.fileservice;
 
 import java.io.File;
 import java.io.IOException;
-// import java.util.concurrent.TimeUnit;
 
 /** @author Rc Claire Roethlisberger, KOST-CECO */
 
 public class Dbptk {
-	private static String exeDir = "resources" + File.separator + "dbptk-app-4.0.0";
-	private static String dbptkJar = exeDir + File.separator + "dbptk-app-4.0.0.jar";
+	private static String exeDir = "resources" + File.separator + "dbptk-app-4.5.0";
+	private static String dbptkJar = exeDir + File.separator + "dbptk-app-4.5.0.jar";
 
 	/**
 	 * fuehrt eine Validierung mit dbptk via cmd durch und speichert das Ergebnis in
@@ -42,8 +41,8 @@ public class Dbptk {
 		File filedirOfJarPath = new File(dirOfJarPath);
 		File javaFile = new File(filedirOfJarPath.getParent() + File.separator + "Liberica_JRE" + File.separator + "bin"
 				+ File.separator + "java.exe");
-		// falls das File von einem vorhergehenden Durchlauf bereits existiert,
-		// loeschen wir es
+		// falls das File von einem vorhergehenden Durchlauf bereits existiert, loeschen
+		// wir es
 		if (report.exists()) {
 			report.delete();
 		}
@@ -62,9 +61,7 @@ public class Dbptk {
 		/*
 		 * Usage: dbptk validate [OPTIONS]
 		 * 
-		 * 
 		 * -if, --import-file=value (required) Path to SIARD2 archive file.
-		 * 
 		 * 
 		 * -r, --report=value (optional) Path to save the validation report. If not set
 		 * a report will be generated in the installation folder.
@@ -74,54 +71,12 @@ public class Dbptk {
 		 * 
 		 */
 
-		/*
-		 * //String command = "\"" + javaFile.getAbsolutePath() + "\" -jar \"" +
-		 * fdbptkJar.getAbsolutePath() + "\" validate -if \"" // +
-		 * siardFile.getAbsolutePath() + "\" -r \"" + report.getAbsolutePath() +
-		 * "\" -sac";
-		 * 
-		 * System.out.println("command: " + command);
-		 * 
-		 * try { ProcessBuilder pb = new ProcessBuilder("java",
-		 * "NameDesAnderenProgramms"); Process process = pb.start(); // Hier können Sie
-		 * weitere Operationen mit dem Prozess durchführen, z.B. auf die Ausgabe warten
-		 * process.waitFor(); } catch (IOException | InterruptedException e) {
-		 * e.printStackTrace(); }
-		 * 
-		 * String resultExec = Cmd.execToStringSplit(command, out, workDir);
-		 * 
-		 * // dbptk gibt keine Info raus, die replaced oder ignoriert werden muss
-		 * 
-		 * System.out.println("resultExec: " + resultExec);
-		 * 
-		 * if (resultExec.equals("OK")) { if (report.exists()) { // alles io bleibt bei
-		 * OK } else { // Datei nicht angelegt... resultExec = "NoReport"; } } return
-		 * resultExec;
-		 * 
-		 * Runtime.getRuntime().exec funktioniert hier nicht!
-		 * 
-		 * Entsprechend wurde processBuilder verwendet
-		 */
-
-// Define the command and arguments
-		ProcessBuilder processBuilder = new ProcessBuilder(
-//    "C:\\Users\\clair\\eclipse-Workspace\\KOST-Tools\\Liberica_JRE\\bin\\java.exe",
-				javaFile.getAbsolutePath().toString(), "-jar",
-//    "C:\\Users\\clair\\eclipse-Workspace\\KOST-Tools\\KOST-Val\\resources\\dbptk-app-4.0.0\\dbptk-app-4.0.0.jar",
-				fdbptkJar.getAbsolutePath().toString(), "validate", "-if",
-//    "C:\\Users\\clair\\Documents\\_Entwicklung\\inAr_2025-11_SIARD-Validierung_DBPTK\\SIARD-2.1_valid_sakila.siard",
-				siardFile.getAbsolutePath().toString(), "-r",
-//    "C:\\Users\\clair\\.kost-val_2x\\logs\\dbptk.txt",
+		ProcessBuilder processBuilder = new ProcessBuilder(javaFile.getAbsolutePath().toString(), "-jar",
+				fdbptkJar.getAbsolutePath().toString(), "validate", "-if", siardFile.getAbsolutePath().toString(), "-r",
 				report.getAbsolutePath().toString(), "-sac");
 
-// Optional: set working directory if needed
-//processBuilder.directory(new File("C:\\Users\\clair\\eclipse-Workspace\\KOST-Tools\\KOST-Val"));
 		processBuilder.directory(workDir);
 
-// Define where to store the process output
-//File logFile = new File("C:\\Users\\clair\\.kost-val_2x\\logs\\dbptk_process_output.log");
-
-// Redirect both stdout and stderr to the same log file
 		processBuilder.redirectOutput(logFile);
 		processBuilder.redirectErrorStream(true);
 

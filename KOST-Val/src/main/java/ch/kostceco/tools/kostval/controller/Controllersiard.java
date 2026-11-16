@@ -25,6 +25,7 @@ import java.util.Map;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationAzipException;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationBprimaryStructureException;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationCheaderException;
+import ch.kostceco.tools.kostval.exception.modulesiard.ValidationD2structureException;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationDstructureException;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationEcolumnException;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationFrowException;
@@ -313,25 +314,37 @@ public class Controllersiard implements MessageConstants {
 		boolean valid = true;
 
 		// wenn noch valid erfolgt validierung mit DBPTK
-		/*
-		 * TODO fuer v2.3.0.6 noch nicht aktivieren (security Patch mit nur kleinen
-		 * Anpassungen
-		 * 
-		 * try { if (this.getValidationD2structureModule().validate(valDatei,
-		 * directoryOfLogfile, configMap, locale, logFile, dirOfJarPath)) {
-		 * this.getValidationD2structureModule().getMessageService().print(); } else {
-		 * this.getValidationD2structureModule().getMessageService().print(); if (min) {
-		 * return false; } else { valid = false; } } } catch
-		 * (ValidationD2structureException e) { Logtxt.logtxt(logFile,
-		 * getTextResourceService().getText(locale, MESSAGE_XML_MODUL_D_SIARD) +
-		 * getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
-		 * this.getValidationD2structureModule().getMessageService().print(); if (min) {
-		 * return false; } else { valid = false; } } catch (Exception e) {
-		 * Logtxt.logtxt(logFile, getTextResourceService().getText(locale,
-		 * MESSAGE_XML_MODUL_D_SIARD) + getTextResourceService().getText(locale,
-		 * ERROR_XML_UNKNOWN, e.getMessage())); if (min) { return false; } else { valid
-		 * = false; } }
-		 */
+
+		try {
+			if (this.getValidationD2structureModule().validate(valDatei, directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath, initFolderPath, fileToOutputStart)) {
+				this.getValidationD2structureModule().getMessageService().print();
+			} else {
+				this.getValidationD2structureModule().getMessageService().print();
+				if (min) {
+					return false;
+				} else {
+					valid = false;
+				}
+			}
+		} catch (ValidationD2structureException e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_D_SIARD)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
+			this.getValidationD2structureModule().getMessageService().print();
+			if (min) {
+				return false;
+			} else {
+				valid = false;
+			}
+		} catch (Exception e) {
+			Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_D_SIARD)
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, e.getMessage()));
+			if (min) {
+				return false;
+			} else {
+				valid = false;
+			}
+		}
 
 		// Validation Step E (Spalten-Validierung)
 		try {
