@@ -26,7 +26,12 @@ import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -35,6 +40,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import ch.kostceco.tools.kosttools.util.Hash;
 import ch.kostceco.tools.kosttools.util.Util;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -47,6 +53,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebEngine;
@@ -57,18 +64,16 @@ import javafx.stage.StageStyle;
 
 public class ConfigController {
 
-	private File configFileBackup = new File(System.getenv("USERPROFILE") + File.separator + ".kost-val_2x"
-			+ File.separator + "configuration" + File.separator + "BACKUP.kostval.conf.xml");
-
-	private File configFileStandard = new File(System.getenv("USERPROFILE") + File.separator + ".kost-val_2x"
-			+ File.separator + "configuration" + File.separator + "STANDARD.kostval.conf.xml");
-
-	private File configFile = new File(System.getenv("USERPROFILE") + File.separator + ".kost-val_2x" + File.separator
-			+ "configuration" + File.separator + "kostval.conf.xml");
+	private File configDir = new File(
+			System.getenv("USERPROFILE") + File.separator + ".kost-val_2x" + File.separator + "configuration");
+	private File configFileBackup = new File(configDir.getAbsolutePath() + File.separator + "BACKUP.kostval.conf.xml");
+	private File configFile = new File(configDir.getAbsolutePath() + File.separator + "kostval.conf.xml");
+	private File configFileSta = new File(configDir.getAbsolutePath() + File.separator + "STANDARD.kostval.conf.xml");
+	private File configFileKost = new File(configDir.getAbsolutePath() + File.separator + "KOST_kostval.conf.xml");
 
 	private String dirOfJarPath, config, stringPuid, minOne = "Mindestens eine Variante muss erlaubt sein!";
 
-	private String versionKostVal = "   (v2.4.0.4)";
+	private String versionKostVal = "   (v2.4.0.5)";
 
 	private Locale locale = Locale.getDefault();
 
@@ -118,8 +123,10 @@ public class ConfigController {
 	private Button buttonPuid, buttonPuidT, buttonPuidI, buttonPuidA, buttonPuidV, buttonPuidD, buttonConfig2;
 
 	ObservableList<String> droidYesNoList = FXCollections.observableArrayList();
+	ObservableList<String> configList = FXCollections.observableArrayList("kostval.conf.xml", "KOST");
+
 	@FXML
-	private ChoiceBox<String> droidYesNo;
+	private ChoiceBox<String> droidYesNo, configChoice;
 
 	@FXML
 	private WebView wbv;
@@ -137,6 +144,65 @@ public class ConfigController {
 		// Original Config Kopieren
 		try {
 			Util.copyFile(configFile, configFileBackup);
+
+			String actVersion = "<configuration><!-- kostval.conf.xml_" + versionKostVal;
+			actVersion = actVersion.replace("   (", "");
+			actVersion = actVersion.replace(")", "");
+			//File dirConfigJar = new File(dirOfJarPath + File.separator + "configuration");
+			if (configFileSta.exists()) {
+				if (Util.stringInFile(actVersion, configFileSta)) {
+					// in Liste eintragen
+					configList.add("STANDARD");
+				}
+			}
+
+			// Liste mit allen Dateien aus configDir mit der Endung "_kostval.conf.xml"
+			// erstellen
+			try {
+				Map<String, File> fileUnsortedMap = Util.getFileMapFile(configDir);
+				Map<String, File> fileMap = new TreeMap<String, File>(fileUnsortedMap);
+				Set<String> fileMapKeys = fileMap.keySet();
+				for (Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext();) {
+
+					String entryName = iterator.next();
+					File newFile = fileMap.get(entryName);
+					if (!newFile.isDirectory()) {
+						// Eintrag ist eine Datei
+						String newFileName = newFile.getName();
+						if (newFileName.endsWith("_kostval.conf.xml")) {
+							if (Util.stringInFile(actVersion, configFileKost)) {
+								// Aktuelle Version -> in Liste uebernehmen
+								String nameList = newFileName.replace("_kostval.conf.xml", "");
+								if (!configList.contains(nameList)) {
+									configList.add(nameList);
+								}
+
+								// wenn kostval.conf.xml mit einer gespeicherten Datei uebereinstimmt dann
+								// diese in die Liste als gewaehlt setzten
+								String configMd5 = Hash.getMd5(configFile);
+								String fileMd5 = Hash.getMd5(newFile);
+								if (configMd5.equals(fileMd5)) {
+									configChoice.setValue(nameList);
+								}
+							} else {
+								// alte Version -> .xml in .old umbenennen
+								String pathOld = newFile.getAbsolutePath().replace("_kostval.conf.xml",
+										"_kostval.conf.old");
+								newFile.renameTo(new File(pathOld));
+							}
+						}
+					}
+				}
+				/*
+				 * } catch (Exception e) { System.out.println("Exception: " + e.getMessage()); }
+				 * catch (StackOverflowError eso) { System.out.println("Exception: " +
+				 * "StackOverflowError" + eso.getMessage()); } catch (OutOfMemoryError eoom) {
+				 * System.out.println("Exception: " + "OutOfMemoryError" + eoom.getMessage()); }
+				 */
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+
 		} catch (IOException e2) {
 			e2.printStackTrace();
 		}
@@ -190,7 +256,7 @@ public class ConfigController {
 			if (Util.stringInFileLine("kostval-conf-DE.xsl", configFile)) {
 				locale = new Locale("de");
 				buttonConfigApply.setText("Anwenden");
-				buttonConfigApplyStandard.setText("Standard anwenden");
+				buttonConfigApplyStandard.setText("Speichern & anwenden");
 				buttonConfigCancel.setText("Verwerfen");
 				buttonConfig2.setText("Anpassen");
 				labelText.setText("Text");
@@ -216,7 +282,7 @@ public class ConfigController {
 			} else if (Util.stringInFileLine("kostval-conf-FR.xsl", configFile)) {
 				locale = new Locale("fr");
 				buttonConfigApply.setText("Appliquer");
-				buttonConfigApplyStandard.setText("Appliquer le standard");
+				buttonConfigApplyStandard.setText("Sauvegarder et appliquer");
 				buttonConfigCancel.setText("Annuler");
 				buttonConfig2.setText("Changer");
 				labelText.setText("Texte");
@@ -242,7 +308,7 @@ public class ConfigController {
 			} else if (Util.stringInFileLine("kostval-conf-IT.xsl", configFile)) {
 				locale = new Locale("it");
 				buttonConfigApply.setText("Applica");
-				buttonConfigApplyStandard.setText("Applica predefinito");
+				buttonConfigApplyStandard.setText("Salva e applica");
 				buttonConfigCancel.setText("Annulla");
 				buttonConfig2.setText("Modifica");
 				labelText.setText("Testo");
@@ -267,7 +333,7 @@ public class ConfigController {
 			} else {
 				locale = new Locale("en");
 				buttonConfigApply.setText("Apply");
-				buttonConfigApplyStandard.setText("Apply Standard");
+				buttonConfigApplyStandard.setText("Save & Apply");
 				buttonConfigCancel.setText("Cancel");
 				buttonConfig2.setText("Change");
 				labelText.setText("Text");
@@ -548,6 +614,7 @@ public class ConfigController {
 		} catch (IOException | SAXException | ParserConfigurationException e1) {
 			e1.printStackTrace();
 		}
+		configChoice.getItems().addAll(configList);
 
 		engine = wbv.getEngine();
 		engine.load("file:///" + configFile.getAbsolutePath());
@@ -615,15 +682,85 @@ public class ConfigController {
 
 	@FXML
 	void configApplyStandard(ActionEvent e) {
-		engine.loadContent("Apply Standard");
-		configFile.delete();
-		Util.deleteFile(configFileBackup);
+		// TODO configFile speichern mit gewaehlten prefix
+		String stringPrefix="";
+		
+		// create a TextInputDialog fuer den Prefix
+		TextInputDialog dialog = new TextInputDialog(stringPrefix);
+
+		// Set title & header text
+		dialog.setTitle("KOST-Val - Configuration - Save configuration");
+		String headerDeFrItEn = "Bitte den Präfix für den Konfigurationsnamen eingeben z.B. Archiv:";
+		if (locale.toString().startsWith("fr")) {
+			headerDeFrItEn = "Veuillez saisir le préfixe du nom de configuration, par exemple Archive :";
+		} else if (locale.toString().startsWith("it")) {
+			headerDeFrItEn = "Inserire il prefisso per il nome di configurazione, ad esempio Archivio:";
+		} else if (locale.toString().startsWith("en")) {
+			headerDeFrItEn = "Please enter the prefix for the configuration name, e.g., Archive:";
+		}
+		dialog.setHeaderText(headerDeFrItEn);
+		dialog.setContentText("");
+
+		// Show the dialog and capture the result.
+		Optional<String> result = dialog.showAndWait();
+
+		// If the "Okay" button was clicked, the result will contain our String
+		// in the get() method
+		if (result.isPresent()) {
+				try {
+				stringPrefix = result.get();
+					Util.copyFile(configFile, new File(configDir+File.separator+stringPrefix+"_"+configFile.getName()));
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			} else {
+			// Keine Aktion
+		}
+
+		
+		// End TODO
+		
+		int countCheck;
 		try {
-			Util.copyFile(configFileStandard, configFile);
+			countCheck = Util.stringCountInFile("<pdfa>", configFile);
+			if (countCheck != 1) {
+				String info1 = "Die Änderung der Konfiguration ergab einen Fehler. ";
+				String info2 = "Die Änderung wurde nicht übernommen sondern abgebrochen.";
+				if (locale.toString().startsWith("fr")) {
+					info1 = "La modification de la configuration a généré une erreur. ";
+					info2 = "La modification n'a pas été enregistrée et a été annulée.";
+				} else if (locale.toString().startsWith("en")) {
+					info1 = "The configuration change resulted in an error. ";
+					info2 = "The change was not applied but was aborted.";
+				} else if (locale.toString().startsWith("it")) {
+					info1 = "La modifica alla configurazione ha generato un errore. ";
+					info2 = "La modifica non è stata applicata, ma è stata interrotta.";
+				}
+				Alert alertInfo = new Alert(AlertType.INFORMATION);
+				alertInfo.setTitle(info1);
+				alertInfo.setHeaderText(null);
+				alertInfo.setContentText(info1 + info2);
+				alertInfo.initStyle(StageStyle.UTILITY);
+				alertInfo.showAndWait();
+
+				configFile.delete();
+				engine.loadContent("Cancel");
+				try {
+					Util.copyFile(configFileBackup, configFile);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				Util.deleteFile(configFileBackup);
+				((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
+			} else {
+				engine.loadContent("save and apply");
+				Util.deleteFile(configFileBackup);
+				((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
+			}
 		} catch (IOException e1) {
+			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
 	}
 
 	@FXML
@@ -1850,6 +1987,64 @@ public class ConfigController {
 			engine = wbv.getEngine();
 			engine.load("file:///" + configFile.getAbsolutePath());
 		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+
+	// Mit changeConfigChoice wird die Config umgestellt
+	@FXML
+	void changeConfigChoice(ActionEvent event) {
+		int countCheck;
+		try {
+			String selConfig = configChoice.getValue();
+			String configName = "kostval.conf.xml";
+			if (selConfig.equals(configName)) {
+				// keine Veraenderung
+			} else if (selConfig.equals("STANDARD")) {
+					Util.copyFile(new File(configDir + File.separator + selConfig + "." + configName), configFile);
+			} else {
+					Util.copyFile(new File(configDir + File.separator + selConfig + "_" + configName), configFile);
+			}
+
+			countCheck = Util.stringCountInFile("<pdfa>", configFile);
+			if (countCheck != 1) {
+				String info1 = "Die Änderung der Konfiguration ergab einen Fehler. ";
+				String info2 = "Die Änderung wurde nicht übernommen sondern abgebrochen.";
+				if (locale.toString().startsWith("fr")) {
+					info1 = "La modification de la configuration a généré une erreur. ";
+					info2 = "La modification n'a pas été enregistrée et a été annulée.";
+				} else if (locale.toString().startsWith("en")) {
+					info1 = "The configuration change resulted in an error. ";
+					info2 = "The change was not applied but was aborted.";
+				} else if (locale.toString().startsWith("it")) {
+					info1 = "La modifica alla configurazione ha generato un errore. ";
+					info2 = "La modifica non è stata applicata, ma è stata interrotta.";
+				}
+				Alert alertInfo = new Alert(AlertType.INFORMATION);
+				alertInfo.setTitle(info1);
+				alertInfo.setHeaderText(null);
+				alertInfo.setContentText(info1 + info2);
+				alertInfo.initStyle(StageStyle.UTILITY);
+				alertInfo.showAndWait();
+
+				configFile.delete();
+				//engine.loadContent("Cancel");
+				try {
+					Util.copyFile(configFileBackup, configFile);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				//Util.deleteFile(configFileBackup);
+				//((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
+			} else {
+				//engine.loadContent("chose and apply");
+				//Util.deleteFile(configFileBackup);
+				//((Stage) (((ObservableList) event.getSource()).getScene().getWindow())).close();
+			}
+			engine.load("file:///" + configFile.getAbsolutePath());
+
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 	}

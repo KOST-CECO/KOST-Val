@@ -1514,8 +1514,13 @@ public class Controllervalfofile implements MessageConstants {
 						return "countValid"; // countValid = countValid + 1;
 					} else if (recMsg.equals("notAZ")) {
 						if (!min) {
-							Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_AZ)
-									+ getTextResourceService().getText(locale, ERROR_XML_A_NOTAZ, " " + recFormat));
+							if (recFormat.equals("ZIP")) {
+								Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_AZ)
+										+ getTextResourceService().getText(locale, ERROR_XML_A_NOTAZ_ZIP, " " + recFormat));
+							}else {
+								Logtxt.logtxt(logFile, getTextResourceService().getText(locale, MESSAGE_XML_MODUL_A_AZ)
+										+ getTextResourceService().getText(locale, ERROR_XML_A_NOTAZ, " " + recFormat));						
+							}
 						}
 						Logtxt.logtxt(logFile, "<Notaccepted>not accepted</Notaccepted></Validation>");
 						recMsg = "new";

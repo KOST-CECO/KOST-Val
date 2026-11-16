@@ -47,8 +47,8 @@ public class egovdv {
 	private static String validateBat = exeDir + File.separator + "validate.bat";
 
 	// TODO: muss aktualisiert werden
-	private static String versionKostVal = "2.4.0.4";
-	private static String versionEgoDv = "2.1.5";
+	private static String versionKostVal = "2.4.0.5";
+	private static String versionEgoDv = "2.1.8";
 	private static String versionVerapdf = "1.31.105";
 
 	private static String egovCli = exeDir + File.separator + "lib" + File.separator

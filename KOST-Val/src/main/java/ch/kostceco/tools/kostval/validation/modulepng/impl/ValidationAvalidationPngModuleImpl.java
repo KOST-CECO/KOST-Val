@@ -521,6 +521,74 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl imp
 							msg = msg.replace("zlib:", "Data compression error	zlib:");
 							msg = msg.replace(" (data error)", ".");
 						}
+					} else if (msg.contains(
+							"Numbers of source Raster bands and source color space components do not match.")) {
+						// Numbers of source Raster bands and source color space components do not
+						// match.
+						if (locale.toString().startsWith("de")) {
+							msg = "- Die Anzahl der Rasterbaender der Quelle und der Komponenten des Farbraums der Quelle stimmen nicht ueberein. [Pngcheck]";
+						} else if (locale.toString().startsWith("fr")) {
+							msg = "- Le nombre de bandes raster de la source et celui des composantes de l`espace colorimetrique de la source ne correspondent pas. [Pngcheck]";
+						} else if (locale.toString().startsWith("it")) {
+							msg = "- Il numero delle bande raster di origine e quello delle componenti dello spazio colore di origine non corrispondono. [Pngcheck]";
+						} else {
+							msg = "- Numbers of source Raster bands and source color space components do not match. [Pngcheck]";
+						}
+					} else if (msg.contains("invalid IHDR image type")) {
+						// invalid IHDR image type (1)
+						if (locale.toString().startsWith("de")) {
+							msg = msg.replace("invalid IHDR image type", "Ungueltiger IHDR-Bildtyp");
+						} else if (locale.toString().startsWith("fr")) {
+							msg = msg.replace("invalid IHDR image type", "Type d`image IHDR non valide");
+						} else if (locale.toString().startsWith("it")) {
+							msg = msg.replace("invalid IHDR image type", "Tipo di immagine IHDR non valido");
+						} else {
+							// msg ok
+						}
+					} else if (msg.contains("invalid cHRM blue point")) {
+						// invalid cHRM blue point 0.15 15267.3
+						if (locale.toString().startsWith("de")) {
+							msg = msg.replace("invalid cHRM blue point", "Ungueltiger cHRM-Blue-Point");
+						} else if (locale.toString().startsWith("fr")) {
+							msg = msg.replace("invalid cHRM blue point", "Point bleu cHRM non valide");
+						} else if (locale.toString().startsWith("it")) {
+							msg = msg.replace("invalid cHRM blue point", "Punto blu cHRM non valido");
+						} else {
+							// msg ok
+						}
+					} else if (msg.contains("invalid number of PLTE entries")) {
+						// invalid number of PLTE entries (293)
+						if (locale.toString().startsWith("de")) {
+							msg = msg.replace("invalid number of PLTE entries", "Ungueltige Anzahl von PLTE-Eintraegen");
+						} else if (locale.toString().startsWith("fr")) {
+							msg = msg.replace("invalid number of PLTE entries", "Nombre d`entrees PLTE non valide");
+						} else if (locale.toString().startsWith("it")) {
+							msg = msg.replace("invalid number of PLTE entries", "Numero di voci PLTE non valido");
+						} else {
+							// msg ok
+						}
+					} else if (msg.contains("invalid tIME year")) {
+						// invalid tIME year (0)
+						if (locale.toString().startsWith("de")) {
+							msg = msg.replace("invalid tIME year", "Ungueltiges tIME Jahr");
+						} else if (locale.toString().startsWith("fr")) {
+							msg = msg.replace("invalid tIME year", "tIME annee non valide");
+						} else if (locale.toString().startsWith("it")) {
+							msg = msg.replace("invalid tIME year", "tIME anno non valido");
+						} else {
+							// msg ok
+						}
+					} else if (msg.contains("invalid gAMA value")) {
+						// invalid gAMA value (0.0000)
+						if (locale.toString().startsWith("de")) {
+							msg = msg.replace("invalid gAMA value", "Ungueltiger gAMA-Wert");
+						} else if (locale.toString().startsWith("fr")) {
+							msg = msg.replace("invalid gAMA value", "Valeur gAMA non valide");
+						} else if (locale.toString().startsWith("it")) {
+							msg = msg.replace("invalid gAMA value", "Valore gAMA non valido");
+						} else {
+							// msg ok
+						}
 						/*
 						 * TODO: Hier neue zu uebersetztende Fehlemeldungen eintragen
 						 * 

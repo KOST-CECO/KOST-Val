@@ -26,7 +26,7 @@ import ch.kostceco.tools.kosttools.util.Util;
 
 public class droid {
 	private static String exeDir = ".." + File.separator + "DROID";
-	private static String resourcesDroidJar = exeDir + File.separator + "droid-command-line-6.9.12.jar";
+	private static String resourcesDroidJar = exeDir + File.separator + "droid-command-line-6.9.14.jar";
 	private static String javaExe = ".." + File.separator + "Liberica_JRE" + File.separator + "bin" + File.separator
 			+ "java.exe";
 

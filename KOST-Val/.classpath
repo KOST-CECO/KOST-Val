@@ -17,15 +17,15 @@
 	<classpathentry kind="lib" path="lib/jdom-2.0.6.1.jar" sourcepath="KOST-Val/external-sources/jdom-2.0.6.1-sources.jar"/>
 	<classpathentry kind="lib" path="lib/jhove-apps-1.34.0.jar"/>
 	<classpathentry kind="lib" path="lib/pdfbox-app-3.0.8.jar"/>
-	<classpathentry kind="lib" path="lib/spring-aop-7.0.8.jar"/>
-	<classpathentry kind="lib" path="lib/spring-beans-7.0.8.jar"/>
-	<classpathentry kind="lib" path="lib/spring-context-7.0.8.jar"/>
-	<classpathentry kind="lib" path="lib/spring-core-7.0.8.jar"/>
-	<classpathentry kind="lib" path="lib/spring-expression-7.0.8.jar"/>
+	<classpathentry kind="lib" path="lib/spring-aop-7.0.9.jar"/>
+	<classpathentry kind="lib" path="lib/spring-beans-7.0.9.jar"/>
+	<classpathentry kind="lib" path="lib/spring-context-7.0.9.jar"/>
+	<classpathentry kind="lib" path="lib/spring-core-7.0.9.jar"/>
+	<classpathentry kind="lib" path="lib/spring-expression-7.0.9.jar"/>
 	<classpathentry kind="lib" path="lib/tiff-hul-1.9.5.jar"/>
 	<classpathentry kind="lib" path="lib/VALA-6.27.13.5.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/verapdf-greenfield-cli-1.31.105.jar" />
-	<classpathentry kind="lib" path="lib/verapdf-greenfield-gui-1.31.105.jar" />
+	<classpathentry kind="lib" path="lib/verapdf-greenfield-cli-1.31.218.jar" />
+	<classpathentry kind="lib" path="lib/verapdf-greenfield-gui-1.31.218.jar" />
 	<classpathentry kind="lib" path="lib/xercesImpl-2.12.2.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis-2.7.1.jar"/>
 	<classpathentry kind="lib" path="lib/zip64-1.0.jar" sourcepath="external-sources/zip64-sources.jar"/>

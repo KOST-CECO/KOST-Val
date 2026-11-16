@@ -258,7 +258,6 @@ public class KOSTVal implements MessageConstants {
 			String configRepPdfa = configMap.get("pdfarep");
 			String configRepPdfa2u = configMap.get("pdfa2urep");
 			if (configRepPdfa.contains("yes") && configRepPdfa2u.contains("yes")) {
-				System.out.println("repairPdfa = true;");
 				repairPdfa = true;
 			}
 
@@ -292,7 +291,7 @@ public class KOSTVal implements MessageConstants {
 			 * 
 			 * <Infos><Start>20.01.2026 13:21:14</Start>
 			 * 
-			 * yyyy.MM.dd HH:mm:ss -> yyyy.MM.dd_HH.mm.ss
+			 * DD.MM.YYYY hh:mm:ss -> YYYY.MM.DD hh:mm:ss
 			 */
 			String startSearch = "<Infos><Start>";
 			String startSearch2 = "</Start>";
@@ -301,6 +300,13 @@ public class KOSTVal implements MessageConstants {
 			startFolder = startFolder.replace(startSearch2, "");
 			startFolder = startFolder.replace(" ", "_");
 			startFolder = startFolder.replace(":", ".");
+			String timestamp = startFolder;
+			String yymmddTime = timestamp.substring(6, 10) + "."
+			              + timestamp.substring(3, 5) + "."
+			              + timestamp.substring(0, 2)
+			              + timestamp.substring(10);
+			 startFolder = yymmddTime;
+			
 			// OUTPUT ordner anlegen
 			String pathToLogDir = configMap.get("PathToLogfile");
 			File fileToLogDir = new File(pathToLogDir);

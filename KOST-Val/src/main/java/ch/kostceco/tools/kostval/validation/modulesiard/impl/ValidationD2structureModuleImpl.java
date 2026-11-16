@@ -114,24 +114,6 @@ public class ValidationD2structureModuleImpl extends ValidationModuleImpl implem
 				// TODO Validierung mit dbptk
 
 				/*
-				 * Usage: dbptk validate [OPTIONS]
-				 * 
-				 * 
-				 * -if, --import-file=value (required) Path to SIARD2 archive file.
-				 * 
-				 * 
-				 * -r, --report=value (optional) Path to save the validation report. If not set
-				 * a report will be generated in the installation folder.
-				 * 
-				 * -sac, --skip-additional-checks optional) Run the SIARD validation without the
-				 * additional checks. The additional checks can be found at:
-				 * 
-				 * (valDatei, directoryOfLogfile, configMap, locale, logFile, dirOfJarPath)
-				 * 
-				 * 
-				 */
-
-				/*
 				 * Falls report existiert wird als erstes die aufgefangene Konsole ausgewertet:
 				 * 
 				 * Number of requirements passed [27] Number of sub-requirements ok [84] Number
@@ -440,6 +422,8 @@ public class ValidationD2structureModuleImpl extends ValidationModuleImpl implem
 								} else {
 									/*
 									 * TODO zu ignorierende Fehlermeldungen
+									 * 
+									 * ggf Hinweis ausgeben das DBPTK was bemaengeln wuerde
 									 */
 
 									String ignorP423 = "P_4.2-3: [ERROR] - The individual table folders contain an XML file and an XSD file, the names of";
@@ -462,14 +446,18 @@ public class ValidationD2structureModuleImpl extends ValidationModuleImpl implem
 									} else if (line.contains(ignorT631)) {
 										/*
 										 * T_6.3-1: [ERROR] - Dates and timestamps must be restricted to the years
-										 * 0001-9999 according to the SQL:2008 specification. - Error on
-										 * content/schema0/table13/table13.xsd restriction not enforced ==> Das steht
-										 * zwar so in der Spez aber meines Wissens wollte sich der Text hier nur auf die
-										 * Jahrzahlen beziehen und nicht nur Jahrzahlen erlauben ansonsten hätten wir
-										 * dies so auch im xsd umgesetzt Spez: Dates and timestamps must be restricted
-										 * to the years 0001-9999 according to the SQL:2008 specification. This
-										 * restriction is enforced in the definitions of dateType and dateTimeType
-										 * dateType Spez: <!-- date type between 0001 and 9999 restricted to UTC -->
+										 * 0001-9999 according to the SQL:2008 specification.
+										 * 
+										 * - Error on content/schema0/table13/table13.xsd restriction not enforced
+										 * 
+										 * ==> Das steht zwar so in der Spez aber meines Wissens wollte sich der Text
+										 * hier nur auf die Jahrzahlen beziehen und nicht nur Jahrzahlen erlauben
+										 * ansonsten hätten wir dies so auch im xsd umgesetzt Spez: Dates and timestamps
+										 * must be restricted to the years 0001-9999 according to the SQL:2008
+										 * specification. This restriction is enforced in the definitions of dateType
+										 * and dateTimeType dateType
+										 * 
+										 * Spez: <!-- date type between 0001 and 9999 restricted to UTC -->
 										 * <xs:simpleType name="dateType"> <xs:restriction base="xs:date">
 										 * <xs:minInclusive value="0001-01-01Z"/> <xs:maxExclusive
 										 * value="10000-01-01Z"/> <xs:pattern value="\d{4}-\d{2}-\d{2}Z?"/>
@@ -925,7 +913,6 @@ public class ValidationD2structureModuleImpl extends ValidationModuleImpl implem
 			if (min) {
 				return false;
 			} else {
-
 				Logtxt.logtxt(logFile,
 						getTextResourceService().getText(locale, MESSAGE_XML_MODUL_D_SIARD) + getTextResourceService()
 								.getText(locale, ERROR_XML_UNKNOWN, ioe.getMessage() + " (IOException)"));

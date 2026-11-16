@@ -21,18 +21,24 @@ package ch.kostceco.tools.kostval;
 import java.awt.Desktop;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.StringWriter;
+import java.lang.management.ManagementFactory;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
@@ -132,21 +138,19 @@ public class GuiController {
 	private File configFile = new File(configDir.getAbsolutePath() + File.separator + "kostval.conf.xml");
 	private File configFileSta = new File(configDir.getAbsolutePath() + File.separator + "STANDARD.kostval.conf.xml");
 	private File configFileKost = new File(configDir.getAbsolutePath() + File.separator + "KOST_kostval.conf.xml");
+	private File configXslDe = new File(configDir.getAbsolutePath() + File.separator + "kostval-conf-DE.xsl");
+	private File configXslFr = new File(configDir.getAbsolutePath() + File.separator + "kostval-conf-FR.xsl");
+	private File configXslEn = new File(configDir.getAbsolutePath() + File.separator + "kostval-conf-EN.xsl");
+	private File configXslIt = new File(configDir.getAbsolutePath() + File.separator + "kostval-conf-IT.xsl");
 
 	private String arg0, arg1, arg2, arg3 = "--xml";
 
 	private static String dirOfJarPath;
 
-	private String initInstructionsDe;
-
-	private String initInstructionsFr;
-
-	private String initInstructionsIt;
-
-	private String initInstructionsEn;
-	private String versionKostVal = "2.4.0.4";
+	private String initInstructionsDe, initInstructionsFr, initInstructionsIt, initInstructionsEn;
+	private String versionKostVal = "2.4.0.5";
 	/*
-	 * TODO: versionKostVal auch hier anpassen:
+	 * TODO: versionKostVal auch hier anpassen und auch unbedingt dateRelease:
 	 * 
 	 * 2) cmdKOSTVal.java
 	 *
@@ -163,6 +167,8 @@ public class GuiController {
 	 * 8) Start-Bild (make_exe)
 	 * 
 	 * 9) launch_KOST-Val_exe.xml --> VersionInfo
+	 * 
+	 * -> dateRelease anpassen
 	 */
 
 	/*
@@ -198,8 +204,15 @@ public class GuiController {
 		String java6432 = System.getProperty("sun.arch.data.model");
 		String javaVersion = System.getProperty("java.version");
 		String javafxVersion = System.getProperty("javafx.version");
-		label.setText("Copyright © KOST/CECO          KOST-Val v" + versionKostVal + "          JavaFX " + javafxVersion
-				+ "   &   Java-" + java6432 + " " + javaVersion + ".");
+		long maxHeap = Runtime.getRuntime().maxMemory();
+		String javaXmx = "-Xmx" + (maxHeap / (1024 * 1024)) + "m";
+		List<String> maxHeapMf = ManagementFactory.getRuntimeMXBean().getInputArguments();
+		String maxHeapMfS = maxHeapMf + "";
+		if (maxHeapMfS.equals("[]")) {
+			maxHeapMfS = "(" + javaXmx + ")";
+		}
+		label.setText("Copyright © KOST/CECO            KOST-Val v" + versionKostVal + "            JavaFX "
+				+ javafxVersion + "   &   Java-" + java6432 + " " + javaVersion + "            " + maxHeapMfS);
 
 		// PrintStream in Konsole umleiten
 		ps = new PrintStream(new Console(console));
@@ -208,6 +221,15 @@ public class GuiController {
 
 		// festhalten von wo die Applikation (exe) gestartet wurde
 		dirOfJarPath = "";
+
+		// ermitteln ob eine veraltet Warnung ausgegeben werden soll
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate dateRelease = LocalDate.parse("2026-11-12", formatter);
+		LocalDate dateNow = LocalDate.now();
+
+		// Pruefen, ob das Datum aelter als 13 Monate ist
+		boolean old13Months = dateRelease.isBefore(dateNow.minusMonths(13));
+
 		try {
 			/*
 			 * dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist eine
@@ -258,6 +280,46 @@ public class GuiController {
 			} else {
 				Util.copyFile(new File(dirConfigJar + File.separator + configFileKost.getName()), configFileKost);
 			}
+			if (configXslDe.exists()) {
+				if (Util.stringInFile(actVersion, configXslDe)) {
+					// keine Aktion
+				} else {
+					Util.deleteFile(configXslDe);
+					Util.copyFile(new File(dirConfigJar + File.separator + configXslDe.getName()), configXslDe);
+				}
+			} else {
+				Util.copyFile(new File(dirConfigJar + File.separator + configXslDe.getName()), configXslDe);
+			}
+			if (configXslFr.exists()) {
+				if (Util.stringInFile(actVersion, configXslFr)) {
+					// keine Aktion
+				} else {
+					Util.deleteFile(configXslFr);
+					Util.copyFile(new File(dirConfigJar + File.separator + configXslFr.getName()), configXslFr);
+				}
+			} else {
+				Util.copyFile(new File(dirConfigJar + File.separator + configXslFr.getName()), configXslFr);
+			}
+			if (configXslEn.exists()) {
+				if (Util.stringInFile(actVersion, configXslEn)) {
+					// keine Aktion
+				} else {
+					Util.deleteFile(configXslEn);
+					Util.copyFile(new File(dirConfigJar + File.separator + configXslEn.getName()), configXslEn);
+				}
+			} else {
+				Util.copyFile(new File(dirConfigJar + File.separator + configXslEn.getName()), configXslEn);
+			}
+			if (configXslIt.exists()) {
+				if (Util.stringInFile(actVersion, configXslIt)) {
+					// keine Aktion
+				} else {
+					Util.deleteFile(configXslIt);
+					Util.copyFile(new File(dirConfigJar + File.separator + configXslIt.getName()), configXslIt);
+				}
+			} else {
+				Util.copyFile(new File(dirConfigJar + File.separator + configXslIt.getName()), configXslIt);
+			}
 
 			configChoice.setValue("kostval.conf.xml");
 
@@ -284,8 +346,8 @@ public class GuiController {
 
 								// wenn kostval.conf.xml mit einer gespeicherten Datei uebereinstimmt dann
 								// diese in die Liste als gewaehlt setzten
-								String configMd5=Hash.getMd5(configFile);
-								String fileMd5=Hash.getMd5(newFile);
+								String configMd5 = Hash.getMd5(configFile);
+								String fileMd5 = Hash.getMd5(newFile);
 								if (configMd5.equals(fileMd5)) {
 									configChoice.setValue(nameList);
 								}
@@ -581,14 +643,25 @@ public class GuiController {
 				+ "<br/>&emsp;Nur SIP -> SIP-Validierung ohne Formatvalidierung</h3>";
 		initInstructionsDe = "<html>" + help1 + help2 + help3 + help4 + help5 + egg + "<br/></html>";
 		String initInstructions = initInstructionsDe;
+		String old = "";
+		String oldH2 = "<br/><h2><span style=\"background-color: #f44336; padding: 2px 4px;\">";
 		if (locale.toString().startsWith("fr")) {
 			initInstructions = initInstructionsFr;
+			old = "KOST-Val est obsolète. Pour des raisons de sécurité, veuillez utiliser la dernière version !</span></h2><br/>";
 		} else if (locale.toString().startsWith("en")) {
 			initInstructions = initInstructionsEn;
+			old = "KOST-Val is outdated. For security reasons, please use the latest version!</span></h2><br/>";
 		} else if (locale.toString().startsWith("it")) {
 			initInstructions = initInstructionsIt;
+			old = "KOST-Val è obsoleto. Per motivi di sicurezza, si prega di utilizzare la versione più recente!</span></h2><br/>";
 		} else {
 			initInstructions = initInstructionsDe;
+			old = "KOST-Val ist veraltet. Bitte aus Sicherheitsgründen neuste Version verwenden!</span></h2><br/>";
+		}
+		if (old13Months) {
+			// System.out.println("Datum ist aelter als 13 Monate");
+			old = oldH2 + old;
+			initInstructions = old + initInstructions;
 		}
 		engine.loadContent(initInstructions);
 
@@ -1533,6 +1606,7 @@ public class GuiController {
 		}
 		File valFile = fileChooser.showOpenDialog(new Stage());
 		if (valFile != null) {
+			fileFolder.setText(valFile.getAbsolutePath());
 			try {
 				@SuppressWarnings("unused")
 				String init = initFoFile(valFile, configFile, locale, engine, fileFolder, buttonSip, buttonOnlySip,
@@ -1721,6 +1795,8 @@ public class GuiController {
 	// Mit changeConfigChoice wird die Config umgestellt
 	@FXML
 	void changeConfigChoice(ActionEvent event) {
+		configFile = new File(configDir.getAbsolutePath() + File.separator + "kostval.conf.xml");
+		;
 		console.setText(" \n");// loest keine Veraenderung im listener aus
 		console.appendText(""); // jetzt gibt es eine Veraenderung
 		String selConfig = configChoice.getValue();
@@ -1744,6 +1820,13 @@ public class GuiController {
 				e.printStackTrace();
 			}
 		}
+		configChoice.setValue(selConfig);
+		console.setText(" \n");// loest keine Veraenderung im listener aus
+		console.appendText(""); // jetzt gibt es eine Veraenderung
+		// System.out.println(configFile.getAbsolutePath());
+		// engine.load("file:///" +configFile.getAbsolutePath());
+		buttonPrint.setDisable(true);
+		buttonSave.setDisable(true);
 	}
 
 	// Mit changeLang wird die Sprache umgestellt
@@ -1925,64 +2008,11 @@ public class GuiController {
 		if (valFileFolder.isFile()) {
 			if (valFileFolder.exists()) {
 				if (valFileFolder != null) {
-					/*
-					 * Minianleitung in engine anzeigen falls dann datei doch nicht angezeigt werden
-					 * kann...
-					 */
-					String sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/></h3></td><td><h3>Ausgewählte Datei: <br>"
-							+ valFileFolder.getAbsolutePath()
-							+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>"
-							+ "<tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Validierung starten "
-							+ "<br/>&emsp;Nur Formate -> Formatvalidierung aller Formate im gesamten Ordner"
-							+ "<br/>&emsp;SIP inkl. Formate -> SIP-Validierung und Formatvalidierung aller Formate im content-Ordner"
-							+ "<br/>&emsp;Nur SIP -> SIP-Validierung ohne Formatvalidierung</h3></td></tr></table>";
-					if (locale.toString().startsWith("fr")) {
-						sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/></h3></td><td><h3>Fichier sélectionné : <br>"
-								+ valFileFolder.getAbsolutePath()
-								+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Ajuster la configuration et le LogType si nécessaire </h3></td></tr>"
-								+ "<tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Commencer la validation"
-								+ "<br/>&emsp;Formats uniquement -> validation du format de tous les formats dans le dossier entier"
-								+ "<br/>&emsp;SIP y compris les formats -> Validation SIP et validation du format de tous les formats dans le dossier de content"
-								+ "<br/>&emsp;SIP uniquement -> Validation SIP sans validation de format</h3></td></tr></table>";
-					} else if (locale.toString().startsWith("en")) {
-						sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/></h3></td><td><h3>Selected file: <br>"
-								+ valFileFolder.getAbsolutePath()
-								+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Adjust configuration and LogType if necessary </h3></td></tr>"
-								+ "<tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Start validation"
-								+ "<br/>&emsp;Formats only -> format validation of all formats in the entire folder"
-								+ "<br/>&emsp;SIP incl. formats -> SIP validation and format validation of all formats in the content folder"
-								+ "<br/>&emsp;SIP only -> SIP validation without format validation;</h3></td></tr></table>";
-					} else if (locale.toString().startsWith("it")) {
-						sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/></h3></td><td><h3>File selezionato: <br>"
-								+ valFileFolder.getAbsolutePath()
-								+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Regolare la configurazione e il LogType, se necessario </h3></td></tr>"
-								+ "<tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Avviare la convalida."
-								+ "<br/>&emsp;Solo formati -> convalida del formato di tutti i formati dell'intera cartella"
-								+ "<br/>&emsp;SIP incl. formati -> validazione SIP e validazione del formato di tutti i formati nella cartella dei content"
-								+ "<br/>&emsp;Solo SIP -> convalida SIP senza convalida del formato;</h3></td></tr></table>";
-					} else {
-						sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/></h3></td><td><h3>Ausgewählte Datei: <br>"
-								+ valFileFolder.getAbsolutePath()
-								+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>"
-								+ "<tr><td><h3>3.</h3></td><td><h3>Validierung starten "
-								+ "<br/>&emsp;Nur Formate -> Formatvalidierung aller Formate im gesamten Ordner"
-								+ "<br/>&emsp;SIP inkl. Formate -> SIP-Validierung und Formatvalidierung aller Formate im content-Ordner"
-								+ "<br/>&emsp;Nur SIP -> SIP-Validierung ohne Formatvalidierung</h3></td></tr></table>";
-					}
-					String text = "<html><body>" + sel + "</body></html>";
-					engine.loadContent(text);
-
-					fileFolder.clear();
-					fileFolder.setText(valFileFolder.getAbsolutePath());
-
-					// Format und Sip Validierung erst moeglich wenn fileFolder
-					// ausgefuellt
-					buttonFormat.setDisable(false);
 					String fileName = valFileFolder.getName().toLowerCase();
-					if (fileName.endsWith(".txt") || fileName.endsWith(".csv") || fileName.endsWith(".rtf")
-							|| fileName.endsWith(".jpeg") || fileName.endsWith(".jpg") || fileName.endsWith(".svg")
-							|| fileName.endsWith(".png") || fileName.endsWith(".xml") || fileName.endsWith(".siard")) {
-						// TODO: Inhalt anzeigen
+					if (fileName.endsWith(".txt") || fileName.endsWith(".jpeg") || fileName.endsWith(".jpg")
+							|| fileName.endsWith(".svg") || fileName.endsWith(".png") || fileName.endsWith(".xml")
+							|| fileName.endsWith(".xsd") || fileName.endsWith(".xsl") || fileName.endsWith(".siard")
+							|| fileName.endsWith(".json") || fileName.endsWith(".csv")) {
 						console.setText(" \n");// loest keine Veraenderung im listener aus
 						if (locale.toString().startsWith("fr")) {
 							console.setText("1. Fichier selectionne : " + valFileFolder.getAbsolutePath()
@@ -1998,11 +2028,80 @@ public class GuiController {
 									+ "\n2. Ggf. Konfiguration und LogType anpassen \n3. Validierung starten ");
 						}
 						console.appendText(""); // jetzt gibt es eine Veraenderung
-						if (fileName.endsWith(".txt") || fileName.endsWith(".csv") || fileName.endsWith(".rtf")
-								|| fileName.endsWith(".jpeg") || fileName.endsWith(".jpg") || fileName.endsWith(".svg")
-								|| fileName.endsWith(".png")) {
+
+						if (/* fileName.endsWith(".txt") || */fileName.endsWith(".jpeg") || fileName.endsWith(".jpg")
+								|| fileName.endsWith(".svg") || fileName.endsWith(".png")) {
 							engine.load("file:///" + valFileFolder.getAbsolutePath());
-						} else if (fileName.endsWith(".xml")) {
+
+						} else if (fileName.endsWith(".txt")) {
+							File txtFile = valFileFolder;
+							// txt-Datei: Ganzer Inhalt einlesen
+							String textScanner = "";
+							BufferedReader reader = new BufferedReader(
+									new InputStreamReader(new FileInputStream(txtFile), "UTF-8"));
+							String line = "";
+							while ((line = reader.readLine()) != null) {
+								textScanner = textScanner.concat("<tr><td>" + line + "</td></tr>");
+							}
+							reader.close();
+							String selTxt = "<table   width=\"100%\" style=\"background-color:#b2b2c5;\"><tr><td><b>"
+									+ valFileFolder.getAbsolutePath() + " : </b></td></tr>"
+									+ "<table  width=\"600%\"><tr><br></tr>" + textScanner + "</table>";
+							String text = "<html><body>" + selTxt + "</body></html>";
+							engine.loadContent(text);
+							buttonPrint.setDisable(false);
+						} else if (fileName.endsWith(".csv")) {
+							File csvFile = valFileFolder;
+							// CSV-Datei: Inhalt einlesen (max 200)
+							String textScanner = "";
+							BufferedReader reader = new BufferedReader(
+									new InputStreamReader(new FileInputStream(csvFile), "UTF-8"));
+							String line = "";
+							int lineCount = 0;
+							while ((line = reader.readLine()) != null && lineCount < 200) {
+								// maximal die ersten 100 Zeile verarbeiten
+								if (lineCount == 0) {
+									line = "<b>" + line + "</b>";
+								}
+								textScanner = textScanner.concat("<tr><td>" + line + "</td></tr>");
+								if (lineCount == 99) {
+									textScanner = textScanner.concat("<tr><td>... (End Of Preview)</td></tr>");
+								}
+								lineCount++;
+							}
+							reader.close();
+							String selCsv = "<table   width=\"100%\" style=\"background-color:#b2b2c5;\"><tr><td><b>CSV-Preview: "
+									+ valFileFolder.getAbsolutePath() + "</b></td></tr>" + "</table>"
+									+ "<table  width=\"600%\"><tr><br></tr>" + textScanner + "</table>";
+							String text = "<html><body>" + selCsv + "</body></html>";
+							engine.loadContent(text);
+							buttonPrint.setDisable(false);
+						} else if (fileName.endsWith(".json")) {
+							File jFile = valFileFolder;
+							// JSON-Datei: Inhalt einlesen (max 200)
+							String textScanner = "";
+							BufferedReader reader = new BufferedReader(
+									new InputStreamReader(new FileInputStream(jFile), "UTF-8"));
+							String line = "";
+							int lineCount = 0;
+							while ((line = reader.readLine()) != null && lineCount < 200) {
+								// maximal die ersten 200 Zeile verarbeiten
+								textScanner = textScanner.concat("<tr><td>" + line + "</td></tr>");
+								if (lineCount == 199) {
+									textScanner = textScanner.concat("<tr><td>... (End Of Preview)</td></tr>");
+								}
+								lineCount++;
+							}
+							reader.close();
+							String selCsv = "<table   width=\"100%\" style=\"background-color:#b2b2c5;\"><tr><td><b>JSON-Preview: "
+									+ valFileFolder.getAbsolutePath() + "</b></td></tr>" + "</table>"
+									+ "<table  width=\"600%\"><tr><br></tr>" + textScanner + "</table>";
+							String text = "<html><body>" + selCsv + "</body></html>";
+							engine.loadContent(text);
+							buttonPrint.setDisable(false);
+
+						} else if (fileName.endsWith(".xml") || fileName.endsWith(".xsd")
+								|| fileName.endsWith(".xsl")) {
 							// XML laden
 							// System.out.println("XML laden print");
 							StreamSource xml = new StreamSource(valFileFolder);
@@ -2031,7 +2130,10 @@ public class GuiController {
 									StringWriter writer = new StringWriter();
 									transformer.transform(xml, new StreamResult(writer));
 
-									String html = writer.toString();
+									// <table width=\"600%\">
+									String selXml = "<table   width=\"100%\" style=\"background-color:#b2b2c5;\"><tr><td><b>"
+											+ valFileFolder.getAbsolutePath() + "</b></td></tr>" + "</table>";
+									String html = selXml + writer.toString();
 
 									// WebView anzeigen
 									/*
@@ -2050,6 +2152,7 @@ public class GuiController {
 								 * stage.show();
 								 */
 							}
+
 						} else if (fileName.endsWith(".siard")) {
 							// 1) metadata.xml extrahieren in log
 
@@ -2152,7 +2255,7 @@ public class GuiController {
 								// Dateipfad der SIARD-Datei (als header)
 								String xmlPath = valFileFolder.getAbsolutePath();
 
-								// HTML für die WebView aufbauen
+								// HTML fuer die WebView aufbauen
 								String htmlWithPath = "<html>" + "<head>" + "<style>"
 										+ "body { margin: 0; padding: 0; }" + ".xml-path {" + "    padding: 8px 10px;"
 										+ "    background-color: #eeeeee;" + "    border-bottom: 1px solid #cccccc;"
@@ -2176,10 +2279,67 @@ public class GuiController {
 							 * stage.show();
 							 */
 						} else {
-							String pathDetail = "file:/" + valFileFolder.getAbsolutePath();
-							pathDetail = pathDetail.replace("\\\\", "/");
-							pathDetail = pathDetail.replace("\\", "/");
+							/*
+							 * String pathDetail = "file:/" + valFileFolder.getAbsolutePath(); pathDetail =
+							 * pathDetail.replace("\\\\", "/"); pathDetail = pathDetail.replace("\\", "/");
+							 */
+							engine.load("file:///" + valFileFolder.getAbsolutePath());
+
 						}
+					} else {
+						/*
+						 * Minianleitung in engine anzeigen falls dann datei doch nicht angezeigt werden
+						 * kann...
+						 */
+						String sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/></h3></td><td><h3>Ausgewählte Datei: <br>"
+								+ valFileFolder.getAbsolutePath()
+								+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>"
+								+ "<tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Validierung starten "
+								+ "<br/>&emsp;Nur Formate -> Formatvalidierung aller Formate im gesamten Ordner"
+								+ "<br/>&emsp;SIP inkl. Formate -> SIP-Validierung und Formatvalidierung aller Formate im content-Ordner"
+								+ "<br/>&emsp;Nur SIP -> SIP-Validierung ohne Formatvalidierung</h3></td></tr></table>";
+						if (locale.toString().startsWith("fr")) {
+							sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/></h3></td><td><h3>Fichier sélectionné : <br>"
+									+ valFileFolder.getAbsolutePath()
+									+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Ajuster la configuration et le LogType si nécessaire </h3></td></tr>"
+									+ "<tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Commencer la validation"
+									+ "<br/>&emsp;Formats uniquement -> validation du format de tous les formats dans le dossier entier"
+									+ "<br/>&emsp;SIP y compris les formats -> Validation SIP et validation du format de tous les formats dans le dossier de content"
+									+ "<br/>&emsp;SIP uniquement -> Validation SIP sans validation de format</h3></td></tr></table>";
+						} else if (locale.toString().startsWith("en")) {
+							sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/></h3></td><td><h3>Selected file: <br>"
+									+ valFileFolder.getAbsolutePath()
+									+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Adjust configuration and LogType if necessary </h3></td></tr>"
+									+ "<tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Start validation"
+									+ "<br/>&emsp;Formats only -> format validation of all formats in the entire folder"
+									+ "<br/>&emsp;SIP incl. formats -> SIP validation and format validation of all formats in the content folder"
+									+ "<br/>&emsp;SIP only -> SIP validation without format validation;</h3></td></tr></table>";
+						} else if (locale.toString().startsWith("it")) {
+							sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/></h3></td><td><h3>File selezionato: <br>"
+									+ valFileFolder.getAbsolutePath()
+									+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Regolare la configurazione e il LogType, se necessario </h3></td></tr>"
+									+ "<tr><td><h3>3.<br/><br/><br/><br/></h3></td><td><h3>Avviare la convalida."
+									+ "<br/>&emsp;Solo formati -> convalida del formato di tutti i formati dell'intera cartella"
+									+ "<br/>&emsp;SIP incl. formati -> validazione SIP e validazione del formato di tutti i formati nella cartella dei content"
+									+ "<br/>&emsp;Solo SIP -> convalida SIP senza convalida del formato;</h3></td></tr></table>";
+						} else {
+							sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br/><br/></h3></td><td><h3>Ausgewählte Datei: <br>"
+									+ valFileFolder.getAbsolutePath()
+									+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>"
+									+ "<tr><td><h3>3.</h3></td><td><h3>Validierung starten "
+									+ "<br/>&emsp;Nur Formate -> Formatvalidierung aller Formate im gesamten Ordner"
+									+ "<br/>&emsp;SIP inkl. Formate -> SIP-Validierung und Formatvalidierung aller Formate im content-Ordner"
+									+ "<br/>&emsp;Nur SIP -> SIP-Validierung ohne Formatvalidierung</h3></td></tr></table>";
+						}
+						String text = "<html><body>" + sel + "</body></html>";
+						engine.loadContent(text);
+
+						fileFolder.clear();
+						fileFolder.setText(valFileFolder.getAbsolutePath());
+
+						// Format und Sip Validierung erst moeglich wenn fileFolder
+						// ausgefuellt
+						buttonFormat.setDisable(false);
 					}
 				}
 			}
